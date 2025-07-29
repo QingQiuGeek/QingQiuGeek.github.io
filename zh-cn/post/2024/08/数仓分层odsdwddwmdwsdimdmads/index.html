@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="数仓分层，数据源层：ODS（Operational Data Store），数据仓库层：DW（Data Warehouse）、数据明细层：DWD（Data Warehouse Detail）、数据中间层：DWM（Data WareHouse Midddle）、数据服务层：DWS（Data WareHouse Service）、 数据应用层：ADS（Application Data Service）、 维表层：DIM（Dimension）">
+<title>数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS">
+<meta property='og:description' content="数仓分层，数据源层：ODS（Operational Data Store），数据仓库层：DW（Data Warehouse）、数据明细层：DWD（Data Warehouse Detail）、数据中间层：DWM（Data WareHouse Midddle）、数据服务层：DWS（Data WareHouse Service）、 数据应用层：ADS（Application Data Service）、 维表层：DIM（Dimension）">
+<meta property='og:url' content='/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='大数据' /><meta property='article:tag' content='数据仓库' /><meta property='article:published_time' content='2024-08-01T11:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-08-01T11:00:00&#43;00:00'/>
+<meta name="twitter:title" content="数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS">
+<meta name="twitter:description" content="数仓分层，数据源层：ODS（Operational Data Store），数据仓库层：DW（Data Warehouse）、数据明细层：DWD（Data Warehouse Detail）、数据中间层：DWM（Data WareHouse Midddle）、数据服务层：DWS（Data WareHouse Service）、 数据应用层：ADS（Application Data Service）、 维表层：DIM（Dimension）">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#往期推荐"><strong>往期推荐</strong></a>
+      <ol>
+        <li><a href="#11-数据源层odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89">1.1 数据源层：ODS（Operational Data Store） {#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89}</a></li>
+        <li><a href="#12-数据仓库层dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89">1.2 数据仓库层：DW（Data Warehouse） {#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89}</a>
+          <ol>
+            <li><a href="#121-数据明细层dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89">1.2.1 数据明细层：DWD（Data Warehouse Detail） {#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89}</a></li>
+            <li><a href="#122-数据中间层dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89">1.2.2 数据中间层：DWM（Data WareHouse Midddle） {#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89}</a></li>
+            <li><a href="#123-数据服务层dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89">1.2.3 数据服务层：DWS（Data WareHouse Service） {#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89}</a></li>
+          </ol>
+        </li>
+        <li><a href="#13-数据集市层dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89">1.3 数据集市层：DM（Data Mart） {#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89}</a></li>
+        <li><a href="#14-维表层dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89">1.4 维表层：DIM（Dimension） {#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89}</a></li>
+        <li><a href="#15-数据应用层adsapplication-data-service">1.5 数据应用层：ADS（Application Data Service）</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/">数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            数仓分层，数据源层：ODS（Operational Data Store），数据仓库层：DW（Data Warehouse）、数据明细层：DWD（Data Warehouse Detail）、数据中间层：DWM（Data WareHouse Midddle）、数据服务层：DWS（Data WareHouse Service）、 数据应用层：ADS（Application Data Service）、 维表层：DIM（Dimension）
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 01, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 6 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<h2 id="往期推荐"><a href="#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90" class="header-anchor"></a><strong>往期推荐</strong>
+</h2><p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D"  title="数仓入门：数据分析模型、数仓建模、离线实时数仓、Lambda、Kappa、湖仓一体-CSDN博客"
+     target="_blank" rel="noopener"
+    >数仓入门：数据分析模型、数仓建模、离线实时数仓、Lambda、Kappa、湖仓一体-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140798330"  title="数仓常见名词解析和名词之间的关系-CSDN博客"
+     target="_blank" rel="noopener"
+    >数仓常见名词解析和名词之间的关系-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140787541"  title="数据仓库及数仓架构概述-CSDN博客"
+     target="_blank" rel="noopener"
+    >数据仓库及数仓架构概述-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140753124"  title="大数据HBase图文简介-CSDN博客"
+     target="_blank" rel="noopener"
+    >大数据HBase图文简介-CSDN博客</a></p></blockquote>
+<p><strong>目录</strong>{#main-toc}</p>
+<p><a class="link" href="#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0" >1. 数仓分层</a>{#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0-toc}</p>
+<p><a class="link" href="#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89" >1.1 数据源层：ODS（Operational Data Store）</a>{#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89-toc}</p>
+<p><a class="link" href="#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89" >1.2 数据仓库层：DW（Data Warehouse）</a>{#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89-toc}</p>
+<p><a class="link" href="#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89" >1.2.1 数据明细层：DWD（Data Warehouse Detail）</a>{#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89-toc}</p>
+<p><a class="link" href="#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89" >1.2.2 数据中间层：DWM（Data WareHouse Midddle）</a>{#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89-toc}</p>
+<p><a class="link" href="#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89" >1.2.3 数据服务层：DWS（Data WareHouse Service）</a>{#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89-toc}</p>
+<p><a class="link" href="#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89" >1.3 数据应用层：ADS（Application Data Service）</a>{#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89-toc}</p>
+<p><a class="link" href="#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89" >1.4 维表层：DIM（Dimension）</a>{#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89-toc}</p>
+<hr>
+<br />
+<ol>
+<li>数仓分层 {#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0}</li>
+</ol>
+<hr>
+<blockquote>
+<p><strong>那么为什么要数据仓库进行分层呢？</strong></p>
+<ul>
+<li><strong>用空间换时间</strong>，通过大量的预处理来提升应用系统的用户体验（效率），因此数据仓库会存在<strong>大量冗余的数据</strong>；<strong>不分层的话，如果源业务系统的业务规则发生变化将会影响整个数据清洗过程，工作量巨大</strong>。</li>
+<li>通过<strong>数据分层管理可以简化数据清洗</strong>的过程，把一个复杂的工作拆成了多个简单的工作，把一个大的黑盒变成了一个白盒，每一层的处理逻辑都相对简单和容易理解，这样比较容易保证每一个步骤的正确性，当数据发生错误的时候，往往我们只需要<strong>溯源</strong>并局部调整某个步骤即可。</li>
+<li><strong>分层是以解决当前业务快速的数据支撑为目的</strong></li>
+<li><strong>抽象出共性的框架并能够赋能给其他业务线，同时为业务发展提供稳定、准确的数据支撑</strong></li>
+<li><strong>并能够按照已有的模型为新业务发展提供方向，也就是数据驱动和赋能</strong>
+<strong>一个好的分层架构，要有以下好处：</strong></li>
+</ul>
+<p><strong>1. 清晰数据结构</strong></p>
+<p><strong>2. 数据血缘追踪：数据ETL转化过程中的流动变化</strong></p>
+<p><strong>3. 减少重复开发，提高数据复用性</strong></p>
+<p><strong>4. 数据关系条理化</strong></p>
+<p><strong>5. 屏蔽原始数据的影响</strong></p></blockquote>
+<p>数仓分层要结合公司业务进行，并且需要清晰明确各层职责，<strong>一般</strong>采用如下分层结构：</p>
+<p><img src="https://i-blog.csdnimg.cn/direct/e895cdb04e9645a59d90d89a57d585a6.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>数仓建模在哪层建设呢？我们以<strong>维度建模</strong> 为例，建模是在数据源层的下一层进行建设，在上图中，就是在 <strong>DW 层进行数仓建模</strong>，所以 DW 层是数仓建设的核心层。 下面详细阐述下每层建设规范！</p>
+<h3 id="11-数据源层odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89"><a href="#11-%e6%95%b0%e6%8d%ae%e6%ba%90%e5%b1%82odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89" class="header-anchor"></a>1.1 数据源层：ODS（Operational Data Store） {#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89}
+</h3><blockquote>
+<p>ODS 层是最接近数据源的一层，又叫<strong>贴源层</strong> ，考虑后续可能需要<strong>追溯数据</strong> 问题， 因此对于这一层就<strong>不建议做过多的数据清洗工作</strong>，原封不动地接入原始数据即可， 至于<strong>数据去噪、去重、异常值处理等过程可以放在后面的 DWD 层</strong>来做！</p></blockquote>
+<h3 id="12-数据仓库层dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89"><a href="#12-%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e5%b1%82dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89" class="header-anchor"></a>1.2 数据仓库层：DW（Data Warehouse） {#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89}
+</h3><blockquote>
+<p>数据仓库层是数据仓库核心层，在这里把从 ODS 层中获得的数据按照主题建立各种数据模型。该层又依次<strong>细分为DWD、DWM、DWS</strong></p></blockquote>
+<h4 id="121-数据明细层dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89"><a href="#121-%e6%95%b0%e6%8d%ae%e6%98%8e%e7%bb%86%e5%b1%82dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89" class="header-anchor"></a>1.2.1 数据明细层：DWD（Data Warehouse Detail） {#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89}
+</h4><blockquote>
+<ul>
+<li>该层一般<strong>保持和 ODS 层一样的数据粒度</strong>，并且提供<strong>一定的数据质量保证</strong> 。<strong>DWD层要做的就是将数据清理、整合、规范化，把脏数据、垃圾数据、规范不一致的、状态定义不一致的、命名不规范的数据处理掉。</strong></li>
+<li>同时，为了提高数据明细层的易用性，该层会采用一些<strong>维度退化</strong>手法，将维度退化至事实表中，减少事实表和维表的关联。</li>
+<li>另外，在该层也会做<strong>一部分的数据聚合</strong>，将相同主题的数据汇集到一张表中，提高数据的可用性 。</li>
+</ul></blockquote>
+<h4 id="122-数据中间层dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89"><a href="#122-%e6%95%b0%e6%8d%ae%e4%b8%ad%e9%97%b4%e5%b1%82dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89" class="header-anchor"></a>1.2.2 数据中间层：DWM（Data WareHouse Midddle） {#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89}
+</h4><blockquote>
+<ul>
+<li>该层会在 DWD 层的数据基础上，数据做<strong>轻度聚合</strong> ，生成一系列的<strong>中间表</strong> ， <strong>提升公共指标的复用性</strong>，减少重复加工。</li>
+<li>直观来讲，就是对通用的核心维度进行聚合操作，算出相应的统计指标。</li>
+<li>在实际计算中，如果直接从 DWD 或者 ODS 计算出宽表的统计指标，会存在计算量太大并且维度太少的问题，因此一般的做法是，<strong>在 DWM 层先计算出多个小的中间表，然后再拼接成一张 DWS 的宽表</strong>。由于宽和窄的界限不易界定，<strong>也可以去掉 DWM</strong> 这一层，只留 DWS 层，将所有的数据再放在DWS也可。</li>
+</ul></blockquote>
+<h4 id="123-数据服务层dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89"><a href="#123-%e6%95%b0%e6%8d%ae%e6%9c%8d%e5%8a%a1%e5%b1%82dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89" class="header-anchor"></a>1.2.3 数据服务层：DWS（Data WareHouse Service） {#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89}
+</h4><blockquote>
+<ul>
+<li>DWS 层为公共汇总层，会进行<strong>轻度汇总</strong> ，<strong>粒度比明细数据稍粗</strong>，基于 DWD 层上的基础数据，整合汇总成分析某一个主题域的服务数据。</li>
+<li>DWS 层应覆 盖 80% 的应用场景。又<strong>称数据集市或宽表</strong>。 按照业务划分，如主题域流量、订单、用户等，生成字段比较多的宽表，用于提供后续的业务查询，OLAP 分析，数据分发等。</li>
+<li>一般来讲，该层的数据表会相对比较少，一张表会涵盖比较多的业务内容，由于其<strong>字段较多</strong>，因此一般也会称该层的表为<strong>宽表</strong>。</li>
+</ul></blockquote>
+<h3 id="13-数据集市层dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89"><a href="#13-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e5%b1%82dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89" class="header-anchor"></a>1.3 数据集市层：DM（Data Mart） {#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89}
+</h3><blockquote>
+<p>基于DW的基础数据，整合汇总成一个个数据集市，数据集市通常是面向部门的某个主题域的报表数据。比如用户留存表、用户活跃表、商品销量表、商品营收表等等。</p></blockquote>
+<h3 id="14-维表层dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89"><a href="#14-%e7%bb%b4%e8%a1%a8%e5%b1%82dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89" class="header-anchor"></a>1.4 维表层：DIM（Dimension） {#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89}
+</h3><blockquote>
+<p>如果维表过多，也可针对维表设计单独一层，维表层主要包含两部分数据：</p>
+<ul>
+<li>高基数维度数据：一般是用户资料表、商品资料表类似的资料表。数据量可能是千万级或者上亿级别。</li>
+<li>低基数维度数据：一般是配置表，比如枚举值对应的中文含义，或者日期维表。 数据量可能是个位数或者几千几万</li>
+</ul></blockquote>
+<h3 id="15-数据应用层adsapplication-data-service"><a href="#15-%e6%95%b0%e6%8d%ae%e5%ba%94%e7%94%a8%e5%b1%82adsapplication-data-service" class="header-anchor"></a>1.5 数据应用层：ADS（Application Data Service）
+</h3><blockquote>
+<p>在这里，主要是<strong>提供给数据产品和数据分析使用的数据</strong> ，一般会存放在 ES、 PostgreSql、Redis 等系统中供线上系统使用，也可能会存在 Hive 或者 Druid 中供数据分析和数据挖掘使用。比如我们经常说的<strong>报表数据</strong>，一般就放在这里。</p></blockquote>
+<br />
+---
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/%E6%95%B0%E4%BB%93%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90%E5%92%8C%E5%90%8D%E8%AF%8D%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">数仓常见名词解析和名词之间的关系</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive本质、架构、玩法</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive调优</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">大数据HBase图文简介及Phoenix</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">kafka实战 集群搭建-Kraft模式</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

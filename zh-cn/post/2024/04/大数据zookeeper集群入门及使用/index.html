@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="史上最牛B的ZK汇总，集群配置、集群角色、工作机制、选举机制、数据模型、集群操作、应用场景、CAP理论、ZAB协议、Paxos算法、Watcher">
+<title>大数据—Zookeeper集群入门及使用</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="大数据—Zookeeper集群入门及使用">
+<meta property='og:description' content="史上最牛B的ZK汇总，集群配置、集群角色、工作机制、选举机制、数据模型、集群操作、应用场景、CAP理论、ZAB协议、Paxos算法、Watcher">
+<meta property='og:url' content='/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='ZooKeeper' /><meta property='article:tag' content='zookeeper' /><meta property='article:tag' content='java-zookeeper' /><meta property='article:tag' content='hadoop' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-19T16:43:51&#43;00:00'/><meta property='article:modified_time' content='2024-04-19T16:43:51&#43;00:00'/>
+<meta name="twitter:title" content="大数据—Zookeeper集群入门及使用">
+<meta name="twitter:description" content="史上最牛B的ZK汇总，集群配置、集群角色、工作机制、选举机制、数据模型、集群操作、应用场景、CAP理论、ZAB协议、Paxos算法、Watcher">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGkAAABYCAYAAAD2pNkyAAAAIGNIUk0AAHomAACAhAAA+gAAAIDo
+AAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAADsMAAA7DAcdv
+qGQAAAv9SURBVHja7Zp9cFzVdcB/577Vl23FfBmpJrSEEINDnGAZl+x6V2vFslETYsIg2R7CBMJ4
+Ok2BUpJCM2kyiiFMIBBIjEMat2GCh8TYVpKZ0CmKv99qJTmMsZvw4fAZSkONP7CNLUvySntP/5Bt
+9r3dlXYXhukf9zf2jN5955577zl77se5DxwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD
+4XA4HA6Hw+FwOByO/5dIOcKqKrpsbtRm7TwRzlfVvxDhCMJeweyQuilb5TF/uNLOJJPJKaqjn8Xq
+bEEvBCIKxzA8C/K07/emRUQr1N0oNjPHqlyM6AUgZwARUY2ocBDhVaP88ZyG87Z2dXUNvd+G7uzs
+NKmtGz+dVS4DaRTRyarytgj7Mbpj+/a+54uNrSQn2esXTtbhg3cq3Ijwl+OIHheVnwiT7jVd6QPl
+GFCzmbuB64BJRQWV1/BYKVL9I9/3RyfSu2DBgrNHTwx9S9HPAReV2J1BRP5TDPf5ft/OchzR2to6
+dWTk+Pl1dVNf7u7uPgHQFo9PGyT7DeB64Jxxqu8DWSle1Urf9wdyX0zoJNs+p92KfQj4cMm9VQ4Z
++LLp2v2biUST8egyhdVAfanqBZ5VU7U0lUrtGU+uOR7tAeLlGDowClgzacrUf+ju7j464TgS0W+r
+8i3AILyQ6um/dH4ierNV7gWmlNHun70qc9W2bb2/zxlvcbJLZt91suFKGDVi5pv1z/QWH9i8W1Tt
+ynH6YQFT5N1R8WRBsV/7woULJ58YGhjgvfNMVc2kK7ds2fJ2MYHm5uhsLLty+y3wuMKXKmzzGIZk
+KtW/m3EMQLZ99iOFHSRbQG40Ssyod4kRFovKg8CxkGBE0ZuK6W9JRJtV7Q8IOmhAkB9G8D5VO6n+
+bL+nL4KpmgHcBrI/pOJDmtUfF9Nvh4YaChT/FGNuiEhkzqQpU6ee23jeJPGq62okcqERWSawBsiG
+6swZyQymFi+OFY10UbkiVGQKOOgt4H5P5ErxmImp+rgR2gT5PkJ4aajHsjaZTEYAIoUaHe2Y/XcK
+Xwl15b+NsMys37UjJP4i8KReF/+OzRxfpcJ171pKi64bWeV+wMvRvz+CadmaTr9wukQE4GXg5dbW
+1scyJ44/gdKWo2aWqkqhBXfE2AZsoGgwle5fXqQ7fzr5f92CePyeEck+ijLv9Fvl4+8c4m7gHwtX
+12mMz6qauilf37Rp0/FQ+R7gt21tbXcNDbzzcMixF4sdWQr8PC+S7JLLPwE8FCp+zmh1UwEHvWvi
+X6QPe127vwh8HVCUITHew4VkF8TjFwJ/HaiP3pzroDCbN29+55KZsxajbM6p1Vt0R2Q1GEnKW5TA
+lnT6JTHVbQi9wep6S0vLvE8VdBEUdZIgX02l+28t4KDTdHd3H93e03ejQE9Ar+rVUGC6s5pdBdTm
+FB30TPXnTdeOQ6UMMrJh931GvE8aqi4163c+V0hmxOjF4bLqOlIT6V69evVI7eT6pQLrBZ4Ur+qG
+osYR0xAqKMlJAL7vD3gRuQHI5BR72VG9rUhrhZ0kPO6n+x6iBERE1ZhVuWUKCQg5yS5rugJIhqr/
+i6z73eulDhDArN/5nOl6+k9F31vJ2y1lhuS7p+bg8di4ceMhP92/1E/3L/Z9/8/F5KxqY9BeWrKT
+ALZt63sV4SeBQtXPd3R0eHnCyrn5GmR/bV39bZSBiL4UKjpXVSXopCx3hhp/0eOjPy2noVI4p7Fx
+F3Ak2JTepDbzfDIe+8qiRYvOes+NSHC6U2FfuSo8eCLc9QN79+Zt6aXQmmTkjo0bN5Y0++RoCm/V
+R0VETzvJ3tpWg+rfBBviUdmwIVuK+nLo6uoaEuGevBfKDEUfGR48tq85Ht2WjMdub2mJfbSSNkQJ
+rUmlT3enaP7Moh3AoaAanZXf7bw16WBDw/QnKBPNj8j9kDvd7dt3BUJdroQRb20lBioFv6f/AZAH
+iryOAPMVfTA7oq8k49E/JOOx29vi8Yl2UTnGDDmpzOkOYMWKFRbh5aAh9bzQs5CXSZCfbdiwITNh
+AyFENeykfZDjJKsSXIuUN826nf9TbkPlkEr33SGeSYD8djw5hVmKPjhI9o3mePTh1tbY9AmVhyPJ
+lB9JY4bjzcAzGmj7qkTiDEJHGYN2V9KWhvos4UgS1b8K9o7dlTRULr7fm06l+9owNAH3I7w0jngt
+cEtmWPckE7HlE6gODDiiXkVOUmEwVBQ41A4X2H5XT6qvyHYiwelOw5GkImcGKmj5C+17IZXq351K
+99+Z6um/WDxmgvwzkIbQkXSMD6nqvzXHo98rpKu9vb0ubExTYyuNpKkBw4kcyX0e9fKmqMHyNwwn
+dRN0kkh4TUIDTkLy0jwfGL7f/8dUuu97qXR/Qrzq8wT5KmMZgTB3JOOx68OFBw4cyEsJRSL1lf7o
+zgiaRQ/nPquGIqnEQ3NBQhsHzXcSwXsgYXLFjb2P+L7/lp/ue0i86hkg32QsO50zLr0//3w1Gjgj
+oRw+dXVQDp2dnUYhsJtTlWCUWBt0UhmH5gIEI8lKcLoTkb2BzlgmXpw/QHzfH02l++4B7g29apRs
+JrDpyUsJiVQURdu3b2oiL5LMM0GpYLah3ENzkODUacKRpFZfC9WIamenKUHzB4p4rMkv5JLcR6v6
+nrffAJrVL4aKhqc1NvrBpnlfIunkbBBcciKhSDKYTaGBn6V7nlxYqTELDlpVkvHYA83x6N7meKyz
+Eh3G5CdUrUpN0E5UnLfLMdoFwN8HTUJP/tV6ONtQ2Q+idmzaDNyrVY+a0Bb80qt2hhc9q3q3/u2c
+qkoa1Y45cdvedI3m5LrmJ+YtV/RrQCPot+cnYteWq9eO6MfCZYIG7mNUJZRtKM9wixfH6jWbWQtU
+B9QYWRWWzcsSVJDZABg22fBmR4eNOQC5TlqxwmLyMgBz7SG7WjsnTnye1tyZjGQ7mlZmsT1W9FdW
+X/nu6XfovFxZq/r4/ETs6nIGo8LN4bKqWhOYgghHUhk7rtbW2PQjh/Up4NPBN7I1lerL/xxAgtOd
+VnhoNjYvJXTo1HccJihY/QjKGyGj3Jh9/ljKLpndPK7xOpMRXTLnC9kXjvYoemtO/dvtrW01Y+OR
+34eq1VrVXzUnYmubm5tnjm+81qnJeHRd6NIPQXZv3twb6LOE1iRjzISGa4vHpzXHY9/IDOuewIXf
+GMMRzO1FqgacFFFT0SbFhiMyJyEcTGd07RiyS5qusVbTgTyeaNQq/mh70yuCptXwKiqHETUC01SZ
+lX3haAwKpewxcnSoDjgxrXH6v+7f9+ZSlNzrZoPqMnRkaTIe+y8V3YHK6wIjCBHQKaoSzwwfjxG8
+5zpFoSv0wBZc1V6djEePG2G/EBkelWwNSK2M5eHmoswdJHsZUGhqH8aYxVtT6T+U4qRKD83hgyzK
+6c8F8qYxs37XLrv08mutza6F4Gkb0YsULho7qeipf+Miwjp5zD8CY9nvtra2RYMDR58EDUemKDob
+ZfbYxS45ygu3IvDU9p7efz95zZ474IbQ8zXANVkFGOWU8hI+4DuGMdemUr2bCr1sbW2dmhk+HnDs
+mWdOryyzAeeG+nM6kgpusc26nU8Z5XKQsr47C1kqI8h3pKHhy7nF3d3dR1sWLGwB+RpQ8UeIAr+u
+P+Ps9iLX54NlK8znl5HqupnFHASQyWTCv/7DlWS/AVTCKSEpPN3lYrp2vwLMte1Nn7Oi/4SSQPCY
+mNdFWSPUrDYbdrxZSGDFihUWeDCZTK7R7MiXBF2uMLME3QBPY8z3/VTv+qJ9h+stchfo5YR2aBNw
+CGRtRLxHt/b07JpIuE51YGjs6yLvZMOV3xqoBgJG0I3v/l0i9qZYPQMnElb1MhHOQfXsMQ3ytlp9
+GzGvedArG555o1SduSxKJM4/oXopkv2EwgyQelH1VDgicBiVZ00V/du29b1aqs6Ojo7qgwf/d6Yd
+sTMU+QgwTeAs0CkqZFCOgBwR9CU1VTtbWlpePPkDKpn5ieiVVlkw5iT5dSrV11/J+JPJ5AXYzHKg
+CqXHT/f/RyV6HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XCUyP8BdT6l
+KncUIK8AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjUtMDYtMDFUMTc6MjQ6MzQrMDA6MDC/mtbVAAAA
+JXRFWHRkYXRlOm1vZGlmeQAyMDI1LTA2LTAxVDE3OjI0OjM0KzAwOjAwzsduaQAAACh0RVh0ZGF0
+ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#概述-e6a682e8bfb0">概述 {#%E6%A6%82%E8%BF%B0}</a></li>
+    <li><a href="#特点-e789b9e782b9">特点 {#%E7%89%B9%E7%82%B9}</a></li>
+    <li><a href="#集群配置-e99b86e7bea4e9858de7bdaec2a0">集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0}</a>
+      <ol>
+        <li><a href="#以下是集群环境搭建不是单机环境-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283"><strong>以下是集群环境搭建！！不是单机环境</strong> {#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83}</a></li>
+      </ol>
+    </li>
+    <li><a href="#集群角色-e99b86e7bea4e8a792e889b2">集群角色 {#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2}</a>
+      <ol>
+        <li><a href="#Leader">Leader</a></li>
+        <li><a href="#Follower">Follower</a></li>
+        <li><a href="#Observer">Observer</a></li>
+      </ol>
+    </li>
+    <li><a href="#会话-e4bc9ae8af9d">会话 {#%E4%BC%9A%E8%AF%9D}</a></li>
+    <li><a href="#Watcher">Watcher</a>
+      <ol>
+        <li><a href="#节点的值变化监听-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0">节点的值变化监听 {#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0}</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/">大数据—Zookeeper集群入门及使用</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            史上最牛B的ZK汇总，集群配置、集群角色、工作机制、选举机制、数据模型、集群操作、应用场景、CAP理论、ZAB协议、Paxos算法、Watcher
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 19, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 11 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/zookeeper/">Zookeeper</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/java-zookeeper/">Java-Zookeeper</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/hadoop/">Hadoop</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p><strong>目录</strong>{#main-toc}</p>
+<p><a class="link" href="#%E6%A6%82%E8%BF%B0" >概述</a>{#%E6%A6%82%E8%BF%B0-toc}</p>
+<p><a class="link" href="#%E7%89%B9%E7%82%B9" >特点</a>{#%E7%89%B9%E7%82%B9-toc}</p>
+<p><a class="link" href="#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0" >集群配置</a>{#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0-toc}</p>
+<p><a class="link" href="#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83" >以下是集群环境搭建！！不是单机环境</a>{#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83-toc}</p>
+<p><a class="link" href="#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2" >集群角色</a>{#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2-toc}</p>
+<p><a class="link" href="#Leader" >Leader</a>{#Leader-toc}</p>
+<p><a class="link" href="#Follower" >Follower</a>{#Follower-toc}</p>
+<p><a class="link" href="#Observer" >Observer</a>{#Observer-toc}</p>
+<p><a class="link" href="#%E4%BC%9A%E8%AF%9D" >会话</a>{#%E4%BC%9A%E8%AF%9D-toc}</p>
+<p><a class="link" href="#Watcher" >Watcher</a>{#Watcher-toc}</p>
+<p><a class="link" href="#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0" >节点的值变化监听</a>{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0-toc}</p>
+<p><a class="link" href="#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89" >节点的子节点变化监听（路径变化）</a>{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89-toc}</p>
+<p><a class="link" href="#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6" >工作机制</a>{#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6-toc}</p>
+<p><a class="link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B" >客户端向服务端写数据流程</a>{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}</p>
+<p><a class="link" href="#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader" >写请求发给leader</a>{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader-toc}</p>
+<p><a class="link" href="#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower" >写请求发给follower</a>{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower-toc}</p>
+<p><a class="link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B" >客户端向服务端读数据流程</a>{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}</p>
+<p><a class="link" href="#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6" >选举机制</a>{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}</p>
+<p><a class="link" href="#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8" >初次启动</a>{#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}</p>
+<p><a class="link" href="#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8" >非处次启动</a>{#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}</p>
+<p><a class="link" href="#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82" >集群脑裂</a>{#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82-toc}</p>
+<p><a class="link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B" >数据模型</a>{#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-toc}</p>
+<p><a class="link" href="#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B" >节点类型</a>{#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B-toc}</p>
+<p><a class="link" href="#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF" >节点信息</a>{#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF-toc}</p>
+<p><a class="link" href="#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C" >集群操作</a>{#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C-toc}</p>
+<p><a class="link" href="#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9" >创建节点</a>{#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9-toc}</p>
+<p><a class="link" href="#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0" >查看节点</a>{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0-toc}</p>
+<p><a class="link" href="#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0" >查看节点状态</a>{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0-toc}</p>
+<p><a class="link" href="#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0" >更新节点</a>{#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9" >删除节点</a>{#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9-toc}</p>
+<p><a class="link" href="#%E9%80%80%E5%87%BAZK%C2%A0" >退出ZK</a>{#%E9%80%80%E5%87%BAZK%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF" >应用场景</a>{#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}</p>
+<p><a class="link" href="#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1" >统一命名服务</a>{#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1-toc}</p>
+<p><a class="link" href="#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86" >统一配置管理</a>{#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86-toc}</p>
+<p><a class="link" href="#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86" >统一集群管理</a>{#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86-toc}</p>
+<p><a class="link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF" >服务器动态上下线</a>{#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF-toc}</p>
+<p><a class="link" href="#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1" >软负载均衡</a>{#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-toc}</p>
+<p><a class="link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81" >分布式锁</a>{#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-toc}</p>
+<p><a class="link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89" >拜占庭将军问题（Paxos算法）</a>{#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89-toc}</p>
+<br />
+<p><a class="link" href="#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0" >算法描述</a>{#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0-toc}</p>
+<p><a class="link" href="#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B" >算法流程</a>{#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B-toc}</p>
+<p><a class="link" href="#ZAB%E5%8D%8F%E8%AE%AE" >ZAB协议</a>{#ZAB%E5%8D%8F%E8%AE%AE-toc}</p>
+<p><a class="link" href="#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D" >崩溃恢复</a>{#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD" >消息广播</a>{#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-toc}</p>
+<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA" >​编辑 CAP理论</a>{#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA-toc}</p>
+<p><a class="link" href="#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0" >ZK源码图示</a>{#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98" >小小面试题</a>{#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98-toc}</p>
+<p><a class="link" href="#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6" >选举机制</a>{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}</p>
+<p><a class="link" href="#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F" >生产集群安装多少 zk 合适？</a>{#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F-toc}</p>
+<hr>
+<br />
+<h2 id="概述-e6a682e8bfb0"><a href="#%e6%a6%82%e8%bf%b0-e6a682e8bfb0" class="header-anchor"></a>概述 {#%E6%A6%82%E8%BF%B0}
+</h2><p>ZooKeeper 是一个开源的<strong>分布式协调服务</strong> ，它的设计目标是<strong>为那些高吞吐的大型分布式系统提供一个高性能、高可用、且具有严格顺序访问控制 能力的分布式协调服务</strong>，并以一系列简单易用的接口提供给用户使用。</p>
+<p><strong>ZooKeeper 将数据存全量储在内存中以保持高性能</strong> ，并通过服务集群来实现高可用，由于 Zookeeper 的所有更新和删除都是<strong>基于事务</strong> 的，所以其在<strong>读多写少</strong>的应用场景中有着很高的性能表现。</p>
+<p>简单来说zookeeper就是动物园管理者，管理协调大数据里面的一堆组件，比如hadoop、hive、habse等等。Zookeeper 可以用于实现分布 式系统中常见的发布/订阅、负载均衡、命令服务、分布式协调/通知、集群管理、Master 选举、分布式 锁和分布式队列等功能。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/52c5a22a85235aee67a43f9656cc3231.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="特点-e789b9e782b9"><a href="#%e7%89%b9%e7%82%b9-e789b9e782b9" class="header-anchor"></a>特点 {#%E7%89%B9%E7%82%B9}
+</h2><blockquote>
+<ul>
+<li>**顺序一致性：**从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中；</li>
+<li>**原子性：**所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况，一次数据更新要么成功要么失败。</li>
+<li>**单一视图（全局数据一致）：**每个server保存相同的数据副本，无论client连接哪个server，看到的数据一致；</li>
+<li>**可靠性：**一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改；</li>
+<li>**实时性：**一旦一个事务被成功应用后，在一定时间范围内，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。</li>
+<li>集群中只要有<strong>半数以上节点存活</strong>，zk集群就可以正常服务，所以zk适合安装奇数台。</li>
+<li>一个leader，多个follower，<strong>leader挂掉之后会从follower中重新选举</strong>。</li>
+</ul></blockquote>
+<h2 id="集群配置-e99b86e7bea4e9858de7bdaec2a0"><a href="#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae-e99b86e7bea4e9858de7bdaec2a0" class="header-anchor"></a>集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0}
+</h2><p>可以由一组 Zookeeper服务构成 Zookeeper 集群，集群中每台机器都会单独在内存中维护自身的状 态，并且每台机器之间都保持着通讯，只要集群中有半数机器能够正常工作，那么整个集群就可以正常提供服务。对于来自客户端的每个更新请求，Zookeeper都会分配一个全局唯一的递增 ID，这个 ID 反映了所有事 务请求的先后顺序。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/85357d9780c78177d7fdc98faf789f46.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="以下是集群环境搭建不是单机环境-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283"><a href="#%e4%bb%a5%e4%b8%8b%e6%98%af%e9%9b%86%e7%be%a4%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e4%b8%8d%e6%98%af%e5%8d%95%e6%9c%ba%e7%8e%af%e5%a2%83-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283" class="header-anchor"></a><strong>以下是集群环境搭建！！不是单机环境</strong> {#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83}
+</h3><p>解压、安装、配置环境变量并生效这三步省略，直接修改配置：</p>
+<blockquote>
+<p>进入conf/目录下，拷贝配置样本并进行修改：</p>
+<p>cp zoo_sample.cfg zoo.cfg</p>
+<p>指定数据存储目录和日志文件目录（此时还没有目录，稍后手动创建），修改后完整配置如下：</p></blockquote>
+<pre><code>tickTime=2000
+#用于计算的基础时间单元。比如 session 超时：N*tickTime；
+
+initLimit=10
+#用于集群，允许从节点连接并同步到 master 节点的初始化连接时间，以 tickTime 的倍数来表示；
+
+syncLimit=5
+#用于集群， master 主节点与从节点之间发送消息，请求和应答时间长度（心 跳机制）；
+
+dataDir=/export/server/zookeeper/data
+#数据存储位置；稍后手动创建
+
+dataLogDir=/export/server/zookeeper/logs
+#日志目录；稍后手动创建
+
+clientPort=2181
+#用于客户端连接的端口，默认 2181
+
+# server.1 这个1是服务器的标识，可以是任意有效数字，标识这是第几个服务器节点，这个标识要写到
+dataDir目录下面myid文件里，如果没有myid文件要自己创建
+# 指名集群间通讯端口和选举端口
+server.1=linux01:2888:3888
+server.2=linux02:2888:3888
+server.3=linux03:2888:3888
+</code></pre>
+<blockquote>
+<p><strong>标识节点序号</strong></p>
+<p>分别在三台主机的 dataDir 目录下新建 myid 文件,并写入对应的节点标识。Zookeeper 集群通过 myid 文件识别集群节点，并通过上文配置的节点通信端口和选举端口来进行节点通信，选举出 Leader 节点。</p>
+<p>在<strong>每个服务器</strong>上的/export/server/zookeeper/下创建data目录，在里面创建myid文件并写入各自序号，这个序号必须和zoo.cfg文件的序号相同。
+<strong>分别在三台主机上启动ZK集群</strong></p>
+<p>zkServer.sh start</p>
+<p><strong>集群验证</strong></p>
+<p>zkServer.sh status</p>
+<p>可以看到一个leader，两个follower，那么zk集群配置成功</p>
+<p><strong>启动客户端</strong></p>
+<p>zkCli.sh</p></blockquote>
+<h2 id="集群角色-e99b86e7bea4e8a792e889b2"><a href="#%e9%9b%86%e7%be%a4%e8%a7%92%e8%89%b2-e99b86e7bea4e8a792e889b2" class="header-anchor"></a>集群角色 {#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2}
+</h2><p>ZK集群有一个leader和多个follower。</p>
+<h3 id="Leader"><a href="#Leader" class="header-anchor"></a>Leader
+</h3><blockquote>
+<p>为客户端提供读写服务，并维护集群状态，它是由集群选举所产生的；</p></blockquote>
+<h3 id="Follower"><a href="#Follower" class="header-anchor"></a>Follower
+</h3><blockquote>
+<p>为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态。同时也参与写操作 &ldquo;过半写成功&quot;的策略和 Leader 的选举；</p></blockquote>
+<h3 id="Observer"><a href="#Observer" class="header-anchor"></a>Observer
+</h3><blockquote>
+<p>为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态，但不参与写操作&quot;过 半写成功&quot;的策略和 Leader 的选举，因此 Observer 可以在不影响写性能的情况下提升集群的读性 能。</p></blockquote>
+<h2 id="会话-e4bc9ae8af9d"><a href="#%e4%bc%9a%e8%af%9d-e4bc9ae8af9d" class="header-anchor"></a>会话 {#%E4%BC%9A%E8%AF%9D}
+</h2><blockquote>
+<ul>
+<li>Zookeeper 客户端通过 TCP 长连接连接到服务集群，会话 (Session) 从第一次连接开始就已经建立，之 后通过心跳检测机制来保持有效的会话状态。通过这个连接，客户端可以发送请求并接收响应，同时也 可以接收到 Watch 事件的通知。</li>
+<li>关于会话中另外一个核心的概念是 <strong>sessionTimeOut(会话超时时间)</strong>，当由于网络故障或者客户端主动 断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。</li>
+</ul></blockquote>
+<h2 id="Watcher"><a href="#Watcher" class="header-anchor"></a>Watcher
+</h2><p>Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注 册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是Zookeeper 实现分布式协调服务的重要特性。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/f2f283cc4b622d03d766b780723fc6ce.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="节点的值变化监听-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0"><a href="#%e8%8a%82%e7%82%b9%e7%9a%84%e5%80%bc%e5%8f%98%e5%8c%96%e7%9b%91%e5%90%ac-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0" class="header-anchor"></a>节点的值变化监听 {#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0}
+</h3><blockquote>
+<p>1）在linux01主机上注册监听/sanguo 节点数据变化</p>
+\[zk: localhost:2181(CONNECTED) 26\]<p> get -w /sanguo</p>
+<p>2）在linux02主机上修改/sanguo 节点的数据</p>
+\[zk: localhost:2181(CONNECTED) 1\]<p> set /sanguo &ldquo;xisi&rdquo;</p>
+<p>3）观察linux01主机收到数据变化的监听</p>
+<p>WATCHER::</p>
+<p>WatchedEvent state:SyncConnected ype:NodeDataChanged</p>
+<p>path:/sanguo</p>
+<p>注意：在linux02再多次修改/sanguo的值，linux01上不会再收到监听。&lt;</p></blockquote>
+<hr>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">HA—Hadoop高可用</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hadoop入门—HDFS、MR、Yarn</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive入门-HQL、表操作、库操作、视图、索引、数据类型</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive本质、架构、玩法</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive调优</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

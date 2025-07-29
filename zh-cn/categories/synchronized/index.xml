@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Synchronized on 青秋博客</title>
+        <link>/zh-cn/categories/synchronized/</link>
+        <description>Recent content in Synchronized on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sat, 15 Feb 2025 10:30:25 +0000</lastBuildDate><atom:link href="/zh-cn/categories/synchronized/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>synchronized如何实现可重入，和Lock区别</title>
+        <link>/zh-cn/post/2025/02/synchronized%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%87%8D%E5%85%A5%E5%92%8Clock%E5%8C%BA%E5%88%AB/</link>
+        <pubDate>Sat, 15 Feb 2025 10:30:25 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/02/synchronized%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%87%8D%E5%85%A5%E5%92%8Clock%E5%8C%BA%E5%88%AB/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145461986&#34;  title=&#34;字符串常量池-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;字符串常量池-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144995466&#34;  title=&#34;AQS---抽象队列同步器、CLH锁队列-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;AQS&amp;mdash;抽象队列同步器、CLH锁队列-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145594188&#34;  title=&#34;符号引用和直接引用、强引用、软引用、弱引用、虚引用-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;符号引用和直接引用、强引用、软引用、弱引用、虚引用-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145601415&#34;  title=&#34;已老实！再学消息队列、死信队列-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;已老实！再学消息队列、死信队列-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;可重入&#34;&gt;&lt;a href=&#34;#%e5%8f%af%e9%87%8d%e5%85%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;可重入
+&lt;/h2&gt;&lt;p&gt;synchronized底层是利用计算机系统mutex Lock实现的。每一个可重入锁都会关联一个线程ID和一个锁状态status。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;当一个线程请求方法时，会检查锁状态。&lt;br&gt;
+如果锁状态是0，代表该锁没有被占用，使用CAS操作获取锁，将线程ID替换成自己的线程D。&lt;br&gt;
+如果锁状态不是0，代表有线程在访问该方法。此时，如果线程D是自己的线程D,如果是可重入锁，会将status自增1，然后获取到该锁，进而执行相应的方法；如果是非重入锁，就会进入阻塞队列等待。&lt;/p&gt;
+&lt;p&gt;在释放锁时，&lt;br&gt;
+如果是可重入锁的，每一次退出方法，就会将status减1，直至status的值为0，最后释放该锁。&lt;br&gt;
+如果非可重入锁的，线程退出方法，直接就会释放该锁。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;和lock的区别&#34;&gt;&lt;a href=&#34;#%e5%92%8clock%e7%9a%84%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;和lock的区别
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Synchronized内置的Java关键字，Lock是一个Java接口&lt;/li&gt;
+&lt;li&gt;Synchronized无法判断获取锁的状态，Lock可以判断是否获取到了锁&lt;/li&gt;
+&lt;li&gt;Synchronized会自动释放锁，Lock必须要手动释放锁！如果不释放锁，死锁&lt;/li&gt;
+&lt;li&gt;Synchronized线程1（获得锁，阻塞）、线程2（等待，傻傻的等）；Lock锁就不一定会等待下去；&lt;/li&gt;
+&lt;li&gt;Synchronized可重入锁，不可以中断的，非公平；Lock，可重入锁，可以判断锁，非公平（可以自己设置）；&lt;/li&gt;
+&lt;li&gt;Synchronized适合锁少量的代码同步问题，Lock适合锁大量的同步代码！&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+---
+</description>
+        </item>
+        
+    </channel>
+</rss>

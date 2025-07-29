@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="文章详细解析了数组指针的概念，指明了它们与普通指针的区别，以及在函数参数传递中的应用，包括数组指针作为形参、指针数组和函数指针的使用实例。">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="C 指针进阶：数组指针、指针数组、指向指针数组的数组指针、存放数组指针的指针数组、函数指针及传参">
 <title>C 指针进阶--数组指针 指针数组 函数指针及传参</title>
 
 <link rel='canonical' href='/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/'>
 
-<link rel="stylesheet" href="/scss/style.min.5e24419e316d74e72655cb404f2d059af890e0b6fb5213f1d3ac29f539cb3938.css">
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
 <meta property='og:title' content="C 指针进阶--数组指针 指针数组 函数指针及传参">
-<meta property='og:description' content="文章详细解析了数组指针的概念，指明了它们与普通指针的区别，以及在函数参数传递中的应用，包括数组指针作为形参、指针数组和函数指针的使用实例。">
+<meta property='og:description' content="C 指针进阶：数组指针、指针数组、指向指针数组的数组指针、存放数组指针的指针数组、函数指针及传参">
 <meta property='og:url' content='/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C语言' /><meta property='article:tag' content='指针' /><meta property='article:published_time' content='2023-08-04T16:08:31&#43;00:00'/><meta property='article:modified_time' content='2023-08-04T16:08:31&#43;00:00'/><meta property='og:image' content='/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C语言' /><meta property='article:tag' content='c语言' /><meta property='article:published_time' content='2023-08-04T16:08:31&#43;00:00'/><meta property='article:modified_time' content='2023-08-04T16:08:31&#43;00:00'/>
 <meta name="twitter:title" content="C 指针进阶--数组指针 指针数组 函数指针及传参">
-<meta name="twitter:description" content="文章详细解析了数组指针的概念，指明了它们与普通指针的区别，以及在函数参数传递中的应用，包括数组指针作为形参、指针数组和函数指针的使用实例。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/cover.jpg' />
+<meta name="twitter:description" content="C 指针进阶：数组指针、指针数组、指向指针数组的数组指针、存放数组指针的指针数组、函数指针及传参">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -280,25 +279,27 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <nav id="TableOfContents">
   <ol>
     <li><a href="#引导图">引导图</a></li>
+    <li><a href="#"><img src="https://i-blog.csdnimg.cn/blog_migrate/a4980ef9568c4debc64239fd7a8f167e.png" alt=""></a></li>
     <li><a href="#正文">正文</a>
       <ol>
-        <li><a href="#数组指针">数组指针</a>
+        <li><a href="#1数组指针">1.数组指针</a>
           <ol>
             <li><a href="#11数组指针作为形参接收二维数组">1.1.数组指针作为形参接收二维数组</a></li>
           </ol>
         </li>
-        <li><a href="#指针数组">指针数组</a></li>
-        <li><a href="#指向指针数组的数组指针">指向指针数组的数组指针</a></li>
-        <li><a href="#存放数组指针的指针数组">存放数组指针的指针数组</a></li>
-        <li><a href="#函数指针">函数指针</a>
+        <li><a href="#2指针数组">2.指针数组</a></li>
+        <li><a href="#3指向指针数组的数组指针">3.指向指针数组的数组指针</a></li>
+        <li><a href="#4存放数组指针的指针数组">4.存放数组指针的指针数组</a></li>
+        <li><a href="#5函数指针"><strong>5.函数指针</strong></a>
           <ol>
-            <li><a href="#函数指针作形参接收参数">函数指针作形参接收参数</a></li>
-            <li><a href="#函数指针接收函数地址">函数指针接收函数地址</a></li>
+            <li><a href="#51函数指针作形参接收参数">5.1.函数指针作形参接收参数</a></li>
+            <li><a href="#52函数指针接收函数地址">5.2.函数指针接收函数地址</a></li>
           </ol>
         </li>
         <li><a href="#玩点好玩的">玩点好玩的</a></li>
       </ol>
     </li>
+    <li><a href="#ok本文到此为止nnd写了我四五个小时">OK，本文到此为止，NND写了我四五个小时&hellip;.</a></li>
   </ol>
 </nav>
         </div>
@@ -310,16 +311,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <main class="main full-width">
-    <article class="has-image main-article">
+    <article class="main-article">
     <header class="article-header">
-    <div class="article-image">
-        <a href="/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/">
-            <img src="/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/cover_hu_c86b681f3fee94ff.jpg" srcset="/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/cover_hu_c86b681f3fee94ff.jpg 800w, /zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/cover_hu_bea442a1395058f4.jpg 1600w"  width="800"
-                height="534" loading="lazy" alt="Featured image of post C 指针进阶--数组指针 指针数组 函数指针及传参" />
-            
-        </a>
-    </div>
-    
 
 
     <div class="article-details">
@@ -332,7 +325,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         
         <h3 class="article-subtitle">
-            文章详细解析了数组指针的概念，指明了它们与普通指针的区别，以及在函数参数传递中的应用，包括数组指针作为形参、指针数组和函数指针的使用实例。
+            C 指针进阶：数组指针、指针数组、指向指针数组的数组指针、存放数组指针的指针数组、函数指针及传参
         </h3>
         
     </div>
@@ -355,7 +348,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">July 04, 40431</time>
+            <time class="article-time--published">July 04, 2023</time>
         </div>
         
 
@@ -394,11 +387,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/c%E8%AF%AD%E8%A8%80/">C语言</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E6%8C%87%E9%92%88/">指针</a> 
-            
-            
         </div>
         
     </footer>
@@ -413,19 +401,18 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <h2 id="引导图"><a href="#%e5%bc%95%e5%af%bc%e5%9b%be" class="header-anchor"></a>引导图
-</h2><p><img src="https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-07-29-16-15-06.png"
+</h2><h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/blog_migrate/a4980ef9568c4debc64239fd7a8f167e.png"
 	
 	
 	
 	loading="lazy"
 	
-		alt="2025-07-29-16-15-06"
 	
-	
-></p>
+>
+</h2><br />
 <h2 id="正文"><a href="#%e6%ad%a3%e6%96%87" class="header-anchor"></a>正文
-</h2><h3 id="数组指针"><a href="#%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88" class="header-anchor"></a>数组指针
-</h3><p>先不讨论什么是<strong>数组指针</strong>，举个例子</p>
+</h2><h3 id="1数组指针"><a href="#1%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88" class="header-anchor"></a>1.数组指针
+</h3><p>先不讨论什么是数组指针，举个例子</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -433,8 +420,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span><span class="o">*</span> <span class="n">p1</span><span class="p">;</span>
@@ -442,12 +427,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl"><span class="kt">char</span><span class="o">*</span> <span class="n">p2</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">//p2是字符指针，它指向的是字符，指针类型是char*
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>注意！！！为什么我写成了 int* p1 而不是 int *p1，其实两种写法都可以，只不过为了方便理解，把 int*看成一种类似于 int，char，float 的变量类型，同理 char*也是如此，后文不再阐述。</p>
-<p>So 数组指针就是<strong>指向数组的指针</strong>！</p>
+</div><p>注意！！！为什么我写成了int* p1而不是int *p1，其实两种写法都可以，只不过为了方便理解，把int*看成一种类似于int，char，float的变量类型，同理char*也是如此，后文不再阐述。</p>
+<p>So数组指针就是指向数组的指针！</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -465,8 +448,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">13
 </span><span class="lnt">14
 </span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
@@ -484,11 +465,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="c1">//而且，原数组arr元素皆为int，所以数组指针为int型，
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">那么在上句的基础上写作</span><span class="kt">int</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="err">，最后再加上</span><span class="p">(</span><span class="o">*</span><span class="n">parr</span><span class="p">),</span><span class="err">就有了</span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">parr</span><span class="p">)[</span><span class="mi">5</span><span class="p">]</span><span class="err">。</span>
 </span></span><span class="line"><span class="cl"><span class="err">当然，若原数组</span><span class="n">arr元素为int</span><span class="o">*</span><span class="p">,</span><span class="err">那么数组指针写成</span><span class="kt">int</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">parr</span><span class="p">)[</span><span class="mi">5</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>记住，它只是一个数组指针，只负责指向一个数组，至于数组的元素类型是 int 还是 int*，元素个数是[5]还是[6],都是它所指向的数组决定的，而非指针决定，以下所有内容均可这样理解。至于为何写成（*parr）而不是*parr，这和符号优先级有关，看完下文的“指针数组”就明白了~</p>
+</div><p>记住，它只是一个数组指针，只负责指向一个数组，至于数组的元素类型是int还是int*，元素个数是</p>
+\[5\]<p>还是</p>
+\[6\]<p>,都是它所指向的数组决定的，而非指针决定，以下所有内容均可这样理解。至于为何写成（*parr）而不是*parr，这和符号优先级有关，看完下文的&quot;指针数组&quot;就明白了~</p>
 <h4 id="11数组指针作为形参接收二维数组"><a href="#11%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e4%bd%9c%e4%b8%ba%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e4%ba%8c%e7%bb%b4%e6%95%b0%e7%bb%84" class="header-anchor"></a>1.1.数组指针作为形参接收二维数组
 </h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -524,8 +505,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">30
 </span><span class="lnt">31
 </span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">test1</span><span class="p">(</span><span class="kt">int</span> <span class="n">arr</span><span class="p">[][</span><span class="mi">3</span><span class="p">])</span>
@@ -534,7 +513,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">test2</span><span class="p">(</span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">parr</span><span class="p">)[</span><span class="mi">3</span><span class="p">])</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"><span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>	
 </span></span><span class="line"><span class="cl">        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
 </span></span><span class="line"><span class="cl">		    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;%d &#34;</span><span class="p">,</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">parr</span><span class="o">+</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="n">j</span><span class="p">));</span>
@@ -560,12 +539,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">test4</span><span class="p">(</span><span class="n">arr</span><span class="p">);</span>    <span class="c1">//×
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">test5</span><span class="p">(</span><span class="n">arr</span><span class="p">);</span>    <span class="c1">//×
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>test1 中，二维数组作形参接收二维数组参数，没毛病；在 test2 中，首先要说明的是，二维数组作为参数传参，传过去的是二维数组的第一行的地址（看个人理解），也就是 parr 里面放的是{9，8，7}这个一维数组的地址。我们让其+i 就是第 i 行的地址，然后*（parr+i），把第 i 行的地址取出来，再+j，此时得到第 i 行的第 j 个元素的地址(*(parr+i)+j)，再对其解引用*(*(parr+i)+j)得到第 i 行第 j 个元素的值。至于 test3，形参是整型指针，而实参是一个一维数组的地址，要用数组指针接收才行，错。test4，形参是整型指针数组，用来接收整型指针，而我们的实参是一维数组地址，驴唇不对马嘴，pass。test5，形参是二级指针，用来接收一级指针变量的地址或者二级指针，同样驴唇不对马嘴，pass。</p>
-<h3 id="指针数组"><a href="#%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84" class="header-anchor"></a>指针数组
+</div><p>test1中，二维数组作形参接收二维数组参数，没毛病；在test2中，首先要说明的是，二维数组作为参数传参，传过去的是二维数组的第一行的地址（看个人理解），也就是parr里面放的是{9，8，7}这个一维数组的地址。我们让其+i就是第i行的地址，然后*（parr+i），把第i行的地址取出来，再+j，此时得到第i行的第j个元素的地址(*(parr+i)+j)，再对其解引用*(*(parr+i)+j)得到第i行第j个元素的值。至于test3，形参是整型指针，而实参是一个一维数组的地址，要用数组指针接收才行，错。test4，形参是整型指针数组，用来接收整型指针，而我们的实参是一维数组地址，驴唇不对马嘴，pass。test5，形参是二级指针，用来接收一级指针变量的地址或者二级指针，同样驴唇不对马嘴，pass。</p>
+<h3 id="2指针数组"><a href="#2%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84" class="header-anchor"></a>2.指针数组
 </h3><p>同上，先不讨论什么是指针数组，举个例子</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -574,8 +551,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
@@ -583,11 +558,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">arr2</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="sc">&#39;a&#39;</span><span class="p">,</span><span class="sc">&#39;b&#39;</span><span class="p">,</span><span class="sc">&#39;c&#39;</span><span class="p">,</span><span class="sc">&#39;d&#39;</span><span class="p">,</span><span class="sc">&#39;e&#39;</span><span class="p">};</span>
 </span></span><span class="line"><span class="cl"><span class="c1">//这是 字符 数组，存放字符型元素
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>So 指针数组就是存放指针的数组！</p>
+</div><p>So指针数组就是存放指针的数组！</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -603,9 +576,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
@@ -621,14 +591,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="c1">//如何理解？
 </span></span></span><span class="line"><span class="cl"><span class="c1">//首先，arr和&amp;m是地址，p是指针，一共3个元素全放到指针数组parr里，就有了元素个数[3]
 </span></span></span><span class="line"><span class="cl"><span class="c1">//其次，arr和&amp;m以及p都是int*(注意，m是int，&amp;m取了地址就是int*，而arr本身就是地址)，所以指针数组元素类型为int*，于是有了int* [3],数组取名为parr
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>没错，只要是 int*类型的都可以放到数组 parr 里，因为 parr 就是存放整型指针的数组。</p>
-<p>不用管数组 arr 里面几个元素，我们已经在 parr 里面放了数组 arr 的首元素地址，那么就可以借此访问数组 arr 的所有元素。</p>
-<h3 id="指向指针数组的数组指针"><a href="#%e6%8c%87%e5%90%91%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84%e7%9a%84%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88" class="header-anchor"></a>指向指针数组的数组指针
+</div><p>没错，只要是int*类型的都可以放到数组parr里，因为parr就是存放整型指针的数组。</p>
+<p>不用管数组arr里面几个元素，我们已经在parr里面放了数组arr的首元素地址，那么就可以借此访问数组arr的所有元素。</p>
+<h3 id="3指向指针数组的数组指针"><a href="#3%e6%8c%87%e5%90%91%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84%e7%9a%84%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88" class="header-anchor"></a>3.指向指针数组的数组指针
 </h3><p>顾名思义，这是一个数组指针，只不过它指向的是指针数组，而这个数组里面存放的是指针。</p>
 <p>它长个什么样呢？</p>
 <div class="highlight"><div class="chroma">
@@ -650,9 +617,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">15
 </span><span class="lnt">16
 </span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">//6个指针数组的元素
@@ -672,12 +636,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1">//当然可以写成int* [4],总之&gt;=3就行，因为数组pa和pb元素个数都为3，至少得放得下3个
 </span></span></span><span class="line"><span class="cl"><span class="c1">//如果再加上pc[2]，那就是说明我有俩指针pc[0]和pc[1],分别指向两个数组pa和pb，pa和pb各有3个元素
 </span></span></span><span class="line"><span class="cl"><span class="c1">//当然pc[2]可以写成pc[3],只要&gt;=2就行，因为数组指针pc至少要指向2个指针数组pa和pb
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="存放数组指针的指针数组"><a href="#%e5%ad%98%e6%94%be%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e7%9a%84%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84" class="header-anchor"></a>存放数组指针的指针数组
+</div><h3 id="4存放数组指针的指针数组"><a href="#4%e5%ad%98%e6%94%be%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e7%9a%84%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84" class="header-anchor"></a>4.存放数组指针的指针数组
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -696,8 +657,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">14
 </span><span class="lnt">15
 </span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">//2个数组
@@ -716,24 +675,20 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1">//左边就是元素类型int*，右边是数组指针指向的数组的元素个数[3]，
 </span></span></span><span class="line"><span class="cl"><span class="c1">//当然还可以写成int*  [4],总之&gt;=3就行，因为数组p1和p5最多3个元素，至少得放得下3个；
 </span></span></span><span class="line"><span class="cl"><span class="c1">//同理pc[2]可以写成pc[3]，&gt;=2就行，因为至少要存放2个数组指针pa和pb。
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="函数指针"><a href="#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88" class="header-anchor"></a>函数指针
-</h3><h4 id="函数指针作形参接收参数"><a href="#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e4%bd%9c%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e5%8f%82%e6%95%b0" class="header-anchor"></a>函数指针作形参接收参数
-</h4><p>先看看这个 qsort 函数，是 C 语言库函数之一，用于对任何元素类型的数组排序。它有 4 个形参，第一个是要排序数组的地址，第二个是数组元素个数，第三个是数组元素的字节大小，也就是跨越一个元素的步长，第四个就是本节重点，一个函数指针，用来接收数组排序所需的排序函数，比如冒泡，选择排序&hellip;</p>
-<p><img src="https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-07-29-16-20-22.png"
+</div><h3 id="5函数指针"><a href="#5%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88" class="header-anchor"></a><strong>5.函数指针</strong>
+</h3><h4 id="51函数指针作形参接收参数"><a href="#51%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e4%bd%9c%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e5%8f%82%e6%95%b0" class="header-anchor"></a>5.1.函数指针作形参接收参数
+</h4><p>先看看这个qsort函数，是C语言库函数之一，用于对任何元素类型的数组排序。它有4个形参，第一个是要排序数组的地址，第二个是数组元素个数，第三个是数组元素的字节大小，也就是跨越一个元素的步长，第四个就是本节重点，一个函数指针，用来接收数组排序所需的排序函数，比如冒泡，选择排序&hellip;</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/df06459cb95cf86adfcf6a1d132b63d5.png"
 	
 	
 	
 	loading="lazy"
 	
-		alt="2025-07-29-16-20-22"
 	
-	
->
-OK，请看下面的代码：</p>
+></p>
+<p>OK，请看下面的代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -760,11 +715,9 @@ OK，请看下面的代码：</p>
 </span><span class="lnt">22
 </span><span class="lnt">23
 </span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include&lt;stdio.h&gt;
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include&lt;stdio.h&gt; 
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">;}</span>
@@ -777,9 +730,9 @@ OK，请看下面的代码：</p>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;请输入两个操作数:&gt;&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d %d&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">);</span><span class="c1">//p(x,y)也可以
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">);</span><span class="c1">//p(x,y)也可以 
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">ret</span><span class="o">=</span><span class="n">Calc</span><span class="p">(</span><span class="n">add</span><span class="p">);</span><span class="c1">//把add函数地址传过去，用函数指针接收
@@ -788,34 +741,28 @@ OK，请看下面的代码：</p>
 </span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;减法运算 %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">ret</span><span class="p">);</span><span class="c1">//结果是-2
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>运算结果如下：</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-07-29-16-20-40.png"
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/1c0c61d06b16dfd2cc684ca73e532a2d.jpeg"
 	
 	
 	
 	loading="lazy"
 	
-		alt="2025-07-29-16-20-40"
 	
-	
->
-这就是函数指针。。。</p>
-<h4 id="函数指针接收函数地址"><a href="#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e6%8e%a5%e6%94%b6%e5%87%bd%e6%95%b0%e5%9c%b0%e5%9d%80" class="header-anchor"></a>函数指针接收函数地址
-</h4><p><img src="https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-07-29-16-20-58.png"
+></p>
+<p>这就是函数指针。。。</p>
+<h4 id="52函数指针接收函数地址"><a href="#52%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e6%8e%a5%e6%94%b6%e5%87%bd%e6%95%b0%e5%9c%b0%e5%9d%80" class="header-anchor"></a>5.2.函数指针接收函数地址
+</h4><p><img src="https://i-blog.csdnimg.cn/blog_migrate/1ef025a2730326c51431d9339d7198d0.png"
 	
 	
 	
 	loading="lazy"
 	
-		alt="2025-07-29-16-20-58"
 	
-	
->
-如图：函数名本身就是函数的地址，和&amp;函数名效果相同，*ptr 说明其是指针，int （*ptr）说明函数的返回值是 int，而(int , int)则是函数 add 的形参。当然，函数指针也可以和数组指针一样放在指针数组中，比如：</p>
+></p>
+<p>如图：函数名本身就是函数的地址，和&amp;函数名效果相同，*ptr说明其是指针，int （*ptr）说明函数的返回值是int，而(int , int)则是函数add的形参。当然，函数指针也可以和数组指针一样放在指针数组中，比如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -832,15 +779,13 @@ OK，请看下面的代码：</p>
 </span><span class="lnt">12
 </span><span class="lnt">13
 </span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">;}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sub</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">;}</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">;}</span> 
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
@@ -850,8 +795,6 @@ OK，请看下面的代码：</p>
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">(</span><span class="o">*</span><span class="n">p1</span><span class="p">)(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span><span class="c1">//结果是8
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">(</span><span class="o">*</span><span class="n">p2</span><span class="p">)(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span><span class="c1">//结果是-2
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>当然我还可以再找一个指针指向这个函数指针数组，然后把这个指针再放到指针数组里，这样无限套娃&hellip;..</p>
@@ -859,17 +802,13 @@ OK，请看下面的代码：</p>
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="p">(</span><span class="o">*</span> <span class="p">(</span><span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)())</span> <span class="mi">0</span><span class="p">)()</span>
-</span></span><span class="line"><span class="cl"><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>这个出自《C 语言陷阱与缺陷》这本书，作用是调用首地址为 0 地址的子例程。首先 0，用(void(*)())
-，把它转化成函数指针，也就是(void(*)()) 0，然后对这个函数指针调用（* (void(*)())  0) ( ),显然形参为空。看解释：</p>
+</div><p>这个出自《C语言陷阱与缺陷》这本书，作用是调用首地址为0地址的子例程。首先0，用(void(*)())</p>
+<p>把它转化成函数指针，也就是(void(*)()) 0，然后对这个函数指针调用（* (void(*)()) 0) ( ),显然形参为空。看解释：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -878,8 +817,6 @@ OK，请看下面的代码：</p>
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">//调用0地址处的函数
@@ -888,32 +825,17 @@ OK，请看下面的代码：</p>
 </span></span></span><span class="line"><span class="cl"><span class="c1">//2.(void(*) ()) 0 ---对0强制类型转化，成为一个函数地址
 </span></span></span><span class="line"><span class="cl"><span class="c1">//3.*(void(*) ()) 0 ---我TM直接对地址解引用
 </span></span></span><span class="line"><span class="cl"><span class="c1">//4.(*(void(*) ()) 0) () ---调用0地址处的函数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">AI生成项目cpp</span>
-</span></span><span class="line"><span class="cl"><span class="err">运行</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>OK，本文到此为止，NND 写了我四五个小时&hellip;.</p>
-
+</div><h2 id="ok本文到此为止nnd写了我四五个小时"><a href="#ok%e6%9c%ac%e6%96%87%e5%88%b0%e6%ad%a4%e4%b8%ba%e6%ad%a2nnd%e5%86%99%e4%ba%86%e6%88%91%e5%9b%9b%e4%ba%94%e4%b8%aa%e5%b0%8f%e6%97%b6" class="header-anchor"></a>OK，本文到此为止，NND写了我四五个小时&hellip;.
+</h2>
 </section>
 
 
     <footer class="article-footer">
     
 
-    <section class="article-lastmod">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-        <span>
-            最后更新于
-            July 04, 40431 16:08 UTC
-        </span>
-    </section></footer>
+    </footer>
 
     
         <link 

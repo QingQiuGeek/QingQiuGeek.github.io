@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="物理层基本概念、数据通信基本知识、信道及极限容量、信道复用">
+<title>【考前预习】2.计算机网络—物理层</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="【考前预习】2.计算机网络—物理层">
+<meta property='og:description' content="物理层基本概念、数据通信基本知识、信道及极限容量、信道复用">
+<meta property='og:url' content='/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='网络' /><meta property='article:published_time' content='2024-12-10T15:09:53&#43;00:00'/><meta property='article:modified_time' content='2024-12-10T15:09:53&#43;00:00'/>
+<meta name="twitter:title" content="【考前预习】2.计算机网络—物理层">
+<meta name="twitter:description" content="物理层基本概念、数据通信基本知识、信道及极限容量、信道复用">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1物理层基本概念">1.物理层基本概念</a></li>
+    <li><a href="#2数据通信基础知识-2e695b0e68daee9809ae4bfa1e59fbae7a180e79fa5e8af86">2.数据通信基础知识 {#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86}</a></li>
+    <li><a href="#数据通信系统可划分为源系统传输系统目的系统通信的目的是传送消息而数据就是运送消息的实体使用特定的方式表示消息信号则是数据的电">数据通信系统可划分为<strong>源系统、传输系统、目的系统</strong>。通信的目的是传送消息，而数据就是运送消息的实体（使用特定的方式表示消息），信号则是数据的电</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/">【考前预习】2.计算机网络—物理层</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            物理层基本概念、数据通信基本知识、信道及极限容量、信道复用
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 10, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 5 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E7%BD%91%E7%BB%9C/">网络</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p><strong>往期推荐</strong></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144357304?sharetype=blogdetail&amp;sharerId=144357304&amp;sharerefer=PC&amp;sharesource=qq_73181349&amp;spm=1011.2480.3001.8118"  title="【考前预习】1.计算机网络概述-CSDN博客"
+     target="_blank" rel="noopener"
+    >【考前预习】1.计算机网络概述-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/142883278"  title="子网掩码、网络地址、广播地址、子网划分及计算-CSDN博客"
+     target="_blank" rel="noopener"
+    >子网掩码、网络地址、广播地址、子网划分及计算-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/142787997"  title="浅谈云原生--微服务、CICD、Serverless、服务网格_云原生 serverless-CSDN博客"
+     target="_blank" rel="noopener"
+    >浅谈云原生&ndash;微服务、CICD、Serverless、服务网格_云原生 serverless-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141899842"  title="一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客"
+     target="_blank" rel="noopener"
+    >一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140787541"  title="浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客"
+     target="_blank" rel="noopener"
+    >浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客</a></p></blockquote>
+<p><strong>目录</strong>{#main-toc}</p>
+<p><a class="link" href="#1.%E7%89%A9%E7%90%86%E5%B1%82%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5" >1.物理层基本概念</a>{#1.%E7%89%A9%E7%90%86%E5%B1%82%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-toc}</p>
+<p><a class="link" href="#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" >2.数据通信基础知识</a>{#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-toc}</p>
+<p><a class="link" href="#2.1%E4%BF%A1%E9%81%93" >2.1信道</a>{#2.1%E4%BF%A1%E9%81%93-toc}</p>
+<p><a class="link" href="#2.2%E4%BF%A1%E9%81%93%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F" >2.2信道极限容量</a>{#2.2%E4%BF%A1%E9%81%93%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F-toc}</p>
+<p><a class="link" href="#2.3%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93" >2.3物理层的传输媒体</a>{#2.3%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93-toc}</p>
+<p><a class="link" href="#2.3.1%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93" >2.3.1导引型传输媒体</a>{#2.3.1%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93-toc}</p>
+<p><a class="link" href="#2.3.2%E9%9D%9E%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93" >2.3.2非导引型传输媒体</a>{#2.3.2%E9%9D%9E%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93-toc}</p>
+<p><a class="link" href="#2.4%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8" >2.4信道复用</a>{#2.4%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8-toc}</p>
+<p><a class="link" href="#2.4.1%E9%A2%91%E5%88%86%E5%A4%8D%E7%94%A8FDM%EF%BC%88%E9%A2%91%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89" >2.4.1频分复用FDM（频分多址）</a>{#2.4.1%E9%A2%91%E5%88%86%E5%A4%8D%E7%94%A8FDM%EF%BC%88%E9%A2%91%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89-toc}</p>
+<p><a class="link" href="#2.4.2%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8TDM%EF%BC%88%E6%97%B6%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89" >2.4.2时分复用TDM（时分多址）</a>{#2.4.2%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8TDM%EF%BC%88%E6%97%B6%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89-toc}</p>
+<p><a class="link" href="#2.4.3%E7%BB%9F%E8%AE%A1%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8" >2.4.3统计时分复用</a>{#2.4.3%E7%BB%9F%E8%AE%A1%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8-toc}</p>
+<p><a class="link" href="#2.4.4%E6%B3%A2%E5%88%86%E5%A4%8D%E7%94%A8WDM" >2.4.4波分复用WDM</a>{#2.4.4%E6%B3%A2%E5%88%86%E5%A4%8D%E7%94%A8WDM-toc}</p>
+<p><a class="link" href="#2.4.5%E7%A0%81%E5%88%86%E5%A4%8D%E7%94%A8CDM%EF%BC%88%E7%A0%81%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89" >2.4.5码分复用CDM（码分多址）</a>{#2.4.5%E7%A0%81%E5%88%86%E5%A4%8D%E7%94%A8CDM%EF%BC%88%E7%A0%81%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89-toc}</p>
+<p><a class="link" href="#3.%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF" >3.宽带接入技术</a>{#3.%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF-toc}</p>
+<hr>
+<h2 id="1物理层基本概念"><a href="#1%e7%89%a9%e7%90%86%e5%b1%82%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" class="header-anchor"></a>1.物理层基本概念
+</h2><blockquote>
+<p>物理层考虑的是<strong>如何在连接各种计算机的传输媒体上传输数据比特流</strong> ，而不是指具体的传输媒体。计算机网络中的硬件设备和传输媒体的种类和通信手段繁多，物理层的<strong>作用正是要尽可能地屏蔽掉这些传输媒体和通信手段的差异，使物理层上面的数据链路层感觉不到这些差异</strong>，这样就可<strong>使数据链路层只需要考虑如何完成本层的协议和服务，而不必考虑网络具体的传输媒体和通信手段是什么</strong> 。用于物理层的协议也常称为<strong>物理层规程</strong> (procedure)。其实物理层规程就是<strong>物理层协议</strong>。只是在&quot;协议&quot;这个名词出现之前人们就先使用了&quot;规程&quot;这一名词。</p></blockquote>
+<p>因此物理层的主要任务可以描述为确定与传输媒体的接口有关的特性：</p>
+<blockquote>
+<ul>
+<li><strong>机械特性</strong><br>
+指明接口所用接线器的形状和尺寸、引脚数目和排列、固定和锁定装置等。平时常见的各种规格的接插件都有严格的标准化的规定。</li>
+<li><strong>电气特性</strong><br>
+指明在接口电缆的各条线上出现的电压的范围。</li>
+<li><strong>功能特性</strong><br>
+指明某条线上出现的某一电平的电压的意义。</li>
+<li><strong>过程特性</strong><br>
+指明对于不同功能的各种可能事件的出现顺序。</li>
+</ul></blockquote>
+<p>数据在计算机内部一般是并行传输，但是在通信线路上一般是串行传输。</p>
+<p>物理连接的方式很多（例如，可以是点对点的，也可以采用多点连接或广播连接)，而传输媒体的种类也非常之多（如架空明线、双绞线、对称电缆、同轴电缆、光缆，以及各种波段的无线信道等)。因此在学习物理层时，应将重点放在掌握基本概念上。</p>
+<h2 id="2数据通信基础知识-2e695b0e68daee9809ae4bfa1e59fbae7a180e79fa5e8af86"><a href="#2%e6%95%b0%e6%8d%ae%e9%80%9a%e4%bf%a1%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86-2e695b0e68daee9809ae4bfa1e59fbae7a180e79fa5e8af86" class="header-anchor"></a>2.数据通信基础知识 {#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86}
+</h2><h2 id="数据通信系统可划分为源系统传输系统目的系统通信的目的是传送消息而数据就是运送消息的实体使用特定的方式表示消息信号则是数据的电"><a href="#%e6%95%b0%e6%8d%ae%e9%80%9a%e4%bf%a1%e7%b3%bb%e7%bb%9f%e5%8f%af%e5%88%92%e5%88%86%e4%b8%ba%e6%ba%90%e7%b3%bb%e7%bb%9f%e4%bc%a0%e8%be%93%e7%b3%bb%e7%bb%9f%e7%9b%ae%e7%9a%84%e7%b3%bb%e7%bb%9f%e9%80%9a%e4%bf%a1%e7%9a%84%e7%9b%ae%e7%9a%84%e6%98%af%e4%bc%a0%e9%80%81%e6%b6%88%e6%81%af%e8%80%8c%e6%95%b0%e6%8d%ae%e5%b0%b1%e6%98%af%e8%bf%90%e9%80%81%e6%b6%88%e6%81%af%e7%9a%84%e5%ae%9e%e4%bd%93%e4%bd%bf%e7%94%a8%e7%89%b9%e5%ae%9a%e7%9a%84%e6%96%b9%e5%bc%8f%e8%a1%a8%e7%a4%ba%e6%b6%88%e6%81%af%e4%bf%a1%e5%8f%b7%e5%88%99%e6%98%af%e6%95%b0%e6%8d%ae%e7%9a%84%e7%94%b5" class="header-anchor"></a>数据通信系统可划分为<strong>源系统、传输系统、目的系统</strong>。通信的目的是传送消息，而数据就是运送消息的实体（使用特定的方式表示消息），信号则是数据的电
+</h2>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A01.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">【考前预习】1.计算机网络概述</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">子网掩码、网络地址、广播地址、子网划分及计算</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

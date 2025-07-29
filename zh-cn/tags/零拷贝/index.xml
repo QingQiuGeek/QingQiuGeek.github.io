@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>零拷贝 on 青秋博客</title>
+        <link>/zh-cn/tags/%E9%9B%B6%E6%8B%B7%E8%B4%9D/</link>
+        <description>Recent content in 零拷贝 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sat, 18 Jan 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E9%9B%B6%E6%8B%B7%E8%B4%9D/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝</title>
+        <link>/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/</link>
+        <pubDate>Sat, 18 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/</guid>
+        <description>&lt;h2 id=&#34;用户态和内核态&#34;&gt;&lt;a href=&#34;#%e7%94%a8%e6%88%b7%e6%80%81%e5%92%8c%e5%86%85%e6%a0%b8%e6%80%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;用户态和内核态
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;根据&lt;strong&gt;进程访问资源的特点&lt;/strong&gt;，我们可以把进程在系统上的运行分为两个级别：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;用户态(User Mode)&lt;/strong&gt; : 用户态运行的进程可以&lt;strong&gt;直接读取用户程序的数据&lt;/strong&gt; ，拥有较低的权限。当应用程序需要执行某些&lt;strong&gt;需要特殊权限的操作&lt;/strong&gt; ，例如读写磁盘、网络通信等，就需要&lt;strong&gt;向操作系统发起系统调用请求，进入内核态&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内核态(Kernel Mode)&lt;/strong&gt; ：内核态运行的进程几乎可以访问计算机的任何资源包括系统的内存空间、设备、驱动程序等，不受限制，拥有非常高的权限。当操作系统接收到进程的系统调用请求时，就会&lt;strong&gt;从用户态切换到内核态，执行相应的系统调用，并将结果返回给进程&lt;/strong&gt;，最后再从内核态切换回用户态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;不过，由于切换内核态需要付出较高的开销（需要进行一系列的上下文切换和权限检查），应该尽量减少进入内核态的次数，以提高系统的性能和稳定性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/09725426433c448195b6983f359f44c9.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;用户态和内核态如何切换&#34;&gt;&lt;a href=&#34;#%e7%94%a8%e6%88%b7%e6%80%81%e5%92%8c%e5%86%85%e6%a0%b8%e6%80%81%e5%a6%82%e4%bd%95%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;用户态和内核态如何切换
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;用户态切换到内核态的 3 种方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;系统调用（Trap）&lt;/strong&gt; ：用户态进程 &lt;strong&gt;主动&lt;/strong&gt; 要求切换到内核态的一种方式，主要是为了使用内核态才能做的事情比如读取磁盘资源。系统调用的机制其核心还是使用了操作系统为用户特别开放的一个中断来实现。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/cae6b7241fd3411e92749dacad81cc08.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;中断（Interrupt）&lt;/strong&gt; ：当外围设备完成用户请求的操作后，会向 CPU 发出相应的中断信号，这时 CPU 会&lt;strong&gt;暂停&lt;/strong&gt;执行下一条即将要执行的指令转而去执行与中断信号对应的处理程序，如果先前执行的指令是用户态下的程序，那么这个转换的过程自然也就发生了由用户态到内核态的切换。比如硬盘读写操作完成，系统会切换到硬盘读写的中断处理程序中执行后续操作等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;异常（Exception）&lt;/strong&gt;：当 CPU 在执行运行在用户态下的程序时，发生了某些事先不可知的异常，这时会触发由当前运行进程切换到处理此异常的内核相关程序中，也就转到了内核态，比如缺页异常。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;进程和线程&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e5%92%8c%e7%ba%bf%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程和线程
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;进程（Process）&lt;/strong&gt; 是指计算机中正在运行的一个程序实例。比如打开某个应用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;线程（Thread）&lt;/strong&gt; 轻量级进程，多个线程可以在同一个进程中同时执行，并且&lt;strong&gt;共享进程的资源&lt;/strong&gt;比如内存空间、文件句柄、网络连接等。举例：你打开的微信里就有一个线程专门用来拉取别人发你的最新的消息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;协程&lt;/strong&gt; 是一种&lt;strong&gt;用户态&lt;/strong&gt; 的&lt;strong&gt;轻量级线程&lt;/strong&gt; ，其调度完全由用户程序控制，而不需要内核的参与。协程拥有自己的寄存器上下文和栈，但与其他协程共享堆内存。协程的切换开销非常小，因为只需要保存和恢复协程的上下文，而无需进行内核级的上下文切换。这使得协程在处理大量并发任务时具有非常高的效率。然而，协程需要程序员显式地进行调度和管理，相对于线程和进程来说，其编程模型更为复杂。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/a96815b0d4ae44b8a41519b428f7fd45.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;进程的几种状态&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e7%9a%84%e5%87%a0%e7%a7%8d%e7%8a%b6%e6%80%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程的几种状态
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;和线程的状态很像&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;创建状态(new)&lt;/strong&gt;：进程正在被创建，尚未到就绪状态。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;就绪状态(ready)&lt;/strong&gt;：进程已处于准备运行状态，即进程获得了除了处理器之外的一切所需资源，一旦得到处理器资源(处理器分配的时间片)即可运行。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;运行状态(running)&lt;/strong&gt;：进程正在处理器上运行(单核 CPU 下任意时刻只有一个进程处于运行状态)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;阻塞状态(waiting)&lt;/strong&gt;：又称为等待状态，进程正在等待某一事件而暂停运行如等待某资源为可用或等待 IO 操作完成。即使处理器空闲，该进程也不能运行。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;结束状态(terminated)&lt;/strong&gt;：进程正在从系统中消失。可能是进程正常结束或其他原因中断退出运行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;创建状态和就绪状态的区别：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;状态&lt;/th&gt;
+          &lt;th&gt;通俗理解&lt;/th&gt;
+          &lt;th&gt;线程内部发生了什么&lt;/th&gt;
+          &lt;th&gt;是否能被调度&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;创建（NEW）&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;只是&amp;quot;生成了车票&amp;quot;，还没进站&lt;/td&gt;
+          &lt;td&gt;已 &lt;code&gt;new Thread()&lt;/code&gt;，&lt;strong&gt;但未调用 &lt;code&gt;start()&lt;/code&gt;&lt;/strong&gt; ，&lt;strong&gt;操作系统线程尚未真正创建&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;❌ 调度器看不见，进不了就绪队列&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;就绪（RUNNABLE）&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;已进站，在候车大厅排队&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;调用了 &lt;code&gt;start()&lt;/code&gt;&lt;/strong&gt;，操作系统线程已建立，所有资源到位，等待 CPU 时间片&lt;/td&gt;
+          &lt;td&gt;✅ 随时可能被调度器挑中执行&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;dmadirect-memory-access&#34;&gt;&lt;a href=&#34;#dmadirect-memory-access&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DMA（direct memory access）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在没有DMA技术之前，I/O过程是这样的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;用户进程发起read调用，切换用户态到内核态&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;CPU发出I/O请求给磁盘控制器，然后返回&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;磁盘控制器收到请求开始准备数据，把数据放到磁盘控制器的内部缓冲区，然后产生一个中断&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;CPU收到中断信号，停下手头的工作，把磁盘控制器缓冲区的数据一次一个字节地读进自己的寄存器，然后再把寄存器里的数据写入到内存，而在数据传输的期间 CPU 是无法执行其他任务的&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/ffc10122b85f403ea4e622e140a14c45.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;由上可见整个数据传输过程中，都需要CPU亲自参与，期间cpu不能做其他事，非常拉低性能。于是有了DMA。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/89f0b19a98224a08ac310009f099db35.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;传统的文件传输&#34;&gt;&lt;a href=&#34;#%e4%bc%a0%e7%bb%9f%e7%9a%84%e6%96%87%e4%bb%b6%e4%bc%a0%e8%be%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;传统的文件传输
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;进程文件传输，最简单的方式就是把磁盘文件读取出来，通过网络协议发出去。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/aa9fc61965b24a06b85eac89d4b487c5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;期间发生&lt;strong&gt;四次&lt;/strong&gt; 用户态和内核态的切换，因为发生了**两次系统调用，一次是 &lt;code&gt;read()&lt;/code&gt; ，一次是 &lt;code&gt;write()，&lt;/code&gt;**每次系统调用都得先从用户态切换到内核态，等内核完成任务后，再从内核态切换回用户态。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;如何优化文件传输性能&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e4%bc%98%e5%8c%96%e6%96%87%e4%bb%b6%e4%bc%a0%e8%be%93%e6%80%a7%e8%83%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何优化文件传输性能
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;在读取磁盘数据的时候之所以要发生上下文切换，是因为用户空间没有权限操作磁盘或网卡，需要切换到内核态来完成，而&lt;strong&gt;一次系统调用必然发生两次上下文切换&lt;/strong&gt;：用户到内核、内核到用户，所以要减少上下文切换次数，就要减少系统调用次数！&lt;/p&gt;
+&lt;p&gt;在前面我们知道了，传统的文件传输方式会历经4次数据拷贝，而且这里面，从内核&lt;/p&gt;
+&lt;p&gt;的读缓冲区拷贝到用户的缓冲区里，再从用户的缓冲区里拷贝到socket的缓冲区里，&lt;/p&gt;
+&lt;p&gt;这个过程是没有必要的。因为文件传输的应用场景中，&lt;strong&gt;在用户空间我们并不会对数据再加工，所以数据实际上可以不用搬运到用户空间，因此用户的缓冲区是没有必要存在的&lt;/strong&gt;。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;如何实现零拷贝&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e9%9b%b6%e6%8b%b7%e8%b4%9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何实现零拷贝
+&lt;/h3&gt;&lt;h4 id=&#34;mmap--write&#34;&gt;&lt;a href=&#34;#mmap--write&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;mmap + write
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;在前面我们知道，read()系统调用的过程中会把内核缓冲区的数据拷贝到用户的缓冲区里，于是为了减少这一步开销，可以用&lt;strong&gt;mmap()替换read()系统&lt;/strong&gt;调用函数。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;mmap()&lt;/code&gt; 系统调用函数会直接把内核缓冲区里的数据「&lt;strong&gt;映射&lt;/strong&gt;」到用户空间，这样，操作系统内核与用户空间就不需要再进行任何的数据拷贝操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9e8c6b9440b443f3a2d8f459c7ad3647.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这种方式仍然是两次系统调用，四次上下文切换，只不过少了1次拷贝。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;sendfile&#34;&gt;&lt;a href=&#34;#sendfile&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;sendfile
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;linux内核2.1&lt;/strong&gt;中的sendfile是专门发送文件的系统调用函数，仅有一次系统调用，可以代替read和write两次系统调用。该系统调用，可以直接把内核缓冲区里的数据拷贝到 socket 缓冲区里，不再拷贝到用户态，这样就只有 2 次上下文切换，和 3 次数据拷贝。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/4a86d87191894c02b9d7bd9f3d1863c4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;strong&gt;linux 内核 &lt;code&gt;2.4&lt;/code&gt;&lt;/strong&gt; ，在网卡支持SG-DMA的情况下，可以用sendfile直接把文件从内核缓冲区拷贝到网卡。这才是真正的零拷贝，&lt;strong&gt;因为我们没有在内存层面去拷贝数据，也就是说全程没有通过 CPU 来搬运数据，所有的数据都是通过 DMA 来进行传输的。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/66db6c6cb573401d81f6f6afe95e8376.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;pagecache&#34;&gt;&lt;a href=&#34;#pagecache&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PageCache
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;回顾前面说道文件传输过程，其中第一步都是先需要先把磁盘文件数据拷贝「内核缓冲&lt;/p&gt;
+&lt;p&gt;区」里，这个「内核缓冲区」实际上是磁盘高速缓存(PageCache)。&lt;/p&gt;
+&lt;p&gt;PageCache会缓存&lt;strong&gt;最近被访问的数据&lt;/strong&gt; （把磁盘数据读到缓存中），来提高读写性能。同时会进行&lt;strong&gt;预读&lt;/strong&gt;，比如实际要从磁盘读取32kb数据，那么内核会把32-64kb的数据也提前读到缓存。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

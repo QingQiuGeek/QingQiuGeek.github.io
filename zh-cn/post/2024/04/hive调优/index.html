@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Hive调优汇总：分组聚合优化、join优化、数据倾斜优化、任务并行度优化、小文件合并优化等">
+<title>Hive调优</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="Hive调优">
+<meta property='og:description' content="Hive调优汇总：分组聚合优化、join优化、数据倾斜优化、任务并行度优化、小文件合并优化等">
+<meta property='og:url' content='/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hive' /><meta property='article:tag' content='hive' /><meta property='article:tag' content='数据仓库' /><meta property='article:tag' content='big data' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-13T20:49:38&#43;00:00'/><meta property='article:modified_time' content='2024-04-13T20:49:38&#43;00:00'/>
+<meta name="twitter:title" content="Hive调优">
+<meta name="twitter:description" content="Hive调优汇总：分组聚合优化、join优化、数据倾斜优化、任务并行度优化、小文件合并优化等">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae">Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}</a>
+      <ol>
+        <li><a href="#yarn资源配置-yarne8b584e6ba90e9858de7bdae">Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}</a></li>
+        <li><a href="#mr资源配置-mre8b584e6ba90e9858de7bdae">MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}</a></li>
+      </ol>
+    </li>
+    <li><a href="#explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892">Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}</a></li>
+    <li><a href="#分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96"><strong>分组聚合优化</strong> {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}</a>
+      <ol>
+        <li><a href="#优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e">优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}</a></li>
+      </ol>
+    </li>
+    <li><a href="#join优化-joine4bc98e58c96">Join优化 {#Join%E4%BC%98%E5%8C%96}</a>
+      <ol>
+        <li><a href="#common-join普通join-common20joinefbc88e699aee9809ajoinefbc89">Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}</a>
+          <ol>
+            <li><a href="#原理-e58e9fe79086">原理 {#%E5%8E%9F%E7%90%86}</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表">需要<strong>注意</strong> 的是，<strong>HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系</strong>，即HQL中的A<strong>表</strong></a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/">Hive调优</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            Hive调优汇总：分组聚合优化、join优化、数据倾斜优化、任务并行度优化、小文件合并优化等
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 13, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 12 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/hive/">Hive</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/big-data/">Big Data</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p><strong>目录</strong>{#main-toc}</p>
+<p><a class="link" href="#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE" >Yarn和MR资源配置</a>{#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}</p>
+<p><a class="link" href="#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE" >Yarn资源配置</a>{#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}</p>
+<p><a class="link" href="#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE" >MR资源配置</a>{#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}</p>
+<p><a class="link" href="#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92" >Explain查看执行计划</a>{#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92-toc}</p>
+<p><a class="link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96" >分组聚合优化</a>{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E" >优化前VS优化后</a>{#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E-toc}</p>
+<p><a class="link" href="#Join%E4%BC%98%E5%8C%96" >Join优化</a>{#Join%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89" >Common Join（普通join）</a>{#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89-toc}</p>
+<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
+<p><a class="link" href="#Map%20Join" >Map Join</a>{#Map%20Join-toc}</p>
+<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
+<p><a class="link" href="#%E4%BC%98%E5%8C%96%C2%A0" >优化</a>{#%E4%BC%98%E5%8C%96%C2%A0-toc}</p>
+<p><a class="link" href="#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA" >法一：hint提示</a>{#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA-toc}</p>
+<p><a class="link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91" >法二：自动触发</a>{#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91-toc}</p>
+<p><a class="link" href="#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B" >优化案例</a>{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}</p>
+<p><a class="link" href="#Bucket%20Map%20Join" >Bucket Map Join</a>{#Bucket%20Map%20Join-toc}</p>
+<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
+<p><a class="link" href="#%E4%BC%98%E5%8C%96" >优化</a>{#%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#hint%E6%8F%90%E7%A4%BA%C2%A0" >hint提示</a>{#hint%E6%8F%90%E7%A4%BA%C2%A0-toc}</p>
+<p><a class="link" href="#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B" >优化案例</a>{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}</p>
+<p><a class="link" href="#Sort%20Merge%20Bucket%20Map%20Join%28SMB%20map%20join%29" >Sort Merge Bucket Map Join(SMB map join)</a>{#Sort%20Merge%20Bucket%20Map%20Join(SMB%20map%20join)-toc}</p>
+<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
+<p><a class="link" href="#%E4%BC%98%E5%8C%96" >优化</a>{#%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96" >数据倾斜优化</a>{#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C" >分组聚合导致的数据倾斜</a>{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}</p>
+<p><a class="link" href="#Map-Side%E8%81%9A%E5%90%88" >Map-Side聚合</a>{#Map-Side%E8%81%9A%E5%90%88-toc}</p>
+<p><a class="link" href="#Skew-GroupBy%E4%BC%98%E5%8C%96" >Skew-GroupBy优化</a>{#Skew-GroupBy%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#%E4%BC%98%E5%8C%96%E5%89%8D" >优化前</a>{#%E4%BC%98%E5%8C%96%E5%89%8D-toc}</p>
+<p><a class="link" href="#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0" >优化后</a>{#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0-toc}</p>
+<p><a class="link" href="#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C" >Join导致的数据倾斜</a>{#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}</p>
+<p><a class="link" href="#map%20join" >map join</a>{#map%20join-toc}</p>
+<p><a class="link" href="#skew%20join" >skew join</a>{#skew%20join-toc}</p>
+<p><a class="link" href="#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96" >任务并行度优化</a>{#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6" >Map端并行度</a>{#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}</p>
+<p><a class="link" href="#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6" >Reduce端并行度</a>{#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}</p>
+<p><a class="link" href="#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96" >小文件合并优化</a>{#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6" >合并Map端输入的小文件</a>{#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}</p>
+<p><a class="link" href="#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6" >合并Reduce端输出的小文件</a>{#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}</p>
+<p><a class="link" href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96" >其他优化</a>{#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#CBO%E4%BC%98%E5%8C%96" >CBO优化</a>{#CBO%E4%BC%98%E5%8C%96-toc}</p>
+<p><a class="link" href="#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8" >谓词下推</a>{#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8-toc}</p>
+<p><a class="link" href="#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2" >矢量化查询</a>{#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2-toc}</p>
+<p><a class="link" href="#Fetch%E6%8A%93%E5%8F%96" >Fetch抓取</a>{#Fetch%E6%8A%93%E5%8F%96-toc}</p>
+<p><a class="link" href="#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F" >本地模式</a>{#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F-toc}</p>
+<p><a class="link" href="#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C" >并行执行</a>{#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-toc}</p>
+<p><a class="link" href="#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F" >严格模式</a>{#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-toc}</p>
+<hr>
+<h2 id="yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae"><a href="#yarn%e5%92%8cmr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne5928cmre8b584e6ba90e9858de7bdae" class="header-anchor"></a>Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+</h2><p>配置项参考官网：<a class="link" href="https://apache.github.io/hadoop/"  title="https://apache.github.io/hadoop/"
+     target="_blank" rel="noopener"
+    >https://apache.github.io/hadoop/</a></p>
+<h3 id="yarn资源配置-yarne8b584e6ba90e9858de7bdae"><a href="#yarn%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne8b584e6ba90e9858de7bdae" class="header-anchor"></a>Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+</h3><p>修改yarn-site.xml,调整的Yarn参数均与CPU、内存等资源有关，配置如下：</p>
+<blockquote>
+<p>&lt;property&gt;</p>
+<p>&lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;</p>
+<p>&lt;value&gt;65536&lt;/value&gt;</p>
+<p>&lt;description&gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&lt;/description&gt;</p>
+<p>&lt;/property&gt;</p>
+<p>&lt;property&gt;</p>
+<p>&lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;/name&gt;</p>
+<p>&lt;value&gt;16&lt;/value&gt;</p>
+<p>&lt;description&gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&lt;/description&gt;</p>
+<p>&lt;/property&gt;</p>
+<p>&lt;property&gt;</p>
+<p>&lt;name&gt;yarn.scheduler.maximum-allocation-mb&lt;/name&gt;</p>
+<p>&lt;value&gt;16384&lt;/value&gt;</p>
+<p>&lt;description&gt;单个Container能够使用的最大内存。&lt;/description&gt;</p>
+<p>&lt;/property&gt;</p>
+<p>&lt;property&gt;</p>
+<p>&lt;name&gt;yarn.scheduler.minimum-allocation-mb&lt;/name&gt;</p>
+<p>&lt;value&gt;512&lt;/value&gt;</p>
+<p>&lt;description&gt;单个Container能够使用的最小内存。&lt;/description&gt;</p>
+<p>&lt;/property&gt;</p></blockquote>
+<p>修改后重新分发该配置文件并重启Yarn</p>
+<h3 id="mr资源配置-mre8b584e6ba90e9858de7bdae"><a href="#mr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-mre8b584e6ba90e9858de7bdae" class="header-anchor"></a>MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+</h3><p>MapReduce资源配置主要包括Map Task的内存和CPU核数，以及Reduce Task的内存和CPU核数。核心配置参数如下：</p>
+<p><strong>1</strong>{#_Hlk110418691}<strong>）</strong> <strong>mapreduce.map.memory.mb</strong></p>
+<p>该参数的含义是，单个Map Task申请的container容器内存大小，其默认值为1024。该值不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。</p>
+<blockquote>
+<p>该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.map.memory.mb=2048;</p></blockquote>
+<p><strong>2</strong> <strong>）</strong> <strong>mapreduce.map.cpu.vcores</strong></p>
+<p>该参数的含义是，单个Map Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）</p>
+<p><strong>3）</strong> <strong>mapreduce.reduce.cpu.vcores</strong></p>
+<p>该参数的含义是，单个Reduce Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）</p>
+<p><strong>4）mapreduce.reduce.memory.mb</strong></p>
+<p>该参数的含义是，单个Reduce Task申请的container容器内存大小，其默认值为1024。该值同样不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。</p>
+<blockquote>
+<p>该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.reduce.memory.mb=2048;</p></blockquote>
+<h2 id="explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892"><a href="#explain%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92-explaine69fa5e79c8be689a7e8a18ce8aea1e58892" class="header-anchor"></a>Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}
+</h2><p>Explain用于呈现HQL语句的详细执行步骤，由一系列Stage组成，简单的理解为HQL查询语句的不同执行阶段，这一系列Stage具有依赖关系，每个Stage对应一个MapReduce Job或一个文件系统操作等。</p>
+<p>若某个Stage对应的一个MapReduce Job，则其Map端和Reduce端的计算逻辑分别由Map Operator Tree和Reduce Operator Tree进行描述，Operator Tree由一系列的Operator组成，一个Operator代表在Map或Reduce阶段的一个单一的逻辑操作，例如TableScan Operator，Select Operator，Join Operator等。具体如下图：</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/4da9891258984bbe1a892f0ccafcb92b.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<blockquote>
+<p><strong>常见的Operator及其作用如下</strong></p>
+<p>TableScan：表扫描操作，通常map端第一个操作肯定是表扫描操作</p>
+<p>Select Operator：选取操作</p>
+<p>Group By Operator：map端的分组聚合操作，在后面的分组聚合中会讲到</p>
+<p>Reduce Output Operator：输出到 reduce 操作</p>
+<p>Filter Operator：过滤操作</p>
+<p>Join Operator：join 操作</p>
+<p>File Output Operator：文件输出操作</p>
+<p>Fetch Operator 客户端获取数据操作
+<strong>Explain语法</strong></p>
+<p>EXPLAIN </p>
+\[FORMATTED \| EXTENDED \| DEPENDENCY\]<p> query-sql</p>
+<ul>
+<li>FORMATTED：将执行计划以JSON字符串的形式输出</li>
+<li>EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息</li>
+<li>DEPENDENCY：输出执行计划读取的表及分区</li>
+</ul>
+<p><strong>例：</strong></p>
+<p>hive (default)&gt;</p>
+<p>explain formatted</p>
+<p>select user_id,count(*) from order_detail group by user_id;</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/d475c4d504540aaa12554c7c9480202c.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p></blockquote>
+<h2 id="分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96"><a href="#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96-e58886e7bb84e8819ae59088e4bc98e58c96" class="header-anchor"></a><strong>分组聚合优化</strong> {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}
+</h2><p>分组聚合是通过MR Job实现的，map端读取数据，并按照分组字段分区，通过shuffle，把数据发到reduce，各组数据在reduce端完成最终的聚合运算。</p>
+<p>分组聚合的优化主要围绕减少shuffle数据量进行，具体做法是map-side聚合。map-side聚合是在map端维护一个hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到reduce端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个map端的部分聚合过程，以减少shuffle的工作量，进而减少reduce端的聚合工作量。</p>
+<blockquote>
+<p>map-side聚合相关参数如下</p>
+<p>&ndash;启用map-side聚合，默认是true</p>
+<p><strong>set hive.map.aggr=true;</strong></p>
+<br />
+<p>&ndash;用于检测源表数据是否适合进行map-side聚合。检测的方法是：系统自动先对若干条数据进行map-side聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行map-side聚合；否则，认为该表数据不适合进行map-side聚合，后续数据便不再进行map-side聚合。0.5意味着平均有2条数据可以聚合成1条，1意味着没有出现任何的聚合</p>
+<p><strong>set hive.map.aggr.hash.min.reduction=0.5;</strong></p>
+<br />
+<p>&ndash;用于<strong>hive.map.aggr.hash.min.reduction=0.5</strong> 检测源表是否适合map-side聚合的条数。</p>
+<p><strong>set hive.groupby.mapaggr.checkinterval=100000;</strong></p>
+<br />
+<p>&ndash;map-side聚合所用的hash table占用map task堆内存的最大比例，若超出该值，则会对hash table进行一次flush。</p>
+<p><strong>set hive.map.aggr.hash.force.flush.memory.threshold=0.7;</strong></p></blockquote>
+<h3 id="优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e"><a href="#%e4%bc%98%e5%8c%96%e5%89%8dvs%e4%bc%98%e5%8c%96%e5%90%8e-e4bc98e58c96e5898dvse4bc98e58c96e5908e" class="header-anchor"></a>优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}
+</h3><p>set hive.map.aggr=false关闭分组聚合优化，查看执行效果，在Map端没有了Group By Operator</p>
+<br />
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/bef7cc2560feaf0c03af5c376dadbac4.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>set hive.map.aggr=true开启分组聚合优化，查看执行效果，在Map端有了Group By Operator，</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/fd582dc168193eedd0302e6cdccc7d17.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<br />
+<p>若发生map-side优化，优化后比优化前的HQL执行耗时应该有所减少，且map的output数量明显小于input数量。</p>
+<p>若没有触发map-side，则map的output数量虽然比input数量有所减少但可以忽略不计。具体有没有触发map-side可以去web UI界面查看map日志。</p>
+<p>注意！！map-side聚合不够智能，即map端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据<strong>分区分桶</strong>，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。</p>
+<blockquote>
+<p><strong>例：</strong></p>
+<p>1）select province_id,count(*) from order_detail group by province_id;</p>
+<p>该语句查询所有订单，根据省份id分组聚合，省份只有34个，这样map后的数据应该只有34条，所以聚合结果是应该是比较可观的。所以group by 的基数越小，一般越适合聚合。</p>
+<p>2）select product_id,count(*) from order_detail group by product_id;</p>
+<p>若product_id这一分组字段在order_detail表中分布比较散，那么可能会导致hive在表中切片抽样进行map-side检测的时候测试聚合结果&gt;0.5，那么最终就没有使用map-side聚合。所以说如果能保证抽样数据的测试结果&lt;=0.5，就会实现分组聚合，当然也可以调整<strong>hive.map.aggr.hash.min.reduction</strong> 的值以提高map-side的命中率。</p></blockquote>
+<p><strong>若100w</strong> <strong>的数据集分组聚合之后的输出</strong> <strong>&gt;100w,</strong> <strong>可能的原因是多次触发了</strong> <strong>hash table</strong> <strong>的</strong> <strong>flush</strong></p>
+<h2 id="join优化-joine4bc98e58c96"><a href="#join%e4%bc%98%e5%8c%96-joine4bc98e58c96" class="header-anchor"></a>Join优化 {#Join%E4%BC%98%E5%8C%96}
+</h2><p>Join优化就是控制HQL语句走哪种join算法，这些join算法有的快，有的慢，有的激进，有的保守。我们要做的就是让HQL走最适合自己的join算法。</p>
+<h3 id="common-join普通join-common20joinefbc88e699aee9809ajoinefbc89"><a href="#common-join%e6%99%ae%e9%80%9ajoin-common20joinefbc88e699aee9809ajoinefbc89" class="header-anchor"></a>Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}
+</h3><h4 id="原理-e58e9fe79086"><a href="#%e5%8e%9f%e7%90%86-e58e9fe79086" class="header-anchor"></a>原理 {#%E5%8E%9F%E7%90%86}
+</h4><p>hive中最稳定的join算法，其通过一个MapReduce Job完成一个join操作。Map端负责读取join操作所需表的数据，并按照关联字段进行分区，通过Shuffle，将其发送到Reduce端，相同key的数据在Reduce端完成最终的Join操作。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/c93be2b01fce05ed73c439a062480a2f.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表"><a href="#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f-%e7%9a%84%e6%98%afhql%e8%af%ad%e5%8f%a5%e4%b8%ad%e7%9a%84join%e6%93%8d%e4%bd%9c%e5%92%8c%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92%e4%b8%ad%e7%9a%84common-join%e4%bb%bb%e5%8a%a1%e5%b9%b6%e9%9d%9e%e4%b8%80%e5%af%b9%e4%b8%80%e7%9a%84%e5%85%b3%e7%b3%bb%e5%8d%b3hql%e4%b8%ad%e7%9a%84a%e8%a1%a8" class="header-anchor"></a>需要<strong>注意</strong> 的是，<strong>HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系</strong>，即HQL中的A<strong>表</strong>
+</h2>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="万字Kafka详解！图文并茂！kafka架构、数据模型、消息队列MQ、数据请求机制、副本机制、生产者、消费者组详解、主题分区、broker、controller">
+<title>Kafka入门到入土——万字详解，图文并茂</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="Kafka入门到入土——万字详解，图文并茂">
+<meta property='og:description' content="万字Kafka详解！图文并茂！kafka架构、数据模型、消息队列MQ、数据请求机制、副本机制、生产者、消费者组详解、主题分区、broker、controller">
+<meta property='og:url' content='/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='消息队列' /><meta property='article:tag' content='kafka' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='大数据' /><meta property='article:tag' content='zookeeper' /><meta property='article:tag' content='big data' /><meta property='article:published_time' content='2024-05-05T17:42:50&#43;00:00'/><meta property='article:modified_time' content='2024-05-05T17:42:50&#43;00:00'/>
+<meta name="twitter:title" content="Kafka入门到入土——万字详解，图文并茂">
+<meta name="twitter:description" content="万字Kafka详解！图文并茂！kafka架构、数据模型、消息队列MQ、数据请求机制、副本机制、生产者、消费者组详解、主题分区、broker、controller">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#消息队列mq-e6b688e681afe9989fe58897efbc88mqefbc89">消息队列（MQ） {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89}</a>
+      <ol>
+        <li><a href="#消息队列一般应用场景-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af">消息队列一般应用场景 {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF}</a></li>
+        <li><a href="#JMS">JMS</a>
+          <ol>
+            <li><a href="#jms模型-c2a0jmse6a8a1e59e8b">JMS模型 {#%C2%A0JMS%E6%A8%A1%E5%9E%8B}</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#kafka架构-kafkae69eb6e69e84">Kafka架构 {#Kafka%E6%9E%B6%E6%9E%84}</a>
+      <ol>
+        <li><a href="#Broker">Broker</a>
+          <ol>
+            <li><a href="#controller选举-controllere98089e4b8be">Controller选举 {#Controller%E9%80%89%E4%B8%BE}</a></li>
+            <li><a href="#broker上下线-brokere4b88ae4b88be7babfc2a0">Broker上下线 {#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0}</a></li>
+            <li><a href="#broker工作流程-brokere5b7a5e4bd9ce6b581e7a88b">Broker工作流程 {#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B}</a></li>
+          </ol>
+        </li>
+        <li><a href="#Producer">Producer</a></li>
+        <li><a href="#Consumer">Consumer</a></li>
+        <li><a href="#consumer-group-consumer20group">Consumer Group {#Consumer%20Group}</a></li>
+        <li><a href="#Topic">Topic</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/">Kafka入门到入土——万字详解，图文并茂</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            万字Kafka详解！图文并茂！kafka架构、数据模型、消息队列MQ、数据请求机制、副本机制、生产者、消费者组详解、主题分区、broker、controller
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 05, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 15 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/kafka/">Kafka</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/zookeeper/">Zookeeper</a> 
+            
+            
+            ... 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p><strong>目录</strong>{#main-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89" >消息队列（MQ）</a>{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF" >消息队列一般应用场景</a>{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}</p>
+<p><a class="link" href="#JMS" >JMS</a>{#JMS-toc}</p>
+<p><a class="link" href="#%C2%A0JMS%E6%A8%A1%E5%9E%8B" >JMS模型</a>{#%C2%A0JMS%E6%A8%A1%E5%9E%8B-toc}</p>
+<p><a class="link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89" >点对点模型（peer to peer）</a>{#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89-toc}</p>
+<p><a class="link" href="#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B" >发布订阅模型</a>{#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B-toc}</p>
+<p><a class="link" href="#Kafka%E6%9E%B6%E6%9E%84" >Kafka架构</a>{#Kafka%E6%9E%B6%E6%9E%84-toc}</p>
+<p><a class="link" href="#Broker" >Broker</a>{#Broker-toc}</p>
+<p><a class="link" href="#Controller%E9%80%89%E4%B8%BE" >Controller选举</a>{#Controller%E9%80%89%E4%B8%BE-toc}</p>
+<p><a class="link" href="#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0" >Broker上下线</a>{#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0-toc}</p>
+<p><a class="link" href="#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" >Broker工作流程</a>{#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-toc}</p>
+<p><a class="link" href="#Producer" >Producer</a>{#Producer-toc}</p>
+<p><a class="link" href="#Consumer" >Consumer</a>{#Consumer-toc}</p>
+<p><a class="link" href="#Consumer%20Group" >Consumer Group</a>{#Consumer%20Group-toc}</p>
+<p><a class="link" href="#Topic" >Topic</a>{#Topic-toc}</p>
+<p><a class="link" href="#Partition%E5%88%86%E5%8C%BA" >Partition分区</a>{#Partition%E5%88%86%E5%8C%BA-toc}</p>
+<p><a class="link" href="#%E5%88%86%E5%8C%BA%E5%A5%BD%E5%A4%84%C2%A0" >分区好处</a>{#%E5%88%86%E5%8C%BA%E5%A5%BD%E5%A4%84%C2%A0-toc}</p>
+<p><a class="link" href="#%C2%A0%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5" >生产者发送消息的分区策略</a>{#%C2%A0%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5-toc}</p>
+<p><a class="link" href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8Segment" >文件存储Segment</a>{#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8Segment-toc}</p>
+<p><a class="link" href="#%E5%88%86%E5%8C%BA%E7%9A%84%E5%89%AF%E6%9C%AC" >分区的副本</a>{#%E5%88%86%E5%8C%BA%E7%9A%84%E5%89%AF%E6%9C%AC-toc}</p>
+<p><a class="link" href="#Why%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC" >Why分区副本</a>{#Why%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC-toc}</p>
+<p><a class="link" href="#%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E2%80%8B%E7%BC%96%E8%BE%91" >手动调整分区副本存储​编辑</a>{#%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E2%80%8B%E7%BC%96%E8%BE%91-toc}</p>
+<p><a class="link" href="#%E5%89%AF%E6%9C%ACLeader%E5%88%86%E5%8C%BA%E8%87%AA%E5%8A%A8%E5%B9%B3%E8%A1%A1" >副本Leader分区自动平衡</a>{#%E5%89%AF%E6%9C%ACLeader%E5%88%86%E5%8C%BA%E8%87%AA%E5%8A%A8%E5%B9%B3%E8%A1%A1-toc}</p>
+<p><a class="link" href="#%E5%A2%9E%E5%8A%A0%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%C2%A0" >增加副本数量</a>{#%E5%A2%9E%E5%8A%A0%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%89%AF%E6%9C%ACLeader%E9%80%89%E4%B8%BE" >副本Leader选举</a>{#%E5%89%AF%E6%9C%ACLeader%E9%80%89%E4%B8%BE-toc}</p>
+<p><a class="link" href="#%E5%89%AF%E6%9C%ACLeader%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D" >副本Leader故障恢复</a>{#%E5%89%AF%E6%9C%ACLeader%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D-toc}</p>
+<p><a class="link" href="#%E5%89%AF%E6%9C%ACFollower%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%C2%A0" >副本Follower故障恢复</a>{#%E5%89%AF%E6%9C%ACFollower%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%C2%A0-toc}</p>
+<p><a class="link" href="#%C2%A0ISR%E6%9C%BA%E5%88%B6" >ISR机制</a>{#%C2%A0ISR%E6%9C%BA%E5%88%B6-toc}</p>
+<p><a class="link" href="#%E4%B8%8D%E5%AE%8C%E5%85%A8%E9%A6%96%E9%A2%86%E9%80%89%E4%B8%BE" >不完全首领选举</a>{#%E4%B8%8D%E5%AE%8C%E5%85%A8%E9%A6%96%E9%A2%86%E9%80%89%E4%B8%BE-toc}</p>
+<p><a class="link" href="#%E6%9C%80%E5%B0%91%E5%90%8C%E6%AD%A5%E5%89%AF%E6%9C%AC" >最少同步副本</a>{#%E6%9C%80%E5%B0%91%E5%90%8C%E6%AD%A5%E5%89%AF%E6%9C%AC-toc}</p>
+<p><a class="link" href="#%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82%C2%A0" >数据请求</a>{#%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82%C2%A0-toc}</p>
+<p><a class="link" href="#%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6" >请求机制</a>{#%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6-toc}</p>
+<p><a class="link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E8%AF%A6%E8%A7%A3" >生产者详解</a>{#%E7%94%9F%E4%BA%A7%E8%80%85%E8%AF%A6%E8%A7%A3-toc}</p>
+<p><a class="link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B" >生产者发送消息的过程</a>{#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%C2%A0" >消息可靠性</a>{#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%C2%A0-toc}</p>
+<p><a class="link" href="#ACK%E5%BA%94%E7%AD%94%C2%A0" >ACK应答</a>{#ACK%E5%BA%94%E7%AD%94%C2%A0-toc}</p>
+<p><a class="link" href="#%C2%A0%E6%95%B0%E6%8D%AE%E9%87%8D%E8%AF%95" >数据重试</a>{#%C2%A0%E6%95%B0%E6%8D%AE%E9%87%8D%E8%AF%95-toc}</p>
+<p><a class="link" href="#%E6%95%B0%E6%8D%AE%E4%B9%B1%E5%BA%8F%C2%A0" >数据乱序</a>{#%E6%95%B0%E6%8D%AE%E4%B9%B1%E5%BA%8F%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81" >同步发送</a>{#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81-toc}</p>
+<p><a class="link" href="#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81" >异步发送</a>{#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81-toc}</p>
+<p><a class="link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E6%8F%90%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F" >生产者提高吞吐量</a>{#%E7%94%9F%E4%BA%A7%E8%80%85%E6%8F%90%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F-toc}</p>
+<p><a class="link" href="#%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%C2%A0" >压缩算法</a>{#%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%C2%A0-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3" >消费者详解</a>{#%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3-toc}</p>
+<p><a class="link" href="#push%26pull" >push&amp;pull</a>{#push%26pull-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E8%B0%83%E5%BA%A6%E5%99%A8%C2%A0" >消费者组调度器</a>{#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E8%B0%83%E5%BA%A6%E5%99%A8%C2%A0-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E9%85%8D%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5%C2%A0" >消费者分配分区策略</a>{#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E9%85%8D%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5%C2%A0-toc}</p>
+<p><a class="link" href="#%E6%B6%88%E8%B4%B9%E8%80%85Leader%C2%A0" >消费者Leader</a>{#%E6%B6%88%E8%B4%B9%E8%80%85Leader%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1" >分区再均衡</a>{#%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1-toc}</p>
+<p><a class="link" href="#%E7%9B%91%E5%90%AC%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1%C2%A0" >监听分区再均衡</a>{#%E7%9B%91%E5%90%AC%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1%C2%A0-toc}</p>
+<p><a class="link" href="#%E5%81%8F%E7%A7%BB%E9%87%8FOffset" >偏移量Offset</a>{#%E5%81%8F%E7%A7%BB%E9%87%8FOffset-toc}</p>
+<p><a class="link" href="#LSO" >LSO</a>{#LSO-toc}</p>
+<p><a class="link" href="#LEO" >LEO</a>{#LEO-toc}</p>
+<p><a class="link" href="#HW" >HW</a>{#HW-toc}</p>
+<p><a class="link" href="#%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F" >手动提交偏移量</a>{#%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F-toc}</p>
+<p><a class="link" href="#%E5%90%8C%E6%AD%A5%E6%8F%90%E4%BA%A4" >同步提交</a>{#%E5%90%8C%E6%AD%A5%E6%8F%90%E4%BA%A4-toc}</p>
+<p><a class="link" href="#%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4" >异步提交</a>{#%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4-toc}</p>
+<p><a class="link" href="#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F" >自动提交偏移量</a>{#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F-toc}</p>
+<p><a class="link" href="#%E6%88%AA%E8%87%B3%20%E5%B0%9A%E7%A1%85%E8%B0%B7kafka3.x%20P39" >截至 尚硅谷kafka3.x P39</a>{#%E6%88%AA%E8%87%B3%20%E5%B0%9A%E7%A1%85%E8%B0%B7kafka3.x%20P39-toc}</p>
+<hr>
+<br />
+<p>Kafka是一个由Scala和Java语言开发的，经典高吞吐量的分布式消息发布和订阅系统，也是大数据技术领域中用作数据交换的核心组件之一。它具有以下特点：</p>
+<blockquote>
+<ul>
+<li>支持消息的发布和订阅，类似于 RabbtMQ、ActiveMQ 等消息队列；</li>
+<li>支持数据实时处理；</li>
+<li>能保证消息的可靠性投递；</li>
+<li>支持消息的持久化存储，并通过多副本分布式的存储方案来保证消息的容错；</li>
+<li>高吞吐率，单 Broker 可以轻松处理数千个分区以及每秒百万级的消息量；</li>
+</ul></blockquote>
+<h2 id="消息队列mq-e6b688e681afe9989fe58897efbc88mqefbc89"><a href="#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97mq-e6b688e681afe9989fe58897efbc88mqefbc89" class="header-anchor"></a>消息队列（MQ） {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89}
+</h2><p>Kafka软件最初的设计就是专门用于数据传输的消息系统，类似功能的软件有RabbitMQ、ActiveMQ、RocketMQ等，这些软件的核心功能是传输数据，而Java中如果想要实现数据传输功能，那么这个软件一般需要遵循Java消息服务技术规范JMS。前面提到的ActiveMQ软件就完全遵循了JMS技术规范，而RabbitMQ是遵循了类似JMS规范并兼容JMS规范的跨平台的AMQP规范。除了上面描述的JMS，AMQP外，还有一种用于物联网小型设备之间传输消息的MQTT通讯协议。</p>
+<p>Kafka拥有作为一个消息系统应该具备的功能，但是却有着独特的设计。<strong>Kafka借鉴了JMS规范的思想，但是却并没有完全遵循JMS规范</strong>。这也恰恰是软件名称为Kafka，而不是KafkaMQ的原因。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/9fb6defea02f0b37752ca1c4782231e4.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="消息队列一般应用场景-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af"><a href="#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%b8%80%e8%88%ac%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af" class="header-anchor"></a>消息队列一般应用场景 {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF}
+</h3><blockquote>
+<ul>
+<li>**应用耦合：**多应用间通过消息队列对同一消息进行处理，避免调用接口失败导致整个过程失败。</li>
+<li><img src="https://i-blog.csdnimg.cn/blog_migrate/2f16f6101cd2b4bb63436228734e155b.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+<li>**异步处理：**多应用对消息队列中同一消息进行处理，应用间并发处理消息，相比串行处理，减少处理时间</li>
+<li><img src="https://i-blog.csdnimg.cn/blog_migrate/a55ab7be057ab04a981105f917581112.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+<li><strong>限流削峰：</strong> 广泛应用于秒杀或抢购活动中，避免流量过大导致应用系统挂掉的情况。该方法有如下优点：
+<ul>
+<li>1.请求先入消息队列，而不是由业务处理系统直接处理，做了一次缓冲,极 大地减少了业务处理系统的压力；</li>
+<li>2.队列长度可以做限制，事实上，秒杀时，后入队列的用户无法秒杀到商品，这些请求可以直接被抛弃，返回活动已结束或商品已售完信息；</li>
+</ul>
+</li>
+<li><img src="https://i-blog.csdnimg.cn/blog_migrate/257e558241daec39757876a0891b6458.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+<li><strong>消息驱动的系统：</strong> 系统分为消息队列、消息生产者、消息消费者，生产者 负责产生消息，消费者(可能有多个)负责对消息进行处理。<strong>具体场景</strong>：用户新上传了一批照片，人脸识别系统需要对这个用户的所有照片进行聚类，聚类完成后由对账系统重新生成用户的人脸索引(加快查询)。这三个子 系统间由消息队列连接起来，前一个阶段的处理结果放入队列中，后一个阶段从 队列中获取消息继续处理。</li>
+<li><img src="https://i-blog.csdnimg.cn/blog_migrate/e7a0846fd5fe97485958c48ddb466a5d.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+<li>该方法有如下优点：1.避免了直接调用下一个系统导致当前系统失败； 2.每个子系统对于消息的处理方式可以更为灵活，可以选择收到消息时就处理，可以选择定时处理，也可以划分时间段按不同处理速度处理；</li>
+</ul></blockquote>
+<h3 id="JMS"><a href="#JMS" class="header-anchor"></a>JMS
+</h3><p>JMS类似于JDBC，是java平台的消息中间件通用规范，定义了系统和系统之间传输消息的接口。</p>
+<p>为了实现系统和系统之间的数据传输，JMS规范中定义很多用于通信的组件：<img src="https://i-blog.csdnimg.cn/blog_migrate/285ce9d7a2a8f1e6ac77037c2f05e82b.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<blockquote>
+<ul>
+<li><strong>JMS Producer</strong> **：**JMS消息生产者。所谓的生产者，就是生产数据的客户端应用程序，这些应用通过JMS接口发送JMS消息。</li>
+<li><strong>JMS Provider</strong>：JMS消息提供者。其实就是实现JMS接口和规范的消息中间件，也就是我们提供消息服务的软件系统，比如RabbitMQ、ActiveMQ、Kafka。</li>
+<li><strong>JMS Message</strong>：JMS消息。这里的消息指的就是数据。一般采用Java数据模型进行封装，其中包含消息头，消息属性和消息主体内容。</li>
+<li><strong>JMS Consumer</strong>：JMS消息消费者。所谓的消费者，就是从消息提供者中获取数据的客户端应用程序，这些应用通过JMS接口接收JMS消息。</li>
+</ul></blockquote>
+<h4 id="jms模型-c2a0jmse6a8a1e59e8b"><a href="#jms%e6%a8%a1%e5%9e%8b-c2a0jmse6a8a1e59e8b" class="header-anchor"></a>JMS模型 {#%C2%A0JMS%E6%A8%A1%E5%9E%8B}
+</h4><h5 id="点对点模型peer-to-peer-e782b9e5afb9e782b9e6a8a1e59e8befbc88peer20to20peerefbc89"><a href="#%e7%82%b9%e5%af%b9%e7%82%b9%e6%a8%a1%e5%9e%8bpeer-to-peer-e782b9e5afb9e782b9e6a8a1e59e8befbc88peer20to20peerefbc89" class="header-anchor"></a>点对点模型（peer to peer） {#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89}
+</h5><blockquote>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/fd0746d5877a27d6ecaa045fee8dc601.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>每个消息只有一个接收者（Consumer）(即一旦被消费，就会被删除)；</li>
+<li>发送者和接发收者间没有依赖性，发送者发送消息之后，不管有没有接收者在运行，都不会影响到发送者下次发送消息；</li>
+<li>接收者在成功接收消息之后需向队列应答成功，以便消息队列删除当前接 收的消息</li>
+</ul></blockquote>
+<h5 id="发布订阅模型-e58f91e5b883e8aea2e99885e6a8a1e59e8b"><a href="#%e5%8f%91%e5%b8%83%e8%ae%a2%e9%98%85%e6%a8%a1%e5%9e%8b-e58f91e5b883e8aea2e99885e6a8a1e59e8b" class="header-anchor"></a>发布订阅模型 {#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B}
+</h5><blockquote>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/0bdabc2f116a00b4e787472f14c7c820.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>每个消息可以有多个订阅者，但是订阅者必须来自不同的消费者组；</li>
+<li>针对某个主题（Topic）的订阅者，它必须创建一个订阅者之后，才能消费发布者的消息。</li>
+<li>为了消费消息，订阅者需要提前订阅该角色主题，并保持在线运行；</li>
+</ul>
+<p><strong>Kafka采用就是这种模型。</strong></p></blockquote>
+<h2 id="kafka架构-kafkae69eb6e69e84"><a href="#kafka%e6%9e%b6%e6%9e%84-kafkae69eb6e69e84" class="header-anchor"></a>Kafka架构 {#Kafka%E6%9E%B6%E6%9E%84}
+</h2><p>在 Kafka 2.8.0 版本，移除了对 Zookeeper 的依赖，通过<strong>Kraft模式</strong> 进行自己的集群管理，使用 Kafka<strong>内部的 Quorum 控制器</strong>来取代 ZooKeeper管理元数据，这样我们无需维护zk集群，只要维护Kafka集群就可以了，节省运算资源。</p>
+<p><strong>kafka基本数据单元被称为 message(消息)</strong>，为减少网络开销，提高效率，多个消息会被放入同一批次(Batch) 中后再写入。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/f0678a5c5c02bd632d1b71553fd9fa4c.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="Broker"><a href="#Broker" class="header-anchor"></a>Broker
+</h3><blockquote>
+<ul>
+<li>kafka 集群中包含多个服务实例（节点），这种服务实例被称为 broker（一个 broker 就是一个节点/一个服务器），每个 broker 都有一个唯一标识 broker.id，用于标识自己在集群中的身份，可以在配置文件 server.properties 中进行配置，或由程序自动生成。</li>
+<li>Broker 接收来自生产者的消息，为消息设置偏移量，并提交消息到磁盘保存。Broker 为消费者提供服务，对读取分区的请求做出响应，返回已经提交到磁盘的消息。</li>
+</ul></blockquote>
+<h4 id="controller选举-controllere98089e4b8be"><a href="#controller%e9%80%89%e4%b8%be-controllere98089e4b8be" class="header-anchor"></a>Controller选举 {#Controller%E9%80%89%E4%B8%BE}
+</h4><blockquote>
+<p>每一个集群都会选举出一个 Broker作为<strong>集群控制器</strong> **(Controller)，它负责分区 Leader 选举，还负责管理主题分区及其副本的状态、元数据管理。**如果在运行过程中，Controller节点出现了故障，那么Kafka会依托于ZooKeeper软件选举其他的节点作为新的Controller，让Kafka集群实现高可用。</p>
+<p><strong>特殊情况</strong></p>
+<p>Controller节点并没有宕掉，而是因为网络的抖动，不稳定，导致和ZooKeeper之间的会话超时，那么此时，整个Kafka集群就会认为之前的Controller已经下线（退出）从而选举出新的Controller，而之前的Controller的网络又恢复了，以为自己还是Controller了，继续管理整个集群，那么此时，整个Kafka集群就有两个controller进行管理，那么其他的broker就懵了，不知道听谁的了，这种情况，我们称之为脑裂现象，为了解决这个问题，Kafka通过一个任期（epoch:纪元）的概念来解决，也就是说，每一个Broker当选Controller时，会告诉当前Broker是第几任Controller，一旦重新选举时，这个任期会自动增1，那么不同任期的Controller的epoch值是不同的，那么旧的controller一旦发现集群中有新任controller的时候，那么它就会完成退出操作（清空缓存，中断和broker的连接，并重新加载最新的缓存），让自己重新变成一个普通的Broker。</p></blockquote>
+<h4 id="broker上下线-brokere4b88ae4b88be7babfc2a0"><a href="#broker%e4%b8%8a%e4%b8%8b%e7%ba%bf-brokere4b88ae4b88be7babfc2a0" class="header-anchor"></a>Broker上下线 {#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0}
+</h4><p>Controller 在初始化时，会利用 ZK 的 watch 机制注册很多不同类型的监听器，当监听的事件被触发时，Controller 就会触发相应的操作。Controller 在初始化时，会注册多种类型的监听器，主要有以下几种：</p>
+<blockquote>
+<ul>
+<li>/kafka/admin/reassign_partitions 节点，用于分区副本迁移的监听</li>
+<li>/kafka/isr_change_notification 节点，用于 Partition ISR 变动的监听</li>
+<li>/kafka/admin/preferred_replica_election 节点，用于需要进行 Partition 最优 leader 选举的监听</li>
+<li>/kafka/brokers/topics 节点，用于 Topic 新建的监听</li>
+<li>/kafka/brokers/topics/TOPIC_NAME 节点，用于 Topic Partition 扩容的监听</li>
+<li>/kafka/admin/delete_topics 节点，用于 Topic 删除的监听</li>
+<li>/kafka/brokers/ids 节点，用于 Broker 上下线的监听，记录有哪些kafka服务器在线。</li>
+<li>/kafka/controller节点，辅助选举leader</li>
+<li><img src="https://i-blog.csdnimg.cn/blog_migrate/6eacf94f1216ffd1894cad366ae0a0ca.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+</ul></blockquote>
+<p>每台 Broker 在上线时，都会与ZK建立一个建立一个session，并在 /brokers/ids下注册一个节点，节点名字就是broker id，这个节点是临时节点，该节点内部会有这个 Broker 的详细节点信息。Controller会监听/brokers/ids这个路径下的所有子节点，如果有新的节点出现，那么就代表有新的Broker上线，如果有节点消失，就代表有broker下线，Controller会进行相应的处理，Kafka就是利用ZK的这种watch机制及临时节点的特性来完成集群 Broker的上下线。无论Controller监听到的哪一种节点的变化，都会进行相应的处理，同步整个集群元数据。</p>
+<h4 id="broker工作流程-brokere5b7a5e4bd9ce6b581e7a88b"><a href="#broker%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b-brokere5b7a5e4bd9ce6b581e7a88b" class="header-anchor"></a>Broker工作流程 {#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B}
+</h4><p><img src="https://i-blog.csdnimg.cn/blog_migrate/afd0a4e19e5449dd0cfa84fe3c8213ed.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="Producer"><a href="#Producer" class="header-anchor"></a>Producer
+</h3><blockquote>
+<p>一般情况下，生产者在把消息均衡地分布到在主题的所有分区上，而并不关心消息会被写到哪个分区。如果我们想要把消息写到指定的分区，可以通过<strong>自定义分区器</strong>来实现。</p></blockquote>
+<h3 id="Consumer"><a href="#Consumer" class="header-anchor"></a>Consumer
+</h3><blockquote>
+<p><strong>消费者一定是归属于某个消费组中的</strong>，消费者可以订阅一或多个主题，并按照分区中消息的顺序来读取。消费者通过检查消息的偏移量 (offset) 来区分读取过的消息。偏移量是一个不 断递增的数值，在创建消息时，Kafka 会把它添加到其中，在给定的分区里，每个消息的偏移量都是唯一的。消费者把每个分区最后读取的偏移量保存在 Zookeeper 或 Kafka 上，如果消费者关闭或者重启，它还可以重新获取该偏移量，以保证读取状态不会丢失。</p></blockquote>
+<h3 id="consumer-group-consumer20group"><a href="#consumer-group-consumer20group" class="header-anchor"></a>Consumer Group {#Consumer%20Group}
+</h3><blockquote>
+<p>消费者组由一个或者多个消费者组成，<strong>同一个组中的消费者对于同一条消息只消费一次。</strong></p>
+<p>每个消费者组都有一个 ID，即 group ID。组内的所有消费者协调在一起来消费 一个订阅主题的所有分区。当然，<strong>每个分区只能由同一个消费组内的一个消费者来消费，但可以由不同的消费组来消费。partition 数量决定了每个 consumer group 中并发消费者的最大数。</strong></p>
+<p><strong>因此要合理设置消费者组中的消费者数量，避免出现消费者闲置。</strong></p></blockquote>
+<h3 id="Topic"><a href="#Topic" class="header-anchor"></a>Topic
+</h3><blockquote>
+<p>Kafka 的消息通过 Topics(主题) 进行分类，Kafka中有两个固定的，用于记录消费者偏移量和事务处理的主题，一个主题可以被分为若干个 Partitions(分区)，一个分区就是 一个提交日志 (commit log)。消息以追加的方式写入分区，然后以先入先出的顺序读取。<strong>Kafka 通过分区来实现数据的冗余和伸缩性，分区可以分布在不同的服务器上，这意味着一个 Topic 可以横跨多个服务器，以提供比单个服务器更强大的性能</strong>。</p>
+<p><strong>由于一个 Topic 包含多个分区，因此无法在整个 Topic 范围内保证消息的顺序性，但可以保证消息在单个分区内的顺序性。</strong></p>
+<br /></blockquote>
+<hr>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">HA—Hadoop高可用</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">大数据—Zookeeper集群入门及使用</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hadoop入门—HDFS、MR、Yarn</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive本质、架构、玩法</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive调优</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

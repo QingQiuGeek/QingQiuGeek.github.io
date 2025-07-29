@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>字符串常量池 on 青秋博客</title>
+        <link>/zh-cn/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/</link>
+        <description>Recent content in 字符串常量池 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Fri, 07 Feb 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>字符串常量池</title>
+        <link>/zh-cn/post/2025/02/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/</link>
+        <pubDate>Fri, 07 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/02/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145166085&#34;  title=&#34;synchronized锁升级-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;synchronized锁升级-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145355561&#34;  title=&#34;【排坑】云服务器docker部署前后端分离项目&amp;#43;域名解析&amp;#43;OSS-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;【排坑】云服务器docker部署前后端分离项目+域名解析+OSS-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145285512&#34;  title=&#34;【大坑！已解决】docker容器jar包连不上另一个容器的mysql_docker启动jar包时无法连接mysql-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;【大坑！已解决】docker容器jar包连不上另一个容器的mysql_docker启动jar包时无法连接mysql-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145461620&#34;  title=&#34;JVM图文入门-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;JVM图文入门-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145346364&#34;  title=&#34;【已解决】OSS配置问题_keyuewenhua.oss-cn-beijing.aliyuncs-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;【已解决】OSS配置问题_keyuewenhua.oss-cn-beijing.aliyuncs-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/5b52485b93fb447ebf597269ad64e74c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/f11962bafabf4d248a043657d834c598.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;String s=&lt;strong&gt;new String(&amp;ldquo;abc&amp;rdquo;)时，&lt;/strong&gt; 虚拟机会先去字符串常量池查找有无abc这个字符串对象，如果有就不在字符串常量池创建了，直接在堆中创建一个abc字符串对象，然后将&lt;strong&gt;堆中这个abc的对象地址&lt;/strong&gt; 返回赋值给变量，如果没有，则先在字符串常量池创建字符串abc，然后在堆中创建abc的字符串对象，然后将&lt;strong&gt;堆中这个abc的对象地址&lt;/strong&gt;返回赋值给变量。&lt;/p&gt;
+&lt;p&gt;java的栈上存储的是基本数据类型的变量和对象的引用，而对象本身则存储在堆上。
+&lt;strong&gt;为什么要先在字符串常量池中创建对象，然后再在堆上创建呢&lt;/strong&gt;？&lt;/p&gt;
+&lt;p&gt;通常我们会用双引号的方式创建字符串对象，而不是new关键字，此时虚拟机会先在字符串常量池中查找有没有&amp;quot;abc&amp;quot;这个字符串对象，如果有，则不创建任何对象，直接将字符串常量池中这个&amp;quot;abc&amp;quot;的对象地址返回，赋给变量 s；如果没有，在字符串常量池中创建&amp;quot;abc&amp;quot;这个对象，然后将其地址返回，赋给变量 s。此时就不用在堆中创建对象了
+String s = new String(&amp;ldquo;abc&amp;rdquo;); String s1 = new String(&amp;ldquo;abc&amp;rdquo;);&lt;/p&gt;
+&lt;p&gt;这两行代码会创建三个对象，字符串常量池一个、堆上两个。&lt;/p&gt;
+&lt;p&gt;String s = &amp;ldquo;abc&amp;rdquo;; String s1 = &amp;ldquo;abc&amp;rdquo;;&lt;/p&gt;
+&lt;p&gt;这两行代码只会创建一个对象，就是字符串常量池中的那个。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

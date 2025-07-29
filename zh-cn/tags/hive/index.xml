@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Hive on 青秋博客</title>
+        <link>/zh-cn/tags/hive/</link>
+        <description>Recent content in Hive on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sun, 14 Apr 2024 21:41:05 +0000</lastBuildDate><atom:link href="/zh-cn/tags/hive/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Hive入门-HQL、表操作、库操作、视图、索引、数据类型</title>
+        <link>/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+        <pubDate>Sun, 14 Apr 2024 21:41:05 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B&#34; &gt;数据类型&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BA%93%E6%93%8D%E4%BD%9C&#34; &gt;库操作&lt;/a&gt;{#%E5%BA%93%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A1%A8%E6%93%8D%E4%BD%9C&#34; &gt;表操作&lt;/a&gt;{#%E8%A1%A8%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%C2%A0%C2%A0&#34; &gt;数据导入导出&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%C2%A0%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9B%E5%BB%BA%E8%A1%A8&#34; &gt;创建表&lt;/a&gt;{#%E5%88%9B%E5%BB%BA%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%B4%E6%97%B6%E8%A1%A8&#34; &gt;临时表&lt;/a&gt;{#%E4%B8%B4%E6%97%B6%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%85%E9%83%A8%E8%A1%A8&#34; &gt;内部表&lt;/a&gt;{#%E5%86%85%E9%83%A8%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%A4%96%E9%83%A8%E8%A1%A8&#34; &gt;外部表&lt;/a&gt;{#%E5%A4%96%E9%83%A8%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%85%E5%A4%96%E9%83%A8%E8%A1%A8%E8%BD%AC%E6%8D%A2&#34; &gt;内外部表转换&lt;/a&gt;{#%E5%86%85%E5%A4%96%E9%83%A8%E8%A1%A8%E8%BD%AC%E6%8D%A2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E8%A1%A8&#34; &gt;分区表&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E6%A1%B6%E8%A1%A8&#34; &gt;分桶表&lt;/a&gt;{#%E5%88%86%E6%A1%B6%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E8%AF%A2%E8%A1%A8&#34; &gt;查询表&lt;/a&gt;{#%E6%9F%A5%E8%AF%A2%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JOIN&#34; &gt;JOIN&lt;/a&gt;{#JOIN-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BF%AE%E6%94%B9%E8%A1%A8&#34; &gt;修改表&lt;/a&gt;{#%E4%BF%AE%E6%94%B9%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%A0%E9%99%A4%E8%A1%A8&#34; &gt;删除表&lt;/a&gt;{#%E5%88%A0%E9%99%A4%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B8%85%E7%A9%BA%E8%A1%A8&#34; &gt;清空表&lt;/a&gt;{#%E6%B8%85%E7%A9%BA%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%89%B9%E4%BE%8B-update%E5%92%8Cdelete%C2%A0&#34; &gt;特例-update和delete&lt;/a&gt;{#%E7%89%B9%E4%BE%8B-update%E5%92%8Cdelete%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A7%86%E5%9B%BE&#34; &gt;视图&lt;/a&gt;{#%E8%A7%86%E5%9B%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A7%86%E5%9B%BE%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0&#34; &gt;视图增删改&lt;/a&gt;{#%E8%A7%86%E5%9B%BE%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%B4%A2%E5%BC%95&#34; &gt;索引&lt;/a&gt;{#%E7%B4%A2%E5%BC%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86&#34; &gt;索引原理&lt;/a&gt;{#%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%B4%A2%E5%BC%95%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0&#34; &gt;索引增删改&lt;/a&gt;{#%E7%B4%A2%E5%BC%95%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%8A%A8%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95&#34; &gt;设置自动使用索引&lt;/a&gt;{#%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%8A%A8%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%B4%A2%E5%BC%95%E7%BC%BA%E9%99%B7&#34; &gt;索引缺陷&lt;/a&gt;{#%C2%A0%E7%B4%A2%E5%BC%95%E7%BC%BA%E9%99%B7-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;数据类型-e695b0e68daee7b1bbe59e8b&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b-e695b0e68daee7b1bbe59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据类型 {#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B}
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/bac99aab3da81ef11fe70797c68cd91b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;decimal 类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;decimal(11,2) 代表最多有 11 位数字，其中后 2 位是小数，整数部分是 9位；如果整数部分超过 9 位，则这个字段就会变成 null；如果小数部分不足 2 位， 则后面用 0 补齐两位，如果小数部分超过两位，则超出部分四舍五入。也可直接写 decimal，后面不指定位数，默认是 decimal(10,0) 整数 10 位，没有小数
+&lt;strong&gt;map类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;90&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;87&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;63&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nature&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;76&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;78&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nature&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;wangwu&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;89&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;exists&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;delimited&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fields&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;keys&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;:&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;load&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inpath&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;./data/map1.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;into&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;查询数学⼤于&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;分的学⽣的英语和⾃然成绩：&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;english&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;nature&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;math&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;查看每个⼈的前两科的成绩总和&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;chinese&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;math&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;struct类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;90&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;87&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;63&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;76&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;78&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;wangwu&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;89&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;81&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;exists&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;struct1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;natrue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;delimited&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fields&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;导⼊数据：&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;load&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inpath&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;./data/arr1.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;into&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;struct1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str2&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;array类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;78&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;89&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;92&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;96&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;67&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;75&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;83&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;94&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;王五&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;23&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;exists&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;delimited&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fields&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;load&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inpath&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;/data/arr1.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;into&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;结果&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--------+---------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--------+---------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;78,89,92,96&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;67,75,83,94&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;王五&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;23,12&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--------+---------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;库操作-e5ba93e6938de4bd9c&#34;&gt;&lt;a href=&#34;#%e5%ba%93%e6%93%8d%e4%bd%9c-e5ba93e6938de4bd9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;库操作 {#%E5%BA%93%E6%93%8D%E4%BD%9C}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;创建库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;IF&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;EXISTS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;COMMENT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_comment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LOCATION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hdfs_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WITH&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DBPROPERTIES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;...)];&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;查询库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SHOW&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DATABASES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LIKE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;identifier_with_wildcards&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;注：&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;like通配表达式说明&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;表示任意个任意字符，&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;表示或的关系。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;查看数据库信息&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;DESCRIBE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;EXTENDED&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;修改数据库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;用户可以使用&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;alter&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database命令修改数据库某些信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，其中能够修改的信息包括&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dbproperties&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;location&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;owner&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;user&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。需要注意的是：修改数据库&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;location&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，不会改变当前已有表的路径信息，而只是改变后续创建的新表的默认的父目录。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--修改dbproperties
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DBPROPERTIES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;...);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--修改location
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LOCATION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hdfs_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--修改owner user
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;OWNER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;USER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;user_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;删除数据库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;DROP&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;IF&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;EXISTS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RESTRICT&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;CASCADE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RESTRICT&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：严格模式，若数据库不为空，则会删除失败，默认为该模式。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;CASCADE&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：级联模式，若数据库不为空，则会将库中的表一并删除。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;切换当前数据库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;USE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;br /&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;表操作-e8a1a8e6938de4bd9c&#34;&gt;&lt;a href=&#34;#%e8%a1%a8%e6%93%8d%e4%bd%9c-e8a1a8e6938de4bd9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;表操作 {#%E8%A1%A8%E6%93%8D%E4%BD%9C}
+&lt;/h2&gt;&lt;p&gt;表有临时表、外部表、内部表（管理表）、分区表，分桶表&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f81716d6afa2533bffaa9034fcdf3a95.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Linux上传文件到hdfs上&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;hdfs dfs -put student.txt
+&lt;strong&gt;基于其他表的结构建表&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;create table teacher2 &lt;strong&gt;like&lt;/strong&gt; teacher;
+&lt;br /&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Hive本质、架构、玩法</title>
+        <link>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</link>
+        <pubDate>Sun, 14 Apr 2024 12:23:06 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%9C%AC%E8%B4%A8&#34; &gt;Hive本质&lt;/a&gt;{#Hive%E6%9C%AC%E8%B4%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97&#34; &gt;Hive主要有以下3个模块&lt;/a&gt;{#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Metastore&#34; &gt;Metastore&lt;/a&gt;{#Metastore-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9E%B6%E6%9E%84%C2%A0&#34; &gt;架构&lt;/a&gt;{#%E6%9E%B6%E6%9E%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE&#34; &gt;Hive日志配置&lt;/a&gt;{#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B&#34; &gt;HQL执行过程&lt;/a&gt;{#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A&#34; &gt;Hive四种玩法：&lt;/a&gt;{#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1%EF%BC%89CLI&#34; &gt;1）CLI&lt;/a&gt;{#1%EF%BC%89CLI-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2%EF%BC%89HiveServer2&#34; &gt;2）HiveServer2&lt;/a&gt;{#2%EF%BC%89HiveServer2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3%EF%BC%89Beeline&#34; &gt;3）Beeline&lt;/a&gt;{#3%EF%BC%89Beeline-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4%EF%BC%89Web%20UI&#34; &gt;4）Web UI&lt;/a&gt;{#4%EF%BC%89Web%20UI-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hive-本质-hivee69cace8b4a8&#34;&gt;&lt;a href=&#34;#hive-%e6%9c%ac%e8%b4%a8-hivee69cace8b4a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Hive&lt;/strong&gt; &lt;strong&gt;本质&lt;/strong&gt; {#Hive%E6%9C%AC%E8%B4%A8}
+&lt;/h2&gt;&lt;p&gt;Hive是构建在hadoop上的数据仓库，也可以说是一个&lt;strong&gt;操作hdfs文件&lt;/strong&gt; 的客户端，它&lt;strong&gt;可以将结构化的数据文件映射成表&lt;/strong&gt;，并提供类 SQL查询功能，用于查询的 SQL 语句会被转化为 MapReduce 作业，然后提交到 Hadoop 上运行。&lt;strong&gt;Hive执行引擎可以是MapReduce、Spark、Tez，如果是MR，Hive就会把HQL翻译成MR进行数据计算。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由于Hive是针对数据仓库应⽤设计的，⽽数据仓库的内容是读多写少的。因此，Hive中不⽀持 对数据的改写和添加，所有的数据都是在加载的时候中确定好的。&lt;/p&gt;
+&lt;p&gt;Hive不适合⽤于联机事务处理(OLTP)，也不提供实时查询功能。它最适合应⽤在基于⼤量不可变数据的批处理 作业。Hive 的特点是可伸缩（在Hadoop 的集群上动态的添加设备），可扩展、容错、输⼊格式的松散耦合。 Hive 的⼊⼝是DRIVER ，执⾏的SQL语句⾸先提交到DRIVER驱动，然后调COMPILER解释驱动，最终解释成 MapReduce 任务执⾏，最后将结果返回。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;简单、容易上手 (提供了类似 sql 的查询语言 hql)，使得精通 sql 但是不了解 Java 编程的人也能很 好地进行大数据分析；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灵活性高，可以自定义用户函数 (UDF) 和存储格式；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为超大的数据集设计的计算和存储能力，集群扩展容易;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;4.&lt;strong&gt;统一的元数据管理&lt;/strong&gt;，可与 presto／impala／sparksql 等共享数据；&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;执行延迟高，不适合做数据的实时处理，但适合做海量数据的离线处理。&lt;/li&gt;
+&lt;/ol&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9785a8b5d20da5ab15eb5cf746fa5288.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hive主要有以下3个模块-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34;&gt;&lt;a href=&#34;#hive%e4%b8%bb%e8%a6%81%e6%9c%89%e4%bb%a5%e4%b8%8b3%e4%b8%aa%e6%a8%a1%e5%9d%97-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive主要有以下3个模块 {#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97}
+&lt;/h2&gt;&lt;h2 id=&#34;户接模块含clihwijdbcthrift-server等来实现对hive的访问cli是hive带-的命令界hwi是hive的个简单界jdbcodbc以及thrift-server可向户提供进-编程的接其中thrift-server是基于thrift软件框架开发的提供hi&#34;&gt;&lt;a href=&#34;#%e6%88%b7%e6%8e%a5%e6%a8%a1%e5%9d%97%e5%90%abclihwijdbcthrift-server%e7%ad%89%e6%9d%a5%e5%ae%9e%e7%8e%b0%e5%af%b9hive%e7%9a%84%e8%ae%bf%e9%97%aecli%e6%98%afhive%e5%b8%a6-%e7%9a%84%e5%91%bd%e4%bb%a4%e7%95%8chwi%e6%98%afhive%e7%9a%84%e4%b8%aa%e7%ae%80%e5%8d%95%e7%95%8cjdbcodbc%e4%bb%a5%e5%8f%8athrift-server%e5%8f%af%e5%90%91%e6%88%b7%e6%8f%90%e4%be%9b%e8%bf%9b-%e7%bc%96%e7%a8%8b%e7%9a%84%e6%8e%a5%e5%85%b6%e4%b8%adthrift-server%e6%98%af%e5%9f%ba%e4%ba%8ethrift%e8%bd%af%e4%bb%b6%e6%a1%86%e6%9e%b6%e5%bc%80%e5%8f%91%e7%9a%84%e6%8f%90%e4%be%9bhi&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;**⽤户接⼝模块：**含CLI、HWI、JDBC、Thrift Server等，⽤来实现对Hive的访问。CLI是Hive⾃带 的命令⾏界⾯；HWI是Hive的⼀个简单⽹⻚界⾯；JDBC、ODBC以及Thrift Server可向⽤户提供进 ⾏编程的接⼝，其中Thrift Server是基于Thrift软件框架开发的，提供Hi
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>Hive调优</title>
+        <link>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</link>
+        <pubDate>Sat, 13 Apr 2024 20:49:38 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn和MR资源配置&lt;/a&gt;{#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn资源配置&lt;/a&gt;{#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;MR资源配置&lt;/a&gt;{#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92&#34; &gt;Explain查看执行计划&lt;/a&gt;{#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96&#34; &gt;分组聚合优化&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E&#34; &gt;优化前VS优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E4%BC%98%E5%8C%96&#34; &gt;Join优化&lt;/a&gt;{#Join%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89&#34; &gt;Common Join（普通join）&lt;/a&gt;{#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%20Join&#34; &gt;Map Join&lt;/a&gt;{#Map%20Join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%C2%A0&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA&#34; &gt;法一：hint提示&lt;/a&gt;{#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91&#34; &gt;法二：自动触发&lt;/a&gt;{#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Bucket%20Map%20Join&#34; &gt;Bucket Map Join&lt;/a&gt;{#Bucket%20Map%20Join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#hint%E6%8F%90%E7%A4%BA%C2%A0&#34; &gt;hint提示&lt;/a&gt;{#hint%E6%8F%90%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Sort%20Merge%20Bucket%20Map%20Join%28SMB%20map%20join%29&#34; &gt;Sort Merge Bucket Map Join(SMB map join)&lt;/a&gt;{#Sort%20Merge%20Bucket%20Map%20Join(SMB%20map%20join)-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96&#34; &gt;数据倾斜优化&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;分组聚合导致的数据倾斜&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map-Side%E8%81%9A%E5%90%88&#34; &gt;Map-Side聚合&lt;/a&gt;{#Map-Side%E8%81%9A%E5%90%88-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Skew-GroupBy%E4%BC%98%E5%8C%96&#34; &gt;Skew-GroupBy优化&lt;/a&gt;{#Skew-GroupBy%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8D&#34; &gt;优化前&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0&#34; &gt;优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;Join导致的数据倾斜&lt;/a&gt;{#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#map%20join&#34; &gt;map join&lt;/a&gt;{#map%20join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#skew%20join&#34; &gt;skew join&lt;/a&gt;{#skew%20join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96&#34; &gt;任务并行度优化&lt;/a&gt;{#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Map端并行度&lt;/a&gt;{#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Reduce端并行度&lt;/a&gt;{#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96&#34; &gt;小文件合并优化&lt;/a&gt;{#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Map端输入的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Reduce端输出的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96&#34; &gt;其他优化&lt;/a&gt;{#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#CBO%E4%BC%98%E5%8C%96&#34; &gt;CBO优化&lt;/a&gt;{#CBO%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8&#34; &gt;谓词下推&lt;/a&gt;{#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2&#34; &gt;矢量化查询&lt;/a&gt;{#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Fetch%E6%8A%93%E5%8F%96&#34; &gt;Fetch抓取&lt;/a&gt;{#Fetch%E6%8A%93%E5%8F%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F&#34; &gt;本地模式&lt;/a&gt;{#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C&#34; &gt;并行执行&lt;/a&gt;{#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F&#34; &gt;严格模式&lt;/a&gt;{#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e5%92%8cmr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne5928cmre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h2&gt;&lt;p&gt;配置项参考官网：&lt;a class=&#34;link&#34; href=&#34;https://apache.github.io/hadoop/&#34;  title=&#34;https://apache.github.io/hadoop/&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://apache.github.io/hadoop/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;yarn资源配置-yarne8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h3&gt;&lt;p&gt;修改yarn-site.xml,调整的Yarn参数均与CPU、内存等资源有关，配置如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.memory-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;65536&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.cpu-vcores&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;16&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.maximum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;16384&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最大内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.minimum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;512&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最小内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;修改后重新分发该配置文件并重启Yarn&lt;/p&gt;
+&lt;h3 id=&#34;mr资源配置-mre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#mr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-mre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h3&gt;&lt;p&gt;MapReduce资源配置主要包括Map Task的内存和CPU核数，以及Reduce Task的内存和CPU核数。核心配置参数如下：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;{#_Hlk110418691}&lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.memory.mb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Map Task申请的container容器内存大小，其默认值为1024。该值不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.map.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt; &lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Map Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3）&lt;/strong&gt; &lt;strong&gt;mapreduce.reduce.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4）mapreduce.reduce.memory.mb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器内存大小，其默认值为1024。该值同样不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.reduce.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34;&gt;&lt;a href=&#34;#explain%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}
+&lt;/h2&gt;&lt;p&gt;Explain用于呈现HQL语句的详细执行步骤，由一系列Stage组成，简单的理解为HQL查询语句的不同执行阶段，这一系列Stage具有依赖关系，每个Stage对应一个MapReduce Job或一个文件系统操作等。&lt;/p&gt;
+&lt;p&gt;若某个Stage对应的一个MapReduce Job，则其Map端和Reduce端的计算逻辑分别由Map Operator Tree和Reduce Operator Tree进行描述，Operator Tree由一系列的Operator组成，一个Operator代表在Map或Reduce阶段的一个单一的逻辑操作，例如TableScan Operator，Select Operator，Join Operator等。具体如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/4da9891258984bbe1a892f0ccafcb92b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;常见的Operator及其作用如下&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;TableScan：表扫描操作，通常map端第一个操作肯定是表扫描操作&lt;/p&gt;
+&lt;p&gt;Select Operator：选取操作&lt;/p&gt;
+&lt;p&gt;Group By Operator：map端的分组聚合操作，在后面的分组聚合中会讲到&lt;/p&gt;
+&lt;p&gt;Reduce Output Operator：输出到 reduce 操作&lt;/p&gt;
+&lt;p&gt;Filter Operator：过滤操作&lt;/p&gt;
+&lt;p&gt;Join Operator：join 操作&lt;/p&gt;
+&lt;p&gt;File Output Operator：文件输出操作&lt;/p&gt;
+&lt;p&gt;Fetch Operator 客户端获取数据操作
+&lt;strong&gt;Explain语法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;EXPLAIN &lt;/p&gt;
+\[FORMATTED \| EXTENDED \| DEPENDENCY\]&lt;p&gt; query-sql&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FORMATTED：将执行计划以JSON字符串的形式输出&lt;/li&gt;
+&lt;li&gt;EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息&lt;/li&gt;
+&lt;li&gt;DEPENDENCY：输出执行计划读取的表及分区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
+&lt;p&gt;explain formatted&lt;/p&gt;
+&lt;p&gt;select user_id,count(*) from order_detail group by user_id;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/d475c4d504540aaa12554c7c9480202c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96-e58886e7bb84e8819ae59088e4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;分组聚合优化&lt;/strong&gt; {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}
+&lt;/h2&gt;&lt;p&gt;分组聚合是通过MR Job实现的，map端读取数据，并按照分组字段分区，通过shuffle，把数据发到reduce，各组数据在reduce端完成最终的聚合运算。&lt;/p&gt;
+&lt;p&gt;分组聚合的优化主要围绕减少shuffle数据量进行，具体做法是map-side聚合。map-side聚合是在map端维护一个hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到reduce端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个map端的部分聚合过程，以减少shuffle的工作量，进而减少reduce端的聚合工作量。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;map-side聚合相关参数如下&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用map-side聚合，默认是true&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr=true;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;用于检测源表数据是否适合进行map-side聚合。检测的方法是：系统自动先对若干条数据进行map-side聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行map-side聚合；否则，认为该表数据不适合进行map-side聚合，后续数据便不再进行map-side聚合。0.5意味着平均有2条数据可以聚合成1条，1意味着没有出现任何的聚合&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.min.reduction=0.5;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;用于&lt;strong&gt;hive.map.aggr.hash.min.reduction=0.5&lt;/strong&gt; 检测源表是否适合map-side聚合的条数。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.groupby.mapaggr.checkinterval=100000;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;map-side聚合所用的hash table占用map task堆内存的最大比例，若超出该值，则会对hash table进行一次flush。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.force.flush.memory.threshold=0.7;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8dvs%e4%bc%98%e5%8c%96%e5%90%8e-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}
+&lt;/h3&gt;&lt;p&gt;set hive.map.aggr=false关闭分组聚合优化，查看执行效果，在Map端没有了Group By Operator&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/bef7cc2560feaf0c03af5c376dadbac4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;set hive.map.aggr=true开启分组聚合优化，查看执行效果，在Map端有了Group By Operator，&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd582dc168193eedd0302e6cdccc7d17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;若发生map-side优化，优化后比优化前的HQL执行耗时应该有所减少，且map的output数量明显小于input数量。&lt;/p&gt;
+&lt;p&gt;若没有触发map-side，则map的output数量虽然比input数量有所减少但可以忽略不计。具体有没有触发map-side可以去web UI界面查看map日志。&lt;/p&gt;
+&lt;p&gt;注意！！map-side聚合不够智能，即map端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据&lt;strong&gt;分区分桶&lt;/strong&gt;，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;1）select province_id,count(*) from order_detail group by province_id;&lt;/p&gt;
+&lt;p&gt;该语句查询所有订单，根据省份id分组聚合，省份只有34个，这样map后的数据应该只有34条，所以聚合结果是应该是比较可观的。所以group by 的基数越小，一般越适合聚合。&lt;/p&gt;
+&lt;p&gt;2）select product_id,count(*) from order_detail group by product_id;&lt;/p&gt;
+&lt;p&gt;若product_id这一分组字段在order_detail表中分布比较散，那么可能会导致hive在表中切片抽样进行map-side检测的时候测试聚合结果&amp;gt;0.5，那么最终就没有使用map-side聚合。所以说如果能保证抽样数据的测试结果&amp;lt;=0.5，就会实现分组聚合，当然也可以调整&lt;strong&gt;hive.map.aggr.hash.min.reduction&lt;/strong&gt; 的值以提高map-side的命中率。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;若100w&lt;/strong&gt; &lt;strong&gt;的数据集分组聚合之后的输出&lt;/strong&gt; &lt;strong&gt;&amp;gt;100w,&lt;/strong&gt; &lt;strong&gt;可能的原因是多次触发了&lt;/strong&gt; &lt;strong&gt;hash table&lt;/strong&gt; &lt;strong&gt;的&lt;/strong&gt; &lt;strong&gt;flush&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;join优化-joine4bc98e58c96&#34;&gt;&lt;a href=&#34;#join%e4%bc%98%e5%8c%96-joine4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Join优化 {#Join%E4%BC%98%E5%8C%96}
+&lt;/h2&gt;&lt;p&gt;Join优化就是控制HQL语句走哪种join算法，这些join算法有的快，有的慢，有的激进，有的保守。我们要做的就是让HQL走最适合自己的join算法。&lt;/p&gt;
+&lt;h3 id=&#34;common-join普通join-common20joinefbc88e699aee9809ajoinefbc89&#34;&gt;&lt;a href=&#34;#common-join%e6%99%ae%e9%80%9ajoin-common20joinefbc88e699aee9809ajoinefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}
+&lt;/h3&gt;&lt;h4 id=&#34;原理-e58e9fe79086&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-e58e9fe79086&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理 {#%E5%8E%9F%E7%90%86}
+&lt;/h4&gt;&lt;p&gt;hive中最稳定的join算法，其通过一个MapReduce Job完成一个join操作。Map端负责读取join操作所需表的数据，并按照关联字段进行分区，通过Shuffle，将其发送到Reduce端，相同key的数据在Reduce端完成最终的Join操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c93be2b01fce05ed73c439a062480a2f.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表&#34;&gt;&lt;a href=&#34;#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f-%e7%9a%84%e6%98%afhql%e8%af%ad%e5%8f%a5%e4%b8%ad%e7%9a%84join%e6%93%8d%e4%bd%9c%e5%92%8c%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92%e4%b8%ad%e7%9a%84common-join%e4%bb%bb%e5%8a%a1%e5%b9%b6%e9%9d%9e%e4%b8%80%e5%af%b9%e4%b8%80%e7%9a%84%e5%85%b3%e7%b3%bb%e5%8d%b3hql%e4%b8%ad%e7%9a%84a%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;需要&lt;strong&gt;注意&lt;/strong&gt; 的是，&lt;strong&gt;HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系&lt;/strong&gt;，即HQL中的A&lt;strong&gt;表&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

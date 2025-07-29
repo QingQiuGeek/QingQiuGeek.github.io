@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Spring Security on 青秋博客</title>
+        <link>/zh-cn/tags/spring-security/</link>
+        <description>Recent content in Spring Security on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Tue, 23 Jul 2024 17:48:45 +0000</lastBuildDate><atom:link href="/zh-cn/tags/spring-security/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>一文入门SpringSecurity 5</title>
+        <link>/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/</link>
+        <pubDate>Tue, 23 Jul 2024 17:48:45 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%8F%90%E7%A4%BA&#34; &gt;提示&lt;/a&gt;{#%E6%8F%90%E7%A4%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Apache%20Shiro%E5%92%8CSpring%20Security&#34; &gt;Apache Shiro和Spring Security&lt;/a&gt;{#Apache%20Shiro%E5%92%8CSpring%20Security-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83&#34; &gt;认证和授权&lt;/a&gt;{#%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#RBAC&#34; &gt;RBAC&lt;/a&gt;{#RBAC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Demo&#34; &gt;Demo&lt;/a&gt;{#Demo-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%8E%AF%E5%A2%83&#34; &gt;环境&lt;/a&gt;{#%E7%8E%AF%E5%A2%83-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Controller&#34; &gt;Controller&lt;/a&gt;{#Controller-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BC%95%E5%85%A5Spring%20Security&#34; &gt;引入Spring Security&lt;/a&gt;{#%E5%BC%95%E5%85%A5Spring%20Security-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9D%E6%8E%A2Security%E5%8E%9F%E7%90%86&#34; &gt;初探Security原理&lt;/a&gt;{#%E5%88%9D%E6%8E%A2Security%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E5%9B%BE%E7%A4%BA%E2%80%8B%E7%BC%96%E8%BE%91&#34; &gt;认证授权图示​编辑&lt;/a&gt;{#%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E5%9B%BE%E7%A4%BA%E2%80%8B%E7%BC%96%E8%BE%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%9B%BE%E4%B8%AD%E6%B6%89%E5%8F%8A%E7%9A%84%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3&#34; &gt;图中涉及的类和接口&lt;/a&gt;{#%E5%9B%BE%E4%B8%AD%E6%B6%89%E5%8F%8A%E7%9A%84%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93&#34; &gt;流程总结&lt;/a&gt;{#%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;blockquote&gt;
+&lt;h2 id=&#34;提示-e68f90e7a4ba&#34;&gt;&lt;a href=&#34;#%e6%8f%90%e7%a4%ba-e68f90e7a4ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;提示 {#%E6%8F%90%E7%A4%BA}
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Spring Security源码的接口名和方法名都很长，看源码的时候要见名知意，有必要细看接口名和方法名，另外可以借助流程图，&lt;strong&gt;&lt;strong&gt;调试追踪代码&lt;/strong&gt;&lt;/strong&gt;，有助于理解学习！&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;apache-shiro和spring-security-apache20shiroe5928cspring20security&#34;&gt;&lt;a href=&#34;#apache-shiro%e5%92%8cspring-security-apache20shiroe5928cspring20security&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Apache Shiro和Spring Security {#Apache%20Shiro%E5%92%8CSpring%20Security}
+&lt;/h2&gt;&lt;p&gt;​Spring Security是一个**可高度可定制的身份验证（认证）和访问控制（授权）框架，**它是用于保护基于Spring的应用程序的实际标准，相比与另外一个安全框架Shiro，它提供了更丰富的功能，社区资源也比Shiro丰富。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Shiro轻量级，不依赖Spring，是第三方框架，简单而灵活，可以用于非Web环境！&lt;/li&gt;
+&lt;li&gt;Security重量级，依赖Spring，控制粒度更细，老版本不能脱离Web，新版本可以&lt;/li&gt;
+&lt;li&gt;Spring Boot 2默认使用Security 5，要求JDK至少是8&lt;/li&gt;
+&lt;li&gt;Spring Boot 3默认使用Security 6，要求JDK至少是17&lt;/li&gt;
+&lt;li&gt;Security 5和Security 6的区别之一就是5到6废弃了&lt;strong&gt;WebSecurityConfigurerAdapter类&lt;/strong&gt;，在Security 5编写配置类需要继承WebSecurityConfigurerAdapter并重写某些方法，但是在Security 6已经不需要了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://springdoc.cn/spring-deprecated-websecurityconfigureradapter/&#34;  title=&#34;Spring Security：升级已弃用的 WebSecurityConfigurerAdapter - spring 中文网&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spring Security：升级已弃用的 WebSecurityConfigurerAdapter - spring 中文网&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://springdoc.cn/spring-security-migrate-5-to-6/#google_vignette&#34;  title=&#34;从 Spring Security 5 迁移到 Spring Security 6/Spring Boot 3 - spring 中文网&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;从 Spring Security 5 迁移到 Spring Security 6/Spring Boot 3 - spring 中文网&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;认证和授权-e8aea4e8af81e5928ce68e88e69d83&#34;&gt;&lt;a href=&#34;#%e8%ae%a4%e8%af%81%e5%92%8c%e6%8e%88%e6%9d%83-e8aea4e8af81e5928ce68e88e69d83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;认证和授权 {#%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;认证&lt;/strong&gt;（Authentication）：验证当前访问系统的是不是本系统的用户，并且要确认具体是哪个用户&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;​授权&lt;/strong&gt;（Authorization）：经过认证后判断当前用户是否有权限进行某个操作&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;注：Authentication和Authorization拼写很像，有必要分清，后面看源代码方便！&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;RBAC&#34;&gt;&lt;a href=&#34;#RBAC&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RBAC
+&lt;/h2&gt;&lt;p&gt;Role-Based Access Control 基于角色的访问控制&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2153bd578bf24f14958ce09dd5705d0d.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把权限打包给角色（角色拥有一组权限），给用户分配角色（用户拥有多个角色）&lt;/p&gt;
+&lt;p&gt;最少包括五张表 （用户表、角色表、用户角色表、权限表、角色权限表）&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;Demo&#34;&gt;&lt;a href=&#34;#Demo&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Demo
+&lt;/h2&gt;&lt;h3 id=&#34;环境-e78eafe5a283&#34;&gt;&lt;a href=&#34;#%e7%8e%af%e5%a2%83-e78eafe5a283&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;环境 {#%E7%8E%AF%E5%A2%83}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Spring Boot：2.7.2&lt;/p&gt;
+&lt;p&gt;SpringSecurity：5+&lt;/p&gt;
+&lt;p&gt;JDK：1.8&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Controller&#34;&gt;&lt;a href=&#34;#Controller&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Controller
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,2071 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>大数据 on 青秋博客</title>
+        <link>/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/</link>
+        <description>Recent content in 大数据 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Thu, 05 Sep 2024 23:07:21 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】</title>
+        <link>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Eflink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</link>
+        <pubDate>Thu, 05 Sep 2024 23:07:21 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Eflink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐 {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141861919&#34;  title=&#34;一文入门大数据准流式计算引擎Spark【万字详解，全网最新】-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;一文入门大数据准流式计算引擎Spark【万字详解，全网最新】-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&lt;/a&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141761563&#34;  title=&#34;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS_ods dwd dws ads dm-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS_ods dwd dws ads dm-CSDN博客&lt;/a&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#0.%20Flink%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1&#34; &gt;0. Flink知识图谱&lt;/a&gt;{#0.%20Flink%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.%C2%A0Flink%E5%8F%91%E5%B1%95&#34; &gt;1. Flink发展&lt;/a&gt;{#1.%C2%A0Flink%E5%8F%91%E5%B1%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%20%E5%9B%9B%E4%BB%A3%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E&#34; &gt;1.1 四代计算引擎&lt;/a&gt;{#1.1%20%E5%9B%9B%E4%BB%A3%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.%20Flink%E7%AE%80%E4%BB%8B&#34; &gt;2. Flink简介&lt;/a&gt;{#2.%20Flink%E7%AE%80%E4%BB%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1%20Flink%E7%89%B9%E7%82%B9%C2%A0&#34; &gt;2.1 Flink特点&lt;/a&gt;{#2.1%20Flink%E7%89%B9%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20%E6%89%B9%E5%A4%84%E7%90%86%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%C2%A0&#34; &gt;2.2 批处理和流处理&lt;/a&gt;{#2.2%20%E6%89%B9%E5%A4%84%E7%90%86%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3%20%E6%9C%89%E7%95%8C%E6%B5%81%E5%92%8C%E6%97%A0%E7%95%8C%E6%B5%81&#34; &gt;2.3 有界流和无界流&lt;/a&gt;{#2.3%20%E6%9C%89%E7%95%8C%E6%B5%81%E5%92%8C%E6%97%A0%E7%95%8C%E6%B5%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.4%20Flink%E5%92%8CSpark%20Streaming&#34; &gt;2.4 Flink和Spark Streaming&lt;/a&gt;{#2.4%20Flink%E5%92%8CSpark%20Streaming-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.%20Flink%E4%B8%89%E5%B1%82%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84&#34; &gt;3. Flink三层核心架构&lt;/a&gt;{#3.%20Flink%E4%B8%89%E5%B1%82%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1%20API%20%26%20Libraries%E5%B1%82%E8%AF%A6%E8%A7%A3&#34; &gt;3.1 API &amp;amp; Libraries层详解&lt;/a&gt;{#3.1%20API%20%26%20Libraries%E5%B1%82%E8%AF%A6%E8%A7%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1.1%20SQL%26Table%20API%E5%B1%82&#34; &gt;3.1.1 SQL&amp;amp;Table API层&lt;/a&gt;{#3.1.1%20SQL%26Table%20API%E5%B1%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1.2%C2%A0DataStream%20%26%20DataSet%20API%E5%B1%82&#34; &gt;3.1.2 DataStream &amp;amp; DataSet API层&lt;/a&gt;{#3.1.2%C2%A0DataStream%20%26%20DataSet%20API%E5%B1%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1.3%C2%A0Stateful%20Stream%20Processing%E5%B1%82&#34; &gt;3.1.3 Stateful Stream Processing层&lt;/a&gt;{#3.1.3%C2%A0Stateful%20Stream%20Processing%E5%B1%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4.%20%E4%B8%89%E7%A7%8DTime%E6%A6%82%E5%BF%B5&#34; &gt;4. 三种Time概念&lt;/a&gt;{#4.%20%E4%B8%89%E7%A7%8DTime%E6%A6%82%E5%BF%B5-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4.1%C2%A0WaterMark%E6%B0%B4%E5%8D%B0&#34; &gt;4.1 WaterMark水印&lt;/a&gt;{#4.1%C2%A0WaterMark%E6%B0%B4%E5%8D%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.%20Windows%E7%AA%97%E5%8F%A3%E7%B1%BB%E5%9E%8B&#34; &gt;5. Windows窗口类型&lt;/a&gt;{#5.%20Windows%E7%AA%97%E5%8F%A3%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1%20%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3&#34; &gt;5.1 时间窗口&lt;/a&gt;{#5.1%20%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.1%20%E6%BB%9A%E5%8A%A8%E7%AA%97%E5%8F%A3Tumbling%20Windows&#34; &gt;5.1.1 滚动窗口Tumbling Windows&lt;/a&gt;{#5.1.1%20%E6%BB%9A%E5%8A%A8%E7%AA%97%E5%8F%A3Tumbling%20Windows-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.2%20%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3Sliding%20Windows&#34; &gt;5.1.2 滑动窗口Sliding Windows&lt;/a&gt;{#5.1.2%20%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3Sliding%20Windows-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.3%20%E4%BC%9A%E8%AF%9D%E7%AA%97%E5%8F%A3Session%20Windows&#34; &gt;5.1.3 会话窗口Session Windows&lt;/a&gt;{#5.1.3%20%E4%BC%9A%E8%AF%9D%E7%AA%97%E5%8F%A3Session%20Windows-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.4%20%E5%85%A8%E5%B1%80%E7%AA%97%E5%8F%A3Global%20Windows&#34; &gt;5.1.4 全局窗口Global Windows&lt;/a&gt;{#5.1.4%20%E5%85%A8%E5%B1%80%E7%AA%97%E5%8F%A3Global%20Windows-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.2%20%E8%AE%A1%E6%95%B0%E7%AA%97%E5%8F%A3&#34; &gt;5.2 计数窗口&lt;/a&gt;{#5.2%20%E8%AE%A1%E6%95%B0%E7%AA%97%E5%8F%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.%20%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86&#34; &gt;6. 状态管理&lt;/a&gt;{#6.%20%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.1%C2%A0%E7%8A%B6%E6%80%81%E7%9A%84Flink%E5%AE%98%E6%96%B9%E5%AE%9A%E4%B9%89&#34; &gt;6.1 状态的Flink官方定义&lt;/a&gt;{#6.1%C2%A0%E7%8A%B6%E6%80%81%E7%9A%84Flink%E5%AE%98%E6%96%B9%E5%AE%9A%E4%B9%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2%C2%A0%E7%8A%B6%E6%80%81%E5%88%86%E7%B1%BB%E5%8F%8A%E7%8A%B6%E6%80%81%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B&#34; &gt;6.2 状态分类及状态存储类型&lt;/a&gt;{#6.2%C2%A0%E7%8A%B6%E6%80%81%E5%88%86%E7%B1%BB%E5%8F%8A%E7%8A%B6%E6%80%81%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2.1%20%E7%AE%97%E5%AD%90%E7%8A%B6%E6%80%81&#34; &gt;6.2.1 算子状态&lt;/a&gt;{#6.2.1%20%E7%AE%97%E5%AD%90%E7%8A%B6%E6%80%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2.2%20%E9%94%AE%E6%8E%A7%E7%8A%B6%E6%80%81&#34; &gt;6.2.2 键控状态&lt;/a&gt;{#6.2.2%20%E9%94%AE%E6%8E%A7%E7%8A%B6%E6%80%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2.3%C2%A0Broadcast%20State&#34; &gt;6.2.3 Broadcast State&lt;/a&gt;{#6.2.3%C2%A0Broadcast%20State-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.3.%20%E7%8A%B6%E6%80%81%E5%90%8E%E7%AB%AF%EF%BC%88%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%EF%BC%89&#34; &gt;6.3. 状态后端（持久化存储）&lt;/a&gt;{#6.3.%20%E7%8A%B6%E6%80%81%E5%90%8E%E7%AB%AF%EF%BC%88%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.%20Flink%E7%AE%97%E5%AD%90&#34; &gt;7. Flink算子&lt;/a&gt;{#7.%20Flink%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1%20DataSet%E6%89%B9%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90&#34; &gt;7.1 DataSet批处理算子&lt;/a&gt;{#7.1%20DataSet%E6%89%B9%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1.1%20Source%E7%AE%97%E5%AD%90&#34; &gt;7.1.1 Source算子&lt;/a&gt;{#7.1.1%20Source%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1.2%C2%A0Transform%20%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90&#34; &gt;7.1.2 Transform 转换算子&lt;/a&gt;{#7.1.2%C2%A0Transform%20%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1.3%C2%A0Sink%20%E8%BE%93%E5%87%BA%E7%AE%97%E5%AD%90&#34; &gt;7.1.3 Sink 输出算子&lt;/a&gt;{#7.1.3%C2%A0Sink%20%E8%BE%93%E5%87%BA%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.2%20DataStream%E6%B5%81%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90&#34; &gt;7.2 DataStream流处理算子&lt;/a&gt;{#7.2%20DataStream%E6%B5%81%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#8.%20Flink%E5%AE%B9%E9%94%99&#34; &gt;8. Flink容错&lt;/a&gt;{#8.%20Flink%E5%AE%B9%E9%94%99-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#8.1%C2%A0Checkpoint%E6%9C%BA%E5%88%B6&#34; &gt;8.1 Checkpoint机制&lt;/a&gt;{#8.1%C2%A0Checkpoint%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#9.%20Flink%20CEP&#34; &gt;9. Flink CEP&lt;/a&gt;{#9.%20Flink%20CEP-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#9.1%20%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%C2%A0&#34; &gt;9.1 使用场景&lt;/a&gt;{#9.1%20%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#9.2%C2%A0CEP%20API&#34; &gt;9.2 CEP API&lt;/a&gt;{#9.2%C2%A0CEP%20API-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#10.%20Flink%20CDC&#34; &gt;10. Flink CDC&lt;/a&gt;{#10.%20Flink%20CDC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#10.1%20CDC%E7%A7%8D%E7%B1%BB&#34; &gt;10.1 CDC种类&lt;/a&gt;{#10.1%20CDC%E7%A7%8D%E7%B1%BB-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#11.%20Flink%20SQL&#34; &gt;11. Flink SQL&lt;/a&gt;{#11.%20Flink%20SQL-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;Flink知识图谱&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/6d8c45618d4c4585b10441448471b332.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Flink发展 {#1.%C2%A0Flink%E5%8F%91%E5%B1%95}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Apache Flink 诞生于柏林工业大学的一个研究性项目，&lt;strong&gt;原名 StratoSphere&lt;/strong&gt; 。2014 年，由 StratoSphere 项目孵化出 Flink，并于同年捐赠 Apache，之后成为 Apache 的顶级项目。2019 年 1 年，&lt;strong&gt;阿里巴巴收购了 Flink 的母公司 Data Artisans，并宣布开源内部的 Blink&lt;/strong&gt;，Blink 是阿里巴巴基于 Flink 优化后的版本，增加了大量的新功能，并在性能和稳定性上进行了各种优化，经历过阿里内部多种复杂业务的挑战和检验。同时阿里巴巴也表示会逐步将这些新功能和特性 Merge 回社区版本的 Flink 中，因此 Flink 成为目前最为火热的大数据处理框架。&lt;/p&gt;
+&lt;h3 id=&#34;11-四代计算引擎-1120e59b9be4bba3e8aea1e7ae97e5bc95e6938e&#34;&gt;&lt;a href=&#34;#11-%e5%9b%9b%e4%bb%a3%e8%ae%a1%e7%ae%97%e5%bc%95%e6%93%8e-1120e59b9be4bba3e8aea1e7ae97e5bc95e6938e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 四代计算引擎 {#1.1%20%E5%9B%9B%E4%BB%A3%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E}
+&lt;/h3&gt;&lt;p&gt;在国外一些社区，有很多人&lt;strong&gt;将大数据的计算引擎分成了 4 代&lt;/strong&gt;，当然，也有很多人不会认同。我们先姑且这么认为和讨论。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;首先&lt;strong&gt;第一代的计算引擎，无疑就是 Hadoop 承载的 MapReduce&lt;/strong&gt;。这里大家应该都 不会对 MapReduce 陌生，它将计算分为两个阶段，分别为 Map 和 Reduce。对于上层应用来说，就不得不想方设法去拆分算法，甚至于不得不在上层应用实现 多个 Job 的&lt;strong&gt;串联&lt;/strong&gt;，以完成一个完整的算法，例如&lt;strong&gt;迭代计算&lt;/strong&gt; 。 由于这样的弊端，&lt;strong&gt;催生了支持 DAG 框架的产生&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;因此，&lt;strong&gt;支持 DAG 的框架被划分为第二代计算引擎&lt;/strong&gt;。如 Tez 以及更上层的 Oozie。这里我们不去细究各种 DAG 实现之间的区别，不过对于当时的 Tez 和 Oozie 来说，&lt;strong&gt;大多还是批处理的任务&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;接下来就是&lt;strong&gt;以 Spark 为代表的第三代的计算引擎&lt;/strong&gt;。第三代计算引擎的特点主要 是 Job 内部的 DAG 支持（不跨越 Job），以及强调的&lt;strong&gt;准实时计算&lt;/strong&gt;。在这里，很多人也会认为第三代计算引擎也能够很好的运行批处理的 Job。 随着第三代计算引擎的出现，促进了上层应用快速发展，例如各种迭代计算的性能以及对流计算和 SQL 等的支持。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Flink 的诞生就被归在了第四代&lt;/strong&gt;。这应该主 要表现在 Flink 对流计算的支持，以及更一步的实时性上面。当然 Flink 也可 以支持 Batch 的任务，以及 DAG 的运算。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Flink简介 {#2.%20Flink%E7%AE%80%E4%BB%8B}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Flink 是一个分布式、高性能、&lt;strong&gt;&lt;strong&gt;有状态&lt;/strong&gt;&lt;/strong&gt;的流处理框架&lt;/strong&gt;，它能够对&lt;strong&gt;有界和无界&lt;/strong&gt;的数据流进行高效的处理。Flink 的 **核心是流处理（DataStream），当然也支持批处理（DataSet），Flink 将批处理看成是流处理的一种特殊情况，即数据流是有 明确界限的。**这和 Spark Streaming 的思想是完全相反的，Spark Streaming 的核心是批处理，它将流处理看成是批处理的一种特殊情况， 即把数据流进行极小粒度的拆分，拆分为多个微批处理。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;21-flink特点-2120flinke789b9e782b9c2a0&#34;&gt;&lt;a href=&#34;#21-flink%e7%89%b9%e7%82%b9-2120flinke789b9e782b9c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1 Flink特点 {#2.1%20Flink%E7%89%B9%E7%82%B9%C2%A0}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;支持高吞吐、低延迟、高性能的流处理&lt;/li&gt;
+&lt;li&gt;结果准确，Flink提供了事件时间和处理时间，对乱序数据仍能提供一直准确的结果&lt;/li&gt;
+&lt;li&gt;支持高度灵活的窗口（Window）操作，支持基于 time、count、session， 以及 data-driven 的窗口操作&lt;/li&gt;
+&lt;li&gt;支持基于轻量级分布式快照（Snapshot）实现的容错&lt;/li&gt;
+&lt;li&gt;一个运行时&lt;strong&gt;同时支持&lt;/strong&gt; Batch on Streaming 处理和 Streaming 处理&lt;/li&gt;
+&lt;li&gt;Flink 在 JVM 内部实现了自己的内存管理&lt;/li&gt;
+&lt;li&gt;支持迭代计算，Spark也支持&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;支持程序自动优化&lt;/strong&gt;：避免特定情况下 Shuffle、排序等昂贵操作，中间结果有必要进行缓存&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;22-批处理和流处理-2220e689b9e5a484e79086e5928ce6b581e5a484e79086c2a0&#34;&gt;&lt;a href=&#34;#22-%e6%89%b9%e5%a4%84%e7%90%86%e5%92%8c%e6%b5%81%e5%a4%84%e7%90%86-2220e689b9e5a484e79086e5928ce6b581e5a484e79086c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.2 批处理和流处理 {#2.2%20%E6%89%B9%E5%A4%84%E7%90%86%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%C2%A0}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;批处理&lt;br&gt;
+有界、持久、大量，一般用于离线计算&lt;/li&gt;
+&lt;li&gt;流处理&lt;br&gt;
+无界、实时，流处理方式无需对整个数据集执行操作，而是&lt;strong&gt;对通过系统传输的每个数据项执行操作&lt;/strong&gt;，一般用于实时统计&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在 Spark 生态体系中，对于批处理和流处理采用了不同的技术框架，&lt;strong&gt;批处理由 SparkSQL 实现，流处理由 Spark Streaming 实现&lt;/strong&gt;，这也是大部分框架采用的策略，使用独立的处理器实现批处理和流处理，而 Flink 可以同时实现批处理和流处理，Flink 将批处理（即处理 有限的静态数据）视作一种特殊的流处理，即&lt;strong&gt;把数据看作是有界的 ！&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;23-有界流和无界流-2320e69c89e7958ce6b581e5928ce697a0e7958ce6b581&#34;&gt;&lt;a href=&#34;#23-%e6%9c%89%e7%95%8c%e6%b5%81%e5%92%8c%e6%97%a0%e7%95%8c%e6%b5%81-2320e69c89e7958ce6b581e5928ce697a0e7958ce6b581&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.3 有界流和无界流 {#2.3%20%E6%9C%89%E7%95%8C%E6%B5%81%E5%92%8C%E6%97%A0%E7%95%8C%E6%B5%81}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;无界数据流：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;有定义流的开始，但没有定义流的结束&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;它们会无休止的产生数据&lt;/li&gt;
+&lt;li&gt;无界流的数据必须&lt;strong&gt;持续处理&lt;/strong&gt;，即数据被摄取后需要立刻处理&lt;/li&gt;
+&lt;li&gt;我们不能等到所有数据都到达再处理，因为输入是无限的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;有界数据流：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;有定义流的开始，也有定义流的结束&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;有界流可以在摄取所有数据后再进行计算&lt;/li&gt;
+&lt;li&gt;有界流所有数据可以被排序，所以并不需要有序摄取&lt;/li&gt;
+&lt;li&gt;有界流处理通常被称为批处理。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;24-flink和spark-streaming-2420flinke5928cspark20streaming&#34;&gt;&lt;a href=&#34;#24-flink%e5%92%8cspark-streaming-2420flinke5928cspark20streaming&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.4 Flink和Spark Streaming {#2.4%20Flink%E5%92%8CSpark%20Streaming}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Spark本质是批处理&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Spark数据模型：Spak采用RDD模型，Spark Streaming的&lt;strong&gt;DStream实际上也就是一组组小批据RDD的集合&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Spark运行时架构：Spark是批计算，将DAG划分为不同的stage,一个完成后才可以计算下一个&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Flink以流处理为根本&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Flink数据模型：Flink基本据模型是数据流，以及事件(Event)序列&lt;/li&gt;
+&lt;li&gt;Flink运行时架构：Flink是标准的流执行模式，一个事件在一个节点处理完后可以直接发往下一个节点进行处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/827856b2eddc4f55bbb7a9f47af7e75c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Flink三层核心架构 {#3.%20Flink%E4%B8%89%E5%B1%82%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;下图为 Flink 技术栈的核心组成部分，由上而下分别是 &lt;strong&gt;API &amp;amp; Libraries 层、Runtime 核心层以及物理部署层。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>一文入门大数据准流式计算引擎Spark【万字详解，全网最新】</title>
+        <link>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Espark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</link>
+        <pubDate>Wed, 04 Sep 2024 00:12:24 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Espark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐 {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141761563&#34;  title=&#34;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140783320&#34;  title=&#34;DW层的数仓建模：范式建模、维度建模及数据分析模型、实体建模-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;DW层的数仓建模：范式建模、维度建模及数据分析模型、实体建模-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS_dm ads-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS_dm ads-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;后续考虑，会出Spark调优、shuffle、数据倾斜优化等&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90&#34; &gt;往期推荐&lt;/a&gt;{#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.%20Spark%E7%AE%80%E4%BB%8B&#34; &gt;1. Spark简介&lt;/a&gt;{#1.%20Spark%E7%AE%80%E4%BB%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%20Spark%E7%89%B9%E7%82%B9&#34; &gt;1.1 Spark特点&lt;/a&gt;{#1.1%20Spark%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2%20Spark%E5%92%8CMR%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%E5%AF%B9%E6%AF%94&#34; &gt;1.2 Spark和MR处理任务对比&lt;/a&gt;{#1.2%20Spark%E5%92%8CMR%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%E5%AF%B9%E6%AF%94-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.%20Spark%E7%BB%84%E4%BB%B6&#34; &gt;2. Spark组件&lt;/a&gt;{#2.%20Spark%E7%BB%84%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1%20Spark%20Core&#34; &gt;2.1 Spark Core&lt;/a&gt;{#2.1%20Spark%20Core-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.1%20RDD%E7%AE%97%E5%AD%90&#34; &gt;2.1.1 RDD算子&lt;/a&gt;{#2.1.1%20RDD%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.1.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89RDD%EF%BC%9F&#34; &gt;2.1.1.1 为什么有RDD？&lt;/a&gt;{#2.1.1.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89RDD%EF%BC%9F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.1.2%20RDD%E4%BB%8B%E7%BB%8D&#34; &gt;2.1.1.2 RDD介绍&lt;/a&gt;{#2.1.1.2%20RDD%E4%BB%8B%E7%BB%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.2%20RDD%20%E7%89%B9%E7%82%B9&#34; &gt;2.1.2 RDD 特点&lt;/a&gt;{#2.1.2%20RDD%20%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.3%20RDD%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88&#34; &gt;2.1.3 RDD做了什么&lt;/a&gt;{#2.1.3%20RDD%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.4%20RDD%E7%9A%84%E8%BD%AC%E6%8D%A2%E5%92%8C%E8%A1%8C%E5%8A%A8%E6%93%8D%E4%BD%9C&#34; &gt;2.1.4 RDD的转换和行动操作&lt;/a&gt;{#2.1.4%20RDD%E7%9A%84%E8%BD%AC%E6%8D%A2%E5%92%8C%E8%A1%8C%E5%8A%A8%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.4.1%C2%A0%20Transformation%EF%BC%88%E8%BD%AC%E6%8D%A2%EF%BC%89%E7%AE%97%E5%AD%90%E6%A6%82%E8%BF%B0&#34; &gt;2.1.4.1 Transformation（转换）算子概述&lt;/a&gt;{#2.1.4.1%C2%A0%20Transformation%EF%BC%88%E8%BD%AC%E6%8D%A2%EF%BC%89%E7%AE%97%E5%AD%90%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.4.2%C2%A0%20Action%EF%BC%88%E8%A1%8C%E5%8A%A8%EF%BC%89%E7%AE%97%E5%AD%90%E6%A6%82%E8%BF%B0%C2%A0&#34; &gt;2.1.4.2 Action（行动）算子概述&lt;/a&gt;{#2.1.4.2%C2%A0%20Action%EF%BC%88%E8%A1%8C%E5%8A%A8%EF%BC%89%E7%AE%97%E5%AD%90%E6%A6%82%E8%BF%B0%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.5%20RDD%E6%8C%81%E4%B9%85%E5%8C%96%E5%92%8C%E7%BC%93%E5%AD%98&#34; &gt;2.1.5 RDD持久化和缓存&lt;/a&gt;{#2.1.5%20RDD%E6%8C%81%E4%B9%85%E5%8C%96%E5%92%8C%E7%BC%93%E5%AD%98-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.6%20%E5%AD%98%E5%82%A8%E7%BA%A7%E5%88%AB&#34; &gt;2.1.6 存储级别&lt;/a&gt;{#2.1.6%20%E5%AD%98%E5%82%A8%E7%BA%A7%E5%88%AB-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.7%20Checkpoint%E6%A3%80%E6%9F%A5%E7%82%B9%E6%9C%BA%E5%88%B6%C2%A0&#34; &gt;2.1.7 Checkpoint检查点机制&lt;/a&gt;{#2.1.7%20Checkpoint%E6%A3%80%E6%9F%A5%E7%82%B9%E6%9C%BA%E5%88%B6%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.8%20RDD%E5%AE%BD%E7%AA%84%E4%BE%9D%E8%B5%96&#34; &gt;2.1.8 RDD宽窄依赖&lt;/a&gt;{#2.1.8%20RDD%E5%AE%BD%E7%AA%84%E4%BE%9D%E8%B5%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.8.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%AE%BE%E8%AE%A1%E5%AE%BD%E7%AA%84%E4%BE%9D%E8%B5%96&#34; &gt;2.1.8.1 为什么要设计宽窄依赖&lt;/a&gt;{#2.1.8.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%AE%BE%E8%AE%A1%E5%AE%BD%E7%AA%84%E4%BE%9D%E8%B5%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.8.2%20DAG%E7%94%9F%E6%88%90%E5%92%8C%E5%88%92%E5%88%86Stage&#34; &gt;2.1.8.2 DAG生成和划分Stage&lt;/a&gt;{#2.1.8.2%20DAG%E7%94%9F%E6%88%90%E5%92%8C%E5%88%92%E5%88%86Stage-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20Spark%20SQL&#34; &gt;2.2 Spark SQL&lt;/a&gt;{#2.2%20Spark%20SQL-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1%20Spark%20SQL%E5%8F%91%E5%B1%95%EF%BC%88%E7%B2%BE%E5%BD%A9%EF%BC%89&#34; &gt;2.2.1 Spark SQL发展（精彩）&lt;/a&gt;{#2.2.1%20Spark%20SQL%E5%8F%91%E5%B1%95%EF%BC%88%E7%B2%BE%E5%BD%A9%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2%20Spark%20SQL%E6%A6%82%E8%BF%B0&#34; &gt;2.2.2 Spark SQL概述&lt;/a&gt;{#2.2.2%20Spark%20SQL%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.3%20Spark%20SQL%E7%89%B9%E7%82%B9&#34; &gt;2.2.3 Spark SQL特点&lt;/a&gt;{#2.2.3%20Spark%20SQL%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.4%20Spark%20SQL%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%20DataFrame%E5%92%8CDataset&#34; &gt;2.2.4 Spark SQL数据模型 DataFrame和Dataset&lt;/a&gt;{#2.2.4%20Spark%20SQL%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%20DataFrame%E5%92%8CDataset-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.5%20%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8CSparkSQL%E7%BC%96%E7%A8%8B&#34; &gt;2.2.5 如何进行SparkSQL编程&lt;/a&gt;{#2.2.5%20%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8CSparkSQL%E7%BC%96%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3%20Spark%20Streaming&#34; &gt;2.3 Spark Streaming&lt;/a&gt;{#2.3%20Spark%20Streaming-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.1%20%E7%AE%80%E4%BB%8B&#34; &gt;2.3.1 简介&lt;/a&gt;{#2.3.1%20%E7%AE%80%E4%BB%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.2%20%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E7%89%B9%E7%82%B9&#34; &gt;2.3.2 流式计算特点&lt;/a&gt;{#2.3.2%20%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.3%20%E5%B8%B8%E8%A7%81%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%92%8C%E7%A6%BB%E7%BA%BF%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6&#34; &gt;2.3.3 常见流式计算和离线计算框架&lt;/a&gt;{#2.3.3%20%E5%B8%B8%E8%A7%81%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%92%8C%E7%A6%BB%E7%BA%BF%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.4%20SparkStreaming%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86&#34; &gt;2.3.4 SparkStreaming的基本工作原理&lt;/a&gt;{#2.3.4%20SparkStreaming%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.5%20SparkStreaming%E7%9A%84%E7%BC%93%E5%AD%98&#34; &gt;2.3.5 SparkStreaming的缓存&lt;/a&gt;{#2.3.5%20SparkStreaming%E7%9A%84%E7%BC%93%E5%AD%98-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.6%20SparkStreaming%E7%9A%84%E5%AE%B9%E9%94%99&#34; &gt;2.3.6 SparkStreaming的容错&lt;/a&gt;{#2.3.6%20SparkStreaming%E7%9A%84%E5%AE%B9%E9%94%99-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3.7%20DStream%E6%93%8D%E4%BD%9C&#34; &gt;2.3.7 DStream操作&lt;/a&gt;{#2.3.7%20DStream%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.4%20MLlib&#34; &gt;2.4 MLlib&lt;/a&gt;{#2.4%20MLlib-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.5%20Graphx&#34; &gt;2.5 Graphx&lt;/a&gt;{#2.5%20Graphx-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Spark%E5%A4%9A%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%BC%8F&#34; &gt;Spark多种部署模式&lt;/a&gt;{#Spark%E5%A4%9A%E7%A7%8D%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;Spark简介 {#1.%20Spark%E7%AE%80%E4%BB%8B}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Spark 于 2009 年诞生于加州大学伯克利分校 AMPLab，2013 年被捐赠给 Apache 软件基金会，2014 年 2 月成为 Apache 的顶级项目。&lt;/p&gt;
+&lt;p&gt;相对于 MapReduce 的批处理计算，&lt;strong&gt;Spark基于内存计算&lt;/strong&gt;，可以带来上百倍的性能提升，因此它成为继 MapReduce 之后，最为广泛使用的&lt;strong&gt;分布式计算框架、大数据分析引擎&lt;/strong&gt;。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;11-spark特点-1120sparke789b9e782b9&#34;&gt;&lt;a href=&#34;#11-spark%e7%89%b9%e7%82%b9-1120sparke789b9e782b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 Spark特点 {#1.1%20Spark%E7%89%B9%E7%82%B9}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;快&lt;/strong&gt;：采用&lt;strong&gt;DAG执行引擎，支持循环数据流和内存计算&lt;/strong&gt;，使得 Spark 速度更快，在内存中的速度 是Hadoop MR的百倍，在磁盘上的速度是Hadoop MR的十倍(官网数据)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;通用&lt;/strong&gt;：Spark提供了统一的解决方案。Spark可以⽤于批处理、交互式查询（Spark SQL）、实时流处理（Spark Streaming）、机器学习（Spark MLlib）和图计算（GraphX）。这些不同类型的处理都可以在同⼀个应用中无缝使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;易用&lt;/strong&gt;：Spark支持Java、Python、Scala的API和超过80种⾼级算法，⽽且⽀持交互式的Python和Scala的shell。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;兼容&lt;/strong&gt;：Spark可以使⽤Hadoop的YARN和Apache Mesos作为它的资源管理和调度器，器，并且不需要任何数据迁移就可以处理所有Hadoop支持的数据，包括HDFS、HBase和Cassandra等。Spark也可以不依赖于第三⽅的资源管理和调度器，它实现了Standalone作为其内置的资源管理和调度框架。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;12-spark和mr处理任务对比-1220sparke5928cmre5a484e79086e4bbbbe58aa1e5afb9e6af94&#34;&gt;&lt;a href=&#34;#12-spark%e5%92%8cmr%e5%a4%84%e7%90%86%e4%bb%bb%e5%8a%a1%e5%af%b9%e6%af%94-1220sparke5928cmre5a484e79086e4bbbbe58aa1e5afb9e6af94&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2 Spark和MR处理任务对比 {#1.2%20Spark%E5%92%8CMR%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%E5%AF%B9%E6%AF%94}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/598e70154d4147deb1269a7566774e6c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/404b28dcc6494c1fad6636a3e2c2450b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Spark组件 {#2.%20Spark%E7%BB%84%E4%BB%B6}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;21-spark-core-2120spark20core&#34;&gt;&lt;a href=&#34;#21-spark-core-2120spark20core&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1 Spark Core {#2.1%20Spark%20Core}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Spark Core实现了 Spark 的基本功能，包含任务调度、内存管理、错误恢复、与存储系统 交互等模块。Spark Core 中还包含 了对弹性分布式数据集(resilient distributed dataset，简称RDD)的 API 定义。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;211-rdd算子-21120rdde7ae97e5ad90&#34;&gt;&lt;a href=&#34;#211-rdd%e7%ae%97%e5%ad%90-21120rdde7ae97e5ad90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1.1 RDD算子 {#2.1.1%20RDD%E7%AE%97%E5%AD%90}
+&lt;/h4&gt;&lt;h5 id=&#34;2111-为什么有rdd-211120e4b8bae4bb80e4b988e69c89rddefbc9f&#34;&gt;&lt;a href=&#34;#2111-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%9c%89rdd-211120e4b8bae4bb80e4b988e69c89rddefbc9f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1.1.1 为什么有RDD？ {#2.1.1.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89RDD%EF%BC%9F}
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;在许多迭代式算法(比如机器学习、图算法等)和交互式数据挖掘中，不同计算阶段之间会重用中间结果，即&lt;strong&gt;一个阶段的输出结果会作为下一个阶段的输入&lt;/strong&gt;。但是， 之前的 &lt;strong&gt;MapReduce 框架采用非循环式的数据流模型&lt;/strong&gt;，把中间结果写入到 HDFS 中，带来了大量的数据复制、磁盘 IO 和序列化开销，且这些框架只能支持一些 特定的计算模式(map/reduce)，并没有提供一种&lt;strong&gt;通用的数据抽象&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;RDD 提供了一个抽象的数据模型，让我们不必担心底层数据的分布式特性，只需&lt;strong&gt;将具体的应用逻辑表达为一系列转换操作(函数)&lt;/strong&gt; ，不同 RDD 之间的转换操作之间还可以形成依赖关系，进而实现&lt;strong&gt;管道化&lt;/strong&gt;，从而&lt;strong&gt;避免了中间结果的存储&lt;/strong&gt;，大大降低数据复制、磁盘 IO 和序列化开销，并且还提供了更多的 API操作！&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;2112-rdd介绍-211220rdde4bb8be7bb8d&#34;&gt;&lt;a href=&#34;#2112-rdd%e4%bb%8b%e7%bb%8d-211220rdde4bb8be7bb8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1.1.2 RDD介绍 {#2.1.1.2%20RDD%E4%BB%8B%E7%BB%8D}
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;RDD（Resilient Distributed Dataset）叫做&lt;strong&gt;弹性分布式数据集&lt;/strong&gt;，是Spark中&lt;strong&gt;最基本的数据抽象&lt;/strong&gt;，是Spark计算的基石，它代表⼀个不可变、可分区、里面的元素可并行计算的集合。&lt;/li&gt;
+&lt;li&gt;RDD具有数据流模型的特点：自动容错、位置感知性调度和可伸缩性。RDD允许用户在执⾏多个查询时显式地将⼯作集缓存在内存中，后续的查询能够&lt;strong&gt;重⽤⼯作集&lt;/strong&gt;，这极⼤地提升了查询速度。&lt;/li&gt;
+&lt;li&gt;MR中对数据是没有进行抽象的，而在Spark中对数据进行了抽象，提供⼀些列处理⽅法也就是 RDD，为用户屏蔽了底层对数据的复杂抽象和处理，为⽤户提供了⼀组⽅便 的数据转换与求值方法，好比Java中类的封装。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;注意 : RDD本身是不存储数据，而是记录了数据的位置，数据的转换关系(调用什么方法、传入什么函数)！！！&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;以下是RDD源码翻译解读：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/8b0a801743be4b50a960e23592f8e3b2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;212-rdd-特点-21220rdd20e789b9e782b9&#34;&gt;&lt;a href=&#34;#212-rdd-%e7%89%b9%e7%82%b9-21220rdd20e789b9e782b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1.2 RDD 特点 {#2.1.2%20RDD%20%E7%89%B9%E7%82%B9}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;弹性体现：
+&lt;ol&gt;
+&lt;li&gt;存储的弹性：内存与磁盘的自动切换；&lt;/li&gt;
+&lt;li&gt;容错的弹性：RDD的血统（Lineag）会&lt;strong&gt;记录RDD的元数据信息和转换行为&lt;/strong&gt; ，当RDD的部分分区数据丢失时，它可以根据这些信息来重新运算并恢复丢失的数据分区。&lt;/li&gt;
+&lt;li&gt;计算的弹性：计算出错重试机制；&lt;/li&gt;
+&lt;li&gt;分片的弹性：可根据需要重新分片；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;分布式：数据存储在大数据集群不同节点上&lt;/li&gt;
+&lt;li&gt;数据集：RDD&lt;strong&gt;封装了计算逻辑&lt;/strong&gt;，并不保存数据&lt;/li&gt;
+&lt;li&gt;数据抽象：RDD是⼀个抽象，需要具体实现&lt;/li&gt;
+&lt;li&gt;不可变：RDD封装的&lt;strong&gt;计算逻辑不可改变&lt;/strong&gt;，想要改变只能产⽣新的RDD&lt;/li&gt;
+&lt;li&gt;可分区、并行计算&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;213-rdd做了什么-21320rdde5819ae4ba86e4bb80e4b988&#34;&gt;&lt;a href=&#34;#213-rdd%e5%81%9a%e4%ba%86%e4%bb%80%e4%b9%88-21320rdde5819ae4ba86e4bb80e4b988&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1.3 RDD做了什么 {#2.1.3%20RDD%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;从计算的角度来讲，数据处理过程中需要计算资源（内存 &amp;amp; CPU）和计算模型（逻辑）。执⾏时，需要&lt;strong&gt;将计算资源&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别</title>
+        <link>/zh-cn/post/2024/09/%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E4%BD%95%E4%B8%BA%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E4%BD%95%E4%B8%BA%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;往期推荐&lt;/strong&gt; {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141761563&#34;  title=&#34;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;前言 {#0.%20%E5%89%8D%E8%A8%80}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;1991年，数据仓库之父 比尔·恩门 著书《Building the DataWarehouse》，要求&lt;strong&gt;构建数据仓库&lt;/strong&gt; 时，遵循&lt;strong&gt;范式建模&lt;/strong&gt;，即从关系型数据库中提取的范式数据，仍按范式存储到数据仓库中，这样就导致&lt;strong&gt;数仓中有很多小表，查询的时候必然会有很多表的关联&lt;/strong&gt;，极大地影响查询效率和性能。&lt;/li&gt;
+&lt;li&gt;1994年，拉尔夫·金博尔 著书《The DataWarehouse Toolkit》，提出&lt;strong&gt;维度建模和数据集市的概念&lt;/strong&gt;，&lt;strong&gt;维度建模是反范式建模，自下而上&lt;/strong&gt; ，然而这种方式仍有缺点：那就是每个业务平台的数据有各自的数据集市，集市之间&lt;strong&gt;数据隔离，存在数据不一致、重复&lt;/strong&gt;的情况。&lt;/li&gt;
+&lt;li&gt;1998-2001年，比尔·恩门派和金博尔派合并，比尔·恩门提出&lt;strong&gt;CIF架构：数仓分层&lt;/strong&gt;，不同层采用不同的建模方式，同时解决了数据不一致和查询效率低的问题。
+&lt;strong&gt;基于以上，有了范式建模、维度建模、实体建模三种主要建模方式&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;01-浅谈维度建模-0120e6b585e8b088e7bbb4e5baa6e5bbbae6a8a1&#34;&gt;&lt;a href=&#34;#01-%e6%b5%85%e8%b0%88%e7%bb%b4%e5%ba%a6%e5%bb%ba%e6%a8%a1-0120e6b585e8b088e7bbb4e5baa6e5bbbae6a8a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;0.1 浅谈维度建模 {#0.1%20%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1}
+&lt;/h3&gt;&lt;h2 id=&#34;维度建模主要面向&#34;&gt;&lt;a href=&#34;#%e7%bb%b4%e5%ba%a6%e5%bb%ba%e6%a8%a1%e4%b8%bb%e8%a6%81%e9%9d%a2%e5%90%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;维度建模主要&lt;strong&gt;面向&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖</title>
+        <link>/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/</link>
+        <pubDate>Sun, 01 Sep 2024 00:53:40 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;往期推荐&lt;/strong&gt; {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;=========================================================================&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90&#34; &gt;往期推荐&lt;/a&gt;{#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#0.%20%E5%89%8D%E8%A8%80&#34; &gt;1. 数仓架构&lt;/a&gt;{#0.%20%E5%89%8D%E8%A8%80-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84&#34; &gt;1.1 离线数仓架构&lt;/a&gt;{#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84&#34; &gt;1.1.1 数据集市架构&lt;/a&gt;{#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82&#34; &gt;1.1.1.2 独立数据集市&lt;/a&gt;{#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82&#34; &gt;1.1.1.2 从属数据集市&lt;/a&gt;{#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20Inmon%E4%BC%81%E4%B8%9A%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%8E%82%E6%9E%B6%E6%9E%84&#34; &gt;1.1.2 Inmon企业信息工厂架构&lt;/a&gt;{#2.2%20Inmon%E4%BC%81%E4%B8%9A%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%8E%82%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3%20Kimball%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84&#34; &gt;1.1.3 Kimball数据仓库架构&lt;/a&gt;{#2.3%20Kimball%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.4%20%E6%B7%B7%E5%90%88%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84&#34; &gt;1.1.4 混合型数据仓库架构&lt;/a&gt;{#2.4%20%E6%B7%B7%E5%90%88%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%C2%A0&#34; &gt;1.2 实时数仓架构&lt;/a&gt;{#2.2%20%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1%20Lambda%E6%9E%B6%E6%9E%84&#34; &gt;1.2.1 Lambda架构&lt;/a&gt;{#2.2.1%20Lambda%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.1%20%E4%BC%A0%E7%BB%9F%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91&#34; &gt;1.2.1.1 传统的Lambda实时开发&lt;/a&gt;{#2.2.1.1%20%E4%BC%A0%E7%BB%9F%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.2%C2%A0%E5%8D%87%E7%BA%A7%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91&#34; &gt;1.2.1.2 升级的Lambda实时开发&lt;/a&gt;{#2.2.1.2%C2%A0%E5%8D%87%E7%BA%A7%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.1.3%C2%A0%E4%B8%BA%E4%BB%80%E4%B9%88Lambda%E6%9E%B6%E6%9E%84%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E6%B5%81%E5%A4%84%E7%90%86%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%9F&#34; &gt;1.2.1.3 为什么Lambda架构同时存在流处理和批处理？&lt;/a&gt;{#1.2.1.3%C2%A0%E4%B8%BA%E4%BB%80%E4%B9%88Lambda%E6%9E%B6%E6%9E%84%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E6%B5%81%E5%A4%84%E7%90%86%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%9F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.1.4%20Lambda%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9&#34; &gt;1.2.1.4 Lambda架构缺点&lt;/a&gt;{#1.2.1.4%20Lambda%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2%20Kappa%E6%9E%B6%E6%9E%84&#34; &gt;1.2.2 Kappa架构&lt;/a&gt;{#2.2.2%20Kappa%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.2.1%20Kappa%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9%C2%A0&#34; &gt;1.2.2.1 Kappa架构缺点&lt;/a&gt;{#1.2.2.1%20Kappa%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Kappa%E5%92%8CLambda%E5%AF%B9%E6%AF%94&#34; &gt;1.2.3 Kappa和Lambda对比&lt;/a&gt;{#Kappa%E5%92%8CLambda%E5%AF%B9%E6%AF%94-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.3%20%E6%95%B0%E6%8D%AE%E6%B9%96%E5%87%BA%E7%8E%B0%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%89%B9%E6%B5%81%E4%B8%80%E4%BD%93&#34; &gt;1.2.4 湖仓一体&amp;mdash;数据湖&lt;/a&gt;{#2.2.3%20%E6%95%B0%E6%8D%AE%E6%B9%96%E5%87%BA%E7%8E%B0%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%89%B9%E6%B5%81%E4%B8%80%E4%BD%93-toc}&lt;/p&gt;
+&lt;p&gt;=========================================================================&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;数仓架构 {#0.%20%E5%89%8D%E8%A8%80}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/3777f513a36341459145f21b7a2e5e37.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数仓架构大致分为离线数仓架构和实时数仓架构&lt;/strong&gt;，数仓架构可以简单理解为构成数仓的各层关系，如ODS、DWM、DWD、DWS，具体分层这里不赘述。&lt;/p&gt;
+&lt;h3 id=&#34;11-离线数仓架构-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84&#34;&gt;&lt;a href=&#34;#11-%e7%a6%bb%e7%ba%bf%e6%95%b0%e4%bb%93%e6%9e%b6%e6%9e%84-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 离线数仓架构 {#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2671ec1cfe104f8f8a115b0c195715ee.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;显而易见，这种架构不能处理实时数据，那么必然会有数据的流失。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;任何事物都是随着时间的演进变得越来越完善，当然也是越来越复杂，数仓也不例外。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;离线数仓架构&lt;/strong&gt; 包括&lt;strong&gt;数据集市架构、Inmon企业信息工厂架构、Kimball数据仓库架构、混合型数据仓库架构&lt;/strong&gt;，接下来就详细说说这几种架构。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;111-数据集市架构-2120e695b0e68daee99b86e5b882e69eb6e69e84&#34;&gt;&lt;a href=&#34;#111-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e6%9e%b6%e6%9e%84-2120e695b0e68daee99b86e5b882e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.1 数据集市架构 {#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84}
+&lt;/h4&gt;&lt;p&gt;数据集市架构重点在于&lt;strong&gt;集市&lt;/strong&gt; 二字，数据集市是按&lt;strong&gt;主题域&lt;/strong&gt; 组织的数据集合，用于支持&lt;strong&gt;部门级的决策&lt;/strong&gt;。有两种类型的数据集市：独立数据集市 和 从属数据集市。&lt;/p&gt;
+&lt;br /&gt;
+&lt;blockquote&gt;
+&lt;h5 id=&#34;1112-独立数据集市-21120e78bace7ab8be695b0e68daee99b86e5b882&#34;&gt;&lt;a href=&#34;#1112-%e7%8b%ac%e7%ab%8b%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82-21120e78bace7ab8be695b0e68daee99b86e5b882&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.1.2 独立数据集市 {#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82}
+&lt;/h5&gt;&lt;p&gt;独立数据集市集中于部门所关心的&lt;strong&gt;单一主题域&lt;/strong&gt; ，&lt;strong&gt;数据以部门为基础&lt;/strong&gt;，例如制造部门、人力资源部门和其他部门都各自有他们自己的数据集市。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/067762e2511c4969911e4343147186b2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：因为一个部门的业务相对于整个企业要简单，数据量也小得多，所以部门的独立数据集市&lt;strong&gt;周期短、见效快&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;缺点：独立数据集市各自为政。从业务角度看，当部门的分析&lt;strong&gt;需求扩展&lt;/strong&gt; 或者&lt;strong&gt;跨部门跨主题域分析&lt;/strong&gt; 时，独立数据市场会力不从心。 当&lt;strong&gt;数据存在歧义&lt;/strong&gt; ，比如同一个产品在A部门和B部门的定义不同，将无法在部门间进行信息比较。 每个部门使用不同的技术，建立不同的ETL的过程，处理不同的事务系统，而在多个独立的数据集市之间还会存在数据的交叉与重叠，甚至会有&lt;strong&gt;数据不一致&lt;/strong&gt;的情况！&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+&lt;blockquote&gt;
+&lt;h5 id=&#34;1112-从属数据集市-21220e4bb8ee5b19ee695b0e68daee99b86e5b882&#34;&gt;&lt;a href=&#34;#1112-%e4%bb%8e%e5%b1%9e%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82-21220e4bb8ee5b19ee695b0e68daee99b86e5b882&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.1.2 从属数据集市 {#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82}
+&lt;/h5&gt;&lt;p&gt;从属数据集市的数据&lt;strong&gt;来源于数据仓库&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS</title>
+        <link>/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/</link>
+        <pubDate>Thu, 01 Aug 2024 11:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D&#34;  title=&#34;数仓入门：数据分析模型、数仓建模、离线实时数仓、Lambda、Kappa、湖仓一体-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓入门：数据分析模型、数仓建模、离线实时数仓、Lambda、Kappa、湖仓一体-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0&#34; &gt;1. 数仓分层&lt;/a&gt;{#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89&#34; &gt;1.1 数据源层：ODS（Operational Data Store）&lt;/a&gt;{#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89&#34; &gt;1.2 数据仓库层：DW（Data Warehouse）&lt;/a&gt;{#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89&#34; &gt;1.2.1 数据明细层：DWD（Data Warehouse Detail）&lt;/a&gt;{#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89&#34; &gt;1.2.2 数据中间层：DWM（Data WareHouse Midddle）&lt;/a&gt;{#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89&#34; &gt;1.2.3 数据服务层：DWS（Data WareHouse Service）&lt;/a&gt;{#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89&#34; &gt;1.3 数据应用层：ADS（Application Data Service）&lt;/a&gt;{#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89&#34; &gt;1.4 维表层：DIM（Dimension）&lt;/a&gt;{#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;ol&gt;
+&lt;li&gt;数仓分层 {#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;那么为什么要数据仓库进行分层呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;用空间换时间&lt;/strong&gt;，通过大量的预处理来提升应用系统的用户体验（效率），因此数据仓库会存在&lt;strong&gt;大量冗余的数据&lt;/strong&gt;；&lt;strong&gt;不分层的话，如果源业务系统的业务规则发生变化将会影响整个数据清洗过程，工作量巨大&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;通过&lt;strong&gt;数据分层管理可以简化数据清洗&lt;/strong&gt;的过程，把一个复杂的工作拆成了多个简单的工作，把一个大的黑盒变成了一个白盒，每一层的处理逻辑都相对简单和容易理解，这样比较容易保证每一个步骤的正确性，当数据发生错误的时候，往往我们只需要&lt;strong&gt;溯源&lt;/strong&gt;并局部调整某个步骤即可。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分层是以解决当前业务快速的数据支撑为目的&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抽象出共性的框架并能够赋能给其他业务线，同时为业务发展提供稳定、准确的数据支撑&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;并能够按照已有的模型为新业务发展提供方向，也就是数据驱动和赋能&lt;/strong&gt;
+&lt;strong&gt;一个好的分层架构，要有以下好处：&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;1. 清晰数据结构&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 数据血缘追踪：数据ETL转化过程中的流动变化&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 减少重复开发，提高数据复用性&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4. 数据关系条理化&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5. 屏蔽原始数据的影响&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;数仓分层要结合公司业务进行，并且需要清晰明确各层职责，&lt;strong&gt;一般&lt;/strong&gt;采用如下分层结构：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e895cdb04e9645a59d90d89a57d585a6.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数仓建模在哪层建设呢？我们以&lt;strong&gt;维度建模&lt;/strong&gt; 为例，建模是在数据源层的下一层进行建设，在上图中，就是在 &lt;strong&gt;DW 层进行数仓建模&lt;/strong&gt;，所以 DW 层是数仓建设的核心层。 下面详细阐述下每层建设规范！&lt;/p&gt;
+&lt;h3 id=&#34;11-数据源层odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89&#34;&gt;&lt;a href=&#34;#11-%e6%95%b0%e6%8d%ae%e6%ba%90%e5%b1%82odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 数据源层：ODS（Operational Data Store） {#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;ODS 层是最接近数据源的一层，又叫&lt;strong&gt;贴源层&lt;/strong&gt; ，考虑后续可能需要&lt;strong&gt;追溯数据&lt;/strong&gt; 问题， 因此对于这一层就&lt;strong&gt;不建议做过多的数据清洗工作&lt;/strong&gt;，原封不动地接入原始数据即可， 至于&lt;strong&gt;数据去噪、去重、异常值处理等过程可以放在后面的 DWD 层&lt;/strong&gt;来做！&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;12-数据仓库层dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89&#34;&gt;&lt;a href=&#34;#12-%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e5%b1%82dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2 数据仓库层：DW（Data Warehouse） {#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;数据仓库层是数据仓库核心层，在这里把从 ODS 层中获得的数据按照主题建立各种数据模型。该层又依次&lt;strong&gt;细分为DWD、DWM、DWS&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;121-数据明细层dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89&#34;&gt;&lt;a href=&#34;#121-%e6%95%b0%e6%8d%ae%e6%98%8e%e7%bb%86%e5%b1%82dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2.1 数据明细层：DWD（Data Warehouse Detail） {#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;该层一般&lt;strong&gt;保持和 ODS 层一样的数据粒度&lt;/strong&gt;，并且提供&lt;strong&gt;一定的数据质量保证&lt;/strong&gt; 。&lt;strong&gt;DWD层要做的就是将数据清理、整合、规范化，把脏数据、垃圾数据、规范不一致的、状态定义不一致的、命名不规范的数据处理掉。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;同时，为了提高数据明细层的易用性，该层会采用一些&lt;strong&gt;维度退化&lt;/strong&gt;手法，将维度退化至事实表中，减少事实表和维表的关联。&lt;/li&gt;
+&lt;li&gt;另外，在该层也会做&lt;strong&gt;一部分的数据聚合&lt;/strong&gt;，将相同主题的数据汇集到一张表中，提高数据的可用性 。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;122-数据中间层dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89&#34;&gt;&lt;a href=&#34;#122-%e6%95%b0%e6%8d%ae%e4%b8%ad%e9%97%b4%e5%b1%82dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2.2 数据中间层：DWM（Data WareHouse Midddle） {#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;该层会在 DWD 层的数据基础上，数据做&lt;strong&gt;轻度聚合&lt;/strong&gt; ，生成一系列的&lt;strong&gt;中间表&lt;/strong&gt; ， &lt;strong&gt;提升公共指标的复用性&lt;/strong&gt;，减少重复加工。&lt;/li&gt;
+&lt;li&gt;直观来讲，就是对通用的核心维度进行聚合操作，算出相应的统计指标。&lt;/li&gt;
+&lt;li&gt;在实际计算中，如果直接从 DWD 或者 ODS 计算出宽表的统计指标，会存在计算量太大并且维度太少的问题，因此一般的做法是，&lt;strong&gt;在 DWM 层先计算出多个小的中间表，然后再拼接成一张 DWS 的宽表&lt;/strong&gt;。由于宽和窄的界限不易界定，&lt;strong&gt;也可以去掉 DWM&lt;/strong&gt; 这一层，只留 DWS 层，将所有的数据再放在DWS也可。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;123-数据服务层dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89&#34;&gt;&lt;a href=&#34;#123-%e6%95%b0%e6%8d%ae%e6%9c%8d%e5%8a%a1%e5%b1%82dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2.3 数据服务层：DWS（Data WareHouse Service） {#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;DWS 层为公共汇总层，会进行&lt;strong&gt;轻度汇总&lt;/strong&gt; ，&lt;strong&gt;粒度比明细数据稍粗&lt;/strong&gt;，基于 DWD 层上的基础数据，整合汇总成分析某一个主题域的服务数据。&lt;/li&gt;
+&lt;li&gt;DWS 层应覆 盖 80% 的应用场景。又&lt;strong&gt;称数据集市或宽表&lt;/strong&gt;。 按照业务划分，如主题域流量、订单、用户等，生成字段比较多的宽表，用于提供后续的业务查询，OLAP 分析，数据分发等。&lt;/li&gt;
+&lt;li&gt;一般来讲，该层的数据表会相对比较少，一张表会涵盖比较多的业务内容，由于其&lt;strong&gt;字段较多&lt;/strong&gt;，因此一般也会称该层的表为&lt;strong&gt;宽表&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;13-数据集市层dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89&#34;&gt;&lt;a href=&#34;#13-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e5%b1%82dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.3 数据集市层：DM（Data Mart） {#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;基于DW的基础数据，整合汇总成一个个数据集市，数据集市通常是面向部门的某个主题域的报表数据。比如用户留存表、用户活跃表、商品销量表、商品营收表等等。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;14-维表层dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89&#34;&gt;&lt;a href=&#34;#14-%e7%bb%b4%e8%a1%a8%e5%b1%82dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.4 维表层：DIM（Dimension） {#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;如果维表过多，也可针对维表设计单独一层，维表层主要包含两部分数据：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;高基数维度数据：一般是用户资料表、商品资料表类似的资料表。数据量可能是千万级或者上亿级别。&lt;/li&gt;
+&lt;li&gt;低基数维度数据：一般是配置表，比如枚举值对应的中文含义，或者日期维表。 数据量可能是个位数或者几千几万&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;15-数据应用层adsapplication-data-service&#34;&gt;&lt;a href=&#34;#15-%e6%95%b0%e6%8d%ae%e5%ba%94%e7%94%a8%e5%b1%82adsapplication-data-service&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.5 数据应用层：ADS（Application Data Service）
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;在这里，主要是&lt;strong&gt;提供给数据产品和数据分析使用的数据&lt;/strong&gt; ，一般会存放在 ES、 PostgreSql、Redis 等系统中供线上系统使用，也可能会存在 Hive 或者 Druid 中供数据分析和数据挖掘使用。比如我们经常说的&lt;strong&gt;报表数据&lt;/strong&gt;，一般就放在这里。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+---
+</description>
+        </item>
+        <item>
+        <title>大数据HBase图文简介及Phoenix</title>
+        <link>/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/</link>
+        <pubDate>Mon, 29 Jul 2024 11:30:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;引言&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e8%a8%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引言
+&lt;/h2&gt;&lt;p&gt;要想明白为什么HBase的产生，就需要先了解一下 Hadoop。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hadoop 可以通过 HDFS 来存 储结构化、半结构甚至非结构化的数据，是传统数据库的补充，是海量数据存储的最佳方法，它针对大文件的存储、批量访问和流式访问都做了优化，同时也通过多副本解决了容灾问题。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;但是 Hadoop 的缺陷在于它&lt;strong&gt;只能执行批处理&lt;/strong&gt;，并且只能以&lt;strong&gt;顺序方式访问数据&lt;/strong&gt;，这意味着即使是最简单的工作也必须搜索整个数据集，&lt;strong&gt;无法实现对数据的随机访问&lt;/strong&gt;。实现数据的&lt;strong&gt;随机访问是传统的关系型数据库所擅长的&lt;/strong&gt;，但它们却不能用于海量数据的存储。在这种情况下，必须有一种新的方案来&lt;strong&gt;同时解决海量数据存储和随机访问的问题&lt;/strong&gt;，HBase 就是其中之一 (HBase，Cassandra，couchDB，Dynamo 和 MongoDB 都能存储海量数据并支持随机访问)。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;数据结构分类：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;结构化数据：即以关系型数据库表形式管理的数据；&lt;/li&gt;
+&lt;li&gt;半结构化数据：非关系模型的，有基本固定结构模式的数据，例如日志文件、XML 文档、 JSON 文档、Email 等；&lt;/li&gt;
+&lt;li&gt;非结构化数据：没有固定模式的数据，如 WORD、PDF、PPT、EXL，各种格式的图片、视 频等。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;HBase简介&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;HBase全称Hadoop Database ，是一个基于HDFS的分布式的、面向列的开源数据库，但是这个数据库没有SQL，只提供了API，需要API编程来使用HBase，而后面提到的Phoenix才使得可以用SQL操作HBase！&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;HBase有如下特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;容量大：一个表可以有数十亿行，上百万列，这也和它的扩展性息息相关；&lt;/li&gt;
+&lt;li&gt;面向列：数据是按照列存储，每一列都单独存放，数据即索引，在查询时可以只访问指定列的数据，有效地降低了系统的 I/O 负担；&lt;/li&gt;
+&lt;li&gt;稀疏性：空 (null) 列并不占用存储空间，表可以设计的非常稀疏 ；&lt;/li&gt;
+&lt;li&gt;易扩展：的扩展性主要体现在两个方面，一个是基于上层处理能力（RegionServer） 的扩展，一个是基于存储的扩展（HDFS）。通过横向添加 RegionSever 的机器， 进行水平扩展，提升 Hbase 上层的处理能力，提升 Hbsae 服务更多 Region 的 能力。&lt;/li&gt;
+&lt;li&gt;数据多版本：每个单元中的数据可以有多个版本，按照时间戳排序，新的数据在最上面；&lt;/li&gt;
+&lt;li&gt;采用 HDFS 作为底层存储，支持结构化、半结构化和非结构化的存储；&lt;/li&gt;
+&lt;li&gt;支持数据分片；&lt;/li&gt;
+&lt;li&gt;易于使用的 Java 客户端 API，客户端可以通过 HBase 实现对 HDFS 上数据的随机访问；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9bfd7d519e2446d7903861122c1eee1e.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;HBase的表&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;表-schema-仅定义列族表&#34;&gt;&lt;a href=&#34;#%e8%a1%a8-schema-%e4%bb%85%e5%ae%9a%e4%b9%89%e5%88%97%e6%97%8f%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;表 schema 仅定义列族，表&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>kafka实战 集群搭建-Kraft模式</title>
+        <link>/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/</link>
+        <pubDate>Sun, 05 May 2024 20:57:35 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE&#34; &gt;集群配置&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8&#34; &gt;集群启动&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0&#34; &gt;脚本启动zk集群&lt;/a&gt;{#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0&#34; &gt;脚本启动kafka集群&lt;/a&gt;{#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0&#34; &gt;启动成功&lt;/a&gt;{#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Kafka%E6%93%8D%E4%BD%9C&#34; &gt;Kafka操作&lt;/a&gt;{#Kafka%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic&#34; &gt;命令行创建Topic&lt;/a&gt;{#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E2%80%8B%E7%BC%96%E8%BE%91&#34; &gt;​编辑&lt;/a&gt;{#%E2%80%8B%E7%BC%96%E8%BE%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8&#34; &gt;消费者生产者联动&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E2%80%8B%E7%BC%96%E8%BE%91&#34; &gt;​编辑&lt;/a&gt;{#%E2%80%8B%E7%BC%96%E8%BE%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1&#34; &gt;Linux配置EFAK3.0.1&lt;/a&gt;{#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Kraft%E6%A8%A1%E5%BC%8F%E9%9B%86%E7%BE%A4&#34; &gt;Kraft模式集群&lt;/a&gt;{#Kraft%E6%A8%A1%E5%BC%8F%E9%9B%86%E7%BE%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%85%8D%E7%BD%AE&#34; &gt;配置&lt;/a&gt;{#%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%AF%E5%8A%A8%E5%89%8D%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%86%E7%BE%A4&#34; &gt;启动前初始化集群&lt;/a&gt;{#%E5%90%AF%E5%8A%A8%E5%89%8D%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%86%E7%BE%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B5%85%E6%B5%85%E6%8A%8A%E7%8E%A9Kraft&#34; &gt;浅浅把玩Kraft&lt;/a&gt;{#%E6%B5%85%E6%B5%85%E6%8A%8A%E7%8E%A9Kraft-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Flume%E8%81%94%E5%8A%A8kafka&#34; &gt;Flume联动kafka&lt;/a&gt;{#Flume%E8%81%94%E5%8A%A8kafka-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Flume%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85&#34; &gt;Flume作为生产者&lt;/a&gt;{#Flume%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Flume%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0%E2%80%8B%E7%BC%96%E8%BE%91&#34; &gt;Flume作为消费者 ​编辑&lt;/a&gt;{#Flume%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0%E2%80%8B%E7%BC%96%E8%BE%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#SpringBoot%E8%81%94%E5%8A%A8kakfa&#34; &gt;SpringBoot联动kakfa&lt;/a&gt;{#SpringBoot%E8%81%94%E5%8A%A8kakfa-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#SpringBoot%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85&#34; &gt;SpringBoot作为生产者&lt;/a&gt;{#SpringBoot%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#SpringBoot%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0&#34; &gt;SpringBoot作为消费者&lt;/a&gt;{#SpringBoot%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;集群配置-e99b86e7bea4e9858de7bdae&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae-e99b86e7bea4e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;三台服务器：linux01、linux02、linux03&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;每台服务器均安装了zookeeper、kafka，服务器之间做了ssh免密登录（集群启停脚本用）&lt;/p&gt;
+&lt;p&gt;kafka虽然内置了zk，但是这里用的是自己安装的zk。&lt;/p&gt;
+&lt;p&gt;服务器之间加了ip映射，如hosts文件所示，这样就不需要p地址，只需要服务器名字就可以了&lt;br&gt;
+&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/eb408c7885cbb8c35f6dea4a8c1a371b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;集群启动-e99b86e7bea4e590afe58aa8&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8-e99b86e7bea4e590afe58aa8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群启动 {#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意事项&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;启动时先启动zk，再启动kafka&lt;/li&gt;
+&lt;li&gt;关闭时先关闭kafka，再关闭zk，因为kafka需要zk来维护数据信息，再关闭前kafka要和zk通讯。&lt;/li&gt;
+&lt;li&gt;kafka-server-start.sh -daemon config/server.properties&lt;/li&gt;
+&lt;li&gt;kafka-server-stop.sh&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;脚本启动zk集群-e8849ae69cace590afe58aa8zke99b86e7bea4c2a0&#34;&gt;&lt;a href=&#34;#%e8%84%9a%e6%9c%ac%e5%90%af%e5%8a%a8zk%e9%9b%86%e7%be%a4-e8849ae69cace590afe58aa8zke99b86e7bea4c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;脚本启动zk集群 {#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/5146d22dd61bdd0dca7a6c97444a450c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;脚本启动kafka集群-e8849ae69cace590afe58aa8kafkae99b86e7bea4c2a0&#34;&gt;&lt;a href=&#34;#%e8%84%9a%e6%9c%ac%e5%90%af%e5%8a%a8kafka%e9%9b%86%e7%be%a4-e8849ae69cace590afe58aa8kafkae99b86e7bea4c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;脚本启动kafka集群 {#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/3388a4063e460ccc351ca9c74ba28d43.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;启动成功-e590afe58aa8e68890e58a9fc2a0&#34;&gt;&lt;a href=&#34;#%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f-e590afe58aa8e68890e58a9fc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;启动成功 {#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0}
+&lt;/h3&gt;&lt;p&gt;启动成功，三台服务器均显示如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/4fff028a6f054f402a9e2df63b1b7810.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;查看zk客户端，根节点下已经有了kafka节点&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;默认直接在根节点下生成admin、brokers、cluster等节点，但是不方便维护，因此在server.properties文件中改了配置，让所有节点统一生成在kafka节点。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/b9f8872873986c923e3f1862808bd5b2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;zk集群启停脚本&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;#zookeeper集群启停及状态查看脚本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;ZOOKEEPER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;/export/server/zookeeper&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$1&lt;/span&gt; in
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;start&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in linux01 linux02 linux03
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;do&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; ---------- zookeeper &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; 启动 ------------
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		ssh &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$ZOOKEEPER&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/bin/zkServer.sh start&amp;#34;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;stop&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in linux01 linux02 linux03
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;do&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; ---------- zookeeper &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; 停止 ------------ 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		ssh &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$ZOOKEEPER&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/bin/zkServer.sh stop&amp;#34;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;status&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in linux01 linux02 linux03
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;do&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; ---------- zookeeper &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; 状态 ------------ 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		ssh &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$ZOOKEEPER&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/bin/zkServer.sh status&amp;#34;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;esac&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;kafka集群启停脚本&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$1&lt;/span&gt; in
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;start&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in linux01 linux02 linux03
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; --------&lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; 启动kafka---------
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        ssh &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;source /etc/profile;/export/server/kafka/bin/kafka-server-start.sh -daemon /export/server/kafka/config/server.properties&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;stop&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;){&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in linux01 linux02 linux03
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; --------&lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; 停止kafka---------
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        ssh &lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;source /etc/profile;/export/server/kafka/bin/kafka-server-stop.sh stop&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;esac&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;kafka操作-kafkae6938de4bd9c&#34;&gt;&lt;a href=&#34;#kafka%e6%93%8d%e4%bd%9c-kafkae6938de4bd9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Kafka操作 {#Kafka%E6%93%8D%E4%BD%9C}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&amp;ndash;bootstrap-server是连接kafka，对于集群而言，连接任何一台服务器的kafka都是一样的&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;命令行创建topic-e591bde4bba4e8a18ce5889be5bbbatopic&#34;&gt;&lt;a href=&#34;#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%88%9b%e5%bb%batopic-e591bde4bba4e8a18ce5889be5bbbatopic&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;命令行创建Topic {#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic}
+&lt;/h3&gt;&lt;h3 id=&#34;e2808be7bc96e8be91&#34;&gt;&lt;a href=&#34;#e2808be7bc96e8be91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/49403c709dce40f931823c3b0cf5ea0d.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt; {#%E2%80%8B%E7%BC%96%E8%BE%91}
+&lt;/h3&gt;&lt;h3 id=&#34;消费者生产者联动-e6b688e8b4b9e88085e7949fe4baa7e88085e88194e58aa8&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e8%b4%b9%e8%80%85%e7%94%9f%e4%ba%a7%e8%80%85%e8%81%94%e5%8a%a8-e6b688e8b4b9e88085e7949fe4baa7e88085e88194e58aa8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消费者生产者联动 {#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8}
+&lt;/h3&gt;&lt;h3 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/686e2fdd6b20743399269793f8e77a0b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/42262fff1a46f4831e04f1b7ed768939.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;先启动生产者，生产hello、hahaha，再启动消费者，生产者再生产aaaaa、bbbb。此时hello、hahaha属于历史消息，不会显示，只显示aaaaa、bbbb，若想显示历史消息，需要如下，此时消息是乱序的：&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/ffc0bdc441ef90df3b370852d05af4c1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;linux配置efak301-linuxe9858de7bdaeefak301&#34;&gt;&lt;a href=&#34;#linux%e9%85%8d%e7%bd%aeefak301-linuxe9858de7bdaeefak301&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Linux配置EFAK3.0.1 {#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1}
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;1. 配置EFAK的环境变量&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ke.sh文件中引用的efak变量名是KE_HOME，所以环境变量名一定是KE_HOME，否则efak无法启动&lt;br&gt;
+&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/ad81fe1df803cc2ba77a2487d420cd63.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;br&gt;
+source /etc/profile&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2. 修改kafka的bin/kafka-server-start.sh的内存配置，如果不修改，可能无法启动efak&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9496f1566089cf16bee4bd251a664fef.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;内容如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;x&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$KAFKA_HEAP_OPTS&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;#export KAFKA_HEAP_OPTS=&amp;#34;-Xmx1G -Xms1G&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;KAFKA_HEAP_OPTS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;-server     -Xms2G   -Xmx2G   -XX:PermSize=128m   -XX:+UseG1GC   -XX:MaxGCPauseMillis=200  -XX:ParallelGCThreads=8   -XX:ConcGCThreads=5   -XX:InitiatingHeapOccupancyPercent=70&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;#监控kafka运行的端口号9999&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;JMX_PORT&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;9999&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Kafka入门到入土——万字详解，图文并茂</title>
+        <link>/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/</link>
+        <pubDate>Sun, 05 May 2024 17:42:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89&#34; &gt;消息队列（MQ）&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF&#34; &gt;消息队列一般应用场景&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JMS&#34; &gt;JMS&lt;/a&gt;{#JMS-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0JMS%E6%A8%A1%E5%9E%8B&#34; &gt;JMS模型&lt;/a&gt;{#%C2%A0JMS%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89&#34; &gt;点对点模型（peer to peer）&lt;/a&gt;{#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B&#34; &gt;发布订阅模型&lt;/a&gt;{#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Kafka%E6%9E%B6%E6%9E%84&#34; &gt;Kafka架构&lt;/a&gt;{#Kafka%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Broker&#34; &gt;Broker&lt;/a&gt;{#Broker-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Controller%E9%80%89%E4%B8%BE&#34; &gt;Controller选举&lt;/a&gt;{#Controller%E9%80%89%E4%B8%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0&#34; &gt;Broker上下线&lt;/a&gt;{#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B&#34; &gt;Broker工作流程&lt;/a&gt;{#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Producer&#34; &gt;Producer&lt;/a&gt;{#Producer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Consumer&#34; &gt;Consumer&lt;/a&gt;{#Consumer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Consumer%20Group&#34; &gt;Consumer Group&lt;/a&gt;{#Consumer%20Group-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Topic&#34; &gt;Topic&lt;/a&gt;{#Topic-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Partition%E5%88%86%E5%8C%BA&#34; &gt;Partition分区&lt;/a&gt;{#Partition%E5%88%86%E5%8C%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E5%A5%BD%E5%A4%84%C2%A0&#34; &gt;分区好处&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E5%A5%BD%E5%A4%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5&#34; &gt;生产者发送消息的分区策略&lt;/a&gt;{#%C2%A0%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8Segment&#34; &gt;文件存储Segment&lt;/a&gt;{#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8Segment-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E7%9A%84%E5%89%AF%E6%9C%AC&#34; &gt;分区的副本&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E7%9A%84%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Why%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC&#34; &gt;Why分区副本&lt;/a&gt;{#Why%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E2%80%8B%E7%BC%96%E8%BE%91&#34; &gt;手动调整分区副本存储​编辑&lt;/a&gt;{#%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E2%80%8B%E7%BC%96%E8%BE%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACLeader%E5%88%86%E5%8C%BA%E8%87%AA%E5%8A%A8%E5%B9%B3%E8%A1%A1&#34; &gt;副本Leader分区自动平衡&lt;/a&gt;{#%E5%89%AF%E6%9C%ACLeader%E5%88%86%E5%8C%BA%E8%87%AA%E5%8A%A8%E5%B9%B3%E8%A1%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%A2%9E%E5%8A%A0%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%C2%A0&#34; &gt;增加副本数量&lt;/a&gt;{#%E5%A2%9E%E5%8A%A0%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACLeader%E9%80%89%E4%B8%BE&#34; &gt;副本Leader选举&lt;/a&gt;{#%E5%89%AF%E6%9C%ACLeader%E9%80%89%E4%B8%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACLeader%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D&#34; &gt;副本Leader故障恢复&lt;/a&gt;{#%E5%89%AF%E6%9C%ACLeader%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACFollower%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%C2%A0&#34; &gt;副本Follower故障恢复&lt;/a&gt;{#%E5%89%AF%E6%9C%ACFollower%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0ISR%E6%9C%BA%E5%88%B6&#34; &gt;ISR机制&lt;/a&gt;{#%C2%A0ISR%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%8D%E5%AE%8C%E5%85%A8%E9%A6%96%E9%A2%86%E9%80%89%E4%B8%BE&#34; &gt;不完全首领选举&lt;/a&gt;{#%E4%B8%8D%E5%AE%8C%E5%85%A8%E9%A6%96%E9%A2%86%E9%80%89%E4%B8%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%80%E5%B0%91%E5%90%8C%E6%AD%A5%E5%89%AF%E6%9C%AC&#34; &gt;最少同步副本&lt;/a&gt;{#%E6%9C%80%E5%B0%91%E5%90%8C%E6%AD%A5%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82%C2%A0&#34; &gt;数据请求&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6&#34; &gt;请求机制&lt;/a&gt;{#%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E8%AF%A6%E8%A7%A3&#34; &gt;生产者详解&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E8%AF%A6%E8%A7%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B&#34; &gt;生产者发送消息的过程&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%C2%A0&#34; &gt;消息可靠性&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ACK%E5%BA%94%E7%AD%94%C2%A0&#34; &gt;ACK应答&lt;/a&gt;{#ACK%E5%BA%94%E7%AD%94%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E6%95%B0%E6%8D%AE%E9%87%8D%E8%AF%95&#34; &gt;数据重试&lt;/a&gt;{#%C2%A0%E6%95%B0%E6%8D%AE%E9%87%8D%E8%AF%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E4%B9%B1%E5%BA%8F%C2%A0&#34; &gt;数据乱序&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E4%B9%B1%E5%BA%8F%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81&#34; &gt;同步发送&lt;/a&gt;{#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81&#34; &gt;异步发送&lt;/a&gt;{#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E6%8F%90%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F&#34; &gt;生产者提高吞吐量&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E6%8F%90%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%C2%A0&#34; &gt;压缩算法&lt;/a&gt;{#%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3&#34; &gt;消费者详解&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#push%26pull&#34; &gt;push&amp;amp;pull&lt;/a&gt;{#push%26pull-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E8%B0%83%E5%BA%A6%E5%99%A8%C2%A0&#34; &gt;消费者组调度器&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E8%B0%83%E5%BA%A6%E5%99%A8%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E9%85%8D%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5%C2%A0&#34; &gt;消费者分配分区策略&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E9%85%8D%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85Leader%C2%A0&#34; &gt;消费者Leader&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85Leader%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1&#34; &gt;分区再均衡&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%9B%91%E5%90%AC%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1%C2%A0&#34; &gt;监听分区再均衡&lt;/a&gt;{#%E7%9B%91%E5%90%AC%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%81%8F%E7%A7%BB%E9%87%8FOffset&#34; &gt;偏移量Offset&lt;/a&gt;{#%E5%81%8F%E7%A7%BB%E9%87%8FOffset-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#LSO&#34; &gt;LSO&lt;/a&gt;{#LSO-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#LEO&#34; &gt;LEO&lt;/a&gt;{#LEO-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HW&#34; &gt;HW&lt;/a&gt;{#HW-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F&#34; &gt;手动提交偏移量&lt;/a&gt;{#%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%8C%E6%AD%A5%E6%8F%90%E4%BA%A4&#34; &gt;同步提交&lt;/a&gt;{#%E5%90%8C%E6%AD%A5%E6%8F%90%E4%BA%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4&#34; &gt;异步提交&lt;/a&gt;{#%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F&#34; &gt;自动提交偏移量&lt;/a&gt;{#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%88%AA%E8%87%B3%20%E5%B0%9A%E7%A1%85%E8%B0%B7kafka3.x%20P39&#34; &gt;截至 尚硅谷kafka3.x P39&lt;/a&gt;{#%E6%88%AA%E8%87%B3%20%E5%B0%9A%E7%A1%85%E8%B0%B7kafka3.x%20P39-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;p&gt;Kafka是一个由Scala和Java语言开发的，经典高吞吐量的分布式消息发布和订阅系统，也是大数据技术领域中用作数据交换的核心组件之一。它具有以下特点：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;支持消息的发布和订阅，类似于 RabbtMQ、ActiveMQ 等消息队列；&lt;/li&gt;
+&lt;li&gt;支持数据实时处理；&lt;/li&gt;
+&lt;li&gt;能保证消息的可靠性投递；&lt;/li&gt;
+&lt;li&gt;支持消息的持久化存储，并通过多副本分布式的存储方案来保证消息的容错；&lt;/li&gt;
+&lt;li&gt;高吞吐率，单 Broker 可以轻松处理数千个分区以及每秒百万级的消息量；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;消息队列mq-e6b688e681afe9989fe58897efbc88mqefbc89&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97mq-e6b688e681afe9989fe58897efbc88mqefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列（MQ） {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89}
+&lt;/h2&gt;&lt;p&gt;Kafka软件最初的设计就是专门用于数据传输的消息系统，类似功能的软件有RabbitMQ、ActiveMQ、RocketMQ等，这些软件的核心功能是传输数据，而Java中如果想要实现数据传输功能，那么这个软件一般需要遵循Java消息服务技术规范JMS。前面提到的ActiveMQ软件就完全遵循了JMS技术规范，而RabbitMQ是遵循了类似JMS规范并兼容JMS规范的跨平台的AMQP规范。除了上面描述的JMS，AMQP外，还有一种用于物联网小型设备之间传输消息的MQTT通讯协议。&lt;/p&gt;
+&lt;p&gt;Kafka拥有作为一个消息系统应该具备的功能，但是却有着独特的设计。&lt;strong&gt;Kafka借鉴了JMS规范的思想，但是却并没有完全遵循JMS规范&lt;/strong&gt;。这也恰恰是软件名称为Kafka，而不是KafkaMQ的原因。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9fb6defea02f0b37752ca1c4782231e4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;消息队列一般应用场景-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%b8%80%e8%88%ac%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列一般应用场景 {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;**应用耦合：**多应用间通过消息队列对同一消息进行处理，避免调用接口失败导致整个过程失败。&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/2f16f6101cd2b4bb63436228734e155b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;**异步处理：**多应用对消息队列中同一消息进行处理，应用间并发处理消息，相比串行处理，减少处理时间&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/a55ab7be057ab04a981105f917581112.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;限流削峰：&lt;/strong&gt; 广泛应用于秒杀或抢购活动中，避免流量过大导致应用系统挂掉的情况。该方法有如下优点：
+&lt;ul&gt;
+&lt;li&gt;1.请求先入消息队列，而不是由业务处理系统直接处理，做了一次缓冲,极 大地减少了业务处理系统的压力；&lt;/li&gt;
+&lt;li&gt;2.队列长度可以做限制，事实上，秒杀时，后入队列的用户无法秒杀到商品，这些请求可以直接被抛弃，返回活动已结束或商品已售完信息；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/257e558241daec39757876a0891b6458.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;消息驱动的系统：&lt;/strong&gt; 系统分为消息队列、消息生产者、消息消费者，生产者 负责产生消息，消费者(可能有多个)负责对消息进行处理。&lt;strong&gt;具体场景&lt;/strong&gt;：用户新上传了一批照片，人脸识别系统需要对这个用户的所有照片进行聚类，聚类完成后由对账系统重新生成用户的人脸索引(加快查询)。这三个子 系统间由消息队列连接起来，前一个阶段的处理结果放入队列中，后一个阶段从 队列中获取消息继续处理。&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/e7a0846fd5fe97485958c48ddb466a5d.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;该方法有如下优点：1.避免了直接调用下一个系统导致当前系统失败； 2.每个子系统对于消息的处理方式可以更为灵活，可以选择收到消息时就处理，可以选择定时处理，也可以划分时间段按不同处理速度处理；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;JMS&#34;&gt;&lt;a href=&#34;#JMS&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS
+&lt;/h3&gt;&lt;p&gt;JMS类似于JDBC，是java平台的消息中间件通用规范，定义了系统和系统之间传输消息的接口。&lt;/p&gt;
+&lt;p&gt;为了实现系统和系统之间的数据传输，JMS规范中定义很多用于通信的组件：&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/285ce9d7a2a8f1e6ac77037c2f05e82b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JMS Producer&lt;/strong&gt; **：**JMS消息生产者。所谓的生产者，就是生产数据的客户端应用程序，这些应用通过JMS接口发送JMS消息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JMS Provider&lt;/strong&gt;：JMS消息提供者。其实就是实现JMS接口和规范的消息中间件，也就是我们提供消息服务的软件系统，比如RabbitMQ、ActiveMQ、Kafka。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JMS Message&lt;/strong&gt;：JMS消息。这里的消息指的就是数据。一般采用Java数据模型进行封装，其中包含消息头，消息属性和消息主体内容。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JMS Consumer&lt;/strong&gt;：JMS消息消费者。所谓的消费者，就是从消息提供者中获取数据的客户端应用程序，这些应用通过JMS接口接收JMS消息。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;jms模型-c2a0jmse6a8a1e59e8b&#34;&gt;&lt;a href=&#34;#jms%e6%a8%a1%e5%9e%8b-c2a0jmse6a8a1e59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS模型 {#%C2%A0JMS%E6%A8%A1%E5%9E%8B}
+&lt;/h4&gt;&lt;h5 id=&#34;点对点模型peer-to-peer-e782b9e5afb9e782b9e6a8a1e59e8befbc88peer20to20peerefbc89&#34;&gt;&lt;a href=&#34;#%e7%82%b9%e5%af%b9%e7%82%b9%e6%a8%a1%e5%9e%8bpeer-to-peer-e782b9e5afb9e782b9e6a8a1e59e8befbc88peer20to20peerefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;点对点模型（peer to peer） {#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89}
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd0746d5877a27d6ecaa045fee8dc601.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个消息只有一个接收者（Consumer）(即一旦被消费，就会被删除)；&lt;/li&gt;
+&lt;li&gt;发送者和接发收者间没有依赖性，发送者发送消息之后，不管有没有接收者在运行，都不会影响到发送者下次发送消息；&lt;/li&gt;
+&lt;li&gt;接收者在成功接收消息之后需向队列应答成功，以便消息队列删除当前接 收的消息&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;发布订阅模型-e58f91e5b883e8aea2e99885e6a8a1e59e8b&#34;&gt;&lt;a href=&#34;#%e5%8f%91%e5%b8%83%e8%ae%a2%e9%98%85%e6%a8%a1%e5%9e%8b-e58f91e5b883e8aea2e99885e6a8a1e59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;发布订阅模型 {#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B}
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/0bdabc2f116a00b4e787472f14c7c820.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个消息可以有多个订阅者，但是订阅者必须来自不同的消费者组；&lt;/li&gt;
+&lt;li&gt;针对某个主题（Topic）的订阅者，它必须创建一个订阅者之后，才能消费发布者的消息。&lt;/li&gt;
+&lt;li&gt;为了消费消息，订阅者需要提前订阅该角色主题，并保持在线运行；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Kafka采用就是这种模型。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;kafka架构-kafkae69eb6e69e84&#34;&gt;&lt;a href=&#34;#kafka%e6%9e%b6%e6%9e%84-kafkae69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Kafka架构 {#Kafka%E6%9E%B6%E6%9E%84}
+&lt;/h2&gt;&lt;p&gt;在 Kafka 2.8.0 版本，移除了对 Zookeeper 的依赖，通过&lt;strong&gt;Kraft模式&lt;/strong&gt; 进行自己的集群管理，使用 Kafka&lt;strong&gt;内部的 Quorum 控制器&lt;/strong&gt;来取代 ZooKeeper管理元数据，这样我们无需维护zk集群，只要维护Kafka集群就可以了，节省运算资源。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;kafka基本数据单元被称为 message(消息)&lt;/strong&gt;，为减少网络开销，提高效率，多个消息会被放入同一批次(Batch) 中后再写入。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f0678a5c5c02bd632d1b71553fd9fa4c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;Broker&#34;&gt;&lt;a href=&#34;#Broker&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Broker
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;kafka 集群中包含多个服务实例（节点），这种服务实例被称为 broker（一个 broker 就是一个节点/一个服务器），每个 broker 都有一个唯一标识 broker.id，用于标识自己在集群中的身份，可以在配置文件 server.properties 中进行配置，或由程序自动生成。&lt;/li&gt;
+&lt;li&gt;Broker 接收来自生产者的消息，为消息设置偏移量，并提交消息到磁盘保存。Broker 为消费者提供服务，对读取分区的请求做出响应，返回已经提交到磁盘的消息。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;controller选举-controllere98089e4b8be&#34;&gt;&lt;a href=&#34;#controller%e9%80%89%e4%b8%be-controllere98089e4b8be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Controller选举 {#Controller%E9%80%89%E4%B8%BE}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;每一个集群都会选举出一个 Broker作为&lt;strong&gt;集群控制器&lt;/strong&gt; **(Controller)，它负责分区 Leader 选举，还负责管理主题分区及其副本的状态、元数据管理。**如果在运行过程中，Controller节点出现了故障，那么Kafka会依托于ZooKeeper软件选举其他的节点作为新的Controller，让Kafka集群实现高可用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特殊情况&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Controller节点并没有宕掉，而是因为网络的抖动，不稳定，导致和ZooKeeper之间的会话超时，那么此时，整个Kafka集群就会认为之前的Controller已经下线（退出）从而选举出新的Controller，而之前的Controller的网络又恢复了，以为自己还是Controller了，继续管理整个集群，那么此时，整个Kafka集群就有两个controller进行管理，那么其他的broker就懵了，不知道听谁的了，这种情况，我们称之为脑裂现象，为了解决这个问题，Kafka通过一个任期（epoch:纪元）的概念来解决，也就是说，每一个Broker当选Controller时，会告诉当前Broker是第几任Controller，一旦重新选举时，这个任期会自动增1，那么不同任期的Controller的epoch值是不同的，那么旧的controller一旦发现集群中有新任controller的时候，那么它就会完成退出操作（清空缓存，中断和broker的连接，并重新加载最新的缓存），让自己重新变成一个普通的Broker。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;broker上下线-brokere4b88ae4b88be7babfc2a0&#34;&gt;&lt;a href=&#34;#broker%e4%b8%8a%e4%b8%8b%e7%ba%bf-brokere4b88ae4b88be7babfc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Broker上下线 {#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0}
+&lt;/h4&gt;&lt;p&gt;Controller 在初始化时，会利用 ZK 的 watch 机制注册很多不同类型的监听器，当监听的事件被触发时，Controller 就会触发相应的操作。Controller 在初始化时，会注册多种类型的监听器，主要有以下几种：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;/kafka/admin/reassign_partitions 节点，用于分区副本迁移的监听&lt;/li&gt;
+&lt;li&gt;/kafka/isr_change_notification 节点，用于 Partition ISR 变动的监听&lt;/li&gt;
+&lt;li&gt;/kafka/admin/preferred_replica_election 节点，用于需要进行 Partition 最优 leader 选举的监听&lt;/li&gt;
+&lt;li&gt;/kafka/brokers/topics 节点，用于 Topic 新建的监听&lt;/li&gt;
+&lt;li&gt;/kafka/brokers/topics/TOPIC_NAME 节点，用于 Topic Partition 扩容的监听&lt;/li&gt;
+&lt;li&gt;/kafka/admin/delete_topics 节点，用于 Topic 删除的监听&lt;/li&gt;
+&lt;li&gt;/kafka/brokers/ids 节点，用于 Broker 上下线的监听，记录有哪些kafka服务器在线。&lt;/li&gt;
+&lt;li&gt;/kafka/controller节点，辅助选举leader&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/6eacf94f1216ffd1894cad366ae0a0ca.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;每台 Broker 在上线时，都会与ZK建立一个建立一个session，并在 /brokers/ids下注册一个节点，节点名字就是broker id，这个节点是临时节点，该节点内部会有这个 Broker 的详细节点信息。Controller会监听/brokers/ids这个路径下的所有子节点，如果有新的节点出现，那么就代表有新的Broker上线，如果有节点消失，就代表有broker下线，Controller会进行相应的处理，Kafka就是利用ZK的这种watch机制及临时节点的特性来完成集群 Broker的上下线。无论Controller监听到的哪一种节点的变化，都会进行相应的处理，同步整个集群元数据。&lt;/p&gt;
+&lt;h4 id=&#34;broker工作流程-brokere5b7a5e4bd9ce6b581e7a88b&#34;&gt;&lt;a href=&#34;#broker%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b-brokere5b7a5e4bd9ce6b581e7a88b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Broker工作流程 {#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B}
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/afd0a4e19e5449dd0cfa84fe3c8213ed.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;Producer&#34;&gt;&lt;a href=&#34;#Producer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Producer
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;一般情况下，生产者在把消息均衡地分布到在主题的所有分区上，而并不关心消息会被写到哪个分区。如果我们想要把消息写到指定的分区，可以通过&lt;strong&gt;自定义分区器&lt;/strong&gt;来实现。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Consumer&#34;&gt;&lt;a href=&#34;#Consumer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Consumer
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;消费者一定是归属于某个消费组中的&lt;/strong&gt;，消费者可以订阅一或多个主题，并按照分区中消息的顺序来读取。消费者通过检查消息的偏移量 (offset) 来区分读取过的消息。偏移量是一个不 断递增的数值，在创建消息时，Kafka 会把它添加到其中，在给定的分区里，每个消息的偏移量都是唯一的。消费者把每个分区最后读取的偏移量保存在 Zookeeper 或 Kafka 上，如果消费者关闭或者重启，它还可以重新获取该偏移量，以保证读取状态不会丢失。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;consumer-group-consumer20group&#34;&gt;&lt;a href=&#34;#consumer-group-consumer20group&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Consumer Group {#Consumer%20Group}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;消费者组由一个或者多个消费者组成，&lt;strong&gt;同一个组中的消费者对于同一条消息只消费一次。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;每个消费者组都有一个 ID，即 group ID。组内的所有消费者协调在一起来消费 一个订阅主题的所有分区。当然，&lt;strong&gt;每个分区只能由同一个消费组内的一个消费者来消费，但可以由不同的消费组来消费。partition 数量决定了每个 consumer group 中并发消费者的最大数。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;因此要合理设置消费者组中的消费者数量，避免出现消费者闲置。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Topic&#34;&gt;&lt;a href=&#34;#Topic&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Topic
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Kafka 的消息通过 Topics(主题) 进行分类，Kafka中有两个固定的，用于记录消费者偏移量和事务处理的主题，一个主题可以被分为若干个 Partitions(分区)，一个分区就是 一个提交日志 (commit log)。消息以追加的方式写入分区，然后以先入先出的顺序读取。&lt;strong&gt;Kafka 通过分区来实现数据的冗余和伸缩性，分区可以分布在不同的服务器上，这意味着一个 Topic 可以横跨多个服务器，以提供比单个服务器更强大的性能&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;由于一个 Topic 包含多个分区，因此无法在整个 Topic 范围内保证消息的顺序性，但可以保证消息在单个分区内的顺序性。&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Flume进阶--万字详解【老大爷也能学会】</title>
+        <link>/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/</link>
+        <pubDate>Sun, 28 Apr 2024 21:47:38 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BA%8B%E5%8A%A1%EF%BC%88Put%E3%80%81Take%EF%BC%89&#34; &gt;事务（Put、Take）&lt;/a&gt;{#%E4%BA%8B%E5%8A%A1%EF%BC%88Put%E3%80%81Take%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86&#34; &gt;架构原理&lt;/a&gt;{#%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Channel%E9%80%89%E6%8B%A9%E5%99%A8&#34; &gt;Channel选择器&lt;/a&gt;{#Channel%E9%80%89%E6%8B%A9%E5%99%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#SinkProcessor&#34; &gt;SinkProcessor&lt;/a&gt;{#SinkProcessor-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84&#34; &gt;拓扑结构&lt;/a&gt;{#%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8D%95%E6%BA%90%E5%A4%9A%E5%87%BA%E5%8F%A3%E6%A1%88%E4%BE%8B&#34; &gt;单源多出口案例&lt;/a&gt;{#%E5%8D%95%E6%BA%90%E5%A4%9A%E5%87%BA%E5%8F%A3%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%A1%88%E4%BE%8B&#34; &gt;故障转移案例&lt;/a&gt;{#%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%A1%88%E4%BE%8B&#34; &gt;负载均衡案例&lt;/a&gt;{#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Flume%E8%81%9A%E5%90%88%E6%A1%88%E4%BE%8B&#34; &gt;Flume聚合案例&lt;/a&gt;{#Flume%E8%81%9A%E5%90%88%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8B%A6%E6%88%AA%E5%99%A8&#34; &gt;自定义拦截器&lt;/a&gt;{#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8B%A6%E6%88%AA%E5%99%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8B%A6%E6%88%AA%E5%99%A8%E6%89%93%E6%88%90jar%E5%8C%85&#34; &gt;自定义拦截器打成jar包&lt;/a&gt;{#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8B%A6%E6%88%AA%E5%99%A8%E6%89%93%E6%88%90jar%E5%8C%85-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&#34; &gt;任务配置文件&lt;/a&gt;{#%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%AE%9A%E4%B9%89Source&#34; &gt;自定义Source&lt;/a&gt;{#%E8%87%AA%E5%AE%9A%E4%B9%89Source-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%AE%9A%E4%B9%89Sink&#34; &gt;自定义Sink&lt;/a&gt;{#%E8%87%AA%E5%AE%9A%E4%B9%89Sink-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81&#34; &gt;事务源码&lt;/a&gt;{#%E4%BA%8B%E5%8A%A1%E6%BA%90%E7%A0%81-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;事务puttake-e4ba8be58aa1efbc88pute38081takeefbc89&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1puttake-e4ba8be58aa1efbc88pute38081takeefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务（Put、Take） {#%E4%BA%8B%E5%8A%A1%EF%BC%88Put%E3%80%81Take%EF%BC%89}
+&lt;/h2&gt;&lt;p&gt;put事务把数据批处理写入临时缓冲区putList，，然后doCommit去检查Channel内存队列是否足够合并，如果不够，就回滚数据，如果够，就把putList的数据写入到Channel，然后由take事务从channel中拉取，写入到临时缓冲区takeList，然后把数据从takeList发送到HDFS，发送完毕后清空缓冲区，如果某个数据发送失败，就回滚到channel。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/4da3520c2f3d002b71242ed425c50075.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;架构原理-e69eb6e69e84e58e9fe79086&#34;&gt;&lt;a href=&#34;#%e6%9e%b6%e6%9e%84%e5%8e%9f%e7%90%86-e69eb6e69e84e58e9fe79086&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;架构原理 {#%E6%9E%B6%E6%9E%84%E5%8E%9F%E7%90%86}
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/6b33d27550dc91abe2157e6ffb6a5fbe.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在拦截阶段可以进行数据过滤清洗，洗掉脏数据。&lt;/p&gt;
+&lt;h3 id=&#34;channel选择器-channele98089e68ba9e599a8&#34;&gt;&lt;a href=&#34;#channel%e9%80%89%e6%8b%a9%e5%99%a8-channele98089e68ba9e599a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Channel选择器 {#Channel%E9%80%89%E6%8B%A9%E5%99%A8}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;1）ChannelSelector&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;因为一个source可以对应对各channel&lt;/strong&gt; ，ChannelSelector 的作用就是选出 Event 将要被发往哪个 Channel。其共有两种类型， 分别是 Replicating（复制）和 Multiplexing（多路复用）。 ReplicatingSelector 会将同一个 Event &lt;strong&gt;发往所有&lt;/strong&gt;的 Channel，Multiplexing 会根据自定义的配置，将不同的Event发往不同的Channel，Multiplexing要结合拦截器使用，Multiplexing会根据数据的头信息来决定发送到哪个channel。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;SinkProcessor&#34;&gt;&lt;a href=&#34;#SinkProcessor&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;SinkProcessor&lt;/strong&gt;
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2）SinkProcessor&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;一个sink只能绑定一个channel，一个channel能绑定多个sink。SinkProcessor 共 有 三 种 类 型 ， 分 别 是 DefaultSinkProcessor 、LoadBalancingSinkProcessor 和 FailoverSinkProcessor。&lt;strong&gt;DefaultSinkProcessor 对 应 的 是 单个的 Sink&lt;/strong&gt; ， LoadBalancingSinkProcessor 和 FailoverSinkProcessor 对应的是 &lt;strong&gt;Sink Group&lt;/strong&gt;，LoadBalancingSinkProcessor 可以实现负载均衡的功能，FailoverSinkProcessor 可以错误恢复的功能。&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;LoadBalancingSinkProcessor负载均衡：&lt;/p&gt;
+&lt;p&gt;一个channel会发给多个sink&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c13d7f19497ac3908e16001f79aa51a5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;FailoverSinkProcessor故障转移：&lt;/p&gt;
+&lt;p&gt;当一个sink故障，任务会转移到其他sink&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/3aa5bb77e965ee81be7c4be39123ebd4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;拓扑结构-e68b93e68991e7bb93e69e84&#34;&gt;&lt;a href=&#34;#%e6%8b%93%e6%89%91%e7%bb%93%e6%9e%84-e68b93e68991e7bb93e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;拓扑结构 {#%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84}
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/b782cdaa55628b1946ecc2eb77f1b1c0.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/1d75f11b9f9d8e720d54b5c6897b3bdf.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/a07850669dd6d3b62b8ffe5d1a22227a.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/5d2301a75759519ab6afdc931100a780.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;单源多出口案例-e58d95e6ba90e5a49ae587bae58fa3e6a188e4be8b&#34;&gt;&lt;a href=&#34;#%e5%8d%95%e6%ba%90%e5%a4%9a%e5%87%ba%e5%8f%a3%e6%a1%88%e4%be%8b-e58d95e6ba90e5a49ae587bae58fa3e6a188e4be8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;单源多出口案例 {#%E5%8D%95%E6%BA%90%E5%A4%9A%E5%87%BA%E5%8F%A3%E6%A1%88%E4%BE%8B}
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/587f48341cf257de77cb5ad6098db637.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;前置条件：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;linux01上启动hive，hdfs，在linux03上部署3个flume任务，启动hdfs。linux01和linux03配置ssh免密登录。
+&lt;strong&gt;要求：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;flume1在linux03监听linux01的hive日志，把hive日志的新内容发送给linux03上的flume2和flume3，flume2把内容写到hdfs，flume3把内容写到linux03的本地文件/export/server/flume/job/group1/datas文件夹中。
+&lt;strong&gt;剧透：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;flume3成功把hive日志的新内容写到datas文件夹，说明linux03确实监听到了linux01 的hive日志并且成功把日志从linux01弄到了linux03，但是flume2却没有把新内容写到hdfs，猜想的可能是因为在linux03上写flume2的配置文件**sinks.k1.hdfs.path = hdfs://linux01:9820/flume/group1/%Y%m%d/%H，**linux01和linux03是不同的服务器，跨服务器没写进去，所以建议在同一台服务器搞。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在flume/job目录中新建文件夹group1来存放本次案例的任务配置文件&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;mkdir group1&lt;/p&gt;
+&lt;p&gt;cd group1&lt;/p&gt;
+&lt;p&gt;vim flume-file-flume.conf&lt;/p&gt;
+&lt;p&gt;vim flume-flume-hdfs.conf&lt;/p&gt;
+&lt;p&gt;vim flume-flume-dir.conf&lt;/p&gt;
+&lt;p&gt;三个conf配置如下：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;flume-file-flume.conf&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# Name the components on this agent
+a1.sources = r1
+a1.sinks = k1 k2
+a1.channels = c1 c2
+
+# 将数据流复制给所有 channel
+a1.sources.r1.selector.type = replicating
+
+# Describe/configure the source
+a1.sources.r1.type = exec
+a1.sources.r1.command = ssh root@linux01 &#39;tail -F /export/server/hive/logs/hive.log&#39;
+#因为hive在linux01，flume在linux03，为了跨服务器监听，这里用了ssh免密登录
+a1.sources.r1.shell = /bin/bash -c
+
+# Describe the sink
+# sink 端的 avro 是一个数据发送者
+a1.sinks.k1.type = avro
+a1.sinks.k1.hostname = linux03
+a1.sinks.k1.port = 4141
+
+a1.sinks.k2.type = avro
+a1.sinks.k2.hostname = linux03
+a1.sinks.k2.port = 4142
+# Describe the channel
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+a1.channels.c2.type = memory
+a1.channels.c2.capacity = 1000
+a1.channels.c2.transactionCapacity = 100
+# Bind the source and si
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Flume入门--万字详解</title>
+        <link>/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Mon, 22 Apr 2024 15:22:55 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A6%82%E8%BF%B0&#34; &gt;概述&lt;/a&gt;{#%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84&#34; &gt;基础架构&lt;/a&gt;{#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Agent&#34; &gt;Agent&lt;/a&gt;{#Agent-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Source&#34; &gt;Source&lt;/a&gt;{#Source-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Sink&#34; &gt;Sink&lt;/a&gt;{#Sink-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Channel&#34; &gt;Channel&lt;/a&gt;{#Channel-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#selector%C2%A0&#34; &gt;selector&lt;/a&gt;{#selector%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#interceptor&#34; &gt;interceptor&lt;/a&gt;{#interceptor-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Event&#34; &gt;Event&lt;/a&gt;{#Event-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2&#34; &gt;安装部署&lt;/a&gt;{#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Netcat&#34; &gt;Netcat&lt;/a&gt;{#Netcat-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B&#34; &gt;Flume入门案例&lt;/a&gt;{#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1%29netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7&#34; &gt;1)netcat本机端口监控&lt;/a&gt;{#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2%29%E7%9B%91%E6%8E%A7hive%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0hdfs&#34; &gt;2)监控hive日志上传hdfs&lt;/a&gt;{#2)%E7%9B%91%E6%8E%A7hive%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0hdfs-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3%29%E5%AE%9E%E6%97%B6%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%88%B0hdfs&#34; &gt;3)实时读取目录文件到hdfs&lt;/a&gt;{#3)%E5%AE%9E%E6%97%B6%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%88%B0hdfs-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4%29%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%BF%BD%E5%8A%A0%E6%96%87%E4%BB%B6&#34; &gt;4)实时监控目录下的多个追加文件&lt;/a&gt;{#4)%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%BF%BD%E5%8A%A0%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;概述-e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0-e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述 {#%E6%A6%82%E8%BF%B0}
+&lt;/h2&gt;&lt;p&gt;Flume 是 Cloudera 提供的一个高可用的，高可靠的，分布式的海量&lt;strong&gt;日志采集&lt;/strong&gt;、聚合和传 输的系统。Flume 基于流式架构，灵活简单。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/2e3869480961b81ca25702e6d1970111.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;基础架构-e59fbae7a180e69eb6e69e84&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84-e59fbae7a180e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基础架构 {#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}
+&lt;/h2&gt;&lt;p&gt;Flume运行的核心是 Agent。Flume是以agent为最小的独立运行单位。一个agent就是一个JVM。它是 一个完整的数据收集工具，含有三个核心组件，分别是source、 channel、 sink。通过这些组件， Event 可以从一个地方流向另一个地方。如下图所示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/0ec63ccc446e6faf2bcafcbc179a7e34.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;Agent&#34;&gt;&lt;a href=&#34;#Agent&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Agent
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Agent 是一个 JVM 进程，它以事件的形式将数据从源头送至目的。&lt;/li&gt;
+&lt;li&gt;Agent 主要有 3 个部分组成，Source、Channel、Sink。同一台服务器可以运行多个Agent，每个Agent可以有多个source、sink、channel。Agent的名字可以相同但是不能同时启动任务，否则会出现冲突。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;Source&#34;&gt;&lt;a href=&#34;#Source&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Source
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Source 是负责接收数据到 Flume Agent 并传给Channel的组件。&lt;/li&gt;
+&lt;li&gt;Source 组件可以处理各种类型、各种格式的日志数据，包括 avro、thrift、exec、jms、spooling directory、netcat、taildir、 sequence generator、syslog、http、legacy这些不同的数据源。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;Sink&#34;&gt;&lt;a href=&#34;#Sink&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Sink
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Sink 不断地轮询 Channel 中的事件且批量地移除它们，并将这些事件批量写入到存储系统或索引系统、或者被发送到另一个 Flume Agent。&lt;/li&gt;
+&lt;li&gt;Sink 组件目的地包括 hdfs、logger、avro、thrift、ipc、file、HBase、solr、自定义。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;Channel&#34;&gt;&lt;a href=&#34;#Channel&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Channel
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Channel 是位于 Source 和 Sink 之间的缓冲区。因此，Channel 允许 Source 和 Sink 运作在不同的速率上。&lt;/li&gt;
+&lt;li&gt;Channel 是线程安全的，可以同时处理几个 Source 的写入操作和几个 Sink 的读取操作。&lt;/li&gt;
+&lt;li&gt;Flume 自带两种 Channel：Memory Channel 和 File Channel。&lt;/li&gt;
+&lt;li&gt;Memory Channel 是内存中的队列。Memory Channel 在不需要关心数据丢失的情景下适 用。如果需要关心数据丢失，那么 Memory Channel 就不应该使用，因为程序死亡、机器宕 机或者重启都会导致数据丢失。&lt;/li&gt;
+&lt;li&gt;File Channel 将所有事件写到磁盘。因此在程序关闭或机器宕机的情况下不会丢失数 据。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;selector-selectorc2a0&#34;&gt;&lt;a href=&#34;#selector-selectorc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;selector {#selector%C2%A0}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;选择器，作用于source端，然后决定数据发往哪个目标。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;interceptor&#34;&gt;&lt;a href=&#34;#interceptor&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;interceptor
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;拦截器，flume允许使用拦截器拦截数据。允许使用拦截器链，作用于source和sink阶段。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;Event&#34;&gt;&lt;a href=&#34;#Event&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Event
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;传输单元，Flume 数据传输的基本单元，以 Event 的形式将数据从源头送至目的地。&lt;/li&gt;
+&lt;li&gt;Event 由 Header 和 Body 两部分组成，Header 用来存放该 event 的一些属性，为 K-V 结构， Body 用来存放该条数据，形式为字节数组。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f38006431e7a0b773e856f928571ee27.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;安装部署-e5ae89e8a385e983a8e7bdb2&#34;&gt;&lt;a href=&#34;#%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2-e5ae89e8a385e983a8e7bdb2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;安装部署 {#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;解压&lt;/p&gt;
+&lt;p&gt;tar -zxvf /export/server/apache-flume-1.9.0-bin.tar.gz /export/server/&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;为了让flume1.9兼容hadoop3.x，要删除flume lib包下的guava-11.0.2.jar&lt;/p&gt;
+&lt;p&gt;rm guava-11.0.2.jar&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;Netcat&#34;&gt;&lt;a href=&#34;#Netcat&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Netcat
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;安装&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;sudo yum install -y nc&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;简单案例&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;flume入门案例-flumee585a5e997a8e6a188e4be8b&#34;&gt;&lt;a href=&#34;#flume%e5%85%a5%e9%97%a8%e6%a1%88%e4%be%8b-flumee585a5e997a8e6a188e4be8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flume入门案例 {#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B}
+&lt;/h2&gt;&lt;h3 id=&#34;1netcat本机端口监控-1netcate69cace69cbae7abafe58fa3e79b91e68ea7&#34;&gt;&lt;a href=&#34;#1netcat%e6%9c%ac%e6%9c%ba%e7%ab%af%e5%8f%a3%e7%9b%91%e6%8e%a7-1netcate69cace69cbae7abafe58fa3e79b91e68ea7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1)netcat本机端口监控 {#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;在flume文件夹下创建工作目录job&lt;/p&gt;
+&lt;p&gt;mkdir job&lt;/p&gt;
+&lt;p&gt;在job目录下建立任务配置文件，文件名任取，建议见名知意，net表示数据源是端口，logger表示数据是日志文件&lt;/p&gt;
+&lt;p&gt;vim net-flume-logger.conf&lt;/p&gt;
+&lt;p&gt;配置文件内容如下：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;# Name the components on this agent
+a1.sources = r1 #a1是该agent名，不可重复
+a1.sinks = k1
+a1.channels = c1
+
+# Describe/configure the source
+a1.sources.r1.type = netcat
+a1.sources.r1.bind = localhost
+a1.sources.r1.port = 4444
+
+# Describe the sink
+a1.sinks.k1.type = logger
+
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000 #最多接收1000个event
+a1.channels.c1.transactionCapacity = 100 #100个事务，一次最多发送100个event，事务失败会回滚。capacity应该＜transactionCapacity
+
+# Bind the source and sink to
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>大数据—Zookeeper集群入门及使用</title>
+        <link>/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
+        <pubDate>Fri, 19 Apr 2024 16:43:51 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A6%82%E8%BF%B0&#34; &gt;概述&lt;/a&gt;{#%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%89%B9%E7%82%B9&#34; &gt;特点&lt;/a&gt;{#%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0&#34; &gt;集群配置&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83&#34; &gt;以下是集群环境搭建！！不是单机环境&lt;/a&gt;{#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2&#34; &gt;集群角色&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Leader&#34; &gt;Leader&lt;/a&gt;{#Leader-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Follower&#34; &gt;Follower&lt;/a&gt;{#Follower-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Observer&#34; &gt;Observer&lt;/a&gt;{#Observer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%9A%E8%AF%9D&#34; &gt;会话&lt;/a&gt;{#%E4%BC%9A%E8%AF%9D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Watcher&#34; &gt;Watcher&lt;/a&gt;{#Watcher-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0&#34; &gt;节点的值变化监听&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89&#34; &gt;节点的子节点变化监听（路径变化）&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6&#34; &gt;工作机制&lt;/a&gt;{#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B&#34; &gt;客户端向服务端写数据流程&lt;/a&gt;{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader&#34; &gt;写请求发给leader&lt;/a&gt;{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower&#34; &gt;写请求发给follower&lt;/a&gt;{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B&#34; &gt;客户端向服务端读数据流程&lt;/a&gt;{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6&#34; &gt;选举机制&lt;/a&gt;{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8&#34; &gt;初次启动&lt;/a&gt;{#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8&#34; &gt;非处次启动&lt;/a&gt;{#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82&#34; &gt;集群脑裂&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B&#34; &gt;数据模型&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B&#34; &gt;节点类型&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF&#34; &gt;节点信息&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C&#34; &gt;集群操作&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9&#34; &gt;创建节点&lt;/a&gt;{#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0&#34; &gt;查看节点&lt;/a&gt;{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0&#34; &gt;查看节点状态&lt;/a&gt;{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0&#34; &gt;更新节点&lt;/a&gt;{#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9&#34; &gt;删除节点&lt;/a&gt;{#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%80%E5%87%BAZK%C2%A0&#34; &gt;退出ZK&lt;/a&gt;{#%E9%80%80%E5%87%BAZK%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF&#34; &gt;应用场景&lt;/a&gt;{#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1&#34; &gt;统一命名服务&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86&#34; &gt;统一配置管理&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86&#34; &gt;统一集群管理&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF&#34; &gt;服务器动态上下线&lt;/a&gt;{#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1&#34; &gt;软负载均衡&lt;/a&gt;{#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81&#34; &gt;分布式锁&lt;/a&gt;{#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89&#34; &gt;拜占庭将军问题（Paxos算法）&lt;/a&gt;{#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89-toc}&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0&#34; &gt;算法描述&lt;/a&gt;{#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B&#34; &gt;算法流程&lt;/a&gt;{#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ZAB%E5%8D%8F%E8%AE%AE&#34; &gt;ZAB协议&lt;/a&gt;{#ZAB%E5%8D%8F%E8%AE%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D&#34; &gt;崩溃恢复&lt;/a&gt;{#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD&#34; &gt;消息广播&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA&#34; &gt;​编辑 CAP理论&lt;/a&gt;{#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0&#34; &gt;ZK源码图示&lt;/a&gt;{#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98&#34; &gt;小小面试题&lt;/a&gt;{#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6&#34; &gt;选举机制&lt;/a&gt;{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F&#34; &gt;生产集群安装多少 zk 合适？&lt;/a&gt;{#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;概述-e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0-e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述 {#%E6%A6%82%E8%BF%B0}
+&lt;/h2&gt;&lt;p&gt;ZooKeeper 是一个开源的&lt;strong&gt;分布式协调服务&lt;/strong&gt; ，它的设计目标是&lt;strong&gt;为那些高吞吐的大型分布式系统提供一个高性能、高可用、且具有严格顺序访问控制 能力的分布式协调服务&lt;/strong&gt;，并以一系列简单易用的接口提供给用户使用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ZooKeeper 将数据存全量储在内存中以保持高性能&lt;/strong&gt; ，并通过服务集群来实现高可用，由于 Zookeeper 的所有更新和删除都是&lt;strong&gt;基于事务&lt;/strong&gt; 的，所以其在&lt;strong&gt;读多写少&lt;/strong&gt;的应用场景中有着很高的性能表现。&lt;/p&gt;
+&lt;p&gt;简单来说zookeeper就是动物园管理者，管理协调大数据里面的一堆组件，比如hadoop、hive、habse等等。Zookeeper 可以用于实现分布 式系统中常见的发布/订阅、负载均衡、命令服务、分布式协调/通知、集群管理、Master 选举、分布式 锁和分布式队列等功能。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/52c5a22a85235aee67a43f9656cc3231.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;特点-e789b9e782b9&#34;&gt;&lt;a href=&#34;#%e7%89%b9%e7%82%b9-e789b9e782b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;特点 {#%E7%89%B9%E7%82%B9}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;**顺序一致性：**从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中；&lt;/li&gt;
+&lt;li&gt;**原子性：**所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况，一次数据更新要么成功要么失败。&lt;/li&gt;
+&lt;li&gt;**单一视图（全局数据一致）：**每个server保存相同的数据副本，无论client连接哪个server，看到的数据一致；&lt;/li&gt;
+&lt;li&gt;**可靠性：**一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改；&lt;/li&gt;
+&lt;li&gt;**实时性：**一旦一个事务被成功应用后，在一定时间范围内，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。&lt;/li&gt;
+&lt;li&gt;集群中只要有&lt;strong&gt;半数以上节点存活&lt;/strong&gt;，zk集群就可以正常服务，所以zk适合安装奇数台。&lt;/li&gt;
+&lt;li&gt;一个leader，多个follower，&lt;strong&gt;leader挂掉之后会从follower中重新选举&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;集群配置-e99b86e7bea4e9858de7bdaec2a0&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae-e99b86e7bea4e9858de7bdaec2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0}
+&lt;/h2&gt;&lt;p&gt;可以由一组 Zookeeper服务构成 Zookeeper 集群，集群中每台机器都会单独在内存中维护自身的状 态，并且每台机器之间都保持着通讯，只要集群中有半数机器能够正常工作，那么整个集群就可以正常提供服务。对于来自客户端的每个更新请求，Zookeeper都会分配一个全局唯一的递增 ID，这个 ID 反映了所有事 务请求的先后顺序。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/85357d9780c78177d7fdc98faf789f46.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;以下是集群环境搭建不是单机环境-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e4%b8%8b%e6%98%af%e9%9b%86%e7%be%a4%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e4%b8%8d%e6%98%af%e5%8d%95%e6%9c%ba%e7%8e%af%e5%a2%83-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;以下是集群环境搭建！！不是单机环境&lt;/strong&gt; {#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83}
+&lt;/h3&gt;&lt;p&gt;解压、安装、配置环境变量并生效这三步省略，直接修改配置：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;进入conf/目录下，拷贝配置样本并进行修改：&lt;/p&gt;
+&lt;p&gt;cp zoo_sample.cfg zoo.cfg&lt;/p&gt;
+&lt;p&gt;指定数据存储目录和日志文件目录（此时还没有目录，稍后手动创建），修改后完整配置如下：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;tickTime=2000
+#用于计算的基础时间单元。比如 session 超时：N*tickTime；
+
+initLimit=10
+#用于集群，允许从节点连接并同步到 master 节点的初始化连接时间，以 tickTime 的倍数来表示；
+
+syncLimit=5
+#用于集群， master 主节点与从节点之间发送消息，请求和应答时间长度（心 跳机制）；
+
+dataDir=/export/server/zookeeper/data
+#数据存储位置；稍后手动创建
+
+dataLogDir=/export/server/zookeeper/logs
+#日志目录；稍后手动创建
+
+clientPort=2181
+#用于客户端连接的端口，默认 2181
+
+# server.1 这个1是服务器的标识，可以是任意有效数字，标识这是第几个服务器节点，这个标识要写到
+dataDir目录下面myid文件里，如果没有myid文件要自己创建
+# 指名集群间通讯端口和选举端口
+server.1=linux01:2888:3888
+server.2=linux02:2888:3888
+server.3=linux03:2888:3888
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标识节点序号&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;分别在三台主机的 dataDir 目录下新建 myid 文件,并写入对应的节点标识。Zookeeper 集群通过 myid 文件识别集群节点，并通过上文配置的节点通信端口和选举端口来进行节点通信，选举出 Leader 节点。&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;每个服务器&lt;/strong&gt;上的/export/server/zookeeper/下创建data目录，在里面创建myid文件并写入各自序号，这个序号必须和zoo.cfg文件的序号相同。
+&lt;strong&gt;分别在三台主机上启动ZK集群&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;zkServer.sh start&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;集群验证&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;zkServer.sh status&lt;/p&gt;
+&lt;p&gt;可以看到一个leader，两个follower，那么zk集群配置成功&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;启动客户端&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;zkCli.sh&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;集群角色-e99b86e7bea4e8a792e889b2&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e8%a7%92%e8%89%b2-e99b86e7bea4e8a792e889b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群角色 {#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2}
+&lt;/h2&gt;&lt;p&gt;ZK集群有一个leader和多个follower。&lt;/p&gt;
+&lt;h3 id=&#34;Leader&#34;&gt;&lt;a href=&#34;#Leader&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Leader
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;为客户端提供读写服务，并维护集群状态，它是由集群选举所产生的；&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Follower&#34;&gt;&lt;a href=&#34;#Follower&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Follower
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态。同时也参与写操作 &amp;ldquo;过半写成功&amp;quot;的策略和 Leader 的选举；&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Observer&#34;&gt;&lt;a href=&#34;#Observer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Observer
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态，但不参与写操作&amp;quot;过 半写成功&amp;quot;的策略和 Leader 的选举，因此 Observer 可以在不影响写性能的情况下提升集群的读性 能。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;会话-e4bc9ae8af9d&#34;&gt;&lt;a href=&#34;#%e4%bc%9a%e8%af%9d-e4bc9ae8af9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;会话 {#%E4%BC%9A%E8%AF%9D}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Zookeeper 客户端通过 TCP 长连接连接到服务集群，会话 (Session) 从第一次连接开始就已经建立，之 后通过心跳检测机制来保持有效的会话状态。通过这个连接，客户端可以发送请求并接收响应，同时也 可以接收到 Watch 事件的通知。&lt;/li&gt;
+&lt;li&gt;关于会话中另外一个核心的概念是 &lt;strong&gt;sessionTimeOut(会话超时时间)&lt;/strong&gt;，当由于网络故障或者客户端主动 断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;Watcher&#34;&gt;&lt;a href=&#34;#Watcher&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Watcher
+&lt;/h2&gt;&lt;p&gt;Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注 册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是Zookeeper 实现分布式协调服务的重要特性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f2f283cc4b622d03d766b780723fc6ce.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;节点的值变化监听-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%9a%84%e5%80%bc%e5%8f%98%e5%8c%96%e7%9b%91%e5%90%ac-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点的值变化监听 {#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;1）在linux01主机上注册监听/sanguo 节点数据变化&lt;/p&gt;
+\[zk: localhost:2181(CONNECTED) 26\]&lt;p&gt; get -w /sanguo&lt;/p&gt;
+&lt;p&gt;2）在linux02主机上修改/sanguo 节点的数据&lt;/p&gt;
+\[zk: localhost:2181(CONNECTED) 1\]&lt;p&gt; set /sanguo &amp;ldquo;xisi&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;3）观察linux01主机收到数据变化的监听&lt;/p&gt;
+&lt;p&gt;WATCHER::&lt;/p&gt;
+&lt;p&gt;WatchedEvent state:SyncConnected ype:NodeDataChanged&lt;/p&gt;
+&lt;p&gt;path:/sanguo&lt;/p&gt;
+&lt;p&gt;注意：在linux02再多次修改/sanguo的值，linux01上不会再收到监听。&amp;lt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>HA—Hadoop高可用</title>
+        <link>/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/</link>
+        <pubDate>Mon, 15 Apr 2024 19:23:57 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HA%20%E6%A6%82%E8%BF%B0&#34; &gt;HA 概述&lt;/a&gt;{#HA%20%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HDFS%E9%AB%98%E5%8F%AF%E7%94%A8&#34; &gt;HDFS高可用&lt;/a&gt;{#HDFS%E9%AB%98%E5%8F%AF%E7%94%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BF%9D%E8%AF%81%E6%89%80%E6%9C%89NN%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%C2%A0&#34; &gt;保证所有NN的数据一致性&lt;/a&gt;{#%E4%BF%9D%E8%AF%81%E6%89%80%E6%9C%89NN%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%89%8B%E5%8A%A8%E6%A8%A1%E5%BC%8F&#34; &gt;手动模式&lt;/a&gt;{#%E6%89%8B%E5%8A%A8%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%8A%A8%E6%A8%A1%E5%BC%8F&#34; &gt;自动模式&lt;/a&gt;{#%E8%87%AA%E5%8A%A8%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A7%A3%E5%86%B3NN%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8AJN%E7%9A%84%E9%97%AE%E9%A2%98&#34; &gt;解决NN连接不上JN的问题&lt;/a&gt;{#%E8%A7%A3%E5%86%B3NN%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8AJN%E7%9A%84%E9%97%AE%E9%A2%98-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0Yarn%E9%AB%98%E5%8F%AF%E7%94%A8&#34; &gt;Yarn高可用&lt;/a&gt;{#%C2%A0Yarn%E9%AB%98%E5%8F%AF%E7%94%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98&#34; &gt;核心问题&lt;/a&gt;{#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;ha-概述-ha20e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#ha-%e6%a6%82%e8%bf%b0-ha20e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HA 概述 {#HA%20%E6%A6%82%E8%BF%B0}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;1）所谓 HA（High Availablity），即高可用（7*24 小时不中断服务）。&lt;/p&gt;
+&lt;p&gt;2）实现高可用最关键的策略是消除单点故障（传统的主从模式集群单个节点发生故障会影响整个集群）。HA 严格来说应该分成各个组件的 HA 机制：&lt;strong&gt;HDFS 的 HA 和 YARN 的 HA&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;3）NameNode 主要在以下两个方面影响 HDFS 集群&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NameNode 机器发生意外，如宕机，集群将无法使用，直到管理员重启&lt;/li&gt;
+&lt;li&gt;NameNode 机器需要升级，包括软件、硬件升级，此时集群也将无法使用&lt;/li&gt;
+&lt;li&gt;HDFS HA 功能通过配置多个 NameNode(Active/Standby)实现在集群中对 NameNode 的热备来解决上述问题。如果出现故障，如机器崩溃或机器需要升级维护，这时可以启动另一台机器上的NameNode继续维护整个集群的运行（&lt;strong&gt;集群中同时只能有一台active的NN，其他NN处于standby（备用）&lt;/strong&gt; ）。而这种启动方式&lt;strong&gt;分为手动和自动（推荐）&lt;/strong&gt;，但是在这之前，我们&lt;strong&gt;必须通过某种方式保证所有NN的元数据一致&lt;/strong&gt;，这样才能保证active状态的NN故障后，另一个处于standby状态的NN激活为active能够正常维持集群运行，类似于公司员工的任务的交接。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;hdfs高可用-hdfse9ab98e58fafe794a8&#34;&gt;&lt;a href=&#34;#hdfs%e9%ab%98%e5%8f%af%e7%94%a8-hdfse9ab98e58fafe794a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HDFS高可用 {#HDFS%E9%AB%98%E5%8F%AF%E7%94%A8}
+&lt;/h2&gt;&lt;h3 id=&#34;保证所有nn的数据一致性-e4bf9de8af81e68980e69c89nne79a84e695b0e68daee4b880e887b4e680a7c2a0&#34;&gt;&lt;a href=&#34;#%e4%bf%9d%e8%af%81%e6%89%80%e6%9c%89nn%e7%9a%84%e6%95%b0%e6%8d%ae%e4%b8%80%e8%87%b4%e6%80%a7-e4bf9de8af81e68980e69c89nne79a84e695b0e68daee4b880e887b4e680a7c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;保证所有NN的数据一致性 {#%E4%BF%9D%E8%AF%81%E6%89%80%E6%9C%89NN%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%C2%A0}
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;在处于active的NN正常运行时，他会生成Fsimage文件，让其他处于standby的NN同步，同时引入JournalNode节点来保证edits文件数据的一致性&lt;/strong&gt;，JournalNode作为active的NN和standby的NN的中间节点，activeNN会把edits发送给JournalNode，然后standbyNN从JournalNode获取edits。同时为了保证JournalNode的可靠性，JournalNode本身也是一个多节点的集群。&lt;/p&gt;
+&lt;p&gt;JournalNode 节点会在集群自动的选择一个&amp;quot;主&amp;quot;节点出来，Active 节点会和 JournalNode 的主节点通信，然后 JournalNode 集群的主节点会将数据发送给其他的节点，只要有过半的节点完成了数据的存储（&lt;strong&gt;过半写成功&lt;/strong&gt;），JournalNode 集群的主节点，就会将成功信息返回给 Active 节点。当 JournalNode 集群的主节点挂掉，其他的 JournalNode 节点会快速选举出新的&amp;quot;主&amp;quot;节点来。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;同时在HA架构中，并没有SecondaryNameNode&lt;/strong&gt;，那么定期合并fsimage的eedits的任务是由standby的NN来完成的。&lt;/p&gt;
+&lt;h3 id=&#34;手动模式-e6898be58aa8e6a8a1e5bc8f&#34;&gt;&lt;a href=&#34;#%e6%89%8b%e5%8a%a8%e6%a8%a1%e5%bc%8f-e6898be58aa8e6a8a1e5bc8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;手动模式 {#%E6%89%8B%E5%8A%A8%E6%A8%A1%E5%BC%8F}
+&lt;/h3&gt;&lt;p&gt;配置core-site.xml&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;configuration&amp;gt;
+    &amp;lt;!-- 指定hdfs的nameservice为ns1 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;fs.defaultFS&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hdfs://mycluster/&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- 指定hadoop临时目录 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;hadoop.tmp.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;配置hdfs-site.xml&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;configuration&amp;gt;
+    &amp;lt;!--指定hdfs的nameservice为mycluster，需要和core-site.xml中的保持一致 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.nameservices&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;mycluster&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- hadoop-ha下面有两个NameNode，分别是nn1，nn2 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.ha.namenodes.mycluster&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;nn1,nn2,nn3&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- nn1的RPC通信地址 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.namenode.rpc-address.mycluster.nn1&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;linux01:8020&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- nn1的http通信地址 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.namenode.http-address.mycluster.nn1&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;linux01:9870&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- nn2的RPC通信地址 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.namenode.rpc-address.mycluster.nn2&amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Hadoop入门—HDFS、MR、Yarn</title>
+        <link>/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/</link>
+        <pubDate>Mon, 15 Apr 2024 14:38:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hadoop%E7%AE%80%E4%BB%8B&#34; &gt;Hadoop简介&lt;/a&gt;{#Hadoop%E7%AE%80%E4%BB%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC&#34; &gt;Hadoop 三大发行版本&lt;/a&gt;{#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hadoop%E4%BC%98%E5%8A%BF&#34; &gt;Hadoop优势&lt;/a&gt;{#Hadoop%E4%BC%98%E5%8A%BF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90&#34; &gt;Hadoop基本组成&lt;/a&gt;{#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4&#34; &gt;常用Shell命令&lt;/a&gt;{#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8&#34; &gt;HDFS分布存储&lt;/a&gt;{#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HDFS%E5%90%AF%E5%81%9C&#34; &gt;HDFS启停&lt;/a&gt;{#HDFS%E5%90%AF%E5%81%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#NameNode%EF%BC%88NN%EF%BC%89&#34; &gt;NameNode（NN）&lt;/a&gt;{#NameNode%EF%BC%88NN%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#DataNode%EF%BC%88DN%EF%BC%89&#34; &gt;DataNode（DN）&lt;/a&gt;{#DataNode%EF%BC%88DN%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#SecondaryNameNode%EF%BC%88SNN%EF%BC%89&#34; &gt;SecondaryNameNode（SNN）&lt;/a&gt;{#SecondaryNameNode%EF%BC%88SNN%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B&#34; &gt;文件写入流程&lt;/a&gt;{#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HDFS%E6%9E%B6%E6%9E%84%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7&#34; &gt;HDFS架构的稳定性&lt;/a&gt;{#HDFS%E6%9E%B6%E6%9E%84%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B&#34; &gt;文件读取流程&lt;/a&gt;{#%C2%A0%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F&#34; &gt;存储方式&lt;/a&gt;{#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Block%E5%9D%97%E5%92%8C%E5%A4%9A%E5%89%AF%E6%9C%AC&#34; &gt;Block块和多副本&lt;/a&gt;{#Block%E5%9D%97%E5%92%8C%E5%A4%9A%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#edits%E5%92%8Cfsimage%E6%96%87%E4%BB%B6&#34; &gt;edits和fsimage文件&lt;/a&gt;{#edits%E5%92%8Cfsimage%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E5%85%83%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6%E5%8F%8A%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0&#34; &gt;元数据合并及控制参数&lt;/a&gt;{#%C2%A0%E5%85%83%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6%E5%8F%8A%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HDFS%E6%BC%AB%E7%94%BB&#34; &gt;HDFS漫画&lt;/a&gt;{#HDFS%E6%BC%AB%E7%94%BB-toc}&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Mapreduce%E5%88%86%E5%B8%83%E5%BC%8F%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6&#34; &gt;Mapreduce分布式并行计算框架&lt;/a&gt;{#Mapreduce%E5%88%86%E5%B8%83%E5%BC%8F%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%BC%8F&#34; &gt;计算模式&lt;/a&gt;{#%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%E5%92%8CReduce&#34; &gt;Map和Reduce&lt;/a&gt;{#Map%E5%92%8CReduce-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MR%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86&#34; &gt;MR执行原理&lt;/a&gt;{#MR%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E3%80%81%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86&#34; &gt;Yarn作业调度、资源管理&lt;/a&gt;{#Yarn%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E3%80%81%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E5%90%AF%E5%81%9C%C2%A0&#34; &gt;Yarn启停&lt;/a&gt;{#Yarn%E5%90%AF%E5%81%9C%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ResourceManager&#34; &gt;ResourceManager&lt;/a&gt;{#ResourceManager-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#NodeManager%C2%A0&#34; &gt;NodeManager&lt;/a&gt;{#NodeManager%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ApplicationMaster&#34; &gt;ApplicationMaster&lt;/a&gt;{#ApplicationMaster-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JobHistoryServer&#34; &gt;JobHistoryServer&lt;/a&gt;{#JobHistoryServer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Container&#34; &gt;Container&lt;/a&gt;{#Container-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hadoop%E4%B8%80%E9%94%AE%E5%90%AF%E5%81%9C%C2%A0&#34; &gt;Hadoop一键启停&lt;/a&gt;{#Hadoop%E4%B8%80%E9%94%AE%E5%90%AF%E5%81%9C%C2%A0-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hadoop简介-hadoope7ae80e4bb8b&#34;&gt;&lt;a href=&#34;#hadoop%e7%ae%80%e4%bb%8b-hadoope7ae80e4bb8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hadoop简介 {#Hadoop%E7%AE%80%E4%BB%8B}
+&lt;/h2&gt;&lt;p&gt;狭义来说，hadoop是Apache基金会开发的分布式系统基础架构，用来解决海量数据的存储和海量数据的分析计算问题。广义上来说，Hadoop 通常是指一个更广泛的概念 &amp;mdash;&amp;mdash; Hadoop 生态圈。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/0fd7c932e8ae6ff521f32eee46cd8663.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;hadoop-三大发行版本-hadoop20e4b889e5a4a7e58f91e8a18ce78988e69cac&#34;&gt;&lt;a href=&#34;#hadoop-%e4%b8%89%e5%a4%a7%e5%8f%91%e8%a1%8c%e7%89%88%e6%9c%ac-hadoop20e4b889e5a4a7e58f91e8a18ce78988e69cac&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hadoop 三大发行版本 {#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC}
+&lt;/h3&gt;&lt;p&gt;Apache、Cloudera、Hortonworks&lt;/p&gt;
+&lt;p&gt;Apache 版本最原始（最基础）的版本，对于入门学习最好。&lt;/p&gt;
+&lt;p&gt;Cloudera在大型互联网企业中用的较多。其主要产品有CDH、Cloudera Manager，Cloudera Support&lt;/p&gt;
+&lt;h3 id=&#34;hadoop优势-hadoope4bc98e58abf&#34;&gt;&lt;a href=&#34;#hadoop%e4%bc%98%e5%8a%bf-hadoope4bc98e58abf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hadoop优势 {#Hadoop%E4%BC%98%E5%8A%BF}
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;高可靠性：&lt;/strong&gt; Hadoop 底层维护多个数据副本，所以即使 Hadoop 某个计算元素或存储出现故障，也不会导致数据的丢失。&lt;br&gt;
+&lt;strong&gt;高扩展性：&lt;/strong&gt; 在集群间分配任务数据，可方便的扩展数以千计的节点。&lt;br&gt;
+高效性： 在 MapReduce 的思想下，Hadoop 是并行工作的，以加快任务处理速度。&lt;br&gt;
+&lt;strong&gt;高容错性：&lt;/strong&gt; 能够自动将失败的任务重新分配。&lt;/p&gt;
+&lt;p&gt;**低成本：**Hadoop不要求机器的配置达到极高的标准，大部分普通商用服务器即可满足要求，通过提供多个副本和容错机制提高集群的可靠性&lt;/p&gt;
+&lt;h3 id=&#34;hadoop基本组成-hadoope59fbae69cace7bb84e68890&#34;&gt;&lt;a href=&#34;#hadoop%e5%9f%ba%e6%9c%ac%e7%bb%84%e6%88%90-hadoope59fbae69cace7bb84e68890&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hadoop基本组成 {#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd575291df78b55069687df62b245798.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;常用shell命令-e5b8b8e794a8shelle591bde4bba4&#34;&gt;&lt;a href=&#34;#%e5%b8%b8%e7%94%a8shell%e5%91%bd%e4%bb%a4-e5b8b8e794a8shelle591bde4bba4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;常用Shell命令 {#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4}
+&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;hdfs dfs -ls &amp;lt;path&amp;gt;：列出指定 HDFS 路径下的文件和目录
+hdfs dfs -mkdir &amp;lt;path&amp;gt;：在 HDFS 中创建新目录
+hdfs dfs -put &amp;lt;localsrc&amp;gt; &amp;lt;dst&amp;gt;：将本地文件（或目录）复制到 HDFS
+hdfs dfs -get &amp;lt;src&amp;gt; &amp;lt;localdst&amp;gt;：将 HDFS 上的文件（或目录）复制到本地
+hdfs dfs -mv &amp;lt;src&amp;gt; &amp;lt;dst&amp;gt;：移动 HDFS 中的文件目录或重命名文件目录
+hdfs dfs -cp &amp;lt;src&amp;gt; &amp;lt;dst&amp;gt;：复制 HDFS 中的文件或目录
+hdfs dfs -rm &amp;lt;path&amp;gt;：删除 HDFS 中的文件
+hdfs dfs -cat &amp;lt;path&amp;gt;：在控制台显示 HDFS 文件的内容
+hdfs dfs -du &amp;lt;path&amp;gt;：显示 HDFS 文件或目录的大小
+hdfs dfs -df &amp;lt;path&amp;gt;：显示 HDFS 的可用空间
+hdfs fsck path [-files [-blocks [-location]]]
+-files列出路径内的文件状态
+-files -blocks输出文件块报告（几个块，几个副本）
+-files -blocks -locations 输出每个block的详情
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;hdfs分布存储-hdfse58886e5b883e5ad98e582a8&#34;&gt;&lt;a href=&#34;#hdfs%e5%88%86%e5%b8%83%e5%ad%98%e5%82%a8-hdfse58886e5b883e5ad98e582a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HDFS分布存储 {#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8}
+&lt;/h2&gt;&lt;p&gt;HDFS是一个分布式文件系统，具有高容错、高吞吐 量等特性，&lt;strong&gt;分布在多个集群节点上的文件系统。有NN、DN、SNN三种角色。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;hdfs启停-hdfse590afe5819c&#34;&gt;&lt;a href=&#34;#hdfs%e5%90%af%e5%81%9c-hdfse590afe5819c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;HDFS启停&lt;/strong&gt; {#HDFS%E5%90%AF%E5%81%9C}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/307c647c8aa7e460c1ae34a79304e357.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;namenodenn-namenodeefbc88nnefbc89&#34;&gt;&lt;a href=&#34;#namenodenn-namenodeefbc88nnefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;NameNode（NN） {#NameNode%EF%BC%88NN%EF%BC%89}
+&lt;/h3&gt;&lt;p&gt;HDFS的主角色，负责管理每个文件的块所在的 DataNode、整个HDFS文件系统、存储文件的元数据，如文件名，文件目录结构，文件属性（生成时间、副本数、文件权限）等。&lt;/p&gt;
+&lt;h3 id=&#34;datanodedn-datanodeefbc88dnefbc89&#34;&gt;&lt;a href=&#34;#datanodedn-datanodeefbc88dnefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DataNode（DN） {#DataNode%EF%BC%88DN%EF%BC%89}
+&lt;/h3&gt;&lt;p&gt;HDFS从角色，负责处理客户端的读写请求，存储删除文件块，以及块数据校验和。&lt;/p&gt;
+&lt;h3 id=&#34;secondarynamenodesnn-secondarynamenodeefbc88snnefbc89&#34;&gt;&lt;a href=&#34;#secondarynamenodesnn-secondarynamenodeefbc88snnefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;SecondaryNameNode（SNN） {#SecondaryNameNode%EF%BC%88SNN%EF%BC%89}
+&lt;/h3&gt;&lt;p&gt;NN的辅助角色，帮NN打杂，监控 HDFS 状态的辅助后台程序，每隔一段时间获取 HDFS 元数据的快照。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;可通过9870端口（默认9870）访问web界面，查看集群各节点状态及信息&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/06b13a99d15316eb579548d13d808452.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;文件写入流程-e69687e4bbb6e58699e585a5e6b581e7a88b&#34;&gt;&lt;a href=&#34;#%e6%96%87%e4%bb%b6%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b-e69687e4bbb6e58699e585a5e6b581e7a88b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;文件写入流程 {#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/15300fba96e9072b20673cad977f7de1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;发送的写入请求通过后客户端会根据nn返回的信息自动把数据分块向网络距离最近的dn写入数据同时dn会完成备份操作把备份传到其他的dn然后由其他的dn再次做备份传播直到满足设置的备份数量nb&#34;&gt;&lt;a href=&#34;#%e5%8f%91%e9%80%81%e7%9a%84%e5%86%99%e5%85%a5%e8%af%b7%e6%b1%82%e9%80%9a%e8%bf%87%e5%90%8e%e5%ae%a2%e6%88%b7%e7%ab%af%e4%bc%9a%e6%a0%b9%e6%8d%aenn%e8%bf%94%e5%9b%9e%e7%9a%84%e4%bf%a1%e6%81%af%e8%87%aa%e5%8a%a8%e6%8a%8a%e6%95%b0%e6%8d%ae%e5%88%86%e5%9d%97%e5%90%91%e7%bd%91%e7%bb%9c%e8%b7%9d%e7%a6%bb%e6%9c%80%e8%bf%91%e7%9a%84dn%e5%86%99%e5%85%a5%e6%95%b0%e6%8d%ae%e5%90%8c%e6%97%b6dn%e4%bc%9a%e5%ae%8c%e6%88%90%e5%a4%87%e4%bb%bd%e6%93%8d%e4%bd%9c%e6%8a%8a%e5%a4%87%e4%bb%bd%e4%bc%a0%e5%88%b0%e5%85%b6%e4%bb%96%e7%9a%84dn%e7%84%b6%e5%90%8e%e7%94%b1%e5%85%b6%e4%bb%96%e7%9a%84dn%e5%86%8d%e6%ac%a1%e5%81%9a%e5%a4%87%e4%bb%bd%e4%bc%a0%e6%92%ad%e7%9b%b4%e5%88%b0%e6%bb%a1%e8%b6%b3%e8%ae%be%e7%bd%ae%e7%9a%84%e5%a4%87%e4%bb%bd%e6%95%b0%e9%87%8fnb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;发送的写入请求通过后，客户端会根据NN返回的信息自动把数据分块，向&lt;strong&gt;网络距离最近&lt;/strong&gt;的DN写入数据。同时，DN会完成备份操作，把备份传到其他的DN，然后由其他的DN再次做备份传播，直到满足设置的备份数量&amp;amp;nb
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>Hive本质、架构、玩法</title>
+        <link>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</link>
+        <pubDate>Sun, 14 Apr 2024 12:23:06 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%9C%AC%E8%B4%A8&#34; &gt;Hive本质&lt;/a&gt;{#Hive%E6%9C%AC%E8%B4%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97&#34; &gt;Hive主要有以下3个模块&lt;/a&gt;{#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Metastore&#34; &gt;Metastore&lt;/a&gt;{#Metastore-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9E%B6%E6%9E%84%C2%A0&#34; &gt;架构&lt;/a&gt;{#%E6%9E%B6%E6%9E%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE&#34; &gt;Hive日志配置&lt;/a&gt;{#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B&#34; &gt;HQL执行过程&lt;/a&gt;{#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A&#34; &gt;Hive四种玩法：&lt;/a&gt;{#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1%EF%BC%89CLI&#34; &gt;1）CLI&lt;/a&gt;{#1%EF%BC%89CLI-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2%EF%BC%89HiveServer2&#34; &gt;2）HiveServer2&lt;/a&gt;{#2%EF%BC%89HiveServer2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3%EF%BC%89Beeline&#34; &gt;3）Beeline&lt;/a&gt;{#3%EF%BC%89Beeline-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4%EF%BC%89Web%20UI&#34; &gt;4）Web UI&lt;/a&gt;{#4%EF%BC%89Web%20UI-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hive-本质-hivee69cace8b4a8&#34;&gt;&lt;a href=&#34;#hive-%e6%9c%ac%e8%b4%a8-hivee69cace8b4a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Hive&lt;/strong&gt; &lt;strong&gt;本质&lt;/strong&gt; {#Hive%E6%9C%AC%E8%B4%A8}
+&lt;/h2&gt;&lt;p&gt;Hive是构建在hadoop上的数据仓库，也可以说是一个&lt;strong&gt;操作hdfs文件&lt;/strong&gt; 的客户端，它&lt;strong&gt;可以将结构化的数据文件映射成表&lt;/strong&gt;，并提供类 SQL查询功能，用于查询的 SQL 语句会被转化为 MapReduce 作业，然后提交到 Hadoop 上运行。&lt;strong&gt;Hive执行引擎可以是MapReduce、Spark、Tez，如果是MR，Hive就会把HQL翻译成MR进行数据计算。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由于Hive是针对数据仓库应⽤设计的，⽽数据仓库的内容是读多写少的。因此，Hive中不⽀持 对数据的改写和添加，所有的数据都是在加载的时候中确定好的。&lt;/p&gt;
+&lt;p&gt;Hive不适合⽤于联机事务处理(OLTP)，也不提供实时查询功能。它最适合应⽤在基于⼤量不可变数据的批处理 作业。Hive 的特点是可伸缩（在Hadoop 的集群上动态的添加设备），可扩展、容错、输⼊格式的松散耦合。 Hive 的⼊⼝是DRIVER ，执⾏的SQL语句⾸先提交到DRIVER驱动，然后调COMPILER解释驱动，最终解释成 MapReduce 任务执⾏，最后将结果返回。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;简单、容易上手 (提供了类似 sql 的查询语言 hql)，使得精通 sql 但是不了解 Java 编程的人也能很 好地进行大数据分析；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灵活性高，可以自定义用户函数 (UDF) 和存储格式；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为超大的数据集设计的计算和存储能力，集群扩展容易;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;4.&lt;strong&gt;统一的元数据管理&lt;/strong&gt;，可与 presto／impala／sparksql 等共享数据；&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;执行延迟高，不适合做数据的实时处理，但适合做海量数据的离线处理。&lt;/li&gt;
+&lt;/ol&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9785a8b5d20da5ab15eb5cf746fa5288.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hive主要有以下3个模块-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34;&gt;&lt;a href=&#34;#hive%e4%b8%bb%e8%a6%81%e6%9c%89%e4%bb%a5%e4%b8%8b3%e4%b8%aa%e6%a8%a1%e5%9d%97-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive主要有以下3个模块 {#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97}
+&lt;/h2&gt;&lt;h2 id=&#34;户接模块含clihwijdbcthrift-server等来实现对hive的访问cli是hive带-的命令界hwi是hive的个简单界jdbcodbc以及thrift-server可向户提供进-编程的接其中thrift-server是基于thrift软件框架开发的提供hi&#34;&gt;&lt;a href=&#34;#%e6%88%b7%e6%8e%a5%e6%a8%a1%e5%9d%97%e5%90%abclihwijdbcthrift-server%e7%ad%89%e6%9d%a5%e5%ae%9e%e7%8e%b0%e5%af%b9hive%e7%9a%84%e8%ae%bf%e9%97%aecli%e6%98%afhive%e5%b8%a6-%e7%9a%84%e5%91%bd%e4%bb%a4%e7%95%8chwi%e6%98%afhive%e7%9a%84%e4%b8%aa%e7%ae%80%e5%8d%95%e7%95%8cjdbcodbc%e4%bb%a5%e5%8f%8athrift-server%e5%8f%af%e5%90%91%e6%88%b7%e6%8f%90%e4%be%9b%e8%bf%9b-%e7%bc%96%e7%a8%8b%e7%9a%84%e6%8e%a5%e5%85%b6%e4%b8%adthrift-server%e6%98%af%e5%9f%ba%e4%ba%8ethrift%e8%bd%af%e4%bb%b6%e6%a1%86%e6%9e%b6%e5%bc%80%e5%8f%91%e7%9a%84%e6%8f%90%e4%be%9bhi&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;**⽤户接⼝模块：**含CLI、HWI、JDBC、Thrift Server等，⽤来实现对Hive的访问。CLI是Hive⾃带 的命令⾏界⾯；HWI是Hive的⼀个简单⽹⻚界⾯；JDBC、ODBC以及Thrift Server可向⽤户提供进 ⾏编程的接⼝，其中Thrift Server是基于Thrift软件框架开发的，提供Hi
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>Hive调优</title>
+        <link>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</link>
+        <pubDate>Sat, 13 Apr 2024 20:49:38 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn和MR资源配置&lt;/a&gt;{#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn资源配置&lt;/a&gt;{#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;MR资源配置&lt;/a&gt;{#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92&#34; &gt;Explain查看执行计划&lt;/a&gt;{#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96&#34; &gt;分组聚合优化&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E&#34; &gt;优化前VS优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E4%BC%98%E5%8C%96&#34; &gt;Join优化&lt;/a&gt;{#Join%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89&#34; &gt;Common Join（普通join）&lt;/a&gt;{#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%20Join&#34; &gt;Map Join&lt;/a&gt;{#Map%20Join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%C2%A0&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA&#34; &gt;法一：hint提示&lt;/a&gt;{#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91&#34; &gt;法二：自动触发&lt;/a&gt;{#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Bucket%20Map%20Join&#34; &gt;Bucket Map Join&lt;/a&gt;{#Bucket%20Map%20Join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#hint%E6%8F%90%E7%A4%BA%C2%A0&#34; &gt;hint提示&lt;/a&gt;{#hint%E6%8F%90%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Sort%20Merge%20Bucket%20Map%20Join%28SMB%20map%20join%29&#34; &gt;Sort Merge Bucket Map Join(SMB map join)&lt;/a&gt;{#Sort%20Merge%20Bucket%20Map%20Join(SMB%20map%20join)-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96&#34; &gt;数据倾斜优化&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;分组聚合导致的数据倾斜&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map-Side%E8%81%9A%E5%90%88&#34; &gt;Map-Side聚合&lt;/a&gt;{#Map-Side%E8%81%9A%E5%90%88-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Skew-GroupBy%E4%BC%98%E5%8C%96&#34; &gt;Skew-GroupBy优化&lt;/a&gt;{#Skew-GroupBy%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8D&#34; &gt;优化前&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0&#34; &gt;优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;Join导致的数据倾斜&lt;/a&gt;{#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#map%20join&#34; &gt;map join&lt;/a&gt;{#map%20join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#skew%20join&#34; &gt;skew join&lt;/a&gt;{#skew%20join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96&#34; &gt;任务并行度优化&lt;/a&gt;{#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Map端并行度&lt;/a&gt;{#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Reduce端并行度&lt;/a&gt;{#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96&#34; &gt;小文件合并优化&lt;/a&gt;{#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Map端输入的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Reduce端输出的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96&#34; &gt;其他优化&lt;/a&gt;{#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#CBO%E4%BC%98%E5%8C%96&#34; &gt;CBO优化&lt;/a&gt;{#CBO%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8&#34; &gt;谓词下推&lt;/a&gt;{#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2&#34; &gt;矢量化查询&lt;/a&gt;{#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Fetch%E6%8A%93%E5%8F%96&#34; &gt;Fetch抓取&lt;/a&gt;{#Fetch%E6%8A%93%E5%8F%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F&#34; &gt;本地模式&lt;/a&gt;{#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C&#34; &gt;并行执行&lt;/a&gt;{#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F&#34; &gt;严格模式&lt;/a&gt;{#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e5%92%8cmr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne5928cmre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h2&gt;&lt;p&gt;配置项参考官网：&lt;a class=&#34;link&#34; href=&#34;https://apache.github.io/hadoop/&#34;  title=&#34;https://apache.github.io/hadoop/&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://apache.github.io/hadoop/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;yarn资源配置-yarne8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h3&gt;&lt;p&gt;修改yarn-site.xml,调整的Yarn参数均与CPU、内存等资源有关，配置如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.memory-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;65536&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.cpu-vcores&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;16&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.maximum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;16384&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最大内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.minimum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;512&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最小内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;修改后重新分发该配置文件并重启Yarn&lt;/p&gt;
+&lt;h3 id=&#34;mr资源配置-mre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#mr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-mre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h3&gt;&lt;p&gt;MapReduce资源配置主要包括Map Task的内存和CPU核数，以及Reduce Task的内存和CPU核数。核心配置参数如下：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;{#_Hlk110418691}&lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.memory.mb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Map Task申请的container容器内存大小，其默认值为1024。该值不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.map.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt; &lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Map Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3）&lt;/strong&gt; &lt;strong&gt;mapreduce.reduce.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4）mapreduce.reduce.memory.mb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器内存大小，其默认值为1024。该值同样不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.reduce.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34;&gt;&lt;a href=&#34;#explain%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}
+&lt;/h2&gt;&lt;p&gt;Explain用于呈现HQL语句的详细执行步骤，由一系列Stage组成，简单的理解为HQL查询语句的不同执行阶段，这一系列Stage具有依赖关系，每个Stage对应一个MapReduce Job或一个文件系统操作等。&lt;/p&gt;
+&lt;p&gt;若某个Stage对应的一个MapReduce Job，则其Map端和Reduce端的计算逻辑分别由Map Operator Tree和Reduce Operator Tree进行描述，Operator Tree由一系列的Operator组成，一个Operator代表在Map或Reduce阶段的一个单一的逻辑操作，例如TableScan Operator，Select Operator，Join Operator等。具体如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/4da9891258984bbe1a892f0ccafcb92b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;常见的Operator及其作用如下&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;TableScan：表扫描操作，通常map端第一个操作肯定是表扫描操作&lt;/p&gt;
+&lt;p&gt;Select Operator：选取操作&lt;/p&gt;
+&lt;p&gt;Group By Operator：map端的分组聚合操作，在后面的分组聚合中会讲到&lt;/p&gt;
+&lt;p&gt;Reduce Output Operator：输出到 reduce 操作&lt;/p&gt;
+&lt;p&gt;Filter Operator：过滤操作&lt;/p&gt;
+&lt;p&gt;Join Operator：join 操作&lt;/p&gt;
+&lt;p&gt;File Output Operator：文件输出操作&lt;/p&gt;
+&lt;p&gt;Fetch Operator 客户端获取数据操作
+&lt;strong&gt;Explain语法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;EXPLAIN &lt;/p&gt;
+\[FORMATTED \| EXTENDED \| DEPENDENCY\]&lt;p&gt; query-sql&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FORMATTED：将执行计划以JSON字符串的形式输出&lt;/li&gt;
+&lt;li&gt;EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息&lt;/li&gt;
+&lt;li&gt;DEPENDENCY：输出执行计划读取的表及分区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
+&lt;p&gt;explain formatted&lt;/p&gt;
+&lt;p&gt;select user_id,count(*) from order_detail group by user_id;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/d475c4d504540aaa12554c7c9480202c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96-e58886e7bb84e8819ae59088e4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;分组聚合优化&lt;/strong&gt; {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}
+&lt;/h2&gt;&lt;p&gt;分组聚合是通过MR Job实现的，map端读取数据，并按照分组字段分区，通过shuffle，把数据发到reduce，各组数据在reduce端完成最终的聚合运算。&lt;/p&gt;
+&lt;p&gt;分组聚合的优化主要围绕减少shuffle数据量进行，具体做法是map-side聚合。map-side聚合是在map端维护一个hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到reduce端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个map端的部分聚合过程，以减少shuffle的工作量，进而减少reduce端的聚合工作量。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;map-side聚合相关参数如下&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用map-side聚合，默认是true&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr=true;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;用于检测源表数据是否适合进行map-side聚合。检测的方法是：系统自动先对若干条数据进行map-side聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行map-side聚合；否则，认为该表数据不适合进行map-side聚合，后续数据便不再进行map-side聚合。0.5意味着平均有2条数据可以聚合成1条，1意味着没有出现任何的聚合&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.min.reduction=0.5;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;用于&lt;strong&gt;hive.map.aggr.hash.min.reduction=0.5&lt;/strong&gt; 检测源表是否适合map-side聚合的条数。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.groupby.mapaggr.checkinterval=100000;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;map-side聚合所用的hash table占用map task堆内存的最大比例，若超出该值，则会对hash table进行一次flush。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.force.flush.memory.threshold=0.7;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8dvs%e4%bc%98%e5%8c%96%e5%90%8e-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}
+&lt;/h3&gt;&lt;p&gt;set hive.map.aggr=false关闭分组聚合优化，查看执行效果，在Map端没有了Group By Operator&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/bef7cc2560feaf0c03af5c376dadbac4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;set hive.map.aggr=true开启分组聚合优化，查看执行效果，在Map端有了Group By Operator，&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd582dc168193eedd0302e6cdccc7d17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;若发生map-side优化，优化后比优化前的HQL执行耗时应该有所减少，且map的output数量明显小于input数量。&lt;/p&gt;
+&lt;p&gt;若没有触发map-side，则map的output数量虽然比input数量有所减少但可以忽略不计。具体有没有触发map-side可以去web UI界面查看map日志。&lt;/p&gt;
+&lt;p&gt;注意！！map-side聚合不够智能，即map端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据&lt;strong&gt;分区分桶&lt;/strong&gt;，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;1）select province_id,count(*) from order_detail group by province_id;&lt;/p&gt;
+&lt;p&gt;该语句查询所有订单，根据省份id分组聚合，省份只有34个，这样map后的数据应该只有34条，所以聚合结果是应该是比较可观的。所以group by 的基数越小，一般越适合聚合。&lt;/p&gt;
+&lt;p&gt;2）select product_id,count(*) from order_detail group by product_id;&lt;/p&gt;
+&lt;p&gt;若product_id这一分组字段在order_detail表中分布比较散，那么可能会导致hive在表中切片抽样进行map-side检测的时候测试聚合结果&amp;gt;0.5，那么最终就没有使用map-side聚合。所以说如果能保证抽样数据的测试结果&amp;lt;=0.5，就会实现分组聚合，当然也可以调整&lt;strong&gt;hive.map.aggr.hash.min.reduction&lt;/strong&gt; 的值以提高map-side的命中率。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;若100w&lt;/strong&gt; &lt;strong&gt;的数据集分组聚合之后的输出&lt;/strong&gt; &lt;strong&gt;&amp;gt;100w,&lt;/strong&gt; &lt;strong&gt;可能的原因是多次触发了&lt;/strong&gt; &lt;strong&gt;hash table&lt;/strong&gt; &lt;strong&gt;的&lt;/strong&gt; &lt;strong&gt;flush&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;join优化-joine4bc98e58c96&#34;&gt;&lt;a href=&#34;#join%e4%bc%98%e5%8c%96-joine4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Join优化 {#Join%E4%BC%98%E5%8C%96}
+&lt;/h2&gt;&lt;p&gt;Join优化就是控制HQL语句走哪种join算法，这些join算法有的快，有的慢，有的激进，有的保守。我们要做的就是让HQL走最适合自己的join算法。&lt;/p&gt;
+&lt;h3 id=&#34;common-join普通join-common20joinefbc88e699aee9809ajoinefbc89&#34;&gt;&lt;a href=&#34;#common-join%e6%99%ae%e9%80%9ajoin-common20joinefbc88e699aee9809ajoinefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}
+&lt;/h3&gt;&lt;h4 id=&#34;原理-e58e9fe79086&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-e58e9fe79086&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理 {#%E5%8E%9F%E7%90%86}
+&lt;/h4&gt;&lt;p&gt;hive中最稳定的join算法，其通过一个MapReduce Job完成一个join操作。Map端负责读取join操作所需表的数据，并按照关联字段进行分区，通过Shuffle，将其发送到Reduce端，相同key的数据在Reduce端完成最终的Join操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c93be2b01fce05ed73c439a062480a2f.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表&#34;&gt;&lt;a href=&#34;#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f-%e7%9a%84%e6%98%afhql%e8%af%ad%e5%8f%a5%e4%b8%ad%e7%9a%84join%e6%93%8d%e4%bd%9c%e5%92%8c%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92%e4%b8%ad%e7%9a%84common-join%e4%bb%bb%e5%8a%a1%e5%b9%b6%e9%9d%9e%e4%b8%80%e5%af%b9%e4%b8%80%e7%9a%84%e5%85%b3%e7%b3%bb%e5%8d%b3hql%e4%b8%ad%e7%9a%84a%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;需要&lt;strong&gt;注意&lt;/strong&gt; 的是，&lt;strong&gt;HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系&lt;/strong&gt;，即HQL中的A&lt;strong&gt;表&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

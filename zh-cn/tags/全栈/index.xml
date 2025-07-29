@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>全栈 on 青秋博客</title>
+        <link>/zh-cn/tags/%E5%85%A8%E6%A0%88/</link>
+        <description>Recent content in 全栈 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Tue, 04 Feb 2025 14:53:44 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%85%A8%E6%A0%88/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>练习两年半，我的全栈博客出生了</title>
+        <link>/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/</link>
+        <pubDate>Tue, 04 Feb 2025 14:53:44 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/</guid>
+        <description>&lt;h2 id=&#34;登陆注册页&#34;&gt;&lt;a href=&#34;#%e7%99%bb%e9%99%86%e6%b3%a8%e5%86%8c%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;登陆注册页
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/353dee420a4a4020a1918149aa54f93b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;首页&#34;&gt;&lt;a href=&#34;#%e9%a6%96%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;首页
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e47d1285726e453f89a10c569ec78454.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;文章详情页&#34;&gt;&lt;a href=&#34;#%e6%96%87%e7%ab%a0%e8%af%a6%e6%83%85%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;文章详情页
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9ed253e53e8d434dbbcd39e428b6b30a.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分类专栏&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%b1%bb%e4%b8%93%e6%a0%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分类专栏
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/5b5ecc70758340b4891e77240654b513.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;搜索结果页&#34;&gt;&lt;a href=&#34;#%e6%90%9c%e7%b4%a2%e7%bb%93%e6%9e%9c%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;搜索结果页
+&lt;/h2&gt;&lt;p&gt;可以根据类别、标签或者搜索框文本搜索&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/99b6b6b8bda64966ac3d358dc44de673.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;创作页&#34;&gt;&lt;a href=&#34;#%e5%88%9b%e4%bd%9c%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;创作页
+&lt;/h2&gt;&lt;p&gt;这里参考了csdn的创作页&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/be3ac8d869f849f8b5d74e8d0ec16a93.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;支持多种皮肤，可以上传粘贴图片 &lt;img src=&#34;https://i-blog.csdnimg.cn/direct/d5a5dd103135483e80f98f4cbb6a3277.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ai页&#34;&gt;&lt;a href=&#34;#ai%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AI页
+&lt;/h2&gt;&lt;p&gt;引入了讯飞星火大模型lite版本，token不限量&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/73e57beb676645f5936dfdd2dbcea6bd.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;个人主页&#34;&gt;&lt;a href=&#34;#%e4%b8%aa%e4%ba%ba%e4%b8%bb%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;个人主页
+&lt;/h2&gt;&lt;p&gt;主页也参考了csdn&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/1c2e892911a947008a0df2db0b650e13.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/3031a05daf1a4867a1f31d469298378a.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt; &lt;img src=&#34;https://i-blog.csdnimg.cn/direct/b320c8075d26461fb9584abe473bd2c3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;管理页&#34;&gt;&lt;a href=&#34;#%e7%ae%a1%e7%90%86%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;管理页
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/bb6dd08e64244906b01e3f4fc1e99bc4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/0710e9de1b4c4f59b96f143189ddf60e.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/27343ccb37144a7ea8e284ab8e7fb8c8.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9d184610bf064ff19ee5a7157e5fb1eb.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/10da5e7d27194520a2c3883c903e10d4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

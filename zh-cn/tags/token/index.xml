@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Token on 青秋博客</title>
+        <link>/zh-cn/tags/token/</link>
+        <description>Recent content in Token on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Wed, 24 Jul 2024 11:19:04 +0000</lastBuildDate><atom:link href="/zh-cn/tags/token/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Cookie、Session、JWT、Token</title>
+        <link>/zh-cn/post/2024/07/cookiesessionjwttoken/</link>
+        <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/07/cookiesessionjwttoken/</guid>
+        <description>&lt;p&gt;JavaWeb中，客户端通常是浏览器，通过浏览器向服务器发送请求，所以有时候称客户端为浏览器。&lt;/p&gt;
+&lt;h2 id=&#34;cookie&#34;&gt;&lt;a href=&#34;#cookie&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Cookie
+&lt;/h2&gt;&lt;p&gt;Cookie是服务器生成，存储在浏览器的一段字符串，可以记录用户的身份信息等数据，但是这些信息是明文存储的，很不安全。&lt;/p&gt;
+&lt;p&gt;浏览器把cookie以k-v形式保存到某个目录下的文本文件内，下一次请求同一网站时会把该cookie发送给服务器。由于cookie是存在于浏览器上的，所以浏览器加入了一些限制来确保cookie不会被恶意使用，同时不会占据太多磁盘空间，单个 cookie 保存的数据不能超过4KB，而且每个域的cookie数量是有限的。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Cookie缺陷：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;cookie存在本地浏览器，浏览器之间的cookie不共享，所以用户换了浏览器就要重新登录&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;session&#34;&gt;&lt;a href=&#34;#session&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Session
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Session 是基于Cookie实现的，是一种HTTP存储机制，目的是为无状态的HTTP协议提供持久机制&lt;/strong&gt; ，服务器会为每个用户创建的一个临时会话对象，存储在服务器，它保存了每个用户的会话信息。相较于Cookie，session容量更大，可以保存Object。&lt;/p&gt;
+&lt;p&gt;一次session会话可以有多个请求也就有多个cookie的交互，服务器为了区分当前是谁发送的请求，给每个浏览器分配了不同的&amp;quot;身份标识&amp;quot;JSESSIONID，JSESSIONID放在cookie中，然后浏览器每次向服务器发请求的时候，都带上JSESSIONID，服务器就可以根据JSESSIONID查找用户对应的session会话，&lt;strong&gt;所以session是有状态的（因为服务器要保存session）。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;服务器使用session把用户的信息临时保存在了服务器上，这种用户信息存储方式相对cookie来说更安全。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Session 在两种情况下会自动销毁：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;客户端关闭浏览器程序&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Session 超时（会话超时）：客户端一段时间内没有访问过该Session内存，服务器会清理。回话超时的时间，默认是30分钟，只要发起请求，会话时间从0重新计算。
+&lt;strong&gt;Session缺陷：&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果web服务器做了负载均衡，那么下一个操作请求到了另一台服务器的时候session就会丢失，也就是每个服务器的session不共享。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;服务器要保存所有人的session，如果服务器访问量大，那么对服务器来说有很大的内存开销，限制了服务器的扩展能力，是&lt;strong&gt;空间换时间&lt;/strong&gt;
+&lt;strong&gt;误解：&lt;/strong&gt;&lt;br&gt;
+关闭浏览器 ，服务器的session不会立刻消失！&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;对session来说，除非浏览器通知服务器删除session，否则服务器会一直保留。&lt;/p&gt;
+&lt;p&gt;然而浏览器从来不会在关闭之前主动通知服务器它将要关闭，大部分session机制都使用会话cookie来保存JSESSIONID，而关闭浏览器后这个JSESSIONID就消失了，再次连接服务器时也就无法找到原来的session。如果服务器设置的cookie被保存在硬盘上，或者使用某种手段改写浏览器发出的HTTP请求头，把原来的JSESSIONID发送给服务器，则再次打开浏览器仍然能够打开原来的session。&lt;/p&gt;
+&lt;p&gt;恰恰是由于关闭浏览器不会导致session被删除，迫使服务器需要为session设置了一个失效时间，当距离客户端上一次使用session的时间超过这个失效时间时，服务器就可以以为客户端已经停止了活动，才会把session删除以节省存储空间。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;csrf攻击&#34;&gt;&lt;a href=&#34;#csrf%e6%94%bb%e5%87%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CSRF攻击
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;跨站请求攻击，攻击者冒充用户的浏览器去访问一个用户曾经认证过的网站并运行一些操作，如发邮件、甚至财产操作。这利用了web中用户身份验证的一个漏洞：简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是&lt;strong&gt;用户自愿发出&lt;/strong&gt;的。csrf并不能够拿到用户的任何信息，只是以用户浏览器身份进行操作。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/1f6904d136814685827d3889b99dce11.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;h2 id=&#34;token&#34;&gt;&lt;a href=&#34;#token&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Token
+&lt;/h2&gt;&lt;p&gt;基于session的缺陷，我们的解决方案是怎么让服务器不保存session，而让客户端去保存，可是如果不保存JSESSIONID, 怎么验证客户端发给服务器JSESSIONID的确是服务器生成的呢？&lt;/p&gt;
+&lt;p&gt;关键点就在于验证，比如说， A已经登录了系统， 服务器给A发一个令牌(token)， 里边包含了A的 user id等信息， 下一次A再次通过Http 请求访问服务器的时候， 把这个token 通过Http header 带过来就可以了。&lt;/p&gt;
+&lt;h2 id=&#34;不&#34;&gt;&lt;a href=&#34;#%e4%b8%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;不
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

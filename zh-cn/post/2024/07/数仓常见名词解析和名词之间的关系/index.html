@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="实体、维度、度量、指标、事实表、标签、自然键、代理键、持久键、退化维度、上卷、下钻、维度立方体、数据集市、粒度、口径">
+<title>数仓常见名词解析和名词之间的关系</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/07/%E6%95%B0%E4%BB%93%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90%E5%92%8C%E5%90%8D%E8%AF%8D%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="数仓常见名词解析和名词之间的关系">
+<meta property='og:description' content="实体、维度、度量、指标、事实表、标签、自然键、代理键、持久键、退化维度、上卷、下钻、维度立方体、数据集市、粒度、口径">
+<meta property='og:url' content='/zh-cn/post/2024/07/%E6%95%B0%E4%BB%93%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90%E5%92%8C%E5%90%8D%E8%AF%8D%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='数据仓库' /><meta property='article:tag' content='数据仓库' /><meta property='article:published_time' content='2024-07-31T10:08:42&#43;00:00'/><meta property='article:modified_time' content='2024-07-31T10:08:42&#43;00:00'/>
+<meta name="twitter:title" content="数仓常见名词解析和名词之间的关系">
+<meta name="twitter:description" content="实体、维度、度量、指标、事实表、标签、自然键、代理键、持久键、退化维度、上卷、下钻、维度立方体、数据集市、粒度、口径">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#往期推荐">往期推荐</a></li>
+    <li><a href="#名词汇总">名词汇总</a>
+      <ol>
+        <li><a href="#实体">实体</a></li>
+        <li><a href="#维度">维度</a></li>
+        <li><a href="#度量">度量</a></li>
+        <li><a href="#事实表">事实表</a></li>
+        <li><a href="#粒度">粒度</a></li>
+        <li><a href="#口径">口径</a></li>
+        <li><a href="#指标">指标</a></li>
+        <li><a href="#标签">标签</a></li>
+        <li><a href="#自然键">自然键</a></li>
+        <li><a href="#持久键">持久键</a></li>
+        <li><a href="#代理键">代理键</a></li>
+        <li><a href="#退化维度">退化维度</a></li>
+        <li><a href="#下钻">下钻</a></li>
+        <li><a href="#上卷">上卷</a></li>
+        <li><a href="#维度立方体">维度立方体</a></li>
+        <li><a href="#数据集市">数据集市</a></li>
+      </ol>
+    </li>
+    <li><a href="#名词关系">名词关系</a>
+      <ol>
+        <li><a href="#实体表事实表维度表的联系">实体表、事实表、维度表的联系</a></li>
+        <li><a href="#指标与标签的区别">指标与标签的区别</a></li>
+        <li><a href="#维度和指标的区别联系"><strong>维度和指标的区别联系</strong></a></li>
+        <li><a href="#自然键与代理键在数仓的使用区别">自然键与代理键在数仓的使用区别</a></li>
+        <li><a href="#数据集市和数据仓库的关系">数据集市和数据仓库的关系</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/07/%E6%95%B0%E4%BB%93%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90%E5%92%8C%E5%90%8D%E8%AF%8D%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/">数仓常见名词解析和名词之间的关系</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            实体、维度、度量、指标、事实表、标签、自然键、代理键、持久键、退化维度、上卷、下钻、维度立方体、数据集市、粒度、口径
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 31, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 9 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<h2 id="往期推荐"><a href="#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90" class="header-anchor"></a>往期推荐
+</h2><p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140753124"  title="大数据HBase图文简介-CSDN博客"
+     target="_blank" rel="noopener"
+    >大数据HBase图文简介-CSDN博客</a></p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D"  title="数据仓库及数仓架构概述-CSDN博客"
+     target="_blank" rel="noopener"
+    >数据仓库及数仓架构概述-CSDN博客</a></p></blockquote>
+<h2 id="名词汇总"><a href="#%e5%90%8d%e8%af%8d%e6%b1%87%e6%80%bb" class="header-anchor"></a>名词汇总
+</h2><p><img src="https://i-blog.csdnimg.cn/direct/8ff214bb20f94e26b3743fecce6d3959.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<blockquote>
+<h3 id="实体"><a href="#%e5%ae%9e%e4%bd%93" class="header-anchor"></a>实体
+</h3><ul>
+<li>实体是指依附的主体，就是我们分析的一个对象，比如分析华为手机近半年的销售量是多少，那<strong>华为手机就是一个实体</strong>；我们分析用户的活跃度，<strong>用户就是一个实体</strong>。</li>
+<li>实体可以是现实中不存在的，比如虚拟的业务对象，活动，会员等都可看做一个实体。</li>
+<li><strong>实体的存在是为了业务分析，作为分析的一个筛选的维度，拥有描述自己的属性，本身具有可分析的价值。</strong></li>
+</ul>
+<h3 id="维度"><a href="#%e7%bb%b4%e5%ba%a6" class="header-anchor"></a>维度
+</h3><p>维度就是<strong>看待问题的角度</strong> ，分析业务数据，从什么角度分析，就建立什么样的维度。所以维度就是要对数据进行分析时所用的一个量，比如分析产品销售情况，可以选择按<strong>商品类别</strong>来进行分析，这就构成一个维度，把所有商品类别集合在一起，就构成了<strong>维度表。</strong></p>
+<h3 id="度量"><a href="#%e5%ba%a6%e9%87%8f" class="header-anchor"></a>度量
+</h3><p>度量是业务流程节点上的一个<strong>数值</strong> 。比如<strong>分析产品销售情况，产品ID、生产时间、生产商就是维度，而销量、价格、成本这些可度量的值就是度量</strong>。</p>
+<h3 id="事实表"><a href="#%e4%ba%8b%e5%ae%9e%e8%a1%a8" class="header-anchor"></a>事实表
+</h3><p>订单金额就是度量值，因此<strong>事实表=维度+度量</strong></p>
+<p><img src="https://i-blog.csdnimg.cn/direct/e35d57db8dd54b03b5da0e75fb2db17f.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="粒度"><a href="#%e7%b2%92%e5%ba%a6" class="header-anchor"></a>粒度
+</h3><ul>
+<li>业务流程中对<strong>度量的单位</strong>，比如商品是按件记录度量，还是按批记录度量。</li>
+<li>例如：数仓建设中，我们说这是<strong>用户粒度</strong>的事实表，那么表中每行数据都是一个用户，无重复用户；例如还有<strong>销售粒度</strong>的表，那么表中每行都是一条销售记录。</li>
+<li>选择合适的粒度级别是数据仓库建设好坏的重要关键内容，在设计数据粒度时，通常需重点考虑以下因素：
+<ol>
+<li>要接受的分析类型、可接受的数据最低粒度和能存储的数据量；</li>
+<li>粒度的层次定义越粗，就越不能在该仓库中进行更细致的分析；</li>
+<li><strong>如果存储资源有一定的限制，就只能采用较粗的数据粒度划分；</strong></li>
+<li>数据粒度划分策略一定要保证：数据的粒度确实能够满足用户的决策分析需要，这是数据粒度划分策略中最重要的一个准则；</li>
+</ol>
+</li>
+</ul>
+<h3 id="口径"><a href="#%e5%8f%a3%e5%be%84" class="header-anchor"></a>口径
+</h3><p>口径就是<strong>取数逻辑</strong>（如何取数的），比如要取的数是10岁以下儿童中男孩的平均身高，这就是统计的口径，<strong>类似于要统计的数据范围</strong>。</p>
+<h3 id="指标"><a href="#%e6%8c%87%e6%a0%87" class="header-anchor"></a>指标
+</h3><p><strong>指标是口径的衡量值</strong>，也就是最后的结果。比如最近七天的订单量，一个促销活动的购买转化率等。一个指标具体到计算实施，有以下几部分组成：</p>
+<ul>
+<li><strong>指标加工逻辑</strong>：比如count ,sum, avg 维度，比如按部门、地域进行指标统计，对应sql中的group by</li>
+<li><strong>业务限定/修饰词</strong>：比如以不同的支付渠道来算对应的指标，微信支付的订单退款率，支付宝支付 的订单退款率 。对应sql中的where。</li>
+</ul>
+<p>除此之外，指标还可以分为如下几种：</p>
+<ul>
+<li>原子指标：<strong>基本业务事实，没有业务限定词、没有维度。<strong>比如订单表中的</strong>订单量、订单总金额都算原子指标</strong>。</li>
+<li>业务方更关心的指标是有实际业务含义可以直接取数据的指标。<strong>比如店铺近1天订单支付金额，这就是一个派生指标</strong>，会被直接在产品上展示给商家看。 但是这个指标却<strong>不能直接从数仓的统一中间层里取数</strong>（因为没有现成的事实字段，数仓提供的一般都是大宽表）。需要有一个桥梁连接数仓中间层和业务方的指标需求，于是便有了派生指标。</li>
+<li>派生指标：维度+修饰词+原子指标。<strong>店铺近1天订单支付金额，店铺是维度，近1天是一个时间类型的修饰词，支付金额是一个原子指标</strong>； 维度：观察各项指标的角度； 修饰词：维度的一个或某些值，比如维度性别下，男和女就是2种修饰词。</li>
+<li>衍生指标：比如某<strong>一个促销活动的转化率就是衍生指标</strong>，因为需要<strong>促销投放人数指标和促销订单数指标进行计算</strong>得出。</li>
+</ul>
+<h3 id="标签"><a href="#%e6%a0%87%e7%ad%be" class="header-anchor"></a>标签
+</h3><ul>
+<li>标签是人为设定的、根据业务场景需求，对目标对象运用一定的算法得到的高度精炼的<strong>特征标识</strong>。</li>
+<li>可见标签是经过人为再加工后的结果，如网红、下头男、小仙女。对于有歧义的标签，我们内部可进行标签区分，比如：苹果，我们可以定义苹果指的是水果，苹果手机才指的是手机。</li>
+</ul>
+<h3 id="自然键"><a href="#%e8%87%aa%e7%84%b6%e9%94%ae" class="header-anchor"></a>自然键
+</h3><p>由现实中已经存在的属性组成的键，它<strong>在业务概念中是唯一</strong>的，并具有一定的业务含义，比如<strong>商品ID， 员工ID</strong>。</p>
+<p>以数仓角度看，来自于业务系统的标识符就是自然键，比如业务库中员工的编号。</p>
+<h3 id="持久键"><a href="#%e6%8c%81%e4%b9%85%e9%94%ae" class="header-anchor"></a>持久键
+</h3><p>保持永久性，不发生变化。有时也被叫做<strong>超自然持久键</strong>。比如<strong>身份证号属于持久键</strong>。 自然键和持久键区别：举个例子就明白了，<strong>比如说公司员工离职之后又重新入职，他的自然键也就是员工编号发生了变化，但是他的持久键身份证号是不变的。</strong></p>
+<h3 id="代理键"><a href="#%e4%bb%a3%e7%90%86%e9%94%ae" class="header-anchor"></a>代理键
+</h3><p>不具有业务含义的键。代理键有许多其他的称呼：无意义键、整数键、非自然键、人工键、合成键等。 代理键就是简单的按照顺序序列生产的整数表示。产品行的第1行代理键为1，则下一行的代理键为 2，如此进行。<strong>代理键的作用仅仅是连接维度表和事实表</strong>。</p>
+<h3 id="退化维度"><a href="#%e9%80%80%e5%8c%96%e7%bb%b4%e5%ba%a6" class="header-anchor"></a>退化维度
+</h3><ul>
+<li><strong>退化维度，就是那些看起来像是事实表的一个维度关键字，但实际上并没有对应的维度表</strong>，**就是维度属性存储到事实表中，这种存储到事实表中的维度列被称为退化维度。**与其他存储在维表中的维度一样， 退化维度也可以用来进行事实表的过滤查询、实现聚合操作等。</li>
+<li>那么如何定义退化维度？比如说订单ID，<strong>这种量级很大的维度，没必要用一张维度表来进行存储</strong>，而我们进行数据查询或者数据过滤的时候又非常需要，所以这种就<strong>冗余在事实表里面</strong>，这种就叫退化维度。</li>
+</ul>
+<h3 id="下钻"><a href="#%e4%b8%8b%e9%92%bb" class="header-anchor"></a>下钻
+</h3><p>这是在<strong>数据分析</strong>中常见的概念，下钻可以理解成<strong>增加维的层次（升维）</strong>，从而可以由<strong>粗粒度到细粒度来观察数据</strong> ，比如对产品销售情况分析时，可以沿着时间维从年到月到日更细粒度的观察数据。<strong>从年的维度可以下钻到月的维度、日的维度等。</strong></p>
+<h3 id="上卷"><a href="#%e4%b8%8a%e5%8d%b7" class="header-anchor"></a>上卷
+</h3><p>知道了下钻，上卷就容易理解了，它俩是<strong>相逆</strong>的操作**（降维）<strong>，所以上卷可以理解为</strong>删掉维**的某些层，<strong>由细粒度到粗粒度</strong>观察数据的操作或沿着维的层次向上聚合汇总数据。</p>
+<h3 id="维度立方体"><a href="#%e7%bb%b4%e5%ba%a6%e7%ab%8b%e6%96%b9%e4%bd%93" class="header-anchor"></a>维度立方体
+</h3><p><strong>维度立方体包含了下钻和上卷的所有操作</strong>，站在多个维度角度取看待事情，那么就会有不同的结果，所以维度立方体统计可以满足任何维度需求，不过缺点是结果过多，导致程序运行速度大大降低。</p>
+<p><img src="https://i-blog.csdnimg.cn/direct/d388252b91744deeb6d3b336dc481348.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="数据集市"><a href="#%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82" class="header-anchor"></a>数据集市
+</h3><p><strong>数据集市（Data Mart），也叫数据市场</strong>，数据集市就是<strong>满足特定的部门或者用户的需求</strong>，按照多维的方式进行存储，包括定义维度、需要计算的指标、维度的层次等，生成面向决策分析需求的数据立方体。其实就是从数据仓库中抽取出来的子集。</p></blockquote>
+<h2 id="名词关系"><a href="#%e5%90%8d%e8%af%8d%e5%85%b3%e7%b3%bb" class="header-anchor"></a>名词关系
+</h2><blockquote>
+<h3 id="实体表事实表维度表的联系"><a href="#%e5%ae%9e%e4%bd%93%e8%a1%a8%e4%ba%8b%e5%ae%9e%e8%a1%a8%e7%bb%b4%e5%ba%a6%e8%a1%a8%e7%9a%84%e8%81%94%e7%b3%bb" class="header-anchor"></a>实体表、事实表、维度表的联系
+</h3><p>在<strong>Kimball维度建模</strong>中有维度与事实，在<strong>Inmon范式建模</strong>中有实体与关系，事实表和实体表之间有怎样区别与联系，先看下它们各自概念：</p>
+<ul>
+<li>维度表：维度表可以看成是用户用来分析一个事实的窗口，它里面的数据应该是对事实的各个方面描述，比如时间维度表，地域维度表，维度表是事实表的一个分析角度。</li>
+<li>事实表：<strong>事实表=维度+度量</strong> ，事实表其实就是通过各种维度和一些指标值的<strong>组合</strong>来<strong>确定</strong>一个事实的，比如通过时间维度、地域维度可以确定某时某地的一些指标值的事实。事实表的每一条数据都是几条维度表的数据和指标值交汇而得到的。</li>
+<li>实体表：<strong>实体表就是一个实际对象的表</strong>，实体表放的数据一定是一条条客观存在的事物数据，比如说各种商品，它就是客观存在的，所以可以将其设计一个实体表。实时表只描述各个事物，并不存在具体的事实，所以也有人称实体表是无事实的事实表。</li>
+</ul>
+<p>举个例子： 比如说手机商场中有苹果手机，华为手机等各品牌各型号的手机，这些数据可以组成一个手机实体表，但是表中没有可度量的数据。某天苹果手机卖了15台，华为手机卖了20台，这些手机销售数据属于事实，组成一个事实表。这样就可以使用日期维度表和地域维度表对这个事实表进行各种维度分析。</p>
+<h3 id="指标与标签的区别"><a href="#%e6%8c%87%e6%a0%87%e4%b8%8e%e6%a0%87%e7%ad%be%e7%9a%84%e5%8c%ba%e5%88%ab" class="header-anchor"></a>指标与标签的区别
+</h3><p><strong>概念不同</strong></p>
+<ul>
+<li><strong>指标是客观的，用来定义、评价和描述特定事物的一种标准或方式</strong> 。比如：新增用户数、累计用户数、用户活跃率等是衡量用户发展情况的指标；</li>
+<li><strong>标签是主观的、人为设定的</strong>，根据业务场景需求，对目标对象运用一定的算法得到的高度精炼的特征标识。 可见标签是经过人为再加工后的结果，如网红、下头男、高富帅。</li>
+</ul>
+<p><strong>构成不同</strong></p>
+<ul>
+<li>指标名称是对事物<strong>质与量</strong>两方面特点的命名；指标取值是指标在具体时间、地域、条件下的数量表现，如人的体重，指标名称是体重，指标的取值就是120斤；</li>
+<li>标签名称通常都是形容词或形容词+名词的结构，标签一般是不可量化的，通常是孤立的，除了基础类标签，通过一定算法加工出来的标签一般都没有单位和量纲。如将超过200斤的称为大胖子。</li>
+</ul>
+<p><strong>分类不同</strong></p>
+<ul>
+<li>对指标的分类： 按照指标计算逻辑，可以将指标分为<strong>原子指标、派生指标、衍生指标</strong> 三种类型； 按照对事件描述内容的不同，分为<strong>过程性指标和结果性指标</strong>；</li>
+<li>对标签的分类： 按照标签的变化性分为<strong>静态标签和动态标</strong>签； 按照标签的指代和评估指标的不同，可分为定性标签和定量标签；</li>
+</ul>
+<p><strong>指标最擅长的应用是监测、分析、评价和建模。 标签最擅长的应用是标注、刻画、分类和特征提取</strong>。 特别需要指出的是，由于对结果的标注也是一种标签，所以在自然语言处理和机器学习相关 的算法应用场景下，标签对于监督式学习有重要价值，只是单纯的指标难以做到的。而指标在任 务分配、绩效管理等领域的作用，也是标签无法做到的。</p>
+<h3 id="维度和指标的区别联系"><a href="#%e7%bb%b4%e5%ba%a6%e5%92%8c%e6%8c%87%e6%a0%87%e7%9a%84%e5%8c%ba%e5%88%ab%e8%81%94%e7%b3%bb" class="header-anchor"></a><strong>维度和指标的区别联系</strong>
+</h3><p>维度就是数据的观察角度，即从<strong>哪个角度去分析问题，看待问题</strong> 。 指标就是从维度的基础上去<strong>衡量结果值</strong>。</p>
+<ul>
+<li>维度：一般是一个离散的值，比如时间维度上每一个独立的日期或地域，因此统计时，可以把维 度相同记录的聚合在一起，应用聚合函数做累加、均值、最大值、最小值等聚合计算。</li>
+<li>指标：就是被聚合的通计算，即聚合运算的结果，一般是一个连续的值。</li>
+</ul>
+<h3 id="自然键与代理键在数仓的使用区别"><a href="#%e8%87%aa%e7%84%b6%e9%94%ae%e4%b8%8e%e4%bb%a3%e7%90%86%e9%94%ae%e5%9c%a8%e6%95%b0%e4%bb%93%e7%9a%84%e4%bd%bf%e7%94%a8%e5%8c%ba%e5%88%ab" class="header-anchor"></a>自然键与代理键在数仓的使用区别
+</h3><ul>
+<li><strong>维度表的唯一主键应该是代理键而不应该是自然键</strong>。有时建模人员不愿意放弃使用自然键，因为他们希望与操作型代码查询事实表，而不希望与维度表做连接操作。然而，应该避免使用包含业务含义的多维键，因为不管我们做出任何假设最终都可能变得无效，因为<strong>我们控制不了业务库的变动</strong>。</li>
+<li>所以数据仓库中维度表与事实表的每个连接应该基于无实际含义的整数代理键。避免使用自然键作为维度表的主键。</li>
+</ul>
+<h3 id="数据集市和数据仓库的关系"><a href="#%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e5%92%8c%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-anchor"></a>数据集市和数据仓库的关系
+</h3><ul>
+<li>数据集市是企业级数据仓库的一个子集，他<strong>主要面向部门级业务</strong> ，并且只面向某个特定的主题。为了解决灵活性和性能之间的矛盾，数据集市就是数据仓库体系结构中增加的一种小型的部门或工作组级别的数据仓库。数据集市存储为特定用户预先计算好的数据，从而满足用户对性能的需求。数据集市可以在<strong>一定程度上缓解访问数据仓库的瓶颈。</strong></li>
+<li>数据集市和数据仓库的主要区别：<strong>数据仓库是企业级的</strong>，能为整个企业各个部门的运行提供决策支持手 段；而数据集市则是一种微型的数据仓库,它通常有更少的数据,更少的主题区域,以及更少的历史数据,因 此是部门级的，一般只能为某个局部范围内的管理人员服务，因此也称之为部门级数据仓库。</li>
+</ul></blockquote>
+<hr>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive入门-HQL、表操作、库操作、视图、索引、数据类型</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive本质、架构、玩法</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Hive调优</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

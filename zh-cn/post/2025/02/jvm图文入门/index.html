@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="jvm结构图、类加载器、双亲委派、垃圾回收、字节码文件">
+<title>JVM图文入门</title>
+
+<link rel='canonical' href='/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="JVM图文入门">
+<meta property='og:description' content="jvm结构图、类加载器、双亲委派、垃圾回收、字节码文件">
+<meta property='og:url' content='/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='jvm' /><meta property='article:tag' content='虚拟机' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2025-02-06T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-06T12:00:00&#43;00:00'/>
+<meta name="twitter:title" content="JVM图文入门">
+<meta name="twitter:description" content="jvm结构图、类加载器、双亲委派、垃圾回收、字节码文件">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#31-字节码文件的组成-e5ad97e88a82e7a081e69687e4bbb6e79a84e7bb84e68890">3.1 字节码文件的组成 {#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90}</a></li>
+        <li><a href="#41-类加载器classloader-e7b1bbe58aa0e8bdbde599a8classloader">4.1 类加载器ClassLoader {#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader}</a></li>
+        <li><a href="#42-运行时数据区-e8bf90e8a18ce697b6e695b0e68daee58cba">4.2 运行时数据区 {#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA}</a>
+          <ol>
+            <li><a href="#程序计数器-e7a88be5ba8fe8aea1e695b0e599a8">程序计数器 {#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8}</a></li>
+            <li><a href="#java虚拟机栈方法栈-javae696b9e6b395e6a088efbc88e8999ae68b9fe69cbae6a088efbc89">Java虚拟机栈（方法栈） {#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89}</a></li>
+            <li><a href="#本地方法栈-e69cace59cb0e696b9e6b395e6a088c2a0">本地方法栈 {#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0}</a></li>
+            <li><a href="#堆-heape5a086">堆 {#Heap%E5%A0%86}</a></li>
+          </ol>
+        </li>
+        <li><a href="#43-执行引擎-e689a7e8a18ce5bc95e6938e">4.3 执行引擎 {#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E}</a></li>
+        <li><a href="#51-破坏双亲委派-e7a0b4e59d8fe58f8ce4bab2e5a794e6b4be">5.1 破坏双亲委派 {#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE}</a>
+          <ol>
+            <li><a href="#tomcat破坏-tomcate7a0b4e59d8f">Tomcat破坏 {#Tomcat%E7%A0%B4%E5%9D%8F}</a></li>
+            <li><a href="#jdbc破坏-jdbce7a0b4e59d8fc2a0">JDBC破坏 {#JDBC%E7%A0%B4%E5%9D%8F%C2%A0}</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/">JVM图文入门</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            jvm结构图、类加载器、双亲委派、垃圾回收、字节码文件
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 06, 2025</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 10 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/jvm/">Jvm</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p><strong>往期推荐</strong>{#tableOfContents}</p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145339474"  title="【已解决】redisCache注解失效，没写cacheConfig_com.howbuy.cachemanagement.client.redisclient#incr-CSDN博客"
+     target="_blank" rel="noopener"
+    >【已解决】redisCache注解失效，没写cacheConfig_com.howbuy.cachemanagement.client.redisclient#incr-CSDN博客</a>{#tableOfContents}</p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145346364"  title="【已解决】OSS配置问题_keyuewenhua.oss-cn-beijing.aliyuncs-CSDN博客"
+     target="_blank" rel="noopener"
+    >【已解决】OSS配置问题_keyuewenhua.oss-cn-beijing.aliyuncs-CSDN博客</a>{#tableOfContents}</p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145355561"  title="【排坑】云服务器docker部署前后端分离项目&#43;域名解析&#43;OSS-CSDN博客"
+     target="_blank" rel="noopener"
+    >【排坑】云服务器docker部署前后端分离项目+域名解析+OSS-CSDN博客</a>{#tableOfContents}</p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145444729"  title="微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata-CSDN博客"
+     target="_blank" rel="noopener"
+    >微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata-CSDN博客</a>{#tableOfContents}</p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145461986"  title="字符串常量池-CSDN博客"
+     target="_blank" rel="noopener"
+    >字符串常量池-CSDN博客</a>{#tableOfContents}</p></blockquote>
+<p><strong>目录</strong>{#main-toc}</p>
+<p><a class="link" href="#main-toc" >1. JVM8结构图</a>{#main-toc-toc}</p>
+<p><a class="link" href="#Java%E6%80%A7%E8%83%BD%E4%BD%8E%E7%9A%84%E8%80%8C%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0" >2. Java性能低的主要原因</a>{#Java%E6%80%A7%E8%83%BD%E4%BD%8E%E7%9A%84%E8%80%8C%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0-toc}</p>
+<p><a class="link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6" >3. 字节码文件</a>{#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6-toc}</p>
+<p><a class="link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90" >3.1 字节码文件的组成</a>{#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90-toc}</p>
+<p><a class="link" href="#5.%20JVM%E6%9E%B6%E6%9E%84" >4. JVM架构</a>{#5.%20JVM%E6%9E%B6%E6%9E%84-toc}</p>
+<p><a class="link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader" >4.1 类加载器ClassLoader</a>{#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader-toc}</p>
+<p><a class="link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA" >4.2 运行时数据区</a>{#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-toc}</p>
+<p><a class="link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8" >程序计数器</a>{#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8-toc}</p>
+<p><a class="link" href="#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89" >Java虚拟机栈（方法栈）</a>{#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89-toc}</p>
+<p><a class="link" href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0" >本地方法栈</a>{#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0-toc}</p>
+<p><a class="link" href="#Heap%E5%A0%86" >堆</a>{#Heap%E5%A0%86-toc}</p>
+<p><a class="link" href="#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E" >4.3 执行引擎</a>{#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-toc}</p>
+<p><a class="link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE" >5. 双亲委派</a>{#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE-toc}</p>
+<p><a class="link" href="#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE" >5.1 破坏双亲委派</a>{#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE-toc}</p>
+<p><a class="link" href="#Tomcat%E7%A0%B4%E5%9D%8F" >Tomcat破坏</a>{#Tomcat%E7%A0%B4%E5%9D%8F-toc}</p>
+<p><a class="link" href="#JDBC%E7%A0%B4%E5%9D%8F%C2%A0" >JDBC破坏</a>{#JDBC%E7%A0%B4%E5%9D%8F%C2%A0-toc}</p>
+<hr>
+<br />
+<ol>
+<li>JVM8结构图 {#main-toc}</li>
+</ol>
+<hr>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/973e296f2ad5024e006d26c79d9f2d27.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ol start="2">
+<li>Java性能低的主要原因 {#Java%E6%80%A7%E8%83%BD%E4%BD%8E%E7%9A%84%E8%80%8C%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0}</li>
+</ol>
+<hr>
+<p>Java语言如果不做任何的优化，性能其实是不如C和C++语言的。主要原因是：</p>
+<p>在程序运行过程中，Java虚拟机需要将字节码指令<strong>实时</strong> 地解释成计算机能识别的机器码，这个过程在运行时可能会<strong>反复执行</strong>，所以效率较低。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/77956ae94eb35c711fe6ae90215b9e65.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>C和C++语言在执行过程中，只需将源代码编译成可执行文件，就包含了计算机能识别的机器码，无需在运行过程中再实时地解释，所以性能较高。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/4891e09006dbffd15576105091139111.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>Java为什么要选择一条执行效率比较低的方式呢？主要是为了实现<strong>跨平台</strong>的特性。Java的字节码指令，如果希望在不同平台（操作系统+硬件架构），比如在windows或者linux上运行。可以使用同一份字节码指令，交给windows和linux上的Java虚拟机进行解释，这样就可以获得不同平台上的机器码了。这样就实现了Write Once，Run Anywhere 编写一次，到处运行。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/26d4cec4bed87ef7639e8cabaee78e9a.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ol start="3">
+<li>字节码文件 {#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6}</li>
+</ol>
+<hr>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/ad540780ab9b2f156f1b85a26cd16701.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>我们java中说的字节码文件即 java代码编译后的.class文件，class文件可以跨平台运行在不同操作系统的JVM上。</p>
+<h3 id="31-字节码文件的组成-e5ad97e88a82e7a081e69687e4bbb6e79a84e7bb84e68890"><a href="#31-%e5%ad%97%e8%8a%82%e7%a0%81%e6%96%87%e4%bb%b6%e7%9a%84%e7%bb%84%e6%88%90-e5ad97e88a82e7a081e69687e4bbb6e79a84e7bb84e68890" class="header-anchor"></a>3.1 字节码文件的组成 {#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90}
+</h3><blockquote>
+<p>字节码文件总共可以分为以下几个部分：</p>
+<ul>
+<li>
+<p><strong>基础信息</strong>：魔数、字节码文件对应的Java版本号、访问标识(public final等等)、父类和接口信息</p>
+</li>
+<li>
+<p><strong>常量池</strong> **：**保存了字符串常量、类或接口名、字段名，主要在字节码指令中使用</p>
+</li>
+<li>
+<p><strong>字段：</strong> 当前类或接口声明的字段信息</p>
+</li>
+<li>
+<p>**方法：**当前类或接口声明的方法信息，核心内容为方法的字节码指令</p>
+</li>
+<li>
+<p>**属性：**类的属性，比如源码的文件名、内部类的列表等</p>
+</li>
+</ul></blockquote>
+<ol start="4">
+<li>JVM架构 {#5.%20JVM%E6%9E%B6%E6%9E%84}</li>
+</ol>
+<hr>
+<blockquote>
+<p>根据上面的JVM图，JVM大致可分为三块： 类加载器ClassLoader、运行时数据区 、执行引擎</p></blockquote>
+<h3 id="41-类加载器classloader-e7b1bbe58aa0e8bdbde599a8classloader"><a href="#41-%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%99%a8classloader-e7b1bbe58aa0e8bdbde599a8classloader" class="header-anchor"></a>4.1 类加载器ClassLoader {#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader}
+</h3><p>类加载器会通过二进制流的方式获取到字节码文件并交给Java虚拟机，虚拟机会在方法区和堆上生成对应的对象保存字节码信息。</p>
+<blockquote>
+<p><strong>根加载器（启动类加载器）：</strong></p>
+<p>默认加载Java安装目录/jre/lib下的类文件，比如rt.jar，tools.jar，resources.jar等。</p>
+<p><strong>扩展类加载器：</strong></p>
+<p>默认加载Java安装目录/jre/lib/ext下的类文件</p>
+<p><strong>应用程序类加载器（系统类加载器）：</strong></p>
+<p>默认加载的是项目中的类以及通过maven引入的第三方jar包中的类。</p>
+<p><strong>用户自定义类加载器</strong></p></blockquote>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/03e97036e8ac7a1f4571a63072af659d.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><strong>输出为null是因为根加载器的具体实现是由C或C++编写，不在java范围内。</strong></p>
+<h3 id="42-运行时数据区-e8bf90e8a18ce697b6e695b0e68daee58cba"><a href="#42-%e8%bf%90%e8%a1%8c%e6%97%b6%e6%95%b0%e6%8d%ae%e5%8c%ba-e8bf90e8a18ce697b6e695b0e68daee58cba" class="header-anchor"></a>4.2 运行时数据区 {#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA}
+</h3><p>运行时数据可以划分为以下5块</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/cf125a3e73d0f0285c20eb26d0ed68a0.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h4 id="程序计数器-e7a88be5ba8fe8aea1e695b0e599a8"><a href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8-e7a88be5ba8fe8aea1e695b0e599a8" class="header-anchor"></a>程序计数器 {#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8}
+</h4><blockquote>
+<p>每个线程都有一个私有的程序计数器，也就是一个指针，指向方法区中的方法字节码（用来存储指向指令的地址）。解释器会在工作的时候改变这个计数器的值来选取下一条需要执行的字节码指令。如果线程执行的是非本地方法，则程序计数器中保存的是当前需要执行的指令地址；如果线程执行的是本地方法，则程序计数器中的值是 undefined。</p></blockquote>
+<h4 id="java虚拟机栈方法栈-javae696b9e6b395e6a088efbc88e8999ae68b9fe69cbae6a088efbc89"><a href="#java%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%a0%88%e6%96%b9%e6%b3%95%e6%a0%88-javae696b9e6b395e6a088efbc88e8999ae68b9fe69cbae6a088efbc89" class="header-anchor"></a>Java虚拟机栈（方法栈） {#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89}
+</h4><blockquote>
+<p>栈中没有垃圾回收的，线程结束后内存会自动释放。栈主管程序运行、生命周期、线程同步。</p>
+<p>Java 虚拟机栈中是一个个栈帧，每个栈帧对应一个被调用的方法，当线程执行一个方法时，会创建一个对应的栈帧，并将栈帧压入栈中。当方法执行完毕后，将栈帧从栈中弹出。</p></blockquote>
+<p><strong>栈帧及组成</strong>{#%E6%A0%88%E5%B8%A7}</p>
+<blockquote>
+<br />
+<ul>
+<li>
+<p>局部变量表，局部变量表的作用是在运行过程中存放所有的局部变量</p>
+</li>
+<li>
+<p>操作数栈，操作数栈是栈帧中虚拟机在执行指令过程中用来存放临时数据的一块区域</p>
+</li>
+<li>
+<p>帧数据，帧数据主要包含动态链接、方法出口、异常表的引用</p>
+</li>
+</ul></blockquote>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/c18bc4bce68bc763c9b8a7118d9dfad7.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<p>stack1的方法结束后要弹出栈，此时需要通过stack1返回下面的stack2的方法。</p>
+<h4 id="本地方法栈-e69cace59cb0e696b9e6b395e6a088c2a0"><a href="#%e6%9c%ac%e5%9c%b0%e6%96%b9%e6%b3%95%e6%a0%88-e69cace59cb0e696b9e6b395e6a088c2a0" class="header-anchor"></a>本地方法栈 {#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0}
+</h4><blockquote>
+<p><strong>Java虚拟机栈存储了Java方法调用时的栈帧，而本地方法栈存储的是native本地方法的栈帧</strong></p></blockquote>
+<h4 id="堆-heape5a086"><a href="#%e5%a0%86-heape5a086" class="header-anchor"></a>堆 {#Heap%E5%A0%86}
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Test</span><span class="w"> </span><span class="p">{</span><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;张三&#34;</span><span class="p">;</span><span class="w">       
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">18</span><span class="p">;</span><span class="w">       
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">printTotalScore</span><span class="p">();</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">printAverageScore</span><span class="p">();</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span><span class="w">       
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;李四&#34;</span><span class="p">;</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">19</span><span class="p">;</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">id</span><span class="o">=</span><span class="w"> </span><span class="n">2</span><span class="p">;</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">printTotalScore</span><span class="p">();</span><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">printAverageScore</span><span class="p">();</span><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这段代码中通过<code>new</code>关键字创建了两个<code>Student</code>类的对象，这两个对象会被存放在堆上。在栈上通过<code>s1</code>和<code>s2</code>两个局部变量保存堆上两个对象的地址，从而实现了引用关系的建立。</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/16822dbd8227cfa12045c5f5a6197733.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<p>以前的Java 中&quot;几乎&quot;所有的对象都会在堆中分配，但随着JIT编译器的发展和逃逸技术的逐渐成熟，所有的对象都分配到堆上渐渐变得不那么&quot;绝对&quot;了。从 JDK 7 开始，Java 虚拟机已经默认开启逃逸分析了，意味着如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。<strong>垃圾指JVM中没有任何引用指向它的对象</strong></p>
+<blockquote>
+<p><strong>逃逸分析</strong></p>
+<p><strong>逃逸分析</strong>是一种编译器优化技术，用于判断对象的作用域和生命周期。如果编译器确定一个对象不会逃逸出方法或线程的范围，它可以选择在栈上分配这个对象，而不是在堆上。这样做可以减少垃圾回收的压力，并提高性能。</p></blockquote>
+<p><strong>一个JVM实例只有一个堆内存</strong>，堆内存大小可以调节，类加载器读取类文件后要把类、方法、常变量放到堆内存中，保存所有引用类型的真实信息，堆内存在逻辑上分为三部分：</p>
+<blockquote>
+<ul>
+<li>新生代：伊甸区、幸存0区 from、幸存1区 to</li>
+<li>老年代</li>
+<li>永久代</li>
+</ul>
+<p><img src="https://i-blog.csdnimg.cn/direct/751a0755fcb54d798939dec2078b28b2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://i-blog.csdnimg.cn/direct/f931f0f0a561433b9003820a2c3e5343.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p></blockquote>
+<h3 id="43-执行引擎-e689a7e8a18ce5bc95e6938e"><a href="#43-%e6%89%a7%e8%a1%8c%e5%bc%95%e6%93%8e-e689a7e8a18ce5bc95e6938e" class="header-anchor"></a>4.3 执行引擎 {#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E}
+</h3><p>略</p>
+<ol start="5">
+<li>双亲委派 {#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE}</li>
+</ol>
+<hr>
+<blockquote>
+<p>应用程序类加载器（又叫系统类加载器）收到类的加载请求先检查自己是否加载过该类，如果没有，将请求向上委托给自己的父类加载器（extensionLoader），如果父类加载器也没有加载过该类，该父类加载器继续向上委托给自己的父类加载器（bootstrapLoader，又叫根加载器、启动类加载器）若启动类加载器也没有加载过该类，则会根据要加载的类的全限定名尝试加载该类，若加载成功，则返回引用，若加载失败，则抛出异常，并反向委托给扩展类加载器，若仍加载失败，则继续抛出异常，并反向委托给应用程序类加载器，若仍加载失败，则报异常ClassNotFound。</p></blockquote>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/cf60d86b5fc6576cb316267637d834d2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/e7ed992419dd7bca322104bd6a121d27.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/aafc08916de8c9f5a6e2910c33ddfdd6.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<blockquote>
+<p><strong>安全性和沙箱机制</strong></p>
+<p>由于java核心库和扩展库由根加载器加载，这些库中的类有更高的安全级别，而应用程序类由应用程序类加载器加载，安全级别低，双亲向上委派可以防止核心API被篡改，提高了程序安全性。</p>
+<p><strong>什么是沙箱？</strong></p>
+<p>java安全模型的核心就是java沙箱，沙箱是一个限制程序运行的环境，沙箱机制就是把java代码限定在jvm的特定运行范围内，严格限制代码对本地系统资源的访问（CPU、内存、文件系统、网络等），通过这样来保证代码的有效隔离，防止对本地系统造成破坏。</p>
+<p><strong>避免类重复加载</strong></p>
+<p>由于父类加载器加载类时会优先尝试加载，若类已经被加载过，就不会再次加载，避免了类重复加载。</p></blockquote>
+<h3 id="51-破坏双亲委派-e7a0b4e59d8fe58f8ce4bab2e5a794e6b4be"><a href="#51-%e7%a0%b4%e5%9d%8f%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%b4%be-e7a0b4e59d8fe58f8ce4bab2e5a794e6b4be" class="header-anchor"></a>5.1 破坏双亲委派 {#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE}
+</h3><blockquote>
+<p>打破双亲委派机制历史上有三种方式，但本质上只有<strong>第一种</strong>算是真正的打破了双亲委派机制：</p>
+<ul>
+<li>
+<p>自定义类加载器并且重写loadClass方法。Tomcat通过这种方式实现应用之间类隔离。</p>
+</li>
+<li>
+<p>线程上下文类加载器。利用上下文类加载器加载类，比如JDBC和JNDI等。</p>
+</li>
+<li>
+<p>Osgi框架的类加载器。历史上Osgi框架实现了一套新的类加载器机制，允许同级之间委托进行类的加载，目前很少使用。</p>
+</li>
+</ul></blockquote>
+<h4 id="tomcat破坏-tomcate7a0b4e59d8f"><a href="#tomcat%e7%a0%b4%e5%9d%8f-tomcate7a0b4e59d8f" class="header-anchor"></a>Tomcat破坏 {#Tomcat%E7%A0%B4%E5%9D%8F}
+</h4><p><img src="https://i-blog.csdnimg.cn/blog_migrate/e9959398d5270c635d04715341e669a5.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<h4 id="jdbc破坏-jdbce7a0b4e59d8fc2a0"><a href="#jdbc%e7%a0%b4%e5%9d%8f-jdbce7a0b4e59d8fc2a0" class="header-anchor"></a>JDBC破坏 {#JDBC%E7%A0%B4%E5%9D%8F%C2%A0}
+</h4><p>JDBC中使用了DriverManager来管理项目中引入的不同数据库的驱动，比如mysql驱动、oracle驱动。DriverManager类位于rt.jar包中，由启动类加载器加载。依赖中的mysql驱动对应的类，由应用程序类加载器来加载。DriverManager属于rt.jar是启动类加载器加载的。而用户jar包中的驱动需要由应用类加载器加载，<em>这就违反了双亲委派机制</em> 。<strong>存疑</strong></p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/93679b9db65beff9fd47dac2d92a139d.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>​</p>
+<blockquote>
+<p>JDBC案例中真的打破了双亲委派机制吗？{#JDBC%E6%A1%88%E4%BE%8B%E4%B8%AD%E7%9C%9F%E7%9A%84%E6%89%93%E7%A0%B4%E4%BA%86%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E5%90%97%EF%BC%9F}</p>
+<p>最早这个论点提出是在周志明《深入理解Java虚拟机》中，他认为打破了双亲委派机制，这种由启动类加载器加载的类，委派应用程序类加载器去加载类的方式，所以打破了双亲委派机制。</p>
+<p>但是如果我们分别从DriverManager以及驱动类的加载流程上分析，JDBC只是在DriverManager加载完之后，通过初始化阶段触发了驱动类的加载，类的加载依然遵循双亲委派机制。</p>
+<p>所以我认为这里没有打破双亲委派机制，只是用一种巧妙的方法让启动类加载器加载的类，去引发的其他类的加载。</p></blockquote>
+<hr>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/12/string.intern/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">String.intern()</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%83%BD%E6%A0%B9%E6%8D%AE%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7%E6%9D%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">如何设计一个能根据任务优先级来执行的线程池</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/java-io%E6%A8%A1%E5%9E%8B----bionioaioio%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Java io模型----BIO、NIO、AIO、IO多路复用、零拷贝</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%90%91list%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%83%E7%B4%A0/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">【泛型擦除】通过反射向List中添加不同类型的元素</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

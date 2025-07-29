@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>异常 on 青秋博客</title>
+        <link>/zh-cn/tags/%E5%BC%82%E5%B8%B8/</link>
+        <description>Recent content in 异常 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Tue, 31 Dec 2024 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%BC%82%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Java异常族谱、运行时异常、非运行时异常、ERROR</title>
+        <link>/zh-cn/post/2024/12/java%E5%BC%82%E5%B8%B8%E6%97%8F%E8%B0%B1%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BC%82%E5%B8%B8%E9%9D%9E%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BC%82%E5%B8%B8error/</link>
+        <pubDate>Tue, 31 Dec 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/12/java%E5%BC%82%E5%B8%B8%E6%97%8F%E8%B0%B1%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BC%82%E5%B8%B8%E9%9D%9E%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BC%82%E5%B8%B8error/</guid>
+        <description>&lt;h2 id=&#34;概览&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%a7%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概览
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/498c14c49c9b4b08973224411d728933.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在Exception异常中，大致又分为&lt;strong&gt;checked Exception（非运行时异常、受检异常）和unchecked Exception（运行时异常、非受检异常）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;受检异常&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在程序编译阶段就要被检查出来并处理掉的（try~catch或者在方法外面throws），否则程序无法通过编译，比如ClassNotFound、FileNotFoundException。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;非受检异常&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;可以通过编译，但是会在程序运行过程中爆露出来，比如常见的空指针、参数错误、类型转换错误 。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;try-catch-finally&#34;&gt;&lt;a href=&#34;#try-catch-finally&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;try-catch-finally
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;try&lt;/code&gt;块：用于捕获异常。其后可接零个或多个 &lt;code&gt;catch&lt;/code&gt; 块，如果没有 &lt;code&gt;catch&lt;/code&gt; 块，则必须跟一个 &lt;code&gt;finally&lt;/code&gt; 块。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;catch&lt;/code&gt;块：用于处理 try 捕获到的异常。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;finally&lt;/code&gt; 块：无论是否捕获或处理异常，&lt;code&gt;finally&lt;/code&gt; 块里的语句都会被执行。当在 &lt;code&gt;try&lt;/code&gt; 块或 &lt;code&gt;catch&lt;/code&gt; 块中遇到 return 语句时，&lt;code&gt;finally&lt;/code&gt; 语句块将在方法return之前被执行。&lt;/li&gt;
+&lt;li&gt;finally的代码在某些情况下也不是必须执行的，比如JVM终止、线程死亡。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;throws和throw&#34;&gt;&lt;a href=&#34;#throws%e5%92%8cthrow&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;throws和throw
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;throws：用于在方法声明中声明可能抛出的异常类型。如果一个方法可能抛出异常，但不想在方法内部进行处理，可以使用throws关键字将异常传递（上抛）给调用者来处理，直至被catch或者抛给前端用户。&lt;/li&gt;
+&lt;li&gt;throw：手动抛出异常。可以根据需要在代码中使用throw语句主动抛出特定类型的异常比如自定义异常。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+---
+</description>
+        </item>
+        
+    </channel>
+</rss>

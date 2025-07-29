@@ -1,0 +1,1053 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>数据仓库 on 青秋博客</title>
+        <link>/zh-cn/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</link>
+        <description>Recent content in 数据仓库 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sun, 01 Sep 2024 21:34:40 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别</title>
+        <link>/zh-cn/post/2024/09/%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E4%BD%95%E4%B8%BA%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E4%BD%95%E4%B8%BA%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;往期推荐&lt;/strong&gt; {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141761563&#34;  title=&#34;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;前言 {#0.%20%E5%89%8D%E8%A8%80}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;1991年，数据仓库之父 比尔·恩门 著书《Building the DataWarehouse》，要求&lt;strong&gt;构建数据仓库&lt;/strong&gt; 时，遵循&lt;strong&gt;范式建模&lt;/strong&gt;，即从关系型数据库中提取的范式数据，仍按范式存储到数据仓库中，这样就导致&lt;strong&gt;数仓中有很多小表，查询的时候必然会有很多表的关联&lt;/strong&gt;，极大地影响查询效率和性能。&lt;/li&gt;
+&lt;li&gt;1994年，拉尔夫·金博尔 著书《The DataWarehouse Toolkit》，提出&lt;strong&gt;维度建模和数据集市的概念&lt;/strong&gt;，&lt;strong&gt;维度建模是反范式建模，自下而上&lt;/strong&gt; ，然而这种方式仍有缺点：那就是每个业务平台的数据有各自的数据集市，集市之间&lt;strong&gt;数据隔离，存在数据不一致、重复&lt;/strong&gt;的情况。&lt;/li&gt;
+&lt;li&gt;1998-2001年，比尔·恩门派和金博尔派合并，比尔·恩门提出&lt;strong&gt;CIF架构：数仓分层&lt;/strong&gt;，不同层采用不同的建模方式，同时解决了数据不一致和查询效率低的问题。
+&lt;strong&gt;基于以上，有了范式建模、维度建模、实体建模三种主要建模方式&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;01-浅谈维度建模-0120e6b585e8b088e7bbb4e5baa6e5bbbae6a8a1&#34;&gt;&lt;a href=&#34;#01-%e6%b5%85%e8%b0%88%e7%bb%b4%e5%ba%a6%e5%bb%ba%e6%a8%a1-0120e6b585e8b088e7bbb4e5baa6e5bbbae6a8a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;0.1 浅谈维度建模 {#0.1%20%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1}
+&lt;/h3&gt;&lt;h2 id=&#34;维度建模主要面向&#34;&gt;&lt;a href=&#34;#%e7%bb%b4%e5%ba%a6%e5%bb%ba%e6%a8%a1%e4%b8%bb%e8%a6%81%e9%9d%a2%e5%90%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;维度建模主要&lt;strong&gt;面向&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖</title>
+        <link>/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/</link>
+        <pubDate>Sun, 01 Sep 2024 00:53:40 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;往期推荐&lt;/strong&gt; {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;=========================================================================&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90&#34; &gt;往期推荐&lt;/a&gt;{#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#0.%20%E5%89%8D%E8%A8%80&#34; &gt;1. 数仓架构&lt;/a&gt;{#0.%20%E5%89%8D%E8%A8%80-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84&#34; &gt;1.1 离线数仓架构&lt;/a&gt;{#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84&#34; &gt;1.1.1 数据集市架构&lt;/a&gt;{#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82&#34; &gt;1.1.1.2 独立数据集市&lt;/a&gt;{#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82&#34; &gt;1.1.1.2 从属数据集市&lt;/a&gt;{#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20Inmon%E4%BC%81%E4%B8%9A%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%8E%82%E6%9E%B6%E6%9E%84&#34; &gt;1.1.2 Inmon企业信息工厂架构&lt;/a&gt;{#2.2%20Inmon%E4%BC%81%E4%B8%9A%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%8E%82%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3%20Kimball%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84&#34; &gt;1.1.3 Kimball数据仓库架构&lt;/a&gt;{#2.3%20Kimball%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.4%20%E6%B7%B7%E5%90%88%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84&#34; &gt;1.1.4 混合型数据仓库架构&lt;/a&gt;{#2.4%20%E6%B7%B7%E5%90%88%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%C2%A0&#34; &gt;1.2 实时数仓架构&lt;/a&gt;{#2.2%20%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1%20Lambda%E6%9E%B6%E6%9E%84&#34; &gt;1.2.1 Lambda架构&lt;/a&gt;{#2.2.1%20Lambda%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.1%20%E4%BC%A0%E7%BB%9F%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91&#34; &gt;1.2.1.1 传统的Lambda实时开发&lt;/a&gt;{#2.2.1.1%20%E4%BC%A0%E7%BB%9F%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.2%C2%A0%E5%8D%87%E7%BA%A7%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91&#34; &gt;1.2.1.2 升级的Lambda实时开发&lt;/a&gt;{#2.2.1.2%C2%A0%E5%8D%87%E7%BA%A7%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.1.3%C2%A0%E4%B8%BA%E4%BB%80%E4%B9%88Lambda%E6%9E%B6%E6%9E%84%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E6%B5%81%E5%A4%84%E7%90%86%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%9F&#34; &gt;1.2.1.3 为什么Lambda架构同时存在流处理和批处理？&lt;/a&gt;{#1.2.1.3%C2%A0%E4%B8%BA%E4%BB%80%E4%B9%88Lambda%E6%9E%B6%E6%9E%84%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E6%B5%81%E5%A4%84%E7%90%86%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%9F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.1.4%20Lambda%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9&#34; &gt;1.2.1.4 Lambda架构缺点&lt;/a&gt;{#1.2.1.4%20Lambda%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2%20Kappa%E6%9E%B6%E6%9E%84&#34; &gt;1.2.2 Kappa架构&lt;/a&gt;{#2.2.2%20Kappa%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.2.1%20Kappa%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9%C2%A0&#34; &gt;1.2.2.1 Kappa架构缺点&lt;/a&gt;{#1.2.2.1%20Kappa%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Kappa%E5%92%8CLambda%E5%AF%B9%E6%AF%94&#34; &gt;1.2.3 Kappa和Lambda对比&lt;/a&gt;{#Kappa%E5%92%8CLambda%E5%AF%B9%E6%AF%94-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.3%20%E6%95%B0%E6%8D%AE%E6%B9%96%E5%87%BA%E7%8E%B0%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%89%B9%E6%B5%81%E4%B8%80%E4%BD%93&#34; &gt;1.2.4 湖仓一体&amp;mdash;数据湖&lt;/a&gt;{#2.2.3%20%E6%95%B0%E6%8D%AE%E6%B9%96%E5%87%BA%E7%8E%B0%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%89%B9%E6%B5%81%E4%B8%80%E4%BD%93-toc}&lt;/p&gt;
+&lt;p&gt;=========================================================================&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;数仓架构 {#0.%20%E5%89%8D%E8%A8%80}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/3777f513a36341459145f21b7a2e5e37.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数仓架构大致分为离线数仓架构和实时数仓架构&lt;/strong&gt;，数仓架构可以简单理解为构成数仓的各层关系，如ODS、DWM、DWD、DWS，具体分层这里不赘述。&lt;/p&gt;
+&lt;h3 id=&#34;11-离线数仓架构-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84&#34;&gt;&lt;a href=&#34;#11-%e7%a6%bb%e7%ba%bf%e6%95%b0%e4%bb%93%e6%9e%b6%e6%9e%84-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 离线数仓架构 {#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84}
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2671ec1cfe104f8f8a115b0c195715ee.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;显而易见，这种架构不能处理实时数据，那么必然会有数据的流失。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;任何事物都是随着时间的演进变得越来越完善，当然也是越来越复杂，数仓也不例外。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;离线数仓架构&lt;/strong&gt; 包括&lt;strong&gt;数据集市架构、Inmon企业信息工厂架构、Kimball数据仓库架构、混合型数据仓库架构&lt;/strong&gt;，接下来就详细说说这几种架构。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;111-数据集市架构-2120e695b0e68daee99b86e5b882e69eb6e69e84&#34;&gt;&lt;a href=&#34;#111-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e6%9e%b6%e6%9e%84-2120e695b0e68daee99b86e5b882e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.1 数据集市架构 {#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84}
+&lt;/h4&gt;&lt;p&gt;数据集市架构重点在于&lt;strong&gt;集市&lt;/strong&gt; 二字，数据集市是按&lt;strong&gt;主题域&lt;/strong&gt; 组织的数据集合，用于支持&lt;strong&gt;部门级的决策&lt;/strong&gt;。有两种类型的数据集市：独立数据集市 和 从属数据集市。&lt;/p&gt;
+&lt;br /&gt;
+&lt;blockquote&gt;
+&lt;h5 id=&#34;1112-独立数据集市-21120e78bace7ab8be695b0e68daee99b86e5b882&#34;&gt;&lt;a href=&#34;#1112-%e7%8b%ac%e7%ab%8b%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82-21120e78bace7ab8be695b0e68daee99b86e5b882&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.1.2 独立数据集市 {#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82}
+&lt;/h5&gt;&lt;p&gt;独立数据集市集中于部门所关心的&lt;strong&gt;单一主题域&lt;/strong&gt; ，&lt;strong&gt;数据以部门为基础&lt;/strong&gt;，例如制造部门、人力资源部门和其他部门都各自有他们自己的数据集市。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/067762e2511c4969911e4343147186b2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;​&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：因为一个部门的业务相对于整个企业要简单，数据量也小得多，所以部门的独立数据集市&lt;strong&gt;周期短、见效快&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;缺点：独立数据集市各自为政。从业务角度看，当部门的分析&lt;strong&gt;需求扩展&lt;/strong&gt; 或者&lt;strong&gt;跨部门跨主题域分析&lt;/strong&gt; 时，独立数据市场会力不从心。 当&lt;strong&gt;数据存在歧义&lt;/strong&gt; ，比如同一个产品在A部门和B部门的定义不同，将无法在部门间进行信息比较。 每个部门使用不同的技术，建立不同的ETL的过程，处理不同的事务系统，而在多个独立的数据集市之间还会存在数据的交叉与重叠，甚至会有&lt;strong&gt;数据不一致&lt;/strong&gt;的情况！&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+&lt;blockquote&gt;
+&lt;h5 id=&#34;1112-从属数据集市-21220e4bb8ee5b19ee695b0e68daee99b86e5b882&#34;&gt;&lt;a href=&#34;#1112-%e4%bb%8e%e5%b1%9e%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82-21220e4bb8ee5b19ee695b0e68daee99b86e5b882&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.1.2 从属数据集市 {#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82}
+&lt;/h5&gt;&lt;p&gt;从属数据集市的数据&lt;strong&gt;来源于数据仓库&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>DW层的数仓建模：范式建模、维度建模及数据分析模型、实体建模</title>
+        <link>/zh-cn/post/2024/08/dw%E5%B1%82%E7%9A%84%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1/</link>
+        <pubDate>Fri, 02 Aug 2024 11:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/08/dw%E5%B1%82%E7%9A%84%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐 {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140737307&#34;  title=&#34;小学生也能看懂的Redis7持久化机制--RDB和AOF-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;小学生也能看懂的Redis7持久化机制&amp;ndash;RDB和AOF-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.%20%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E5%9C%A8%E5%93%AA%E5%B1%82%E5%BB%BA&#34; &gt;1. 数仓建模在哪层建&lt;/a&gt;{#1.%20%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E5%9C%A8%E5%93%AA%E5%B1%82%E5%BB%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.%20%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%A6%81%E6%80%8E%E4%B9%88%E5%BB%BA%EF%BC%88%E4%B8%89%E7%A7%8D%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%89&#34; &gt;2. 数仓建模要怎么建（三种建模法）&lt;/a&gt;{#2.%20%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%A6%81%E6%80%8E%E4%B9%88%E5%BB%BA%EF%BC%88%E4%B8%89%E7%A7%8D%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1%C2%A0%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Third%20Normal%20Form%EF%BC%8C3NF%EF%BC%89&#34; &gt;2.1 范式建模法（Third Normal Form，3NF）&lt;/a&gt;{#2.1%C2%A0%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Third%20Normal%20Form%EF%BC%8C3NF%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Dimensional%20Modeling%EF%BC%89&#34; &gt;2.2 维度建模法（Dimensional Modeling）&lt;/a&gt;{#2.2%20%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Dimensional%20Modeling%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1%C2%A0%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%A8%A1%E5%BC%8F&#34; &gt;2.2.1 维度建模模式&lt;/a&gt;{#2.2.1%C2%A0%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.1%20%E6%98%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F&#34; &gt;2.2.1.1 星型模式&lt;/a&gt;{#2.2.1.1%20%E6%98%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.2%20%E6%98%9F%E5%BA%A7%E6%A8%A1%E5%BC%8F&#34; &gt;2.2.1.2 星座模式&lt;/a&gt;{#2.2.1.2%20%E6%98%9F%E5%BA%A7%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.1.3%C2%A0%E9%9B%AA%E8%8A%B1%E6%A8%A1%E5%BC%8F&#34; &gt;2.2.1.3 雪花模式&lt;/a&gt;{#2.2.1.3%C2%A0%E9%9B%AA%E8%8A%B1%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2%20%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E8%BF%87%E7%A8%8B&#34; &gt;2.2.2 维度建模过程&lt;/a&gt;{#2.2.2%20%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2.1%20%E9%80%89%E6%8B%A9%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B&#34; &gt;2.2.2.1 选择业务过程&lt;/a&gt;{#2.2.2.1%20%E9%80%89%E6%8B%A9%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2.2%C2%A0%E5%A3%B0%E6%98%8E%E7%B2%92%E5%BA%A6&#34; &gt;2.2.2.2 声明粒度&lt;/a&gt;{#2.2.2.2%C2%A0%E5%A3%B0%E6%98%8E%E7%B2%92%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2.1%20%E7%A1%AE%E8%AE%A4%E7%BB%B4%E5%BA%A6&#34; &gt;2.2.2.1 确认维度&lt;/a&gt;{#2.2.2.1%20%E7%A1%AE%E8%AE%A4%E7%BB%B4%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2.2.1%20%E7%A1%AE%E8%AE%A4%E4%BA%8B%E5%AE%9E&#34; &gt;2.2.2.1 确认事实&lt;/a&gt;{#2.2.2.1%20%E7%A1%AE%E8%AE%A4%E4%BA%8B%E5%AE%9E-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3%C2%A0%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Entity%20Modeling%EF%BC%89&#34; &gt;2.3 实体建模法（Entity Modeling）&lt;/a&gt;{#2.3%C2%A0%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Entity%20Modeling%EF%BC%89-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;数仓建模即数据仓库建模，对数据仓库中的数据进行适当的联合，类似数据库分库建表，明晰数据关系，以便进行数据处理操作。（可以适当冗余，不遵循范式）&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;数仓建模在哪层建 {#1.%20%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E5%9C%A8%E5%93%AA%E5%B1%82%E5%BB%BA}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;以维度建模为例，建模是在数据源层的下一层进行建设，在上节的分层架构中，就是在&lt;strong&gt;DW层进行数仓建模&lt;/strong&gt;，所以DW层是数仓建设的核心层！&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;数仓建模要怎么建（三种建模法） {#2.%20%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%A6%81%E6%80%8E%E4%B9%88%E5%BB%BA%EF%BC%88%E4%B8%89%E7%A7%8D%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%89}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;常见的有&lt;strong&gt;范式建模法、维度建模法、实体建模法&lt;/strong&gt;等，每种方法从本质上将是从不同的角度看待业务中的问题。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;21-范式建模法third-normal-form3nf-21c2a0e88c83e5bc8fe5bbbae6a8a1e6b395efbc88third20normal20formefbc8c3nfefbc89&#34;&gt;&lt;a href=&#34;#21-%e8%8c%83%e5%bc%8f%e5%bb%ba%e6%a8%a1%e6%b3%95third-normal-form3nf-21c2a0e88c83e5bc8fe5bbbae6a8a1e6b395efbc88third20normal20formefbc8c3nfefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1 范式建模法（Third Normal Form，3NF） {#2.1%C2%A0%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E6%B3%95%EF%BC%88Third%20Normal%20Form%EF%BC%8C3NF%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;范式建模法其实是我们在构建数据模型常用的一个方法，该方法主要由 &lt;strong&gt;Inmon&lt;/strong&gt; 所提倡，主要解决关系型数据库的数据存储，利用的一种技术层面上的方法。目前，我们在关系型数据库中的建模 方法，大部分采用的是三范式建模法。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;范式&lt;/strong&gt;是符合某一种级别的关系模式的集合。构造数据库必须遵循一定的规则，而在关系型数据库 中这种规则就是范式，这一过程也被称为规范化。目前关系数据库有六种范式：第一范式 （1NF）、第二范式（2NF）、第三范式（3NF）、Boyce-Codd范式（BCNF）、第四范式 （4NF）和第五范式（5NF）&lt;/li&gt;
+&lt;li&gt;在数据仓库的模型设计中，&lt;strong&gt;一般采用第三范式&lt;/strong&gt; 。一个符合第三范式的关系必须具有以下三个条件 :
+&lt;ul&gt;
+&lt;li&gt;每个属性值唯一，不具有多义性 ;&lt;/li&gt;
+&lt;li&gt;每个非主属性必须完全依赖于整个主键，而非主键的一部分 ;&lt;/li&gt;
+&lt;li&gt;每个非主属性不能依赖于其他关系中的属性，因为这样的话，这种属性应该归到其他关系中去；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/dbcc6af2ab054735ac986e3b415e1ab1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;据 Inmon 的观点，&lt;strong&gt;数据仓库模&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS</title>
+        <link>/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/</link>
+        <pubDate>Thu, 01 Aug 2024 11:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D&#34;  title=&#34;数仓入门：数据分析模型、数仓建模、离线实时数仓、Lambda、Kappa、湖仓一体-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓入门：数据分析模型、数仓建模、离线实时数仓、Lambda、Kappa、湖仓一体-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0&#34; &gt;1. 数仓分层&lt;/a&gt;{#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89&#34; &gt;1.1 数据源层：ODS（Operational Data Store）&lt;/a&gt;{#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89&#34; &gt;1.2 数据仓库层：DW（Data Warehouse）&lt;/a&gt;{#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89&#34; &gt;1.2.1 数据明细层：DWD（Data Warehouse Detail）&lt;/a&gt;{#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89&#34; &gt;1.2.2 数据中间层：DWM（Data WareHouse Midddle）&lt;/a&gt;{#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89&#34; &gt;1.2.3 数据服务层：DWS（Data WareHouse Service）&lt;/a&gt;{#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89&#34; &gt;1.3 数据应用层：ADS（Application Data Service）&lt;/a&gt;{#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89&#34; &gt;1.4 维表层：DIM（Dimension）&lt;/a&gt;{#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;ol&gt;
+&lt;li&gt;数仓分层 {#1.%20%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82%C2%A0}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;那么为什么要数据仓库进行分层呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;用空间换时间&lt;/strong&gt;，通过大量的预处理来提升应用系统的用户体验（效率），因此数据仓库会存在&lt;strong&gt;大量冗余的数据&lt;/strong&gt;；&lt;strong&gt;不分层的话，如果源业务系统的业务规则发生变化将会影响整个数据清洗过程，工作量巨大&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;通过&lt;strong&gt;数据分层管理可以简化数据清洗&lt;/strong&gt;的过程，把一个复杂的工作拆成了多个简单的工作，把一个大的黑盒变成了一个白盒，每一层的处理逻辑都相对简单和容易理解，这样比较容易保证每一个步骤的正确性，当数据发生错误的时候，往往我们只需要&lt;strong&gt;溯源&lt;/strong&gt;并局部调整某个步骤即可。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分层是以解决当前业务快速的数据支撑为目的&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抽象出共性的框架并能够赋能给其他业务线，同时为业务发展提供稳定、准确的数据支撑&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;并能够按照已有的模型为新业务发展提供方向，也就是数据驱动和赋能&lt;/strong&gt;
+&lt;strong&gt;一个好的分层架构，要有以下好处：&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;1. 清晰数据结构&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 数据血缘追踪：数据ETL转化过程中的流动变化&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 减少重复开发，提高数据复用性&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4. 数据关系条理化&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5. 屏蔽原始数据的影响&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;数仓分层要结合公司业务进行，并且需要清晰明确各层职责，&lt;strong&gt;一般&lt;/strong&gt;采用如下分层结构：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e895cdb04e9645a59d90d89a57d585a6.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数仓建模在哪层建设呢？我们以&lt;strong&gt;维度建模&lt;/strong&gt; 为例，建模是在数据源层的下一层进行建设，在上图中，就是在 &lt;strong&gt;DW 层进行数仓建模&lt;/strong&gt;，所以 DW 层是数仓建设的核心层。 下面详细阐述下每层建设规范！&lt;/p&gt;
+&lt;h3 id=&#34;11-数据源层odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89&#34;&gt;&lt;a href=&#34;#11-%e6%95%b0%e6%8d%ae%e6%ba%90%e5%b1%82odsoperational-data-store-1120e695b0e68daee6ba90e5b182efbc9aodsefbc88operational20data20storeefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 数据源层：ODS（Operational Data Store） {#1.1%20%E6%95%B0%E6%8D%AE%E6%BA%90%E5%B1%82%EF%BC%9AODS%EF%BC%88Operational%20Data%20Store%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;ODS 层是最接近数据源的一层，又叫&lt;strong&gt;贴源层&lt;/strong&gt; ，考虑后续可能需要&lt;strong&gt;追溯数据&lt;/strong&gt; 问题， 因此对于这一层就&lt;strong&gt;不建议做过多的数据清洗工作&lt;/strong&gt;，原封不动地接入原始数据即可， 至于&lt;strong&gt;数据去噪、去重、异常值处理等过程可以放在后面的 DWD 层&lt;/strong&gt;来做！&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;12-数据仓库层dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89&#34;&gt;&lt;a href=&#34;#12-%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e5%b1%82dwdata-warehouse-1220e695b0e68daee4bb93e5ba93e5b182efbc9adwefbc88data20warehouseefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2 数据仓库层：DW（Data Warehouse） {#1.2%20%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%B1%82%EF%BC%9ADW%EF%BC%88Data%20Warehouse%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;数据仓库层是数据仓库核心层，在这里把从 ODS 层中获得的数据按照主题建立各种数据模型。该层又依次&lt;strong&gt;细分为DWD、DWM、DWS&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;121-数据明细层dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89&#34;&gt;&lt;a href=&#34;#121-%e6%95%b0%e6%8d%ae%e6%98%8e%e7%bb%86%e5%b1%82dwddata-warehouse-detail-12120e695b0e68daee6988ee7bb86e5b182efbc9adwdefbc88data20warehouse20detailefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2.1 数据明细层：DWD（Data Warehouse Detail） {#1.2.1%20%E6%95%B0%E6%8D%AE%E6%98%8E%E7%BB%86%E5%B1%82%EF%BC%9ADWD%EF%BC%88Data%20Warehouse%20Detail%EF%BC%89}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;该层一般&lt;strong&gt;保持和 ODS 层一样的数据粒度&lt;/strong&gt;，并且提供&lt;strong&gt;一定的数据质量保证&lt;/strong&gt; 。&lt;strong&gt;DWD层要做的就是将数据清理、整合、规范化，把脏数据、垃圾数据、规范不一致的、状态定义不一致的、命名不规范的数据处理掉。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;同时，为了提高数据明细层的易用性，该层会采用一些&lt;strong&gt;维度退化&lt;/strong&gt;手法，将维度退化至事实表中，减少事实表和维表的关联。&lt;/li&gt;
+&lt;li&gt;另外，在该层也会做&lt;strong&gt;一部分的数据聚合&lt;/strong&gt;，将相同主题的数据汇集到一张表中，提高数据的可用性 。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;122-数据中间层dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89&#34;&gt;&lt;a href=&#34;#122-%e6%95%b0%e6%8d%ae%e4%b8%ad%e9%97%b4%e5%b1%82dwmdata-warehouse-midddle-12220e695b0e68daee4b8ade997b4e5b182efbc9adwmefbc88data20warehouse20midddleefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2.2 数据中间层：DWM（Data WareHouse Midddle） {#1.2.2%20%E6%95%B0%E6%8D%AE%E4%B8%AD%E9%97%B4%E5%B1%82%EF%BC%9ADWM%EF%BC%88Data%20WareHouse%20Midddle%EF%BC%89}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;该层会在 DWD 层的数据基础上，数据做&lt;strong&gt;轻度聚合&lt;/strong&gt; ，生成一系列的&lt;strong&gt;中间表&lt;/strong&gt; ， &lt;strong&gt;提升公共指标的复用性&lt;/strong&gt;，减少重复加工。&lt;/li&gt;
+&lt;li&gt;直观来讲，就是对通用的核心维度进行聚合操作，算出相应的统计指标。&lt;/li&gt;
+&lt;li&gt;在实际计算中，如果直接从 DWD 或者 ODS 计算出宽表的统计指标，会存在计算量太大并且维度太少的问题，因此一般的做法是，&lt;strong&gt;在 DWM 层先计算出多个小的中间表，然后再拼接成一张 DWS 的宽表&lt;/strong&gt;。由于宽和窄的界限不易界定，&lt;strong&gt;也可以去掉 DWM&lt;/strong&gt; 这一层，只留 DWS 层，将所有的数据再放在DWS也可。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;123-数据服务层dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89&#34;&gt;&lt;a href=&#34;#123-%e6%95%b0%e6%8d%ae%e6%9c%8d%e5%8a%a1%e5%b1%82dwsdata-warehouse-service-12320e695b0e68daee69c8de58aa1e5b182efbc9adwsefbc88data20warehouse20serviceefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2.3 数据服务层：DWS（Data WareHouse Service） {#1.2.3%20%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%B1%82%EF%BC%9ADWS%EF%BC%88Data%20WareHouse%20Service%EF%BC%89}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;DWS 层为公共汇总层，会进行&lt;strong&gt;轻度汇总&lt;/strong&gt; ，&lt;strong&gt;粒度比明细数据稍粗&lt;/strong&gt;，基于 DWD 层上的基础数据，整合汇总成分析某一个主题域的服务数据。&lt;/li&gt;
+&lt;li&gt;DWS 层应覆 盖 80% 的应用场景。又&lt;strong&gt;称数据集市或宽表&lt;/strong&gt;。 按照业务划分，如主题域流量、订单、用户等，生成字段比较多的宽表，用于提供后续的业务查询，OLAP 分析，数据分发等。&lt;/li&gt;
+&lt;li&gt;一般来讲，该层的数据表会相对比较少，一张表会涵盖比较多的业务内容，由于其&lt;strong&gt;字段较多&lt;/strong&gt;，因此一般也会称该层的表为&lt;strong&gt;宽表&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;13-数据集市层dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89&#34;&gt;&lt;a href=&#34;#13-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e5%b1%82dmdata-mart-1320e695b0e68daee5ba94e794a8e5b182efbc9aadsefbc88application20data20serviceefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.3 数据集市层：DM（Data Mart） {#1.3%20%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%9AADS%EF%BC%88Application%20Data%20Service%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;基于DW的基础数据，整合汇总成一个个数据集市，数据集市通常是面向部门的某个主题域的报表数据。比如用户留存表、用户活跃表、商品销量表、商品营收表等等。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;14-维表层dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89&#34;&gt;&lt;a href=&#34;#14-%e7%bb%b4%e8%a1%a8%e5%b1%82dimdimension-1420e7bbb4e8a1a8e5b182efbc9adimefbc88dimensionefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.4 维表层：DIM（Dimension） {#1.4%20%E7%BB%B4%E8%A1%A8%E5%B1%82%EF%BC%9ADIM%EF%BC%88Dimension%EF%BC%89}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;如果维表过多，也可针对维表设计单独一层，维表层主要包含两部分数据：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;高基数维度数据：一般是用户资料表、商品资料表类似的资料表。数据量可能是千万级或者上亿级别。&lt;/li&gt;
+&lt;li&gt;低基数维度数据：一般是配置表，比如枚举值对应的中文含义，或者日期维表。 数据量可能是个位数或者几千几万&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;15-数据应用层adsapplication-data-service&#34;&gt;&lt;a href=&#34;#15-%e6%95%b0%e6%8d%ae%e5%ba%94%e7%94%a8%e5%b1%82adsapplication-data-service&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.5 数据应用层：ADS（Application Data Service）
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;在这里，主要是&lt;strong&gt;提供给数据产品和数据分析使用的数据&lt;/strong&gt; ，一般会存放在 ES、 PostgreSql、Redis 等系统中供线上系统使用，也可能会存在 Hive 或者 Druid 中供数据分析和数据挖掘使用。比如我们经常说的&lt;strong&gt;报表数据&lt;/strong&gt;，一般就放在这里。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;br /&gt;
+---
+</description>
+        </item>
+        <item>
+        <title>数仓常见名词解析和名词之间的关系</title>
+        <link>/zh-cn/post/2024/07/%E6%95%B0%E4%BB%93%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90%E5%92%8C%E5%90%8D%E8%AF%8D%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/</link>
+        <pubDate>Wed, 31 Jul 2024 10:08:42 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/07/%E6%95%B0%E4%BB%93%E5%B8%B8%E8%A7%81%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90%E5%92%8C%E5%90%8D%E8%AF%8D%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140753124&#34;  title=&#34;大数据HBase图文简介-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据HBase图文简介-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;名词汇总&#34;&gt;&lt;a href=&#34;#%e5%90%8d%e8%af%8d%e6%b1%87%e6%80%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;名词汇总
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/8ff214bb20f94e26b3743fecce6d3959.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&#34;实体&#34;&gt;&lt;a href=&#34;#%e5%ae%9e%e4%bd%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;实体
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;实体是指依附的主体，就是我们分析的一个对象，比如分析华为手机近半年的销售量是多少，那&lt;strong&gt;华为手机就是一个实体&lt;/strong&gt;；我们分析用户的活跃度，&lt;strong&gt;用户就是一个实体&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;实体可以是现实中不存在的，比如虚拟的业务对象，活动，会员等都可看做一个实体。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实体的存在是为了业务分析，作为分析的一个筛选的维度，拥有描述自己的属性，本身具有可分析的价值。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;维度&#34;&gt;&lt;a href=&#34;#%e7%bb%b4%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;维度
+&lt;/h3&gt;&lt;p&gt;维度就是&lt;strong&gt;看待问题的角度&lt;/strong&gt; ，分析业务数据，从什么角度分析，就建立什么样的维度。所以维度就是要对数据进行分析时所用的一个量，比如分析产品销售情况，可以选择按&lt;strong&gt;商品类别&lt;/strong&gt;来进行分析，这就构成一个维度，把所有商品类别集合在一起，就构成了&lt;strong&gt;维度表。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;度量&#34;&gt;&lt;a href=&#34;#%e5%ba%a6%e9%87%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;度量
+&lt;/h3&gt;&lt;p&gt;度量是业务流程节点上的一个&lt;strong&gt;数值&lt;/strong&gt; 。比如&lt;strong&gt;分析产品销售情况，产品ID、生产时间、生产商就是维度，而销量、价格、成本这些可度量的值就是度量&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;事实表&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%ae%9e%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事实表
+&lt;/h3&gt;&lt;p&gt;订单金额就是度量值，因此&lt;strong&gt;事实表=维度+度量&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e35d57db8dd54b03b5da0e75fb2db17f.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;粒度&#34;&gt;&lt;a href=&#34;#%e7%b2%92%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;粒度
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;业务流程中对&lt;strong&gt;度量的单位&lt;/strong&gt;，比如商品是按件记录度量，还是按批记录度量。&lt;/li&gt;
+&lt;li&gt;例如：数仓建设中，我们说这是&lt;strong&gt;用户粒度&lt;/strong&gt;的事实表，那么表中每行数据都是一个用户，无重复用户；例如还有&lt;strong&gt;销售粒度&lt;/strong&gt;的表，那么表中每行都是一条销售记录。&lt;/li&gt;
+&lt;li&gt;选择合适的粒度级别是数据仓库建设好坏的重要关键内容，在设计数据粒度时，通常需重点考虑以下因素：
+&lt;ol&gt;
+&lt;li&gt;要接受的分析类型、可接受的数据最低粒度和能存储的数据量；&lt;/li&gt;
+&lt;li&gt;粒度的层次定义越粗，就越不能在该仓库中进行更细致的分析；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;如果存储资源有一定的限制，就只能采用较粗的数据粒度划分；&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;数据粒度划分策略一定要保证：数据的粒度确实能够满足用户的决策分析需要，这是数据粒度划分策略中最重要的一个准则；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;口径&#34;&gt;&lt;a href=&#34;#%e5%8f%a3%e5%be%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;口径
+&lt;/h3&gt;&lt;p&gt;口径就是&lt;strong&gt;取数逻辑&lt;/strong&gt;（如何取数的），比如要取的数是10岁以下儿童中男孩的平均身高，这就是统计的口径，&lt;strong&gt;类似于要统计的数据范围&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;指标&#34;&gt;&lt;a href=&#34;#%e6%8c%87%e6%a0%87&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;指标
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;指标是口径的衡量值&lt;/strong&gt;，也就是最后的结果。比如最近七天的订单量，一个促销活动的购买转化率等。一个指标具体到计算实施，有以下几部分组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;指标加工逻辑&lt;/strong&gt;：比如count ,sum, avg 维度，比如按部门、地域进行指标统计，对应sql中的group by&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;业务限定/修饰词&lt;/strong&gt;：比如以不同的支付渠道来算对应的指标，微信支付的订单退款率，支付宝支付 的订单退款率 。对应sql中的where。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;除此之外，指标还可以分为如下几种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;原子指标：&lt;strong&gt;基本业务事实，没有业务限定词、没有维度。&lt;strong&gt;比如订单表中的&lt;/strong&gt;订单量、订单总金额都算原子指标&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;业务方更关心的指标是有实际业务含义可以直接取数据的指标。&lt;strong&gt;比如店铺近1天订单支付金额，这就是一个派生指标&lt;/strong&gt;，会被直接在产品上展示给商家看。 但是这个指标却&lt;strong&gt;不能直接从数仓的统一中间层里取数&lt;/strong&gt;（因为没有现成的事实字段，数仓提供的一般都是大宽表）。需要有一个桥梁连接数仓中间层和业务方的指标需求，于是便有了派生指标。&lt;/li&gt;
+&lt;li&gt;派生指标：维度+修饰词+原子指标。&lt;strong&gt;店铺近1天订单支付金额，店铺是维度，近1天是一个时间类型的修饰词，支付金额是一个原子指标&lt;/strong&gt;； 维度：观察各项指标的角度； 修饰词：维度的一个或某些值，比如维度性别下，男和女就是2种修饰词。&lt;/li&gt;
+&lt;li&gt;衍生指标：比如某&lt;strong&gt;一个促销活动的转化率就是衍生指标&lt;/strong&gt;，因为需要&lt;strong&gt;促销投放人数指标和促销订单数指标进行计算&lt;/strong&gt;得出。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;标签&#34;&gt;&lt;a href=&#34;#%e6%a0%87%e7%ad%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;标签
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;标签是人为设定的、根据业务场景需求，对目标对象运用一定的算法得到的高度精炼的&lt;strong&gt;特征标识&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;可见标签是经过人为再加工后的结果，如网红、下头男、小仙女。对于有歧义的标签，我们内部可进行标签区分，比如：苹果，我们可以定义苹果指的是水果，苹果手机才指的是手机。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;自然键&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e7%84%b6%e9%94%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自然键
+&lt;/h3&gt;&lt;p&gt;由现实中已经存在的属性组成的键，它&lt;strong&gt;在业务概念中是唯一&lt;/strong&gt;的，并具有一定的业务含义，比如&lt;strong&gt;商品ID， 员工ID&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;以数仓角度看，来自于业务系统的标识符就是自然键，比如业务库中员工的编号。&lt;/p&gt;
+&lt;h3 id=&#34;持久键&#34;&gt;&lt;a href=&#34;#%e6%8c%81%e4%b9%85%e9%94%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;持久键
+&lt;/h3&gt;&lt;p&gt;保持永久性，不发生变化。有时也被叫做&lt;strong&gt;超自然持久键&lt;/strong&gt;。比如&lt;strong&gt;身份证号属于持久键&lt;/strong&gt;。 自然键和持久键区别：举个例子就明白了，&lt;strong&gt;比如说公司员工离职之后又重新入职，他的自然键也就是员工编号发生了变化，但是他的持久键身份证号是不变的。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;代理键&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e7%90%86%e9%94%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代理键
+&lt;/h3&gt;&lt;p&gt;不具有业务含义的键。代理键有许多其他的称呼：无意义键、整数键、非自然键、人工键、合成键等。 代理键就是简单的按照顺序序列生产的整数表示。产品行的第1行代理键为1，则下一行的代理键为 2，如此进行。&lt;strong&gt;代理键的作用仅仅是连接维度表和事实表&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;退化维度&#34;&gt;&lt;a href=&#34;#%e9%80%80%e5%8c%96%e7%bb%b4%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;退化维度
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;退化维度，就是那些看起来像是事实表的一个维度关键字，但实际上并没有对应的维度表&lt;/strong&gt;，**就是维度属性存储到事实表中，这种存储到事实表中的维度列被称为退化维度。**与其他存储在维表中的维度一样， 退化维度也可以用来进行事实表的过滤查询、实现聚合操作等。&lt;/li&gt;
+&lt;li&gt;那么如何定义退化维度？比如说订单ID，&lt;strong&gt;这种量级很大的维度，没必要用一张维度表来进行存储&lt;/strong&gt;，而我们进行数据查询或者数据过滤的时候又非常需要，所以这种就&lt;strong&gt;冗余在事实表里面&lt;/strong&gt;，这种就叫退化维度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;下钻&#34;&gt;&lt;a href=&#34;#%e4%b8%8b%e9%92%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;下钻
+&lt;/h3&gt;&lt;p&gt;这是在&lt;strong&gt;数据分析&lt;/strong&gt;中常见的概念，下钻可以理解成&lt;strong&gt;增加维的层次（升维）&lt;/strong&gt;，从而可以由&lt;strong&gt;粗粒度到细粒度来观察数据&lt;/strong&gt; ，比如对产品销售情况分析时，可以沿着时间维从年到月到日更细粒度的观察数据。&lt;strong&gt;从年的维度可以下钻到月的维度、日的维度等。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;上卷&#34;&gt;&lt;a href=&#34;#%e4%b8%8a%e5%8d%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;上卷
+&lt;/h3&gt;&lt;p&gt;知道了下钻，上卷就容易理解了，它俩是&lt;strong&gt;相逆&lt;/strong&gt;的操作**（降维）&lt;strong&gt;，所以上卷可以理解为&lt;/strong&gt;删掉维**的某些层，&lt;strong&gt;由细粒度到粗粒度&lt;/strong&gt;观察数据的操作或沿着维的层次向上聚合汇总数据。&lt;/p&gt;
+&lt;h3 id=&#34;维度立方体&#34;&gt;&lt;a href=&#34;#%e7%bb%b4%e5%ba%a6%e7%ab%8b%e6%96%b9%e4%bd%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;维度立方体
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;维度立方体包含了下钻和上卷的所有操作&lt;/strong&gt;，站在多个维度角度取看待事情，那么就会有不同的结果，所以维度立方体统计可以满足任何维度需求，不过缺点是结果过多，导致程序运行速度大大降低。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/d388252b91744deeb6d3b336dc481348.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;数据集市&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据集市
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;数据集市（Data Mart），也叫数据市场&lt;/strong&gt;，数据集市就是&lt;strong&gt;满足特定的部门或者用户的需求&lt;/strong&gt;，按照多维的方式进行存储，包括定义维度、需要计算的指标、维度的层次等，生成面向决策分析需求的数据立方体。其实就是从数据仓库中抽取出来的子集。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;名词关系&#34;&gt;&lt;a href=&#34;#%e5%90%8d%e8%af%8d%e5%85%b3%e7%b3%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;名词关系
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h3 id=&#34;实体表事实表维度表的联系&#34;&gt;&lt;a href=&#34;#%e5%ae%9e%e4%bd%93%e8%a1%a8%e4%ba%8b%e5%ae%9e%e8%a1%a8%e7%bb%b4%e5%ba%a6%e8%a1%a8%e7%9a%84%e8%81%94%e7%b3%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;实体表、事实表、维度表的联系
+&lt;/h3&gt;&lt;p&gt;在&lt;strong&gt;Kimball维度建模&lt;/strong&gt;中有维度与事实，在&lt;strong&gt;Inmon范式建模&lt;/strong&gt;中有实体与关系，事实表和实体表之间有怎样区别与联系，先看下它们各自概念：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;维度表：维度表可以看成是用户用来分析一个事实的窗口，它里面的数据应该是对事实的各个方面描述，比如时间维度表，地域维度表，维度表是事实表的一个分析角度。&lt;/li&gt;
+&lt;li&gt;事实表：&lt;strong&gt;事实表=维度+度量&lt;/strong&gt; ，事实表其实就是通过各种维度和一些指标值的&lt;strong&gt;组合&lt;/strong&gt;来&lt;strong&gt;确定&lt;/strong&gt;一个事实的，比如通过时间维度、地域维度可以确定某时某地的一些指标值的事实。事实表的每一条数据都是几条维度表的数据和指标值交汇而得到的。&lt;/li&gt;
+&lt;li&gt;实体表：&lt;strong&gt;实体表就是一个实际对象的表&lt;/strong&gt;，实体表放的数据一定是一条条客观存在的事物数据，比如说各种商品，它就是客观存在的，所以可以将其设计一个实体表。实时表只描述各个事物，并不存在具体的事实，所以也有人称实体表是无事实的事实表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;举个例子： 比如说手机商场中有苹果手机，华为手机等各品牌各型号的手机，这些数据可以组成一个手机实体表，但是表中没有可度量的数据。某天苹果手机卖了15台，华为手机卖了20台，这些手机销售数据属于事实，组成一个事实表。这样就可以使用日期维度表和地域维度表对这个事实表进行各种维度分析。&lt;/p&gt;
+&lt;h3 id=&#34;指标与标签的区别&#34;&gt;&lt;a href=&#34;#%e6%8c%87%e6%a0%87%e4%b8%8e%e6%a0%87%e7%ad%be%e7%9a%84%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;指标与标签的区别
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;概念不同&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;指标是客观的，用来定义、评价和描述特定事物的一种标准或方式&lt;/strong&gt; 。比如：新增用户数、累计用户数、用户活跃率等是衡量用户发展情况的指标；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;标签是主观的、人为设定的&lt;/strong&gt;，根据业务场景需求，对目标对象运用一定的算法得到的高度精炼的特征标识。 可见标签是经过人为再加工后的结果，如网红、下头男、高富帅。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;构成不同&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指标名称是对事物&lt;strong&gt;质与量&lt;/strong&gt;两方面特点的命名；指标取值是指标在具体时间、地域、条件下的数量表现，如人的体重，指标名称是体重，指标的取值就是120斤；&lt;/li&gt;
+&lt;li&gt;标签名称通常都是形容词或形容词+名词的结构，标签一般是不可量化的，通常是孤立的，除了基础类标签，通过一定算法加工出来的标签一般都没有单位和量纲。如将超过200斤的称为大胖子。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;分类不同&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对指标的分类： 按照指标计算逻辑，可以将指标分为&lt;strong&gt;原子指标、派生指标、衍生指标&lt;/strong&gt; 三种类型； 按照对事件描述内容的不同，分为&lt;strong&gt;过程性指标和结果性指标&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;对标签的分类： 按照标签的变化性分为&lt;strong&gt;静态标签和动态标&lt;/strong&gt;签； 按照标签的指代和评估指标的不同，可分为定性标签和定量标签；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;指标最擅长的应用是监测、分析、评价和建模。 标签最擅长的应用是标注、刻画、分类和特征提取&lt;/strong&gt;。 特别需要指出的是，由于对结果的标注也是一种标签，所以在自然语言处理和机器学习相关 的算法应用场景下，标签对于监督式学习有重要价值，只是单纯的指标难以做到的。而指标在任 务分配、绩效管理等领域的作用，也是标签无法做到的。&lt;/p&gt;
+&lt;h3 id=&#34;维度和指标的区别联系&#34;&gt;&lt;a href=&#34;#%e7%bb%b4%e5%ba%a6%e5%92%8c%e6%8c%87%e6%a0%87%e7%9a%84%e5%8c%ba%e5%88%ab%e8%81%94%e7%b3%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;维度和指标的区别联系&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;维度就是数据的观察角度，即从&lt;strong&gt;哪个角度去分析问题，看待问题&lt;/strong&gt; 。 指标就是从维度的基础上去&lt;strong&gt;衡量结果值&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;维度：一般是一个离散的值，比如时间维度上每一个独立的日期或地域，因此统计时，可以把维 度相同记录的聚合在一起，应用聚合函数做累加、均值、最大值、最小值等聚合计算。&lt;/li&gt;
+&lt;li&gt;指标：就是被聚合的通计算，即聚合运算的结果，一般是一个连续的值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;自然键与代理键在数仓的使用区别&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e7%84%b6%e9%94%ae%e4%b8%8e%e4%bb%a3%e7%90%86%e9%94%ae%e5%9c%a8%e6%95%b0%e4%bb%93%e7%9a%84%e4%bd%bf%e7%94%a8%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自然键与代理键在数仓的使用区别
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;维度表的唯一主键应该是代理键而不应该是自然键&lt;/strong&gt;。有时建模人员不愿意放弃使用自然键，因为他们希望与操作型代码查询事实表，而不希望与维度表做连接操作。然而，应该避免使用包含业务含义的多维键，因为不管我们做出任何假设最终都可能变得无效，因为&lt;strong&gt;我们控制不了业务库的变动&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;所以数据仓库中维度表与事实表的每个连接应该基于无实际含义的整数代理键。避免使用自然键作为维度表的主键。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;数据集市和数据仓库的关系&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e5%92%8c%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e7%9a%84%e5%85%b3%e7%b3%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据集市和数据仓库的关系
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;数据集市是企业级数据仓库的一个子集，他&lt;strong&gt;主要面向部门级业务&lt;/strong&gt; ，并且只面向某个特定的主题。为了解决灵活性和性能之间的矛盾，数据集市就是数据仓库体系结构中增加的一种小型的部门或工作组级别的数据仓库。数据集市存储为特定用户预先计算好的数据，从而满足用户对性能的需求。数据集市可以在&lt;strong&gt;一定程度上缓解访问数据仓库的瓶颈。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;数据集市和数据仓库的主要区别：&lt;strong&gt;数据仓库是企业级的&lt;/strong&gt;，能为整个企业各个部门的运行提供决策支持手 段；而数据集市则是一种微型的数据仓库,它通常有更少的数据,更少的主题区域,以及更少的历史数据,因 此是部门级的，一般只能为某个局部范围内的管理人员服务，因此也称之为部门级数据仓库。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Hive入门-HQL、表操作、库操作、视图、索引、数据类型</title>
+        <link>/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+        <pubDate>Sun, 14 Apr 2024 21:41:05 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B&#34; &gt;数据类型&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BA%93%E6%93%8D%E4%BD%9C&#34; &gt;库操作&lt;/a&gt;{#%E5%BA%93%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A1%A8%E6%93%8D%E4%BD%9C&#34; &gt;表操作&lt;/a&gt;{#%E8%A1%A8%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%C2%A0%C2%A0&#34; &gt;数据导入导出&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%C2%A0%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9B%E5%BB%BA%E8%A1%A8&#34; &gt;创建表&lt;/a&gt;{#%E5%88%9B%E5%BB%BA%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%B4%E6%97%B6%E8%A1%A8&#34; &gt;临时表&lt;/a&gt;{#%E4%B8%B4%E6%97%B6%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%85%E9%83%A8%E8%A1%A8&#34; &gt;内部表&lt;/a&gt;{#%E5%86%85%E9%83%A8%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%A4%96%E9%83%A8%E8%A1%A8&#34; &gt;外部表&lt;/a&gt;{#%E5%A4%96%E9%83%A8%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%85%E5%A4%96%E9%83%A8%E8%A1%A8%E8%BD%AC%E6%8D%A2&#34; &gt;内外部表转换&lt;/a&gt;{#%E5%86%85%E5%A4%96%E9%83%A8%E8%A1%A8%E8%BD%AC%E6%8D%A2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E8%A1%A8&#34; &gt;分区表&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E6%A1%B6%E8%A1%A8&#34; &gt;分桶表&lt;/a&gt;{#%E5%88%86%E6%A1%B6%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E8%AF%A2%E8%A1%A8&#34; &gt;查询表&lt;/a&gt;{#%E6%9F%A5%E8%AF%A2%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JOIN&#34; &gt;JOIN&lt;/a&gt;{#JOIN-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BF%AE%E6%94%B9%E8%A1%A8&#34; &gt;修改表&lt;/a&gt;{#%E4%BF%AE%E6%94%B9%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%A0%E9%99%A4%E8%A1%A8&#34; &gt;删除表&lt;/a&gt;{#%E5%88%A0%E9%99%A4%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B8%85%E7%A9%BA%E8%A1%A8&#34; &gt;清空表&lt;/a&gt;{#%E6%B8%85%E7%A9%BA%E8%A1%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%89%B9%E4%BE%8B-update%E5%92%8Cdelete%C2%A0&#34; &gt;特例-update和delete&lt;/a&gt;{#%E7%89%B9%E4%BE%8B-update%E5%92%8Cdelete%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A7%86%E5%9B%BE&#34; &gt;视图&lt;/a&gt;{#%E8%A7%86%E5%9B%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A7%86%E5%9B%BE%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0&#34; &gt;视图增删改&lt;/a&gt;{#%E8%A7%86%E5%9B%BE%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%B4%A2%E5%BC%95&#34; &gt;索引&lt;/a&gt;{#%E7%B4%A2%E5%BC%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86&#34; &gt;索引原理&lt;/a&gt;{#%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%B4%A2%E5%BC%95%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0&#34; &gt;索引增删改&lt;/a&gt;{#%E7%B4%A2%E5%BC%95%E5%A2%9E%E5%88%A0%E6%94%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%8A%A8%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95&#34; &gt;设置自动使用索引&lt;/a&gt;{#%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%8A%A8%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%B4%A2%E5%BC%95%E7%BC%BA%E9%99%B7&#34; &gt;索引缺陷&lt;/a&gt;{#%C2%A0%E7%B4%A2%E5%BC%95%E7%BC%BA%E9%99%B7-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;数据类型-e695b0e68daee7b1bbe59e8b&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b-e695b0e68daee7b1bbe59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据类型 {#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B}
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/bac99aab3da81ef11fe70797c68cd91b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;decimal 类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;decimal(11,2) 代表最多有 11 位数字，其中后 2 位是小数，整数部分是 9位；如果整数部分超过 9 位，则这个字段就会变成 null；如果小数部分不足 2 位， 则后面用 0 补齐两位，如果小数部分超过两位，则超出部分四舍五入。也可直接写 decimal，后面不指定位数，默认是 decimal(10,0) 整数 10 位，没有小数
+&lt;strong&gt;map类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;90&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;87&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;63&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nature&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;76&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;78&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nature&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;wangwu&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;89&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;exists&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;delimited&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fields&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;map&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;keys&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;:&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;load&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inpath&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;./data/map1.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;into&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;查询数学⼤于&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;分的学⽣的英语和⾃然成绩：&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;english&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;nature&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;math&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;查看每个⼈的前两科的成绩总和&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;chinese&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;math&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;map1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;struct类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;90&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;87&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;63&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;76&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;60&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;78&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;wangwu&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;89&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;81&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;exists&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;struct1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;natrue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;delimited&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fields&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;导⼊数据：&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;load&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inpath&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;./data/arr1.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;into&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;struct1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;english&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;chinese&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str2&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;score&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;array类型：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;78&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;89&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;92&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;96&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;67&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;75&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;83&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;94&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;王五&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;23&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;exists&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;row&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;delimited&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fields&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;items&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;terminated&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;load&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inpath&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;/data/arr1.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;into&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;结果&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--------+---------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--------+---------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;zhangsan&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;78,89,92,96&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lisi&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;67,75,83,94&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;王五&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;23,12&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--------+---------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;库操作-e5ba93e6938de4bd9c&#34;&gt;&lt;a href=&#34;#%e5%ba%93%e6%93%8d%e4%bd%9c-e5ba93e6938de4bd9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;库操作 {#%E5%BA%93%E6%93%8D%E4%BD%9C}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;创建库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;IF&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;EXISTS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;COMMENT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_comment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LOCATION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hdfs_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WITH&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DBPROPERTIES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;...)];&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;查询库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SHOW&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DATABASES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LIKE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;identifier_with_wildcards&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;注：&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;like通配表达式说明&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;表示任意个任意字符，&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;表示或的关系。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;查看数据库信息&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;DESCRIBE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;EXTENDED&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;修改数据库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;用户可以使用&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;alter&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database命令修改数据库某些信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，其中能够修改的信息包括&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dbproperties&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;location&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;owner&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;user&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。需要注意的是：修改数据库&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;location&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，不会改变当前已有表的路径信息，而只是改变后续创建的新表的默认的父目录。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--修改dbproperties
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DBPROPERTIES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;property_value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;...);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--修改location
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LOCATION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hdfs_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--修改owner user
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;OWNER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;USER&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;user_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;删除数据库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;DROP&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;DATABASE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;IF&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;EXISTS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RESTRICT&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;CASCADE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RESTRICT&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：严格模式，若数据库不为空，则会删除失败，默认为该模式。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;CASCADE&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：级联模式，若数据库不为空，则会将库中的表一并删除。&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;切换当前数据库&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;USE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;database_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;br /&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;表操作-e8a1a8e6938de4bd9c&#34;&gt;&lt;a href=&#34;#%e8%a1%a8%e6%93%8d%e4%bd%9c-e8a1a8e6938de4bd9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;表操作 {#%E8%A1%A8%E6%93%8D%E4%BD%9C}
+&lt;/h2&gt;&lt;p&gt;表有临时表、外部表、内部表（管理表）、分区表，分桶表&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f81716d6afa2533bffaa9034fcdf3a95.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Linux上传文件到hdfs上&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;hdfs dfs -put student.txt
+&lt;strong&gt;基于其他表的结构建表&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;create table teacher2 &lt;strong&gt;like&lt;/strong&gt; teacher;
+&lt;br /&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>Hive本质、架构、玩法</title>
+        <link>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</link>
+        <pubDate>Sun, 14 Apr 2024 12:23:06 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%9C%AC%E8%B4%A8&#34; &gt;Hive本质&lt;/a&gt;{#Hive%E6%9C%AC%E8%B4%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97&#34; &gt;Hive主要有以下3个模块&lt;/a&gt;{#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Metastore&#34; &gt;Metastore&lt;/a&gt;{#Metastore-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9E%B6%E6%9E%84%C2%A0&#34; &gt;架构&lt;/a&gt;{#%E6%9E%B6%E6%9E%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE&#34; &gt;Hive日志配置&lt;/a&gt;{#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B&#34; &gt;HQL执行过程&lt;/a&gt;{#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A&#34; &gt;Hive四种玩法：&lt;/a&gt;{#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1%EF%BC%89CLI&#34; &gt;1）CLI&lt;/a&gt;{#1%EF%BC%89CLI-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2%EF%BC%89HiveServer2&#34; &gt;2）HiveServer2&lt;/a&gt;{#2%EF%BC%89HiveServer2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3%EF%BC%89Beeline&#34; &gt;3）Beeline&lt;/a&gt;{#3%EF%BC%89Beeline-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4%EF%BC%89Web%20UI&#34; &gt;4）Web UI&lt;/a&gt;{#4%EF%BC%89Web%20UI-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hive-本质-hivee69cace8b4a8&#34;&gt;&lt;a href=&#34;#hive-%e6%9c%ac%e8%b4%a8-hivee69cace8b4a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Hive&lt;/strong&gt; &lt;strong&gt;本质&lt;/strong&gt; {#Hive%E6%9C%AC%E8%B4%A8}
+&lt;/h2&gt;&lt;p&gt;Hive是构建在hadoop上的数据仓库，也可以说是一个&lt;strong&gt;操作hdfs文件&lt;/strong&gt; 的客户端，它&lt;strong&gt;可以将结构化的数据文件映射成表&lt;/strong&gt;，并提供类 SQL查询功能，用于查询的 SQL 语句会被转化为 MapReduce 作业，然后提交到 Hadoop 上运行。&lt;strong&gt;Hive执行引擎可以是MapReduce、Spark、Tez，如果是MR，Hive就会把HQL翻译成MR进行数据计算。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由于Hive是针对数据仓库应⽤设计的，⽽数据仓库的内容是读多写少的。因此，Hive中不⽀持 对数据的改写和添加，所有的数据都是在加载的时候中确定好的。&lt;/p&gt;
+&lt;p&gt;Hive不适合⽤于联机事务处理(OLTP)，也不提供实时查询功能。它最适合应⽤在基于⼤量不可变数据的批处理 作业。Hive 的特点是可伸缩（在Hadoop 的集群上动态的添加设备），可扩展、容错、输⼊格式的松散耦合。 Hive 的⼊⼝是DRIVER ，执⾏的SQL语句⾸先提交到DRIVER驱动，然后调COMPILER解释驱动，最终解释成 MapReduce 任务执⾏，最后将结果返回。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;简单、容易上手 (提供了类似 sql 的查询语言 hql)，使得精通 sql 但是不了解 Java 编程的人也能很 好地进行大数据分析；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灵活性高，可以自定义用户函数 (UDF) 和存储格式；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;为超大的数据集设计的计算和存储能力，集群扩展容易;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;4.&lt;strong&gt;统一的元数据管理&lt;/strong&gt;，可与 presto／impala／sparksql 等共享数据；&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;执行延迟高，不适合做数据的实时处理，但适合做海量数据的离线处理。&lt;/li&gt;
+&lt;/ol&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9785a8b5d20da5ab15eb5cf746fa5288.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;hive主要有以下3个模块-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34;&gt;&lt;a href=&#34;#hive%e4%b8%bb%e8%a6%81%e6%9c%89%e4%bb%a5%e4%b8%8b3%e4%b8%aa%e6%a8%a1%e5%9d%97-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive主要有以下3个模块 {#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97}
+&lt;/h2&gt;&lt;h2 id=&#34;户接模块含clihwijdbcthrift-server等来实现对hive的访问cli是hive带-的命令界hwi是hive的个简单界jdbcodbc以及thrift-server可向户提供进-编程的接其中thrift-server是基于thrift软件框架开发的提供hi&#34;&gt;&lt;a href=&#34;#%e6%88%b7%e6%8e%a5%e6%a8%a1%e5%9d%97%e5%90%abclihwijdbcthrift-server%e7%ad%89%e6%9d%a5%e5%ae%9e%e7%8e%b0%e5%af%b9hive%e7%9a%84%e8%ae%bf%e9%97%aecli%e6%98%afhive%e5%b8%a6-%e7%9a%84%e5%91%bd%e4%bb%a4%e7%95%8chwi%e6%98%afhive%e7%9a%84%e4%b8%aa%e7%ae%80%e5%8d%95%e7%95%8cjdbcodbc%e4%bb%a5%e5%8f%8athrift-server%e5%8f%af%e5%90%91%e6%88%b7%e6%8f%90%e4%be%9b%e8%bf%9b-%e7%bc%96%e7%a8%8b%e7%9a%84%e6%8e%a5%e5%85%b6%e4%b8%adthrift-server%e6%98%af%e5%9f%ba%e4%ba%8ethrift%e8%bd%af%e4%bb%b6%e6%a1%86%e6%9e%b6%e5%bc%80%e5%8f%91%e7%9a%84%e6%8f%90%e4%be%9bhi&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;**⽤户接⼝模块：**含CLI、HWI、JDBC、Thrift Server等，⽤来实现对Hive的访问。CLI是Hive⾃带 的命令⾏界⾯；HWI是Hive的⼀个简单⽹⻚界⾯；JDBC、ODBC以及Thrift Server可向⽤户提供进 ⾏编程的接⼝，其中Thrift Server是基于Thrift软件框架开发的，提供Hi
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>Hive调优</title>
+        <link>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</link>
+        <pubDate>Sat, 13 Apr 2024 20:49:38 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn和MR资源配置&lt;/a&gt;{#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn资源配置&lt;/a&gt;{#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;MR资源配置&lt;/a&gt;{#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92&#34; &gt;Explain查看执行计划&lt;/a&gt;{#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96&#34; &gt;分组聚合优化&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E&#34; &gt;优化前VS优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E4%BC%98%E5%8C%96&#34; &gt;Join优化&lt;/a&gt;{#Join%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89&#34; &gt;Common Join（普通join）&lt;/a&gt;{#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%20Join&#34; &gt;Map Join&lt;/a&gt;{#Map%20Join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%C2%A0&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA&#34; &gt;法一：hint提示&lt;/a&gt;{#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91&#34; &gt;法二：自动触发&lt;/a&gt;{#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Bucket%20Map%20Join&#34; &gt;Bucket Map Join&lt;/a&gt;{#Bucket%20Map%20Join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#hint%E6%8F%90%E7%A4%BA%C2%A0&#34; &gt;hint提示&lt;/a&gt;{#hint%E6%8F%90%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Sort%20Merge%20Bucket%20Map%20Join%28SMB%20map%20join%29&#34; &gt;Sort Merge Bucket Map Join(SMB map join)&lt;/a&gt;{#Sort%20Merge%20Bucket%20Map%20Join(SMB%20map%20join)-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96&#34; &gt;数据倾斜优化&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;分组聚合导致的数据倾斜&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map-Side%E8%81%9A%E5%90%88&#34; &gt;Map-Side聚合&lt;/a&gt;{#Map-Side%E8%81%9A%E5%90%88-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Skew-GroupBy%E4%BC%98%E5%8C%96&#34; &gt;Skew-GroupBy优化&lt;/a&gt;{#Skew-GroupBy%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8D&#34; &gt;优化前&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0&#34; &gt;优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;Join导致的数据倾斜&lt;/a&gt;{#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#map%20join&#34; &gt;map join&lt;/a&gt;{#map%20join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#skew%20join&#34; &gt;skew join&lt;/a&gt;{#skew%20join-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96&#34; &gt;任务并行度优化&lt;/a&gt;{#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Map端并行度&lt;/a&gt;{#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Reduce端并行度&lt;/a&gt;{#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96&#34; &gt;小文件合并优化&lt;/a&gt;{#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Map端输入的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Reduce端输出的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96&#34; &gt;其他优化&lt;/a&gt;{#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#CBO%E4%BC%98%E5%8C%96&#34; &gt;CBO优化&lt;/a&gt;{#CBO%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8&#34; &gt;谓词下推&lt;/a&gt;{#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2&#34; &gt;矢量化查询&lt;/a&gt;{#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Fetch%E6%8A%93%E5%8F%96&#34; &gt;Fetch抓取&lt;/a&gt;{#Fetch%E6%8A%93%E5%8F%96-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F&#34; &gt;本地模式&lt;/a&gt;{#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C&#34; &gt;并行执行&lt;/a&gt;{#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F&#34; &gt;严格模式&lt;/a&gt;{#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e5%92%8cmr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne5928cmre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h2&gt;&lt;p&gt;配置项参考官网：&lt;a class=&#34;link&#34; href=&#34;https://apache.github.io/hadoop/&#34;  title=&#34;https://apache.github.io/hadoop/&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://apache.github.io/hadoop/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;yarn资源配置-yarne8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h3&gt;&lt;p&gt;修改yarn-site.xml,调整的Yarn参数均与CPU、内存等资源有关，配置如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.memory-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;65536&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.cpu-vcores&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;16&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.maximum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;16384&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最大内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.minimum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;value&amp;gt;512&amp;lt;/value&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最小内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;修改后重新分发该配置文件并重启Yarn&lt;/p&gt;
+&lt;h3 id=&#34;mr资源配置-mre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#mr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-mre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+&lt;/h3&gt;&lt;p&gt;MapReduce资源配置主要包括Map Task的内存和CPU核数，以及Reduce Task的内存和CPU核数。核心配置参数如下：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;{#_Hlk110418691}&lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.memory.mb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Map Task申请的container容器内存大小，其默认值为1024。该值不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.map.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt; &lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Map Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3）&lt;/strong&gt; &lt;strong&gt;mapreduce.reduce.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4）mapreduce.reduce.memory.mb&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器内存大小，其默认值为1024。该值同样不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.reduce.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34;&gt;&lt;a href=&#34;#explain%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}
+&lt;/h2&gt;&lt;p&gt;Explain用于呈现HQL语句的详细执行步骤，由一系列Stage组成，简单的理解为HQL查询语句的不同执行阶段，这一系列Stage具有依赖关系，每个Stage对应一个MapReduce Job或一个文件系统操作等。&lt;/p&gt;
+&lt;p&gt;若某个Stage对应的一个MapReduce Job，则其Map端和Reduce端的计算逻辑分别由Map Operator Tree和Reduce Operator Tree进行描述，Operator Tree由一系列的Operator组成，一个Operator代表在Map或Reduce阶段的一个单一的逻辑操作，例如TableScan Operator，Select Operator，Join Operator等。具体如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/4da9891258984bbe1a892f0ccafcb92b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;常见的Operator及其作用如下&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;TableScan：表扫描操作，通常map端第一个操作肯定是表扫描操作&lt;/p&gt;
+&lt;p&gt;Select Operator：选取操作&lt;/p&gt;
+&lt;p&gt;Group By Operator：map端的分组聚合操作，在后面的分组聚合中会讲到&lt;/p&gt;
+&lt;p&gt;Reduce Output Operator：输出到 reduce 操作&lt;/p&gt;
+&lt;p&gt;Filter Operator：过滤操作&lt;/p&gt;
+&lt;p&gt;Join Operator：join 操作&lt;/p&gt;
+&lt;p&gt;File Output Operator：文件输出操作&lt;/p&gt;
+&lt;p&gt;Fetch Operator 客户端获取数据操作
+&lt;strong&gt;Explain语法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;EXPLAIN &lt;/p&gt;
+\[FORMATTED \| EXTENDED \| DEPENDENCY\]&lt;p&gt; query-sql&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FORMATTED：将执行计划以JSON字符串的形式输出&lt;/li&gt;
+&lt;li&gt;EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息&lt;/li&gt;
+&lt;li&gt;DEPENDENCY：输出执行计划读取的表及分区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
+&lt;p&gt;explain formatted&lt;/p&gt;
+&lt;p&gt;select user_id,count(*) from order_detail group by user_id;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/d475c4d504540aaa12554c7c9480202c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96-e58886e7bb84e8819ae59088e4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;分组聚合优化&lt;/strong&gt; {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}
+&lt;/h2&gt;&lt;p&gt;分组聚合是通过MR Job实现的，map端读取数据，并按照分组字段分区，通过shuffle，把数据发到reduce，各组数据在reduce端完成最终的聚合运算。&lt;/p&gt;
+&lt;p&gt;分组聚合的优化主要围绕减少shuffle数据量进行，具体做法是map-side聚合。map-side聚合是在map端维护一个hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到reduce端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个map端的部分聚合过程，以减少shuffle的工作量，进而减少reduce端的聚合工作量。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;map-side聚合相关参数如下&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用map-side聚合，默认是true&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr=true;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;用于检测源表数据是否适合进行map-side聚合。检测的方法是：系统自动先对若干条数据进行map-side聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行map-side聚合；否则，认为该表数据不适合进行map-side聚合，后续数据便不再进行map-side聚合。0.5意味着平均有2条数据可以聚合成1条，1意味着没有出现任何的聚合&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.min.reduction=0.5;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;用于&lt;strong&gt;hive.map.aggr.hash.min.reduction=0.5&lt;/strong&gt; 检测源表是否适合map-side聚合的条数。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.groupby.mapaggr.checkinterval=100000;&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&amp;ndash;map-side聚合所用的hash table占用map task堆内存的最大比例，若超出该值，则会对hash table进行一次flush。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.force.flush.memory.threshold=0.7;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8dvs%e4%bc%98%e5%8c%96%e5%90%8e-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}
+&lt;/h3&gt;&lt;p&gt;set hive.map.aggr=false关闭分组聚合优化，查看执行效果，在Map端没有了Group By Operator&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/bef7cc2560feaf0c03af5c376dadbac4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;set hive.map.aggr=true开启分组聚合优化，查看执行效果，在Map端有了Group By Operator，&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd582dc168193eedd0302e6cdccc7d17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;若发生map-side优化，优化后比优化前的HQL执行耗时应该有所减少，且map的output数量明显小于input数量。&lt;/p&gt;
+&lt;p&gt;若没有触发map-side，则map的output数量虽然比input数量有所减少但可以忽略不计。具体有没有触发map-side可以去web UI界面查看map日志。&lt;/p&gt;
+&lt;p&gt;注意！！map-side聚合不够智能，即map端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据&lt;strong&gt;分区分桶&lt;/strong&gt;，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;1）select province_id,count(*) from order_detail group by province_id;&lt;/p&gt;
+&lt;p&gt;该语句查询所有订单，根据省份id分组聚合，省份只有34个，这样map后的数据应该只有34条，所以聚合结果是应该是比较可观的。所以group by 的基数越小，一般越适合聚合。&lt;/p&gt;
+&lt;p&gt;2）select product_id,count(*) from order_detail group by product_id;&lt;/p&gt;
+&lt;p&gt;若product_id这一分组字段在order_detail表中分布比较散，那么可能会导致hive在表中切片抽样进行map-side检测的时候测试聚合结果&amp;gt;0.5，那么最终就没有使用map-side聚合。所以说如果能保证抽样数据的测试结果&amp;lt;=0.5，就会实现分组聚合，当然也可以调整&lt;strong&gt;hive.map.aggr.hash.min.reduction&lt;/strong&gt; 的值以提高map-side的命中率。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;若100w&lt;/strong&gt; &lt;strong&gt;的数据集分组聚合之后的输出&lt;/strong&gt; &lt;strong&gt;&amp;gt;100w,&lt;/strong&gt; &lt;strong&gt;可能的原因是多次触发了&lt;/strong&gt; &lt;strong&gt;hash table&lt;/strong&gt; &lt;strong&gt;的&lt;/strong&gt; &lt;strong&gt;flush&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;join优化-joine4bc98e58c96&#34;&gt;&lt;a href=&#34;#join%e4%bc%98%e5%8c%96-joine4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Join优化 {#Join%E4%BC%98%E5%8C%96}
+&lt;/h2&gt;&lt;p&gt;Join优化就是控制HQL语句走哪种join算法，这些join算法有的快，有的慢，有的激进，有的保守。我们要做的就是让HQL走最适合自己的join算法。&lt;/p&gt;
+&lt;h3 id=&#34;common-join普通join-common20joinefbc88e699aee9809ajoinefbc89&#34;&gt;&lt;a href=&#34;#common-join%e6%99%ae%e9%80%9ajoin-common20joinefbc88e699aee9809ajoinefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}
+&lt;/h3&gt;&lt;h4 id=&#34;原理-e58e9fe79086&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-e58e9fe79086&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理 {#%E5%8E%9F%E7%90%86}
+&lt;/h4&gt;&lt;p&gt;hive中最稳定的join算法，其通过一个MapReduce Job完成一个join操作。Map端负责读取join操作所需表的数据，并按照关联字段进行分区，通过Shuffle，将其发送到Reduce端，相同key的数据在Reduce端完成最终的Join操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c93be2b01fce05ed73c439a062480a2f.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表&#34;&gt;&lt;a href=&#34;#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f-%e7%9a%84%e6%98%afhql%e8%af%ad%e5%8f%a5%e4%b8%ad%e7%9a%84join%e6%93%8d%e4%bd%9c%e5%92%8c%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92%e4%b8%ad%e7%9a%84common-join%e4%bb%bb%e5%8a%a1%e5%b9%b6%e9%9d%9e%e4%b8%80%e5%af%b9%e4%b8%80%e7%9a%84%e5%85%b3%e7%b3%bb%e5%8d%b3hql%e4%b8%ad%e7%9a%84a%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;需要&lt;strong&gt;注意&lt;/strong&gt; 的是，&lt;strong&gt;HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系&lt;/strong&gt;，即HQL中的A&lt;strong&gt;表&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

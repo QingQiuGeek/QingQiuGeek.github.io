@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Zookeeper on 青秋博客</title>
+        <link>/zh-cn/categories/zookeeper/</link>
+        <description>Recent content in Zookeeper on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sun, 05 May 2024 17:42:50 +0000</lastBuildDate><atom:link href="/zh-cn/categories/zookeeper/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Kafka入门到入土——万字详解，图文并茂</title>
+        <link>/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/</link>
+        <pubDate>Sun, 05 May 2024 17:42:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89&#34; &gt;消息队列（MQ）&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF&#34; &gt;消息队列一般应用场景&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JMS&#34; &gt;JMS&lt;/a&gt;{#JMS-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0JMS%E6%A8%A1%E5%9E%8B&#34; &gt;JMS模型&lt;/a&gt;{#%C2%A0JMS%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89&#34; &gt;点对点模型（peer to peer）&lt;/a&gt;{#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B&#34; &gt;发布订阅模型&lt;/a&gt;{#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Kafka%E6%9E%B6%E6%9E%84&#34; &gt;Kafka架构&lt;/a&gt;{#Kafka%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Broker&#34; &gt;Broker&lt;/a&gt;{#Broker-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Controller%E9%80%89%E4%B8%BE&#34; &gt;Controller选举&lt;/a&gt;{#Controller%E9%80%89%E4%B8%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0&#34; &gt;Broker上下线&lt;/a&gt;{#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B&#34; &gt;Broker工作流程&lt;/a&gt;{#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Producer&#34; &gt;Producer&lt;/a&gt;{#Producer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Consumer&#34; &gt;Consumer&lt;/a&gt;{#Consumer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Consumer%20Group&#34; &gt;Consumer Group&lt;/a&gt;{#Consumer%20Group-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Topic&#34; &gt;Topic&lt;/a&gt;{#Topic-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Partition%E5%88%86%E5%8C%BA&#34; &gt;Partition分区&lt;/a&gt;{#Partition%E5%88%86%E5%8C%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E5%A5%BD%E5%A4%84%C2%A0&#34; &gt;分区好处&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E5%A5%BD%E5%A4%84%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5&#34; &gt;生产者发送消息的分区策略&lt;/a&gt;{#%C2%A0%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8Segment&#34; &gt;文件存储Segment&lt;/a&gt;{#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8Segment-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E7%9A%84%E5%89%AF%E6%9C%AC&#34; &gt;分区的副本&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E7%9A%84%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Why%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC&#34; &gt;Why分区副本&lt;/a&gt;{#Why%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E2%80%8B%E7%BC%96%E8%BE%91&#34; &gt;手动调整分区副本存储​编辑&lt;/a&gt;{#%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%89%AF%E6%9C%AC%E5%AD%98%E5%82%A8%E2%80%8B%E7%BC%96%E8%BE%91-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACLeader%E5%88%86%E5%8C%BA%E8%87%AA%E5%8A%A8%E5%B9%B3%E8%A1%A1&#34; &gt;副本Leader分区自动平衡&lt;/a&gt;{#%E5%89%AF%E6%9C%ACLeader%E5%88%86%E5%8C%BA%E8%87%AA%E5%8A%A8%E5%B9%B3%E8%A1%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%A2%9E%E5%8A%A0%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%C2%A0&#34; &gt;增加副本数量&lt;/a&gt;{#%E5%A2%9E%E5%8A%A0%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACLeader%E9%80%89%E4%B8%BE&#34; &gt;副本Leader选举&lt;/a&gt;{#%E5%89%AF%E6%9C%ACLeader%E9%80%89%E4%B8%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACLeader%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D&#34; &gt;副本Leader故障恢复&lt;/a&gt;{#%E5%89%AF%E6%9C%ACLeader%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%89%AF%E6%9C%ACFollower%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%C2%A0&#34; &gt;副本Follower故障恢复&lt;/a&gt;{#%E5%89%AF%E6%9C%ACFollower%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0ISR%E6%9C%BA%E5%88%B6&#34; &gt;ISR机制&lt;/a&gt;{#%C2%A0ISR%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%8D%E5%AE%8C%E5%85%A8%E9%A6%96%E9%A2%86%E9%80%89%E4%B8%BE&#34; &gt;不完全首领选举&lt;/a&gt;{#%E4%B8%8D%E5%AE%8C%E5%85%A8%E9%A6%96%E9%A2%86%E9%80%89%E4%B8%BE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%80%E5%B0%91%E5%90%8C%E6%AD%A5%E5%89%AF%E6%9C%AC&#34; &gt;最少同步副本&lt;/a&gt;{#%E6%9C%80%E5%B0%91%E5%90%8C%E6%AD%A5%E5%89%AF%E6%9C%AC-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82%C2%A0&#34; &gt;数据请求&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6&#34; &gt;请求机制&lt;/a&gt;{#%E8%AF%B7%E6%B1%82%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E8%AF%A6%E8%A7%A3&#34; &gt;生产者详解&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E8%AF%A6%E8%A7%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B&#34; &gt;生产者发送消息的过程&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%9A%84%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%C2%A0&#34; &gt;消息可靠性&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ACK%E5%BA%94%E7%AD%94%C2%A0&#34; &gt;ACK应答&lt;/a&gt;{#ACK%E5%BA%94%E7%AD%94%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E6%95%B0%E6%8D%AE%E9%87%8D%E8%AF%95&#34; &gt;数据重试&lt;/a&gt;{#%C2%A0%E6%95%B0%E6%8D%AE%E9%87%8D%E8%AF%95-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E4%B9%B1%E5%BA%8F%C2%A0&#34; &gt;数据乱序&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E4%B9%B1%E5%BA%8F%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81&#34; &gt;同步发送&lt;/a&gt;{#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81&#34; &gt;异步发送&lt;/a&gt;{#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E6%8F%90%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F&#34; &gt;生产者提高吞吐量&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E6%8F%90%E9%AB%98%E5%90%9E%E5%90%90%E9%87%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%C2%A0&#34; &gt;压缩算法&lt;/a&gt;{#%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3&#34; &gt;消费者详解&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#push%26pull&#34; &gt;push&amp;amp;pull&lt;/a&gt;{#push%26pull-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E8%B0%83%E5%BA%A6%E5%99%A8%C2%A0&#34; &gt;消费者组调度器&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84%E8%B0%83%E5%BA%A6%E5%99%A8%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E9%85%8D%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5%C2%A0&#34; &gt;消费者分配分区策略&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E5%88%86%E9%85%8D%E5%88%86%E5%8C%BA%E7%AD%96%E7%95%A5%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85Leader%C2%A0&#34; &gt;消费者Leader&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85Leader%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1&#34; &gt;分区再均衡&lt;/a&gt;{#%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%9B%91%E5%90%AC%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1%C2%A0&#34; &gt;监听分区再均衡&lt;/a&gt;{#%E7%9B%91%E5%90%AC%E5%88%86%E5%8C%BA%E5%86%8D%E5%9D%87%E8%A1%A1%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%81%8F%E7%A7%BB%E9%87%8FOffset&#34; &gt;偏移量Offset&lt;/a&gt;{#%E5%81%8F%E7%A7%BB%E9%87%8FOffset-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#LSO&#34; &gt;LSO&lt;/a&gt;{#LSO-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#LEO&#34; &gt;LEO&lt;/a&gt;{#LEO-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HW&#34; &gt;HW&lt;/a&gt;{#HW-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F&#34; &gt;手动提交偏移量&lt;/a&gt;{#%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%8C%E6%AD%A5%E6%8F%90%E4%BA%A4&#34; &gt;同步提交&lt;/a&gt;{#%E5%90%8C%E6%AD%A5%E6%8F%90%E4%BA%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4&#34; &gt;异步提交&lt;/a&gt;{#%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F&#34; &gt;自动提交偏移量&lt;/a&gt;{#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E5%81%8F%E7%A7%BB%E9%87%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%88%AA%E8%87%B3%20%E5%B0%9A%E7%A1%85%E8%B0%B7kafka3.x%20P39&#34; &gt;截至 尚硅谷kafka3.x P39&lt;/a&gt;{#%E6%88%AA%E8%87%B3%20%E5%B0%9A%E7%A1%85%E8%B0%B7kafka3.x%20P39-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;p&gt;Kafka是一个由Scala和Java语言开发的，经典高吞吐量的分布式消息发布和订阅系统，也是大数据技术领域中用作数据交换的核心组件之一。它具有以下特点：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;支持消息的发布和订阅，类似于 RabbtMQ、ActiveMQ 等消息队列；&lt;/li&gt;
+&lt;li&gt;支持数据实时处理；&lt;/li&gt;
+&lt;li&gt;能保证消息的可靠性投递；&lt;/li&gt;
+&lt;li&gt;支持消息的持久化存储，并通过多副本分布式的存储方案来保证消息的容错；&lt;/li&gt;
+&lt;li&gt;高吞吐率，单 Broker 可以轻松处理数千个分区以及每秒百万级的消息量；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;消息队列mq-e6b688e681afe9989fe58897efbc88mqefbc89&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97mq-e6b688e681afe9989fe58897efbc88mqefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列（MQ） {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88MQ%EF%BC%89}
+&lt;/h2&gt;&lt;p&gt;Kafka软件最初的设计就是专门用于数据传输的消息系统，类似功能的软件有RabbitMQ、ActiveMQ、RocketMQ等，这些软件的核心功能是传输数据，而Java中如果想要实现数据传输功能，那么这个软件一般需要遵循Java消息服务技术规范JMS。前面提到的ActiveMQ软件就完全遵循了JMS技术规范，而RabbitMQ是遵循了类似JMS规范并兼容JMS规范的跨平台的AMQP规范。除了上面描述的JMS，AMQP外，还有一种用于物联网小型设备之间传输消息的MQTT通讯协议。&lt;/p&gt;
+&lt;p&gt;Kafka拥有作为一个消息系统应该具备的功能，但是却有着独特的设计。&lt;strong&gt;Kafka借鉴了JMS规范的思想，但是却并没有完全遵循JMS规范&lt;/strong&gt;。这也恰恰是软件名称为Kafka，而不是KafkaMQ的原因。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9fb6defea02f0b37752ca1c4782231e4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;消息队列一般应用场景-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%b8%80%e8%88%ac%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af-e6b688e681afe9989fe58897e4b880e888ace5ba94e794a8e59cbae699af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列一般应用场景 {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%80%E8%88%AC%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;**应用耦合：**多应用间通过消息队列对同一消息进行处理，避免调用接口失败导致整个过程失败。&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/2f16f6101cd2b4bb63436228734e155b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;**异步处理：**多应用对消息队列中同一消息进行处理，应用间并发处理消息，相比串行处理，减少处理时间&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/a55ab7be057ab04a981105f917581112.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;限流削峰：&lt;/strong&gt; 广泛应用于秒杀或抢购活动中，避免流量过大导致应用系统挂掉的情况。该方法有如下优点：
+&lt;ul&gt;
+&lt;li&gt;1.请求先入消息队列，而不是由业务处理系统直接处理，做了一次缓冲,极 大地减少了业务处理系统的压力；&lt;/li&gt;
+&lt;li&gt;2.队列长度可以做限制，事实上，秒杀时，后入队列的用户无法秒杀到商品，这些请求可以直接被抛弃，返回活动已结束或商品已售完信息；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/257e558241daec39757876a0891b6458.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;消息驱动的系统：&lt;/strong&gt; 系统分为消息队列、消息生产者、消息消费者，生产者 负责产生消息，消费者(可能有多个)负责对消息进行处理。&lt;strong&gt;具体场景&lt;/strong&gt;：用户新上传了一批照片，人脸识别系统需要对这个用户的所有照片进行聚类，聚类完成后由对账系统重新生成用户的人脸索引(加快查询)。这三个子 系统间由消息队列连接起来，前一个阶段的处理结果放入队列中，后一个阶段从 队列中获取消息继续处理。&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/e7a0846fd5fe97485958c48ddb466a5d.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;该方法有如下优点：1.避免了直接调用下一个系统导致当前系统失败； 2.每个子系统对于消息的处理方式可以更为灵活，可以选择收到消息时就处理，可以选择定时处理，也可以划分时间段按不同处理速度处理；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;JMS&#34;&gt;&lt;a href=&#34;#JMS&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS
+&lt;/h3&gt;&lt;p&gt;JMS类似于JDBC，是java平台的消息中间件通用规范，定义了系统和系统之间传输消息的接口。&lt;/p&gt;
+&lt;p&gt;为了实现系统和系统之间的数据传输，JMS规范中定义很多用于通信的组件：&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/285ce9d7a2a8f1e6ac77037c2f05e82b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JMS Producer&lt;/strong&gt; **：**JMS消息生产者。所谓的生产者，就是生产数据的客户端应用程序，这些应用通过JMS接口发送JMS消息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JMS Provider&lt;/strong&gt;：JMS消息提供者。其实就是实现JMS接口和规范的消息中间件，也就是我们提供消息服务的软件系统，比如RabbitMQ、ActiveMQ、Kafka。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JMS Message&lt;/strong&gt;：JMS消息。这里的消息指的就是数据。一般采用Java数据模型进行封装，其中包含消息头，消息属性和消息主体内容。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JMS Consumer&lt;/strong&gt;：JMS消息消费者。所谓的消费者，就是从消息提供者中获取数据的客户端应用程序，这些应用通过JMS接口接收JMS消息。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;jms模型-c2a0jmse6a8a1e59e8b&#34;&gt;&lt;a href=&#34;#jms%e6%a8%a1%e5%9e%8b-c2a0jmse6a8a1e59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS模型 {#%C2%A0JMS%E6%A8%A1%E5%9E%8B}
+&lt;/h4&gt;&lt;h5 id=&#34;点对点模型peer-to-peer-e782b9e5afb9e782b9e6a8a1e59e8befbc88peer20to20peerefbc89&#34;&gt;&lt;a href=&#34;#%e7%82%b9%e5%af%b9%e7%82%b9%e6%a8%a1%e5%9e%8bpeer-to-peer-e782b9e5afb9e782b9e6a8a1e59e8befbc88peer20to20peerefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;点对点模型（peer to peer） {#%E7%82%B9%E5%AF%B9%E7%82%B9%E6%A8%A1%E5%9E%8B%EF%BC%88peer%20to%20peer%EF%BC%89}
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd0746d5877a27d6ecaa045fee8dc601.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个消息只有一个接收者（Consumer）(即一旦被消费，就会被删除)；&lt;/li&gt;
+&lt;li&gt;发送者和接发收者间没有依赖性，发送者发送消息之后，不管有没有接收者在运行，都不会影响到发送者下次发送消息；&lt;/li&gt;
+&lt;li&gt;接收者在成功接收消息之后需向队列应答成功，以便消息队列删除当前接 收的消息&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;发布订阅模型-e58f91e5b883e8aea2e99885e6a8a1e59e8b&#34;&gt;&lt;a href=&#34;#%e5%8f%91%e5%b8%83%e8%ae%a2%e9%98%85%e6%a8%a1%e5%9e%8b-e58f91e5b883e8aea2e99885e6a8a1e59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;发布订阅模型 {#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%9E%8B}
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/0bdabc2f116a00b4e787472f14c7c820.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个消息可以有多个订阅者，但是订阅者必须来自不同的消费者组；&lt;/li&gt;
+&lt;li&gt;针对某个主题（Topic）的订阅者，它必须创建一个订阅者之后，才能消费发布者的消息。&lt;/li&gt;
+&lt;li&gt;为了消费消息，订阅者需要提前订阅该角色主题，并保持在线运行；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Kafka采用就是这种模型。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;kafka架构-kafkae69eb6e69e84&#34;&gt;&lt;a href=&#34;#kafka%e6%9e%b6%e6%9e%84-kafkae69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Kafka架构 {#Kafka%E6%9E%B6%E6%9E%84}
+&lt;/h2&gt;&lt;p&gt;在 Kafka 2.8.0 版本，移除了对 Zookeeper 的依赖，通过&lt;strong&gt;Kraft模式&lt;/strong&gt; 进行自己的集群管理，使用 Kafka&lt;strong&gt;内部的 Quorum 控制器&lt;/strong&gt;来取代 ZooKeeper管理元数据，这样我们无需维护zk集群，只要维护Kafka集群就可以了，节省运算资源。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;kafka基本数据单元被称为 message(消息)&lt;/strong&gt;，为减少网络开销，提高效率，多个消息会被放入同一批次(Batch) 中后再写入。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f0678a5c5c02bd632d1b71553fd9fa4c.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;Broker&#34;&gt;&lt;a href=&#34;#Broker&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Broker
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;kafka 集群中包含多个服务实例（节点），这种服务实例被称为 broker（一个 broker 就是一个节点/一个服务器），每个 broker 都有一个唯一标识 broker.id，用于标识自己在集群中的身份，可以在配置文件 server.properties 中进行配置，或由程序自动生成。&lt;/li&gt;
+&lt;li&gt;Broker 接收来自生产者的消息，为消息设置偏移量，并提交消息到磁盘保存。Broker 为消费者提供服务，对读取分区的请求做出响应，返回已经提交到磁盘的消息。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;controller选举-controllere98089e4b8be&#34;&gt;&lt;a href=&#34;#controller%e9%80%89%e4%b8%be-controllere98089e4b8be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Controller选举 {#Controller%E9%80%89%E4%B8%BE}
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;每一个集群都会选举出一个 Broker作为&lt;strong&gt;集群控制器&lt;/strong&gt; **(Controller)，它负责分区 Leader 选举，还负责管理主题分区及其副本的状态、元数据管理。**如果在运行过程中，Controller节点出现了故障，那么Kafka会依托于ZooKeeper软件选举其他的节点作为新的Controller，让Kafka集群实现高可用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特殊情况&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Controller节点并没有宕掉，而是因为网络的抖动，不稳定，导致和ZooKeeper之间的会话超时，那么此时，整个Kafka集群就会认为之前的Controller已经下线（退出）从而选举出新的Controller，而之前的Controller的网络又恢复了，以为自己还是Controller了，继续管理整个集群，那么此时，整个Kafka集群就有两个controller进行管理，那么其他的broker就懵了，不知道听谁的了，这种情况，我们称之为脑裂现象，为了解决这个问题，Kafka通过一个任期（epoch:纪元）的概念来解决，也就是说，每一个Broker当选Controller时，会告诉当前Broker是第几任Controller，一旦重新选举时，这个任期会自动增1，那么不同任期的Controller的epoch值是不同的，那么旧的controller一旦发现集群中有新任controller的时候，那么它就会完成退出操作（清空缓存，中断和broker的连接，并重新加载最新的缓存），让自己重新变成一个普通的Broker。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;broker上下线-brokere4b88ae4b88be7babfc2a0&#34;&gt;&lt;a href=&#34;#broker%e4%b8%8a%e4%b8%8b%e7%ba%bf-brokere4b88ae4b88be7babfc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Broker上下线 {#Broker%E4%B8%8A%E4%B8%8B%E7%BA%BF%C2%A0}
+&lt;/h4&gt;&lt;p&gt;Controller 在初始化时，会利用 ZK 的 watch 机制注册很多不同类型的监听器，当监听的事件被触发时，Controller 就会触发相应的操作。Controller 在初始化时，会注册多种类型的监听器，主要有以下几种：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;/kafka/admin/reassign_partitions 节点，用于分区副本迁移的监听&lt;/li&gt;
+&lt;li&gt;/kafka/isr_change_notification 节点，用于 Partition ISR 变动的监听&lt;/li&gt;
+&lt;li&gt;/kafka/admin/preferred_replica_election 节点，用于需要进行 Partition 最优 leader 选举的监听&lt;/li&gt;
+&lt;li&gt;/kafka/brokers/topics 节点，用于 Topic 新建的监听&lt;/li&gt;
+&lt;li&gt;/kafka/brokers/topics/TOPIC_NAME 节点，用于 Topic Partition 扩容的监听&lt;/li&gt;
+&lt;li&gt;/kafka/admin/delete_topics 节点，用于 Topic 删除的监听&lt;/li&gt;
+&lt;li&gt;/kafka/brokers/ids 节点，用于 Broker 上下线的监听，记录有哪些kafka服务器在线。&lt;/li&gt;
+&lt;li&gt;/kafka/controller节点，辅助选举leader&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/6eacf94f1216ffd1894cad366ae0a0ca.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;每台 Broker 在上线时，都会与ZK建立一个建立一个session，并在 /brokers/ids下注册一个节点，节点名字就是broker id，这个节点是临时节点，该节点内部会有这个 Broker 的详细节点信息。Controller会监听/brokers/ids这个路径下的所有子节点，如果有新的节点出现，那么就代表有新的Broker上线，如果有节点消失，就代表有broker下线，Controller会进行相应的处理，Kafka就是利用ZK的这种watch机制及临时节点的特性来完成集群 Broker的上下线。无论Controller监听到的哪一种节点的变化，都会进行相应的处理，同步整个集群元数据。&lt;/p&gt;
+&lt;h4 id=&#34;broker工作流程-brokere5b7a5e4bd9ce6b581e7a88b&#34;&gt;&lt;a href=&#34;#broker%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b-brokere5b7a5e4bd9ce6b581e7a88b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Broker工作流程 {#Broker%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B}
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/afd0a4e19e5449dd0cfa84fe3c8213ed.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;Producer&#34;&gt;&lt;a href=&#34;#Producer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Producer
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;一般情况下，生产者在把消息均衡地分布到在主题的所有分区上，而并不关心消息会被写到哪个分区。如果我们想要把消息写到指定的分区，可以通过&lt;strong&gt;自定义分区器&lt;/strong&gt;来实现。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Consumer&#34;&gt;&lt;a href=&#34;#Consumer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Consumer
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;消费者一定是归属于某个消费组中的&lt;/strong&gt;，消费者可以订阅一或多个主题，并按照分区中消息的顺序来读取。消费者通过检查消息的偏移量 (offset) 来区分读取过的消息。偏移量是一个不 断递增的数值，在创建消息时，Kafka 会把它添加到其中，在给定的分区里，每个消息的偏移量都是唯一的。消费者把每个分区最后读取的偏移量保存在 Zookeeper 或 Kafka 上，如果消费者关闭或者重启，它还可以重新获取该偏移量，以保证读取状态不会丢失。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;consumer-group-consumer20group&#34;&gt;&lt;a href=&#34;#consumer-group-consumer20group&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Consumer Group {#Consumer%20Group}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;消费者组由一个或者多个消费者组成，&lt;strong&gt;同一个组中的消费者对于同一条消息只消费一次。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;每个消费者组都有一个 ID，即 group ID。组内的所有消费者协调在一起来消费 一个订阅主题的所有分区。当然，&lt;strong&gt;每个分区只能由同一个消费组内的一个消费者来消费，但可以由不同的消费组来消费。partition 数量决定了每个 consumer group 中并发消费者的最大数。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;因此要合理设置消费者组中的消费者数量，避免出现消费者闲置。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Topic&#34;&gt;&lt;a href=&#34;#Topic&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Topic
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Kafka 的消息通过 Topics(主题) 进行分类，Kafka中有两个固定的，用于记录消费者偏移量和事务处理的主题，一个主题可以被分为若干个 Partitions(分区)，一个分区就是 一个提交日志 (commit log)。消息以追加的方式写入分区，然后以先入先出的顺序读取。&lt;strong&gt;Kafka 通过分区来实现数据的冗余和伸缩性，分区可以分布在不同的服务器上，这意味着一个 Topic 可以横跨多个服务器，以提供比单个服务器更强大的性能&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;由于一个 Topic 包含多个分区，因此无法在整个 Topic 范围内保证消息的顺序性，但可以保证消息在单个分区内的顺序性。&lt;/strong&gt;&lt;/p&gt;
+&lt;br /&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>大数据—Zookeeper集群入门及使用</title>
+        <link>/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
+        <pubDate>Fri, 19 Apr 2024 16:43:51 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A6%82%E8%BF%B0&#34; &gt;概述&lt;/a&gt;{#%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%89%B9%E7%82%B9&#34; &gt;特点&lt;/a&gt;{#%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0&#34; &gt;集群配置&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83&#34; &gt;以下是集群环境搭建！！不是单机环境&lt;/a&gt;{#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2&#34; &gt;集群角色&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Leader&#34; &gt;Leader&lt;/a&gt;{#Leader-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Follower&#34; &gt;Follower&lt;/a&gt;{#Follower-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Observer&#34; &gt;Observer&lt;/a&gt;{#Observer-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%9A%E8%AF%9D&#34; &gt;会话&lt;/a&gt;{#%E4%BC%9A%E8%AF%9D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Watcher&#34; &gt;Watcher&lt;/a&gt;{#Watcher-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0&#34; &gt;节点的值变化监听&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89&#34; &gt;节点的子节点变化监听（路径变化）&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6&#34; &gt;工作机制&lt;/a&gt;{#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B&#34; &gt;客户端向服务端写数据流程&lt;/a&gt;{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader&#34; &gt;写请求发给leader&lt;/a&gt;{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower&#34; &gt;写请求发给follower&lt;/a&gt;{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B&#34; &gt;客户端向服务端读数据流程&lt;/a&gt;{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6&#34; &gt;选举机制&lt;/a&gt;{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8&#34; &gt;初次启动&lt;/a&gt;{#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8&#34; &gt;非处次启动&lt;/a&gt;{#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82&#34; &gt;集群脑裂&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B&#34; &gt;数据模型&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B&#34; &gt;节点类型&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF&#34; &gt;节点信息&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C&#34; &gt;集群操作&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9&#34; &gt;创建节点&lt;/a&gt;{#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0&#34; &gt;查看节点&lt;/a&gt;{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0&#34; &gt;查看节点状态&lt;/a&gt;{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0&#34; &gt;更新节点&lt;/a&gt;{#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9&#34; &gt;删除节点&lt;/a&gt;{#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%80%E5%87%BAZK%C2%A0&#34; &gt;退出ZK&lt;/a&gt;{#%E9%80%80%E5%87%BAZK%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF&#34; &gt;应用场景&lt;/a&gt;{#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1&#34; &gt;统一命名服务&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86&#34; &gt;统一配置管理&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86&#34; &gt;统一集群管理&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF&#34; &gt;服务器动态上下线&lt;/a&gt;{#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1&#34; &gt;软负载均衡&lt;/a&gt;{#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81&#34; &gt;分布式锁&lt;/a&gt;{#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89&#34; &gt;拜占庭将军问题（Paxos算法）&lt;/a&gt;{#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89-toc}&lt;/p&gt;
+&lt;br /&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0&#34; &gt;算法描述&lt;/a&gt;{#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B&#34; &gt;算法流程&lt;/a&gt;{#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ZAB%E5%8D%8F%E8%AE%AE&#34; &gt;ZAB协议&lt;/a&gt;{#ZAB%E5%8D%8F%E8%AE%AE-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D&#34; &gt;崩溃恢复&lt;/a&gt;{#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD&#34; &gt;消息广播&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA&#34; &gt;​编辑 CAP理论&lt;/a&gt;{#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0&#34; &gt;ZK源码图示&lt;/a&gt;{#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98&#34; &gt;小小面试题&lt;/a&gt;{#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6&#34; &gt;选举机制&lt;/a&gt;{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F&#34; &gt;生产集群安装多少 zk 合适？&lt;/a&gt;{#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;概述-e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0-e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述 {#%E6%A6%82%E8%BF%B0}
+&lt;/h2&gt;&lt;p&gt;ZooKeeper 是一个开源的&lt;strong&gt;分布式协调服务&lt;/strong&gt; ，它的设计目标是&lt;strong&gt;为那些高吞吐的大型分布式系统提供一个高性能、高可用、且具有严格顺序访问控制 能力的分布式协调服务&lt;/strong&gt;，并以一系列简单易用的接口提供给用户使用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ZooKeeper 将数据存全量储在内存中以保持高性能&lt;/strong&gt; ，并通过服务集群来实现高可用，由于 Zookeeper 的所有更新和删除都是&lt;strong&gt;基于事务&lt;/strong&gt; 的，所以其在&lt;strong&gt;读多写少&lt;/strong&gt;的应用场景中有着很高的性能表现。&lt;/p&gt;
+&lt;p&gt;简单来说zookeeper就是动物园管理者，管理协调大数据里面的一堆组件，比如hadoop、hive、habse等等。Zookeeper 可以用于实现分布 式系统中常见的发布/订阅、负载均衡、命令服务、分布式协调/通知、集群管理、Master 选举、分布式 锁和分布式队列等功能。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/52c5a22a85235aee67a43f9656cc3231.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;特点-e789b9e782b9&#34;&gt;&lt;a href=&#34;#%e7%89%b9%e7%82%b9-e789b9e782b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;特点 {#%E7%89%B9%E7%82%B9}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;**顺序一致性：**从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中；&lt;/li&gt;
+&lt;li&gt;**原子性：**所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况，一次数据更新要么成功要么失败。&lt;/li&gt;
+&lt;li&gt;**单一视图（全局数据一致）：**每个server保存相同的数据副本，无论client连接哪个server，看到的数据一致；&lt;/li&gt;
+&lt;li&gt;**可靠性：**一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改；&lt;/li&gt;
+&lt;li&gt;**实时性：**一旦一个事务被成功应用后，在一定时间范围内，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。&lt;/li&gt;
+&lt;li&gt;集群中只要有&lt;strong&gt;半数以上节点存活&lt;/strong&gt;，zk集群就可以正常服务，所以zk适合安装奇数台。&lt;/li&gt;
+&lt;li&gt;一个leader，多个follower，&lt;strong&gt;leader挂掉之后会从follower中重新选举&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;集群配置-e99b86e7bea4e9858de7bdaec2a0&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae-e99b86e7bea4e9858de7bdaec2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0}
+&lt;/h2&gt;&lt;p&gt;可以由一组 Zookeeper服务构成 Zookeeper 集群，集群中每台机器都会单独在内存中维护自身的状 态，并且每台机器之间都保持着通讯，只要集群中有半数机器能够正常工作，那么整个集群就可以正常提供服务。对于来自客户端的每个更新请求，Zookeeper都会分配一个全局唯一的递增 ID，这个 ID 反映了所有事 务请求的先后顺序。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/85357d9780c78177d7fdc98faf789f46.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;以下是集群环境搭建不是单机环境-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e4%b8%8b%e6%98%af%e9%9b%86%e7%be%a4%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e4%b8%8d%e6%98%af%e5%8d%95%e6%9c%ba%e7%8e%af%e5%a2%83-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;以下是集群环境搭建！！不是单机环境&lt;/strong&gt; {#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83}
+&lt;/h3&gt;&lt;p&gt;解压、安装、配置环境变量并生效这三步省略，直接修改配置：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;进入conf/目录下，拷贝配置样本并进行修改：&lt;/p&gt;
+&lt;p&gt;cp zoo_sample.cfg zoo.cfg&lt;/p&gt;
+&lt;p&gt;指定数据存储目录和日志文件目录（此时还没有目录，稍后手动创建），修改后完整配置如下：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;tickTime=2000
+#用于计算的基础时间单元。比如 session 超时：N*tickTime；
+
+initLimit=10
+#用于集群，允许从节点连接并同步到 master 节点的初始化连接时间，以 tickTime 的倍数来表示；
+
+syncLimit=5
+#用于集群， master 主节点与从节点之间发送消息，请求和应答时间长度（心 跳机制）；
+
+dataDir=/export/server/zookeeper/data
+#数据存储位置；稍后手动创建
+
+dataLogDir=/export/server/zookeeper/logs
+#日志目录；稍后手动创建
+
+clientPort=2181
+#用于客户端连接的端口，默认 2181
+
+# server.1 这个1是服务器的标识，可以是任意有效数字，标识这是第几个服务器节点，这个标识要写到
+dataDir目录下面myid文件里，如果没有myid文件要自己创建
+# 指名集群间通讯端口和选举端口
+server.1=linux01:2888:3888
+server.2=linux02:2888:3888
+server.3=linux03:2888:3888
+&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;标识节点序号&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;分别在三台主机的 dataDir 目录下新建 myid 文件,并写入对应的节点标识。Zookeeper 集群通过 myid 文件识别集群节点，并通过上文配置的节点通信端口和选举端口来进行节点通信，选举出 Leader 节点。&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;每个服务器&lt;/strong&gt;上的/export/server/zookeeper/下创建data目录，在里面创建myid文件并写入各自序号，这个序号必须和zoo.cfg文件的序号相同。
+&lt;strong&gt;分别在三台主机上启动ZK集群&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;zkServer.sh start&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;集群验证&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;zkServer.sh status&lt;/p&gt;
+&lt;p&gt;可以看到一个leader，两个follower，那么zk集群配置成功&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;启动客户端&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;zkCli.sh&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;集群角色-e99b86e7bea4e8a792e889b2&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e8%a7%92%e8%89%b2-e99b86e7bea4e8a792e889b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群角色 {#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2}
+&lt;/h2&gt;&lt;p&gt;ZK集群有一个leader和多个follower。&lt;/p&gt;
+&lt;h3 id=&#34;Leader&#34;&gt;&lt;a href=&#34;#Leader&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Leader
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;为客户端提供读写服务，并维护集群状态，它是由集群选举所产生的；&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Follower&#34;&gt;&lt;a href=&#34;#Follower&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Follower
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态。同时也参与写操作 &amp;ldquo;过半写成功&amp;quot;的策略和 Leader 的选举；&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;Observer&#34;&gt;&lt;a href=&#34;#Observer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Observer
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态，但不参与写操作&amp;quot;过 半写成功&amp;quot;的策略和 Leader 的选举，因此 Observer 可以在不影响写性能的情况下提升集群的读性 能。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;会话-e4bc9ae8af9d&#34;&gt;&lt;a href=&#34;#%e4%bc%9a%e8%af%9d-e4bc9ae8af9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;会话 {#%E4%BC%9A%E8%AF%9D}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Zookeeper 客户端通过 TCP 长连接连接到服务集群，会话 (Session) 从第一次连接开始就已经建立，之 后通过心跳检测机制来保持有效的会话状态。通过这个连接，客户端可以发送请求并接收响应，同时也 可以接收到 Watch 事件的通知。&lt;/li&gt;
+&lt;li&gt;关于会话中另外一个核心的概念是 &lt;strong&gt;sessionTimeOut(会话超时时间)&lt;/strong&gt;，当由于网络故障或者客户端主动 断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;Watcher&#34;&gt;&lt;a href=&#34;#Watcher&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Watcher
+&lt;/h2&gt;&lt;p&gt;Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注 册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是Zookeeper 实现分布式协调服务的重要特性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f2f283cc4b622d03d766b780723fc6ce.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;节点的值变化监听-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%9a%84%e5%80%bc%e5%8f%98%e5%8c%96%e7%9b%91%e5%90%ac-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点的值变化监听 {#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0}
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;1）在linux01主机上注册监听/sanguo 节点数据变化&lt;/p&gt;
+\[zk: localhost:2181(CONNECTED) 26\]&lt;p&gt; get -w /sanguo&lt;/p&gt;
+&lt;p&gt;2）在linux02主机上修改/sanguo 节点的数据&lt;/p&gt;
+\[zk: localhost:2181(CONNECTED) 1\]&lt;p&gt; set /sanguo &amp;ldquo;xisi&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;3）观察linux01主机收到数据变化的监听&lt;/p&gt;
+&lt;p&gt;WATCHER::&lt;/p&gt;
+&lt;p&gt;WatchedEvent state:SyncConnected ype:NodeDataChanged&lt;/p&gt;
+&lt;p&gt;path:/sanguo&lt;/p&gt;
+&lt;p&gt;注意：在linux02再多次修改/sanguo的值，linux01上不会再收到监听。&amp;lt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>HA—Hadoop高可用</title>
+        <link>/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/</link>
+        <pubDate>Mon, 15 Apr 2024 19:23:57 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HA%20%E6%A6%82%E8%BF%B0&#34; &gt;HA 概述&lt;/a&gt;{#HA%20%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HDFS%E9%AB%98%E5%8F%AF%E7%94%A8&#34; &gt;HDFS高可用&lt;/a&gt;{#HDFS%E9%AB%98%E5%8F%AF%E7%94%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BF%9D%E8%AF%81%E6%89%80%E6%9C%89NN%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%C2%A0&#34; &gt;保证所有NN的数据一致性&lt;/a&gt;{#%E4%BF%9D%E8%AF%81%E6%89%80%E6%9C%89NN%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%C2%A0-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%89%8B%E5%8A%A8%E6%A8%A1%E5%BC%8F&#34; &gt;手动模式&lt;/a&gt;{#%E6%89%8B%E5%8A%A8%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%87%AA%E5%8A%A8%E6%A8%A1%E5%BC%8F&#34; &gt;自动模式&lt;/a&gt;{#%E8%87%AA%E5%8A%A8%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%A7%A3%E5%86%B3NN%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8AJN%E7%9A%84%E9%97%AE%E9%A2%98&#34; &gt;解决NN连接不上JN的问题&lt;/a&gt;{#%E8%A7%A3%E5%86%B3NN%E8%BF%9E%E6%8E%A5%E4%B8%8D%E4%B8%8AJN%E7%9A%84%E9%97%AE%E9%A2%98-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0Yarn%E9%AB%98%E5%8F%AF%E7%94%A8&#34; &gt;Yarn高可用&lt;/a&gt;{#%C2%A0Yarn%E9%AB%98%E5%8F%AF%E7%94%A8-toc}&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98&#34; &gt;核心问题&lt;/a&gt;{#%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98-toc}&lt;/p&gt;
+&lt;hr&gt;
+&lt;br /&gt;
+&lt;h2 id=&#34;ha-概述-ha20e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#ha-%e6%a6%82%e8%bf%b0-ha20e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HA 概述 {#HA%20%E6%A6%82%E8%BF%B0}
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;1）所谓 HA（High Availablity），即高可用（7*24 小时不中断服务）。&lt;/p&gt;
+&lt;p&gt;2）实现高可用最关键的策略是消除单点故障（传统的主从模式集群单个节点发生故障会影响整个集群）。HA 严格来说应该分成各个组件的 HA 机制：&lt;strong&gt;HDFS 的 HA 和 YARN 的 HA&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;3）NameNode 主要在以下两个方面影响 HDFS 集群&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NameNode 机器发生意外，如宕机，集群将无法使用，直到管理员重启&lt;/li&gt;
+&lt;li&gt;NameNode 机器需要升级，包括软件、硬件升级，此时集群也将无法使用&lt;/li&gt;
+&lt;li&gt;HDFS HA 功能通过配置多个 NameNode(Active/Standby)实现在集群中对 NameNode 的热备来解决上述问题。如果出现故障，如机器崩溃或机器需要升级维护，这时可以启动另一台机器上的NameNode继续维护整个集群的运行（&lt;strong&gt;集群中同时只能有一台active的NN，其他NN处于standby（备用）&lt;/strong&gt; ）。而这种启动方式&lt;strong&gt;分为手动和自动（推荐）&lt;/strong&gt;，但是在这之前，我们&lt;strong&gt;必须通过某种方式保证所有NN的元数据一致&lt;/strong&gt;，这样才能保证active状态的NN故障后，另一个处于standby状态的NN激活为active能够正常维持集群运行，类似于公司员工的任务的交接。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;hdfs高可用-hdfse9ab98e58fafe794a8&#34;&gt;&lt;a href=&#34;#hdfs%e9%ab%98%e5%8f%af%e7%94%a8-hdfse9ab98e58fafe794a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HDFS高可用 {#HDFS%E9%AB%98%E5%8F%AF%E7%94%A8}
+&lt;/h2&gt;&lt;h3 id=&#34;保证所有nn的数据一致性-e4bf9de8af81e68980e69c89nne79a84e695b0e68daee4b880e887b4e680a7c2a0&#34;&gt;&lt;a href=&#34;#%e4%bf%9d%e8%af%81%e6%89%80%e6%9c%89nn%e7%9a%84%e6%95%b0%e6%8d%ae%e4%b8%80%e8%87%b4%e6%80%a7-e4bf9de8af81e68980e69c89nne79a84e695b0e68daee4b880e887b4e680a7c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;保证所有NN的数据一致性 {#%E4%BF%9D%E8%AF%81%E6%89%80%E6%9C%89NN%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%C2%A0}
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;在处于active的NN正常运行时，他会生成Fsimage文件，让其他处于standby的NN同步，同时引入JournalNode节点来保证edits文件数据的一致性&lt;/strong&gt;，JournalNode作为active的NN和standby的NN的中间节点，activeNN会把edits发送给JournalNode，然后standbyNN从JournalNode获取edits。同时为了保证JournalNode的可靠性，JournalNode本身也是一个多节点的集群。&lt;/p&gt;
+&lt;p&gt;JournalNode 节点会在集群自动的选择一个&amp;quot;主&amp;quot;节点出来，Active 节点会和 JournalNode 的主节点通信，然后 JournalNode 集群的主节点会将数据发送给其他的节点，只要有过半的节点完成了数据的存储（&lt;strong&gt;过半写成功&lt;/strong&gt;），JournalNode 集群的主节点，就会将成功信息返回给 Active 节点。当 JournalNode 集群的主节点挂掉，其他的 JournalNode 节点会快速选举出新的&amp;quot;主&amp;quot;节点来。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;同时在HA架构中，并没有SecondaryNameNode&lt;/strong&gt;，那么定期合并fsimage的eedits的任务是由standby的NN来完成的。&lt;/p&gt;
+&lt;h3 id=&#34;手动模式-e6898be58aa8e6a8a1e5bc8f&#34;&gt;&lt;a href=&#34;#%e6%89%8b%e5%8a%a8%e6%a8%a1%e5%bc%8f-e6898be58aa8e6a8a1e5bc8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;手动模式 {#%E6%89%8B%E5%8A%A8%E6%A8%A1%E5%BC%8F}
+&lt;/h3&gt;&lt;p&gt;配置core-site.xml&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;configuration&amp;gt;
+    &amp;lt;!-- 指定hdfs的nameservice为ns1 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;fs.defaultFS&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;hdfs://mycluster/&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- 指定hadoop临时目录 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;hadoop.tmp.dir&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+&amp;lt;/configuration&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;配置hdfs-site.xml&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;configuration&amp;gt;
+    &amp;lt;!--指定hdfs的nameservice为mycluster，需要和core-site.xml中的保持一致 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.nameservices&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;mycluster&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- hadoop-ha下面有两个NameNode，分别是nn1，nn2 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.ha.namenodes.mycluster&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;nn1,nn2,nn3&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- nn1的RPC通信地址 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.namenode.rpc-address.mycluster.nn1&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;linux01:8020&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- nn1的http通信地址 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.namenode.http-address.mycluster.nn1&amp;lt;/name&amp;gt;
+        &amp;lt;value&amp;gt;linux01:9870&amp;lt;/value&amp;gt;
+    &amp;lt;/property&amp;gt;
+    &amp;lt;!-- nn2的RPC通信地址 --&amp;gt;
+    &amp;lt;property&amp;gt;
+        &amp;lt;name&amp;gt;dfs.namenode.rpc-address.mycluster.nn2&amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

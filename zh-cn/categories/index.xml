@@ -7,44 +7,964 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sun, 27 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>类别2</title>
-        <link>/zh-cn/categories/%E7%B1%BB%E5%88%AB2/</link>
-        <pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate>
+        <lastBuildDate>Mon, 28 Jul 2025 15:15:47 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>前端</title>
+        <link>/zh-cn/categories/%E5%89%8D%E7%AB%AF/</link>
+        <pubDate>Mon, 28 Jul 2025 15:15:47 +0000</pubDate>
         
-        <guid>/zh-cn/categories/%E7%B1%BB%E5%88%AB2/</guid>
+        <guid>/zh-cn/categories/%E5%89%8D%E7%AB%AF/</guid>
         <description></description>
         </item>
         <item>
-        <title>类别3</title>
-        <link>/zh-cn/categories/%E7%B1%BB%E5%88%AB3/</link>
-        <pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate>
+        <title>Agent</title>
+        <link>/zh-cn/categories/agent/</link>
+        <pubDate>Thu, 24 Jul 2025 22:25:14 +0000</pubDate>
         
-        <guid>/zh-cn/categories/%E7%B1%BB%E5%88%AB3/</guid>
+        <guid>/zh-cn/categories/agent/</guid>
         <description></description>
         </item>
         <item>
-        <title>类别4</title>
-        <link>/zh-cn/categories/%E7%B1%BB%E5%88%AB4/</link>
-        <pubDate>Sat, 26 Aug 2023 00:00:00 +0000</pubDate>
+        <title>Prompt</title>
+        <link>/zh-cn/categories/prompt/</link>
+        <pubDate>Thu, 24 Jul 2025 22:25:14 +0000</pubDate>
         
-        <guid>/zh-cn/categories/%E7%B1%BB%E5%88%AB4/</guid>
+        <guid>/zh-cn/categories/prompt/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Java</title>
+        <link>/zh-cn/categories/java/</link>
+        <pubDate>Sat, 19 Jul 2025 19:22:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/java/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>开发语言</title>
+        <link>/zh-cn/categories/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/</link>
+        <pubDate>Sat, 19 Jul 2025 19:22:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Spring</title>
+        <link>/zh-cn/categories/spring/</link>
+        <pubDate>Sat, 19 Jul 2025 19:20:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/spring/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数据库</title>
+        <link>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+        <pubDate>Sat, 19 Jul 2025 19:20:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>2PC</title>
+        <link>/zh-cn/categories/2pc/</link>
+        <pubDate>Fri, 14 Mar 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/2pc/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>3PC</title>
+        <link>/zh-cn/categories/3pc/</link>
+        <pubDate>Fri, 14 Mar 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/3pc/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>TCC</title>
+        <link>/zh-cn/categories/tcc/</link>
+        <pubDate>Fri, 14 Mar 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/tcc/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>分布式事务</title>
+        <link>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</link>
+        <pubDate>Fri, 14 Mar 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Spring生态</title>
+        <link>/zh-cn/categories/spring%E7%94%9F%E6%80%81/</link>
+        <pubDate>Wed, 19 Feb 2025 08:11:22 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/spring%E7%94%9F%E6%80%81/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>后端</title>
+        <link>/zh-cn/categories/%E5%90%8E%E7%AB%AF/</link>
+        <pubDate>Wed, 19 Feb 2025 08:11:22 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%90%8E%E7%AB%AF/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Github</title>
+        <link>/zh-cn/categories/github/</link>
+        <pubDate>Mon, 17 Feb 2025 10:02:16 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/github/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>杂</title>
+        <link>/zh-cn/categories/%E6%9D%82/</link>
+        <pubDate>Mon, 17 Feb 2025 10:02:16 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%9D%82/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Mysql</title>
+        <link>/zh-cn/categories/mysql/</link>
+        <pubDate>Sat, 15 Feb 2025 10:33:28 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/mysql/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Synchronized</title>
+        <link>/zh-cn/categories/synchronized/</link>
+        <pubDate>Sat, 15 Feb 2025 10:30:25 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/synchronized/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>AMQP</title>
+        <link>/zh-cn/categories/amqp/</link>
+        <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/amqp/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>JMS</title>
+        <link>/zh-cn/categories/jms/</link>
+        <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/jms/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Kafka</title>
+        <link>/zh-cn/categories/kafka/</link>
+        <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/kafka/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Rabbitmq</title>
+        <link>/zh-cn/categories/rabbitmq/</link>
+        <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/rabbitmq/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Rocketmq</title>
+        <link>/zh-cn/categories/rocketmq/</link>
+        <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/rocketmq/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>消息队列</title>
+        <link>/zh-cn/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link>
+        <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Jvm</title>
+        <link>/zh-cn/categories/jvm/</link>
+        <pubDate>Thu, 13 Feb 2025 14:03:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/jvm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>符号引用</title>
+        <link>/zh-cn/categories/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8/</link>
+        <pubDate>Thu, 13 Feb 2025 14:03:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>强弱引用</title>
+        <link>/zh-cn/categories/%E5%BC%BA%E5%BC%B1%E5%BC%95%E7%94%A8/</link>
+        <pubDate>Thu, 13 Feb 2025 14:03:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%BC%BA%E5%BC%B1%E5%BC%95%E7%94%A8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>直接引用</title>
+        <link>/zh-cn/categories/%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8/</link>
+        <pubDate>Thu, 13 Feb 2025 14:03:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>AQS</title>
+        <link>/zh-cn/categories/aqs/</link>
+        <pubDate>Wed, 12 Feb 2025 11:02:38 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/aqs/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>CLH</title>
+        <link>/zh-cn/categories/clh/</link>
+        <pubDate>Wed, 12 Feb 2025 11:02:38 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/clh/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>集合</title>
+        <link>/zh-cn/categories/%E9%9B%86%E5%90%88/</link>
+        <pubDate>Tue, 11 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E9%9B%86%E5%90%88/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>字符串常量池</title>
+        <link>/zh-cn/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/</link>
+        <pubDate>Fri, 07 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>虚拟机</title>
+        <link>/zh-cn/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/</link>
+        <pubDate>Thu, 06 Feb 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Spring Boot</title>
+        <link>/zh-cn/categories/spring-boot/</link>
+        <pubDate>Wed, 05 Feb 2025 16:56:07 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/spring-boot/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Spring Cloud</title>
+        <link>/zh-cn/categories/spring-cloud/</link>
+        <pubDate>Wed, 05 Feb 2025 16:56:07 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/spring-cloud/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>微服务</title>
+        <link>/zh-cn/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+        <pubDate>Wed, 05 Feb 2025 16:56:07 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>个人博客</title>
+        <link>/zh-cn/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+        <pubDate>Tue, 04 Feb 2025 14:53:44 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>全栈</title>
+        <link>/zh-cn/categories/%E5%85%A8%E6%A0%88/</link>
+        <pubDate>Tue, 04 Feb 2025 14:53:44 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%85%A8%E6%A0%88/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Docker</title>
+        <link>/zh-cn/categories/docker/</link>
+        <pubDate>Sun, 26 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/docker/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>服务器</title>
+        <link>/zh-cn/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/</link>
+        <pubDate>Sun, 26 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>容器</title>
+        <link>/zh-cn/categories/%E5%AE%B9%E5%99%A8/</link>
+        <pubDate>Sun, 26 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%AE%B9%E5%99%A8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>运维</title>
+        <link>/zh-cn/categories/%E8%BF%90%E7%BB%B4/</link>
+        <pubDate>Sun, 26 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E8%BF%90%E7%BB%B4/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Oss</title>
+        <link>/zh-cn/categories/oss/</link>
+        <pubDate>Sat, 25 Jan 2025 16:12:01 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/oss/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>疑难杂症录</title>
+        <link>/zh-cn/categories/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/</link>
+        <pubDate>Sat, 25 Jan 2025 16:12:01 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Redis实战</title>
+        <link>/zh-cn/categories/redis%E5%AE%9E%E6%88%98/</link>
+        <pubDate>Sat, 25 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/redis%E5%AE%9E%E6%88%98/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Mysql日志</title>
+        <link>/zh-cn/categories/mysql%E6%97%A5%E5%BF%97/</link>
+        <pubDate>Fri, 24 Jan 2025 21:03:52 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/mysql%E6%97%A5%E5%BF%97/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Mybatis</title>
+        <link>/zh-cn/categories/mybatis/</link>
+        <pubDate>Fri, 24 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/mybatis/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Apache</title>
+        <link>/zh-cn/categories/apache/</link>
+        <pubDate>Thu, 23 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/apache/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Tomcat</title>
+        <link>/zh-cn/categories/tomcat/</link>
+        <pubDate>Thu, 23 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/tomcat/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>操作系统</title>
+        <link>/zh-cn/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
+        <pubDate>Sat, 18 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>零拷贝</title>
+        <link>/zh-cn/categories/%E9%9B%B6%E6%8B%B7%E8%B4%9D/</link>
+        <pubDate>Sat, 18 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E9%9B%B6%E6%8B%B7%E8%B4%9D/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>内核态</title>
+        <link>/zh-cn/categories/%E5%86%85%E6%A0%B8%E6%80%81/</link>
+        <pubDate>Sat, 18 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%86%85%E6%A0%B8%E6%80%81/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>用户态</title>
+        <link>/zh-cn/categories/%E7%94%A8%E6%88%B7%E6%80%81/</link>
+        <pubDate>Sat, 18 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%94%A8%E6%88%B7%E6%80%81/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Synchronized锁升级</title>
+        <link>/zh-cn/categories/synchronized%E9%94%81%E5%8D%87%E7%BA%A7/</link>
+        <pubDate>Thu, 16 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/synchronized%E9%94%81%E5%8D%87%E7%BA%A7/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>包管理工具</title>
+        <link>/zh-cn/categories/%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Mon, 13 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Sse</title>
+        <link>/zh-cn/categories/sse/</link>
+        <pubDate>Thu, 09 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/sse/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Websocket</title>
+        <link>/zh-cn/categories/websocket/</link>
+        <pubDate>Thu, 09 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/websocket/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>List</title>
+        <link>/zh-cn/categories/list/</link>
+        <pubDate>Sat, 04 Jan 2025 19:31:55 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/list/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数据结构</title>
+        <link>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+        <pubDate>Sat, 04 Jan 2025 19:31:55 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>异常</title>
+        <link>/zh-cn/categories/%E5%BC%82%E5%B8%B8/</link>
+        <pubDate>Tue, 31 Dec 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%BC%82%E5%B8%B8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>事务</title>
+        <link>/zh-cn/categories/%E4%BA%8B%E5%8A%A1/</link>
+        <pubDate>Fri, 27 Dec 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E4%BA%8B%E5%8A%A1/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>缓存</title>
+        <link>/zh-cn/categories/%E7%BC%93%E5%AD%98/</link>
+        <pubDate>Thu, 26 Dec 2024 22:17:09 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%BC%93%E5%AD%98/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Etcd</title>
+        <link>/zh-cn/categories/etcd/</link>
+        <pubDate>Sat, 21 Dec 2024 11:58:09 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/etcd/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Openapi</title>
+        <link>/zh-cn/categories/openapi/</link>
+        <pubDate>Mon, 16 Dec 2024 22:39:23 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/openapi/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>计算机网络</title>
+        <link>/zh-cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</link>
+        <pubDate>Mon, 16 Dec 2024 12:24:02 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>网络</title>
+        <link>/zh-cn/categories/%E7%BD%91%E7%BB%9C/</link>
+        <pubDate>Mon, 16 Dec 2024 12:24:02 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%BD%91%E7%BB%9C/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Ci/Cd</title>
+        <link>/zh-cn/categories/ci/cd/</link>
+        <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/ci/cd/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Kubernetes</title>
+        <link>/zh-cn/categories/kubernetes/</link>
+        <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/kubernetes/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Serverless</title>
+        <link>/zh-cn/categories/serverless/</link>
+        <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/serverless/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Service_mesh</title>
+        <link>/zh-cn/categories/service_mesh/</link>
+        <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/service_mesh/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>云原生</title>
+        <link>/zh-cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+        <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Axios</title>
+        <link>/zh-cn/categories/axios/</link>
+        <pubDate>Tue, 08 Oct 2024 00:35:44 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/axios/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>React</title>
+        <link>/zh-cn/categories/react/</link>
+        <pubDate>Tue, 08 Oct 2024 00:35:44 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/react/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Flink</title>
+        <link>/zh-cn/categories/flink/</link>
+        <pubDate>Thu, 05 Sep 2024 23:07:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/flink/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>大数据</title>
+        <link>/zh-cn/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/</link>
+        <pubDate>Thu, 05 Sep 2024 23:07:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>实时计算</title>
+        <link>/zh-cn/categories/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/</link>
+        <pubDate>Thu, 05 Sep 2024 23:07:21 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Spark</title>
+        <link>/zh-cn/categories/spark/</link>
+        <pubDate>Wed, 04 Sep 2024 00:12:24 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/spark/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>分布式计算框架</title>
+        <link>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/</link>
+        <pubDate>Wed, 04 Sep 2024 00:12:24 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Kappa</title>
+        <link>/zh-cn/categories/kappa/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/kappa/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Lambda</title>
+        <link>/zh-cn/categories/lambda/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/lambda/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>离线数仓</title>
+        <link>/zh-cn/categories/%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>实时数仓</title>
+        <link>/zh-cn/categories/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数据仓库</title>
+        <link>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数据湖</title>
+        <link>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E6%B9%96/</link>
+        <pubDate>Sun, 01 Sep 2024 21:34:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%95%B0%E6%8D%AE%E6%B9%96/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Kappa架构</title>
+        <link>/zh-cn/categories/kappa%E6%9E%B6%E6%9E%84/</link>
+        <pubDate>Sun, 01 Sep 2024 00:53:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/kappa%E6%9E%B6%E6%9E%84/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Lambda架构</title>
+        <link>/zh-cn/categories/lambda%E6%9E%B6%E6%9E%84/</link>
+        <pubDate>Sun, 01 Sep 2024 00:53:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/lambda%E6%9E%B6%E6%9E%84/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数仓架构</title>
+        <link>/zh-cn/categories/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84/</link>
+        <pubDate>Sun, 01 Sep 2024 00:53:40 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Ant Design</title>
+        <link>/zh-cn/categories/ant-design/</link>
+        <pubDate>Sat, 10 Aug 2024 23:28:45 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/ant-design/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Ant Design Pro</title>
+        <link>/zh-cn/categories/ant-design-pro/</link>
+        <pubDate>Sat, 10 Aug 2024 23:28:45 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/ant-design-pro/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>前端框架</title>
+        <link>/zh-cn/categories/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</link>
+        <pubDate>Sat, 10 Aug 2024 23:28:45 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>数学建模</title>
+        <link>/zh-cn/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</link>
+        <pubDate>Fri, 02 Aug 2024 11:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Hbase</title>
+        <link>/zh-cn/categories/hbase/</link>
+        <pubDate>Mon, 29 Jul 2024 11:30:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/hbase/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Phoenix</title>
+        <link>/zh-cn/categories/phoenix/</link>
+        <pubDate>Mon, 29 Jul 2024 11:30:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/phoenix/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Redis</title>
+        <link>/zh-cn/categories/redis/</link>
+        <pubDate>Sun, 28 Jul 2024 11:34:59 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/redis/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>RedisTemplate</title>
+        <link>/zh-cn/categories/redistemplate/</link>
+        <pubDate>Sun, 28 Jul 2024 11:34:59 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/redistemplate/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>AOF</title>
+        <link>/zh-cn/categories/aof/</link>
+        <pubDate>Sun, 28 Jul 2024 00:12:57 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/aof/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>RDB</title>
+        <link>/zh-cn/categories/rdb/</link>
+        <pubDate>Sun, 28 Jul 2024 00:12:57 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/rdb/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>持久化</title>
+        <link>/zh-cn/categories/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+        <pubDate>Sun, 28 Jul 2024 00:12:57 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Cookie</title>
+        <link>/zh-cn/categories/cookie/</link>
+        <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/cookie/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>JWT</title>
+        <link>/zh-cn/categories/jwt/</link>
+        <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/jwt/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Session</title>
+        <link>/zh-cn/categories/session/</link>
+        <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/session/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Token</title>
+        <link>/zh-cn/categories/token/</link>
+        <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/token/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Spring Security</title>
+        <link>/zh-cn/categories/spring-security/</link>
+        <pubDate>Tue, 23 Jul 2024 17:48:45 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/spring-security/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Feed流推送</title>
+        <link>/zh-cn/categories/feed%E6%B5%81%E6%8E%A8%E9%80%81/</link>
+        <pubDate>Tue, 16 Jul 2024 17:43:11 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/feed%E6%B5%81%E6%8E%A8%E9%80%81/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>共同关注</title>
+        <link>/zh-cn/categories/%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8/</link>
+        <pubDate>Tue, 16 Jul 2024 17:43:11 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>点赞top5</title>
+        <link>/zh-cn/categories/%E7%82%B9%E8%B5%9Etop5/</link>
+        <pubDate>Sun, 14 Jul 2024 18:14:45 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E7%82%B9%E8%B5%9Etop5/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>分布式</title>
+        <link>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
+        <pubDate>Thu, 11 Jul 2024 23:06:25 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Javascript</title>
+        <link>/zh-cn/categories/javascript/</link>
+        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/javascript/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Node.js</title>
+        <link>/zh-cn/categories/node.js/</link>
+        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/node.js/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Vue.js</title>
+        <link>/zh-cn/categories/vue.js/</link>
+        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/vue.js/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Webpack</title>
+        <link>/zh-cn/categories/webpack/</link>
+        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/webpack/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Yarn</title>
+        <link>/zh-cn/categories/yarn/</link>
+        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/yarn/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Big Data</title>
+        <link>/zh-cn/categories/big-data/</link>
+        <pubDate>Sun, 05 May 2024 17:42:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/big-data/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Zookeeper</title>
+        <link>/zh-cn/categories/zookeeper/</link>
+        <pubDate>Sun, 05 May 2024 17:42:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/zookeeper/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Flume</title>
+        <link>/zh-cn/categories/flume/</link>
+        <pubDate>Sun, 28 Apr 2024 21:47:38 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/flume/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Hadoop</title>
+        <link>/zh-cn/categories/hadoop/</link>
+        <pubDate>Fri, 19 Apr 2024 16:43:51 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/hadoop/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Java-Zookeeper</title>
+        <link>/zh-cn/categories/java-zookeeper/</link>
+        <pubDate>Fri, 19 Apr 2024 16:43:51 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/java-zookeeper/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Hdfs</title>
+        <link>/zh-cn/categories/hdfs/</link>
+        <pubDate>Mon, 15 Apr 2024 14:38:50 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/hdfs/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Hive</title>
+        <link>/zh-cn/categories/hive/</link>
+        <pubDate>Sun, 14 Apr 2024 21:41:05 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/hive/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>C&#43;&#43;</title>
+        <link>/zh-cn/categories/c&#43;&#43;/</link>
+        <pubDate>Fri, 04 Aug 2023 22:32:09 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/c&#43;&#43;/</guid>
         <description></description>
         </item>
         <item>
         <title>C语言</title>
         <link>/zh-cn/categories/c%E8%AF%AD%E8%A8%80/</link>
-        <pubDate>Fri, 04 Aug 2023 16:08:31 +0000</pubDate>
+        <pubDate>Fri, 04 Aug 2023 22:32:09 +0000</pubDate>
         
         <guid>/zh-cn/categories/c%E8%AF%AD%E8%A8%80/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>指针</title>
-        <link>/zh-cn/categories/%E6%8C%87%E9%92%88/</link>
-        <pubDate>Fri, 04 Aug 2023 16:08:31 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/%E6%8C%87%E9%92%88/</guid>
         <description></description>
         </item>
         

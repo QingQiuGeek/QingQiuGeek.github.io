@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Hbase on 青秋博客</title>
+        <link>/zh-cn/categories/hbase/</link>
+        <description>Recent content in Hbase on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Mon, 29 Jul 2024 11:30:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/hbase/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>大数据HBase图文简介及Phoenix</title>
+        <link>/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/</link>
+        <pubDate>Mon, 29 Jul 2024 11:30:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/</guid>
+        <description>&lt;blockquote&gt;
+&lt;h2 id=&#34;往期推荐&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;引言&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e8%a8%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引言
+&lt;/h2&gt;&lt;p&gt;要想明白为什么HBase的产生，就需要先了解一下 Hadoop。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hadoop 可以通过 HDFS 来存 储结构化、半结构甚至非结构化的数据，是传统数据库的补充，是海量数据存储的最佳方法，它针对大文件的存储、批量访问和流式访问都做了优化，同时也通过多副本解决了容灾问题。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;但是 Hadoop 的缺陷在于它&lt;strong&gt;只能执行批处理&lt;/strong&gt;，并且只能以&lt;strong&gt;顺序方式访问数据&lt;/strong&gt;，这意味着即使是最简单的工作也必须搜索整个数据集，&lt;strong&gt;无法实现对数据的随机访问&lt;/strong&gt;。实现数据的&lt;strong&gt;随机访问是传统的关系型数据库所擅长的&lt;/strong&gt;，但它们却不能用于海量数据的存储。在这种情况下，必须有一种新的方案来&lt;strong&gt;同时解决海量数据存储和随机访问的问题&lt;/strong&gt;，HBase 就是其中之一 (HBase，Cassandra，couchDB，Dynamo 和 MongoDB 都能存储海量数据并支持随机访问)。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;数据结构分类：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;结构化数据：即以关系型数据库表形式管理的数据；&lt;/li&gt;
+&lt;li&gt;半结构化数据：非关系模型的，有基本固定结构模式的数据，例如日志文件、XML 文档、 JSON 文档、Email 等；&lt;/li&gt;
+&lt;li&gt;非结构化数据：没有固定模式的数据，如 WORD、PDF、PPT、EXL，各种格式的图片、视 频等。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;HBase简介&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;HBase全称Hadoop Database ，是一个基于HDFS的分布式的、面向列的开源数据库，但是这个数据库没有SQL，只提供了API，需要API编程来使用HBase，而后面提到的Phoenix才使得可以用SQL操作HBase！&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;HBase有如下特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;容量大：一个表可以有数十亿行，上百万列，这也和它的扩展性息息相关；&lt;/li&gt;
+&lt;li&gt;面向列：数据是按照列存储，每一列都单独存放，数据即索引，在查询时可以只访问指定列的数据，有效地降低了系统的 I/O 负担；&lt;/li&gt;
+&lt;li&gt;稀疏性：空 (null) 列并不占用存储空间，表可以设计的非常稀疏 ；&lt;/li&gt;
+&lt;li&gt;易扩展：的扩展性主要体现在两个方面，一个是基于上层处理能力（RegionServer） 的扩展，一个是基于存储的扩展（HDFS）。通过横向添加 RegionSever 的机器， 进行水平扩展，提升 Hbase 上层的处理能力，提升 Hbsae 服务更多 Region 的 能力。&lt;/li&gt;
+&lt;li&gt;数据多版本：每个单元中的数据可以有多个版本，按照时间戳排序，新的数据在最上面；&lt;/li&gt;
+&lt;li&gt;采用 HDFS 作为底层存储，支持结构化、半结构化和非结构化的存储；&lt;/li&gt;
+&lt;li&gt;支持数据分片；&lt;/li&gt;
+&lt;li&gt;易于使用的 Java 客户端 API，客户端可以通过 HBase 实现对 HDFS 上数据的随机访问；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9bfd7d519e2446d7903861122c1eee1e.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;HBase的表&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;表-schema-仅定义列族表&#34;&gt;&lt;a href=&#34;#%e8%a1%a8-schema-%e4%bb%85%e5%ae%9a%e4%b9%89%e5%88%97%e6%97%8f%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;表 schema 仅定义列族，表&lt;/strong&gt;
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>包管理工具 on 青秋博客</title>
+        <link>/zh-cn/tags/%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</link>
+        <description>Recent content in 包管理工具 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Mon, 13 Jan 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>yum、dnf、apt包管理工具</title>
+        <link>/zh-cn/post/2025/01/yumdnfapt%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Mon, 13 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/01/yumdnfapt%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</guid>
+        <description>&lt;h3 id=&#34;red-hat-系列&#34;&gt;&lt;a href=&#34;#red-hat-%e7%b3%bb%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Red Hat 系列
+&lt;/h3&gt;&lt;h4 id=&#34;rpm-red-hat-package-manager&#34;&gt;&lt;a href=&#34;#rpm-red-hat-package-manager&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;rpm (Red Hat Package Manager)&lt;/strong&gt;
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Red Hat 系列&lt;/strong&gt; Linux 发行版（如 CentOS、RHEL、Fedora）上的软件包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Red Hat 系列 Linux（RHEL、CentOS、Fedora）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt; ：不自动处理依赖关系，需要用户手动管理或借助其他工具（如 &lt;code&gt;yum&lt;/code&gt; 或 &lt;code&gt;dnf&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt; ：&lt;code&gt;rpm&lt;/code&gt; 是一个&lt;strong&gt;低级&lt;/strong&gt; 包管理工具，主要用于安装、查询、卸载和管理 &lt;code&gt;.rpm&lt;/code&gt; 包。它本身不处理依赖关系，通常由其他工具（如 &lt;code&gt;yum&lt;/code&gt; 或 &lt;code&gt;dnf&lt;/code&gt;）解决&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;yum-yellowdog-updater-modified&#34;&gt;&lt;a href=&#34;#yum-yellowdog-updater-modified&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;yum (Yellowdog Updater, Modified)&lt;/strong&gt;
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Red Hat 系列&lt;/strong&gt; Linux 发行版（如 CentOS、RHEL、Fedora）的软件包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Red Hat 系列 Linux（RHEL、CentOS、Fedora）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：自动处理软件包依赖。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt; ：&lt;code&gt;yum&lt;/code&gt; 是一个&lt;strong&gt;高级&lt;/strong&gt;的包管理工具，可以从软件仓库中自动下载和安装软件包，自动处理依赖关系和升级。它是基于 RPM 包的管理工&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
