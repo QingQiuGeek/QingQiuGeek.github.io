@@ -7,7 +7,43 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 07 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E7%B1%BB%E5%88%AB3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 27 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E7%B1%BB%E5%88%AB3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>2025最新，使用Github Action部署hugo个人博客&#43;自有域名配置</title>
+        <link>/zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/</link>
+        <pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/</guid>
+        <description>&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image.png&#34;
+	width=&#34;2699&#34;
+	height=&#34;1239&#34;
+	srcset=&#34;/zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image_hu_a27ca3b4e682af13.png 480w, /zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image_hu_20e9bfd334172aa1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;217&#34;
+		data-flex-basis=&#34;522px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image-1.png&#34;
+	width=&#34;2831&#34;
+	height=&#34;1306&#34;
+	srcset=&#34;/zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image-1_hu_cefae32d25f2276.png 480w, /zh-cn/post/2025/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image-1_hu_81ce42358f604b16.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;216&#34;
+		data-flex-basis=&#34;520px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Markdown Syntax Guide</title>
         <link>/zh-cn/post/2023/09/markdown-syntax-guide/</link>
         <pubDate>Thu, 07 Sep 2023 00:00:00 +0000</pubDate>
@@ -204,42 +240,6 @@
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</description>
-        </item>
-        <item>
-        <title>2025最新，使用Github Action部署hugo个人博客&#43;自有域名配置</title>
-        <link>/zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/</link>
-        <pubDate>Thu, 27 Jul 2023 00:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/</guid>
-        <description>&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image.png&#34;
-	width=&#34;2699&#34;
-	height=&#34;1239&#34;
-	srcset=&#34;/zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image_hu_a27ca3b4e682af13.png 480w, /zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image_hu_20e9bfd334172aa1.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;217&#34;
-		data-flex-basis=&#34;522px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image-1.png&#34;
-	width=&#34;2831&#34;
-	height=&#34;1306&#34;
-	srcset=&#34;/zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image-1_hu_cefae32d25f2276.png 480w, /zh-cn/post/2023/07/2025%E6%9C%80%E6%96%B0%E4%BD%BF%E7%94%A8github-action%E9%83%A8%E7%BD%B2hugo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2-%E8%87%AA%E6%9C%89%E5%9F%9F%E5%90%8D%E9%85%8D%E7%BD%AE/image-1_hu_81ce42358f604b16.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;216&#34;
-		data-flex-basis=&#34;520px&#34;
-	
-&gt;&lt;/p&gt;
-</description>
         </item>
         
     </channel>
