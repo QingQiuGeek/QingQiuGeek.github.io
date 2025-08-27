@@ -22,8 +22,6 @@
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image_hu_ae871aaf7cbe79af.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image_hu_abb20e2b328fbc6b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;209&#34;
@@ -75,8 +73,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1_hu_9f50d72e4713275a.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1_hu_e892968554c81460.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;352&#34;
@@ -96,8 +92,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2_hu_57d3224414c2e837.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2_hu_d5435fb5eaa6d337.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -111,8 +105,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3_hu_fbf8ea63e84c9d64.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3_hu_cd5ef232b66b9c88.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;227&#34;
@@ -125,8 +117,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	height=&#34;1148&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4_hu_493c72faaa0d005a.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4_hu_ba3abf22a2a6c6b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -149,8 +139,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	height=&#34;887&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5_hu_4d4e26163a453731.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5_hu_66e2c8639fa1ca70.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -191,8 +179,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6_hu_52dfd5d1e1ebfb29.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6_hu_11dd4332aaa90aaa.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;269&#34;
@@ -205,8 +191,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7_hu_2625dce4698b9464.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7_hu_de1611f6402ed05e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;181&#34;
@@ -218,8 +202,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;688&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8_hu_52c0bd3ecacf8461.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8_hu_cefe06dc3ddf1ff3.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -236,8 +218,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9_hu_fdcc81a3d0edfece.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9_hu_c4d2baad5f67d482.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;230&#34;
@@ -252,8 +232,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10_hu_157753679e8ec94b.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10_hu_128645316d4622f6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;89&#34;
@@ -266,8 +244,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11_hu_5749475ab96244d1.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11_hu_fdb712f4675e0e4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -279,8 +255,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;696&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12_hu_cbb94e5392c1e693.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12_hu_3fa0523a2f6f2f2b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -295,8 +269,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13_hu_4b1cee605bbbf67f.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13_hu_58e809ec424f960c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;94&#34;
@@ -308,8 +280,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;781&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14_hu_f1b4c4dcb189bb05.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14_hu_ca4e5674b708f30f.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -323,8 +293,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15_hu_3c0d662c6bd6c4dc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15_hu_3c58c6056ad8f8ae.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;78&#34;
@@ -336,8 +304,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;1308&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16_hu_3c0d662c6bd6c4dc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16_hu_3c58c6056ad8f8ae.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -356,8 +322,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17_hu_f4034a3b5f774256.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17_hu_c2d144baf5c37545.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -372,8 +336,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18_hu_8fee4c51ba5bc4bc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18_hu_233fa6c8244e1f4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;237&#34;
@@ -385,8 +347,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;955&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19_hu_e796581b28647e17.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19_hu_a7bfd4eb965f4d88.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -403,8 +363,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20_hu_68e96f09be2f3bc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20_hu_58f862bcd0565186.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;113&#34;
@@ -419,8 +377,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21_hu_54781fad034c5888.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21_hu_c4ac2a9b591cc19d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;173&#34;
@@ -433,8 +389,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;291&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22_hu_7b46bce3de21f748.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22_hu_775d8f0fe7403c04.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -483,8 +437,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23_hu_30a5329cc559fcde.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23_hu_d5dd26fb9b003a81.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -499,8 +451,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;658&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24_hu_f5e5925f43b6c9ad.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24_hu_e523a5cfc8834ca0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

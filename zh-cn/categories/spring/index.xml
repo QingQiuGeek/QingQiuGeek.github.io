@@ -358,6 +358,302 @@
 ---
 </description>
         </item>
+        <item>
+        <title>一文入门SpringSecurity 5</title>
+        <link>/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/</link>
+        <pubDate>Tue, 23 Jul 2024 17:48:45 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/</guid>
+        <description>&lt;h2 id=&#34;提示&#34;&gt;&lt;a href=&#34;#%e6%8f%90%e7%a4%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;提示
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Spring Security 源码的接口名和方法名都很长，看源码的时候要见名知意，有必要细看接口名和方法名，另外可以借助流程图，调试追踪代码，有助于理解学习！&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;apache-shiro-和-spring-security&#34;&gt;&lt;a href=&#34;#apache-shiro-%e5%92%8c-spring-security&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Apache Shiro 和 Spring Security
+&lt;/h2&gt;&lt;p&gt;​Spring Security 是一个**可高度可定制的身份验证（认证）和访问控制（授权）框架，**它是用于保护基于 Spring 的应用程序的实际标准，相比与另外一个安全框架 Shiro，它提供了更丰富的功能，社区资源也比 Shiro 丰富。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Shiro 轻量级，不依赖 Spring，是第三方框架，简单而灵活，可以用于非 Web 环境！&lt;/li&gt;
+&lt;li&gt;Security 重量级，依赖 Spring，控制粒度更细，老版本不能脱离 Web，新版本可以&lt;/li&gt;
+&lt;li&gt;Spring Boot 2 默认使用 Security 5，要求 JDK 至少是 8&lt;/li&gt;
+&lt;li&gt;Spring Boot 3 默认使用 Security 6，要求 JDK 至少是 17&lt;/li&gt;
+&lt;li&gt;Security 5 和 Security 6 的区别之一就是 5 到 6 废弃了&lt;strong&gt;WebSecurityConfigurerAdapter 类&lt;/strong&gt;，在 Security 5 编写配置类需要继承 WebSecurityConfigurerAdapter 并重写某些方法，但是在 Security 6 已经不需要了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://springdoc.cn/spring-deprecated-websecurityconfigureradapter/&#34;  title=&#34;Spring Security：升级已弃用的 WebSecurityConfigurerAdapter - spring 中文网&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spring Security：升级已弃用的 WebSecurityConfigurerAdapter - spring 中文网&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://springdoc.cn/spring-security-migrate-5-to-6/#google_vignette&#34;  title=&#34;从 Spring Security 5 迁移到 Spring Security 6/Spring Boot 3 - spring 中文网&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;从 Spring Security 5 迁移到 Spring Security 6/Spring Boot 3 - spring 中文网&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;认证和授权&#34;&gt;&lt;a href=&#34;#%e8%ae%a4%e8%af%81%e5%92%8c%e6%8e%88%e6%9d%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;认证和授权
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;认证&lt;/strong&gt;（Authentication）：验证当前访问系统的是不是本系统的用户，并且要确认具体是哪个用户&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;​ 授权&lt;/strong&gt;（Authorization）：经过认证后判断当前用户是否有权限进行某个操作&lt;/p&gt;
+&lt;p&gt;注：Authentication 和 Authorization 拼写很像，有必要分清，后面看源代码方便！&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;rbac&#34;&gt;&lt;a href=&#34;#rbac&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RBAC
+&lt;/h2&gt;&lt;p&gt;Role-Based Access Control 基于角色的访问控制&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image.png&#34;
+	width=&#34;708&#34;
+	height=&#34;337&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image_hu_982a41ae3026fd77.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image_hu_3de2d16810a73f28.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;504px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;把权限打包给角色（角色拥有一组权限），给用户分配角色（用户拥有多个角色）&lt;/p&gt;
+&lt;p&gt;最少包括五张表 （用户表、角色表、用户角色表、权限表、角色权限表）&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;demo&#34;&gt;&lt;a href=&#34;#demo&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Demo
+&lt;/h2&gt;&lt;h3 id=&#34;环境&#34;&gt;&lt;a href=&#34;#%e7%8e%af%e5%a2%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;环境
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Spring Boot：2.7.2&lt;/p&gt;
+&lt;p&gt;SpringSecurity：5+&lt;/p&gt;
+&lt;p&gt;JDK：1.8&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;controller&#34;&gt;&lt;a href=&#34;#controller&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Controller
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@RestController&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/admin&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;AdminController&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nd&#34;&gt;@GetMapping&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/query&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;queryInfo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;I am a admin&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;可以直接访问
+&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-1.png&#34;
+	width=&#34;871&#34;
+	height=&#34;254&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-1_hu_3d61c493d4e42671.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-1_hu_e43c5c45ad094898.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;342&#34;
+		data-flex-basis=&#34;822px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;引入-spring-security&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e5%85%a5-spring-security&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引入 Spring Security
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dependency&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;groupId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;springframework&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;boot&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;groupId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;artifactId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;spring&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;boot&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;starter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;artifactId&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dependency&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;再次访问时默认出现了该登陆界面，&lt;strong&gt;默认用户是 user，密码默认在控制台生成&lt;/strong&gt; ，成功登陆后才会放行。&lt;strong&gt;Spring Security 默认拦截了除登录、退出之外的所有请求&lt;/strong&gt;。显示的登录和退出表单是 Security 默认生成的。&lt;/p&gt;
+&lt;p&gt;（前端页面样式 bootstrap.min.css 是一个 CDN 地址，需要魔法，所以加载很慢）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-2.png&#34;
+	width=&#34;1072&#34;
+	height=&#34;656&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-2_hu_5344c98b869f7bf.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-2_hu_d7c586399ef276f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;163&#34;
+		data-flex-basis=&#34;392px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-3.png&#34;
+	width=&#34;1969&#34;
+	height=&#34;182&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-3_hu_114ecd68d735a5b6.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-3_hu_b69bb0da507b6c8c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1081&#34;
+		data-flex-basis=&#34;2596px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-4.png&#34;
+	width=&#34;1278&#34;
+	height=&#34;614&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-4_hu_797b415802bcaeeb.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-4_hu_9fc1e2adbb5c917e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;208&#34;
+		data-flex-basis=&#34;499px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;初探-security-原理&#34;&gt;&lt;a href=&#34;#%e5%88%9d%e6%8e%a2-security-%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;初探 Security 原理
+&lt;/h2&gt;&lt;p&gt;**Spring Security 底层是基于 Servlet 的过滤器链，默认共有 16 个过滤器，&lt;strong&gt;这里面我们只需要重点关注两个过滤器即可：&lt;/strong&gt;&lt;code&gt;UsernamePasswordAuthenticationFilter&lt;/code&gt;&lt;strong&gt;负责登录认证，&lt;/strong&gt;&lt;code&gt;FilterSecurityInterceptor&lt;/code&gt;**负责权限授权。
+&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-5.png&#34;
+	width=&#34;920&#34;
+	height=&#34;967&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-5_hu_3b5760c1aa643c62.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-5_hu_378d5bf069f60297.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;95&#34;
+		data-flex-basis=&#34;228px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;认证授权图示&#34;&gt;&lt;a href=&#34;#%e8%ae%a4%e8%af%81%e6%8e%88%e6%9d%83%e5%9b%be%e7%a4%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;认证授权图示
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-6.png&#34;
+	width=&#34;1538&#34;
+	height=&#34;520&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-6_hu_908685fa00294a3d.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-6_hu_71be2eda08406c2f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;295&#34;
+		data-flex-basis=&#34;709px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-7.png&#34;
+	width=&#34;1240&#34;
+	height=&#34;1132&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-7_hu_40d284aaadde4345.png 480w, /zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/image-7_hu_20c660161f151fb7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;109&#34;
+		data-flex-basis=&#34;262px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;图中涉及的类和接口&#34;&gt;&lt;a href=&#34;#%e5%9b%be%e4%b8%ad%e6%b6%89%e5%8f%8a%e7%9a%84%e7%b1%bb%e5%92%8c%e6%8e%a5%e5%8f%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;图中涉及的类和接口
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UsernamePasswordAuthenticationFilter 类&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;抽象类 AbstractAuthenticationProcessingFilter 的子类，是常用的用户名和密码认证方式的主要处理类,该类中将用请求信息封装为&lt;strong&gt;初步&lt;/strong&gt;的 Authentication（Authentication 实际上是一个接口，它的实现类是 UsernamePasswordAuthenticationToken），此时最多只有用户名和密码，在&lt;strong&gt;登录认证成功之后&lt;/strong&gt;又会生成一个包含用户权限等信息的&lt;strong&gt;更全面&lt;/strong&gt;的 Authentication 对象，然后把它保存在 SecurityContextHolder 所持有的 SecurityContext 中。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AuthenticationManager 接口&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;用来处理 Authentication 请求的接口。在其中只定义了一个方法 authenticate()，该方法只接收一个代表认证请求的 Authentication 对象作为参数，如果认证成功，则会返回一个封装了当前用户权限等信息的 Authentication 对象。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;AuthenticationManager&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Authentication&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;authenticate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Authentication&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;authentication&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;throws&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AuthenticationException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ProviderManager 类&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;ProviderManager&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AuthenticationManager&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MessageSourceAware&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;InitializingBean&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;AuthenticationManager 接口的实现类&lt;/strong&gt;，&lt;strong&gt;AuthenticationManager 接口&lt;/strong&gt;不直接自己处理认证请求，而是委托给&lt;strong&gt;ProviderManager&lt;/strong&gt;所配置的&lt;strong&gt;AuthenticationProvider 列表，&lt;strong&gt;而 ProviderManager 的作用就是管理这个 AuthenticationProvider 列表，&lt;strong&gt;管理的方式是通过 for 循环去遍历该列表，因为不同的登录逻辑（表单登录、qq 登录、邮箱登录）是不一样的，那么&lt;/strong&gt;AuthenticationProvider 列表就要&lt;/strong&gt;支持不同的 Authentication。&lt;br&gt;
+信息验证的逻辑都是在&lt;/strong&gt;AuthenticationProvider**里面，会依次使用每一个 AuthenticationProvider 进行认证，如果有一个 AuthenticationProvider 认证后的结果不为 null，则表示该 AuthenticationProvider 已经认证成功，之后的 AuthenticationProvider 将不再继续认证。然后直接以该 AuthenticationProvider 的认证结果作为 ProviderManager 的认证结果。如果所有的 AuthenticationProvider 的认证结果都为 null，则表示认证失败，将抛出一个 **ProviderNotFoundException**。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AuthenticationProvider 接口&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;该接口被实现为抽象类 AbstractUserDetailsAuthenticationProvider，然后 DaoAuthenticationProvider 类继承该抽象类，并拥有一个 UserDetailsService 的变量&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;abstract&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;AbstractUserDetailsAuthenticationProvider&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AuthenticationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;InitializingBean&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MessageSourceAware&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;DaoAuthenticationProvider&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;extends&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AbstractUserDetailsAuthenticationProvider&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UserDetailsService 接口&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;UserDetailsService&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UserDetails&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;loadUserByUsername&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;username&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;throws&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UsernameNotFoundException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;加载用户数据&lt;/strong&gt;的核心&lt;strong&gt;接口，可以自定义从数据库加载数据或者从内存加载临时用户（InMemory）&lt;/strong&gt;,登录认证的时候 Spring Security 会通过 UserDetailsService 的 loadUserByUsername() 方法获取对应的 UserDetails 类型的用户信息进行认证，&lt;strong&gt;认证通过后会将用户信息封装为 UserDetails 接口的实现类 User&lt;/strong&gt; 并赋给认证通过的 Authentication 的 principal，然后再把该 Authentication 存入到 SecurityContext 中。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;InMemoryUserDetailsManager 类&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;该类是&lt;strong&gt;UserDetailsService 接口&lt;/strong&gt;的实现类，作用是从内存中加载用户，也就是说用户是在代码中提前写好的，程序运行后被加载到内存，不是从数据库中取的没有持久化，如果是从数据库加载用户就不用这个类了。该类有一个方法是&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;private&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;User&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;createUserDetails&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UserAttribute&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;attr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;返回值是&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;User&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;类型&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UserDetails 接口&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;提供用户核心信息的&lt;strong&gt;接口&lt;/strong&gt;,通过 UserDetailsService 的 loadUserByUsername() 方法获取,然后将该 UserDetails 赋给认证通过的 Authentication 的 principal。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;UserDetails&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;extends&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Serializable&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;User 类&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;User&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UserDetails&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CredentialsContainer&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;UserDetails 接口的实现类，User 类也是 security 的默认用户类，我们可以继承该类对其方法重写&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;SecurityContextHolder 类&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;用来保存 SecurityContext 的，SecurityContext 中含有当前正在访问系统的用户的详细信息。默认情况下，SecurityContextHolder &lt;strong&gt;使用 ThreadLocal 来保存 SecurityContext&lt;/strong&gt;，这也就意味着&lt;strong&gt;在处于同一线程中的方法中我们可以从 ThreadLocal 中获取到当前的 SecurityContext。因为线程池的原因，如果我们每次在请求完成后都将 ThreadLocal 进行清除的话，那么我们把 SecurityContext 存放在 ThreadLocal 中还是比较安全的&lt;/strong&gt;。这些工作 Spring Security 已经自动为我们做了，即在每一次 request 结束后都将清除当前线程的 ThreadLocal。&lt;/p&gt;
+&lt;h2 id=&#34;流程总结&#34;&gt;&lt;a href=&#34;#%e6%b5%81%e7%a8%8b%e6%80%bb%e7%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;流程总结
+&lt;/h2&gt;&lt;p&gt;用户填写的用户名密码传到后端，进入 Security 的过滤器链进行验证，验证流程为：&lt;/p&gt;
+&lt;p&gt;进入 UsernamePasswordAuthenticationFilter，里面有一个 attemptAuthentication 方法，该方法会生成一个 UsernamePasswordAuthenticationToken，也就是一个凭证 Authentication，这个 Authentication 只包含了用户名、密码这些基础信息，没有权限等其他信息，然后 Authentication 作为参数被传到 AuthenticationManager 接口的实现类 ProviderManager 类的 authenticate 方法进行认证，ProviderManager 类中有一个 List&lt;AuthenticationProvider&gt; 列表（AuthenticationProvider 是接口，AbstractUserDetailsAuthenticationProvider 是接口的抽象类，DaoAuthenticationProvider 是实现类），该列表存放着不同的登录逻辑&lt;strong&gt;AuthenticationProvider&lt;/strong&gt;，通过 for 循环去遍历该列表，信息验证的逻辑都是在&lt;strong&gt;AuthenticationProvider&lt;/strong&gt;里面，会依次使用每一 AuthenticationProvider 进行认证，如果有一个 AuthenticationProvider 认证后的结果不为 null，则表示该 AuthenticationProvider 已经认证成功，之后的 AuthenticationProvider 将不再继续认证。然后直接以该 AuthenticationProvider 的认证结果作为 ProviderManager 的认证结果。如果所有的 AuthenticationProvider 的认证结果都为 null，则表示认证失败，将抛出一个 &lt;strong&gt;ProviderNotFoundException。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;DaoAuthenticationProvider 内部的认证逻辑：它有一个 retrieveUser 方法，该方法调用 UserDetailsService().loadUserByUsername 从数据库获取用户信息，并返回一个 UserDetails 类型的对象，它含有用户的详细信息，如用户权限等等，然后将 UserDetails 对象和 Authentication 校验，成功后会把 UserDetails 中的信息填入到 Authentication，一个最终的 Authentication 就产生了，它会被保存到安全上下文中！&lt;/p&gt;
+</description>
+        </item>
         
     </channel>
 </rss>

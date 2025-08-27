@@ -11,7 +11,7 @@
 <meta property='og:description' content="redis实战--短信验证码登录，基于session实现和基于redis实现，双重拦截器配置，token刷新">
 <meta property='og:url' content='/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='数据库' /><meta property='article:tag' content='缓存' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2024-05-15T20:01:48&#43;00:00'/><meta property='article:modified_time' content='2024-05-15T20:01:48&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2024-05-15T20:01:48&#43;00:00'/><meta property='article:modified_time' content='2024-05-15T20:01:48&#43;00:00'/>
 <meta name="twitter:title" content="Redis实战—验证码登录注册">
 <meta name="twitter:description" content="redis实战--短信验证码登录，基于session实现和基于redis实现，双重拦截器配置，token刷新">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,11 +336,26 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#基于session-e59fbae4ba8esession">基于Session {#%E5%9F%BA%E4%BA%8ESession}</a>
+    <li><a href="#基于-session">基于 Session</a>
       <ol>
-        <li><a href="#controller层-controllere5b182">Controller层 {#Controller%E5%B1%82}</a></li>
-        <li><a href="#service层-servicee5b182">Service层 {#Service%E5%B1%82}</a></li>
-        <li><a href="#serviceimpl层-serviceimple5b182">ServiceImpl层 {#ServiceImpl%E5%B1%82}</a></li>
+        <li><a href="#controller-层">Controller 层</a></li>
+        <li><a href="#service-层">Service 层</a></li>
+        <li><a href="#serviceimpl-层">ServiceImpl 层</a></li>
+        <li><a href="#校验登录状态">校验登录状态</a>
+          <ol>
+            <li><a href="#threadlocal">ThreadLocal</a></li>
+            <li><a href="#登录拦截器">登录拦截器</a></li>
+            <li><a href="#添加拦截器到-config">添加拦截器到 Config</a></li>
+            <li><a href="#controller-层实现">Controller 层实现</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#基于-redis">基于 Redis</a>
+      <ol>
+        <li><a href="#serviceimpl">ServiceImpl</a></li>
+        <li><a href="#新增刷新拦截器">新增刷新拦截器</a></li>
+        <li><a href="#添加拦截器到-config-1">添加拦截器到 Config</a></li>
       </ol>
     </li>
   </ol>
@@ -406,7 +421,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 3 分钟
+                阅读时长: 6 分钟
             </time>
         </div>
         
@@ -432,16 +447,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E7%BC%93%E5%AD%98/">缓存</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/java/">Java</a> 
             
             
@@ -458,32 +463,20 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#%E5%9F%BA%E4%BA%8ESession" >基于Session</a>{#%E5%9F%BA%E4%BA%8ESession-toc}</p>
-<p><a class="link" href="#Controller%E5%B1%82" >Controller层</a>{#Controller%E5%B1%82-toc}</p>
-<p><a class="link" href="#Service%E5%B1%82" >Service层</a>{#Service%E5%B1%82-toc}</p>
-<p><a class="link" href="#ServiceImpl%E5%B1%82" >ServiceImpl层</a>{#ServiceImpl%E5%B1%82-toc}</p>
-<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%91%E6%A0%A1%E9%AA%8C%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81" >​编辑校验登录状态</a>{#%E2%80%8B%E7%BC%96%E8%BE%91%E6%A0%A1%E9%AA%8C%E7%99%BB%E5%BD%95%E7%8A%B6%E6%80%81-toc}</p>
-<p><a class="link" href="#ThreadLocal" >ThreadLocal</a>{#ThreadLocal-toc}</p>
-<p><a class="link" href="#%E7%99%BB%E5%BD%95%E6%8B%A6%E6%88%AA%E5%99%A8" >登录拦截器</a>{#%E7%99%BB%E5%BD%95%E6%8B%A6%E6%88%AA%E5%99%A8-toc}</p>
-<p><a class="link" href="#%E6%B7%BB%E5%8A%A0%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%B0Config" >添加拦截器到Config</a>{#%E6%B7%BB%E5%8A%A0%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%B0Config-toc}</p>
-<p><a class="link" href="#Controller%E5%B1%82%E5%AE%9E%E7%8E%B0" >Controller层实现</a>{#Controller%E5%B1%82%E5%AE%9E%E7%8E%B0-toc}</p>
-<p><a class="link" href="#%E5%9F%BA%E4%BA%8ERedis" >基于Redis</a>{#%E5%9F%BA%E4%BA%8ERedis-toc}</p>
-<p><a class="link" href="#ServiceImpl" >ServiceImpl</a>{#ServiceImpl-toc}</p>
-<p><a class="link" href="#%E6%96%B0%E5%A2%9E%E5%88%B7%E6%96%B0%E6%8B%A6%E6%88%AA%E5%99%A8" >新增刷新拦截器</a>{#%E6%96%B0%E5%A2%9E%E5%88%B7%E6%96%B0%E6%8B%A6%E6%88%AA%E5%99%A8-toc}</p>
-<p><a class="link" href="#%E6%B7%BB%E5%8A%A0%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%B0Config" >添加拦截器到Config</a>{#%E6%B7%BB%E5%8A%A0%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%B0Config-toc}</p>
-<hr>
-<br />
-<h2 id="基于session-e59fbae4ba8esession"><a href="#%e5%9f%ba%e4%ba%8esession-e59fbae4ba8esession" class="header-anchor"></a>基于Session {#%E5%9F%BA%E4%BA%8ESession}
-</h2><p><img src="https://i-blog.csdnimg.cn/blog_migrate/1539c8a565f979fa9f96e8e187747d9d.png"
-	
-	
-	
+    <h2 id="基于-session"><a href="#%e5%9f%ba%e4%ba%8e-session" class="header-anchor"></a>基于 Session
+</h2><p><img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image.png"
+	width="1367"
+	height="687"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image_hu_f255ec84cb953b9b.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image_hu_12bdde2c430989ad.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="477px"
+	
 ></p>
-<h3 id="controller层-controllere5b182"><a href="#controller%e5%b1%82-controllere5b182" class="header-anchor"></a>Controller层 {#Controller%E5%B1%82}
+<h3 id="controller-层"><a href="#controller-%e5%b1%82" class="header-anchor"></a>Controller 层
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -507,9 +500,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">19
 </span><span class="lnt">20
 </span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">    </span><span class="cm">/**
@@ -533,12 +523,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// TODO 实现登录功能</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">login</span><span class="p">(</span><span class="n">loginForm</span><span class="p">,</span><span class="n">session</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="service层-servicee5b182"><a href="#service%e5%b1%82-servicee5b182" class="header-anchor"></a>Service层 {#Service%E5%B1%82}
+</div><h3 id="service-层"><a href="#service-%e5%b1%82" class="header-anchor"></a>Service 层
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -551,7 +538,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="n">Result</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">LoginFormDTO</span><span class="w"> </span><span class="n">loginForm</span><span class="p">,</span><span class="w"> </span><span class="n">HttpSession</span><span class="w"> </span><span class="n">session</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="serviceimpl层-serviceimple5b182"><a href="#serviceimpl%e5%b1%82-serviceimple5b182" class="header-anchor"></a>ServiceImpl层 {#ServiceImpl%E5%B1%82}
+</div><h3 id="serviceimpl-层"><a href="#serviceimpl-%e5%b1%82" class="header-anchor"></a>ServiceImpl 层
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -601,9 +588,34 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">45
 </span><span class="lnt">46
 </span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">   
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//登录</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">LoginFormDTO</span><span class="w"> </span><span class="n">loginForm</span><span class="p">,</span><span class="w"> </span><span class="n">HttpSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -649,11 +661,581 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setPhone</span><span class="p">(</span><span class="n">phone</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//生成随机用户名</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setNickName</span><span class="p">(</span><span class="s">&#34;user_&#34;</span><span class="o">+</span><span class="n">RandomUtil</span><span class="p">.</span><span class="na">randomString</span><span class="p">(</span><span class="n">5</span><span class="p">));</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">save</span><span class="p">(</span><span class="n">us</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">save</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="c1">//保存用户到数据库,mybatis-plus提供的</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">user</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//发送验证码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">sendCode</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">HttpSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1. 校验手机号</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">RegexUtils</span><span class="p">.</span><span class="na">isPhoneInvalid</span><span class="p">(</span><span class="n">phone</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//2. 不符合，返回错误信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">fail</span><span class="p">(</span><span class="s">&#34;手机号格式错误&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3.符合，生成6位验证码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RandomUtil</span><span class="p">.</span><span class="na">randomNumbers</span><span class="p">(</span><span class="n">6</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//4.验证码保存到session稍后返回给服务端，以便服务端进行登录验证</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">session</span><span class="p">.</span><span class="na">setAttribute</span><span class="p">(</span><span class="s">&#34;code&#34;</span><span class="p">,</span><span class="n">code</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//5.发送验证码，这里验证码输出到控制台</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;验证码发送成功：{}&#34;</span><span class="p">,</span><span class="n">code</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//6.返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><hr>
-
+</div><p><img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-1.png"
+	width="1713"
+	height="865"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-1_hu_be1409a0b7fccc02.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-1_hu_427ae6655a3271b6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="475px"
+	
+></p>
+<h3 id="校验登录状态"><a href="#%e6%a0%a1%e9%aa%8c%e7%99%bb%e5%bd%95%e7%8a%b6%e6%80%81" class="header-anchor"></a>校验登录状态
+</h3><p><strong>上面完成了短信验证码的发送及登录注册，用户如果登陆成功就要进入个人主页，但是进入个人主页需要验证用户的登录状态，接下来使用拦截器和 ThreadLocal 完成登录状态校验</strong></p>
+<p><img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-2.png"
+	width="1562"
+	height="782"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-2_hu_b06156446998283f.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-2_hu_67ff9d7b3f63cb8b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="479px"
+	
+></p>
+<h4 id="threadlocal"><a href="#threadlocal" class="header-anchor"></a>ThreadLocal
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserHolder</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">UserDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ThreadLocal</span><span class="o">&lt;&gt;</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">saveUser</span><span class="p">(</span><span class="n">UserDTO</span><span class="w"> </span><span class="n">user</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">tl</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">UserDTO</span><span class="w"> </span><span class="nf">getUser</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">tl</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeUser</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">tl</span><span class="p">.</span><span class="na">remove</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="登录拦截器"><a href="#%e7%99%bb%e5%bd%95%e6%8b%a6%e6%88%aa%e5%99%a8" class="header-anchor"></a>登录拦截器
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//这是一个自定义的拦截器类，用于校验登陆状态</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">//需要在config中添加到拦截器中才会生效</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">LoginInterceptor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">HandlerInterceptor</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">afterCompletion</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">removerUser</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">preHandle</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//1.获取session</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">HttpSession</span><span class="w"> </span><span class="n">session</span><span class="o">=</span><span class="n">request</span><span class="p">.</span><span class="na">getSession</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//2.获取session中的用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Object</span><span class="w"> </span><span class="n">user</span><span class="o">=</span><span class="n">session</span><span class="p">.</span><span class="na">getAttribute</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//3.判断用户是否存在</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="kc">null</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//4.不存在，拦截</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">response</span><span class="p">.</span><span class="na">setStatus</span><span class="p">(</span><span class="n">401</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//5.存在，保存到ThreadLocal，并放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">saveUSer</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="添加拦截器到-config"><a href="#%e6%b7%bb%e5%8a%a0%e6%8b%a6%e6%88%aa%e5%99%a8%e5%88%b0-config" class="header-anchor"></a>添加拦截器到 Config
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MvcConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addInterceptors</span><span class="p">(</span><span class="n">InterceptorRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 登录拦截器</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">addInterceptor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">LoginInterceptor</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">excludePathPatterns</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/shop/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/voucher/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/shop-type/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/upload/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/blog/hot&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/user/code&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/user/login&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="controller-层实现"><a href="#controller-%e5%b1%82%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>Controller 层实现
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//登录校验状态</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/me&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//个人主页</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">me</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// TODO 获取当前登录的用户并返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//在拦截器LoginInterceptor中已经把用户保存到localthread</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserDTO</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">getUser</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="基于-redis"><a href="#%e5%9f%ba%e4%ba%8e-redis" class="header-anchor"></a>基于 Redis
+</h2><p><img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-3.png"
+	width="1416"
+	height="711"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-3_hu_c95787ce8b2455d.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-3_hu_2ba06558fa036bee.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="477px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-4.png"
+	width="932"
+	height="714"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-4_hu_5e4aa72e75c685d0.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-4_hu_cb1b24c3d8c721cc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="130"
+		data-flex-basis="313px"
+	
+>
+<img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-5.png"
+	width="1637"
+	height="839"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-5_hu_1d126e5328e5e996.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-5_hu_fcd38f9db595e398.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
+	
+>
+<strong>接下来在上面代码的基础上修改 serviceImpl 和拦截器及 config</strong></p>
+<h3 id="serviceimpl"><a href="#serviceimpl" class="header-anchor"></a>ServiceImpl
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//注入stringRedisTemplate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Resource</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">LoginFormDTO</span><span class="w"> </span><span class="n">loginForm</span><span class="p">,</span><span class="w"> </span><span class="n">HttpSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1.校验手机号</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">phone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginForm</span><span class="p">.</span><span class="na">getPhone</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">RegexUtils</span><span class="p">.</span><span class="na">isPhoneInvalid</span><span class="p">(</span><span class="n">phone</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//2.不符合返回错误信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">fail</span><span class="p">(</span><span class="s">&#34;手机号格式错误&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3.手机号校验成功，校验验证码，验证码从redis中获取</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">get</span><span class="p">(</span><span class="s">&#34;login:code:&#34;</span><span class="o">+</span><span class="n">phone</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">logincode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loginForm</span><span class="p">.</span><span class="na">getCode</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">code</span><span class="o">==</span><span class="kc">null</span><span class="o">||!</span><span class="n">code</span><span class="p">.</span><span class="na">toString</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="n">logincode</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//4.验证码错误</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">fail</span><span class="p">(</span><span class="s">&#34;验证码错误&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//5.验证码一致，查询是否存在用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//query()是mp提供的，本类继承了extends ServiceImpl&lt;UserMapper, User&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">query</span><span class="p">().</span><span class="na">eq</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">phone</span><span class="p">).</span><span class="na">one</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user</span><span class="o">==</span><span class="kc">null</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//6.不存在用户，创建新用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">user</span><span class="o">=</span><span class="n">createUserWithPhone</span><span class="p">(</span><span class="n">phone</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//7.用户存在，生成用户的token作为登录凭证</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">().</span><span class="na">toString</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//8.存入redis时用的hash存储，因此这里要把userDto转换成hashmap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserDTO</span><span class="w"> </span><span class="n">userDTO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BeanUtil</span><span class="p">.</span><span class="na">copyProperties</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">UserDTO</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">userMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BeanUtil</span><span class="p">.</span><span class="na">beanToMap</span><span class="p">(</span><span class="n">userDTO</span><span class="p">,</span><span class="k">new</span><span class="w"> </span><span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">(),</span><span class="w"> </span><span class="n">CopyOptions</span><span class="p">.</span><span class="na">create</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">setIgnoreNullValue</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">setFieldValueEditor</span><span class="p">((</span><span class="n">fieldName</span><span class="p">,</span><span class="n">fieldValue</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">fieldValue</span><span class="p">.</span><span class="na">toString</span><span class="p">()));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//9.token存入redis并设置token有效期</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForHash</span><span class="p">().</span><span class="na">putAll</span><span class="p">(</span><span class="s">&#34;login:token:&#34;</span><span class="o">+</span><span class="n">token</span><span class="p">,</span><span class="n">userMap</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">expire</span><span class="p">(</span><span class="s">&#34;login:token:&#34;</span><span class="p">,</span><span class="n">30</span><span class="p">,</span><span class="n">TimeUnit</span><span class="p">.</span><span class="na">MINUTES</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">token</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">sendCode</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">phone</span><span class="p">,</span><span class="w"> </span><span class="n">HttpSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//1.校验手机号</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">RegexUtils</span><span class="p">.</span><span class="na">isPhoneInvalid</span><span class="p">(</span><span class="n">phone</span><span class="p">)){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//2.不符合返回错误信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">fail</span><span class="p">(</span><span class="s">&#34;手机号格式错误&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//2.符合生成验证码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RandomUtil</span><span class="p">.</span><span class="na">randomNumbers</span><span class="p">(</span><span class="n">6</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//3.保存到redis中,设置有效期1分钟</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForValue</span><span class="p">().</span><span class="na">set</span><span class="p">(</span><span class="s">&#34;login:code:&#34;</span><span class="o">+</span><span class="n">phone</span><span class="p">,</span><span class="n">code</span><span class="p">,</span><span class="n">1L</span><span class="p">,</span><span class="w"> </span><span class="n">TimeUnit</span><span class="p">.</span><span class="na">MINUTES</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//4.发送验证码给客户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">log</span><span class="p">.</span><span class="na">info</span><span class="p">(</span><span class="s">&#34;验证码发送成功：{}&#34;</span><span class="p">,</span><span class="n">code</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="新增刷新拦截器"><a href="#%e6%96%b0%e5%a2%9e%e5%88%b7%e6%96%b0%e6%8b%a6%e6%88%aa%e5%99%a8" class="header-anchor"></a>新增刷新拦截器
+</h3><p>用于刷新 Token 有效期，这里做了拦截器的优化。在第一个拦截器会获取 token，根据 token 去 redis 查询用户，如果查到就说明用户已经登陆过了，此时只需要刷新 token 有效期并保存到 threadlocal 然后放行。如果没有查到说明是未登录用户或者登录已经过期，那么 token 也是 null 的，也直接放行，<strong>所以第一个拦截器虽然拦截一切路径，但不论如何最后都会放行，其主要作用是对已登录用户刷新 token，在第二个拦截器才会对未登录用户进行限制，决定放不放行。</strong></p>
+<p><img src="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-6.png"
+	width="1720"
+	height="847"
+	srcset="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-6_hu_f95434d930950164.png 480w, /zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/image-6_hu_e8628783bc606a95.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RefreshTokenInterceptor</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">HandlerInterceptor</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">RefreshTokenInterceptor</span><span class="p">(</span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">stringRedisTemplate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">preHandle</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 1.获取请求头中的token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="na">getHeader</span><span class="p">(</span><span class="s">&#34;authorization&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">StrUtil</span><span class="p">.</span><span class="na">isBlank</span><span class="p">(</span><span class="n">token</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 2.基于TOKEN获取redis中的用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;login:token&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">token</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Object</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">userMap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForHash</span><span class="p">().</span><span class="na">entries</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 3.判断用户是否存在</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">userMap</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 5.将查询到的hash数据转为UserDTO</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserDTO</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BeanUtil</span><span class="p">.</span><span class="na">fillBeanWithMap</span><span class="p">(</span><span class="n">userMap</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">UserDTO</span><span class="p">(),</span><span class="w"> </span><span class="kc">false</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 6.存在，保存用户信息到 ThreadLocal</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">saveUser</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 7.刷新token有效期</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">expire</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">30L</span><span class="p">,</span><span class="w"> </span><span class="n">TimeUnit</span><span class="p">.</span><span class="na">MINUTES</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 8.放行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">afterCompletion</span><span class="p">(</span><span class="n">HttpServletRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">HttpServletResponse</span><span class="w"> </span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 移除用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">removeUser</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="添加拦截器到-config-1"><a href="#%e6%b7%bb%e5%8a%a0%e6%8b%a6%e6%88%aa%e5%99%a8%e5%88%b0-config-1" class="header-anchor"></a>添加拦截器到 Config
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MvcConfig</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">WebMvcConfigurer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Resource</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">StringRedisTemplate</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addInterceptors</span><span class="p">(</span><span class="n">InterceptorRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 登录拦截器</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">addInterceptor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">LoginInterceptor</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">excludePathPatterns</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/shop/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/voucher/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/shop-type/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/upload/**&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/blog/hot&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/user/code&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="s">&#34;/user/login&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">).</span><span class="na">order</span><span class="p">(</span><span class="n">1</span><span class="p">);</span><span class="c1">//设置拦截器的优先级</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// token刷新的拦截器，拦截所有请求</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">addInterceptor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">RefreshTokenInterceptor</span><span class="p">(</span><span class="n">stringRedisTemplate</span><span class="p">)).</span><span class="na">addPathPatterns</span><span class="p">(</span><span class="s">&#34;/**&#34;</span><span class="p">).</span><span class="na">order</span><span class="p">(</span><span class="n">0</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//后注册的拦截器先执行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 

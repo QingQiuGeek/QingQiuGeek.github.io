@@ -2353,8 +2353,6 @@ HashRouter的路径包含#,例如：localhost:3000/#/demo/test&lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image_hu_7ef02301cd0d3109.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image_hu_b5cbf9b6a1064922.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;129&#34;
@@ -2366,8 +2364,6 @@ HashRouter的路径包含#,例如：localhost:3000/#/demo/test&lt;br&gt;
 	height=&#34;389&#34;
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-1_hu_5f75b2ded8c63ad9.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-1_hu_310098749ef72196.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2391,8 +2387,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-2_hu_8753ad5876531cf0.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-2_hu_7346afe3f031fb2d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;153&#34;
@@ -2406,8 +2400,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-3_hu_48f5d46d1a7d633d.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-3_hu_e8ddf82b4de151eb.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;268&#34;
@@ -2420,8 +2412,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	height=&#34;122&#34;
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-4_hu_f4a4bca0c49742bb.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-4_hu_32e0da58e783ad1c.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2539,8 +2529,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-5_hu_3c3a0ec648835fe9.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-5_hu_bbd153deeee5415e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;437&#34;
@@ -2553,8 +2541,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	height=&#34;153&#34;
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-6_hu_d062e7b10866ba78.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-6_hu_104129036172f394.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2617,8 +2603,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-7_hu_c8aee62ff287a03e.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-7_hu_50f6a8c9e0bc2ec7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;165&#34;
@@ -2642,8 +2626,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-8_hu_2674e298dc26d1ec.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-8_hu_205ae9309cfad841.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;436&#34;
@@ -2655,8 +2637,6 @@ npm_mirror: https://npm.taobao.org/mirrors/npm/
 	height=&#34;1428&#34;
 	srcset=&#34;/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-9_hu_8e2e9fc4eebb97c5.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-9_hu_9e9453975197f0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

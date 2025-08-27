@@ -11,7 +11,7 @@
 <meta property='og:description' content="用户共同关注功能、feed流新消息推送、zset实现滚动分页查询">
 <meta property='og:url' content='/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='共同关注' /><meta property='article:tag' content='Feed流推送' /><meta property='article:published_time' content='2024-07-16T17:43:11&#43;00:00'/><meta property='article:modified_time' content='2024-07-16T17:43:11&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:published_time' content='2024-07-16T17:43:11&#43;00:00'/><meta property='article:modified_time' content='2024-07-16T17:43:11&#43;00:00'/>
 <meta name="twitter:title" content="Redis的zset实现共同关注、懒汉式关注推送">
 <meta name="twitter:description" content="用户共同关注功能、feed流新消息推送、zset实现滚动分页查询">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -337,7 +337,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <nav id="TableOfContents">
   <ol>
     <li><a href="#共同关注功能">共同关注功能</a></li>
-    <li><a href="#feed流推送">Feed流推送</a></li>
+    <li><a href="#feed-流推送">Feed 流推送</a></li>
+    <li><a href="#推模式实现关注推送功能">推模式实现关注推送功能  </a></li>
+    <li><a href="#滚动分页查询">滚动分页查询</a></li>
   </ol>
 </nav>
         </div>
@@ -401,7 +403,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 3 分钟
             </time>
         </div>
         
@@ -425,16 +427,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/redis/">Redis</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8/">共同关注</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/feed%E6%B5%81%E6%8E%A8%E9%80%81/">Feed流推送</a> 
-            
-            
         </div>
         
     </footer>
@@ -449,12 +441,16 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <h2 id="共同关注功能"><a href="#%e5%85%b1%e5%90%8c%e5%85%b3%e6%b3%a8%e5%8a%9f%e8%83%bd" class="header-anchor"></a>共同关注功能
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/076b7115fd4247a592168302283ae0e7.png"
-	
-	
-	
+</h2><p><img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image.png"
+	width="1441"
+	height="737"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image_hu_86b1ed787f01f348.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image_hu_d2771366b8d08f5e.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="469px"
 	
 ></p>
 <div class="highlight"><div class="chroma">
@@ -499,24 +495,316 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="feed流推送"><a href="#feed%e6%b5%81%e6%8e%a8%e9%80%81" class="header-anchor"></a>Feed流推送
-</h2><p><strong>关注推送又叫Feed流，直译为投喂，为用户持续的提供沉浸式体验，如抖音、快手这类短视频APP，通过无限下滑获取最新信息。</strong></p>
-<p><strong>传统的推送模式是用户寻找内容，而Feed模式是内容匹配用户</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/da239140ee1d47bd9a7d3a1da97326c5.png"
-	
-	
-	
+</div><h2 id="feed-流推送"><a href="#feed-%e6%b5%81%e6%8e%a8%e9%80%81" class="header-anchor"></a>Feed 流推送
+</h2><p><strong>关注推送又叫 Feed 流，直译为投喂，为用户持续的提供沉浸式体验，如抖音、快手这类短视频 APP，通过无限下滑获取最新信息。</strong></p>
+<p><strong>传统的推送模式是用户寻找内容，而 Feed 模式是内容匹配用户</strong></p>
+<p><img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-1.png"
+	width="1341"
+	height="699"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-1_hu_d43e0e896ad571aa.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-1_hu_c79620da73f3298d.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="460px"
 	
 ></p>
 <blockquote>
 <ul>
-<li><strong>拉模式又叫读扩散</strong><br>
-<strong>粉丝从博主那里拉取：博主把自己的推文放到自己的发件箱，用户从多个博主那里拉取，但是每个博主发的推文时间是乱序的，那么</strong></li>
+<li>
+<p><strong>拉模式又叫读扩散</strong><br>
+<strong>粉丝从博主那里拉取：博主把自己的推文放到自己的发件箱，用户从多个博主那里拉取，但是每个博主发的推文时间是乱序的，那么用户拉取每个博主的推文后还要进行时间排序，比较耗时。</strong></p>
+</li>
+<li>
+<p><strong>推模式又叫写扩散</strong><br>
+<strong>博主推给粉丝：博主把写到的推文的 id 推给粉丝的收件箱，粉丝刷新后会消费到博主新的推文 id，进而根据 id 加载出新推文，但是如果博主粉丝有千百万，那么要把推文 id 推给千百万个粉丝收件箱，仍然会比较耗时。</strong> &gt; <img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-3.png"
+	width="1438"
+	height="686"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-3_hu_413a991284b678cb.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-3_hu_f68bfdf8a103d95a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p>
+</li>
 </ul></blockquote>
-<hr>
-
+<h2 id="推模式实现关注推送功能"><a href="#%e6%8e%a8%e6%a8%a1%e5%bc%8f%e5%ae%9e%e7%8e%b0%e5%85%b3%e6%b3%a8%e6%8e%a8%e9%80%81%e5%8a%9f%e8%83%bd" class="header-anchor"></a>推模式实现关注推送功能  
+</h2><p><img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-4.png"
+	width="1383"
+	height="503"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-4_hu_a09fa4b9e2ce35f9.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-4_hu_93a0cc931fd8a66b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="274"
+		data-flex-basis="659px"
+	
+></p>
+<p>Redis 数据结构可以选用 list 或者 zset，list 是链表有下标，可以实现排序和分页，zset 可以基于 score 进行排序，排序之后也可以实现分页查询，但是最终选取 zset 来实现，原因如下：</p>
+<p><strong>list 要依赖角标，有重复读问题</strong>
+<img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-5.png"
+	width="1357"
+	height="748"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-5_hu_75082b8f8521f935.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-5_hu_ec26632e5178a45c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="435px"
+	
+></p>
+<p>参考下面的 zset，我觉得 list 也可以利用 lastId 实现无重复读效果，只不过 zset 可以根据 score 排序并利用 score 的范围查询，就使用 zset 了</p>
+<p><strong>zset 不依赖角标，依赖 lastId，无重复读问题</strong>
+<img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-6.png"
+	width="1371"
+	height="739"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-6_hu_956356556a7161e3.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-6_hu_c656d118d664a4ac.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>zset 的 score 排序后虽然有角标的效果，但我们是利用 score 值的范围查询来实现分页的，把 score 按从大到小排列，每次查询记住最小的 score 作为下次查询的最大的 score，即 lastId</p>
+<blockquote>
+<p><strong>zset 集合的元素并不是存进去就有序的，而是可以根据需要用 score 排序！<br>
+因此并不是集合最后一个元素就是最小的时间戳！</strong></p></blockquote>
+<p><strong>（详见 黑马点评 实战篇 P9、P10）</strong></p>
+<p><strong>修改新增 Blog 的代码</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">saveBlog</span><span class="p">(</span><span class="n">Blog</span><span class="w"> </span><span class="n">blog</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">UserDTO</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">getUser</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">blog</span><span class="p">.</span><span class="na">setUserId</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="na">getId</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 保存探店博文</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">save</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">save</span><span class="p">(</span><span class="n">blog</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">save</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//保存成功则把博文id发给粉丝，实现消息推送</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//查询该用户的粉丝</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Follow</span><span class="o">&gt;</span><span class="w"> </span><span class="n">followUsers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">followService</span><span class="p">.</span><span class="na">query</span><span class="p">().</span><span class="na">eq</span><span class="p">(</span><span class="s">&#34;follow_user_id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="na">getId</span><span class="p">()).</span><span class="na">list</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//把blogId推给每个粉丝的收件箱，用zset集合实现，时间戳作为score，这样就可以根据时间戳进行排序</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">for</span><span class="p">(</span><span class="n">Follow</span><span class="w"> </span><span class="n">follow</span><span class="p">:</span><span class="n">followUsers</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">Long</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">follow</span><span class="p">.</span><span class="na">getUserId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s">&#34;feed:&#34;</span><span class="o">+</span><span class="n">userId</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">().</span><span class="na">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">blog</span><span class="p">.</span><span class="na">getId</span><span class="p">().</span><span class="na">toString</span><span class="p">(),</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">blog</span><span class="p">.</span><span class="na">getId</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="滚动分页查询"><a href="#%e6%bb%9a%e5%8a%a8%e5%88%86%e9%a1%b5%e6%9f%a5%e8%af%a2" class="header-anchor"></a>滚动分页查询
+</h2><p><img src="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-7.png"
+	width="1510"
+	height="808"
+	srcset="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-7_hu_f780bfb3b1af1ecb.png 480w, /zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/image-7_hu_17bcb53dec07347e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="448px"
+	
+></p>
+<blockquote>
+<p><strong>偏移量 offset</strong><br>
+假设有一个有序集合，分数从高到低排序为 [70, 60, 50, 40, 30, 20, 10]，每次查询的偏移量为上次查询结果中最小分数相同的元素的个数。如果上一次查询的结果是 [50, 40, 30]，那么下一次查询的偏移量就是 3，即上一次查询结果中最小分数相同的元素的个数，这样可以确保不会重复返回已经获取过的元素。</p></blockquote>
+<p><strong>Controller 层接口</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@GetMapping</span><span class="p">(</span><span class="s">&#34;/of/follow&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">queryBlogOfFollow</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nd">@RequestParam</span><span class="p">(</span><span class="s">&#34;lastId&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">max</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">,</span><span class="nd">@RequestParam</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;offset&#34;</span><span class="w"> </span><span class="p">,</span><span class="n">defaultValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;0&#34;</span><span class="p">)</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">offset</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">blogService</span><span class="p">.</span><span class="na">queryBlogOfFollow</span><span class="p">(</span><span class="n">max</span><span class="p">,</span><span class="w"> </span><span class="n">offset</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>BlogServiceImpl 实现</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">queryBlogOfFollow</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">max</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">offset</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//获取当前登录用户的id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">getUser</span><span class="p">().</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s">&#34;feed:&#34;</span><span class="o">+</span><span class="n">userId</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//根据登录用户id去redis查询其收件箱得到推送的blog的id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//详见黑马点评 实战篇p10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">ZSetOperations</span><span class="p">.</span><span class="na">TypedTuple</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">typedTuples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">reverseRangeByScoreWithScores</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">0</span><span class="p">),</span><span class="w"> </span><span class="n">Double</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">max</span><span class="p">),</span><span class="w"> </span><span class="n">Long</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">offset</span><span class="p">),</span><span class="w"> </span><span class="n">Long</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">2</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">typedTuples</span><span class="o">==</span><span class="kc">null</span><span class="o">||</span><span class="n">typedTuples</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">Collections</span><span class="p">.</span><span class="na">emptyList</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">IDlist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">typedTuples</span><span class="p">.</span><span class="na">size</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">minTime</span><span class="o">=</span><span class="n">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">os</span><span class="o">=</span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ZSetOperations</span><span class="p">.</span><span class="na">TypedTuple</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tuple</span><span class="p">:</span><span class="n">typedTuples</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//获取id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tuple</span><span class="p">.</span><span class="na">getValue</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">IDlist</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">Long</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">id</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">long</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tuple</span><span class="p">.</span><span class="na">getScore</span><span class="p">().</span><span class="na">longValue</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">time</span><span class="o">==</span><span class="n">minTime</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">os</span><span class="o">++</span><span class="p">;</span><span class="c1">//偏移量，每次偏移量都会变化，第一次偏移量默认是0，后面每次后端都要把查询后的偏移量传给前端</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">minTime</span><span class="o">=</span><span class="n">time</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">os</span><span class="o">=</span><span class="n">1</span><span class="p">;</span><span class="c1">//重置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">join</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StrUtil</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="s">&#34;,&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">IDlist</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Blog</span><span class="o">&gt;</span><span class="w"> </span><span class="n">blogList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">query</span><span class="p">().</span><span class="na">in</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">IDlist</span><span class="p">).</span><span class="na">last</span><span class="p">(</span><span class="s">&#34;ORDER BY FIELD(id,&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">join</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;)&#34;</span><span class="p">).</span><span class="na">list</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Blog</span><span class="w"> </span><span class="n">blog</span><span class="p">:</span><span class="n">blogList</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//查询blog有关的用户信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blog</span><span class="p">.</span><span class="na">getUserId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">getById</span><span class="p">(</span><span class="n">id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">blog</span><span class="p">.</span><span class="na">setName</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="na">getNickName</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">blog</span><span class="p">.</span><span class="na">setIcon</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="na">getIcon</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//判断该登录用户是否点赞</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Long</span><span class="w"> </span><span class="n">loginUserId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">getUser</span><span class="p">().</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="s">&#34;blog:liked:&#34;</span><span class="o">+</span><span class="n">id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Double</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">().</span><span class="na">score</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">loginUserId</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">blog</span><span class="p">.</span><span class="na">setIsLike</span><span class="p">(</span><span class="n">score</span><span class="o">!=</span><span class="kc">null</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">ScrollResult</span><span class="w"> </span><span class="n">scrollResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ScrollResult</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">scrollResult</span><span class="p">.</span><span class="na">setList</span><span class="p">(</span><span class="n">blogList</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">scrollResult</span><span class="p">.</span><span class="na">setOffset</span><span class="p">(</span><span class="n">os</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">scrollResult</span><span class="p">.</span><span class="na">setMinTime</span><span class="p">(</span><span class="n">minTime</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">scrollResult</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>ScrollResult.java</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ScrollResult</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//时间戳</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="n">minTime</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//查询偏移量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">offset</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 

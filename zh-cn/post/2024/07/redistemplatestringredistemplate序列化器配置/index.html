@@ -11,7 +11,7 @@
 <meta property='og:description' content="stringRedisTemplate、RedisTemplate序列化，几种序列化器配置及性能对比，key、value分别序列化、lettuce和jedis">
 <meta property='og:url' content='/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='redisTemplate' /><meta property='article:published_time' content='2024-07-28T11:34:59&#43;00:00'/><meta property='article:modified_time' content='2024-07-28T11:34:59&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:published_time' content='2024-07-28T11:34:59&#43;00:00'/><meta property='article:modified_time' content='2024-07-28T11:34:59&#43;00:00'/>
 <meta name="twitter:title" content="RedisTemplate、StringRedisTemplate、序列化器配置">
 <meta name="twitter:description" content="stringRedisTemplate、RedisTemplate序列化，几种序列化器配置及性能对比，key、value分别序列化、lettuce和jedis">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,13 +336,13 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#lettuce和jedisredisson"><strong>Lettuce和Jedis、Redisson</strong></a></li>
-    <li><a href="#默认的redistemplate测试">默认的RedisTemplate测试</a></li>
+    <li><a href="#lettuce-和-jedisredisson">Lettuce 和 Jedis、Redisson</a></li>
+    <li><a href="#默认的-redistemplate-测试">默认的 RedisTemplate 测试</a></li>
     <li><a href="#各个序列化器性能测试对比">各个序列化器性能测试对比</a></li>
-    <li><a href="#测试结果"><strong>测试结果</strong></a></li>
-    <li><a href="#自定义redistemplate">自定义RedisTemplate</a></li>
-    <li><a href="#json序列化value--redistemplate测试">Json序列化Value + RedisTemplate测试</a></li>
-    <li><a href="#string序列化value--stringredistemplate-测试"><strong>String序列化Value + StringRedisTemplate</strong> <strong>测试</strong></a></li>
+    <li><a href="#测试结果">测试结果</a></li>
+    <li><a href="#自定义-redistemplate">自定义 RedisTemplate</a></li>
+    <li><a href="#json-序列化-value--redistemplate-测试">Json 序列化 Value + RedisTemplate 测试</a></li>
+    <li><a href="#string-序列化-value--stringredistemplate-测试">String 序列化 Value + StringRedisTemplate 测试</a></li>
     <li><a href="#总结">总结</a></li>
   </ol>
 </nav>
@@ -407,7 +407,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 8 分钟
+                阅读时长: 7 分钟
             </time>
         </div>
         
@@ -428,17 +428,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/redis/">Redis</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/redistemplate/">RedisTemplate</a> 
             
             
         </div>
@@ -454,49 +444,68 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h2 id="lettuce和jedisredisson"><a href="#lettuce%e5%92%8cjedisredisson" class="header-anchor"></a><strong>Lettuce和Jedis、Redisson</strong>
-</h2><p>RedisTemplate是SpringDataRedis中对JedisApi的高度封装，提供了Redis各种操作、 异常处理及序列化，支持发布订阅。</p>
-<p>首先我们要知道<strong>SpringData</strong> 是Spring中数据操作的模块，包括对各种数据库的集成，比如我们之前学过的Spring Data JDBC、JPA等，其中有一个模块叫做<strong>Spring Data Redis</strong> ，而<strong>RedisTemplate就是其中提供操作Redis的通用模板</strong>。</p>
+    <h2 id="lettuce-和-jedisredisson"><a href="#lettuce-%e5%92%8c-jedisredisson" class="header-anchor"></a>Lettuce 和 Jedis、Redisson
+</h2><p>RedisTemplate 是 SpringDataRedis 中对 JedisApi 的高度封装，提供了 Redis 各种操作、 异常处理及序列化，支持发布订阅。</p>
+<p>首先我们要知道<strong>SpringData</strong> 是 Spring 中数据操作的模块，包括对各种数据库的集成，比如我们之前学过的 Spring Data JDBC、JPA 等，其中有一个模块叫做<strong>Spring Data Redis</strong> ，而<strong>RedisTemplate 就是其中提供操作 Redis 的通用模板</strong>。</p>
 <blockquote>
-<p><strong>Spring Data Redis中提供了如下的内容：</strong></p>
-<p>1、对不同Redis客户端的整合（<strong>Lettuce和Jedis、Redisson</strong>）</p>
-<p>2、提供了RedisTemplate统一API操作Redis</p>
-<p>3、⽀持Redis订阅发布模型</p>
-<p>4、⽀持Redis哨兵和集群</p>
-<p>5、⽀持基于Lettuce的响应式编程（<strong>底层就是Netty</strong>）</p>
-<p>6、⽀持基于JDK、JSON、字符串、Spring对象的数据序列化、反序列化</p></blockquote>
+<p><strong>Spring Data Redis 中提供了如下的内容：</strong></p>
+<p>1、对不同 Redis 客户端的整合（<strong>Lettuce 和 Jedis、Redisson</strong>）</p>
+<p>2、提供了 RedisTemplate 统一 API 操作 Redis</p>
+<p>3、⽀持 Redis 订阅发布模型</p>
+<p>4、⽀持 Redis 哨兵和集群</p>
+<p>5、⽀持基于 Lettuce 的响应式编程（<strong>底层就是 Netty</strong>）</p>
+<p>6、⽀持基于 JDK、JSON、字符串、Spring 对象的数据序列化、反序列化</p></blockquote>
 <br />
-<p><strong>使用Spring Data Redis需要引入RedisTemplate依赖和commons-pool连接池依赖，<strong>Je</strong>dis与RedisTemplate底层使用的连接池都是commons-pool2</strong>，所以需要导入它</p>
-<pre><code>&lt;dependency&gt;
- &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
- &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
- &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
- &lt;artifactId&gt;commons-pool2&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-<p>这⾥我们可以看⼀下spring-boot-starter-data-redis底层，发现并没有引入Jedis</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/a9ef70f4be2948a0bbdcfbc9616fa94f.png"
-	
-	
-	
+<p><strong>使用 Spring Data Redis 需要引入 RedisTemplate 依赖和 commons-pool 连接池依赖，<strong>Je</strong>dis 与 RedisTemplate 底层使用的连接池都是 commons-pool2</strong>，所以需要导入它</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">    <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">     <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">     <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">     <span class="nt">&lt;groupId&gt;</span>org.apache.commons<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">     <span class="nt">&lt;artifactId&gt;</span>commons-pool2<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这⾥我们可以看⼀下 spring-boot-starter-data-redis 底层，发现并没有引入 Jedis
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image.png"
+	width="642"
+	height="483"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image_hu_946977d190fffd4a.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image_hu_84d1f23895b02bf2.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="132"
+		data-flex-basis="319px"
 	
 ></p>
 <blockquote>
 <p><strong>原因：</strong></p>
-<p><strong>在SpringBoot 2.x版本以后，从原来的Jedis替换成了lettuce</strong>，所以2.x以后开始默认使用Lettuce作为Redis客户端，<strong>Lettuce客户端基于Netty的NIO框架实现</strong>，只需要<strong>维持单一的连接（非阻塞式IO）<strong>即可高效支持业务端</strong>并发</strong>请求。同时，Lettuce支持的特性更加全面，其性能表现并不逊于，甚至优于Jedis。
+<p><strong>在 SpringBoot 2.x 版本以后，从原来的 Jedis 替换成了 lettuce</strong>，所以 2.x 以后开始默认使用 Lettuce 作为 Redis 客户端，<strong>Lettuce 客户端基于 Netty 的 NIO 框架实现</strong>，只需要<strong>维持单一的连接（非阻塞式 IO）<strong>即可高效支持业务端</strong>并发</strong>请求。同时，Lettuce 支持的特性更加全面，其性能表现并不逊于，甚至优于 Jedis。
 简单理解：</p>
 <ul>
 <li>Jedis：<br>
-采用的直连，<strong>多线程操作不安全</strong> ，如果想要避免线程安全问题，就需要使用JedisPool连接池，但是也会有一些线程过多等其他问题，类似于<strong>BIO（阻塞式IO）</strong></li>
+采用的直连，<strong>多线程操作不安全</strong> ，如果想要避免线程安全问题，就需要使用 JedisPool 连接池，但是也会有一些线程过多等其他问题，类似于<strong>BIO（阻塞式 IO）</strong></li>
 <li>Lettuce：<br>
-单线程实现，线程安全，底层采用Netty，实例可以在多个线程中进行共享，<strong>不存在线程安全问题</strong>！类似NIO</li>
+单线程实现，线程安全，底层采用 Netty，实例可以在多个线程中进行共享，<strong>不存在线程安全问题</strong>！类似 NIO</li>
 <li>Redisson：支持红锁、分布式锁等</li>
 </ul></blockquote>
-<h2 id="默认的redistemplate测试"><a href="#%e9%bb%98%e8%ae%a4%e7%9a%84redistemplate%e6%b5%8b%e8%af%95" class="header-anchor"></a>默认的RedisTemplate测试
+<h2 id="默认的-redistemplate-测试"><a href="#%e9%bb%98%e8%ae%a4%e7%9a%84-redistemplate-%e6%b5%8b%e8%af%95" class="header-anchor"></a>默认的 RedisTemplate 测试
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -513,7 +522,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@SpringBootTest</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">RedisTestApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">class</span> <span class="nc">RedisTestApplicationTests</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="nd">@Autowired</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="n">RedisTemplate</span><span class="w"> </span><span class="n">redisTemplate</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="nd">@Test</span><span class="w">
@@ -525,48 +534,72 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>通过指令来查看发现是乱码，<strong>这就涉及到了序列化的问题</strong>了。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/290118734cf1417b8118cfd722bdb971.png"
-	
-	
-	
+</div><p>通过指令来查看发现是乱码，<strong>这就涉及到了序列化的问题</strong>了。
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-1.png"
+	width="659"
+	height="264"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-1_hu_8f97780cabae6872.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-1_hu_5978b40271619285.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="249"
+		data-flex-basis="599px"
 	
 ></p>
-<p>想要解决以上问题，需要了解RedisTemplate序列化的问题，<strong>首先进入RedisTemplate源码，发现需要设置key、hashKey和value、hashValue的序列化器</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/4015ab600340461cb086dea5876885ff.png"
-	
-	
-	
+<p>想要解决以上问题，需要了解 RedisTemplate 序列化的问题，<strong>首先进入 RedisTemplate 源码，发现需要设置 key、hashKey 和 value、hashValue 的序列化器</strong>
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-2.png"
+	width="1035"
+	height="162"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-2_hu_8d813034b5bb7517.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-2_hu_e8a8b9b514e44c6d.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="638"
+		data-flex-basis="1533px"
 	
 ></p>
-<p>再往下看有一个<strong>默认的序列化器</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/dff1d6cb67f240ba831fdcb1ba68df56.png"
-	
-	
-	
+<p>再往下看有一个<strong>默认的序列化器</strong>
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-3.png"
+	width="1030"
+	height="201"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-3_hu_4ecfd3541ca93d61.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-3_hu_b4f0d6569d6979bc.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="512"
+		data-flex-basis="1229px"
 	
 ></p>
-<p>也就是说，<strong>RedisTemplate默认采用的是默认的JDK序列化器</strong>，这种序列化方式会有一定的问题 比如<strong>可读性差、内存占用大</strong></p>
-<p>所以总结来说，我们<strong>可以修改key和value的RedisSerializer具体实现</strong>，这⾥我们可以先看⼀下 <strong>RedisSerializer的实现类有哪些：</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/f49fb3833fd14cab8b2278d0e413c189.png"
-	
-	
-	
+<p>也就是说，<strong>RedisTemplate 默认采用的是默认的 JDK 序列化器</strong>，这种序列化方式会有一定的问题 比如<strong>可读性差、内存占用大</strong></p>
+<p>所以总结来说，我们<strong>可以修改 key 和 value 的 RedisSerializer 具体实现</strong>，这⾥我们可以先看⼀下 <strong>RedisSerializer 的实现类有哪些：</strong>
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-4.png"
+	width="1041"
+	height="313"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-4_hu_8e0aa00669e78043.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-4_hu_a37092a1e9b4f061.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="332"
+		data-flex-basis="798px"
 	
 ></p>
 <blockquote>
 <ul>
-<li>JacksonJsonRedisSerializer: 序列化object对象为json字符串</li>
-<li>Jackson2JsonRedisSerializer: 跟JacksonJsonRedisSerializer实际上是一样的</li>
-<li>JdkSerializationRedisSerializer: 序列化java对象</li>
+<li>JacksonJsonRedisSerializer: 序列化 object 对象为 json 字符串</li>
+<li>Jackson2JsonRedisSerializer: 跟 JacksonJsonRedisSerializer 实际上是一样的</li>
+<li>JdkSerializationRedisSerializer: 序列化 java 对象</li>
 <li>GenericToStringSerializer: 可以将任何对象泛化为字符串并序列化</li>
 <li>StringRedisSerializer: 简单的字符串序列化</li>
 </ul></blockquote>
@@ -645,7 +678,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="测试结果"><a href="#%e6%b5%8b%e8%af%95%e7%bb%93%e6%9e%9c" class="header-anchor"></a><strong>测试结果</strong>
+</div><h2 id="测试结果"><a href="#%e6%b5%8b%e8%af%95%e7%bb%93%e6%9e%9c" class="header-anchor"></a>测试结果
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -666,14 +699,13 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </div>
 </div><blockquote>
 <ul>
-<li>JdkSerializationRedisSerializer序列化后长度最小，Jackson2JsonRedisSerializer效率最高。</li>
-<li>如果综合考虑效率和可读性，牺牲部分空间，推荐key使用StringRedisSerializer，保持的key简明易读；value可以使用Jackson2JsonRedisSerializer</li>
-<li>如果空间比较敏感，效率要求不高，推荐key使用StringRedisSerializer，保持的key简明易读；value可以使用JdkSerializationRedisSerializer</li>
+<li>JdkSerializationRedisSerializer 序列化后长度最小，Jackson2JsonRedisSerializer 效率最高。</li>
+<li>如果综合考虑效率和可读性，牺牲部分空间，推荐 key 使用 StringRedisSerializer，保持的 key 简明易读；value 可以使用 Jackson2JsonRedisSerializer</li>
+<li>如果空间比较敏感，效率要求不高，推荐 key 使用 StringRedisSerializer，保持的 key 简明易读；value 可以使用 JdkSerializationRedisSerializer</li>
 </ul></blockquote>
-<br />
-<h2 id="自定义redistemplate"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89redistemplate" class="header-anchor"></a>自定义RedisTemplate
-</h2><p>新建RedisConfig配置类，以下是固定模板，可以直接用</p>
-<p><strong>这个模板我们采用的Json序列化Value，String序列化Key</strong></p>
+<h2 id="自定义-redistemplate"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89-redistemplate" class="header-anchor"></a>自定义 RedisTemplate
+</h2><p>新建 RedisConfig 配置类，以下是固定模板，可以直接用</p>
+<p><strong>这个模板我们采用的 Json 序列化 Value，String 序列化 Key</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -728,7 +760,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="json序列化value--redistemplate测试"><a href="#json%e5%ba%8f%e5%88%97%e5%8c%96value--redistemplate%e6%b5%8b%e8%af%95" class="header-anchor"></a>Json序列化Value + RedisTemplate测试
+</div><h2 id="json-序列化-value--redistemplate-测试"><a href="#json-%e5%ba%8f%e5%88%97%e5%8c%96-value--redistemplate-%e6%b5%8b%e8%af%95" class="header-anchor"></a>Json 序列化 Value + RedisTemplate 测试
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -755,7 +787,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>此时<strong>用keys * 查看</strong>，没有乱码。那么再储存一个对象试试！</p>
+</div><p>此时<strong>用 keys * 查看</strong>，没有乱码。那么再储存一个对象试试！</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -772,26 +804,38 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>用可视化工具查看，发现<strong>JSON序列化Value后多了个@Class字段</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/ea37fff8b03e48b7bff571998dad08ea.png"
-	
-	
-	
+</div><p>用可视化工具查看，发现<strong>JSON 序列化 Value 后多了个@Class 字段</strong>
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-5.png"
+	width="491"
+	height="218"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-5_hu_efe81c8191db476.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-5_hu_2e17ba87e2a5b4d8.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="540px"
 	
 ></p>
-<p>虽然实现了对象的序列化和反序列化，但这是<strong>因为添加了@class字段</strong>，会导致<strong>额外的内存开销</strong>，在数据量特别大的时候就会有影响，但是<strong>如果没有@class就不会实现自动序列化和反序列化</strong>。</p>
-<p>实际开发中，如果为了节省空间，<strong>并不会完全使用JSON序列化来处理value</strong>， 而是<strong>统一采用String序列化器，储存Java对象也是如此</strong>，这就意味着我们需要重新编写RedisTemplate，但是SpringBoot其实提供了一个String序列化器实现的StringRedisTemplate，通过它可以完成以上的需求。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/20dec78aa98449e881327b0241d8eb84.png"
-	
-	
-	
+<p>虽然实现了对象的序列化和反序列化，但这是<strong>因为添加了@class 字段</strong>，会导致<strong>额外的内存开销</strong>，在数据量特别大的时候就会有影响，但是<strong>如果没有@class 就不会实现自动序列化和反序列化</strong>。</p>
+<p>实际开发中，如果为了节省空间，<strong>并不会完全使用 JSON 序列化来处理 value</strong>， 而是<strong>统一采用 String 序列化器，储存 Java 对象也是如此</strong>，这就意味着我们需要重新编写 RedisTemplate，但是 SpringBoot 其实提供了一个 String 序列化器实现的 StringRedisTemplate，通过它可以完成以上的需求。
+<img src="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-6.png"
+	width="1033"
+	height="272"
+	srcset="/zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-6_hu_50814f144be08cfd.png 480w, /zh-cn/post/2024/07/redistemplatestringredistemplate%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E9%85%8D%E7%BD%AE/image-6_hu_5a49d90d7e81ff5a.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="379"
+		data-flex-basis="911px"
 	
 ></p>
-<h2 id="string序列化value--stringredistemplate-测试"><a href="#string%e5%ba%8f%e5%88%97%e5%8c%96value--stringredistemplate-%e6%b5%8b%e8%af%95" class="header-anchor"></a><strong>String序列化Value + StringRedisTemplate</strong> <strong>测试</strong>
+<h2 id="string-序列化-value--stringredistemplate-测试"><a href="#string-%e5%ba%8f%e5%88%97%e5%8c%96-value--stringredistemplate-%e6%b5%8b%e8%af%95" class="header-anchor"></a>String 序列化 Value + StringRedisTemplate 测试
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -847,13 +891,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </div><h2 id="总结"><a href="#%e6%80%bb%e7%bb%93" class="header-anchor"></a>总结
 </h2><blockquote>
 <ul>
-<li>RedisTemplate的Key和Value的序列化器可以根据需要分别设置。</li>
-<li>RedisTemplate默认使用JdkSerializationRedisSerializer存入数据，会将数据先<strong>序列化成字节数组</strong>然后在存入Redis数据库，这种value不可读。</li>
-<li>如果数据是Object类型，取出的时候又<strong>不想做任何的数据转换</strong>，<strong>直接</strong>从Redis里面取出一个对象，那么使用RedisTemplate是更好的选择。</li>
-<li>当然<strong>任何情况下从Redis获取数据的时候，都会默认将数据当做字节数组转化</strong>，这样就会导致一个问题：<strong>当需要获取的数据不是以字节数组存在redis当中，而是正常的可读的字符串的时候，RedisTemplate就无法获取数据，获取到的值是NULL。这时就需要用StringRedisTempate或者专门设置RedisTemplate的序列化器！</strong></li>
+<li>RedisTemplate 的 Key 和 Value 的序列化器可以根据需要分别设置。</li>
+<li>RedisTemplate 默认使用 JdkSerializationRedisSerializer 存入数据，会将数据先<strong>序列化成字节数组</strong>然后在存入 Redis 数据库，这种 value 不可读。</li>
+<li>如果数据是 Object 类型，取出的时候又<strong>不想做任何的数据转换</strong>，<strong>直接</strong>从 Redis 里面取出一个对象，那么使用 RedisTemplate 是更好的选择。</li>
+<li>当然<strong>任何情况下从 Redis 获取数据的时候，都会默认将数据当做字节数组转化</strong>，这样就会导致一个问题：<strong>当需要获取的数据不是以字节数组存在 redis 当中，而是正常的可读的字符串的时候，RedisTemplate 就无法获取数据，获取到的值是 NULL。这时就需要用 StringRedisTempate 或者专门设置 RedisTemplate 的序列化器！</strong></li>
 </ul></blockquote>
-<br />
----
 
 </section>
 
@@ -914,6 +956,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Redis的zset实现共同关注、懒汉式关注推送</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/">
 
         
@@ -946,19 +1001,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">基于Redis和阻塞队列的 异步秒杀业务</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Redisson分布式锁、可重入锁</h2>
             
         </div>
     </a>

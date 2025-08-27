@@ -11,7 +11,7 @@
 <meta property='og:description' content="Redisson配置，Redisson客户端，Redisson实现分布式锁，不可重入锁，可重入锁">
 <meta property='og:url' content='/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='分布式' /><meta property='article:published_time' content='2024-07-05T20:04:44&#43;00:00'/><meta property='article:modified_time' content='2024-07-05T20:04:44&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='分布式' /><meta property='article:published_time' content='2024-07-05T20:04:44&#43;00:00'/><meta property='article:modified_time' content='2024-07-05T20:04:44&#43;00:00'/>
 <meta name="twitter:title" content="Redisson分布式锁、可重入锁">
 <meta name="twitter:description" content="Redisson配置，Redisson客户端，Redisson实现分布式锁，不可重入锁，可重入锁">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,16 +336,16 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#介绍redisson">介绍Redisson</a></li>
-    <li><a href="#配置redisson">配置Redisson</a>
+    <li><a href="#介绍-redisson">介绍 Redisson</a></li>
+    <li><a href="#配置-redisson">配置 Redisson</a>
       <ol>
         <li><a href="#引入依赖">引入依赖</a></li>
         <li><a href="#配置客户端类">配置客户端类</a></li>
       </ol>
     </li>
-    <li><a href="#使用redisson分布式锁">使用Redisson分布式锁</a></li>
+    <li><a href="#使用-redisson-分布式锁">使用 Redisson 分布式锁</a></li>
     <li><a href="#不可重入锁">不可重入锁</a></li>
-    <li><a href="#redisson可重入锁">Redisson可重入锁</a></li>
+    <li><a href="#redisson-可重入锁">Redisson 可重入锁</a></li>
   </ol>
 </nav>
         </div>
@@ -430,11 +430,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/redis/">Redis</a> 
             
             
@@ -456,12 +451,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h2 id="介绍redisson"><a href="#%e4%bb%8b%e7%bb%8dredisson" class="header-anchor"></a>介绍Redisson
+    <h2 id="介绍-redisson"><a href="#%e4%bb%8b%e7%bb%8d-redisson" class="header-anchor"></a>介绍 Redisson
 </h2><p><strong>什么是 Redisson</strong>？来自于官网上的描述内容如下！</p>
 <blockquote>
 <p>Redisson 是一个在 Redis 的基础上实现的 Java 驻内存数据网格客户端（In-Memory Data Grid）。它不仅提供了一系列的 redis 常用数据结构命令服务，还提供了许多分布式服务，例如分布式锁、分布式对象、分布式集合、分布式远程服务、分布式调度任务服务等等。</p></blockquote>
 <p>相比于 Jedis、Lettuce 等基于 redis 命令封装的客户端，Redisson 提供的功能更加高端和抽象</p>
-<h2 id="配置redisson"><a href="#%e9%85%8d%e7%bd%aeredisson" class="header-anchor"></a>配置Redisson
+<h2 id="配置-redisson"><a href="#%e9%85%8d%e7%bd%ae-redisson" class="header-anchor"></a>配置 Redisson
 </h2><h3 id="引入依赖"><a href="#%e5%bc%95%e5%85%a5%e4%be%9d%e8%b5%96" class="header-anchor"></a>引入依赖
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -508,7 +503,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="使用redisson分布式锁"><a href="#%e4%bd%bf%e7%94%a8redisson%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81" class="header-anchor"></a>使用Redisson分布式锁
+</div><h2 id="使用-redisson-分布式锁"><a href="#%e4%bd%bf%e7%94%a8-redisson-%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81" class="header-anchor"></a>使用 Redisson 分布式锁
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -535,9 +530,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">getUser</span><span class="p">().</span><span class="na">getId</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">RLock</span><span class="w"> </span><span class="n">redisLock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redissonClient</span><span class="p">.</span><span class="na">getLock</span><span class="p">(</span><span class="s">&#34;lock:order:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//尝试获取锁</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">boolean</span><span class="w"> </span><span class="n">tryLock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redisLock</span><span class="p">.</span><span class="na">tryLock</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
@@ -558,51 +553,62 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="不可重入锁"><a href="#%e4%b8%8d%e5%8f%af%e9%87%8d%e5%85%a5%e9%94%81" class="header-anchor"></a>不可重入锁
-</h2><p>在同一个线程中，method1获取锁后，调用method2，method2中尝试获取锁，此时锁已经被method1获取，则method2获取锁失败，这就是不可重入锁，<strong>前面实现的锁就是不可重入锁！</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/db94a2e3f6a84069b996f929f9519da3.png"
-	
-	
-	
+</h2><p>在同一个线程中，method1 获取锁后，调用 method2，method2 中尝试获取锁，此时锁已经被 method1 获取，则 method2 获取锁失败，这就是不可重入锁，<strong>前面实现的锁就是不可重入锁！</strong>
+<img src="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image.png"
+	width="1627"
+	height="736"
+	srcset="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image_hu_6ac21c9547596d8e.png 480w, /zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image_hu_3e15779d52931341.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="530px"
 	
 ></p>
-<h2 id="redisson可重入锁"><a href="#redisson%e5%8f%af%e9%87%8d%e5%85%a5%e9%94%81" class="header-anchor"></a>Redisson可重入锁
+<h2 id="redisson-可重入锁"><a href="#redisson-%e5%8f%af%e9%87%8d%e5%85%a5%e9%94%81" class="header-anchor"></a>Redisson 可重入锁
 </h2><blockquote>
 <p>可重入锁，从字面来理解，就是<strong>可以重复进入的锁</strong>，也叫做递归锁，指的是同一线程外层函数获得锁之后，内层递归函数仍然有获取该锁的代码，但不受影响。</p>
 <p><strong>ReentrantLock</strong> 和<strong>synchronized</strong>都是可重入锁。</p>
-<p><strong>在一个类中，如果synchronized方法1调用了synchronized方法2，方法2是可以正常执行的，这说明synchronized是可重入锁。否则，在执行方法2想获取锁的时候，该锁已经在执行方法1时获取了，那么方法2将永远得不到执行。</strong></p></blockquote>
-<p>为了实现可重入锁，**redis中使用hash类型不再使用string类型，****为什么要使用hash类型，**<strong>就不得不说到Redisson可重入锁在redis中的实现原理：</strong></p>
+<p>在一个类中，如果 synchronized 方法 1 调用了 synchronized 方法 2，方法 2 是可以正常执行的，这说明 synchronized 是可重入锁。否则，在执行方法 2 想获取锁的时候，该锁已经在执行方法 1 时获取了，那么方法 2 将永远得不到执行。</p></blockquote>
+<p>为了实现可重入锁，<strong>Redis 中使用 hash 类型不再使用 string 类型，**<strong>为什么要使用 hash 类型，*</strong>*就不得不说到 Redisson 可重入锁在 redis 中的实现原理：</strong></p>
 <blockquote>
 <p><strong>实现原理 ：</strong></p>
-<p>在同一线程中，method1成功获取锁后调用method2，method2也尝试获取锁，此时要先判断method2所在线程和method1所在线程是否是同一线程，若是，则method2也获取锁成功，它和method1显然<strong>获取了同一个锁****，那么该锁被获取次数+1，而这个锁被获取的次数我们需要记录，也就是说value不仅要记录 线程名 还要记录 锁被获取的次数，那么我们就由此采用hash类型更合理！</strong></p>
-<br />
+<p>在同一线程中，method1 成功获取锁后调用 method2，method2 也尝试获取锁，此时要先判断 method2 所在线程和 method1 所在线程是否是同一线程，若是，则 method2 也获取锁成功，它和 method1 显然<strong>获取了同一个锁**</strong>，那么该锁被获取次数+1，而这个锁被获取的次数我们需要记录，也就是说 value 不仅要记录 线程名 还要记录 锁被获取的次数，那么我们就由此采用 hash 类型更合理！**</p></blockquote>
+<blockquote>
 <p><strong>为什么记录锁被获取的次数？</strong></p>
-<p>一个业务的完成可能要多次获取锁，如一个业务中执行了method1，method1调用了method2，method2调用了method3，这三个方法都加同一个锁（可重入锁），当method3执行完后，<strong>并不能立刻释放method3的锁，而是锁被获取的次数-1</strong> ，<strong>因为锁是共享的，此时method1和method2还没执行完不能释放锁，那么什么时候释放锁？当然是锁被获取的次数减为0了，说明此时已经没有方法获取锁，那么可以安全的释放可重入锁了。</strong></p>
-<p><strong>So</strong> <strong>锁被获取的次数就是我们判断是否要释放锁的依据！</strong></p>
-<br />
-<p><img src="https://i-blog.csdnimg.cn/direct/5e4c6b86d56b45c7baa043576ea9c955.png"
-	
-	
-	
+<p>一个业务的完成可能要多次获取锁，如一个业务中执行了 method1，method1 调用了 method2，method2 调用了 method3，这三个方法都加同一个锁（可重入锁），当 method3 执行完后，<strong>并不能立刻释放 method3 的锁，而是锁被获取的次数-1</strong> ，<strong>因为锁是共享的，此时 method1 和 method2 还没执行完不能释放锁，那么什么时候释放锁？当然是锁被获取的次数减为 0 了，说明此时已经没有方法获取锁，那么可以安全的释放可重入锁了。</strong></p>
+<p><strong>So</strong> <strong>锁被获取的次数就是我们判断是否要释放锁的依据！</strong></p></blockquote>
+<p><img src="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-1.png"
+	width="1642"
+	height="795"
+	srcset="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-1_hu_1445ca7d2526fc49.png 480w, /zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-1_hu_610cf592bf5de23c.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/824d358169c745aa85e7a45f40fe6e0c.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-2.png"
+	width="717"
+	height="708"
+	srcset="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-2_hu_9e8e3bbdd7eadc4.png 480w, /zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-2_hu_402a042d927d03b8.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-></p></blockquote>
-<br />
-<br />
-<br />
-<br />
-<br />
----
+	
+		class="gallery-image" 
+		data-flex-grow="101"
+		data-flex-basis="243px"
+	
+></p>
 
 </section>
 
@@ -663,12 +669,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/">
+    <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E4%B9%90%E8%A7%82%E9%94%81%E6%82%B2%E8%A7%82%E9%94%81%E4%BC%98%E6%83%A0%E5%8A%B5%E8%B6%85%E5%8D%96%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E9%97%AE%E9%A2%98/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">kafka实战 集群搭建-Kraft模式</h2>
+            <h2 class="article-title">Redis实战—乐观锁、悲观锁、优惠劵超卖、一人一单问题</h2>
             
         </div>
     </a>
@@ -676,25 +682,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/">
+    <a href="/zh-cn/post/2024/05/%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E5%85%A5%E9%97%A8/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Kafka入门到入土——万字详解，图文并茂</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">HA—Hadoop高可用</h2>
+            <h2 class="article-title">缓存穿透、缓存击穿、缓存雪崩【入门】</h2>
             
         </div>
     </a>
@@ -708,6 +701,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">Redis实战—验证码登录注册</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">kafka实战 集群搭建-Kraft模式</h2>
             
         </div>
     </a>

@@ -266,146 +266,209 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
         
         <guid>/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/</guid>
         <description>&lt;h2 id=&#34;消息队列介绍&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%bb%8b%e7%bb%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列介绍
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/3d5a640f3300429c9d49470f7ebbd1c2.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image.png&#34;
+	width=&#34;1220&#34;
+	height=&#34;551&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image_hu_2083712668bfcbd.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image_hu_84c662f5b49a0f5d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;221&#34;
+		data-flex-basis=&#34;531px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;list实现消息队列&#34;&gt;&lt;a href=&#34;#list%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;List实现消息队列
+&lt;h2 id=&#34;list-实现消息队列&#34;&gt;&lt;a href=&#34;#list-%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;List 实现消息队列
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Redis的list数据结构是一个双向链表，先进先出，可以利用LPUSH、LPOP、RPUSH、RPOP命令来实现元素的左右进出，但是list并不是阻塞队列，当list中无元素时，线程并不会阻塞，而是从list中取出一个null，这并不符合我们的业务需要！因此这里要用BRPOP或BLPOP命令实现阻塞效果！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Redis 的 list 数据结构是一个双向链表，先进先出，可以利用 LPUSH、LPOP、RPUSH、RPOP 命令来实现元素的左右进出，但是 list 并不是阻塞队列，当 list 中无元素时，线程并不会阻塞，而是从 list 中取出一个 null，这并不符合我们的业务需要！因此这里要用 BRPOP 或 BLPOP 命令实现阻塞效果！&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;阻塞队列&lt;/strong&gt;&lt;br&gt;
-&lt;strong&gt;当线程尝试从队列中获取元素时，若阻塞队列中无元素，则线程会阻塞，直到队列中有元素线程才会被唤醒并从阻塞队列中取出元素。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;br /&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/a52f856905eb44358b5d3b3e0935c5b6.png&#34;
-	
-	
-	
+当线程尝试从队列中获取元素时，若阻塞队列中无元素，则线程会阻塞，直到队列中有元素线程才会被唤醒并从阻塞队列中取出元素。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-1.png&#34;
+	width=&#34;620&#34;
+	height=&#34;450&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-1_hu_3114569dfe969d66.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-1_hu_82e7925f2ae0b86a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;pubsub实现消息队列&#34;&gt;&lt;a href=&#34;#pubsub%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PubSub实现消息队列
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/5ddb5fe68885405c88a083c9476561b0.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;pubsub-实现消息队列&#34;&gt;&lt;a href=&#34;#pubsub-%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PubSub 实现消息队列
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-2.png&#34;
+	width=&#34;1314&#34;
+	height=&#34;649&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-2_hu_2a42f766dfbf8f6.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-2_hu_50f960402373c4a9.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/866a7ba1bd1a487ca99932152479b1a5.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;202&#34;
+		data-flex-basis=&#34;485px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-3.png&#34;
+	width=&#34;1600&#34;
+	height=&#34;812&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-3_hu_146115a3067d881b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-3_hu_9d549e7ce119472c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2216a683f40e45c6a9b9fc7415bcd642.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;197&#34;
+		data-flex-basis=&#34;472px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-4.png&#34;
+	width=&#34;698&#34;
+	height=&#34;404&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-4_hu_24874a702bd7c353.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-4_hu_e173f9734ff63b9f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;172&#34;
+		data-flex-basis=&#34;414px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;stream实现消息队列&#34;&gt;&lt;a href=&#34;#stream%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Stream实现消息队列&lt;/strong&gt;
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9184c8cf69064effad7f3767904635df.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;stream-实现消息队列&#34;&gt;&lt;a href=&#34;#stream-%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Stream 实现消息队列&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-5.png&#34;
+	width=&#34;1347&#34;
+	height=&#34;617&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-5_hu_8d2bf5d798bf893d.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-5_hu_5d1a96b3e04fbbfb.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/f5a47ee9325f47acbbe1266021be8989.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;218&#34;
+		data-flex-basis=&#34;523px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-6.png&#34;
+	width=&#34;1337&#34;
+	height=&#34;341&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-6_hu_fe953211cddfb59b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-6_hu_a83f5484b905568f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/053a1b1372c04e5d8905783947129630.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;392&#34;
+		data-flex-basis=&#34;940px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-7.png&#34;
+	width=&#34;1296&#34;
+	height=&#34;663&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-7_hu_15e3d44fd180fd4b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-7_hu_34da73ff11a0bed6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/017eb4dcc73e42ac9e2dc12dfafb6a2f.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;469px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-8.png&#34;
+	width=&#34;863&#34;
+	height=&#34;405&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-8_hu_8ce6629be8756de0.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-8_hu_e927e17742f8fd70.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;213&#34;
+		data-flex-basis=&#34;511px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;stream的消费者组&#34;&gt;&lt;a href=&#34;#stream%e7%9a%84%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Stream的消费者组
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/61d9753fa306464796b6aa7001912eb6.png&#34;
-	
-	
-	
+&lt;h3 id=&#34;stream-的消费者组&#34;&gt;&lt;a href=&#34;#stream-%e7%9a%84%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Stream 的消费者组
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-9.png&#34;
+	width=&#34;1273&#34;
+	height=&#34;535&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-9_hu_91f7efaa10e98d58.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-9_hu_778c1b50907df90a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/c8c726ce86434fcb9f53e3718f3bd32b.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;237&#34;
+		data-flex-basis=&#34;571px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-10.png&#34;
+	width=&#34;1251&#34;
+	height=&#34;582&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-10_hu_4b8fdec86f2cf8d3.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-10_hu_63b8aba0b6840591.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/1d8873ac6618482da3854b34fdd5d82a.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;214&#34;
+		data-flex-basis=&#34;515px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-11.png&#34;
+	width=&#34;1365&#34;
+	height=&#34;582&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-11_hu_c825e67298a84f00.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-11_hu_e44dc44f5cfeea90.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/c94c99f2b7d548ab97a48a37fa75563e.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;234&#34;
+		data-flex-basis=&#34;562px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-12.png&#34;
+	width=&#34;1466&#34;
+	height=&#34;793&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-12_hu_bc50606cf02da1c1.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-12_hu_bc374e603a44411c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/65bfa1000e094d099cf0c23966ffe17b.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;443px&#34;
 	
-	
-	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-13.png&#34;
+	width=&#34;989&#34;
+	height=&#34;509&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-13_hu_f9c18c05db3d4b4.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-13_hu_fe73b31da60f7aae.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;194&#34;
+		data-flex-basis=&#34;466px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;redis消息队列总结&#34;&gt;&lt;a href=&#34;#redis%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e6%80%bb%e7%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Redis消息队列总结
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e76945ad31bb4dea90331204f46ecf50.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;redis-消息队列总结&#34;&gt;&lt;a href=&#34;#redis-%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e6%80%bb%e7%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Redis 消息队列总结
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-14.png&#34;
+	width=&#34;1206&#34;
+	height=&#34;580&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-14_hu_38ab1af928b19784.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-14_hu_8660606af1d052c0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;207&#34;
+		data-flex-basis=&#34;499px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;基于stream的异步秒杀&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e4%ba%8estream%e7%9a%84%e5%bc%82%e6%ad%a5%e7%a7%92%e6%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基于Stream的异步秒杀
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/8fa3ca1c5420488fb4b7c114b7ff9e86.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;基于-stream-的异步秒杀&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e4%ba%8e-stream-%e7%9a%84%e5%bc%82%e6%ad%a5%e7%a7%92%e6%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基于 Stream 的异步秒杀
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-15.png&#34;
+	width=&#34;1033&#34;
+	height=&#34;318&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-15_hu_12640be2d553b21d.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-15_hu_8e579cae10b0b36e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;324&#34;
+		data-flex-basis=&#34;779px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;redis创建消费者消费者组消息队列&#34;&gt;&lt;a href=&#34;#redis%e5%88%9b%e5%bb%ba%e6%b6%88%e8%b4%b9%e8%80%85%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Redis创建消费者、消费者组、消息队列
+&lt;h3 id=&#34;redis-创建消费者消费者组消息队列&#34;&gt;&lt;a href=&#34;#redis-%e5%88%9b%e5%bb%ba%e6%b6%88%e8%b4%b9%e8%80%85%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Redis 创建消费者、消费者组、消息队列
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -422,7 +485,7 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;XREADGROUP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;GROUP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;g1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;count&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Block&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2000&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;streams&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;修改seckilllua脚本&#34;&gt;&lt;a href=&#34;#%e4%bf%ae%e6%94%b9seckilllua%e8%84%9a%e6%9c%ac&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;修改seckill.lua脚本
+&lt;/div&gt;&lt;h3 id=&#34;修改-seckilllua-脚本&#34;&gt;&lt;a href=&#34;#%e4%bf%ae%e6%94%b9-seckilllua-%e8%84%9a%e6%9c%ac&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;修改 seckill.lua 脚本
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -496,82 +559,111 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;添加新的秒杀券&#34;&gt;&lt;a href=&#34;#%e6%b7%bb%e5%8a%a0%e6%96%b0%e7%9a%84%e7%a7%92%e6%9d%80%e5%88%b8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;添加新的秒杀券
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/b7e0b87e49ae44ae856f5bc0c68013bb.png&#34;
-	
-	
-	
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-16.png&#34;
+	width=&#34;1723&#34;
+	height=&#34;1297&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-16_hu_203162b5ec961f09.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-16_hu_cbb7ed2a1c024697.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;132&#34;
+		data-flex-basis=&#34;318px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;数据库和redis同时存入id为19的秒杀券&lt;/strong&gt;&lt;/p&gt;
-&lt;h3 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/b8a0a7aeb2d647f69d75f4186a4b0da1.png&#34;
-	
-	
-	
+&lt;p&gt;数据库和 redis 同时存入 id 为 19 的秒杀券&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-17.png&#34;
+	width=&#34;1467&#34;
+	height=&#34;766&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-17_hu_11bf0f88f84513d3.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-17_hu_b3fce92e07b7ce8f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;191&#34;
+		data-flex-basis=&#34;459px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;apifox-模拟用户抢购秒杀券&#34;&gt;&lt;a href=&#34;#apifox-%e6%a8%a1%e6%8b%9f%e7%94%a8%e6%88%b7%e6%8a%a2%e8%b4%ad%e7%a7%92%e6%9d%80%e5%88%b8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Apifox 模拟用户抢购秒杀券
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-18.png&#34;
+	width=&#34;1721&#34;
+	height=&#34;959&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-18_hu_1a843b91e81956ad.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-18_hu_311978a862cf8b5a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;179&#34;
+		data-flex-basis=&#34;430px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;查看-redis-中数据变化&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b-redis-%e4%b8%ad%e6%95%b0%e6%8d%ae%e5%8f%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;查看 Redis 中数据变化
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1、Redis 中 id=19 的秒杀券的数量都-1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-19.png&#34;
+	width=&#34;944&#34;
+	height=&#34;289&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-19_hu_e4a328edbaf8337b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-19_hu_82d3921ec384df06.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;326&#34;
+		data-flex-basis=&#34;783px&#34;
 	
 &gt;
-&lt;/h3&gt;&lt;h3 id=&#34;apifox模拟用户抢购秒杀券&#34;&gt;&lt;a href=&#34;#apifox%e6%a8%a1%e6%8b%9f%e7%94%a8%e6%88%b7%e6%8a%a2%e8%b4%ad%e7%a7%92%e6%9d%80%e5%88%b8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Apifox模拟用户抢购秒杀券
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/096b12271e63436fb8742e37cc97e74a.png&#34;
-	
-	
-	
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-20.png&#34;
+	width=&#34;1472&#34;
+	height=&#34;698&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-20_hu_829f5a77bac3e619.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-20_hu_5f2fea9be1f2503f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;506px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-&lt;h3 id=&#34;查看redis中数据变化&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8bredis%e4%b8%ad%e6%95%b0%e6%8d%ae%e5%8f%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;查看Redis中数据变化
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;1、Redis中id=19的秒杀券的数量都-1&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2dcccdf3dabd4947a5bf267787ac646f.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;strong&gt;2、Redis 中成功存入用户 id&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-21.png&#34;
+	width=&#34;901&#34;
+	height=&#34;308&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-21_hu_8ec3d7627856c7b9.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-21_hu_d2bd5ab1394e9cc0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;292&#34;
+		data-flex-basis=&#34;702px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/df929665a6ba4101995d08c36214098b.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;strong&gt;3、 Redis 中成功存入订单信息&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-22.png&#34;
+	width=&#34;1279&#34;
+	height=&#34;612&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-22_hu_1e278ea873761045.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-22_hu_7ca16fa327cc8b6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;208&#34;
+		data-flex-basis=&#34;501px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;2、Redis中成功存入用户id&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/7989b1c5326845409f3d0135d7d97374.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;strong&gt;4、数据库中成功存入订单信息&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-23.png&#34;
+	width=&#34;1479&#34;
+	height=&#34;417&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-23_hu_a386ad7c16f99191.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-23_hu_4e0773ad57e11ed6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3、 Redis中成功存入订单信息&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2752ccd4a021484b85a00bb07ac726ab.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;4、数据库中成功存入订单信息&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/542c12283c904a26ac132867cf948bac.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;354&#34;
+		data-flex-basis=&#34;851px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;总结&#34;&gt;&lt;a href=&#34;#%e6%80%bb%e7%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;总结
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;VoucherOrderServiceImpl.java完整代码&lt;/strong&gt;&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;VoucherOrderServiceImpl.java 完整代码&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;  1
@@ -996,16 +1088,18 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/91c27518193942c4a1c2d5f1e0eec14a.png&#34;
-	
-	
-	
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-24.png&#34;
+	width=&#34;891&#34;
+	height=&#34;413&#34;
+	srcset=&#34;/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-24_hu_a0b0f90961b0ee98.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-24_hu_5d24efaad6e75c4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;215&#34;
+		data-flex-basis=&#34;517px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;br /&gt;
----
 </description>
         </item>
         <item>
@@ -1025,8 +1119,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	height=&#34;357&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image_hu_acb736d39a8f9deb.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image_hu_b05ef5f7d5920c1c.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1050,8 +1142,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1_hu_54eed240e6805164.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1_hu_f46e1c6b91b91830.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;165&#34;
@@ -1064,8 +1154,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	height=&#34;366&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2_hu_68b8d0747e772832.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2_hu_9ddb87b4cb9efeb3.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1094,8 +1182,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	height=&#34;204&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4_hu_b1676ac90e70cae.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4_hu_f4ef2e3224540269.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1213,8 +1299,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5_hu_5d4b4363e97d6550.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5_hu_6e494f35cdd49a1b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;563&#34;
@@ -1228,8 +1312,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6_hu_55b0b58826548509.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6_hu_a60fdd3c815cb034.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;677&#34;
@@ -1241,8 +1323,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	height=&#34;165&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7_hu_fa59b332ca3881f9.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7_hu_fd3349103b8dd85a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1256,8 +1336,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	height=&#34;257&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8_hu_68ff474d3d8586b4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8_hu_1fca3fe6bfb12f82.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1275,8 +1353,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9_hu_e49bfdad56deb5e8.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9_hu_470135dd049dc851.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;631&#34;
@@ -1291,8 +1367,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	height=&#34;346&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10_hu_d57b4857951ecdac.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10_hu_d7447abbbfec669e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1330,8 +1404,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11_hu_be0541a5ae6984e1.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11_hu_9ff358cfe73ac771.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;782&#34;
@@ -1352,8 +1424,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;508&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12_hu_9410c962c86b8fc7.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12_hu_e947b296b836a7ed.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1376,8 +1446,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13_hu_5d710c3e464160fb.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13_hu_b4042c0e9fdcd9b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;251&#34;
@@ -1392,21 +1460,16 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14_hu_f5fa80a33480e07a.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14_hu_da8639f917e59c09.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;193&#34;
 		data-flex-basis=&#34;464px&#34;
 	
-&gt;
-&lt;img src=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15.png&#34;
+&gt; &amp;gt; &lt;img src=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15.png&#34;
 	width=&#34;2731&#34;
 	height=&#34;1405&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15_hu_59def7060ed1aea4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15_hu_93d6137bc1a1bce2.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1422,8 +1485,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;379&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16_hu_a289fc867e9ef692.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16_hu_c0c556bb2d3ec27e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1449,8 +1510,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17_hu_5901d6f870f24885.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17_hu_3e387f14b5121a89.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;318&#34;
@@ -1463,8 +1522,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18_hu_e51369e0bbf16694.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18_hu_d0dd47ad950f5bb4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;781&#34;
@@ -1476,8 +1533,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;203&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19_hu_412ac310855b5291.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19_hu_387662bb469a5122.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1494,8 +1549,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20_hu_3a58ad8ead6148de.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20_hu_bed5759ad4a7cf35.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;1026&#34;
@@ -1509,8 +1562,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21_hu_2f8758996c2f24e1.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21_hu_3258a79cae287df7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2637&#34;
@@ -1523,8 +1574,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22_hu_90b51c7da860ca5.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22_hu_608b5f0742ce85de.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2825&#34;
@@ -1536,8 +1585,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;74&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23_hu_e7c99a634226dcf2.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23_hu_e23059bf46a8505a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1625,8 +1672,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25_hu_979d450b74f3b2d8.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25_hu_1a76554a0203ec81.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;173&#34;
@@ -1642,8 +1687,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26_hu_48fff353777c1a4e.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26_hu_78031f8a91d64a79.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2467&#34;
@@ -1655,8 +1698,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;88&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27_hu_779425861a1dabc3.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27_hu_a384b69cba4c4489.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1671,8 +1712,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28_hu_284102e529445955.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28_hu_991248eb8b202de9.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;144&#34;
@@ -1685,8 +1724,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29_hu_b9949c828a3d2fe4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29_hu_d9efb6423eca895d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;731&#34;
@@ -1698,8 +1735,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;188&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30_hu_f190973aec3218b2.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30_hu_458387386a9c4fe0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1715,8 +1750,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31_hu_a2a0093e84abc830.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31_hu_1d03d62c880a252a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;275&#34;
@@ -1728,8 +1761,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;299&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32_hu_138cb1786f17e834.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32_hu_91438e14b3e72b00.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1822,8 +1853,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33_hu_1b2c146d96ccee11.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33_hu_e8ae0b2692f52404.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;231&#34;
@@ -1834,8 +1863,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;238&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34_hu_c06bc0c670684eb4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34_hu_69613da2f3bbe719.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1850,8 +1877,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;331&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35_hu_e02e433e8d6c1b9c.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35_hu_3d0362da08cfa14e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1926,8 +1951,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36_hu_4ce1ba711578983d.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36_hu_35e72e807ffea2ab.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;960&#34;
@@ -1939,8 +1962,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;370&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37_hu_f5b0665eff65149f.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37_hu_392ac6891d70a210.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1955,8 +1976,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;463&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38_hu_1810ab1a1a53a541.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38_hu_d7e493f54e086f6b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2234,8 +2253,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39_hu_67311199368c67e6.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39_hu_24ef9f42320452f2.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;105&#34;
@@ -2249,8 +2266,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40_hu_42f5f285e613a5f6.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40_hu_179c1a33079e2f0b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;570&#34;
@@ -2262,8 +2277,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;202&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41_hu_77fe679d3bce86f5.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41_hu_88a089e3928b8b5d.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2370,8 +2383,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image_hu_1a533f54941f3407.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image_hu_3adc4e4ce7128d83.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;140&#34;
@@ -2388,8 +2399,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-1_hu_dd1d11bf4a82fc01.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-1_hu_253b311fae2dedf7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -2402,8 +2411,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;1199&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-2_hu_b18d8e67e763dc82.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-2_hu_9543a809a7c3984e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2421,8 +2428,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-3_hu_440a50f6832267e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-3_hu_fd479b4cdb97012a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;171&#34;
@@ -2437,8 +2442,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;128&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-4_hu_fbee7cb336004b5a.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-4_hu_c702560dd6c22a4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2456,8 +2459,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;102&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-5_hu_fb8a49d93f1948b0.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-5_hu_566712941c66bc7d.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2481,8 +2482,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-6_hu_31b88d90f5084dfd.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-6_hu_d79cb9a358bee63b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;207&#34;
@@ -2502,8 +2501,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;606&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-7_hu_5f8a486867bee6e9.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-7_hu_88f1c9f3b98cb8d0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2526,8 +2523,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;1218&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-8_hu_83217a609e20f5d.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-8_hu_ceece0ec3c83ef80.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2564,8 +2559,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-9_hu_1ef10362958a7860.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-9_hu_a7126ec11b5c21c6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;178&#34;
@@ -2580,8 +2573,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;1116&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-10_hu_ec33e031990f7d01.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-10_hu_ad8033ad93d7cfa8.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2609,8 +2600,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-11_hu_8d47895eb9670cc4.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-11_hu_98cee807c7fcf93f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;256&#34;
@@ -2637,8 +2626,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;977&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-12_hu_14edfaf7848d142e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-12_hu_a44bd717fda1e4bd.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2778,8 +2765,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-13_hu_dddc1de7164a2390.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-13_hu_40162094e329ca10.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -2792,8 +2777,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;915&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-14_hu_472f5d267ffbf545.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-14_hu_10ee90cd84204807.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2830,8 +2813,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-15_hu_953ee717e743402c.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-15_hu_6d8103c0498db0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;210&#34;
@@ -2844,8 +2825,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;198&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-16_hu_d528029ca5248aad.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-16_hu_a0d90dda6653c2eb.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2860,8 +2839,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;923&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-17_hu_80d3dcd4b04fc36.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-17_hu_215b24fbdbea3b46.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2880,8 +2857,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-18_hu_ee2d9868c2dd76e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-18_hu_ac8163d332111cc6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -2896,8 +2871,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;853&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-19_hu_4e61f3787fa5e606.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-19_hu_7baf566fce21040e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2916,8 +2889,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-20_hu_4697a1d0b90af2e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-20_hu_a787faa54ee20ac7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;178&#34;
@@ -2932,8 +2903,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-21_hu_23e0f846daf1577d.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-21_hu_a498339f19ed6aa4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;176&#34;
@@ -2946,8 +2915,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;923&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-22_hu_32234962f2825c07.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-22_hu_36c9c8352e1f209.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2978,8 +2945,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;442&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-23_hu_764dc26531f5f132.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-23_hu_97ffe5702b7f21e6.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3017,8 +2982,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-24_hu_81ae201c71bbf2b4.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-24_hu_7a981bd9f5a87292.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;175&#34;
@@ -3031,8 +2994,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;941&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-25_hu_c1fe699059ebe65f.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-25_hu_94ca64a3481bdf86.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3057,8 +3018,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-26_hu_f5089ad1f24b766b.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-26_hu_5b14f01ed8f66ae3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;167&#34;
@@ -3073,8 +3032,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-27_hu_13da89a4d52ea0cb.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-27_hu_187ffd6110ba53d0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;167&#34;
@@ -3088,8 +3045,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;409&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-28_hu_3f6bdb8dcc34eec7.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-28_hu_674d28909627b5ca.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3113,8 +3068,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-29_hu_9f15cb9331353d14.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-29_hu_96a16bfdc585b8ba.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;176&#34;
@@ -3132,8 +3085,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;1208&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-30_hu_22f2a69d6f42ea0c.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-30_hu_a4a8fa75a4cec60e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

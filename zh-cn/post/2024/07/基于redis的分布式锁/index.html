@@ -11,7 +11,7 @@
 <meta property='og:description' content="分布式场景下并发安全问题、分布式锁初步实现、解决redis锁误删问题、Lua脚本保证分布式锁的原子性">
 <meta property='og:url' content='/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2024-07-04T23:15:25&#43;00:00'/><meta property='article:modified_time' content='2024-07-04T23:15:25&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='分布式' /><meta property='article:published_time' content='2024-07-04T23:15:25&#43;00:00'/><meta property='article:modified_time' content='2024-07-04T23:15:25&#43;00:00'/>
 <meta name="twitter:title" content="基于Redis的分布式锁">
 <meta name="twitter:description" content="分布式场景下并发安全问题、分布式锁初步实现、解决redis锁误删问题、Lua脚本保证分布式锁的原子性">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -338,7 +338,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <ol>
     <li><a href="#分布式场景下并发安全问题的引发">分布式场景下并发安全问题的引发</a></li>
     <li><a href="#问题分析">问题分析</a></li>
-    <li><a href="#redis锁的demo"><strong>Redis锁的demo</strong></a></li>
+    <li><a href="#redis-锁的-demo">Redis 锁的 demo</a></li>
     <li><a href="#分布式锁初步实现">分布式锁初步实现</a>
       <ol>
         <li><a href="#实现锁接口">实现锁接口</a></li>
@@ -346,17 +346,17 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
       </ol>
     </li>
     <li><a href="#分布式场景下调试看效果">分布式场景下调试看效果</a></li>
-    <li><a href="#redis分布式锁误删问题">redis分布式锁误删问题</a>
+    <li><a href="#redis-分布式锁误删问题">Redis 分布式锁误删问题</a>
       <ol>
         <li><a href="#问题分析-1">问题分析</a></li>
         <li><a href="#解决锁误删">解决锁误删</a></li>
-        <li><a href="#修改trylock和unlock方法">修改trylock和unlock方法</a></li>
+        <li><a href="#修改-trylock-和-unlock-方法">修改 trylock 和 unlock 方法</a></li>
       </ol>
     </li>
     <li><a href="#分布式锁的原子性">分布式锁的原子性</a>
       <ol>
         <li><a href="#问题分析-2">问题分析</a></li>
-        <li><a href="#问题解决lua脚本">问题解决（Lua脚本）</a></li>
+        <li><a href="#问题解决lua-脚本">问题解决（Lua 脚本）</a></li>
         <li><a href="#代码实现">代码实现</a></li>
       </ol>
     </li>
@@ -423,7 +423,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 6 分钟
+                阅读时长: 5 分钟
             </time>
         </div>
         
@@ -444,22 +444,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/redis/">Redis</a> 
             
             
             , 
             
             <a href="/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a> 
             
             
         </div>
@@ -476,63 +466,86 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <h2 id="分布式场景下并发安全问题的引发"><a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e5%9c%ba%e6%99%af%e4%b8%8b%e5%b9%b6%e5%8f%91%e5%ae%89%e5%85%a8%e9%97%ae%e9%a2%98%e7%9a%84%e5%bc%95%e5%8f%91" class="header-anchor"></a>分布式场景下并发安全问题的引发
-</h2><p>前面通过加锁解决了单机状态下一人一单的问题，但是当出现了分布式，前面的加锁形式不再适用 ，每个jvm有一个自己的锁监视器，只能被内部线程获取，其他jvm无法使用，那么多台jvm的锁监视器不共用一个锁监视器，就容易出现分布式场景下并发安全问题。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/4bacf4a44accb04e0bd4be0a564e62fa.png"
-	
-	
-	
+</h2><p>前面通过加锁解决了单机状态下一人一单的问题，但是当出现了分布式，前面的加锁形式不再适用 ，每个 jvm 有一个自己的锁监视器，只能被内部线程获取，其他 jvm 无法使用，那么多台 jvm 的锁监视器不共用一个锁监视器，就容易出现分布式场景下并发安全问题。</p>
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image.png"
+	width="1854"
+	height="903"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image_hu_e6b19e579e02d85e.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image_hu_b1a89575bb46134e.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="205"
+		data-flex-basis="492px"
 	
 ></p>
 <h2 id="问题分析"><a href="#%e9%97%ae%e9%a2%98%e5%88%86%e6%9e%90" class="header-anchor"></a>问题分析
-</h2><p>所以我们要使用可以解决分布式场景下的位于jvm外的锁，多个jvm共同使用该锁，而不是使用每个jvm的内部锁。</p>
+</h2><p>所以我们要使用可以解决分布式场景下的位于 jvm 外的锁，多个 jvm 共同使用该锁，而不是使用每个 jvm 的内部锁。</p>
 <p>分布式锁有如下特点：</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/e06d1f1f8d5a0a2c08861111dc0c803c.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-1.png"
+	width="1377"
+	height="701"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-1_hu_fc1b9a042372bd5.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-1_hu_f3c227fd2933e415.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="196"
+		data-flex-basis="471px"
+	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/6fba7f59442d9b4f886175a14335b5e3.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-2.png"
+	width="1392"
+	height="685"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-2_hu_6656352929d9b675.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-2_hu_128c8bf060868ceb.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
 ></p>
-<p><strong>这里我们就选用redis来实现我们的分布式锁！</strong></p>
-<h2 id="redis锁的demo"><a href="#redis%e9%94%81%e7%9a%84demo" class="header-anchor"></a><strong>Redis锁的demo</strong>
-</h2><br />
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/f81b078e6765e29926c842fc081c5573.png"
-	
-	
-	
+<p><strong>这里我们就选用 redis 来实现我们的分布式锁！</strong></p>
+<h2 id="redis-锁的-demo"><a href="#redis-%e9%94%81%e7%9a%84-demo" class="header-anchor"></a>Redis 锁的 demo
+</h2><p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-3.png"
+	width="983"
+	height="545"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-3_hu_b8bbfb9e5de90759.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-3_hu_b4500786ccb38cc8.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="432px"
+	
 ></p>
-<p>redis锁要实现如上两个基本操作：<strong>获取锁和删除锁，在获取锁的同时为了防止宕机出现死锁，要手动添加过期时间，那么为了防止只加锁没有加过期时间的情况出现，我们要保证加锁和加过期时间的原子性，也就是他俩必须同时进行！</strong></p>
+<p>redis 锁要实现如上两个基本操作：<strong>获取锁和删除锁，在获取锁的同时为了防止宕机出现死锁，要手动添加过期时间，那么为了防止只加锁没有加过期时间的情况出现，我们要保证加锁和加过期时间的原子性，也就是他俩必须同时进行！</strong></p>
 <p><strong>那么上述加锁的命令可以换成如下：</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/b15807b8459fe4a9c0db1ad06def0ca7.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-4.png"
+	width="1340"
+	height="627"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-4_hu_871ef363e2ee3cd5.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-4_hu_9bc8583a654c4f28.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
 	
 ></p>
 <br />
 <h2 id="分布式锁初步实现"><a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e5%88%9d%e6%ad%a5%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>分布式锁初步实现
-</h2><p><img src="https://i-blog.csdnimg.cn/blog_migrate/5683cf76e3a7f023a03fc844726bde61.png"
-	
-	
-	
+</h2><p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-5.png"
+	width="1080"
+	height="599"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-5_hu_6f66a77e20e5d6c1.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-5_hu_ca83f27da963ab7a.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="432px"
 	
 ></p>
 <h3 id="实现锁接口"><a href="#%e5%ae%9e%e7%8e%b0%e9%94%81%e6%8e%a5%e5%8f%a3" class="header-anchor"></a>实现锁接口
@@ -589,7 +602,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//锁的key值</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">KEY_PREFIX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;lock:&#34;</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//生成锁的value值</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">ID_PREFIX</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UUID</span><span class="p">.</span><span class="na">randomUUID</span><span class="p">().</span><span class="na">toString</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;-&#34;</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
@@ -609,13 +622,13 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">unlock</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//释放锁</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">delete</span><span class="p">(</span><span class="n">KEY_PREFIX</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="使用锁"><a href="#%e4%bd%bf%e7%94%a8%e9%94%81" class="header-anchor"></a>使用锁
-</h3><p>在<strong>VoucherOrderServiceImpl.java</strong> 中的<strong>seckillVoucher方法</strong>中编写如下代码：</p>
+</h3><p>在<strong>VoucherOrderServiceImpl.java</strong> 中的<strong>seckillVoucher 方法</strong>中编写如下代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -666,84 +679,114 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </div>
 </div><br />
 <h2 id="分布式场景下调试看效果"><a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e5%9c%ba%e6%99%af%e4%b8%8b%e8%b0%83%e8%af%95%e7%9c%8b%e6%95%88%e6%9e%9c" class="header-anchor"></a>分布式场景下调试看效果
-</h2><p>两个application，一个是8081端口，一个是8082端口。</p>
-<p>apifox模拟同一个用户发送请求，<strong>authorization的参数值是同一个用户的</strong>，存储在redis中。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/14bb26417226399afdc8becd6e8a2cad.png"
-	
-	
-	
+</h2><p>两个 application，一个是 8081 端口，一个是 8082 端口。</p>
+<p>apifox 模拟同一个用户发送请求，<strong>authorization 的参数值是同一个用户的</strong>，存储在 redis 中。</p>
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-6.png"
+	width="2045"
+	height="582"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-6_hu_7277a572f70e1450.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-6_hu_4997c9228e2fc6d5.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="351"
+		data-flex-basis="843px"
+	
 ></p>
-<p>如下：<strong>在8082的断点处获取锁失败，在8081的断点处获取锁成功，即只有一次成功获取锁</strong>。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/a3960478bcac07f1dbfabcee8b454f7b.png"
-	
-	
-	
+<p>如下：<strong>在 8082 的断点处获取锁失败，在 8081 的断点处获取锁成功，即只有一次成功获取锁</strong>。</p>
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-7.png"
+	width="1808"
+	height="1347"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-7_hu_485bd3c0af55577.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-7_hu_94360b25b07d9edb.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="322px"
+	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/0f03ad358581c5129ccdea24f8251a2a.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-8.png"
+	width="1804"
+	height="1322"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-8_hu_7a3661ff6a877c7.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-8_hu_f040b2e03e12c4ee.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="327px"
+	
 ></p>
-<p>数据库中优惠券库存stock-1而不是-2，优惠券订单产生1个，数据库没问题！</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/5aec5fa5a81b31ee9ac3ec64f4be823f.png"
-	
-	
-	
+<p>数据库中优惠券库存 stock-1 而不是-2，优惠券订单产生 1 个，数据库没问题！</p>
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-9.png"
+	width="1600"
+	height="335"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-9_hu_fc9670c3149adf9f.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-9_hu_7a13f3168d8f661.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="477"
+		data-flex-basis="1146px"
+	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/3e26836300dcaaa09cb1ff6a1c74536c.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-10.png"
+	width="1561"
+	height="306"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-10_hu_ce769b9ffb7cfe57.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-10_hu_f02339dd41ec981f.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="510"
+		data-flex-basis="1224px"
+	
 ></p>
-<p>redis中查看锁的key值，1010正是userid，问题解决，达到我们想要的效果！</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/71c0aba596c2560e757395af27853d47.png"
-	
-	
-	
+<p>redis 中查看锁的 key 值，1010 正是 userid，问题解决，达到我们想要的效果！
+<img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-11.png"
+	width="335"
+	height="65"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-11_hu_456654257ae04559.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-11_hu_f4264f5b5ca44944.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="515"
+		data-flex-basis="1236px"
+	
 ></p>
-<br />
-<h2 id="redis分布式锁误删问题"><a href="#redis%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e8%af%af%e5%88%a0%e9%97%ae%e9%a2%98" class="header-anchor"></a>redis分布式锁误删问题
+<h2 id="redis-分布式锁误删问题"><a href="#redis-%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e8%af%af%e5%88%a0%e9%97%ae%e9%a2%98" class="header-anchor"></a>Redis 分布式锁误删问题
 </h2><h3 id="问题分析-1"><a href="#%e9%97%ae%e9%a2%98%e5%88%86%e6%9e%90-1" class="header-anchor"></a>问题分析
-</h3><p>当线程1获取锁成功时，如果该业务执行时间长以至于超过了设置的锁过期时间，那么在业务还未完成时，锁便自动释放，此时线程1无锁，线程2获取到了锁执行业务，当线程1业务执行完后，按照业务逻辑仍会释放锁，但此时释放的是线程2的锁，这就出现了锁误删的问题。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/1d36bbc698b2ff80a75559a3dba11d6a.png"
-	
-	
-	
+</h3><p>当线程 1 获取锁成功时，如果该业务执行时间长以至于超过了设置的锁过期时间，那么在业务还未完成时，锁便自动释放，此时线程 1 无锁，线程 2 获取到了锁执行业务，当线程 1 业务执行完后，按照业务逻辑仍会释放锁，但此时释放的是线程 2 的锁，这就出现了锁误删的问题。
+<img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-12.png"
+	width="1410"
+	height="573"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-12_hu_e9fdfae3a2b9e43.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-12_hu_6d898924a4d62ea2.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="246"
+		data-flex-basis="590px"
 	
 ></p>
 <h3 id="解决锁误删"><a href="#%e8%a7%a3%e5%86%b3%e9%94%81%e8%af%af%e5%88%a0" class="header-anchor"></a>解决锁误删
-</h3><p>对于每个线程，我们获取其线程标识（每个JVM内部都维护了线程的id，这个id是自增的，那么<strong>多个jvm可能出现线程id一致的情况</strong>，为了避免该情况出现我们用UUID生成一个随机字符串作为前缀，以降低线程id重复的概率）作为锁的value</p>
-<p>在释放锁时，我们先从redis获取对应的value值，跟当前线程的value做对比，一致则可以删除，否则就不能删除。</p>
-<br />
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/884f0438248300f6f9add83458f89976.png"
-	
-	
-	
+</h3><p>对于每个线程，我们获取其线程标识（每个 JVM 内部都维护了线程的 id，这个 id 是自增的，那么<strong>多个 jvm 可能出现线程 id 一致的情况</strong>，为了避免该情况出现我们用 UUID 生成一个随机字符串作为前缀，以降低线程 id 重复的概率）作为锁的 value</p>
+<p>在释放锁时，我们先从 redis 获取对应的 value 值，跟当前线程的 value 做对比，一致则可以删除，否则就不能删除。</p>
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-13.png"
+	width="564"
+	height="586"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-13_hu_12ab1d3ee30b0f4e.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-13_hu_e893a650e3c8b745.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="96"
+		data-flex-basis="230px"
+	
 ></p>
-<h3 id="修改trylock和unlock方法"><a href="#%e4%bf%ae%e6%94%b9trylock%e5%92%8cunlock%e6%96%b9%e6%b3%95" class="header-anchor"></a>修改trylock和unlock方法
+<h3 id="修改-trylock-和-unlock-方法"><a href="#%e4%bf%ae%e6%94%b9-trylock-%e5%92%8c-unlock-%e6%96%b9%e6%b3%95" class="header-anchor"></a>修改 trylock 和 unlock 方法
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -836,43 +879,57 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </div>
 </div><h2 id="分布式锁的原子性"><a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e7%9a%84%e5%8e%9f%e5%ad%90%e6%80%a7" class="header-anchor"></a>分布式锁的原子性
 </h2><h3 id="问题分析-2"><a href="#%e9%97%ae%e9%a2%98%e5%88%86%e6%9e%90-2" class="header-anchor"></a>问题分析
-</h3><p>JVM做Full GC时会阻塞所有代码，时间过长会出现锁超时自动释放，那么其他线程会趁虚而入获得锁。</p>
-<p>那么会出现如下情况：线程1获取锁执行业务逻辑后要释放锁，在判断完释放锁的条件为true后，即 <strong>threadId.equals(id)==true，</strong> 正要释放锁时出现 Full GC，所有代码被阻塞，直到锁超时自动释放 （注意此时锁不是正常释放而是锁超时释放的），就在这时GC完毕代码恢复，线程2趁虚而入获得锁，而线程1也恢复了要执行释放锁的代码，<strong>因为GC前已经判断过释放条件为ture，那么此时线程1仍然认为锁是自己的，会错误地释放线程2的锁，又出现了误删问题。这里我们就要保证****锁的原子性，即 判断锁的标识 和 释放锁 两个动作必须同时发生！</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/af6e75762ad7918630a1cdc6f291af6f.png"
-	
-	
-	
+</h3><p>JVM 做 Full GC 时会阻塞所有代码，时间过长会出现锁超时自动释放，那么其他线程会趁虚而入获得锁。</p>
+<p>那么会出现如下情况：线程 1 获取锁执行业务逻辑后要释放锁，在判断完释放锁的条件为 true 后，即 <strong>threadId.equals(id)==true，</strong> 正要释放锁时出现 Full GC，所有代码被阻塞，直到锁超时自动释放 （注意此时锁不是正常释放而是锁超时释放的），就在这时 GC 完毕代码恢复，线程 2 趁虚而入获得锁，而线程 1 也恢复了要执行释放锁的代码，**因为 GC 前已经判断过释放条件为 ture，那么此时线程 1 仍然认为锁是自己的，会错误地释放线程 2 的锁，又出现了误删问题。这里我们就要保证****锁的原子性，即 判断锁的标识 和 释放锁 两个动作必须同时发生！**</p>
+<p><img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-14.png"
+	width="1452"
+	height="635"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-14_hu_270e1f20c32f5126.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-14_hu_c7d9c62f7f31303e.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="548px"
+	
 ></p>
-<h3 id="问题解决lua脚本"><a href="#%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3lua%e8%84%9a%e6%9c%ac" class="header-anchor"></a>问题解决（Lua脚本）
+<h3 id="问题解决lua-脚本"><a href="#%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3lua-%e8%84%9a%e6%9c%ac" class="header-anchor"></a>问题解决（Lua 脚本）
 </h3><blockquote>
-<p>Lua是一种编程语言，Redis提供了Lua脚本功能，即可以在一个脚本中写多条redis指令，确保了多条命令执行的原子性</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/f30f023f339530804834cfb995fd4f44.png"
-	
-	
-	
+<p>Lua 是一种编程语言，Redis 提供了 Lua 脚本功能，即可以在一个脚本中写多条 redis 指令，确保了多条命令执行的原子性
+<img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-15.png"
+	width="903"
+	height="556"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-15_hu_a2360cf6101b1d71.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-15_hu_36528d3b65c490d1.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/a331361c2b36cc8cdbecec37f696abf9.png"
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="389px"
 	
-	
-	
+> &gt; <img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-16.png"
+	width="1060"
+	height="390"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-16_hu_db3093822c1b84a2.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-16_hu_4037ea2b9c9931df.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/c0ab95f58d1283ce4c140d9236344233.png"
+		class="gallery-image" 
+		data-flex-grow="271"
+		data-flex-basis="652px"
 	
-	
-	
+> &gt; <img src="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-17.png"
+	width="1416"
+	height="729"
+	srcset="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-17_hu_fd275439d457297a.png 480w, /zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/image-17_hu_943eb3fa4124861d.png 1024w"
 	loading="lazy"
 	
 	
-></p>
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+></p></blockquote>
 <h3 id="代码实现"><a href="#%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>代码实现
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -959,7 +1016,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Override</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">unlock</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 调用lua脚本  </span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 调用lua脚本</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">execute</span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">UNLOCK_SCRIPT</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">Collections</span><span class="p">.</span><span class="na">singletonList</span><span class="p">(</span><span class="n">KEY_PREFIX</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">name</span><span class="p">),</span><span class="w">
@@ -968,7 +1025,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>在resource资源文件夹下创建Lua脚本内容如下：</p>
+</div><p>在 resource 资源文件夹下创建 Lua 脚本内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -983,10 +1040,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="kr">return</span> <span class="mi">0</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><br />
-<br />
----
-
+</div>
 </section>
 
 
@@ -1033,6 +1087,32 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E4%B9%90%E8%A7%82%E9%94%81%E6%82%B2%E8%A7%82%E9%94%81%E4%BC%98%E6%83%A0%E5%8A%B5%E8%B6%85%E5%8D%96%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E9%97%AE%E9%A2%98/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Redis实战—乐观锁、悲观锁、优惠劵超卖、一人一单问题</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/05/%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E5%85%A5%E9%97%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">缓存穿透、缓存击穿、缓存雪崩【入门】</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/">
 
         
@@ -1065,19 +1145,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">Kafka入门到入土——万字详解，图文并茂</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">HA—Hadoop高可用</h2>
             
         </div>
     </a>

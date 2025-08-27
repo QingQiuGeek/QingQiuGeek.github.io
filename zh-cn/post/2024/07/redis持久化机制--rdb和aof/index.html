@@ -11,7 +11,7 @@
 <meta property='og:description' content="redis持久化方式：AOF和RDB持久化过程，AOF和RDB文件配置，各个配置项解读，AOF文件格式，AOF的rewrite压缩机制，RDB和AOF混合使用">
 <meta property='og:url' content='/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='持久化' /><meta property='article:tag' content='RDB' /><meta property='article:tag' content='AOF' /><meta property='article:published_time' content='2024-07-28T00:12:57&#43;00:00'/><meta property='article:modified_time' content='2024-07-28T00:12:57&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='RDB' /><meta property='article:tag' content='AOF' /><meta property='article:published_time' content='2024-07-28T00:12:57&#43;00:00'/><meta property='article:modified_time' content='2024-07-28T00:12:57&#43;00:00'/>
 <meta name="twitter:title" content="Redis持久化机制--RDB和AOF">
 <meta name="twitter:description" content="redis持久化方式：AOF和RDB持久化过程，AOF和RDB文件配置，各个配置项解读，AOF文件格式，AOF的rewrite压缩机制，RDB和AOF混合使用">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,24 +336,22 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1rdb">1.RDB</a>
+    <li><a href="#rdb">RDB</a>
       <ol>
-        <li><a href="#11-rdb持久化命令">1.1 RDB持久化命令</a></li>
-        <li><a href="#12-rdb持久化过程">1.2 RDB持久化过程</a></li>
+        <li><a href="#rdb-持久化命令">RDB 持久化命令</a></li>
+        <li><a href="#rdb-持久化过程">RDB 持久化过程</a></li>
       </ol>
     </li>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/eb0f3f7f8c8a462e974748a90d803bab.png" alt=""></a></li>
-    <li><a href="#2aof">2.AOF</a>
+    <li><a href="#aof">AOF</a>
       <ol>
-        <li><a href="#21-aof持久化过程">2.1 AOF持久化过程</a></li>
-        <li><a href="#22-aof持久化fsync策略">2.2 AOF持久化fsync策略</a></li>
-        <li><a href="#23-aof文件拆分">2.3 AOF文件拆分</a></li>
-        <li><a href="#24为什么aof是执行完命令才记录日志">2.4为什么AOF是执行完命令才记录日志</a></li>
-        <li><a href="#25-aof重写">2.5 AOF重写</a></li>
+        <li><a href="#aof-持久化过程">AOF 持久化过程</a></li>
+        <li><a href="#aof-持久化-fsync-策略">AOF 持久化 fsync 策略</a></li>
+        <li><a href="#aof-文件拆分">AOF 文件拆分</a></li>
+        <li><a href="#为什么-aof-是执行完命令才记录日志">为什么 AOF 是执行完命令才记录日志</a></li>
+        <li><a href="#aof-重写">AOF 重写</a></li>
       </ol>
     </li>
-    <li><a href="#3混合持久化">3.混合持久化</a></li>
-    <li><a href="#redis-40-开始支持-rdb-和-aof-的混合持久化默认关闭可以通过配置项-aof-use-rdb-preamble-开启">Redis 4.0 开始支持 RDB 和 AOF 的混合持久化（默认关闭，可以通过配置项 <code>aof-use-rdb-preamble</code> 开启）。</a></li>
+    <li><a href="#混合持久化">混合持久化</a></li>
   </ol>
 </nav>
         </div>
@@ -438,17 +436,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/redis/">Redis</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E6%8C%81%E4%B9%85%E5%8C%96/">持久化</a> 
             
             
             , 
@@ -459,9 +447,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             , 
             
             <a href="/zh-cn/tags/aof/">AOF</a> 
-            
-            
-            
             
             
         </div>
@@ -477,72 +462,73 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p>Redis 是一个<strong>内存数据库</strong> ，所以其运行效率非常高。但也存在一个问题：内存中的数据 是不持久的，<strong>若主机宕机或 Redis 关机重启，则内存中的数据全部丢失。因此</strong> Redis 具有<strong>持久化功能</strong> ，<strong>Redis通过数据快照或追加操作日志的形式将数据持久化到磁盘。</strong> 根据持久化使用技术的不同，Redis 的持久化分为两种：<strong>RDB 与 AOF。</strong></p>
+    <p>Redis 是一个<strong>内存数据库</strong> ，所以其运行效率非常高。但也存在一个问题：内存中的数据 是不持久的，<strong>若主机宕机或 Redis 关机重启，则内存中的数据全部丢失。因此</strong> Redis 具有<strong>持久化功能</strong> ，<strong>Redis 通过数据快照或追加操作日志的形式将数据持久化到磁盘。</strong> 根据持久化使用技术的不同，Redis 的持久化分为两种：<strong>RDB 与 AOF。</strong></p>
 <p><strong>当系统重新启动时，会自动加载持久化文件，并根据文件中数据库状态描述信息将数据恢复到内存中。</strong></p>
-<h2 id="1rdb"><a href="#1rdb" class="header-anchor"></a>1.RDB
+<h2 id="rdb"><a href="#rdb" class="header-anchor"></a>RDB
 </h2><blockquote>
 <ul>
-<li>RDB（Redis DataBase）是Redis<strong>默认开启</strong> 的持久化⽅式，是指<strong>将内存中某一时刻的数据快照全量写入到指定的 rdb 文件中</strong> 。当 Redis 启动时会自动读取rdb快照文件，<strong>将数据从硬盘载入到内存</strong>，以恢复 Redis 关机前的数据库状态。</li>
-<li>由于RDB是生成的数据快照，<strong>因此⽣成的 RDB⽂件⾮常适合⽤于全量复制、数据备份等场景</strong>。</li>
-<li>RDB创建数据快照的时间间隔可以通过redis.conf配置文件中的&quot;save&quot;配置选项进⾏设置或者通过命令即时创建快照，如&quot;save 900 1&quot;表示如果900秒内有⾄少1个key变化，则创建⼀个snapshots快照。</li>
+<li>RDB（Redis DataBase）是 Redis<strong>默认开启</strong> 的持久化⽅式，是指<strong>将内存中某一时刻的数据快照全量写入到指定的 rdb 文件中</strong> 。当 Redis 启动时会自动读取 rdb 快照文件，<strong>将数据从硬盘载入到内存</strong>，以恢复 Redis 关机前的数据库状态。</li>
+<li>由于 RDB 是生成的数据快照，<strong>因此⽣成的 RDB ⽂件⾮常适合⽤于全量复制、数据备份等场景</strong>。</li>
+<li>RDB 创建数据快照的时间间隔可以通过 redis.conf 配置文件中的&quot;save&quot;配置选项进⾏设置或者通过命令即时创建快照，如&quot;save 900 1&quot;表示如果 900 秒内有⾄少 1 个 key 变化，则创建⼀个 snapshots 快照。</li>
 </ul></blockquote>
-<h3 id="11-rdb持久化命令"><a href="#11-rdb%e6%8c%81%e4%b9%85%e5%8c%96%e5%91%bd%e4%bb%a4" class="header-anchor"></a>1.1 RDB持久化命令
+<h3 id="rdb-持久化命令"><a href="#rdb-%e6%8c%81%e4%b9%85%e5%8c%96%e5%91%bd%e4%bb%a4" class="header-anchor"></a>RDB 持久化命令
 </h3><blockquote>
 <p><strong>save</strong></p>
-<p>执行 save 命令可立即进行一次持久化保存。save 命令是同步保存操作，<strong>由Redis主进程执行，因此执行期间会<strong><strong>阻塞主进程</strong></strong>，Redis 不能处理任何读写请求。</strong></p>
+<p>执行 save 命令可立即进行一次持久化保存。save 命令是同步保存操作，<strong>由 Redis 主进程执行，因此执行期间会**<strong>阻塞主进程*</strong>*，Redis 不能处理任何读写请求。</strong></p>
 <p><strong>bgsave</strong></p>
 <p>执行 bgsave 命令可立即进行一次持久化保存，<strong>主进程会 fork 出一个子进程</strong> ，由该子进程负责完成保存过程。在子进程进行保存过程中，<strong>不会阻塞 redis-server 进程对客户端读写请求的处理</strong>。</p>
 <p><strong>fork()</strong> 函数是用于在操作系统中创建新进程的系统调用。它会将当前进程的内存内容完整地复制到内存的另一个区域，从而创建一个新的子进程。</p></blockquote>
-<h3 id="12-rdb持久化过程"><a href="#12-rdb%e6%8c%81%e4%b9%85%e5%8c%96%e8%bf%87%e7%a8%8b" class="header-anchor"></a>1.2 RDB持久化过程
-</h3><p><img src="https://i-blog.csdnimg.cn/direct/57062c5e1f0d4ed2bcc5489f1bc44be7.png"
-	
-	
-	
+<h3 id="rdb-持久化过程"><a href="#rdb-%e6%8c%81%e4%b9%85%e5%8c%96%e8%bf%87%e7%a8%8b" class="header-anchor"></a>RDB 持久化过程
+</h3><p><img src="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image.png"
+	width="978"
+	height="913"
+	srcset="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image_hu_478cff845d675452.png 480w, /zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image_hu_c110f46bc06f3862.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="107"
+		data-flex-basis="257px"
 	
 ></p>
-<p>在进行持久化过程中，如果主进程接收到了用户写请求，则系统会将内存中发生数据修改的物理块 copy 出一个副本。等内存中的全量数据 copy 结束后，会再将 副本中的数据 copy 到 RDB 临时文件。这个副本的生成是由于**Linux 系统的写时复制技术 （Copy-On-Write）**实现的。</p>
-<h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/eb0f3f7f8c8a462e974748a90d803bab.png"
-	
-	
-	
+<p>在进行持久化过程中，如果主进程接收到了用户写请求，则系统会将内存中发生数据修改的物理块 copy 出一个副本。等内存中的全量数据 copy 结束后，会再将 副本中的数据 copy 到 RDB 临时文件。这个副本的生成是由于**Linux 系统的写时复制技术 （Copy-On-Write）**实现的。
+<img src="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-1.png"
+	width="1051"
+	height="444"
+	srcset="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-1_hu_ba808217ae02d124.png 480w, /zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-1_hu_b6907c94a685360b.png 1024w"
 	loading="lazy"
 	
 	
->
-</h2><h2 id="2aof"><a href="#2aof" class="header-anchor"></a>2.AOF
+		class="gallery-image" 
+		data-flex-grow="236"
+		data-flex-basis="568px"
+	
+></p>
+<h2 id="aof"><a href="#aof" class="header-anchor"></a>AOF
 </h2><p>AOF 持久性记录服务器接收到的每个写操作。然后在服务器启动时再次重复执行这些操作，从⽽重建原始数据集。</p>
-<h3 id="21-aof持久化过程"><a href="#21-aof%e6%8c%81%e4%b9%85%e5%8c%96%e8%bf%87%e7%a8%8b" class="header-anchor"></a>2.1 AOF持久化过程
+<h3 id="aof-持久化过程"><a href="#aof-%e6%8c%81%e4%b9%85%e5%8c%96%e8%bf%87%e7%a8%8b" class="header-anchor"></a>AOF 持久化过程
 </h3><blockquote>
 <ol>
-<li>
-<p><strong>命令追加（append）</strong>：所有的写命令会追加到 AOF 缓冲区中。</p>
-</li>
-<li>
-<p><strong>文件写入（write）</strong> ：将 AOF 缓冲区的数据写入到 AOF 文件过程中要调用<code>write</code>函数（系统调用），<code>write先把</code>数据写到系统内核缓冲区后直接返回，此时还没写到磁盘AOF文件中（延迟写）。</p>
-</li>
-<li>
-<p><strong>文件同步（fsync）</strong> ：AOF 缓冲区根据对应的持久化方式（ <code>fsync</code> 策略）向硬盘做同步操作。这一步需要调用 <code>fsync</code> 函数（系统调用）进行强制硬盘同步，<code>fsync</code> 将阻塞直到写入磁盘完成后返回，保证了数据持久化。</p>
-</li>
-<li>
-<p><strong>文件重写（rewrite）</strong>：随着 AOF 文件越来越大，需要定期对 AOF 文件进行重写，达到压缩的目的。</p>
-</li>
-<li>
-<p>如果在 rewrite 过程中又有写操作命令追加，那么这些数据会暂时写入 aof_rewrite_buf 缓冲区。等将全部 rewrite 计算结果写入临时文件后，会先将<strong>AOF重写缓冲区</strong> 中 的数据<strong>追加</strong> 到临时文件，然后再 rename 为磁盘文件的原名称，覆盖原文件。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/5d4bd7f73ed84d3a9814962ad9018637.png"
-	
-	
-	
+<li><strong>命令追加（append）</strong>：所有的写命令会追加到 AOF 缓冲区中。</li>
+<li><strong>文件写入（write）</strong> ：将 AOF 缓冲区的数据写入到 AOF 文件过程中要调用<code>write</code>函数（系统调用），<code>write先把</code>数据写到系统内核缓冲区后直接返回，此时还没写到磁盘 AOF 文件中（延迟写）。</li>
+<li><strong>文件同步（fsync）</strong> ：AOF 缓冲区根据对应的持久化方式（ <code>fsync</code> 策略）向硬盘做同步操作。这一步需要调用 <code>fsync</code> 函数（系统调用）进行强制硬盘同步，<code>fsync</code> 将阻塞直到写入磁盘完成后返回，保证了数据持久化。</li>
+<li><strong>文件重写（rewrite）</strong>：随着 AOF 文件越来越大，需要定期对 AOF 文件进行重写，达到压缩的目的。</li>
+<li>如果在 rewrite 过程中又有写操作命令追加，那么这些数据会暂时写入 aof_rewrite_buf 缓冲区。等将全部 rewrite 计算结果写入临时文件后，会先将<strong>AOF 重写缓冲区</strong> 中 的数据<strong>追加</strong> 到临时文件，然后再 rename 为磁盘文件的原名称，覆盖原文件。
+<img src="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-2.png"
+	width="620"
+	height="286"
+	srcset="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-2_hu_63a6aa647709618c.png 480w, /zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-2_hu_e0a615f8f1e7ad03.png 1024w"
 	loading="lazy"
 	
 	
-><br>
-<code>write</code>：写入系统内核缓冲区之后直接返回（仅仅是写到缓冲区），不会立即同步到硬盘。虽然提高了效率，但也带来了数据丢失的风险。同步硬盘操作通常依赖于系统调度机制，Linux 内核通常为 30s 同步一次，具体值取决于写出的数据量和 I/O 缓冲区的状态。<br>
-<code>fsync</code>：强制刷新系统内核缓冲区（同步到磁盘），确保写磁盘操作结束才会返回。</p>
-</li>
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="520px"
+	
+> &gt; <code>write</code>：写入系统内核缓冲区之后直接返回（仅仅是写到缓冲区），不会立即同步到硬盘。虽然提高了效率，但也带来了数据丢失的风险。同步硬盘操作通常依赖于系统调度机制，Linux 内核通常为 30s 同步一次，具体值取决于写出的数据量和 I/O 缓冲区的状态。<br>
+<code>fsync</code>：强制刷新系统内核缓冲区（同步到磁盘），确保写磁盘操作结束才会返回。</li>
 </ol></blockquote>
-<h3 id="22-aof持久化fsync策略"><a href="#22-aof%e6%8c%81%e4%b9%85%e5%8c%96fsync%e7%ad%96%e7%95%a5" class="header-anchor"></a>2.2 AOF持久化fsync策略
+<h3 id="aof-持久化-fsync-策略"><a href="#aof-%e6%8c%81%e4%b9%85%e5%8c%96-fsync-%e7%ad%96%e7%95%a5" class="header-anchor"></a>AOF 持久化 fsync 策略
 </h3><blockquote>
 <ul>
 <li><code>appendfsync always</code>：主线程调用 <code>write</code> 执行写操作后，后台线程（ <code>aof_fsync</code> 线程）<strong>立即调用</strong> <code>fsync</code> 函数同步 AOF 文件（刷盘），<code>fsync</code> 完成后线程返回，这样会严重降低 Redis 的性能（<code>write</code> + <code>fsync</code>）。</li>
@@ -550,10 +536,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li><code>appendfsync no</code>：主线程调用 <code>write</code> 执行写操作后立即返回，让操作系统决定何时进行同步，Linux 下一般为 30 秒一次（<code>write</code>但不<code>fsync</code>，<code>fsync</code> 的时机由操作系统决定）。</li>
 </ul>
 <p>为了兼顾数据和写入性能，可以考虑 <code>appendfsync everysec</code> 选项 ，让 Redis 每秒同步一次 AOF 文件。</p></blockquote>
-<h3 id="23-aof文件拆分"><a href="#23-aof%e6%96%87%e4%bb%b6%e6%8b%86%e5%88%86" class="header-anchor"></a>2.3 AOF文件拆分
+<h3 id="aof-文件拆分"><a href="#aof-%e6%96%87%e4%bb%b6%e6%8b%86%e5%88%86" class="header-anchor"></a>AOF 文件拆分
 </h3><p><a class="link" href="https://mp.weixin.qq.com/s/RnoPPL7jiFSKkx3G4p57Pg"  title="从Redis7.0发布看Redis的过去与未来"
      target="_blank" rel="noopener"
-    >从Redis7.0发布看Redis的过去与未来</a></p>
+    >从 Redis7.0 发布看 Redis 的过去与未来</a></p>
 <p>从 Redis 7.0.0 开始，Redis 使用了 <strong>Multi Part AOF</strong> 机制。顾名思义，Multi Part AOF 就是将原来的单个 AOF 文件拆分成多个 AOF 文件。在 Multi Part AOF 中，AOF 文件被分为三种类型，分别为：</p>
 <blockquote>
 <ul>
@@ -561,50 +547,57 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li>INCR：表示增量 AOF 文件，它一般会在 AOFRW 开始执行时被创建，该文件可能存在多个。</li>
 <li>HISTORY：表示历史 AOF 文件，它由 BASE 和 INCR AOF 变化而来，每次 AOFRW 成功完成时，本次 AOFRW 之前对应的 BASE 和 INCR AOF 都将变为 HISTORY，HISTORY 类型的 AOF 会被 Redis 自动删除。</li>
 </ul></blockquote>
-<br />
-<h3 id="24为什么aof是执行完命令才记录日志"><a href="#24%e4%b8%ba%e4%bb%80%e4%b9%88aof%e6%98%af%e6%89%a7%e8%a1%8c%e5%ae%8c%e5%91%bd%e4%bb%a4%e6%89%8d%e8%ae%b0%e5%bd%95%e6%97%a5%e5%bf%97" class="header-anchor"></a>2.4为什么AOF是执行完命令才记录日志
+<h3 id="为什么-aof-是执行完命令才记录日志"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-aof-%e6%98%af%e6%89%a7%e8%a1%8c%e5%ae%8c%e5%91%bd%e4%bb%a4%e6%89%8d%e8%ae%b0%e5%bd%95%e6%97%a5%e5%bf%97" class="header-anchor"></a>为什么 AOF 是执行完命令才记录日志
 </h3><blockquote>
 <p>关系型数据库（如 MySQL）通常都是执行命令之前记录日志（方便故障恢复），而 Redis AOF 持久化机制是在执行完命令之后再记录日志。</p>
 <ul>
 <li>避免额外的检查开销：AOF 记录日志不会对命令进行语法检查，如果先写入日志结果命令出错，则还得修改日志；</li>
 <li>**不会阻塞当前写操作命令的执行：**先写日志然后执行命令，结果命令出错，还得回去改日志，就阻塞了当前命令，甚至影响下一个命令。</li>
 </ul></blockquote>
-<h3 id="25-aof重写"><a href="#25-aof%e9%87%8d%e5%86%99" class="header-anchor"></a>2.5 AOF重写
+<h3 id="aof-重写"><a href="#aof-%e9%87%8d%e5%86%99" class="header-anchor"></a>AOF 重写
 </h3><blockquote>
 <p><strong>什么是重写？</strong></p>
-<p>随着执行的写命令越来越多，AOF文件也越来越大，为解决这一问题，要对AOF压缩，即重写。假如先后执行了set num:1和set:num:2，实际结果是2，那么重写后就不需要set num:1这个记录了。</p>
-<p>重写过程中会把新数据记录到新的aof文件，防止对原先的aof文件造成污染。</p>
+<p>随着执行的写命令越来越多，AOF 文件也越来越大，为解决这一问题，要对 AOF 压缩，即重写。假如先后执行了 set num:1 和 set:num:2，实际结果是 2，那么重写后就不需要 set num:1 这个记录了。</p>
+<p>重写过程中会把新数据记录到新的 aof 文件，防止对原先的 aof 文件造成污染。</p>
 <ul>
 <li>
-<p>redis 的重写 AOF 过程是通过fork系统调用生成<strong>后台子进程 <em>bgrewriteaof</em></strong> 来完成的**，** 如果在 rewrite 过程中又有写操作命令追加，那么这些数据会暂时写入 aof_rewrite_buf 缓冲区。等将全部 rewrite 计算结果写入临时文件后，会先将<strong>AOF重写缓冲区</strong> 中 的数据<strong>追加</strong>到临时文件，然后再 rename 为磁盘文件的原名称，覆盖原文件。</p>
+<p>redis 的重写 AOF 过程是通过 fork 系统调用生成<strong>后台子进程 <em>bgrewriteaof</em></strong> 来完成的**，** 如果在 rewrite 过程中又有写操作命令追加，那么这些数据会暂时写入 aof_rewrite_buf 缓冲区。等将全部 rewrite 计算结果写入临时文件后，会先将<strong>AOF 重写缓冲区</strong> 中 的数据<strong>追加</strong>到临时文件，然后再 rename 为磁盘文件的原名称，覆盖原文件。</p>
 </li>
 <li>
-<p>子进程带有主进程的数据副本，这里使用子进程而不是线程，因为如果是使用线程，<strong>多线程共享内存</strong> ，那么在修改共享内存数据的时候，需要通过<strong>加锁</strong> 来保证数据的安全，而这样就会<strong>降低性能</strong> 。而使用子进程，创建子进程时，父子进程是共享内存数据的，不过这个共享的内存只能以<strong>只读</strong> 的方式，而当父子进程任意一方修改了该共享内存，就会发生「<strong>写时复制</strong>」（这里的写时复制和RDB的写时复制是同一个），于是父子进程就有了独立的数据副本，就不用加锁来保证数据安全。</p>
+<p>子进程带有主进程的数据副本，这里使用子进程而不是线程，因为如果是使用线程，<strong>多线程共享内存</strong> ，那么在修改共享内存数据的时候，需要通过<strong>加锁</strong> 来保证数据的安全，而这样就会<strong>降低性能</strong> 。而使用子进程，创建子进程时，父子进程是共享内存数据的，不过这个共享的内存只能以<strong>只读</strong> 的方式，而当父子进程任意一方修改了该共享内存，就会发生「<strong>写时复制</strong>」（这里的写时复制和 RDB 的写时复制是同一个），于是父子进程就有了独立的数据副本，就不用加锁来保证数据安全。</p>
 </li>
 <li>
-<p>主进程在通过fork系统调用生成bgrewriteaof子进程时，操作系统会把<strong>主进程的「页表」复制一份给子进程</strong> ，这个页表记录着虚拟地址和物理地址映射关系，而不会复制物理内存，也就是说，两者的虚拟空间不同，但其对应的物理空间是同一个。这样父子进程就可以共享只读数据了。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/ce450a082dfc48ba8df6bc821dcd64e3.png"
-	
-	
-	
+<p>主进程在通过 fork 系统调用生成 bgrewriteaof 子进程时，操作系统会把<strong>主进程的「页表」复制一份给子进程</strong> ，这个页表记录着虚拟地址和物理地址映射关系，而不会复制物理内存，也就是说，两者的虚拟空间不同，但其对应的物理空间是同一个。这样父子进程就可以共享只读数据了。</p>
+<p><img src="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-3.png"
+	width="774"
+	height="707"
+	srcset="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-3_hu_1436cd2bcb373e38.png 480w, /zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-3_hu_38fffe937c7c1dde.png 1024w"
 	loading="lazy"
 	
 	
->
-当父进程或者子进程在向这个内存发起写操作时，由于违反权限CPU会触发写保护中断，然后操作系统会在「写保护中断处理函数」里进行物理内存的复制，并<strong>重新设置其内存映射关系</strong> ，将父子进程的内存读写权限设置为可读写，最后才会对内存进行写操作，这个过程被称为<strong>写时复制</strong> 。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/854f7a49dc58480f9f3bc3a9e0661230.png"
+		class="gallery-image" 
+		data-flex-grow="109"
+		data-flex-basis="262px"
 	
-	
-	
+></p>
+<p>当父进程或者子进程在向这个内存发起写操作时，由于违反权限 CPU 会触发写保护中断，然后操作系统会在「写保护中断处理函数」里进行物理内存的复制，并<strong>重新设置其内存映射关系</strong> ，将父子进程的内存读写权限设置为可读写，最后才会对内存进行写操作，这个过程被称为<strong>写时复制</strong> 。
+<img src="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-4.png"
+	width="969"
+	height="707"
+	srcset="/zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-4_hu_3a3d4949b57e3dc1.png 480w, /zh-cn/post/2024/07/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6--rdb%E5%92%8Caof/image-4_hu_bda2f5a9d569c994.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="328px"
 	
 ></p>
 </li>
 </ul></blockquote>
-<h2 id="3混合持久化"><a href="#3%e6%b7%b7%e5%90%88%e6%8c%81%e4%b9%85%e5%8c%96" class="header-anchor"></a>3.混合持久化
-</h2><h2 id="redis-40-开始支持-rdb-和-aof-的混合持久化默认关闭可以通过配置项-aof-use-rdb-preamble-开启"><a href="#redis-40-%e5%bc%80%e5%a7%8b%e6%94%af%e6%8c%81-rdb-%e5%92%8c-aof-%e7%9a%84%e6%b7%b7%e5%90%88%e6%8c%81%e4%b9%85%e5%8c%96%e9%bb%98%e8%ae%a4%e5%85%b3%e9%97%ad%e5%8f%af%e4%bb%a5%e9%80%9a%e8%bf%87%e9%85%8d%e7%bd%ae%e9%a1%b9-aof-use-rdb-preamble-%e5%bc%80%e5%90%af" class="header-anchor"></a>Redis 4.0 开始支持 RDB 和 AOF 的混合持久化（默认关闭，可以通过配置项 <code>aof-use-rdb-preamble</code> 开启）。
-</h2>
+<h2 id="混合持久化"><a href="#%e6%b7%b7%e5%90%88%e6%8c%81%e4%b9%85%e5%8c%96" class="header-anchor"></a>混合持久化
+</h2><p>Redis 4.0 开始支持 RDB 和 AOF 的混合持久化（默认关闭，可以通过配置项 <code>aof-use-rdb-preamble</code> 开启）。</p>
+
 </section>
 
 
@@ -648,6 +641,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Redis的zset实现共同关注、懒汉式关注推送</h2>
+            
+        </div>
+    </a>
+</article>
             
                 
 <article class="">
@@ -696,19 +702,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">Redisson分布式锁、可重入锁</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">基于Redis的分布式锁</h2>
             
         </div>
     </a>

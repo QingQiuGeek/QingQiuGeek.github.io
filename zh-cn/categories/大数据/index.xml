@@ -555,16 +555,8 @@
         <pubDate>Mon, 29 Jul 2024 11:30:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/</guid>
-        <description>&lt;blockquote&gt;
-&lt;h2 id=&#34;往期推荐&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐
-&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22140787541%22%2C%22source%22%3A%22qq_73181349%22%7D&#34;  title=&#34;数据仓库及数仓架构概述-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;数据仓库及数仓架构概述-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140798330&#34;  title=&#34;数仓常见名词解析和名词之间的关系-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;数仓常见名词解析和名词之间的关系-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;引言&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e8%a8%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引言
-&lt;/h2&gt;&lt;p&gt;要想明白为什么HBase的产生，就需要先了解一下 Hadoop。&lt;/p&gt;
+        <description>&lt;h2 id=&#34;引言&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e8%a8%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引言
+&lt;/h2&gt;&lt;p&gt;要想明白为什么 HBase 的产生，就需要先了解一下 Hadoop。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Hadoop 可以通过 HDFS 来存 储结构化、半结构甚至非结构化的数据，是传统数据库的补充，是海量数据存储的最佳方法，它针对大文件的存储、批量访问和流式访问都做了优化，同时也通过多副本解决了容灾问题。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;但是 Hadoop 的缺陷在于它&lt;strong&gt;只能执行批处理&lt;/strong&gt;，并且只能以&lt;strong&gt;顺序方式访问数据&lt;/strong&gt;，这意味着即使是最简单的工作也必须搜索整个数据集，&lt;strong&gt;无法实现对数据的随机访问&lt;/strong&gt;。实现数据的&lt;strong&gt;随机访问是传统的关系型数据库所擅长的&lt;/strong&gt;，但它们却不能用于海量数据的存储。在这种情况下，必须有一种新的方案来&lt;strong&gt;同时解决海量数据存储和随机访问的问题&lt;/strong&gt;，HBase 就是其中之一 (HBase，Cassandra，couchDB，Dynamo 和 MongoDB 都能存储海量数据并支持随机访问)。&lt;/p&gt;
@@ -575,13 +567,10 @@
 &lt;li&gt;半结构化数据：非关系模型的，有基本固定结构模式的数据，例如日志文件、XML 文档、 JSON 文档、Email 等；&lt;/li&gt;
 &lt;li&gt;非结构化数据：没有固定模式的数据，如 WORD、PDF、PPT、EXL，各种格式的图片、视 频等。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;HBase简介&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;HBase全称Hadoop Database ，是一个基于HDFS的分布式的、面向列的开源数据库，但是这个数据库没有SQL，只提供了API，需要API编程来使用HBase，而后面提到的Phoenix才使得可以用SQL操作HBase！&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;hbase-简介&#34;&gt;&lt;a href=&#34;#hbase-%e7%ae%80%e4%bb%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HBase 简介
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;HBase 全称 Hadoop Database ，是一个基于 HDFS 的分布式的、面向列的开源数据库，但是这个数据库没有 SQL，只提供了 API，需要 API 编程来使用 HBase，而后面提到的 Phoenix 才使得可以用 SQL 操作 HBase！&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;HBase有如下特点：&lt;/p&gt;
+&lt;p&gt;HBase 有如下特点：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;容量大：一个表可以有数十亿行，上百万列，这也和它的扩展性息息相关；&lt;/li&gt;
 &lt;li&gt;面向列：数据是按照列存储，每一列都单独存放，数据即索引，在查询时可以只访问指定列的数据，有效地降低了系统的 I/O 负担；&lt;/li&gt;
@@ -592,20 +581,248 @@
 &lt;li&gt;支持数据分片；&lt;/li&gt;
 &lt;li&gt;易于使用的 Java 客户端 API，客户端可以通过 HBase 实现对 HDFS 上数据的随机访问；&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9bfd7d519e2446d7903861122c1eee1e.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image.png&#34;
+	width=&#34;1135&#34;
+	height=&#34;612&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image_hu_1c021cc8169d6b19.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image_hu_ba0871a8f16ba121.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;185&#34;
+		data-flex-basis=&#34;445px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;HBase的表&lt;/li&gt;
+&lt;h2 id=&#34;hbase-的表&#34;&gt;&lt;a href=&#34;#hbase-%e7%9a%84%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HBase 的表
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;表 schema 仅定义列族，表具有多个列族，每个列族可以包含任意数量的列，列由多个单元格 （cell ）组成，单元格可以存储多个版本的数据，多个版本数据以时间戳进行区分。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;所有数据的底层存储格式都是字节数组；&lt;/li&gt;
+&lt;li&gt;不持复杂的事务，只支持行级事务，即单行数据的读写都是原子性的；&lt;/li&gt;
+&lt;li&gt;查询功能简单，不支持 join 等复杂操作；&lt;/li&gt;
+&lt;li&gt;仅支持通过主键(row key)和主键的 range 来检索数据；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-1.png&#34;
+	width=&#34;1101&#34;
+	height=&#34;797&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-1_hu_5bc7b7725805adfb.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-1_hu_eb82ecc2a0e98dbf.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;138&#34;
+		data-flex-basis=&#34;331px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;row-key-行键&#34;&gt;&lt;a href=&#34;#row-key-%e8%a1%8c%e9%94%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Row Key 行键
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Row Key 是用来检索记录的主键。想要访问 HBase Table 中的数据，只有以下三种方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;通过指定的 Row Key 进行访问；&lt;/li&gt;
+&lt;li&gt;通过 Row Key 的 range 进行访问，即访问指定范围内的行；&lt;/li&gt;
+&lt;li&gt;进行全表扫描；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Row Key 可以是任意字符串，存储时数据按照 Row Key 的&lt;strong&gt;字典序进行排序&lt;/strong&gt;，这里需要注意以下两点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;因为字典序对 int 排序的结果是 1,10,100,11,12,13,14,15,16,17,18,19,2,20,21,…,9,91,92,93,94,95,96,97,98,99。如果你使用整型的字符串作为行键，那么为了保持整型的自然序，&lt;strong&gt;行键必须用 0 作左填充&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;行的一次读写操作时原子性的 (不论一次读写多少列)。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;column-family-列族&#34;&gt;&lt;a href=&#34;#column-family-%e5%88%97%e6%97%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Column Family 列族
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;HBase 表中的每个列，都归属于某个列族。列族是表的 Schema 的一部分，所以列族需要在创建表时定义。&lt;/li&gt;
+&lt;li&gt;列族的所有列都以列族名作为前缀，例如 courses:history ， courses:math 都属于 courses 这个列族。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;column-qualifier-列限定符&#34;&gt;&lt;a href=&#34;#column-qualifier-%e5%88%97%e9%99%90%e5%ae%9a%e7%ac%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Column Qualifier 列限定符
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;列限定符，可以理解为是具体的列名，例如 courses:history ， courses:math 都属于 courses 这个列族，它们的列限定符分别是 history 和 math 。需要注意的是列限定符不是表 Schema 的一部分，可以在插入数据的过程中动态创建列。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;cell-单元格&#34;&gt;&lt;a href=&#34;#cell-%e5%8d%95%e5%85%83%e6%a0%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Cell 单元格
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Cell 是行，列族和列限定符的组合，并包含值和时间戳。可以等价理解为关系型数据库中由指定行和指定列确定的一个单元格，而不同的是 HBase 中的一个单元格是由多个版本的数据组成的，每个版本的数据用时间戳进行区分。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;timestamp-时间戳&#34;&gt;&lt;a href=&#34;#timestamp-%e6%97%b6%e9%97%b4%e6%88%b3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Timestamp 时间戳
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;HBase 中通过 row key 和 column 确定的为一个存储单元称为 Cell 。每个 Cell 都保存着同一份数 据的多个版本。版本通过时间戳来索引，时间戳的类型是 64 位整型，时间戳可以由 HBase 在数据写入 时自动赋值，也可以由客户显式指定。每个 Cell 中，不同版本的数据按照时间戳倒序排列，即最新的数据排在最前面。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;hbase-的存储结构&#34;&gt;&lt;a href=&#34;#hbase-%e7%9a%84%e5%ad%98%e5%82%a8%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HBase 的存储结构
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-2.png&#34;
+	width=&#34;1518&#34;
+	height=&#34;785&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-2_hu_4d44bb99c9d0bcbd.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-2_hu_930d5ac1c3f1ab27.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;464px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;regions&#34;&gt;&lt;a href=&#34;#regions&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Regions
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;HBase Table 中的所有行按照 Row Key 的字典序排列。HBase Tables 通过行键的范围 (row key range) 被&lt;strong&gt;水平切分&lt;/strong&gt;成多个 Region , &lt;strong&gt;一个 Region 包含了在 start key 和 end key 之间的所有行。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;每个表一开始只有一个 Region ，随着数据不断增加， Region 会不断增大，当增大到一个阀值的时 候， Region 就会&lt;strong&gt;等分&lt;/strong&gt;为两个新的 Region 。当 Table 中的行不断增多，就会有越来越多的 Region 。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-3.png&#34;
+	width=&#34;1006&#34;
+	height=&#34;649&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-3_hu_f98bb24009154550.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-3_hu_885c1a6987552d12.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;155&#34;
+		data-flex-basis=&#34;372px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Region 是 HBase 中&lt;strong&gt;分布式存储和负载均衡的最小单元&lt;/strong&gt;。这意味着不同的 Region 可以分布在不同的 Region Server 上。但&lt;strong&gt;一个 Region 是不会拆分到多个 Server&lt;/strong&gt; 上的。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-4.png&#34;
+	width=&#34;1042&#34;
+	height=&#34;576&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-4_hu_a686118d976c0b46.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-4_hu_83ca7e87c140d2f4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;180&#34;
+		data-flex-basis=&#34;434px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;region-server&#34;&gt;&lt;a href=&#34;#region-server&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Region Server
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Region Server &lt;strong&gt;运行在 HDFS 的 DataNode&lt;/strong&gt; 上。它具有以下组件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;WAL(Write Ahead Log，预写日志)：对 HBase 读写数据的时候，数据&lt;strong&gt;不是直接写进磁盘&lt;/strong&gt;，它会&lt;strong&gt;在内存中保留&lt;/strong&gt;一段时间，但把数据保存在内存中可能有更高的概率引起数据丢失，为了解决这个问题，数据会先写在一个叫 做 Write-Ahead logfile 的文件中&lt;strong&gt;存储尚未进持久化存储的数据记录&lt;/strong&gt;，以便在发生故障时进行恢复。&lt;/li&gt;
+&lt;li&gt;BlockCache：读缓存。它&lt;strong&gt;将频繁读取的数据存储在内存中，如果存储不足，它将按照 最近最少使 用原则 清除多余的数据。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;MemStore：写缓存。它&lt;strong&gt;存储尚未写入磁盘的新数据，&lt;strong&gt;并会在数据写入磁盘之前对其进行排序。 每个 Region 上的&lt;/strong&gt;每个列族都有一个 MemStore&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;HFile ：将行数据按照 Key\Values 的形式存储在文件系统上，是实际的存储文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Region Server 存取一个子表时，会创建一个 Region 对象，然后对表的每个列族创建一个 Store 实例，每个 Store 会有 0 个或多个 StoreFile 与之对应，每个 StoreFile 则对应一个 HFile ，HFile 就是实际存储在 HDFS 上的文件。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;hbase-的系统架构&#34;&gt;&lt;a href=&#34;#hbase-%e7%9a%84%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HBase 的系统架构
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-5.png&#34;
+	width=&#34;1478&#34;
+	height=&#34;774&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-5_hu_a073c34b524d71e3.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-5_hu_e37f046de00bb9d0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;190&#34;
+		data-flex-basis=&#34;458px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;HBase 系统遵循 Master/Salve 架构，由三种不同类型的组件组成：&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;zookeeper&#34;&gt;&lt;a href=&#34;#zookeeper&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Zookeeper
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;保证任何时候，集群中只有一个 Master；&lt;/li&gt;
+&lt;li&gt;存贮所有 Region 的寻址入口；&lt;/li&gt;
+&lt;li&gt;实时监控 Region Server 的状态，将 Region Server 的上线和下线信息实时通知给 Master；&lt;/li&gt;
+&lt;li&gt;存储 HBase 的 Schema，包括有哪些 Table，每个 Table 有哪些 Column Family 等信息；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;master&#34;&gt;&lt;a href=&#34;#master&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Master
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;为 Region Server 分配或移除 Region ；&lt;/li&gt;
+&lt;li&gt;负责 Region Server 的负载均衡 ；&lt;/li&gt;
+&lt;li&gt;处理 Region Server 的故障转移；&lt;/li&gt;
+&lt;li&gt;处理 GFS 上的垃圾文件回收；&lt;/li&gt;
+&lt;li&gt;处理 Schema 的更新请求；&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-6.png&#34;
+	width=&#34;1449&#34;
+	height=&#34;723&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-6_hu_602aff3094b4ca1c.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-6_hu_fa0a120d709e3199.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;200&#34;
+		data-flex-basis=&#34;480px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;region-server-1&#34;&gt;&lt;a href=&#34;#region-server-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Region Server
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;负责维护 Master 分配给它的 Region ，并处理发送到 Region 上的 IO 请求；&lt;/li&gt;
+&lt;li&gt;负责切分在运行过程中变得过大的 Region；&lt;/li&gt;
+&lt;li&gt;维护 HLog&lt;/li&gt;
+&lt;li&gt;刷新缓存到 HDFS&lt;/li&gt;
+&lt;li&gt;存储 HBase 的实际数据&lt;/li&gt;
+&lt;li&gt;压缩数据&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-7.png&#34;
+	width=&#34;1412&#34;
+	height=&#34;690&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-7_hu_3b7183c5185c40e2.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-7_hu_a32f5a80efac50a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;204&#34;
+		data-flex-basis=&#34;491px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;三个组件间的协作&#34;&gt;&lt;a href=&#34;#%e4%b8%89%e4%b8%aa%e7%bb%84%e4%bb%b6%e9%97%b4%e7%9a%84%e5%8d%8f%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;三个组件间的协作
+&lt;/h3&gt;&lt;p&gt;HBase 使用 ZooKeeper 作为分布式协调服务来维护集群中的服务器状态。 Zookeeper 负责维护可用 服务列表，并提供服务故障通知等服务：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个 Region Server 都会在 ZooKeeper 上创建一个临时节点，Master 通过 Zookeeper 的 Watcher 机制对节点进行监控，从而发现新加入的 Region Server 或故障退出的 Region Server；&lt;/li&gt;
+&lt;li&gt;所有 Masters 会&lt;strong&gt;竞争&lt;/strong&gt;性地在 Zookeeper 上创建同一个临时节点，由于 Zookeeper 只能有一个同名节点，所以必然只有一个 Master 能够创建成功，此时该 Master 就是主 Master，主 Master 会 定期向 Zookeeper &lt;strong&gt;发送心跳&lt;/strong&gt;。备用 Masters 则通过 Watcher 机制对主 HMaster 所在节点&lt;strong&gt;进行监听&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;如果主 Master 未能定时发送心跳，则其持有的 Zookeeper 会话会过期，相应的临时节点也会被 删除，这会触发定义在该节点上的 Watcher 事件，使得备用的 Master Servers 得到通知。所有备 用的 Master Servers 在接到通知后，会再次去竞争性地创建临时节点，完成主 Master 的选举。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;写数据流程&#34;&gt;&lt;a href=&#34;#%e5%86%99%e6%95%b0%e6%8d%ae%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;写数据流程
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Client 向 Region Server 提交写请求；&lt;/li&gt;
+&lt;li&gt;Region Server 找到目标 Region；&lt;/li&gt;
+&lt;li&gt;Region 检查数据是否与 Schema 一致；&lt;/li&gt;
+&lt;li&gt;如果客户端没有指定版本，则获取当前系统时间作为数据版本；&lt;/li&gt;
+&lt;li&gt;将更新写入 WAL Log；&lt;/li&gt;
+&lt;li&gt;将更新写入 Memstore；&lt;/li&gt;
+&lt;li&gt;判断 Memstore 存储是否已满，如果存储已满则需要 flush 为 Store Hfile 文件。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;表-schema-仅定义列族表&#34;&gt;&lt;a href=&#34;#%e8%a1%a8-schema-%e4%bb%85%e5%ae%9a%e4%b9%89%e5%88%97%e6%97%8f%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;表 schema 仅定义列族，表&lt;/strong&gt;
-&lt;/h2&gt;</description>
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-8.png&#34;
+	width=&#34;1395&#34;
+	height=&#34;681&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-8_hu_d2c3f98f2cc52422.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-8_hu_bd2f42fcfdcea680.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;204&#34;
+		data-flex-basis=&#34;491px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;读数据流程&#34;&gt;&lt;a href=&#34;#%e8%af%bb%e6%95%b0%e6%8d%ae%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;读数据流程
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;以下是客户端首次读写 HBase 上数据的流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;客户端从 Zookeeper 获取 META 表所在的 Region Server；&lt;/li&gt;
+&lt;li&gt;客户端访问 META 表所在的 Region Server，从 META 表中查询到访问行键所在的 Region Server，之后客户端将&lt;strong&gt;缓存&lt;/strong&gt;这些信息以及 META 表的位置；&lt;/li&gt;
+&lt;li&gt;客户端从行键所在的 Region Server 上获取数据。&lt;/li&gt;
+&lt;li&gt;如果再次读取，客户端将&lt;strong&gt;从缓存中获取&lt;/strong&gt;行键所在的 Region Server。这样客户端就不需要再次查询 META 表，除非 Region 移动导致缓存失效，这样的话，则将会重新查询并更新缓存。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;注： META 表是 HBase 中一张特殊的表，它保存了所有 Region 的位置信息，META 表自己的位置信息 则存储在 ZooKeeper 上。
+&lt;img src=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-9.png&#34;
+	width=&#34;1404&#34;
+	height=&#34;707&#34;
+	srcset=&#34;/zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-9_hu_9ee2c9e6c3a06dd9.png 480w, /zh-cn/post/2024/07/%E5%A4%A7%E6%95%B0%E6%8D%AEhbase%E5%9B%BE%E6%96%87%E7%AE%80%E4%BB%8B%E5%8F%8Aphoenix/image-9_hu_bd7abe86cb55993a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;198&#34;
+		data-flex-basis=&#34;476px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;phoenix-简介&#34;&gt;&lt;a href=&#34;#phoenix-%e7%ae%80%e4%bb%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Phoenix 简介
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Phoenix 是 HBase 的开源 SQL 中间层，在 Phoenix 之前，如果要使用  HBase，只能调用它的 Java API，但是 Phoenix 允许使用标准 JDBC 的方式来操作 HBase ！&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Phoenix 的理念是 we put sql SQL back in NOSQL&lt;/strong&gt; ，即可以使用标准的 SQL 就能完成对 HBase 上数据的操作，这也意味着可以&lt;strong&gt;通过集成 Spring Data JPA 或 Mybatis 等常用的持久层框架来操作 HBase&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;其次 Phoenix 的性能表现也非常优异， Phoenix 查询引擎会将 SQL 查询转换为一个或多个 HBase Scan，通过并行执行来生成标准的 JDBC 结果集。它通过直接使用 HBase API 以及协处理器和自定义过 滤器，可以为小型数据查询提供毫秒级的性能，为千万行数据的查询提供秒级的性能。&lt;/li&gt;
+&lt;li&gt;同时 Phoenix 还 拥有二级索引等 HBase 不具备的特性，不仅如此 Phoenix 对于用户输入的 SQL 同样会有大量的优化手段（就像 hive 自带 sql 优化器一样）&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
         </item>
         <item>
         <title>kafka实战 集群搭建-Kraft模式</title>
@@ -624,8 +841,6 @@
 	height=&#34;357&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image_hu_acb736d39a8f9deb.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image_hu_b05ef5f7d5920c1c.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -649,8 +864,6 @@
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1_hu_54eed240e6805164.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1_hu_f46e1c6b91b91830.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;165&#34;
@@ -663,8 +876,6 @@
 	height=&#34;366&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2_hu_68b8d0747e772832.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2_hu_9ddb87b4cb9efeb3.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -693,8 +904,6 @@
 	height=&#34;204&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4_hu_b1676ac90e70cae.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4_hu_f4ef2e3224540269.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -812,8 +1021,6 @@
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5_hu_5d4b4363e97d6550.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5_hu_6e494f35cdd49a1b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;563&#34;
@@ -827,8 +1034,6 @@
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6_hu_55b0b58826548509.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6_hu_a60fdd3c815cb034.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;677&#34;
@@ -840,8 +1045,6 @@
 	height=&#34;165&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7_hu_fa59b332ca3881f9.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7_hu_fd3349103b8dd85a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -855,8 +1058,6 @@
 	height=&#34;257&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8_hu_68ff474d3d8586b4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8_hu_1fca3fe6bfb12f82.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -874,8 +1075,6 @@
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9_hu_e49bfdad56deb5e8.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9_hu_470135dd049dc851.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;631&#34;
@@ -890,8 +1089,6 @@
 	height=&#34;346&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10_hu_d57b4857951ecdac.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10_hu_d7447abbbfec669e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -929,8 +1126,6 @@
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11_hu_be0541a5ae6984e1.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11_hu_9ff358cfe73ac771.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;782&#34;
@@ -951,8 +1146,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;508&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12_hu_9410c962c86b8fc7.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12_hu_e947b296b836a7ed.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -975,8 +1168,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13_hu_5d710c3e464160fb.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13_hu_b4042c0e9fdcd9b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;251&#34;
@@ -991,21 +1182,16 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14_hu_f5fa80a33480e07a.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14_hu_da8639f917e59c09.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;193&#34;
 		data-flex-basis=&#34;464px&#34;
 	
-&gt;
-&lt;img src=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15.png&#34;
+&gt; &amp;gt; &lt;img src=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15.png&#34;
 	width=&#34;2731&#34;
 	height=&#34;1405&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15_hu_59def7060ed1aea4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15_hu_93d6137bc1a1bce2.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1021,8 +1207,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;379&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16_hu_a289fc867e9ef692.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16_hu_c0c556bb2d3ec27e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1048,8 +1232,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17_hu_5901d6f870f24885.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17_hu_3e387f14b5121a89.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;318&#34;
@@ -1062,8 +1244,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18_hu_e51369e0bbf16694.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18_hu_d0dd47ad950f5bb4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;781&#34;
@@ -1075,8 +1255,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;203&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19_hu_412ac310855b5291.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19_hu_387662bb469a5122.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1093,8 +1271,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20_hu_3a58ad8ead6148de.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20_hu_bed5759ad4a7cf35.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;1026&#34;
@@ -1108,8 +1284,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21_hu_2f8758996c2f24e1.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21_hu_3258a79cae287df7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2637&#34;
@@ -1122,8 +1296,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22_hu_90b51c7da860ca5.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22_hu_608b5f0742ce85de.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2825&#34;
@@ -1135,8 +1307,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;74&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23_hu_e7c99a634226dcf2.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23_hu_e23059bf46a8505a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1224,8 +1394,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25_hu_979d450b74f3b2d8.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25_hu_1a76554a0203ec81.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;173&#34;
@@ -1241,8 +1409,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26_hu_48fff353777c1a4e.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26_hu_78031f8a91d64a79.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;2467&#34;
@@ -1254,8 +1420,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;88&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27_hu_779425861a1dabc3.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27_hu_a384b69cba4c4489.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1270,8 +1434,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28_hu_284102e529445955.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28_hu_991248eb8b202de9.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;144&#34;
@@ -1284,8 +1446,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29_hu_b9949c828a3d2fe4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29_hu_d9efb6423eca895d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;731&#34;
@@ -1297,8 +1457,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;188&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30_hu_f190973aec3218b2.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30_hu_458387386a9c4fe0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1314,8 +1472,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31_hu_a2a0093e84abc830.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31_hu_1d03d62c880a252a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;275&#34;
@@ -1327,8 +1483,6 @@ SET GLOBAL validate_password.policy = LOW; &lt;br&gt;
 	height=&#34;299&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32_hu_138cb1786f17e834.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32_hu_91438e14b3e72b00.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1421,8 +1575,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33_hu_1b2c146d96ccee11.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33_hu_e8ae0b2692f52404.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;231&#34;
@@ -1433,8 +1585,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;238&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34_hu_c06bc0c670684eb4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34_hu_69613da2f3bbe719.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1449,8 +1599,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;331&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35_hu_e02e433e8d6c1b9c.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35_hu_3d0362da08cfa14e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1525,8 +1673,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36_hu_4ce1ba711578983d.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36_hu_35e72e807ffea2ab.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;960&#34;
@@ -1538,8 +1684,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;370&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37_hu_f5b0665eff65149f.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37_hu_392ac6891d70a210.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1554,8 +1698,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;463&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38_hu_1810ab1a1a53a541.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38_hu_d7e493f54e086f6b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1833,8 +1975,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39_hu_67311199368c67e6.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39_hu_24ef9f42320452f2.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;105&#34;
@@ -1848,8 +1988,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40_hu_42f5f285e613a5f6.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40_hu_179c1a33079e2f0b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;570&#34;
@@ -1861,8 +1999,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;202&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41_hu_77fe679d3bce86f5.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41_hu_88a089e3928b8b5d.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1969,8 +2105,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image_hu_1a533f54941f3407.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image_hu_3adc4e4ce7128d83.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;140&#34;
@@ -1987,8 +2121,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-1_hu_dd1d11bf4a82fc01.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-1_hu_253b311fae2dedf7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -2001,8 +2133,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;1199&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-2_hu_b18d8e67e763dc82.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-2_hu_9543a809a7c3984e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2020,8 +2150,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-3_hu_440a50f6832267e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-3_hu_fd479b4cdb97012a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;171&#34;
@@ -2036,8 +2164,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;128&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-4_hu_fbee7cb336004b5a.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-4_hu_c702560dd6c22a4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2055,8 +2181,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;102&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-5_hu_fb8a49d93f1948b0.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-5_hu_566712941c66bc7d.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2080,8 +2204,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-6_hu_31b88d90f5084dfd.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-6_hu_d79cb9a358bee63b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;207&#34;
@@ -2101,8 +2223,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;606&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-7_hu_5f8a486867bee6e9.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-7_hu_88f1c9f3b98cb8d0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2125,8 +2245,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;1218&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-8_hu_83217a609e20f5d.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-8_hu_ceece0ec3c83ef80.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2163,8 +2281,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-9_hu_1ef10362958a7860.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-9_hu_a7126ec11b5c21c6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;178&#34;
@@ -2179,8 +2295,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;1116&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-10_hu_ec33e031990f7d01.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-10_hu_ad8033ad93d7cfa8.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2208,8 +2322,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-11_hu_8d47895eb9670cc4.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-11_hu_98cee807c7fcf93f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;256&#34;
@@ -2236,8 +2348,6 @@ bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf&lt;/li&gt;
 	height=&#34;977&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-12_hu_14edfaf7848d142e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-12_hu_a44bd717fda1e4bd.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2377,8 +2487,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-13_hu_dddc1de7164a2390.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-13_hu_40162094e329ca10.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -2391,8 +2499,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;915&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-14_hu_472f5d267ffbf545.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-14_hu_10ee90cd84204807.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2429,8 +2535,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-15_hu_953ee717e743402c.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-15_hu_6d8103c0498db0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;210&#34;
@@ -2443,8 +2547,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;198&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-16_hu_d528029ca5248aad.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-16_hu_a0d90dda6653c2eb.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2459,8 +2561,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;923&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-17_hu_80d3dcd4b04fc36.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-17_hu_215b24fbdbea3b46.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2479,8 +2579,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-18_hu_ee2d9868c2dd76e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-18_hu_ac8163d332111cc6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -2495,8 +2593,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;853&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-19_hu_4e61f3787fa5e606.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-19_hu_7baf566fce21040e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2515,8 +2611,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-20_hu_4697a1d0b90af2e.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-20_hu_a787faa54ee20ac7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;178&#34;
@@ -2531,8 +2625,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-21_hu_23e0f846daf1577d.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-21_hu_a498339f19ed6aa4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;176&#34;
@@ -2545,8 +2637,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;923&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-22_hu_32234962f2825c07.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-22_hu_36c9c8352e1f209.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2577,8 +2667,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;442&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-23_hu_764dc26531f5f132.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-23_hu_97ffe5702b7f21e6.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2616,8 +2704,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-24_hu_81ae201c71bbf2b4.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-24_hu_7a981bd9f5a87292.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;175&#34;
@@ -2630,8 +2716,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;941&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-25_hu_c1fe699059ebe65f.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-25_hu_94ca64a3481bdf86.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2656,8 +2740,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-26_hu_f5089ad1f24b766b.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-26_hu_5b14f01ed8f66ae3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;167&#34;
@@ -2672,8 +2754,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-27_hu_13da89a4d52ea0cb.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-27_hu_187ffd6110ba53d0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;167&#34;
@@ -2687,8 +2767,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;409&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-28_hu_3f6bdb8dcc34eec7.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-28_hu_674d28909627b5ca.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2712,8 +2790,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-29_hu_9f15cb9331353d14.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-29_hu_96a16bfdc585b8ba.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;176&#34;
@@ -2731,8 +2807,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;1208&#34;
 	srcset=&#34;/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-30_hu_22f2a69d6f42ea0c.png 480w, /zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/image-30_hu_a4a8fa75a4cec60e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2910,8 +2984,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image_hu_7583199c224fc93c.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image_hu_bdd73baa980f4760.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;239&#34;
@@ -2924,8 +2996,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;758&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1_hu_124a7a8d78fb58bb.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1_hu_8ff7e6529fb82c82.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -2950,8 +3020,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-2_hu_6c49285a3e103af7.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-2_hu_a1bebb17cae83f23.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;235&#34;
@@ -2967,8 +3035,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-3_hu_c71197231becb534.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-3_hu_355edecb5689cd82.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;247&#34;
@@ -2983,8 +3049,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4_hu_b3bf8623ae367e4c.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4_hu_d5fef3d1650295f0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;201&#34;
@@ -2997,8 +3061,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;1105&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5_hu_83763143df0f54db.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5_hu_96e82b6105502e3e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3013,8 +3075,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6_hu_bc1860421569b8f8.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6_hu_778684d95d808a13.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;142&#34;
@@ -3028,8 +3088,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7_hu_ee6f522aef6ef785.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7_hu_76aeb26deaed92a8.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;116&#34;
@@ -3042,8 +3100,6 @@ configMap.put( ProducerConfig.PARTITIONER_CLASS_CONFIG, KafkaPartitionerMock.cla
 	height=&#34;653&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8_hu_23cd4d6dd707d84d.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8_hu_53d52d0fb571962a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3273,8 +3329,6 @@ flume3 成功把 hive 日志的新内容写到 datas 文件夹，说明 linux03 
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-9_hu_df5e0baa2f798ff5.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-9_hu_72b5c4bbf3d757dd.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;556&#34;
@@ -3288,8 +3342,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-10_hu_186d3528c8b8279f.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-10_hu_3ad360ad4ecae4c9.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;129&#34;
@@ -3302,8 +3354,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	height=&#34;734&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11_hu_18a2ea47c6ee537e.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11_hu_af2f6474dc226e45.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3477,8 +3527,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-12_hu_4695483e0537af40.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-12_hu_1136186937ad7577.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;212&#34;
@@ -3491,8 +3539,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	height=&#34;392&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-13_hu_bd5e02c4de5283eb.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-13_hu_b60a000c4cd61376.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3507,8 +3553,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-14_hu_47c7b0836ddc751b.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-14_hu_7747d4b70d76b6c3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;268&#34;
@@ -3521,8 +3565,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	height=&#34;327&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-15_hu_78568c4c2a5d924c.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-15_hu_a1bc7eef27ecb403.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3537,8 +3579,6 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-16_hu_27fec984d5ace5cf.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-16_hu_da10d12b697cf94.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;152&#34;
@@ -3551,8 +3591,6 @@ console1 接收成功 。
 	height=&#34;264&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-17_hu_f94472efee72010a.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-17_hu_a3d4cbf8982a213e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3627,8 +3665,6 @@ console1 接收成功 。
 	height=&#34;705&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18_hu_b52e7eb81f2f0796.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18_hu_2c464d839e46192e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -3788,8 +3824,6 @@ console1 接收成功 。
 	height=&#34;584&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-19_hu_1bc3435833ccf53e.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-19_hu_b1cfcb02dd52d9e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4173,8 +4207,6 @@ console1 接收成功 。
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-20_hu_e70a91c1daa17f20.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-20_hu_a03db1a18740a197.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;917&#34;
@@ -4202,8 +4234,6 @@ console1 接收成功 。
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image_hu_7fa87b03cd51f56f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image_hu_86396d462a02f120.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;239&#34;
@@ -4217,8 +4247,6 @@ console1 接收成功 。
 	height=&#34;464&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1_hu_8561a55c375264ae.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1_hu_a84eee12f3e31d2f.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4269,8 +4297,6 @@ console1 接收成功 。
 	height=&#34;151&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2_hu_3f35ec154b3b11eb.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2_hu_10f158814c30aa1e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4374,8 +4400,6 @@ console1 接收成功 。
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3_hu_c99cca4dd73c04ee.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3_hu_82ef1505922ff86c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;234&#34;
@@ -4391,8 +4415,6 @@ console1 接收成功 。
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4_hu_b88eeeed95de3eea.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4_hu_76944ab34e474c55.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;289&#34;
@@ -4406,8 +4428,6 @@ console1 接收成功 。
 	height=&#34;507&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5_hu_9d7ee6a4efc594d2.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5_hu_d7e8bc859122f40b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4537,7 +4557,7 @@ console1 接收成功 。
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;start-hivemetastore.sh（自己写的脚本）
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;启动 hive 开始操作
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hive 会产生元数据记录在 metastore.log 中，然后就会被 flume 监听到，flume 就会把监听到的日志写到 hdfs 的 flume 文件夹中。浏览器打开 linux01:9870 查看 hdfs 的文件目录，发现新建了 flume 文件夹，表示操作成功。
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;![alt text](image-6.png)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;![](image-6.png)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;注意！监听的 metastore.log 一定要是有效的，如果无效那么 hive 的日志就不会写到里面，flume 就检测不到，具体去看 hive 的日志配置教程。另外启动的 agent 的任务名字和配置文件不要搞错了，是 a2 和 flume-file-hdfs.conf。&lt;/strong&gt;&lt;/p&gt;
@@ -4547,8 +4567,6 @@ console1 接收成功 。
 	height=&#34;528&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7_hu_c1105467385bcae8.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7_hu_4fa73e60ceb8a8e2.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4692,8 +4710,6 @@ job 目录下编写 flume-dir-hdfs.conf 配置文件：&lt;/p&gt;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8_hu_119154576442338f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8_hu_638b356095ba52.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;394&#34;
@@ -4706,8 +4722,6 @@ job 目录下编写 flume-dir-hdfs.conf 配置文件：&lt;/p&gt;
 	height=&#34;1006&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9_hu_2110e997d452b344.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9_hu_2c54946dfe69fec2.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4724,8 +4738,6 @@ job 目录下编写 flume-dir-hdfs.conf 配置文件：&lt;/p&gt;
 	height=&#34;533&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10_hu_3bb935b9cd6bd98f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10_hu_20ded4dc11c4bc23.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4840,8 +4852,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11_hu_3d3be8253f4ea89.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11_hu_35e2622993d720d4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;425&#34;
@@ -4853,8 +4863,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;188&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12_hu_ff914089d72061b5.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12_hu_8ba92ad258b85007.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4871,8 +4879,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;789&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13_hu_496ca9bcf5e7b220.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13_hu_a6a4961d82b88ca0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -4944,8 +4950,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14_hu_d8ff180d4f856e7e.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14_hu_1b7cc2868b1adaee.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;411&#34;
@@ -4978,8 +4982,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15_hu_ba0e6aa6ca72876.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15_hu_7ea1071690105aa1.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;350&#34;
@@ -4993,8 +4995,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16_hu_8a8bb29403f12b75.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16_hu_b5c7c5bcf5a462e7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;450&#34;
@@ -5006,8 +5006,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;1402&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17_hu_2651a7ca432bfddb.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17_hu_f849167e43dfc987.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -5021,8 +5019,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18_hu_41296967dda0ef4e.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18_hu_b14b812135d32750.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;128&#34;
@@ -5035,8 +5031,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;96&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19_hu_9bc37188bd235dcd.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19_hu_a5fd9ba123f64dc8.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -5903,8 +5897,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image_hu_c985863806ed0edc.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image_hu_47a713227fbaa2e7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;330&#34;
@@ -5976,8 +5968,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-1_hu_3f372e4e88ec4427.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-1_hu_fe1c88a95b8ebe06.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;179&#34;
@@ -5991,8 +5981,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;767&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-2_hu_3c6ab8b29a630e2.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-2_hu_ebfdb8f34cef0750.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6061,8 +6049,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-3_hu_8de74b54e2c37152.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-3_hu_f608aba8a29a6929.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;252&#34;
@@ -6076,8 +6062,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-4_hu_d1ccc4c7a5fe1c5a.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-4_hu_193a236c9a33d153.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;171&#34;
@@ -6089,8 +6073,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;273&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-5_hu_9c0be25044f76717.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-5_hu_ab9c930170399a7a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6392,8 +6374,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	srcset=&#34;/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-6_hu_e606529a6d9b9fd8.png 480w, /zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/image-6_hu_c206762bb76f4e7c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;106&#34;
@@ -6417,8 +6397,6 @@ flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.t
 	height=&#34;406&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image_hu_ae871aaf7cbe79af.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image_hu_abb20e2b328fbc6b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6471,8 +6449,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1_hu_9f50d72e4713275a.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1_hu_e892968554c81460.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;352&#34;
@@ -6492,8 +6468,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2_hu_57d3224414c2e837.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2_hu_d5435fb5eaa6d337.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -6507,8 +6481,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3_hu_fbf8ea63e84c9d64.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3_hu_cd5ef232b66b9c88.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;227&#34;
@@ -6521,8 +6493,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	height=&#34;1148&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4_hu_493c72faaa0d005a.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4_hu_ba3abf22a2a6c6b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6545,8 +6515,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 	height=&#34;887&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5_hu_4d4e26163a453731.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5_hu_66e2c8639fa1ca70.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6587,8 +6555,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6_hu_52dfd5d1e1ebfb29.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6_hu_11dd4332aaa90aaa.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;269&#34;
@@ -6601,8 +6567,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7_hu_2625dce4698b9464.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7_hu_de1611f6402ed05e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;181&#34;
@@ -6614,8 +6578,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;688&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8_hu_52c0bd3ecacf8461.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8_hu_cefe06dc3ddf1ff3.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6632,8 +6594,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9_hu_fdcc81a3d0edfece.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9_hu_c4d2baad5f67d482.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;230&#34;
@@ -6648,8 +6608,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10_hu_157753679e8ec94b.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10_hu_128645316d4622f6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;89&#34;
@@ -6662,8 +6620,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11_hu_5749475ab96244d1.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11_hu_fdb712f4675e0e4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -6675,8 +6631,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;696&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12_hu_cbb94e5392c1e693.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12_hu_3fa0523a2f6f2f2b.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6691,8 +6645,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13_hu_4b1cee605bbbf67f.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13_hu_58e809ec424f960c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;94&#34;
@@ -6704,8 +6656,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;781&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14_hu_f1b4c4dcb189bb05.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14_hu_ca4e5674b708f30f.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6719,8 +6669,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15_hu_3c0d662c6bd6c4dc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15_hu_3c58c6056ad8f8ae.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;78&#34;
@@ -6732,8 +6680,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;1308&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16_hu_3c0d662c6bd6c4dc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16_hu_3c58c6056ad8f8ae.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6752,8 +6698,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17_hu_f4034a3b5f774256.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17_hu_c2d144baf5c37545.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -6768,8 +6712,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18_hu_8fee4c51ba5bc4bc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18_hu_233fa6c8244e1f4c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;237&#34;
@@ -6781,8 +6723,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;955&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19_hu_e796581b28647e17.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19_hu_a7bfd4eb965f4d88.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6799,8 +6739,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20_hu_68e96f09be2f3bc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20_hu_58f862bcd0565186.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;113&#34;
@@ -6815,8 +6753,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21_hu_54781fad034c5888.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21_hu_c4ac2a9b591cc19d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;173&#34;
@@ -6829,8 +6765,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;291&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22_hu_7b46bce3de21f748.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22_hu_775d8f0fe7403c04.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6879,8 +6813,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23_hu_30a5329cc559fcde.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23_hu_d5dd26fb9b003a81.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;177&#34;
@@ -6895,8 +6827,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;658&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24_hu_f5e5925f43b6c9ad.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24_hu_e523a5cfc8834ca0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -6939,8 +6869,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image_hu_56e46a4d2510f5d9.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image_hu_8393fd4979f71c19.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;141&#34;
@@ -6970,8 +6898,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-1_hu_a450e0f272720c15.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-1_hu_f2d454cd1d9857ac.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;97&#34;
@@ -6985,8 +6911,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-2_hu_b0464d693e7c6130.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-2_hu_425bc9dbf21459fc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;127&#34;
@@ -6999,8 +6923,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;449&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-3_hu_bf3e07e9994421d7.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-3_hu_391526594d3c51ad.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7056,8 +6978,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-4_hu_4520e8acf4e7fef4.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-4_hu_a65bc72b2afcc3fc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;237&#34;
@@ -7070,8 +6990,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;367&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-5_hu_172101a3a70a1991.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-5_hu_9d8401827ae7467f.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7099,8 +7017,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-6_hu_e8fcf768d70661e7.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-6_hu_96ea3df9b92e66e2.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;743&#34;
@@ -7113,8 +7029,6 @@ path 是指定文件路径，-R 表示对子目录也生效&lt;/p&gt;&lt;/blockq
 	height=&#34;150&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-7_hu_52aaf1bc603a5f5a.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-7_hu_5454dee5108ecc8a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7129,8 +7043,6 @@ hive 通常是在集群环境中使用的，如果只启动了一台服务器，
 	height=&#34;235&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-8_hu_780d886e66dd009a.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-8_hu_c5c8b2a013ac174e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7202,8 +7114,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	height=&#34;459&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-9_hu_2a432c89e502a252.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-9_hu_a19ee912d4b86804.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7322,8 +7232,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image_hu_47b669486afcd8ad.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image_hu_6f7640515ae32138.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;31&#34;
@@ -7358,8 +7266,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1_hu_df40e0082aa7426d.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1_hu_38c1b7e1fc123ebc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;161&#34;
@@ -7387,8 +7293,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2_hu_d4e494b7ea248a44.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2_hu_c61e4d2575f0ab2a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;61&#34;
@@ -7401,8 +7305,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	height=&#34;888&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3_hu_53044b8f5a377993.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3_hu_ae68419ad1ada840.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7431,8 +7333,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4_hu_d8fba809e1779fb4.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4_hu_d946e815b71cef4d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;133&#34;
@@ -7458,8 +7358,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 	height=&#34;514&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5_hu_c9f21c1f5ca0940b.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5_hu_1529fb5d47ecf2d4.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7497,8 +7395,6 @@ Hive 在编译 HQL 语句阶段，起初所有的 join 操作均采用 Common Jo
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6_hu_9b1e73b062f06732.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6_hu_ba70a549f87b60b1.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;142&#34;
@@ -7511,8 +7407,6 @@ Hive 在编译 HQL 语句阶段，起初所有的 join 操作均采用 Common Jo
 	height=&#34;680&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7_hu_ab3561a231e66273.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7_hu_122f568ab470925a.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7548,8 +7442,6 @@ set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8_hu_3e6bbe204819d3d6.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8_hu_63b78982ef539f4b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;31&#34;
@@ -7567,8 +7459,6 @@ set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockq
 	height=&#34;371&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9_hu_53b2492ddd32221d.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9_hu_a661e9dca70d29c4.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7590,8 +7480,6 @@ set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockq
 	height=&#34;1422&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10_hu_4df7790955068a83.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10_hu_75b79a59c50968c3.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7615,8 +7503,6 @@ set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11_hu_d1095692a79431fe.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11_hu_7607218a1c33454a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;41&#34;
@@ -7639,8 +7525,6 @@ set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12_hu_c31777942e896c7e.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12_hu_10df58072d93e378.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;13&#34;
@@ -7657,8 +7541,6 @@ set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockq
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13_hu_cb5f7dc2b3847456.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13_hu_f86c97fcd542db0d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;175&#34;
@@ -7674,8 +7556,6 @@ Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x �
 	height=&#34;190&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14_hu_aa3268172124e9c2.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14_hu_ef09d34419541475.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7702,8 +7582,6 @@ Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x �
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15_hu_d6b5c402d156a695.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15_hu_3ccb68d6dbe1bffb.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;55&#34;
@@ -7717,8 +7595,6 @@ Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x �
 	height=&#34;301&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16_hu_86b016ba9c62bbb1.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16_hu_b55ec376440037ac.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7747,8 +7623,6 @@ Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x �
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17_hu_2ff263283659683b.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17_hu_557c941ca036804f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;25&#34;
@@ -7772,8 +7646,6 @@ Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x �
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18_hu_cd814555b30c2367.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18_hu_7676e8dcb67afaab.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;174&#34;
@@ -7794,8 +7666,6 @@ Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 
 	height=&#34;654&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19_hu_9e5a0b4b5771431a.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19_hu_a812c6d9b6d4878f.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7822,8 +7692,6 @@ Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20_hu_4c7b5ee5d955b18c.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20_hu_4bd4157092ae801d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;354&#34;
@@ -7843,8 +7711,6 @@ Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21_hu_a9f85e157a440921.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21_hu_41134c8a7aa5bf1f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;425&#34;
@@ -7863,8 +7729,6 @@ Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 
 	height=&#34;453&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22_hu_56fdabed3e095d99.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22_hu_ce6b8a273fee43e9.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7914,8 +7778,6 @@ Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23_hu_21010bf6e8750fb7.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23_hu_4938c6195bbe484e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;651&#34;
@@ -7929,8 +7791,6 @@ Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 
 	height=&#34;374&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24_hu_f3c3a8909f90ec92.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24_hu_8d200be734c58711.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -7969,8 +7829,6 @@ set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;&lt;/p
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25_hu_87c8501899639239.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25_hu_19398f78240c4efd.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;229&#34;
@@ -7993,8 +7851,6 @@ set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;&lt;/p
 	height=&#34;303&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26_hu_7e0b9aa0a00b8312.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26_hu_3d9e91230e8317b1.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -8027,8 +7883,6 @@ set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;&lt;/p
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27_hu_40e2f0ee95980f6.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27_hu_1e3b627e737906da.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;224&#34;
@@ -8047,8 +7901,6 @@ set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;&lt;/p
 	height=&#34;298&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28_hu_7ceeab9ab8aa26e.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28_hu_45dd3c1250222a77.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -8070,8 +7922,6 @@ CBO 优化对于执行计划中 join 顺序是有影响的，其之所以会将 
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29_hu_e70a14f380e3cc42.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29_hu_87d64db6b104c96b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;120&#34;
@@ -8085,8 +7935,6 @@ CBO 优化对于执行计划中 join 顺序是有影响的，其之所以会将 
 	height=&#34;540&#34;
 	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30_hu_e362fffa2298c231.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30_hu_aeb22a57936a7ac0.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

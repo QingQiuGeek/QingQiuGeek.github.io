@@ -11,7 +11,7 @@
 <meta property='og:description' content="redis的sorted_set集合实现点赞功能和最早点赞top5功能，bug修正WRONGTYPE Operation against a key holding the wrong kind of value，数据库in( )查询排序">
 <meta property='og:url' content='/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='点赞top5' /><meta property='article:published_time' content='2024-07-14T18:14:45&#43;00:00'/><meta property='article:modified_time' content='2024-07-14T18:14:45&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:published_time' content='2024-07-14T18:14:45&#43;00:00'/><meta property='article:modified_time' content='2024-07-14T18:14:45&#43;00:00'/>
 <meta name="twitter:title" content="Redis实现用户点赞、点赞top5用户排序">
 <meta name="twitter:description" content="redis的sorted_set集合实现点赞功能和最早点赞top5功能，bug修正WRONGTYPE Operation against a key holding the wrong kind of value，数据库in( )查询排序">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -338,6 +338,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <ol>
     <li><a href="#案例需求">案例需求</a></li>
     <li><a href="#方案分析">方案分析</a></li>
+    <li><a href="#点赞功能代码实现">点赞功能代码实现</a></li>
+    <li><a href="#最早点赞-top5-功能代码实现">最早点赞 top5 功能代码实现</a></li>
+    <li><a href="#细节注意">细节注意</a></li>
+    <li><a href="#bug-修正">Bug 修正</a></li>
   </ol>
 </nav>
         </div>
@@ -401,7 +405,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 3 分钟
             </time>
         </div>
         
@@ -422,17 +426,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/redis/">Redis</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E7%82%B9%E8%B5%9Etop5/">点赞top5</a> 
             
             
         </div>
@@ -449,35 +443,227 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <h2 id="案例需求"><a href="#%e6%a1%88%e4%be%8b%e9%9c%80%e6%b1%82" class="header-anchor"></a>案例需求
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/9eee3a0877614bf987ede2353435e34d.png"
-	
-	
-	
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image.png"
+	width="1749"
+	height="800"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image_hu_92e9e0b96a1a5e78.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image_hu_fbdc6ef57e75a3bb.png 1024w"
 	loading="lazy"
 	
-	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/70ca9991f90a43a5acad9aba1b3e55a9.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
 	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-1.png"
+	width="1585"
+	height="885"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-1_hu_ed5db9023c958f30.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-1_hu_a76e2e47bf656c56.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="429px"
 	
 ></p>
 <h2 id="方案分析"><a href="#%e6%96%b9%e6%a1%88%e5%88%86%e6%9e%90" class="header-anchor"></a>方案分析
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/291089f6403e460da257327b26e8b728.png"
-	
-	
-	
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-2.png"
+	width="1434"
+	height="715"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-2_hu_d15a87a3092f0658.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-2_hu_9901f0fe6818234.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
 	
 ></p>
 <blockquote>
-<p><strong>一个用户对于一个blog只能点赞一次，如果只使用数据库完成该功能，那么用户每点赞一次都要查询、修改数据库，这样无疑增加了数据库的压力，那么引入redis，就可以使用redis的Sorted_Set集合解决该问题（中间件的引入当然是越少越好的，这样有利于系统的稳定性，那此处为了场景演示就引入redis了，毕竟现在有点规模的项目基本都离不开redis）</strong>
-<strong>redis的</strong> <strong>Sorted_Set集合</strong> <strong>集合中的元素具有唯一性、有序性，利用唯一性完成一个用户对于一个blog只能点赞一次，利用有序性完成点赞top5的用户排序，key是blog的id，value是用户id和用于排序的时间戳，如果该key的value中有当前登录用户的userId，那么说明该用户对该blog已点赞，那么可以利用该</strong></p></blockquote>
-<hr>
+<p>一个用户对于一个 blog 只能点赞一次，如果只使用数据库完成该功能，那么用户每点赞一次都要查询、修改数据库，这样无疑增加了数据库的压力，那么引入 redis，就可以使用 redis 的 Sorted_Set 集合解决该问题（中间件的引入当然是越少越好的，这样有利于系统的稳定性，那此处为了场景演示就引入 redis 了，毕竟现在有点规模的项目基本都离不开 redis）</p></blockquote>
+<blockquote>
+<p>redis 的 <strong>Sorted_Set 集合</strong> 集合中的元素具有唯一性、有序性，利用唯一性完成一个用户对于一个 blog 只能点赞一次，利用有序性完成点赞 top5 的用户排序，key 是 blog 的 id，value 是用户 id 和用于排序的时间戳，如果该 key 的 value 中有当前登录用户的 userId，那么说明该用户对该 blog 已点赞，那么可以利用该用户的时间戳进行排序，如果没有当前登陆用户的 userId，则未点赞。</p></blockquote>
+<h2 id="点赞功能代码实现"><a href="#%e7%82%b9%e8%b5%9e%e5%8a%9f%e8%83%bd%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>点赞功能代码实现
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">   </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w">   </span><span class="nf">likeBlog</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//获取当前用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Long</span><span class="w"> </span><span class="n">loginUserId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UserHolder</span><span class="p">.</span><span class="na">getUser</span><span class="p">().</span><span class="na">getId</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//判断该用户是否点赞</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="s">&#34;blog:liked:&#34;</span><span class="o">+</span><span class="n">id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Double</span><span class="w"> </span><span class="n">score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">().</span><span class="na">score</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">loginUserId</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//score为空说明该用户未点赞</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">score</span><span class="o">==</span><span class="kc">null</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//如果未点赞则点赞成功，数据库点赞数+1，用户对该blog的点赞信息添加到redis的set</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">boolean</span><span class="w"> </span><span class="n">isUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">update</span><span class="p">().</span><span class="na">setSql</span><span class="p">(</span><span class="s">&#34;liked = liked + 1&#34;</span><span class="p">).</span><span class="na">eq</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">).</span><span class="na">update</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isUpdate</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="c1">//opsForZSet使用的是scoreSet集合，该集合较于set集合，可以对元素进行排序，基于该特性可以对点赞用户的顺序进行排名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">().</span><span class="na">add</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">loginUserId</span><span class="p">.</span><span class="na">toString</span><span class="p">(),</span><span class="n">System</span><span class="p">.</span><span class="na">currentTimeMillis</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">//如果已点赞则取消点赞，数据库点赞数-1，用户对该blog的点赞信息从redis的set移除</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kt">boolean</span><span class="w"> </span><span class="n">isUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">update</span><span class="p">().</span><span class="na">setSql</span><span class="p">(</span><span class="s">&#34;liked = liked - 1&#34;</span><span class="p">).</span><span class="na">eq</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">).</span><span class="na">update</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isUpdate</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">().</span><span class="na">remove</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">loginUserId</span><span class="p">.</span><span class="na">toString</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="最早点赞-top5-功能代码实现"><a href="#%e6%9c%80%e6%97%a9%e7%82%b9%e8%b5%9e-top5-%e5%8a%9f%e8%83%bd%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>最早点赞 top5 功能代码实现
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">  </span><span class="nd">@Override</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">queryBlogLikes</span><span class="p">(</span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//从redis查询top5的点赞用户</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">top5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForZSet</span><span class="p">().</span><span class="na">range</span><span class="p">(</span><span class="s">&#34;blog:liked:&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">0</span><span class="p">,</span><span class="w"> </span><span class="n">4</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">top5</span><span class="o">==</span><span class="kc">null</span><span class="o">||</span><span class="n">top5</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">Collections</span><span class="p">.</span><span class="na">emptyList</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//从查询的数据中得到top5的用户id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">top5</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">Long</span><span class="p">::</span><span class="n">valueOf</span><span class="p">).</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">idsStr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StrUtil</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="s">&#34;,&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">ids</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//根据id查询top5的用户并返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">//        List&lt;User&gt; users = userService.listByIds(ids);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">//详见黑马点评 实战篇 P10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">query</span><span class="p">().</span><span class="na">in</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">ids</span><span class="p">).</span><span class="na">last</span><span class="p">(</span><span class="s">&#34;ORDER BY FIELD (id,&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">idsStr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;)&#34;</span><span class="p">).</span><span class="na">list</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">UserDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">userDTOS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">users</span><span class="p">.</span><span class="na">stream</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">BeanUtil</span><span class="p">.</span><span class="na">copyProperties</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">UserDTO</span><span class="p">.</span><span class="na">class</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">ok</span><span class="p">(</span><span class="n">userDTOS</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="细节注意"><a href="#%e7%bb%86%e8%8a%82%e6%b3%a8%e6%84%8f" class="header-anchor"></a>细节注意
+</h2><p>在最初使用 userService.listByIds(ids)查询数据库用户时，查询条件中的 id 顺序和查询结果的顺序是相反的，具体效果如下：</p>
+<p>先查 id=5，再查 id=1，结果是 id=1 在前面，id=5 在后面，这样导致最早点赞 top5 的用户顺序相反
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-3.png"
+	width="971"
+	height="517"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-3_hu_2f73f2b59de898d3.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-3_hu_873a1117b4ca62da.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="187"
+		data-flex-basis="450px"
+	
+></p>
+<p>为解决上述问题，使用 order by 对 id 排序
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-4.png"
+	width="1240"
+	height="504"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-4_hu_4596ed1285f67f26.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/image-4_hu_534e28ce83436c4d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="246"
+		data-flex-basis="590px"
+	
+></p>
+<p>注意这里演示的 id 是确定的数值，在实际代码中要把查询到的用户 id 列表转换成动态字符串，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//从查询的数据中得到top5的用户id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ids</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">top5</span><span class="p">.</span><span class="na">stream</span><span class="p">().</span><span class="na">map</span><span class="p">(</span><span class="n">Long</span><span class="p">::</span><span class="n">valueOf</span><span class="p">).</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">idsStr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StrUtil</span><span class="p">.</span><span class="na">join</span><span class="p">(</span><span class="s">&#34;,&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">ids</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userService</span><span class="p">.</span><span class="na">query</span><span class="p">().</span><span class="na">in</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">ids</span><span class="p">).</span><span class="na">last</span><span class="p">(</span><span class="s">&#34;ORDER BY FIELD (id,&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">idsStr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;)&#34;</span><span class="p">).</span><span class="na">list</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">UserDTO</span><span class="o">&gt;</span><span class="w"> </span><span class="n">userDTOS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">users</span><span class="p">.</span><span class="na">stream</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                        </span><span class="p">.</span><span class="na">map</span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">BeanUtil</span><span class="p">.</span><span class="na">copyProperties</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">UserDTO</span><span class="p">.</span><span class="na">class</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">.</span><span class="na">collect</span><span class="p">(</span><span class="n">Collectors</span><span class="p">.</span><span class="na">toList</span><span class="p">());</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="bug-修正"><a href="#bug-%e4%bf%ae%e6%ad%a3" class="header-anchor"></a>Bug 修正
+</h2><p><strong>redis 报错</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">WRONGTYPE</span><span class="w"> </span><span class="k">Operation</span><span class="w"> </span><span class="n">against</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="n">holding</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">wrong</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">value</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>原因是由于之前点赞功能是使用 set 集合，使得 redis 中已经存在了一个名为&quot;blog:liked:23&quot;的 key 值，添加点赞 top5 功能后由于把 set 集合换成了 sorted_set 集合导致 key 冲突，解决方案是删掉之前的 key 值</p>
 
 </section>
 
@@ -577,12 +763,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/">
+    <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E4%B9%90%E8%A7%82%E9%94%81%E6%82%B2%E8%A7%82%E9%94%81%E4%BC%98%E6%83%A0%E5%8A%B5%E8%B6%85%E5%8D%96%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E9%97%AE%E9%A2%98/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Redis实战—验证码登录注册</h2>
+            <h2 class="article-title">Redis实战—乐观锁、悲观锁、优惠劵超卖、一人一单问题</h2>
             
         </div>
     </a>

@@ -11,7 +11,7 @@
 <meta property='og:description' content="redis消息队列，list、pubsub、stream，基于stream队列的异步秒杀、redis的消费者组">
 <meta property='og:url' content='/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='java' /><meta property='article:tag' content='redis' /><meta property='article:tag' content='消息队列' /><meta property='article:published_time' content='2024-07-11T23:06:25&#43;00:00'/><meta property='article:modified_time' content='2024-07-11T23:06:25&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='消息队列' /><meta property='article:published_time' content='2024-07-11T23:06:25&#43;00:00'/><meta property='article:modified_time' content='2024-07-11T23:06:25&#43;00:00'/>
 <meta name="twitter:title" content="Redis实现消息队列：list、PubSub、Stream，基于Stream的异步秒杀">
 <meta name="twitter:description" content="redis消息队列，list、pubsub、stream，基于stream队列的异步秒杀、redis的消费者组">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -337,22 +337,21 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <nav id="TableOfContents">
   <ol>
     <li><a href="#消息队列介绍">消息队列介绍</a></li>
-    <li><a href="#list实现消息队列">List实现消息队列</a></li>
-    <li><a href="#pubsub实现消息队列">PubSub实现消息队列</a></li>
-    <li><a href="#stream实现消息队列"><strong>Stream实现消息队列</strong></a>
+    <li><a href="#list-实现消息队列">List 实现消息队列</a></li>
+    <li><a href="#pubsub-实现消息队列">PubSub 实现消息队列</a></li>
+    <li><a href="#stream-实现消息队列"><strong>Stream 实现消息队列</strong></a>
       <ol>
-        <li><a href="#stream的消费者组">Stream的消费者组</a></li>
+        <li><a href="#stream-的消费者组">Stream 的消费者组</a></li>
       </ol>
     </li>
-    <li><a href="#redis消息队列总结">Redis消息队列总结</a></li>
-    <li><a href="#基于stream的异步秒杀">基于Stream的异步秒杀</a>
+    <li><a href="#redis-消息队列总结">Redis 消息队列总结</a></li>
+    <li><a href="#基于-stream-的异步秒杀">基于 Stream 的异步秒杀</a>
       <ol>
-        <li><a href="#redis创建消费者消费者组消息队列">Redis创建消费者、消费者组、消息队列</a></li>
-        <li><a href="#修改seckilllua脚本">修改seckill.lua脚本</a></li>
+        <li><a href="#redis-创建消费者消费者组消息队列">Redis 创建消费者、消费者组、消息队列</a></li>
+        <li><a href="#修改-seckilllua-脚本">修改 seckill.lua 脚本</a></li>
         <li><a href="#添加新的秒杀券">添加新的秒杀券</a></li>
-        <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/b8a0a7aeb2d647f69d75f4186a4b0da1.png" alt=""></a></li>
-        <li><a href="#apifox模拟用户抢购秒杀券">Apifox模拟用户抢购秒杀券</a></li>
-        <li><a href="#查看redis中数据变化">查看Redis中数据变化</a></li>
+        <li><a href="#apifox-模拟用户抢购秒杀券">Apifox 模拟用户抢购秒杀券</a></li>
+        <li><a href="#查看-redis-中数据变化">查看 Redis 中数据变化</a></li>
       </ol>
     </li>
     <li><a href="#总结">总结</a></li>
@@ -440,7 +439,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
+            <a href="/zh-cn/tags/redis/">Redis</a> 
             
             
             , 
@@ -455,15 +454,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/redis/">Redis</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a> 
-            
-            
-            
             
             
         </div>
@@ -480,146 +471,209 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <h2 id="消息队列介绍"><a href="#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%bb%8b%e7%bb%8d" class="header-anchor"></a>消息队列介绍
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/3d5a640f3300429c9d49470f7ebbd1c2.png"
-	
-	
-	
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image.png"
+	width="1220"
+	height="551"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image_hu_2083712668bfcbd.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image_hu_84c662f5b49a0f5d.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="531px"
+	
 ></p>
-<h2 id="list实现消息队列"><a href="#list%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a>List实现消息队列
+<h2 id="list-实现消息队列"><a href="#list-%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a>List 实现消息队列
 </h2><blockquote>
-<p><strong>Redis的list数据结构是一个双向链表，先进先出，可以利用LPUSH、LPOP、RPUSH、RPOP命令来实现元素的左右进出，但是list并不是阻塞队列，当list中无元素时，线程并不会阻塞，而是从list中取出一个null，这并不符合我们的业务需要！因此这里要用BRPOP或BLPOP命令实现阻塞效果！</strong></p>
+<p>Redis 的 list 数据结构是一个双向链表，先进先出，可以利用 LPUSH、LPOP、RPUSH、RPOP 命令来实现元素的左右进出，但是 list 并不是阻塞队列，当 list 中无元素时，线程并不会阻塞，而是从 list 中取出一个 null，这并不符合我们的业务需要！因此这里要用 BRPOP 或 BLPOP 命令实现阻塞效果！</p>
 <p><strong>阻塞队列</strong><br>
-<strong>当线程尝试从队列中获取元素时，若阻塞队列中无元素，则线程会阻塞，直到队列中有元素线程才会被唤醒并从阻塞队列中取出元素。</strong></p></blockquote>
-<br />
-<p><img src="https://i-blog.csdnimg.cn/direct/a52f856905eb44358b5d3b3e0935c5b6.png"
-	
-	
-	
+当线程尝试从队列中获取元素时，若阻塞队列中无元素，则线程会阻塞，直到队列中有元素线程才会被唤醒并从阻塞队列中取出元素。</p></blockquote>
+<p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-1.png"
+	width="620"
+	height="450"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-1_hu_3114569dfe969d66.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-1_hu_82e7925f2ae0b86a.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
+	
 ></p>
-<h2 id="pubsub实现消息队列"><a href="#pubsub%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a>PubSub实现消息队列
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/5ddb5fe68885405c88a083c9476561b0.png"
-	
-	
-	
+<h2 id="pubsub-实现消息队列"><a href="#pubsub-%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a>PubSub 实现消息队列
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-2.png"
+	width="1314"
+	height="649"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-2_hu_2a42f766dfbf8f6.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-2_hu_50f960402373c4a9.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/866a7ba1bd1a487ca99932152479b1a5.png"
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-3.png"
+	width="1600"
+	height="812"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-3_hu_146115a3067d881b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-3_hu_9d549e7ce119472c.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/2216a683f40e45c6a9b9fc7415bcd642.png"
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="472px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-4.png"
+	width="698"
+	height="404"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-4_hu_24874a702bd7c353.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-4_hu_e173f9734ff63b9f.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="414px"
+	
 ></p>
-<h2 id="stream实现消息队列"><a href="#stream%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a><strong>Stream实现消息队列</strong>
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/9184c8cf69064effad7f3767904635df.png"
-	
-	
-	
+<h2 id="stream-实现消息队列"><a href="#stream-%e5%ae%9e%e7%8e%b0%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a><strong>Stream 实现消息队列</strong>
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-5.png"
+	width="1347"
+	height="617"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-5_hu_8d2bf5d798bf893d.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-5_hu_5d1a96b3e04fbbfb.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/f5a47ee9325f47acbbe1266021be8989.png"
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="523px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-6.png"
+	width="1337"
+	height="341"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-6_hu_fe953211cddfb59b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-6_hu_a83f5484b905568f.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/053a1b1372c04e5d8905783947129630.png"
+		class="gallery-image" 
+		data-flex-grow="392"
+		data-flex-basis="940px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-7.png"
+	width="1296"
+	height="663"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-7_hu_15e3d44fd180fd4b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-7_hu_34da73ff11a0bed6.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/017eb4dcc73e42ac9e2dc12dfafb6a2f.png"
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="469px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-8.png"
+	width="863"
+	height="405"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-8_hu_8ce6629be8756de0.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-8_hu_e927e17742f8fd70.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="511px"
+	
 ></p>
-<h3 id="stream的消费者组"><a href="#stream%e7%9a%84%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84" class="header-anchor"></a>Stream的消费者组
-</h3><p><img src="https://i-blog.csdnimg.cn/direct/61d9753fa306464796b6aa7001912eb6.png"
-	
-	
-	
+<h3 id="stream-的消费者组"><a href="#stream-%e7%9a%84%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84" class="header-anchor"></a>Stream 的消费者组
+</h3><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-9.png"
+	width="1273"
+	height="535"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-9_hu_91f7efaa10e98d58.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-9_hu_778c1b50907df90a.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/c8c726ce86434fcb9f53e3718f3bd32b.png"
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="571px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-10.png"
+	width="1251"
+	height="582"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-10_hu_4b8fdec86f2cf8d3.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-10_hu_63b8aba0b6840591.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/1d8873ac6618482da3854b34fdd5d82a.png"
+		class="gallery-image" 
+		data-flex-grow="214"
+		data-flex-basis="515px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-11.png"
+	width="1365"
+	height="582"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-11_hu_c825e67298a84f00.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-11_hu_e44dc44f5cfeea90.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/c94c99f2b7d548ab97a48a37fa75563e.png"
+		class="gallery-image" 
+		data-flex-grow="234"
+		data-flex-basis="562px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-12.png"
+	width="1466"
+	height="793"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-12_hu_bc50606cf02da1c1.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-12_hu_bc374e603a44411c.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/65bfa1000e094d099cf0c23966ffe17b.png"
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="443px"
 	
-	
-	
+>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-13.png"
+	width="989"
+	height="509"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-13_hu_f9c18c05db3d4b4.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-13_hu_fe73b31da60f7aae.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
 ></p>
-<h2 id="redis消息队列总结"><a href="#redis%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e6%80%bb%e7%bb%93" class="header-anchor"></a>Redis消息队列总结
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/e76945ad31bb4dea90331204f46ecf50.png"
-	
-	
-	
+<h2 id="redis-消息队列总结"><a href="#redis-%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e6%80%bb%e7%bb%93" class="header-anchor"></a>Redis 消息队列总结
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-14.png"
+	width="1206"
+	height="580"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-14_hu_38ab1af928b19784.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-14_hu_8660606af1d052c0.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="499px"
+	
 ></p>
-<h2 id="基于stream的异步秒杀"><a href="#%e5%9f%ba%e4%ba%8estream%e7%9a%84%e5%bc%82%e6%ad%a5%e7%a7%92%e6%9d%80" class="header-anchor"></a>基于Stream的异步秒杀
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/8fa3ca1c5420488fb4b7c114b7ff9e86.png"
-	
-	
-	
+<h2 id="基于-stream-的异步秒杀"><a href="#%e5%9f%ba%e4%ba%8e-stream-%e7%9a%84%e5%bc%82%e6%ad%a5%e7%a7%92%e6%9d%80" class="header-anchor"></a>基于 Stream 的异步秒杀
+</h2><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-15.png"
+	width="1033"
+	height="318"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-15_hu_12640be2d553b21d.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-15_hu_8e579cae10b0b36e.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="324"
+		data-flex-basis="779px"
+	
 ></p>
-<h3 id="redis创建消费者消费者组消息队列"><a href="#redis%e5%88%9b%e5%bb%ba%e6%b6%88%e8%b4%b9%e8%80%85%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a>Redis创建消费者、消费者组、消息队列
+<h3 id="redis-创建消费者消费者组消息队列"><a href="#redis-%e5%88%9b%e5%bb%ba%e6%b6%88%e8%b4%b9%e8%80%85%e6%b6%88%e8%b4%b9%e8%80%85%e7%bb%84%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97" class="header-anchor"></a>Redis 创建消费者、消费者组、消息队列
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -636,7 +690,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="n">XREADGROUP</span> <span class="n">GROUP</span> <span class="n">g1</span> <span class="n">c1</span> <span class="n">count</span> <span class="mi">1</span> <span class="n">Block</span> <span class="mi">2000</span> <span class="n">streams</span> <span class="n">s1</span> <span class="o">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="修改seckilllua脚本"><a href="#%e4%bf%ae%e6%94%b9seckilllua%e8%84%9a%e6%9c%ac" class="header-anchor"></a>修改seckill.lua脚本
+</div><h3 id="修改-seckilllua-脚本"><a href="#%e4%bf%ae%e6%94%b9-seckilllua-%e8%84%9a%e6%9c%ac" class="header-anchor"></a>修改 seckill.lua 脚本
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -710,82 +764,111 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="添加新的秒杀券"><a href="#%e6%b7%bb%e5%8a%a0%e6%96%b0%e7%9a%84%e7%a7%92%e6%9d%80%e5%88%b8" class="header-anchor"></a>添加新的秒杀券
-</h3><p><img src="https://i-blog.csdnimg.cn/direct/b7e0b87e49ae44ae856f5bc0c68013bb.png"
-	
-	
-	
+</h3><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-16.png"
+	width="1723"
+	height="1297"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-16_hu_203162b5ec961f09.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-16_hu_cbb7ed2a1c024697.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="132"
+		data-flex-basis="318px"
 	
 ></p>
-<p><strong>数据库和redis同时存入id为19的秒杀券</strong></p>
-<h3 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/b8a0a7aeb2d647f69d75f4186a4b0da1.png"
-	
-	
-	
+<p>数据库和 redis 同时存入 id 为 19 的秒杀券</p>
+<p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-17.png"
+	width="1467"
+	height="766"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-17_hu_11bf0f88f84513d3.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-17_hu_b3fce92e07b7ce8f.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="459px"
+	
+></p>
+<h3 id="apifox-模拟用户抢购秒杀券"><a href="#apifox-%e6%a8%a1%e6%8b%9f%e7%94%a8%e6%88%b7%e6%8a%a2%e8%b4%ad%e7%a7%92%e6%9d%80%e5%88%b8" class="header-anchor"></a>Apifox 模拟用户抢购秒杀券
+</h3><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-18.png"
+	width="1721"
+	height="959"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-18_hu_1a843b91e81956ad.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-18_hu_311978a862cf8b5a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="430px"
+	
+></p>
+<h3 id="查看-redis-中数据变化"><a href="#%e6%9f%a5%e7%9c%8b-redis-%e4%b8%ad%e6%95%b0%e6%8d%ae%e5%8f%98%e5%8c%96" class="header-anchor"></a>查看 Redis 中数据变化
+</h3><p><strong>1、Redis 中 id=19 的秒杀券的数量都-1</strong></p>
+<p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-19.png"
+	width="944"
+	height="289"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-19_hu_e4a328edbaf8337b.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-19_hu_82d3921ec384df06.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="326"
+		data-flex-basis="783px"
 	
 >
-</h3><h3 id="apifox模拟用户抢购秒杀券"><a href="#apifox%e6%a8%a1%e6%8b%9f%e7%94%a8%e6%88%b7%e6%8a%a2%e8%b4%ad%e7%a7%92%e6%9d%80%e5%88%b8" class="header-anchor"></a>Apifox模拟用户抢购秒杀券
-</h3><p><img src="https://i-blog.csdnimg.cn/direct/096b12271e63436fb8742e37cc97e74a.png"
-	
-	
-	
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-20.png"
+	width="1472"
+	height="698"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-20_hu_829f5a77bac3e619.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-20_hu_5f2fea9be1f2503f.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="506px"
 	
 ></p>
-<br />
-<br />
-<br />
-<h3 id="查看redis中数据变化"><a href="#%e6%9f%a5%e7%9c%8bredis%e4%b8%ad%e6%95%b0%e6%8d%ae%e5%8f%98%e5%8c%96" class="header-anchor"></a>查看Redis中数据变化
-</h3><p><strong>1、Redis中id=19的秒杀券的数量都-1</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/2dcccdf3dabd4947a5bf267787ac646f.png"
-	
-	
-	
+<p><strong>2、Redis 中成功存入用户 id</strong>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-21.png"
+	width="901"
+	height="308"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-21_hu_8ec3d7627856c7b9.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-21_hu_d2bd5ab1394e9cc0.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="292"
+		data-flex-basis="702px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/df929665a6ba4101995d08c36214098b.png"
-	
-	
-	
+<p><strong>3、 Redis 中成功存入订单信息</strong></p>
+<p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-22.png"
+	width="1279"
+	height="612"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-22_hu_1e278ea873761045.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-22_hu_7ca16fa327cc8b6.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
 	
 ></p>
-<p><strong>2、Redis中成功存入用户id</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/7989b1c5326845409f3d0135d7d97374.png"
-	
-	
-	
+<p><strong>4、数据库中成功存入订单信息</strong>
+<img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-23.png"
+	width="1479"
+	height="417"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-23_hu_a386ad7c16f99191.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-23_hu_4e0773ad57e11ed6.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><strong>3、 Redis中成功存入订单信息</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/2752ccd4a021484b85a00bb07ac726ab.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><strong>4、数据库中成功存入订单信息</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/542c12283c904a26ac132867cf948bac.png"
-	
-	
-	
-	loading="lazy"
-	
+		class="gallery-image" 
+		data-flex-grow="354"
+		data-flex-basis="851px"
 	
 ></p>
 <h2 id="总结"><a href="#%e6%80%bb%e7%bb%93" class="header-anchor"></a>总结
-</h2><p><strong>VoucherOrderServiceImpl.java完整代码</strong></p>
+</h2><p><strong>VoucherOrderServiceImpl.java 完整代码</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
@@ -1210,16 +1293,18 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="https://i-blog.csdnimg.cn/direct/91c27518193942c4a1c2d5f1e0eec14a.png"
-	
-	
-	
+</div><p><img src="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-24.png"
+	width="891"
+	height="413"
+	srcset="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-24_hu_a0b0f90961b0ee98.png 480w, /zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/image-24_hu_5d24efaad6e75c4c.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="215"
+		data-flex-basis="517px"
+	
 ></p>
-<br />
----
 
 </section>
 
@@ -1267,6 +1352,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E5%92%8C%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%9A%E5%8A%A1/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">基于Redis和阻塞队列的 异步秒杀业务</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/">
 
         
@@ -1293,12 +1391,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E5%92%8C%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%9A%E5%8A%A1/">
+    <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E4%B9%90%E8%A7%82%E9%94%81%E6%82%B2%E8%A7%82%E9%94%81%E4%BC%98%E6%83%A0%E5%8A%B5%E8%B6%85%E5%8D%96%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E9%97%AE%E9%A2%98/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">基于Redis和阻塞队列的 异步秒杀业务</h2>
+            <h2 class="article-title">Redis实战—乐观锁、悲观锁、优惠劵超卖、一人一单问题</h2>
             
         </div>
     </a>
@@ -1306,25 +1404,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/">
+    <a href="/zh-cn/post/2024/05/%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E5%85%A5%E9%97%A8/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Redis实战—验证码登录注册</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">kafka实战 集群搭建-Kraft模式</h2>
+            <h2 class="article-title">缓存穿透、缓存击穿、缓存雪崩【入门】</h2>
             
         </div>
     </a>
