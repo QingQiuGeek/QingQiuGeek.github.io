@@ -856,7 +856,7 @@
         <description></description>
         </item>
         <item>
-        <title>Javascript</title>
+        <title>JavaScript</title>
         <link>/zh-cn/tags/javascript/</link>
         <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
         
@@ -872,35 +872,11 @@
         <description></description>
         </item>
         <item>
-        <title>Vue.js</title>
-        <link>/zh-cn/tags/vue.js/</link>
+        <title>Vue</title>
+        <link>/zh-cn/tags/vue/</link>
         <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
         
-        <guid>/zh-cn/tags/vue.js/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Webpack</title>
-        <link>/zh-cn/tags/webpack/</link>
-        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/webpack/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Yarn</title>
-        <link>/zh-cn/tags/yarn/</link>
-        <pubDate>Tue, 14 May 2024 17:22:29 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/yarn/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Big Data</title>
-        <link>/zh-cn/tags/big-data/</link>
-        <pubDate>Sun, 05 May 2024 17:42:50 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/big-data/</guid>
+        <guid>/zh-cn/tags/vue/</guid>
         <description></description>
         </item>
         <item>

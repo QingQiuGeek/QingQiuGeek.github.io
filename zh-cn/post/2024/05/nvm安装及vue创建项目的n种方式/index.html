@@ -11,7 +11,7 @@
 <meta property='og:description' content="NVM安装配置，vue项目创建的N种方式">
 <meta property='og:url' content='/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='vue.js' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='javascript' /><meta property='article:tag' content='node.js' /><meta property='article:tag' content='yarn' /><meta property='article:tag' content='webpack' /><meta property='article:published_time' content='2024-05-14T17:22:29&#43;00:00'/><meta property='article:modified_time' content='2024-05-14T17:22:29&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='Vue' /><meta property='article:tag' content='JavaScript' /><meta property='article:tag' content='Node.js' /><meta property='article:published_time' content='2024-05-14T17:22:29&#43;00:00'/><meta property='article:modified_time' content='2024-05-14T17:22:29&#43;00:00'/>
 <meta name="twitter:title" content="NVM安装及VUE创建项目的N种方式">
 <meta name="twitter:description" content="NVM安装配置，vue项目创建的N种方式">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,15 +336,24 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#nvm安装-nvme5ae89e8a385">NVM安装 {#NVM%E5%AE%89%E8%A3%85}</a>
+    <li><a href="#nvm-安装">NVM 安装</a>
       <ol>
-        <li><a href="#1卸载nodejs-1e58db8e8bdbdnodejs">1.卸载node.js {#1.%E5%8D%B8%E8%BD%BDnode.js}</a></li>
-        <li><a href="#2安装nvm-2e5ae89e8a385nvm">2.安装nvm {#2.%E5%AE%89%E8%A3%85nvm}</a></li>
-        <li><a href="#-e2808be7bc96e8be91e2808b"><img src="https://i-blog.csdnimg.cn/blog_migrate/6e110712524004aec7912974d7ec307a.png" alt="">​ {#%E2%80%8B%E7%BC%96%E8%BE%91%E2%80%8B}</a></li>
-        <li><a href="#3配置-3e9858de7bdae">3.配置 {#3.%E9%85%8D%E7%BD%AE}</a></li>
+        <li><a href="#卸载-nodejs">卸载 node.js</a></li>
+        <li><a href="#安装-nvm">安装 nvm</a></li>
+        <li><a href="#配置">配置</a></li>
+        <li><a href="#使用-nvm-安装-nodejs">使用 nvm 安装 node.js</a></li>
+        <li><a href="#nvm-常用命令">nvm 常用命令</a></li>
       </ol>
     </li>
-    <li><a href="#里面的root和path应该">里面的root和path应该</a></li>
+    <li><a href="#创建-vue-项目">创建 VUE 项目</a>
+      <ol>
+        <li><a href="#使用-vue-init-创建-vue2不推荐">使用 vue init 创建 vue2（不推荐）</a></li>
+        <li><a href="#使用-vue-create-创建-vue2-和-3较推荐">使用 vue create 创建 vue2 和 3（较推荐）</a></li>
+        <li><a href="#使用-npm-create-vue-创建-vue2-和-3">使用 npm create vue 创建 vue2 和 3</a></li>
+        <li><a href="#使用-npm-create-vite-创建推荐">使用 npm create vite 创建（推荐）</a></li>
+        <li><a href="#使用-vue-ui-创建推荐">使用 vue ui 创建（推荐）</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -429,30 +438,22 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/vue.js/">Vue.js</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/">前端</a> 
             
             
             , 
             
-            <a href="/zh-cn/tags/javascript/">Javascript</a> 
+            <a href="/zh-cn/tags/vue/">Vue</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/javascript/">JavaScript</a> 
             
             
             , 
             
             <a href="/zh-cn/tags/node.js/">Node.js</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/yarn/">Yarn</a> 
-            
-            
-            ... 
             
             
         </div>
@@ -472,64 +473,336 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p>VUE 参考官网：<a class="link" href="https://cli.vuejs.org/zh/guide/"  title="https://cli.vuejs.org/zh/guide/"
      target="_blank" rel="noopener"
     >https://cli.vuejs.org/zh/guide/</a></p></blockquote>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#NVM%E5%AE%89%E8%A3%85" >NVM安装</a>{#NVM%E5%AE%89%E8%A3%85-toc}</p>
-<p><a class="link" href="#1.%E5%8D%B8%E8%BD%BDnode.js" >1.卸载node.js</a>{#1.%E5%8D%B8%E8%BD%BDnode.js-toc}</p>
-<p><a class="link" href="#2.%E5%AE%89%E8%A3%85nvm" >2.安装nvm</a>{#2.%E5%AE%89%E8%A3%85nvm-toc}</p>
-<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%91%E2%80%8B" >​编辑​</a>{#%E2%80%8B%E7%BC%96%E8%BE%91%E2%80%8B-toc}</p>
-<p><a class="link" href="#3.%E9%85%8D%E7%BD%AE" >3.配置</a>{#3.%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#4.%E4%BD%BF%E7%94%A8nvm%E5%AE%89%E8%A3%85node.js" >4.使用nvm安装node.js</a>{#4.%E4%BD%BF%E7%94%A8nvm%E5%AE%89%E8%A3%85node.js-toc}</p>
-<p><a class="link" href="#5.nvm%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4" >5.nvm常用命令</a>{#5.nvm%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4-toc}</p>
-<p><a class="link" href="#%E5%88%9B%E5%BB%BAVUE%E9%A1%B9%E7%9B%AE" >创建VUE项目</a>{#%E5%88%9B%E5%BB%BAVUE%E9%A1%B9%E7%9B%AE-toc}</p>
-<p><a class="link" href="#1.%E4%BD%BF%E7%94%A8vue%20init%20%E5%88%9B%E5%BB%BAvue2%EF%BC%88%E4%B8%8D%E6%8E%A8%E8%8D%90%EF%BC%89" >1.使用vue init 创建vue2（不推荐）</a>{#1.%E4%BD%BF%E7%94%A8vue%20init%20%E5%88%9B%E5%BB%BAvue2%EF%BC%88%E4%B8%8D%E6%8E%A8%E8%8D%90%EF%BC%89-toc}</p>
-<p><a class="link" href="#2.%E4%BD%BF%E7%94%A8vue%20create%E5%88%9B%E5%BB%BAvue2%E5%92%8C3%EF%BC%88%E8%BE%83%E6%8E%A8%E8%8D%90%EF%BC%89" >2.使用vue create创建vue2和3（较推荐）</a>{#2.%E4%BD%BF%E7%94%A8vue%20create%E5%88%9B%E5%BB%BAvue2%E5%92%8C3%EF%BC%88%E8%BE%83%E6%8E%A8%E8%8D%90%EF%BC%89-toc}</p>
-<p><a class="link" href="#3.%E4%BD%BF%E7%94%A8npm%20create%20vue%E5%88%9B%E5%BB%BAvue2%E5%92%8C3" >3.使用npm create vue创建vue2和3</a>{#3.%E4%BD%BF%E7%94%A8npm%20create%20vue%E5%88%9B%E5%BB%BAvue2%E5%92%8C3-toc}</p>
-<p><a class="link" href="#4.%E4%BD%BF%E7%94%A8npm%20create%20vite%E5%88%9B%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89" >4.使用npm create vite创建（推荐）</a>{#4.%E4%BD%BF%E7%94%A8npm%20create%20vite%E5%88%9B%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89-toc}</p>
-<p><a class="link" href="#5.%E4%BD%BF%E7%94%A8vue%20ui%20%E5%88%9B%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89" >5.使用vue ui 创建（推荐）</a>{#5.%E4%BD%BF%E7%94%A8vue%20ui%20%E5%88%9B%E5%BB%BA%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89-toc}</p>
-<hr>
-<br />
-<blockquote>
-<h2 id="nvm安装-nvme5ae89e8a385"><a href="#nvm%e5%ae%89%e8%a3%85-nvme5ae89e8a385" class="header-anchor"></a>NVM安装 {#NVM%E5%AE%89%E8%A3%85}
-</h2></blockquote>
-<p>我们开发过程中常常遇到nodejs版本不适配的问题，需要切换到不同版本的nodejs，nodejs卸载安装麻烦，这就需要用到nvm了。</p>
-<p>nvm 全名 node.js version management</p>
-<p>顾名思义是一个node.js的版本管理工具。通过它可以<strong>安装和切换</strong>不同版本的nodejs。</p>
-<h3 id="1卸载nodejs-1e58db8e8bdbdnodejs"><a href="#1%e5%8d%b8%e8%bd%bdnodejs-1e58db8e8bdbdnodejs" class="header-anchor"></a>1.卸载node.js {#1.%E5%8D%B8%E8%BD%BDnode.js}
+<h2 id="nvm-安装"><a href="#nvm-%e5%ae%89%e8%a3%85" class="header-anchor"></a>NVM 安装
+</h2><p>我们开发过程中常常遇到 nodejs 版本不适配的问题，需要切换到不同版本的 nodejs，nodejs 卸载安装麻烦，这就需要用到 nvm 了。</p>
+<p>nvm 全名 node.js version management，顾名思义是一个 node.js 的版本管理工具。通过它可以<strong>安装和切换</strong>不同版本的 nodejs。</p>
+<h3 id="卸载-nodejs"><a href="#%e5%8d%b8%e8%bd%bd-nodejs" class="header-anchor"></a>卸载 node.js
 </h3><blockquote>
-<p>为了确保彻底删除node在看看你的<a class="link" href="https://so.csdn.net/so/search?q=node%E5%AE%89%E8%A3%85&amp;spm=1001.2101.3001.7020"  title="node安装"
-     target="_blank" rel="noopener"
-    >node安装</a>目录中还有没有node文件夹，有的话一起删除。再看看C:\Users\用户名 文件夹下有没有<code>.npmrc</code>以及<code>.yarnrc</code>等等统统删除。再去看看你的环境变量有没有node相关的，有的话也一起删除了。一定要卸载干净！</p></blockquote>
-<h3 id="2安装nvm-2e5ae89e8a385nvm"><a href="#2%e5%ae%89%e8%a3%85nvm-2e5ae89e8a385nvm" class="header-anchor"></a>2.安装nvm {#2.%E5%AE%89%E8%A3%85nvm}
+<p>为了确保彻底删除 node 在看看你的 node 安装目录中还有没有 node 文件夹，有的话一起删除。再看看 C:\Users\用户名 文件夹下有没有<code>.npmrc</code>以及<code>.yarnrc</code>等等统统删除。再去看看你的环境变量有没有 node 相关的，有的话也一起删除了。一定要卸载干净！</p></blockquote>
+<h3 id="安装-nvm"><a href="#%e5%ae%89%e8%a3%85-nvm" class="header-anchor"></a>安装 nvm
 </h3><blockquote>
 <p><a class="link" href="https://github.com/coreybutler/nvm-windows/releases"  title="Releases · coreybutler​​​​​​/nvm-windows · GitHub"
      target="_blank" rel="noopener"
     >Releases · coreybutler​​​​​​/nvm-windows · GitHub</a></p></blockquote>
-<p>分别选择nvm的安装路径和nodejs的安装路径</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/608143bebc795d81dfbac81ca5eec827.png"
-	
-	
-	
+<p>分别选择 nvm 的安装路径和 nodejs 的安装路径</p>
+<p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image.png"
+	width="503"
+	height="389"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image_hu_7ef02301cd0d3109.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image_hu_b5cbf9b6a1064922.png 1024w"
 	loading="lazy"
 	
-	
->​</p>
-<h3 id="-e2808be7bc96e8be91e2808b"><a href="#-e2808be7bc96e8be91e2808b" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/blog_migrate/6e110712524004aec7912974d7ec307a.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="310px"
 	
+>
+<img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-1.png"
+	width="503"
+	height="389"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-1_hu_5f75b2ded8c63ad9.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-1_hu_310098749ef72196.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
->​ {#%E2%80%8B%E7%BC%96%E8%BE%91%E2%80%8B}
-</h3><p>终端输入nvm -v查到版本号则安装成功！</p>
-<h3 id="3配置-3e9858de7bdae"><a href="#3%e9%85%8d%e7%bd%ae-3e9858de7bdae" class="header-anchor"></a>3.配置 {#3.%E9%85%8D%E7%BD%AE}
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="310px"
+	
+></p>
+<p>终端输入 nvm -v 查到版本号则安装成功！</p>
+<h3 id="配置"><a href="#%e9%85%8d%e7%bd%ae" class="header-anchor"></a>配置
 </h3><p>环境变量在安装过程中会自动配置好</p>
-<p>在nvm的安装目录找到settings.txt，配置下载源</p>
+<p>在 nvm 的安装目录找到 settings.txt，配置下载源</p>
 <pre><code>node_mirror: https://npm.taobao.org/mirrors/node/
 npm_mirror: https://npm.taobao.org/mirrors/npm/
 </code></pre>
-<h2 id="里面的root和path应该"><a href="#%e9%87%8c%e9%9d%a2%e7%9a%84root%e5%92%8cpath%e5%ba%94%e8%af%a5" class="header-anchor"></a>里面的root和path应该
-</h2>
+<p>里面的 root 和 path 应该是安装的时候配好的，不要动。</p>
+<h3 id="使用-nvm-安装-nodejs"><a href="#%e4%bd%bf%e7%94%a8-nvm-%e5%ae%89%e8%a3%85-nodejs" class="header-anchor"></a>使用 nvm 安装 node.js
+</h3><p>nvm list available 查看可安装版本</p>
+<p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-2.png"
+	width="788"
+	height="512"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-2_hu_8753ad5876531cf0.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-2_hu_7346afe3f031fb2d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="153"
+		data-flex-basis="369px"
+	
+>
+选择一个安装：npm install 版本号</p>
+<p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-3.png"
+	width="503"
+	height="187"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-3_hu_48f5d46d1a7d633d.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-3_hu_e8ddf82b4de151eb.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="268"
+		data-flex-basis="645px"
+	
+></p>
+<p>安装后 nvm list 查看已安装的版本和正在使用的版本</p>
+<p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-4.png"
+	width="404"
+	height="122"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-4_hu_f4a4bca0c49742bb.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-4_hu_32e0da58e783ad1c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="331"
+		data-flex-basis="794px"
+	
+></p>
+<h3 id="nvm-常用命令"><a href="#nvm-%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="header-anchor"></a>nvm 常用命令
+</h3><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>nvm version</td>
+          <td>查看当前的版本</td>
+      </tr>
+      <tr>
+          <td>nvm root \[path\]</td>
+          <td>设置和查看 root 路径</td>
+      </tr>
+      <tr>
+          <td>nvm install 版本号</td>
+          <td>安装指定版本的 node</td>
+      </tr>
+      <tr>
+          <td>nvm list</td>
+          <td>查看已经安装的版本</td>
+      </tr>
+      <tr>
+          <td>nvm list available</td>
+          <td>查看网络可以安装的版本</td>
+      </tr>
+      <tr>
+          <td>nvm use</td>
+          <td>切换指定的 node 版本</td>
+      </tr>
+      <tr>
+          <td>nvm uninstall</td>
+          <td>卸载指定的版本</td>
+      </tr>
+  </tbody>
+</table></div>
+<h2 id="创建-vue-项目"><a href="#%e5%88%9b%e5%bb%ba-vue-%e9%a1%b9%e7%9b%ae" class="header-anchor"></a>创建 VUE 项目
+</h2><h3 id="使用-vue-init-创建-vue2不推荐"><a href="#%e4%bd%bf%e7%94%a8-vue-init-%e5%88%9b%e5%bb%ba-vue2%e4%b8%8d%e6%8e%a8%e8%8d%90" class="header-anchor"></a>使用 vue init 创建 vue2（不推荐）
+</h3><p><strong>前提：安装了 vue-cli</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 安装（最新版）</span>
+</span></span><span class="line"><span class="cl">npm install -g vue-cli
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装（指定版本）</span>
+</span></span><span class="line"><span class="cl">npm install -g @vue/cli@4.5.14
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#测试版本,显示版本号即安装成功</span>
+</span></span><span class="line"><span class="cl">vue -V
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>创建项目</strong></p>
+<p>vue init webpack 命令是 vue -cli2.x 版本的初始化方式，启动方式默认为 npm run dev ，webpack 为官方推荐模板。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 生成一个基于 webpack 模板的新项目</span>
+</span></span><span class="line"><span class="cl">vue init webpack project_name
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#进入项目目录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> project_name
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#启动项目</span>
+</span></span><span class="line"><span class="cl">npm run serve
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用<code>vue init</code>构建项目的时候，会有如下几步提示信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;? Project name vuedemo1<span class="sb">`</span>，设置项目名称，这一步直接回车，使用默认即可。
+</span></span><span class="line"><span class="cl">&gt;? Project description A Vue.js project<span class="sb">`</span>，项目描述，我这也直接回车略过。
+</span></span><span class="line"><span class="cl">&gt;? Author <span class="o">(</span>zhangkai &lt;xxxxx@163.com&gt;<span class="o">)</span><span class="sb">`</span>，如果你的电脑上安装了 git，这里会默认提取你的 git 账户名作为作者，我同样回车使用默认。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-vue-create-创建-vue2-和-3较推荐"><a href="#%e4%bd%bf%e7%94%a8-vue-create-%e5%88%9b%e5%bb%ba-vue2-%e5%92%8c-3%e8%be%83%e6%8e%a8%e8%8d%90" class="header-anchor"></a>使用 vue create 创建 vue2 和 3（较推荐）
+</h3><p><strong>vue create 是 vue -cli3.x 版本的初始方式</strong> ，启动方式默认为 npm run serve</p>
+<p>如果在执行 vue create 时，提示如下内容，那么就按照提示重新安装下高版本的 vue/cli 就行了。</p>
+<p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-5.png"
+	width="1133"
+	height="259"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-5_hu_3c3a0ec648835fe9.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-5_hu_bbd153deeee5415e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="437"
+		data-flex-basis="1049px"
+	
+>
+提示是否从<code>https://registry.npmmirror.com</code>这个仓库进行快速安装  ，选 yes 或 no</p>
+<p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-6.png"
+	width="1194"
+	height="153"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-6_hu_d062e7b10866ba78.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-6_hu_104129036172f394.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="780"
+		data-flex-basis="1872px"
+	
+></p>
+<h3 id="使用-npm-create-vue-创建-vue2-和-3"><a href="#%e4%bd%bf%e7%94%a8-npm-create-vue-%e5%88%9b%e5%bb%ba-vue2-%e5%92%8c-3" class="header-anchor"></a>使用 npm create vue 创建 vue2 和 3
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm create vue@2 project_name
+</span></span><span class="line"><span class="cl">npm create vue@3 project_name
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-npm-create-vite-创建推荐"><a href="#%e4%bd%bf%e7%94%a8-npm-create-vite-%e5%88%9b%e5%bb%ba%e6%8e%a8%e8%8d%90" class="header-anchor"></a>使用 npm create vite 创建（推荐）
+</h3><p><strong>基于 Vite 创建 vue 项目是目前 vue 官方比较推荐的创建方式。</strong></p>
+<p>Vite 需要 Node.js  版本 14.18+，16+，有些模板需要依赖更高的 Node 版本才能正常运行</p>
+<p>这种创建方式依赖 npm 版本，不同版本命令不太一样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">#查看npm版本</span>
+</span></span><span class="line"><span class="cl">npm -v
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># npm 6.x</span>
+</span></span><span class="line"><span class="cl">npm create vite@latest vite-vue --template vue
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># npm 7+, 需要额外的加两个短横线:</span>
+</span></span><span class="line"><span class="cl">npm create vite@latest vite-vue -- --template vue
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># yarn</span>
+</span></span><span class="line"><span class="cl">yarn create vite vite-vue --template vue
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># pnpm</span>
+</span></span><span class="line"><span class="cl">pnpm create vite vite-vue --template vue
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-7.png"
+	width="1800"
+	height="1085"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-7_hu_c8aee62ff287a03e.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-7_hu_50f6a8c9e0bc2ec7.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="398px"
+	
+></p>
+<h3 id="使用-vue-ui-创建推荐"><a href="#%e4%bd%bf%e7%94%a8-vue-ui-%e5%88%9b%e5%bb%ba%e6%8e%a8%e8%8d%90" class="header-anchor"></a>使用 vue ui 创建（推荐）
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">#vue的web端可视化创建</span>
+</span></span><span class="line"><span class="cl">vue ui
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-8.png"
+	width="637"
+	height="146"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-8_hu_2674e298dc26d1ec.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-8_hu_205ae9309cfad841.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="436"
+		data-flex-basis="1047px"
+	
+>
+<img src="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-9.png"
+	width="2784"
+	height="1428"
+	srcset="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-9_hu_8e2e9fc4eebb97c5.png 480w, /zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/image-9_hu_9e9453975197f0.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="467px"
+	
+></p>
+
 </section>
 
 

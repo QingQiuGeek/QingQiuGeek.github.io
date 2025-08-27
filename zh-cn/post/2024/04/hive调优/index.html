@@ -339,14 +339,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <li><a href="#yarn-和-mr-资源配置">Yarn 和 MR 资源配置</a>
       <ol>
         <li><a href="#yarn-资源配置">Yarn 资源配置</a></li>
-        <li><a href="#mr-资源配置">MR 资源配置</a>
-          <ol>
-            <li><a href="#mapreducemapmemorymb"><strong>mapreduce.map.memory.mb</strong></a></li>
-            <li><a href="#mapreducemapcpuvcores"><strong>mapreduce.map.cpu.vcores</strong></a></li>
-            <li><a href="#mapreducereducecpuvcores"><strong>mapreduce.reduce.cpu.vcores</strong></a></li>
-            <li><a href="#mapreducereducememorymb"><strong>mapreduce.reduce.memory.mb</strong></a></li>
-          </ol>
-        </li>
+        <li><a href="#mr-资源配置">MR 资源配置</a></li>
       </ol>
     </li>
     <li><a href="#explain-查看执行计划">Explain 查看执行计划</a></li>
@@ -366,14 +359,14 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
           <ol>
             <li><a href="#原理-1">原理</a></li>
             <li><a href="#优化">优化</a></li>
-            <li><a href="#优化案例"><strong>优化案例</strong></a></li>
+            <li><a href="#优化案例">优化案例</a></li>
           </ol>
         </li>
         <li><a href="#bucket-map-join">Bucket Map Join</a>
           <ol>
             <li><a href="#原理-2">原理</a></li>
             <li><a href="#优化-1">优化</a></li>
-            <li><a href="#优化案例-1"><strong>优化案例</strong></a></li>
+            <li><a href="#优化案例-1">优化案例</a></li>
           </ol>
         </li>
         <li><a href="#sort-merge-bucket-map-joinsmb-map-join">Sort Merge Bucket Map Join(SMB map join)</a>
@@ -588,16 +581,16 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </div><p>修改后重新分发该配置文件并重启 Yarn</p>
 <h3 id="mr-资源配置"><a href="#mr-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae" class="header-anchor"></a>MR 资源配置
 </h3><p>MapReduce 资源配置主要包括 Map Task 的内存和 CPU 核数，以及 Reduce Task 的内存和 CPU 核数。核心配置参数如下：</p>
-<h4 id="mapreducemapmemorymb"><a href="#mapreducemapmemorymb" class="header-anchor"></a><strong>mapreduce.map.memory.mb</strong>
-</h4><p>该参数的含义是，单个 Map Task 申请的 container 容器内存大小，其默认值为 1024。该值不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。</p>
+<p><strong>mapreduce.map.memory.mb</strong></p>
+<p>该参数的含义是，单个 Map Task 申请的 container 容器内存大小，其默认值为 1024。该值不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。</p>
 <blockquote>
 <p>该参数需要根据不同的计算任务单独进行配置，在 hive 中，可直接使用如下方式为每个 SQL 语句单独进行配置：set mapreduce.map.memory.mb=2048;</p></blockquote>
-<h4 id="mapreducemapcpuvcores"><a href="#mapreducemapcpuvcores" class="header-anchor"></a><strong>mapreduce.map.cpu.vcores</strong>
-</h4><p>该参数的含义是，单个 Map Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）</p>
-<h4 id="mapreducereducecpuvcores"><a href="#mapreducereducecpuvcores" class="header-anchor"></a><strong>mapreduce.reduce.cpu.vcores</strong>
-</h4><p>该参数的含义是，单个 Reduce Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）</p>
-<h4 id="mapreducereducememorymb"><a href="#mapreducereducememorymb" class="header-anchor"></a><strong>mapreduce.reduce.memory.mb</strong>
-</h4><p>该参数的含义是，单个 Reduce Task 申请的 container 容器内存大小，其默认值为 1024。该值同样不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。</p>
+<p><strong>mapreduce.map.cpu.vcores</strong></p>
+<p>该参数的含义是，单个 Map Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）</p>
+<p><strong>mapreduce.reduce.cpu.vcores</strong></p>
+<p>该参数的含义是，单个 Reduce Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）</p>
+<p><strong>mapreduce.reduce.memory.mb</strong></p>
+<p>该参数的含义是，单个 Reduce Task 申请的 container 容器内存大小，其默认值为 1024。该值同样不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。</p>
 <blockquote>
 <p>该参数需要根据不同的计算任务单独进行配置，在 hive 中，可直接使用如下方式为每个 SQL 语句单独进行配置：set mapreduce.reduce.memory.mb=2048;</p></blockquote>
 <h2 id="explain-查看执行计划"><a href="#explain-%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92" class="header-anchor"></a>Explain 查看执行计划
@@ -822,7 +815,7 @@ Hive 在编译 HQL 语句阶段，起初所有的 join 操作均采用 Common Jo
 <p>&ndash;开启无条件转 Map Join</p>
 <p>set hive.auto.convert.join.noconditionaltask=true; -无条件转 Map Join 时的小表之和阈值,若一个 Common Join operator 相关的表中，存在 n-1 张表的大小总和&lt;=该值,此时 hive 便不会再为每种 n-1 张表的组合均生成 Map Join 计划,同时也不会保留 Common Join 作为后备计划。而是只生成一个最优的 Map Join 计划。
 set hive.auto.convert.join.noconditionaltask.size=10000000;</p></blockquote>
-<h4 id="优化案例"><a href="#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b" class="header-anchor"></a><strong>优化案例</strong>
+<h4 id="优化案例"><a href="#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b" class="header-anchor"></a>优化案例
 </h4><blockquote>
 <p>hive (default)&gt; select * from order_detail od</p>
 <p>join product_info product on od.product_id = product.id</p>
@@ -978,7 +971,7 @@ Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x �
 <p>set hive.ignore.mapjoin.hint=false;</p>
 <p>&ndash;启用 bucket map join 优化功能</p>
 <p>set hive.optimize.bucketmapjoin = true;</p></blockquote>
-<h4 id="优化案例-1"><a href="#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b-1" class="header-anchor"></a><strong>优化案例</strong>
+<h4 id="优化案例-1"><a href="#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b-1" class="header-anchor"></a>优化案例
 </h4><p>hive (default)&gt; select _ from( select _ from order_detail where dt=&lsquo;2020-06-14&rsquo;) od</p>
 <p>join( select * from payment_detail where dt=&lsquo;2020-06-14&rsquo;) pd on od.id=pd.order_detail_id;</p>
 <p><strong>优化前</strong></p>

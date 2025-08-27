@@ -11,7 +11,7 @@
 <meta property='og:description' content="kafka集群实战，EFAK配置、kraft集群配置及启动 持续更新！">
 <meta property='og:url' content='/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='消息队列' /><meta property='article:tag' content='kafka' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-05-05T20:57:35&#43;00:00'/><meta property='article:modified_time' content='2024-05-05T20:57:35&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='消息队列' /><meta property='article:tag' content='Kafka' /><meta property='article:tag' content='分布式' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-05-05T20:57:35&#43;00:00'/><meta property='article:modified_time' content='2024-05-05T20:57:35&#43;00:00'/>
 <meta name="twitter:title" content="kafka实战 集群搭建-Kraft模式">
 <meta name="twitter:description" content="kafka集群实战，EFAK配置、kraft集群配置及启动 持续更新！">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,23 +336,40 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#集群配置-e99b86e7bea4e9858de7bdae">集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE}</a></li>
-    <li><a href="#集群启动-e99b86e7bea4e590afe58aa8">集群启动 {#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8}</a>
+    <li><a href="#集群配置">集群配置</a></li>
+    <li><a href="#集群启动">集群启动</a>
       <ol>
-        <li><a href="#脚本启动zk集群-e8849ae69cace590afe58aa8zke99b86e7bea4c2a0">脚本启动zk集群 {#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0}</a></li>
-        <li><a href="#脚本启动kafka集群-e8849ae69cace590afe58aa8kafkae99b86e7bea4c2a0">脚本启动kafka集群 {#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0}</a></li>
-        <li><a href="#启动成功-e590afe58aa8e68890e58a9fc2a0">启动成功 {#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0}</a></li>
+        <li><a href="#脚本启动-zk-集群">脚本启动 zk 集群</a></li>
+        <li><a href="#脚本启动-kafka-集群">脚本启动 kafka 集群</a></li>
+        <li><a href="#启动成功">启动成功</a></li>
       </ol>
     </li>
-    <li><a href="#kafka操作-kafkae6938de4bd9c">Kafka操作 {#Kafka%E6%93%8D%E4%BD%9C}</a>
+    <li><a href="#kafka-操作">Kafka 操作</a>
       <ol>
-        <li><a href="#命令行创建topic-e591bde4bba4e8a18ce5889be5bbbatopic">命令行创建Topic {#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic}</a></li>
-        <li><a href="#e2808be7bc96e8be91"><img src="https://i-blog.csdnimg.cn/blog_migrate/49403c709dce40f931823c3b0cf5ea0d.png" alt=""> {#%E2%80%8B%E7%BC%96%E8%BE%91}</a></li>
-        <li><a href="#消费者生产者联动-e6b688e8b4b9e88085e7949fe4baa7e88085e88194e58aa8">消费者生产者联动 {#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8}</a></li>
-        <li><a href="#"><img src="https://i-blog.csdnimg.cn/blog_migrate/686e2fdd6b20743399269793f8e77a0b.png" alt=""></a></li>
+        <li><a href="#命令行创建-topic">命令行创建 Topic</a></li>
+        <li><a href="#消费者生产者联动">消费者生产者联动</a></li>
       </ol>
     </li>
-    <li><a href="#linux配置efak301-linuxe9858de7bdaeefak301">Linux配置EFAK3.0.1 {#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1}</a></li>
+    <li><a href="#linux-配置-efak301">Linux 配置 EFAK3.0.1</a></li>
+    <li><a href="#kraft-模式集群">Kraft 模式集群</a>
+      <ol>
+        <li><a href="#配置">配置</a></li>
+        <li><a href="#启动前初始化集群">启动前初始化集群</a></li>
+        <li><a href="#浅浅把玩-kraft"><strong>浅浅把玩 Kraft</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#flume-联动-kafka">Flume 联动 kafka</a>
+      <ol>
+        <li><a href="#flume-作为生产者">Flume 作为生产者</a></li>
+        <li><a href="#flume-作为消费者">Flume 作为消费者  </a></li>
+      </ol>
+    </li>
+    <li><a href="#springboot-联动-kakfa">SpringBoot 联动 kakfa</a>
+      <ol>
+        <li><a href="#springboot-作为生产者">SpringBoot 作为生产者</a></li>
+        <li><a href="#springboot-作为消费者">SpringBoot 作为消费者  </a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -416,7 +433,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 5 分钟
+                阅读时长: 6 分钟
             </time>
         </div>
         
@@ -468,92 +485,96 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE" >集群配置</a>{#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8" >集群启动</a>{#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8-toc}</p>
-<p><a class="link" href="#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0" >脚本启动zk集群</a>{#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0-toc}</p>
-<p><a class="link" href="#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0" >脚本启动kafka集群</a>{#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0-toc}</p>
-<p><a class="link" href="#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0" >启动成功</a>{#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0-toc}</p>
-<p><a class="link" href="#Kafka%E6%93%8D%E4%BD%9C" >Kafka操作</a>{#Kafka%E6%93%8D%E4%BD%9C-toc}</p>
-<p><a class="link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic" >命令行创建Topic</a>{#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic-toc}</p>
-<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%91" >​编辑</a>{#%E2%80%8B%E7%BC%96%E8%BE%91-toc}</p>
-<p><a class="link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8" >消费者生产者联动</a>{#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8-toc}</p>
-<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%91" >​编辑</a>{#%E2%80%8B%E7%BC%96%E8%BE%91-toc}</p>
-<p><a class="link" href="#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1" >Linux配置EFAK3.0.1</a>{#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1-toc}</p>
-<p><a class="link" href="#Kraft%E6%A8%A1%E5%BC%8F%E9%9B%86%E7%BE%A4" >Kraft模式集群</a>{#Kraft%E6%A8%A1%E5%BC%8F%E9%9B%86%E7%BE%A4-toc}</p>
-<p><a class="link" href="#%E9%85%8D%E7%BD%AE" >配置</a>{#%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#%E5%90%AF%E5%8A%A8%E5%89%8D%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%86%E7%BE%A4" >启动前初始化集群</a>{#%E5%90%AF%E5%8A%A8%E5%89%8D%E5%88%9D%E5%A7%8B%E5%8C%96%E9%9B%86%E7%BE%A4-toc}</p>
-<p><a class="link" href="#%E6%B5%85%E6%B5%85%E6%8A%8A%E7%8E%A9Kraft" >浅浅把玩Kraft</a>{#%E6%B5%85%E6%B5%85%E6%8A%8A%E7%8E%A9Kraft-toc}</p>
-<p><a class="link" href="#Flume%E8%81%94%E5%8A%A8kafka" >Flume联动kafka</a>{#Flume%E8%81%94%E5%8A%A8kafka-toc}</p>
-<p><a class="link" href="#Flume%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85" >Flume作为生产者</a>{#Flume%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85-toc}</p>
-<p><a class="link" href="#Flume%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0%E2%80%8B%E7%BC%96%E8%BE%91" >Flume作为消费者 ​编辑</a>{#Flume%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0%E2%80%8B%E7%BC%96%E8%BE%91-toc}</p>
-<p><a class="link" href="#SpringBoot%E8%81%94%E5%8A%A8kakfa" >SpringBoot联动kakfa</a>{#SpringBoot%E8%81%94%E5%8A%A8kakfa-toc}</p>
-<p><a class="link" href="#SpringBoot%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85" >SpringBoot作为生产者</a>{#SpringBoot%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85-toc}</p>
-<p><a class="link" href="#SpringBoot%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0" >SpringBoot作为消费者</a>{#SpringBoot%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85%C2%A0-toc}</p>
-<hr>
-<br />
-<h2 id="集群配置-e99b86e7bea4e9858de7bdae"><a href="#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae-e99b86e7bea4e9858de7bdae" class="header-anchor"></a>集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE}
+    <h2 id="集群配置"><a href="#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae" class="header-anchor"></a>集群配置
 </h2><blockquote>
 <p><strong>三台服务器：linux01、linux02、linux03</strong></p>
-<p>每台服务器均安装了zookeeper、kafka，服务器之间做了ssh免密登录（集群启停脚本用）</p>
-<p>kafka虽然内置了zk，但是这里用的是自己安装的zk。</p>
-<p>服务器之间加了ip映射，如hosts文件所示，这样就不需要p地址，只需要服务器名字就可以了<br>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/eb408c7885cbb8c35f6dea4a8c1a371b.png"
-	
-	
-	
+<p>每台服务器均安装了 zookeeper、kafka，服务器之间做了 ssh 免密登录（集群启停脚本用）</p>
+<p>kafka 虽然内置了 zk，但是这里用的是自己安装的 zk。</p>
+<p>服务器之间加了 ip 映射，如 hosts 文件所示，这样就不需要 p 地址，只需要服务器名字就可以了<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image.png"
+	width="1605"
+	height="357"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image_hu_acb736d39a8f9deb.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image_hu_b05ef5f7d5920c1c.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="449"
+		data-flex-basis="1078px"
 	
 ></p></blockquote>
-<h2 id="集群启动-e99b86e7bea4e590afe58aa8"><a href="#%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8-e99b86e7bea4e590afe58aa8" class="header-anchor"></a>集群启动 {#%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8}
+<h2 id="集群启动"><a href="#%e9%9b%86%e7%be%a4%e5%90%af%e5%8a%a8" class="header-anchor"></a>集群启动
 </h2><blockquote>
 <p><strong>注意事项</strong></p>
 <ul>
-<li>启动时先启动zk，再启动kafka</li>
-<li>关闭时先关闭kafka，再关闭zk，因为kafka需要zk来维护数据信息，再关闭前kafka要和zk通讯。</li>
+<li>启动时先启动 zk，再启动 kafka</li>
+<li>关闭时先关闭 kafka，再关闭 zk，因为 kafka 需要 zk 来维护数据信息，再关闭前 kafka 要和 zk 通讯。</li>
 <li>kafka-server-start.sh -daemon config/server.properties</li>
 <li>kafka-server-stop.sh</li>
 </ul></blockquote>
-<h3 id="脚本启动zk集群-e8849ae69cace590afe58aa8zke99b86e7bea4c2a0"><a href="#%e8%84%9a%e6%9c%ac%e5%90%af%e5%8a%a8zk%e9%9b%86%e7%be%a4-e8849ae69cace590afe58aa8zke99b86e7bea4c2a0" class="header-anchor"></a>脚本启动zk集群 {#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8zk%E9%9B%86%E7%BE%A4%C2%A0}
-</h3><p><img src="https://i-blog.csdnimg.cn/blog_migrate/5146d22dd61bdd0dca7a6c97444a450c.png"
-	
-	
-	
+<h3 id="脚本启动-zk-集群"><a href="#%e8%84%9a%e6%9c%ac%e5%90%af%e5%8a%a8-zk-%e9%9b%86%e7%be%a4" class="header-anchor"></a>脚本启动 zk 集群
+</h3><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1.png"
+	width="1175"
+	height="708"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1_hu_54eed240e6805164.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-1_hu_f46e1c6b91b91830.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="165"
+		data-flex-basis="398px"
 	
 ></p>
-<h3 id="脚本启动kafka集群-e8849ae69cace590afe58aa8kafkae99b86e7bea4c2a0"><a href="#%e8%84%9a%e6%9c%ac%e5%90%af%e5%8a%a8kafka%e9%9b%86%e7%be%a4-e8849ae69cace590afe58aa8kafkae99b86e7bea4c2a0" class="header-anchor"></a>脚本启动kafka集群 {#%E8%84%9A%E6%9C%AC%E5%90%AF%E5%8A%A8kafka%E9%9B%86%E7%BE%A4%C2%A0}
-</h3><p><img src="https://i-blog.csdnimg.cn/blog_migrate/3388a4063e460ccc351ca9c74ba28d43.png"
-	
-	
-	
+<h3 id="脚本启动-kafka-集群"><a href="#%e8%84%9a%e6%9c%ac%e5%90%af%e5%8a%a8-kafka-%e9%9b%86%e7%be%a4" class="header-anchor"></a>脚本启动 kafka 集群
+</h3><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2.png"
+	width="810"
+	height="366"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2_hu_68b8d0747e772832.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-2_hu_9ddb87b4cb9efeb3.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="531px"
 	
 ></p>
-<h3 id="启动成功-e590afe58aa8e68890e58a9fc2a0"><a href="#%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f-e590afe58aa8e68890e58a9fc2a0" class="header-anchor"></a>启动成功 {#%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F%C2%A0}
+<h3 id="启动成功"><a href="#%e5%90%af%e5%8a%a8%e6%88%90%e5%8a%9f" class="header-anchor"></a>启动成功
 </h3><p>启动成功，三台服务器均显示如下：</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/4fff028a6f054f402a9e2df63b1b7810.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-3.png"
+	width="1568"
+	height="227"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-3_hu_a45bf7f6dc5c59cd.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-3_hu_4db7bc7aef40aec5.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><strong>查看zk客户端，根节点下已经有了kafka节点</strong></p>
-<p>默认直接在根节点下生成admin、brokers、cluster等节点，但是不方便维护，因此在server.properties文件中改了配置，让所有节点统一生成在kafka节点。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/b9f8872873986c923e3f1862808bd5b2.png"
+		class="gallery-image" 
+		data-flex-grow="690"
+		data-flex-basis="1657px"
 	
-	
-	
+>
+<strong>查看 zk 客户端，根节点下已经有了 kafka 节点</strong></p>
+<p>默认直接在根节点下生成 admin、brokers、cluster 等节点，但是不方便维护，因此在 server.properties 文件中改了配置，让所有节点统一生成在 kafka 节点。</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4.png"
+	width="2843"
+	height="204"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4_hu_b1676ac90e70cae.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-4_hu_f4ef2e3224540269.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1393"
+		data-flex-basis="3344px"
 	
 ></p>
-<p><strong>zk集群启停脚本</strong></p>
+<p><strong>zk 集群启停脚本</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -590,29 +611,29 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nv">$1</span> in
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;start&#34;</span><span class="o">)</span>
 </span></span><span class="line"><span class="cl">	<span class="k">for</span> i in linux01 linux02 linux03
-</span></span><span class="line"><span class="cl">	<span class="k">do</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">do</span>
 </span></span><span class="line"><span class="cl">		<span class="nb">echo</span> ---------- zookeeper <span class="nv">$i</span> 启动 ------------
-</span></span><span class="line"><span class="cl">		ssh <span class="nv">$i</span> <span class="s2">&#34;</span><span class="nv">$ZOOKEEPER</span><span class="s2">/bin/zkServer.sh start&#34;</span> 
+</span></span><span class="line"><span class="cl">		ssh <span class="nv">$i</span> <span class="s2">&#34;</span><span class="nv">$ZOOKEEPER</span><span class="s2">/bin/zkServer.sh start&#34;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">done</span>
 </span></span><span class="line"><span class="cl">	<span class="p">;;</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;stop&#34;</span><span class="o">)</span>
 </span></span><span class="line"><span class="cl">	<span class="k">for</span> i in linux01 linux02 linux03
-</span></span><span class="line"><span class="cl">	<span class="k">do</span> 
-</span></span><span class="line"><span class="cl">		<span class="nb">echo</span> ---------- zookeeper <span class="nv">$i</span> 停止 ------------ 
-</span></span><span class="line"><span class="cl">		ssh <span class="nv">$i</span> <span class="s2">&#34;</span><span class="nv">$ZOOKEEPER</span><span class="s2">/bin/zkServer.sh stop&#34;</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">do</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">echo</span> ---------- zookeeper <span class="nv">$i</span> 停止 ------------
+</span></span><span class="line"><span class="cl">		ssh <span class="nv">$i</span> <span class="s2">&#34;</span><span class="nv">$ZOOKEEPER</span><span class="s2">/bin/zkServer.sh stop&#34;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">done</span>
 </span></span><span class="line"><span class="cl">	<span class="p">;;</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;status&#34;</span><span class="o">)</span>
 </span></span><span class="line"><span class="cl">	<span class="k">for</span> i in linux01 linux02 linux03
-</span></span><span class="line"><span class="cl">	<span class="k">do</span> 
-</span></span><span class="line"><span class="cl">		<span class="nb">echo</span> ---------- zookeeper <span class="nv">$i</span> 状态 ------------ 
-</span></span><span class="line"><span class="cl">		ssh <span class="nv">$i</span> <span class="s2">&#34;</span><span class="nv">$ZOOKEEPER</span><span class="s2">/bin/zkServer.sh status&#34;</span> 
+</span></span><span class="line"><span class="cl">	<span class="k">do</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">echo</span> ---------- zookeeper <span class="nv">$i</span> 状态 ------------
+</span></span><span class="line"><span class="cl">		ssh <span class="nv">$i</span> <span class="s2">&#34;</span><span class="nv">$ZOOKEEPER</span><span class="s2">/bin/zkServer.sh status&#34;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">done</span>
 </span></span><span class="line"><span class="cl">	<span class="p">;;</span>
 </span></span><span class="line"><span class="cl"><span class="k">esac</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><strong>kafka集群启停脚本</strong></p>
+</div><p><strong>kafka 集群启停脚本</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -653,63 +674,101 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="k">esac</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="kafka操作-kafkae6938de4bd9c"><a href="#kafka%e6%93%8d%e4%bd%9c-kafkae6938de4bd9c" class="header-anchor"></a>Kafka操作 {#Kafka%E6%93%8D%E4%BD%9C}
+</div><h2 id="kafka-操作"><a href="#kafka-%e6%93%8d%e4%bd%9c" class="header-anchor"></a>Kafka 操作
 </h2><blockquote>
-<p>&ndash;bootstrap-server是连接kafka，对于集群而言，连接任何一台服务器的kafka都是一样的</p></blockquote>
-<h3 id="命令行创建topic-e591bde4bba4e8a18ce5889be5bbbatopic"><a href="#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%88%9b%e5%bb%batopic-e591bde4bba4e8a18ce5889be5bbbatopic" class="header-anchor"></a>命令行创建Topic {#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%88%9B%E5%BB%BATopic}
-</h3><h3 id="e2808be7bc96e8be91"><a href="#e2808be7bc96e8be91" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/blog_migrate/49403c709dce40f931823c3b0cf5ea0d.png"
-	
-	
-	
+<p>&ndash;bootstrap-server 是连接 kafka，对于集群而言，连接任何一台服务器的 kafka 都是一样的</p></blockquote>
+<h3 id="命令行创建-topic"><a href="#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%88%9b%e5%bb%ba-topic" class="header-anchor"></a>命令行创建 Topic
+</h3><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5.png"
+	width="2565"
+	height="455"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5_hu_5d4b4363e97d6550.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-5_hu_6e494f35cdd49a1b.png 1024w"
 	loading="lazy"
 	
-	
-> {#%E2%80%8B%E7%BC%96%E8%BE%91}
-</h3><h3 id="消费者生产者联动-e6b688e8b4b9e88085e7949fe4baa7e88085e88194e58aa8"><a href="#%e6%b6%88%e8%b4%b9%e8%80%85%e7%94%9f%e4%ba%a7%e8%80%85%e8%81%94%e5%8a%a8-e6b688e8b4b9e88085e7949fe4baa7e88085e88194e58aa8" class="header-anchor"></a>消费者生产者联动 {#%E6%B6%88%E8%B4%B9%E8%80%85%E7%94%9F%E4%BA%A7%E8%80%85%E8%81%94%E5%8A%A8}
-</h3><h3 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/blog_migrate/686e2fdd6b20743399269793f8e77a0b.png"
+		alt="alt text"
 	
 	
-	
-	loading="lazy"
-	
-	
->
-</h3><p><img src="https://i-blog.csdnimg.cn/blog_migrate/42262fff1a46f4831e04f1b7ed768939.png"
-	
-	
-	
-	loading="lazy"
-	
-	
->先启动生产者，生产hello、hahaha，再启动消费者，生产者再生产aaaaa、bbbb。此时hello、hahaha属于历史消息，不会显示，只显示aaaaa、bbbb，若想显示历史消息，需要如下，此时消息是乱序的：<img src="https://i-blog.csdnimg.cn/blog_migrate/ffc0bdc441ef90df3b370852d05af4c1.png"
-	
-	
-	
-	loading="lazy"
-	
+		class="gallery-image" 
+		data-flex-grow="563"
+		data-flex-basis="1352px"
 	
 ></p>
-<h2 id="linux配置efak301-linuxe9858de7bdaeefak301"><a href="#linux%e9%85%8d%e7%bd%aeefak301-linuxe9858de7bdaeefak301" class="header-anchor"></a>Linux配置EFAK3.0.1 {#Linux%E9%85%8D%E7%BD%AEEFAK3.0.1}
-</h2><p><strong>1. 配置EFAK的环境变量</strong></p>
-<blockquote>
-<p>ke.sh文件中引用的efak变量名是KE_HOME，所以环境变量名一定是KE_HOME，否则efak无法启动<br>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/ad81fe1df803cc2ba77a2487d420cd63.png"
-	
-	
-	
+<h3 id="消费者生产者联动"><a href="#%e6%b6%88%e8%b4%b9%e8%80%85%e7%94%9f%e4%ba%a7%e8%80%85%e8%81%94%e5%8a%a8" class="header-anchor"></a>消费者生产者联动
+</h3><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6.png"
+	width="1592"
+	height="235"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6_hu_55b0b58826548509.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-6_hu_a60fdd3c815cb034.png 1024w"
 	loading="lazy"
 	
-	
-><br>
-source /etc/profile</p></blockquote>
-<p><strong>2. 修改kafka的bin/kafka-server-start.sh的内存配置，如果不修改，可能无法启动efak</strong></p>
-<blockquote>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/9496f1566089cf16bee4bd251a664fef.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="677"
+		data-flex-basis="1625px"
 	
+>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7.png"
+	width="1591"
+	height="165"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7_hu_fa59b332ca3881f9.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-7_hu_fd3349103b8dd85a.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="964"
+		data-flex-basis="2314px"
+	
+>
+先启动生产者，生产 hello、hahaha，再启动消费者，生产者再生产 aaaaa、bbbb。此时 hello、hahaha 属于历史消息，不会显示，只显示 aaaaa、bbbb，若想显示历史消息，需要如下，此时消息是乱序的：
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8.png"
+	width="1895"
+	height="257"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8_hu_68ff474d3d8586b4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-8_hu_1fca3fe6bfb12f82.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="737"
+		data-flex-basis="1769px"
+	
+></p>
+<h2 id="linux-配置-efak301"><a href="#linux-%e9%85%8d%e7%bd%ae-efak301" class="header-anchor"></a>Linux 配置 EFAK3.0.1
+</h2><p><strong>1. 配置 EFAK 的环境变量</strong></p>
+<blockquote>
+<p>ke.sh 文件中引用的 efak 变量名是 KE_HOME，所以环境变量名一定是 KE_HOME，否则 efak 无法启动<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9.png"
+	width="587"
+	height="93"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9_hu_e49bfdad56deb5e8.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-9_hu_470135dd049dc851.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="631"
+		data-flex-basis="1514px"
+	
+></p>
+<p>source /etc/profile</p></blockquote>
+<p><strong>2. 修改 kafka 的 bin/kafka-server-start.sh 的内存配置，如果不修改，可能无法启动 efak</strong></p>
+<blockquote>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10.png"
+	width="2840"
+	height="346"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10_hu_d57b4857951ecdac.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-10_hu_d7447abbbfec669e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="820"
+		data-flex-basis="1969px"
 	
 ></p>
 <p>内容如下：</p>
@@ -731,8 +790,1031 @@ source /etc/profile</p></blockquote>
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div></blockquote>
-<hr>
+</div><p>注意！修改 kafka 配置文件后记得重新分发给集群其他的 kafka！</p>
+<p>scp kafka-server-start.sh root@linux02:/export/server/kafka/bin</p>
+<p>scp kafka-server-start.sh root@linux03:/export/server/kafka/bin</p></blockquote>
+<p><strong>3. 修改 EFAK 的 conf/system-config.properties 文件，关键内容如下</strong></p>
+<blockquote>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11.png"
+	width="1956"
+	height="250"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11_hu_be0541a5ae6984e1.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-11_hu_9ff358cfe73ac771.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="782"
+		data-flex-basis="1877px"
+	
+></p>
+<p>EFAK 需要配置 mysql 的<strong>ke 数据库</strong>来存储元数据，username 是连接 mysql 的登录用户，名字随便起，和 linux03 服务器无关，需要提前在 mysql 创建好并授权访问。</p></blockquote>
+<p>我的<strong>mysql5.7</strong> 在 linux01 服务器，而 EFAK 在 linux03 服务器，这就需要跨服务器连接，解决方法如下。</p>
+<p><strong>4.  在 linux01 的 mysql 创建名为 linux03 的用户，并授予对 ke 数据库的所有权，并规定只有服务器 linux03 的 ip 地址才能访问。</strong></p>
+<blockquote>
+<p>CREATE USER &rsquo;linux03&rsquo;@&lsquo;xxx.xxx.x.xxx&rsquo; IDENTIFIED BY &lsquo;#252012&rsquo;;<br>
+GRANT ALL PRIVILEGES ON ke.* TO &rsquo;linux03&rsquo;@&lsquo;xxx.xxx.x.xxx&rsquo;;<br>
+注：这里的 xxx.xxx.x.xxx 是部署了 EFAK 的服务器 ip，也就是服务器 linux03 的 ip<br>
+如果创建用户失败，提示了创建的用户密码安全级别过低，那么可以降低密码安全级别<br>
+SET GLOBAL validate_password.policy = LOW; <br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12.png"
+	width="728"
+	height="508"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12_hu_9410c962c86b8fc7.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-12_hu_e947b296b836a7ed.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="143"
+		data-flex-basis="343px"
+	
+></p>
+<p><strong>flush privileges;</strong><br>
+大概意思就是允许 ip 为 xxx.xxx.x.xxx 的 linux03 用户访问数据库</p></blockquote>
+<p><strong>5. 启动并登录 EFAK</strong></p>
+<blockquote>
+<p>依次启动 zk、kafka</p>
+<p>zk 和 kafka 集群启动脚本是我自己编写的</p>
+<p>zk-All.sh start</p>
+<p>All-kafka start</p>
+<p>然后 ke.sh start<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13.png"
+	width="1796"
+	height="714"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13_hu_5d710c3e464160fb.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-13_hu_b4042c0e9fdcd9b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="603px"
+	
+>
+启动成功！</p>
+<p>账户是 admin，密码 123456<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14.png"
+	width="2736"
+	height="1415"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14_hu_f5fa80a33480e07a.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-14_hu_da8639f917e59c09.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="464px"
+	
+>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15.png"
+	width="2731"
+	height="1405"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15_hu_59def7060ed1aea4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-15_hu_93d6137bc1a1bce2.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+>
+访问成功，可以看到 3 台 broker 成功运行</p></blockquote>
+<h2 id="kraft-模式集群"><a href="#kraft-%e6%a8%a1%e5%bc%8f%e9%9b%86%e7%be%a4" class="header-anchor"></a>Kraft 模式集群
+</h2><p>在 Kafka 2.8.0 版本，移除了对 Zookeeper 的依赖，通过 <strong>Kraft 模式的 controller</strong>管理集群，使用 Kafka <strong>内部的 Quorum 控制器</strong>来取代 ZooKeeper 管理元数据，<strong>元数据保存在 controller</strong>中，这样我们无需维护 zk 集群，只要维护 Kafka 集群就可以了，节省运算资源。<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16.png"
+	width="1145"
+	height="379"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16_hu_a289fc867e9ef692.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-16_hu_c0c556bb2d3ec27e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="302"
+		data-flex-basis="725px"
+	
+></p>
+<blockquote>
+<p><strong>优点</strong></p>
+<ul>
+<li>kafka 不再依赖外部框架，能独立运行</li>
+<li>controller 管理集群时不需要和 zk 通讯，集群性能提升</li>
+<li>脱离了 zk 依赖，集群扩展不受 zk 读写能力的限制</li>
+<li>controller 不再动态选举，而由配置文件决定，这样可以针对性的加强 controller 的节点配置，而不是像以前一样对随机 controller 节点的高负载束手无策。</li>
+</ul></blockquote>
+<h3 id="配置"><a href="#%e9%85%8d%e7%bd%ae" class="header-anchor"></a>配置
+</h3><p>不在原来的 kafka 集群操作，这里换新的 kafka 集群</p>
+<p>编辑 kafka 的 config/kraft 目录下的 server.properties 文件</p>
+<p>linux01 服务器配置如下：</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17.png"
+	width="1507"
+	height="473"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17_hu_5901d6f870f24885.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-17_hu_3e387f14b5121a89.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="318"
+		data-flex-basis="764px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18.png"
+	width="1649"
+	height="211"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18_hu_e51369e0bbf16694.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-18_hu_d0dd47ad950f5bb4.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="781"
+		data-flex-basis="1875px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19.png"
+	width="1366"
+	height="203"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19_hu_412ac310855b5291.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-19_hu_387662bb469a5122.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="672"
+		data-flex-basis="1614px"
+	
+></p>
+<p>配好后分发该配置文件，并在各个服务器修改对应的参数，如 node.id、advertised.listeners、log.dirs</p>
+<h3 id="启动前初始化集群"><a href="#%e5%90%af%e5%8a%a8%e5%89%8d%e5%88%9d%e5%a7%8b%e5%8c%96%e9%9b%86%e7%be%a4" class="header-anchor"></a>启动前初始化集群
+</h3><p>在 linux01 生成存储目录唯一 ID</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20.png"
+	width="1057"
+	height="103"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20_hu_3a58ad8ead6148de.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-20_hu_bed5759ad4a7cf35.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1026"
+		data-flex-basis="2462px"
+	
+></p>
+<p>用该 ID 格式化<strong>所有服务器</strong>的 kafka 存储目录<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21.png"
+	width="2585"
+	height="98"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21_hu_2f8758996c2f24e1.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-21_hu_3258a79cae287df7.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2637"
+		data-flex-basis="6330px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22.png"
+	width="2232"
+	height="79"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22_hu_90b51c7da860ca5.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-22_hu_608b5f0742ce85de.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2825"
+		data-flex-basis="6780px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23.png"
+	width="2161"
+	height="74"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23_hu_e7c99a634226dcf2.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-23_hu_e23059bf46a8505a.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2920"
+		data-flex-basis="7008px"
+	
+></p>
+<p>启动 kraft 集群，这里使用自定义脚本，把脚本配置到环境变量，效果更佳</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">case</span> <span class="nv">$1</span> in
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;start&#34;</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> i in linux01 linux02 linux03
+</span></span><span class="line"><span class="cl">                <span class="k">do</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">echo</span> --------<span class="nv">$i</span> 启动kraft---------
+</span></span><span class="line"><span class="cl">                        ssh <span class="nv">$i</span> <span class="s2">&#34;source /etc/profile;/export/server/kraft/bin/kafka-server-start.sh -daemon /export/server/kraft/config/kraft/server.properties&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">done</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span><span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;stop&#34;</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> i in linux01 linux02 linux03
+</span></span><span class="line"><span class="cl">                <span class="k">do</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">echo</span> --------<span class="nv">$i</span> 停止kraft---------
+</span></span><span class="line"><span class="cl">                        ssh <span class="nv">$i</span> <span class="s2">&#34;source /etc/profile;/export/server/kraft/bin/kafka-server-stop.sh stop&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">done</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span><span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;status&#34;</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> i in linux01 linux02 linux03
+</span></span><span class="line"><span class="cl">                <span class="k">do</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">echo</span> --------<span class="nv">$i</span> 查看kraft状态---------
+</span></span><span class="line"><span class="cl">                        ssh <span class="nv">$i</span> <span class="s2">&#34;source /etc/profile;jps -ml&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">done</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span><span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看是否启动成功，这里也使用脚本一键查看集群所有 jps，把脚本配置到环境变量，效果更佳</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="k">for</span> i in linux01 linux02 linux03
+</span></span><span class="line"><span class="cl">                <span class="k">do</span>
+</span></span><span class="line"><span class="cl">                        <span class="nb">echo</span> --------<span class="nv">$i</span> 查看jps---------
+</span></span><span class="line"><span class="cl">                        ssh <span class="nv">$i</span> <span class="s2">&#34;source /etc/profile; jps&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25.png"
+	width="781"
+	height="450"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25_hu_979d450b74f3b2d8.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-25_hu_1a76554a0203ec81.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="416px"
+	
+></p>
+<p><strong>无需 zk，启动成功！</strong></p>
+<h3 id="浅浅把玩-kraft"><a href="#%e6%b5%85%e6%b5%85%e6%8a%8a%e7%8e%a9-kraft" class="header-anchor"></a><strong>浅浅把玩 Kraft</strong>
+</h3><p>创建主题 first</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26.png"
+	width="2492"
+	height="101"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26_hu_48fff353777c1a4e.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-26_hu_78031f8a91d64a79.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="2467"
+		data-flex-basis="5921px"
+	
+>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27.png"
+	width="1500"
+	height="88"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27_hu_779425861a1dabc3.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-27_hu_a384b69cba4c4489.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1704"
+		data-flex-basis="4090px"
+	
+> 
+在 linux01 创建生产者，在 linux03 创建消费者</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28.png"
+	width="780"
+	height="540"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28_hu_284102e529445955.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-28_hu_991248eb8b202de9.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="346px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29.png"
+	width="1836"
+	height="251"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29_hu_b9949c828a3d2fe4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-29_hu_d9efb6423eca895d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="731"
+		data-flex-basis="1755px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30.png"
+	width="1600"
+	height="188"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30_hu_f190973aec3218b2.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-30_hu_458387386a9c4fe0.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="851"
+		data-flex-basis="2042px"
+	
+></p>
+<h2 id="flume-联动-kafka"><a href="#flume-%e8%81%94%e5%8a%a8-kafka" class="header-anchor"></a>Flume 联动 kafka
+</h2><h3 id="flume-作为生产者"><a href="#flume-%e4%bd%9c%e4%b8%ba%e7%94%9f%e4%ba%a7%e8%80%85" class="header-anchor"></a>Flume 作为生产者
+</h3><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31.png"
+	width="1054"
+	height="382"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31_hu_a2a0093e84abc830.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-31_hu_1d03d62c880a252a.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="662px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32.png"
+	width="1020"
+	height="299"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32_hu_138cb1786f17e834.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-32_hu_91438e14b3e72b00.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="341"
+		data-flex-basis="818px"
+	
+></p>
+<blockquote>
+<p>案例玩法：依次启动 zk、kafka 集群，在 linux01 编辑 flume 的 file_to_kafka.conf 任务配置，监控 app.log 文件内容，把监控的内容发送到 kafka 的 first 主题，然后启动 flume 任务作为生产者。在 linux02 启动 kafka 消费者，消费 first 主题，检查 linux01 的监控文件 app.log 变化时，消费者是否消费到了消息。</p></blockquote>
+<p>flume 的 job/group3/file_to_kafka.conf 配置:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1">#定义source，sink，channel</span>
+</span></span><span class="line"><span class="cl">a3.sources <span class="o">=</span> r3
+</span></span><span class="line"><span class="cl">a3.sinks <span class="o">=</span> k3
+</span></span><span class="line"><span class="cl">a3.channels <span class="o">=</span> c3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置source</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl">a3.sources.r3.type <span class="o">=</span> TAILDIR
+</span></span><span class="line"><span class="cl">a3.sources.r3.filegroups<span class="o">=</span>f3
+</span></span><span class="line"><span class="cl"><span class="c1">#监控的目录</span>
+</span></span><span class="line"><span class="cl">a3.sources.r3.filegroups.f3<span class="o">=</span>/export/server/flume/job/group3/applog/app.*
+</span></span><span class="line"><span class="cl"><span class="c1">#断点续传的json</span>
+</span></span><span class="line"><span class="cl">a3.sources.r3.positionFile<span class="o">=</span>/export/server/flume/job/group3/tail_dir2.json
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置 sink</span>
+</span></span><span class="line"><span class="cl">a3.sinks.k3.type <span class="o">=</span> org.apache.flume.sink.kafka.KafkaSink
+</span></span><span class="line"><span class="cl">a3.sinks.k3.kafka.bootstrap.servers<span class="o">=</span>linux01:9092,linux02:9092,linux03:9092
+</span></span><span class="line"><span class="cl">a3.sinks.k3.kafka.topic<span class="o">=</span>first
+</span></span><span class="line"><span class="cl">a3.sinks.k3.kafka.flumeBatchSize<span class="o">=</span><span class="m">20</span>
+</span></span><span class="line"><span class="cl">a3.sinks.k3.kafka.producer.acks<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">a3.sinks.k3.kafka.producer.linger.ms<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置channel</span>
+</span></span><span class="line"><span class="cl">a3.channels.c3.type <span class="o">=</span> memory
+</span></span><span class="line"><span class="cl">a3.channels.c3.capacity <span class="o">=</span> <span class="m">1000</span>
+</span></span><span class="line"><span class="cl">a3.channels.c3.transactionCapacity <span class="o">=</span> <span class="m">100</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Bind the source and sink to the channel</span>
+</span></span><span class="line"><span class="cl">a3.sources.r3.channels <span class="o">=</span> c3
+</span></span><span class="line"><span class="cl">a3.sinks.k3.channel <span class="o">=</span> c3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>确保 zk，kafka 集群已启动</p>
+<blockquote>
+<ol>
+<li>在 linux02 创建 kafka 消费者，消费 first 主题<br>
+kafka-console-consumer.sh &ndash;bootstrap-server linux02:9092 &ndash;topic first</li>
+<li>在 linux01 启动 flume 任务<br>
+bin/flume-ng agent -c conf/ -n a3 -f job/group3/file_to_kafka.conf</li>
+<li>对监控的文件 app.log 追加内容，kafka 消费者成功接收到消息<br>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33.png"
+	width="741"
+	height="320"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33_hu_1b2c146d96ccee11.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-33_hu_e8ae0b2692f52404.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="231"
+		data-flex-basis="555px"
+	
+> &gt; <img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34.png"
+	width="1532"
+	height="238"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34_hu_c06bc0c670684eb4.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-34_hu_69613da2f3bbe719.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="643"
+		data-flex-basis="1544px"
+	
+></li>
+</ol></blockquote>
+<h3 id="flume-作为消费者"><a href="#flume-%e4%bd%9c%e4%b8%ba%e6%b6%88%e8%b4%b9%e8%80%85" class="header-anchor"></a>Flume 作为消费者  
+</h3><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35.png"
+	width="965"
+	height="331"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35_hu_e02e433e8d6c1b9c.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-35_hu_3d0362da08cfa14e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="291"
+		data-flex-basis="699px"
+	
+></p>
+<p>在 linux01 的 flume 的 job 目录下编辑 kafka_to_file.conf 文件，内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># Name the components on this agent</span>
+</span></span><span class="line"><span class="cl">a2.sources <span class="o">=</span> r2
+</span></span><span class="line"><span class="cl">a2.sinks <span class="o">=</span> k2
+</span></span><span class="line"><span class="cl">a2.channels <span class="o">=</span> c2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Describe/configure the source</span>
+</span></span><span class="line"><span class="cl">a2.sources.r2.type <span class="o">=</span> org.apache.flume.source.kafka.KafkaSource
+</span></span><span class="line"><span class="cl">a2.sources.r2.batchSize<span class="o">=</span><span class="m">50</span>
+</span></span><span class="line"><span class="cl">a2.sources.r2.batchDurationMillis<span class="o">=</span><span class="m">200</span>
+</span></span><span class="line"><span class="cl">a2.sources.r2.kafka.bootstrap.servers<span class="o">=</span>linux02:9092
+</span></span><span class="line"><span class="cl">a2.sources.r2.kafka.topics<span class="o">=</span>first
+</span></span><span class="line"><span class="cl">a2.sources.r2.kafka.consumer.group.id<span class="o">=</span>custom.g.id
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Describe the sink</span>
+</span></span><span class="line"><span class="cl">a2.sinks.k2.type <span class="o">=</span> logger
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Use a channel which buffers events in memory</span>
+</span></span><span class="line"><span class="cl">a2.channels.c2.type <span class="o">=</span> memory
+</span></span><span class="line"><span class="cl">a2.channels.c2.capacity <span class="o">=</span> <span class="m">1000</span>
+</span></span><span class="line"><span class="cl">a2.channels.c2.transactionCapacity <span class="o">=</span> <span class="m">100</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Bind the source and sink to the channel</span>
+</span></span><span class="line"><span class="cl">a2.sources.r2.channels <span class="o">=</span> c2
+</span></span><span class="line"><span class="cl">a2.sinks.k2.channel <span class="o">=</span> c2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>依次启动 zk、kafka 集群，然后启动 flume 任务和 kakfa 生产者</p>
+<blockquote>
+<ul>
+<li>flume-ng agent -n a2 -c conf/ -f job/kafka_to_file.conf -Dflume.root.logger=INFO,console</li>
+<li>kafka-console-producer.sh &ndash;bootstrap-server linux03:9092 &ndash;topic first</li>
+</ul></blockquote>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36.png"
+	width="1672"
+	height="174"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36_hu_4ce1ba711578983d.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-36_hu_35e72e807ffea2ab.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="960"
+		data-flex-basis="2306px"
+	
+>
+<img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37.png"
+	width="2873"
+	height="370"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37_hu_f5b0665eff65149f.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-37_hu_392ac6891d70a210.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="776"
+		data-flex-basis="1863px"
+	
+></p>
+<p>案例成功！</p>
+<h2 id="springboot-联动-kakfa"><a href="#springboot-%e8%81%94%e5%8a%a8-kakfa" class="header-anchor"></a>SpringBoot 联动 kakfa
+</h2><p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38.png"
+	width="1363"
+	height="463"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38_hu_1810ab1a1a53a541.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-38_hu_d7e493f54e086f6b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="294"
+		data-flex-basis="706px"
+	
+></p>
+<h3 id="springboot-作为生产者"><a href="#springboot-%e4%bd%9c%e4%b8%ba%e7%94%9f%e4%ba%a7%e8%80%85" class="header-anchor"></a>SpringBoot 作为生产者
+</h3><p>创建 springboot 工程</p>
+<p>application.properties 文件内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">server.port=8080
+</span></span><span class="line"><span class="cl">#连接kafka集群
+</span></span><span class="line"><span class="cl">spring.kafka.bootstrap-servers=linux01:9092,linux02:9092,linux03:9092
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#key-value序列化
+</span></span><span class="line"><span class="cl">spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+</span></span><span class="line"><span class="cl">spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>pom 文件内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0&#34;</span> <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span class="line"><span class="cl">         <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.mykafka<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>springboot_kafka<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>springboot_kafka<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>springboot_kafka<span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;properties&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.reporting.outputEncoding&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;spring-boot.version&gt;</span>2.6.13<span class="nt">&lt;/spring-boot.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/properties&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;dependencies&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.springframework.kafka<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>spring-kafka<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.projectlombok<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>lombok<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;optional&gt;</span>true<span class="nt">&lt;/optional&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;groupId&gt;</span>org.springframework.kafka<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;artifactId&gt;</span>spring-kafka-test<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependencies&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;dependencyManagement&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;dependencies&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;artifactId&gt;</span>spring-boot-dependencies<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;version&gt;</span>${spring-boot.version}<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/dependencies&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependencyManagement&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;build&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;plugins&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;plugin&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;version&gt;</span>3.8.1<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;configuration&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;source&gt;</span>1.8<span class="nt">&lt;/source&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;target&gt;</span>1.8<span class="nt">&lt;/target&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;encoding&gt;</span>UTF-8<span class="nt">&lt;/encoding&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;/configuration&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/plugin&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;plugin&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;version&gt;</span>${spring-boot.version}<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;configuration&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;mainClass&gt;</span>org.mykafka.springboot_kafka.SpringbootKafkaApplication<span class="nt">&lt;/mainClass&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;skip&gt;</span>true<span class="nt">&lt;/skip&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;/configuration&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;executions&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;execution&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nt">&lt;id&gt;</span>repackage<span class="nt">&lt;/id&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nt">&lt;goals&gt;</span>
+</span></span><span class="line"><span class="cl">                            <span class="nt">&lt;goal&gt;</span>repackage<span class="nt">&lt;/goal&gt;</span>
+</span></span><span class="line"><span class="cl">                        <span class="nt">&lt;/goals&gt;</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&lt;/execution&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;/executions&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/plugin&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/plugins&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/build&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/project&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>ProducerController 代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">org.mykafka.springboot_kafka</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.kafka.core.KafkaTemplate</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Author:懒大王Smile
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Date: 2024/5/12
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Time: 22:42
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Description:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@RestController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ProducerController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@Autowired</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">KafkaTemplate</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">kafka</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@RequestMapping</span><span class="p">(</span><span class="s">&#34;/ProducerSend&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">date</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">msg</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">kafka</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">&#34;first&#34;</span><span class="p">,</span><span class="n">msg</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="s">&#34;ok&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>项目展示</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39.png"
+	width="697"
+	height="661"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39_hu_67311199368c67e6.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-39_hu_24ef9f42320452f2.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="105"
+		data-flex-basis="253px"
+	
+></p>
+<p>项目启动之后在浏览器访问，kafka 消费者成功接收到数据！</p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40.png"
+	width="1279"
+	height="224"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40_hu_42f5f285e613a5f6.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-40_hu_179c1a33079e2f0b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="570"
+		data-flex-basis="1370px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41.png"
+	width="1606"
+	height="202"
+	srcset="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41_hu_77fe679d3bce86f5.png 480w, /zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/image-41_hu_88a089e3928b8b5d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="795"
+		data-flex-basis="1908px"
+	
+></p>
+<h3 id="springboot-作为消费者"><a href="#springboot-%e4%bd%9c%e4%b8%ba%e6%b6%88%e8%b4%b9%e8%80%85" class="header-anchor"></a>SpringBoot 作为消费者  
+</h3><p>application.properties 文件内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">server.port=8080
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#key-value反序列化
+</span></span><span class="line"><span class="cl">spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+</span></span><span class="line"><span class="cl">spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#消费者组id
+</span></span><span class="line"><span class="cl">spring.kafka.consumer.group-id=mykafka
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>ConsumerController 代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nn">org.mykafka.springboot_kafka</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.context.annotation.Configuration</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="nn">org.springframework.kafka.annotation.KafkaListener</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Author:懒大王Smile
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Date: 2024/5/13
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Time: 23:12
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * @Description:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@Configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ConsumerController</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nd">@KafkaListener</span><span class="p">(</span><span class="n">topics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;first&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">consumerTopic</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">msg</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;收到消息：&#34;</span><span class="o">+</span><span class="n">msg</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Spark 联动 kafka</p>
+<p>尚硅谷 p73</p>
 
 </section>
 

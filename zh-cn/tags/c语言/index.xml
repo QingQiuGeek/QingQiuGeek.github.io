@@ -61,14 +61,18 @@ const char *str = GetString();//正确
         
         <guid>/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/</guid>
         <description>&lt;h2 id=&#34;引导图&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e5%af%bc%e5%9b%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引导图
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-46-22.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image.png&#34;
+	width=&#34;1640&#34;
+	height=&#34;760&#34;
+	srcset=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image_hu_fd23a68908ce84fc.png 480w, /zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image_hu_b9de6a452bc98b6d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;2025-08-01-21-46-22&#34;
+		alt=&#34;alt text&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;215&#34;
+		data-flex-basis=&#34;517px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;br /&gt;
@@ -340,14 +344,18 @@ const char *str = GetString();//正确
 &lt;/div&gt;&lt;h3 id=&#34;函数指针&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数指针
 &lt;/h3&gt;&lt;h4 id=&#34;函数指针作形参接收参数&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e4%bd%9c%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e5%8f%82%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数指针作形参接收参数
 &lt;/h4&gt;&lt;p&gt;先看看这个 qsort 函数，是 C 语言库函数之一，用于对任何元素类型的数组排序。它有 4 个形参，第一个是要排序数组的地址，第二个是数组元素个数，第三个是数组元素的字节大小，也就是跨越一个元素的步长，第四个就是本节重点，一个函数指针，用来接收数组排序所需的排序函数，比如冒泡，选择排序&amp;hellip;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-46-52.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-1.png&#34;
+	width=&#34;1970&#34;
+	height=&#34;225&#34;
+	srcset=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-1_hu_9b0e9357f270a73a.png 480w, /zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-1_hu_c9a4dfd27de36682.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;2025-08-01-21-46-52&#34;
+		alt=&#34;alt text&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;875&#34;
+		data-flex-basis=&#34;2101px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;OK，请看下面的代码：&lt;/p&gt;
@@ -406,26 +414,34 @@ const char *str = GetString();//正确
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;运算结果如下：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-47-05.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-2.png&#34;
+	width=&#34;1062&#34;
+	height=&#34;386&#34;
+	srcset=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-2_hu_e12a6060c3e1a1fe.png 480w, /zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-2_hu_299ad8745532f859.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;2025-08-01-21-47-05&#34;
+		alt=&#34;alt text&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;275&#34;
+		data-flex-basis=&#34;660px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;这就是函数指针。。。&lt;/p&gt;
 &lt;h4 id=&#34;函数指针接收函数地址&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e6%8e%a5%e6%94%b6%e5%87%bd%e6%95%b0%e5%9c%b0%e5%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数指针接收函数地址
-&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-47-18.png&#34;
-	
-	
-	
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-3.png&#34;
+	width=&#34;959&#34;
+	height=&#34;497&#34;
+	srcset=&#34;/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-3_hu_f67bc2d0b25602d0.png 480w, /zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/image-3_hu_713a16ac2d37fc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;2025-08-01-21-47-18&#34;
+		alt=&#34;alt text&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;463px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;如图：函数名本身就是函数的地址，和&amp;amp;函数名效果相同，*ptr 说明其是指针，int （*ptr）说明函数的返回值是 int，而(int , int)则是函数 add 的形参。当然，函数指针也可以和数组指针一样放在指针数组中，比如：&lt;/p&gt;
