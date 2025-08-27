@@ -1230,8 +1230,7 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 &lt;p&gt;Fetch Operator 客户端获取数据操作&lt;/p&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Explain 语法&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;EXPLAIN &lt;/p&gt;
-\[FORMATTED \| EXTENDED \| DEPENDENCY\]&lt;p&gt; query-sql&lt;/p&gt;
+&lt;p&gt;EXPLAIN [FORMATTED | EXTENDED | DEPENDENCY]&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;FORMATTED：将执行计划以 JSON 字符串的形式输出&lt;/li&gt;
 &lt;li&gt;EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息&lt;/li&gt;
@@ -1262,18 +1261,14 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 &lt;p&gt;map-side 聚合相关参数如下&lt;/p&gt;
 &lt;p&gt;&amp;ndash;启用 map-side 聚合，默认是 true&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.map.aggr=true;&lt;/strong&gt;&lt;/p&gt;
-&lt;br /&gt;
 &lt;p&gt;&amp;ndash;用于检测源表数据是否适合进行 map-side 聚合。检测的方法是：系统自动先对若干条数据进行 map-side 聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行 map-side 聚合；否则，认为该表数据不适合进行 map-side 聚合，后续数据便不再进行 map-side 聚合。0.5 意味着平均有 2 条数据可以聚合成 1 条，1 意味着没有出现任何的聚合&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.min.reduction=0.5;&lt;/strong&gt;&lt;/p&gt;
-&lt;br /&gt;
 &lt;p&gt;&amp;ndash;用于&lt;strong&gt;hive.map.aggr.hash.min.reduction=0.5&lt;/strong&gt; 检测源表是否适合 map-side 聚合的条数。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.groupby.mapaggr.checkinterval=100000;&lt;/strong&gt;&lt;/p&gt;
-&lt;br /&gt;
 &lt;p&gt;&amp;ndash;map-side 聚合所用的 hash table 占用 map task 堆内存的最大比例，若超出该值，则会对 hash table 进行一次 flush。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.force.flush.memory.threshold=0.7;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;优化前-vs-优化后&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8d-vs-%e4%bc%98%e5%8c%96%e5%90%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前 VS 优化后
 &lt;/h3&gt;&lt;p&gt;set hive.map.aggr=false 关闭分组聚合优化，查看执行效果，在 Map 端没有了 Group By Operator&lt;/p&gt;
-&lt;br /&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2.png&#34;
 	width=&#34;538&#34;
 	height=&#34;871&#34;
@@ -1303,7 +1298,6 @@ name node 处于安全模式，服务器数量少于最小要求数量，这种�
 		data-flex-basis=&#34;133px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;br /&gt;
 &lt;p&gt;若发生 map-side 优化，优化后比优化前的 HQL 执行耗时应该有所减少，且 map 的 output 数量明显小于 input 数量。&lt;/p&gt;
 &lt;p&gt;若没有触发 map-side，则 map 的 output 数量虽然比 input 数量有所减少但可以忽略不计。具体有没有触发 map-side 可以去 web UI 界面查看 map 日志。&lt;/p&gt;
 &lt;p&gt;注意！！map-side 聚合不够智能，即 map 端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据&lt;strong&gt;分区分桶&lt;/strong&gt;，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。&lt;/p&gt;
