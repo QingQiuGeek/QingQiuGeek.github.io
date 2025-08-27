@@ -928,14 +928,6 @@
         <description></description>
         </item>
         <item>
-        <title>Java-Zookeeper</title>
-        <link>/zh-cn/tags/java-zookeeper/</link>
-        <pubDate>Fri, 19 Apr 2024 16:43:51 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/java-zookeeper/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>Hdfs</title>
         <link>/zh-cn/tags/hdfs/</link>
         <pubDate>Mon, 15 Apr 2024 14:38:50 +0000</pubDate>
@@ -952,19 +944,19 @@
         <description></description>
         </item>
         <item>
-        <title>C&#43;&#43;</title>
-        <link>/zh-cn/tags/c&#43;&#43;/</link>
-        <pubDate>Fri, 04 Aug 2023 22:32:09 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/c&#43;&#43;/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>C语言</title>
         <link>/zh-cn/tags/c%E8%AF%AD%E8%A8%80/</link>
         <pubDate>Fri, 04 Aug 2023 22:32:09 +0000</pubDate>
         
         <guid>/zh-cn/tags/c%E8%AF%AD%E8%A8%80/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>指针</title>
+        <link>/zh-cn/tags/%E6%8C%87%E9%92%88/</link>
+        <pubDate>Fri, 04 Aug 2023 16:08:31 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/%E6%8C%87%E9%92%88/</guid>
         <description></description>
         </item>
         

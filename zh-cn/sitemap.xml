@@ -953,12 +953,6 @@
     <loc>/zh-cn/tags/hadoop/</loc>
     <lastmod>2024-04-19T16:43:51+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/java-zookeeper/</loc>
-    <lastmod>2024-04-19T16:43:51+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/java-zookeeper/</loc>
-    <lastmod>2024-04-19T16:43:51+00:00</lastmod>
-  </url><url>
     <loc>/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2024-04-19T16:43:51+00:00</lastmod>
   </url><url>
@@ -989,12 +983,6 @@
     <loc>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</loc>
     <lastmod>2024-04-13T20:49:38+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/c&#43;&#43;/</loc>
-    <lastmod>2023-08-04T22:32:09+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/c&#43;&#43;/</loc>
-    <lastmod>2023-08-04T22:32:09+00:00</lastmod>
-  </url><url>
     <loc>/zh-cn/post/2023/08/const%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%84%8F%E4%B9%89-----const-int-p%E5%92%8Cint-const-p/</loc>
     <lastmod>2023-08-04T22:32:09+00:00</lastmod>
   </url><url>
@@ -1005,6 +993,12 @@
     <lastmod>2023-08-04T22:32:09+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/</loc>
+    <lastmod>2023-08-04T16:08:31+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/%E6%8C%87%E9%92%88/</loc>
+    <lastmod>2023-08-04T16:08:31+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/%E6%8C%87%E9%92%88/</loc>
     <lastmod>2023-08-04T16:08:31+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/page/</loc>

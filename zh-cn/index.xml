@@ -13782,173 +13782,600 @@ a1.channels.c1.transactionCapacity = 100 #100个事务，一次最多发送100�
         <pubDate>Fri, 19 Apr 2024 16:43:51 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/04/%E5%A4%A7%E6%95%B0%E6%8D%AEzookeeper%E9%9B%86%E7%BE%A4%E5%85%A5%E9%97%A8%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
-        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A6%82%E8%BF%B0&#34; &gt;概述&lt;/a&gt;{#%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%89%B9%E7%82%B9&#34; &gt;特点&lt;/a&gt;{#%E7%89%B9%E7%82%B9-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0&#34; &gt;集群配置&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83&#34; &gt;以下是集群环境搭建！！不是单机环境&lt;/a&gt;{#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2&#34; &gt;集群角色&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Leader&#34; &gt;Leader&lt;/a&gt;{#Leader-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Follower&#34; &gt;Follower&lt;/a&gt;{#Follower-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Observer&#34; &gt;Observer&lt;/a&gt;{#Observer-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%9A%E8%AF%9D&#34; &gt;会话&lt;/a&gt;{#%E4%BC%9A%E8%AF%9D-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Watcher&#34; &gt;Watcher&lt;/a&gt;{#Watcher-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0&#34; &gt;节点的值变化监听&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89&#34; &gt;节点的子节点变化监听（路径变化）&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%9A%84%E5%AD%90%E8%8A%82%E7%82%B9%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%EF%BC%88%E8%B7%AF%E5%BE%84%E5%8F%98%E5%8C%96%EF%BC%89-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6&#34; &gt;工作机制&lt;/a&gt;{#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B&#34; &gt;客户端向服务端写数据流程&lt;/a&gt;{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%86%99%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader&#34; &gt;写请求发给leader&lt;/a&gt;{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99leader-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower&#34; &gt;写请求发给follower&lt;/a&gt;{#%E5%86%99%E8%AF%B7%E6%B1%82%E5%8F%91%E7%BB%99follower-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B&#34; &gt;客户端向服务端读数据流程&lt;/a&gt;{#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%91%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%BB%E6%95%B0%E6%8D%AE%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6&#34; &gt;选举机制&lt;/a&gt;{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8&#34; &gt;初次启动&lt;/a&gt;{#%E5%88%9D%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8&#34; &gt;非处次启动&lt;/a&gt;{#%E9%9D%9E%E5%A4%84%E6%AC%A1%E5%90%AF%E5%8A%A8-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82&#34; &gt;集群脑裂&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E8%84%91%E8%A3%82-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B&#34; &gt;数据模型&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B&#34; &gt;节点类型&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF&#34; &gt;节点信息&lt;/a&gt;{#%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C&#34; &gt;集群操作&lt;/a&gt;{#%E9%9B%86%E7%BE%A4%E6%93%8D%E4%BD%9C-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9&#34; &gt;创建节点&lt;/a&gt;{#%E5%88%9B%E5%BB%BA%E8%8A%82%E7%82%B9-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0&#34; &gt;查看节点&lt;/a&gt;{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0&#34; &gt;查看节点状态&lt;/a&gt;{#%E6%9F%A5%E7%9C%8B%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0&#34; &gt;更新节点&lt;/a&gt;{#%E6%9B%B4%E6%96%B0%E8%8A%82%E7%82%B9%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9&#34; &gt;删除节点&lt;/a&gt;{#%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%80%E5%87%BAZK%C2%A0&#34; &gt;退出ZK&lt;/a&gt;{#%E9%80%80%E5%87%BAZK%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF&#34; &gt;应用场景&lt;/a&gt;{#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1&#34; &gt;统一命名服务&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86&#34; &gt;统一配置管理&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86&#34; &gt;统一集群管理&lt;/a&gt;{#%E7%BB%9F%E4%B8%80%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF&#34; &gt;服务器动态上下线&lt;/a&gt;{#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E7%BA%BF-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1&#34; &gt;软负载均衡&lt;/a&gt;{#%E8%BD%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81&#34; &gt;分布式锁&lt;/a&gt;{#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89&#34; &gt;拜占庭将军问题（Paxos算法）&lt;/a&gt;{#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98%EF%BC%88Paxos%E7%AE%97%E6%B3%95%EF%BC%89-toc}&lt;/p&gt;
-&lt;br /&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0&#34; &gt;算法描述&lt;/a&gt;{#%E7%AE%97%E6%B3%95%E6%8F%8F%E8%BF%B0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B&#34; &gt;算法流程&lt;/a&gt;{#%C2%A0%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ZAB%E5%8D%8F%E8%AE%AE&#34; &gt;ZAB协议&lt;/a&gt;{#ZAB%E5%8D%8F%E8%AE%AE-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D&#34; &gt;崩溃恢复&lt;/a&gt;{#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD&#34; &gt;消息广播&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA&#34; &gt;​编辑 CAP理论&lt;/a&gt;{#%E2%80%8B%E7%BC%96%E8%BE%91%C2%A0CAP%E7%90%86%E8%AE%BA-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0&#34; &gt;ZK源码图示&lt;/a&gt;{#ZK%E6%BA%90%E7%A0%81%E5%9B%BE%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98&#34; &gt;小小面试题&lt;/a&gt;{#%E5%B0%8F%E5%B0%8F%E9%9D%A2%E8%AF%95%E9%A2%98-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6&#34; &gt;选举机制&lt;/a&gt;{#%E9%80%89%E4%B8%BE%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F&#34; &gt;生产集群安装多少 zk 合适？&lt;/a&gt;{#%C2%A0%E7%94%9F%E4%BA%A7%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E5%A4%9A%E5%B0%91%20zk%20%E5%90%88%E9%80%82%EF%BC%9F-toc}&lt;/p&gt;
-&lt;hr&gt;
-&lt;br /&gt;
-&lt;h2 id=&#34;概述-e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0-e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述 {#%E6%A6%82%E8%BF%B0}
-&lt;/h2&gt;&lt;p&gt;ZooKeeper 是一个开源的&lt;strong&gt;分布式协调服务&lt;/strong&gt; ，它的设计目标是&lt;strong&gt;为那些高吞吐的大型分布式系统提供一个高性能、高可用、且具有严格顺序访问控制 能力的分布式协调服务&lt;/strong&gt;，并以一系列简单易用的接口提供给用户使用。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ZooKeeper 将数据存全量储在内存中以保持高性能&lt;/strong&gt; ，并通过服务集群来实现高可用，由于 Zookeeper 的所有更新和删除都是&lt;strong&gt;基于事务&lt;/strong&gt; 的，所以其在&lt;strong&gt;读多写少&lt;/strong&gt;的应用场景中有着很高的性能表现。&lt;/p&gt;
-&lt;p&gt;简单来说zookeeper就是动物园管理者，管理协调大数据里面的一堆组件，比如hadoop、hive、habse等等。Zookeeper 可以用于实现分布 式系统中常见的发布/订阅、负载均衡、命令服务、分布式协调/通知、集群管理、Master 选举、分布式 锁和分布式队列等功能。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/52c5a22a85235aee67a43f9656cc3231.png&#34;
+        <description>&lt;h2 id=&#34;概述&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述
+&lt;/h2&gt;&lt;p&gt;ZooKeeper 是一个开源的&lt;strong&gt;分布式协调服务&lt;/strong&gt;，它的设计目标是&lt;strong&gt;为那些高吞吐的大型分布式系统提供一个高性能、高可用、且具有严格顺序访问控制 能力的分布式协调服务&lt;/strong&gt;，并以一系列简单易用的接口提供给用户使用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ZooKeeper 将数据存全量储在内存中以保持高性能&lt;/strong&gt;，并通过服务集群来实现高可用，由于 Zookeeper 的所有更新和删除都是&lt;strong&gt;基于事务&lt;/strong&gt;的，所以其在&lt;strong&gt;读多写少&lt;/strong&gt;的应用场景中有着很高的性能表现。&lt;/p&gt;
+&lt;p&gt;简单来说 zookeeper 就是动物园管理者，管理协调大数据里面的一堆组件，比如 hadoop、hive、habse 等等。Zookeeper 可以用于实现分布 式系统中常见的发布/订阅、负载均衡、命令服务、分布式协调/通知、集群管理、Master 选举、分布式 锁和分布式队列等功能。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-07-55.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;2025-08-01-22-07-55&#34;
+	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;特点-e789b9e782b9&#34;&gt;&lt;a href=&#34;#%e7%89%b9%e7%82%b9-e789b9e782b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;特点 {#%E7%89%B9%E7%82%B9}
+&lt;h2 id=&#34;特点&#34;&gt;&lt;a href=&#34;#%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;特点
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;**顺序一致性：**从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中；&lt;/li&gt;
 &lt;li&gt;**原子性：**所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况，一次数据更新要么成功要么失败。&lt;/li&gt;
-&lt;li&gt;**单一视图（全局数据一致）：**每个server保存相同的数据副本，无论client连接哪个server，看到的数据一致；&lt;/li&gt;
+&lt;li&gt;**单一视图（全局数据一致）：**每个 server 保存相同的数据副本，无论 client 连接哪个 server，看到的数据一致；&lt;/li&gt;
 &lt;li&gt;**可靠性：**一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改；&lt;/li&gt;
 &lt;li&gt;**实时性：**一旦一个事务被成功应用后，在一定时间范围内，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。&lt;/li&gt;
-&lt;li&gt;集群中只要有&lt;strong&gt;半数以上节点存活&lt;/strong&gt;，zk集群就可以正常服务，所以zk适合安装奇数台。&lt;/li&gt;
-&lt;li&gt;一个leader，多个follower，&lt;strong&gt;leader挂掉之后会从follower中重新选举&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;集群中只要有&lt;strong&gt;半数以上节点存活&lt;/strong&gt;，zk 集群就可以正常服务，所以 zk 适合安装奇数台。&lt;/li&gt;
+&lt;li&gt;一个 leader，多个 follower，&lt;strong&gt;leader 挂掉之后会从 follower 中重新选举&lt;/strong&gt;。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;集群配置-e99b86e7bea4e9858de7bdaec2a0&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae-e99b86e7bea4e9858de7bdaec2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群配置 {#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%C2%A0}
-&lt;/h2&gt;&lt;p&gt;可以由一组 Zookeeper服务构成 Zookeeper 集群，集群中每台机器都会单独在内存中维护自身的状 态，并且每台机器之间都保持着通讯，只要集群中有半数机器能够正常工作，那么整个集群就可以正常提供服务。对于来自客户端的每个更新请求，Zookeeper都会分配一个全局唯一的递增 ID，这个 ID 反映了所有事 务请求的先后顺序。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/85357d9780c78177d7fdc98faf789f46.png&#34;
+&lt;h2 id=&#34;集群配置&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e9%85%8d%e7%bd%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群配置  
+&lt;/h2&gt;&lt;p&gt;可以由一组 Zookeeper 服务构成 Zookeeper 集群，集群中每台机器都会单独在内存中维护自身的状 态，并且每台机器之间都保持着通讯，只要集群中有半数机器能够正常工作，那么整个集群就可以正常提供服务。对于来自客户端的每个更新请求，Zookeeper 都会分配一个全局唯一的递增 ID，这个 ID 反映了所有事 务请求的先后顺序。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-08-29.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;2025-08-01-22-08-29&#34;
+	
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;以下是集群环境搭建不是单机环境-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e4%b8%8b%e6%98%af%e9%9b%86%e7%be%a4%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e4%b8%8d%e6%98%af%e5%8d%95%e6%9c%ba%e7%8e%af%e5%a2%83-e4bba5e4b88be698afe99b86e7bea4e78eafe5a283e690ade5bbbaefbc81efbc81e4b88de698afe58d95e69cbae78eafe5a283&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;以下是集群环境搭建！！不是单机环境&lt;/strong&gt; {#%E4%BB%A5%E4%B8%8B%E6%98%AF%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%EF%BC%81%EF%BC%81%E4%B8%8D%E6%98%AF%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83}
+&lt;h3 id=&#34;以下是集群环境搭建不是单机环境&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e4%b8%8b%e6%98%af%e9%9b%86%e7%be%a4%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e4%b8%8d%e6%98%af%e5%8d%95%e6%9c%ba%e7%8e%af%e5%a2%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以下是集群环境搭建！！不是单机环境
 &lt;/h3&gt;&lt;p&gt;解压、安装、配置环境变量并生效这三步省略，直接修改配置：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;进入conf/目录下，拷贝配置样本并进行修改：&lt;/p&gt;
+&lt;p&gt;进入 conf/目录下，拷贝配置样本并进行修改：&lt;/p&gt;
 &lt;p&gt;cp zoo_sample.cfg zoo.cfg&lt;/p&gt;
 &lt;p&gt;指定数据存储目录和日志文件目录（此时还没有目录，稍后手动创建），修改后完整配置如下：&lt;/p&gt;&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;tickTime=2000
-#用于计算的基础时间单元。比如 session 超时：N*tickTime；
-
-initLimit=10
-#用于集群，允许从节点连接并同步到 master 节点的初始化连接时间，以 tickTime 的倍数来表示；
-
-syncLimit=5
-#用于集群， master 主节点与从节点之间发送消息，请求和应答时间长度（心 跳机制）；
-
-dataDir=/export/server/zookeeper/data
-#数据存储位置；稍后手动创建
-
-dataLogDir=/export/server/zookeeper/logs
-#日志目录；稍后手动创建
-
-clientPort=2181
-#用于客户端连接的端口，默认 2181
-
-# server.1 这个1是服务器的标识，可以是任意有效数字，标识这是第几个服务器节点，这个标识要写到
-dataDir目录下面myid文件里，如果没有myid文件要自己创建
-# 指名集群间通讯端口和选举端口
-server.1=linux01:2888:3888
-server.2=linux02:2888:3888
-server.3=linux03:2888:3888
-&lt;/code&gt;&lt;/pre&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;标识节点序号&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cobol&#34; data-lang=&#34;cobol&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;tickTi&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;me&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2000
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#用于计算的&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;基础时间单元。比如&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;session&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;超时：&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;N&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;tickTime&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;；
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;initLi&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;mit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#用于集群，&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;允许从节点连接并同步到&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;master&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;节点的初始化连接时间，以&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;tickTime&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;的倍数来表示；
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;syncLi&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;mit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#用于集群，&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;master&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;主节点与从节点之间发送消息，请求和应答时间长度（心&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;跳机制）；
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;dataDi&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;export&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;zookeeper&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;kr&#34;&gt;data
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#数据存储位&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;置；稍后手动创建
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;dataLo&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;gDir&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;export&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;zookeeper&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;logs&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#日志目录；&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;稍后手动创建
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;client&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;Port&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2181
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#用于客户端&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;连接的端口，默认&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2181
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;# serv&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;er&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1 &lt;/span&gt;&lt;span class=&#34;err&#34;&gt;这个&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;是服务器的标识，可以是任意有效数字，标识这是第几个服务器节点，这个标识要写到
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;dataDi&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;r目录下面myid&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;文件里，如果没有&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;myid&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;文件要自己创建
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;# 指名集群&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;间通讯端口和选举端口
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;linux01&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2888&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3888
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;linux02&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2888&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3888
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;mi&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;linux03&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2888&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3888
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;**标识节点序号  **&lt;/p&gt;
 &lt;p&gt;分别在三台主机的 dataDir 目录下新建 myid 文件,并写入对应的节点标识。Zookeeper 集群通过 myid 文件识别集群节点，并通过上文配置的节点通信端口和选举端口来进行节点通信，选举出 Leader 节点。&lt;/p&gt;
-&lt;p&gt;在&lt;strong&gt;每个服务器&lt;/strong&gt;上的/export/server/zookeeper/下创建data目录，在里面创建myid文件并写入各自序号，这个序号必须和zoo.cfg文件的序号相同。
-&lt;strong&gt;分别在三台主机上启动ZK集群&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;每个服务器&lt;/strong&gt;上的/export/server/zookeeper/下创建 data 目录，在里面创建 myid 文件并写入各自序号，这个序号必须和 zoo.cfg 文件的序号相同。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;**分别在三台主机上启动 ZK 集群  **&lt;/p&gt;
 &lt;p&gt;zkServer.sh start&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;集群验证&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;zkServer.sh status&lt;/p&gt;
-&lt;p&gt;可以看到一个leader，两个follower，那么zk集群配置成功&lt;/p&gt;
+&lt;p&gt;可以看到一个 leader，两个 follower，那么 zk 集群配置成功&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;启动客户端&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;zkCli.sh&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;集群角色-e99b86e7bea4e8a792e889b2&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e8%a7%92%e8%89%b2-e99b86e7bea4e8a792e889b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群角色 {#%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2}
-&lt;/h2&gt;&lt;p&gt;ZK集群有一个leader和多个follower。&lt;/p&gt;
-&lt;h3 id=&#34;Leader&#34;&gt;&lt;a href=&#34;#Leader&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Leader
+&lt;h2 id=&#34;集群角色&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e8%a7%92%e8%89%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群角色
+&lt;/h2&gt;&lt;p&gt;ZK 集群有一个 leader 和多个 follower。&lt;/p&gt;
+&lt;h3 id=&#34;leader&#34;&gt;&lt;a href=&#34;#leader&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Leader
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;为客户端提供读写服务，并维护集群状态，它是由集群选举所产生的；&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;Follower&#34;&gt;&lt;a href=&#34;#Follower&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Follower
+&lt;h3 id=&#34;follower&#34;&gt;&lt;a href=&#34;#follower&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Follower
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态。同时也参与写操作 &amp;ldquo;过半写成功&amp;quot;的策略和 Leader 的选举；&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;Observer&#34;&gt;&lt;a href=&#34;#Observer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Observer
+&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态。同时也参与写操作 “过半写成功”的策略和 Leader 的选举；&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;observer&#34;&gt;&lt;a href=&#34;#observer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Observer
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态，但不参与写操作&amp;quot;过 半写成功&amp;quot;的策略和 Leader 的选举，因此 Observer 可以在不影响写性能的情况下提升集群的读性 能。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;会话-e4bc9ae8af9d&#34;&gt;&lt;a href=&#34;#%e4%bc%9a%e8%af%9d-e4bc9ae8af9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;会话 {#%E4%BC%9A%E8%AF%9D}
+&lt;p&gt;为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态，但不参与写操作“过 半写成功”的策略和 Leader 的选举，因此 Observer 可以在不影响写性能的情况下提升集群的读性 能。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;会话&#34;&gt;&lt;a href=&#34;#%e4%bc%9a%e8%af%9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;会话
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Zookeeper 客户端通过 TCP 长连接连接到服务集群，会话 (Session) 从第一次连接开始就已经建立，之 后通过心跳检测机制来保持有效的会话状态。通过这个连接，客户端可以发送请求并接收响应，同时也 可以接收到 Watch 事件的通知。&lt;/li&gt;
 &lt;li&gt;关于会话中另外一个核心的概念是 &lt;strong&gt;sessionTimeOut(会话超时时间)&lt;/strong&gt;，当由于网络故障或者客户端主动 断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;Watcher&#34;&gt;&lt;a href=&#34;#Watcher&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Watcher
-&lt;/h2&gt;&lt;p&gt;Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注 册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是Zookeeper 实现分布式协调服务的重要特性。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f2f283cc4b622d03d766b780723fc6ce.png&#34;
+&lt;h2 id=&#34;watcher&#34;&gt;&lt;a href=&#34;#watcher&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Watcher
+&lt;/h2&gt;&lt;p&gt;Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注 册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是 Zookeeper 实现分布式协调服务的重要特性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-09-09.png&#34;
 	
 	
 	
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;2025-08-01-22-09-09&#34;
+	
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;节点的值变化监听-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%9a%84%e5%80%bc%e5%8f%98%e5%8c%96%e7%9b%91%e5%90%ac-e88a82e782b9e79a84e580bce58f98e58c96e79b91e590acc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点的值变化监听 {#%E8%8A%82%E7%82%B9%E7%9A%84%E5%80%BC%E5%8F%98%E5%8C%96%E7%9B%91%E5%90%AC%C2%A0}
+&lt;h3 id=&#34;节点的值变化监听&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%9a%84%e5%80%bc%e5%8f%98%e5%8c%96%e7%9b%91%e5%90%ac&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点的值变化监听  
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;1）在linux01主机上注册监听/sanguo 节点数据变化&lt;/p&gt;
-\[zk: localhost:2181(CONNECTED) 26\]&lt;p&gt; get -w /sanguo&lt;/p&gt;
-&lt;p&gt;2）在linux02主机上修改/sanguo 节点的数据&lt;/p&gt;
-\[zk: localhost:2181(CONNECTED) 1\]&lt;p&gt; set /sanguo &amp;ldquo;xisi&amp;rdquo;&lt;/p&gt;
-&lt;p&gt;3）观察linux01主机收到数据变化的监听&lt;/p&gt;
+&lt;p&gt;1）在 linux01 主机上注册监听/sanguo 节点数据变化&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 26] get -w /sanguo&lt;/p&gt;
+&lt;p&gt;2）在 linux02 主机上修改/sanguo 节点的数据&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 1] set /sanguo &amp;ldquo;xisi&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;3）观察 linux01 主机收到数据变化的监听&lt;/p&gt;
 &lt;p&gt;WATCHER::&lt;/p&gt;
-&lt;p&gt;WatchedEvent state:SyncConnected ype:NodeDataChanged&lt;/p&gt;
+&lt;p&gt;WatchedEvent        state:SyncConnected         ype:NodeDataChanged&lt;/p&gt;
 &lt;p&gt;path:/sanguo&lt;/p&gt;
-&lt;p&gt;注意：在linux02再多次修改/sanguo的值，linux01上不会再收到监听。&amp;lt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
+&lt;p&gt;注意：在 linux02 再多次修改/sanguo 的值，linux01 上不会再收到监听。因为注册 一次，只能监听一次。想再次监听，需要再次注册。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;节点的子节点变化监听路径变化&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%9a%84%e5%ad%90%e8%8a%82%e7%82%b9%e5%8f%98%e5%8c%96%e7%9b%91%e5%90%ac%e8%b7%af%e5%be%84%e5%8f%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点的子节点变化监听（路径变化）
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;1）在 linux01 主机上注册监听/sanguo 节点的子节点变化&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 1] ls -w /sanguo [shuguo, weiguo]&lt;/p&gt;
+&lt;p&gt;2）在 linux02  主机/sanguo 节点上创建子节点&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 2] create /sanguo/jin &amp;ldquo;simayi&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Created /sanguo/jin&lt;/p&gt;
+&lt;p&gt;3）观察  linux01 主机收到子节点变化的监听&lt;/p&gt;
+&lt;p&gt;WATCHER::&lt;/p&gt;
+&lt;p&gt;WatchedEvent        state:SyncConnected        type:NodeChildrenChanged&lt;/p&gt;
+&lt;p&gt;path:/sanguo&lt;/p&gt;
+&lt;p&gt;注意：节点的路径变化，也是注册一次，生效一次。想多次生效，就需要多次注册&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;工作机制&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工作机制
+&lt;/h2&gt;&lt;p&gt;从设计模式的角度来理解，zk 是基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应。&lt;/p&gt;
+&lt;p&gt;集群中只要有半数以上节点存活，Zookeeper 集群就能正常服务。所以 Zookeeper 适合安装奇数台服务器。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-09-29.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-09-29&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;客户端向服务端写数据流程&#34;&gt;&lt;a href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%90%91%e6%9c%8d%e5%8a%a1%e7%ab%af%e5%86%99%e6%95%b0%e6%8d%ae%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;客户端向服务端写数据流程
+&lt;/h3&gt;&lt;h4 id=&#34;写请求发给-leader&#34;&gt;&lt;a href=&#34;#%e5%86%99%e8%af%b7%e6%b1%82%e5%8f%91%e7%bb%99-leader&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;写请求发给 leader
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-09-51.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-09-51&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;写请求发给-follower&#34;&gt;&lt;a href=&#34;#%e5%86%99%e8%af%b7%e6%b1%82%e5%8f%91%e7%bb%99-follower&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;写请求发给 follower
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-05.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-10-05&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;客户端向服务端读数据流程&#34;&gt;&lt;a href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%90%91%e6%9c%8d%e5%8a%a1%e7%ab%af%e8%af%bb%e6%95%b0%e6%8d%ae%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;客户端向服务端读数据流程
+&lt;/h3&gt;&lt;p&gt;由于 ZK 满足的是 CAP 中的 CP，，没有满足 Available，因此读出的数据可能是老数据。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-15.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-10-15&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;选举机制&#34;&gt;&lt;a href=&#34;#%e9%80%89%e4%b8%be%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;选举机制
+&lt;/h2&gt;&lt;h3 id=&#34;初次启动&#34;&gt;&lt;a href=&#34;#%e5%88%9d%e6%ac%a1%e5%90%af%e5%8a%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;初次启动
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-26.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-10-26&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;非处次启动&#34;&gt;&lt;a href=&#34;#%e9%9d%9e%e5%a4%84%e6%ac%a1%e5%90%af%e5%8a%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;非处次启动
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-33.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-10-33&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;集群脑裂&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e8%84%91%e8%a3%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群脑裂
+&lt;/h3&gt;&lt;p&gt;对于一个集群，通常多台机器会部署在不同机房，来提高这个集群的可用性。保证可用性的同时，会发生一种机房间网络线路故障，导致机房间网络不通，而集群被割裂成几个小集群。这时候子集群各自选主导致“脑裂”的情况。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;过半机制是如何防止脑裂现象产生的？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ZooKeeper 的过半机制导致不可能产生 2 个 leader，因为少于等于一半是不可能产生 leader 的，这就使得不论机房的机器如何分配都不可能发生脑裂。&lt;/p&gt;
+&lt;h2 id=&#34;数据模型&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e6%a8%a1%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据模型
+&lt;/h2&gt;&lt;p&gt;Zookeeper 数据模型是由一系列基本数据单元 Znode (数据节点) 组成的节点树，其中根节点为 / ，每个节点上都会保存自己的数据和节点信息。不过和常见的文件系统不同，Zookeeper 将数据全量存储在内存中，以此来实现高吞吐，减少访 问延迟。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-44.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-10-44&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;节点类型&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点类型
+&lt;/h3&gt;&lt;p&gt;Zookeeper 中节点可以分为两大类：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;**持久节点 ：**节点一旦创建，除非被主动删除，否则一直存在；&lt;/p&gt;
+&lt;p&gt;**临时节点 ：**一旦创建该节点的客户端会话失效，则所有该客户端创建的临时节点都会被删除。&lt;/p&gt;
+&lt;p&gt;临时节点和持久节点都可以添加一个特殊的属性： SEQUENTIAL ，代表该节点是否具有递增属性。如果指定该属性，那么在这个节点创建时，Zookeeper 会自动在其节点名称后面追加一个由父节点维护的递增数字。这个递增数字可以被用于为所有的事件进行全局排序，这样客户端可以通过顺序号推断事件的顺序。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;节点信息&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e4%bf%a1%e6%81%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点信息
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-57.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-10-57&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;集群操作&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e6%93%8d%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集群操作
+&lt;/h2&gt;&lt;h3 id=&#34;创建节点&#34;&gt;&lt;a href=&#34;#%e5%88%9b%e5%bb%ba%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;创建节点
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;create [-s] [-e] path data acl   #其中-s 为有序节点，-e 临时节点&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;创建有序节点，此时创建的节点名为指定节点名 + 自增序号：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 23] create -s /a  &amp;ldquo;aaa&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Created /a0000000022&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 24] create -s /b  &amp;ldquo;bbb&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Created /b0000000023&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 25] create -s /c  &amp;ldquo;ccc&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Created /c0000000024&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;创建临时节点，临时节点会在会话过期后被删除：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 26] create -e /tmp  &amp;ldquo;tmp&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Created /tmp&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;查看节点&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;查看节点  
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;get path [watch]&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 31] get /hadoop&lt;/p&gt;
+&lt;p&gt;123456   #节点数据&lt;/p&gt;
+&lt;p&gt;cZxid = 0x14b&lt;/p&gt;
+&lt;p&gt;ctime = Fri May 24 17:03:06 CST 2019&lt;/p&gt;
+&lt;p&gt;mZxid = 0x14b&lt;/p&gt;
+&lt;p&gt;mtime = Fri May 24 17:03:06 CST 2019&lt;/p&gt;
+&lt;p&gt;pZxid = 0x14b&lt;/p&gt;
+&lt;p&gt;cversion = 0&lt;/p&gt;
+&lt;p&gt;dataVersion = 0&lt;/p&gt;
+&lt;p&gt;aclVersion = 0&lt;/p&gt;
+&lt;p&gt;ephemeralOwner = 0x0&lt;/p&gt;
+&lt;p&gt;dataLength = 6&lt;/p&gt;
+&lt;p&gt;numChildren = 0&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;节点各个属性如下表。其中一个重要的概念是 Zxid(ZooKeeper Transaction Id)，ZooKeeper 节点的 每一次更改都具有唯一的 Zxid，如果 Zxid1 小于 Zxid2，则 Zxid1 的更改发生在 Zxid2 更改之前。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-11-14.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-11-14&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;查看节点状态&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b%e8%8a%82%e7%82%b9%e7%8a%b6%e6%80%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;查看节点状态  
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;stat path [watch]&lt;/p&gt;
+&lt;p&gt;它和 get 类似，但不会返回节点数据内容&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;更新节点&#34;&gt;&lt;a href=&#34;#%e6%9b%b4%e6%96%b0%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;更新节点  
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 33] set /hadoop 345&lt;/p&gt;
+&lt;p&gt;cZxid = 0x14b&lt;/p&gt;
+&lt;p&gt;ctime = Fri May 24 17:03:06 CST 2019&lt;/p&gt;
+&lt;p&gt;mZxid = 0x14c&lt;/p&gt;
+&lt;p&gt;mtime = Fri May 24 17:13:05 CST 2019&lt;/p&gt;
+&lt;p&gt;pZxid = 0x14b&lt;/p&gt;
+&lt;p&gt;cversion = 0&lt;/p&gt;
+&lt;p&gt;dataVersion = 1  # 注意更改后此时版本号为 1，默认创建时为 0&lt;/p&gt;
+&lt;p&gt;aclVersion = 0&lt;/p&gt;
+&lt;p&gt;ephemeralOwner = 0x0&lt;/p&gt;
+&lt;p&gt;dataLength = 3&lt;/p&gt;
+&lt;p&gt;numChildren = 0&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;也可以基于版本号进行更改，此时类似于乐观锁机制，当你传入的数据版本号 (dataVersion) 和当前节 点的数据版本号不符合时，zookeeper 会拒绝本次修改：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 34] set /hadoop 678 0&lt;/p&gt;
+&lt;p&gt;version No is not valid : /hadoop    #无效的版本号&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;删除节点&#34;&gt;&lt;a href=&#34;#%e5%88%a0%e9%99%a4%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;删除节点
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;delete path [version]&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;和更新节点数据一样，也可以传入版本号，当你传入的数据版本号 (dataVersion) 和当前节点的数据版 本号不符合时，zookeeper 不会执行删除操作。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 36] delete /hadoop 0&lt;/p&gt;
+&lt;p&gt;version No is not valid : /hadoop   #无效的版本号&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 37] delete /hadoop 1&lt;/p&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 38]&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;要想删除某个节点及其所有后代节点，可以使用递归删除，命令为 **rmr path **。&lt;/p&gt;
+&lt;h3 id=&#34;退出-zk&#34;&gt;&lt;a href=&#34;#%e9%80%80%e5%87%ba-zk&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;退出 ZK 
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;[zk: localhost:2181(CONNECTED) 12] quit&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;应用场景&#34;&gt;&lt;a href=&#34;#%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;应用场景
+&lt;/h2&gt;&lt;h3 id=&#34;统一命名服务&#34;&gt;&lt;a href=&#34;#%e7%bb%9f%e4%b8%80%e5%91%bd%e5%90%8d%e6%9c%8d%e5%8a%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;统一命名服务
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-11-27.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-11-27&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;统一配置管理&#34;&gt;&lt;a href=&#34;#%e7%bb%9f%e4%b8%80%e9%85%8d%e7%bd%ae%e7%ae%a1%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;统一配置管理
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-11-36.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-11-36&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;统一集群管理&#34;&gt;&lt;a href=&#34;#%e7%bb%9f%e4%b8%80%e9%9b%86%e7%be%a4%e7%ae%a1%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;统一集群管理
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-11-46.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-11-46&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;服务器动态上下线&#34;&gt;&lt;a href=&#34;#%e6%9c%8d%e5%8a%a1%e5%99%a8%e5%8a%a8%e6%80%81%e4%b8%8a%e4%b8%8b%e7%ba%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;服务器动态上下线
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-11-56.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-11-56&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;软负载均衡&#34;&gt;&lt;a href=&#34;#%e8%bd%af%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;软负载均衡
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-12-03.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-12-03&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分布式锁&#34;&gt;&lt;a href=&#34;#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分布式锁
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-12-10.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-12-10&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;拜占庭将军问题paxos-算法&#34;&gt;&lt;a href=&#34;#%e6%8b%9c%e5%8d%a0%e5%ba%ad%e5%b0%86%e5%86%9b%e9%97%ae%e9%a2%98paxos-%e7%ae%97%e6%b3%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;拜占庭将军问题（Paxos 算法）
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-12-20.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-12-20&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Paxos 算法是一种基于消息传递且具有高度容错特性的一致性算法。解决如何快速正确的在一个分布式系统中对某个数据值达成一致，并且保证任何异常都不会破坏整个系统的一致性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-12-34.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-12-34&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;算法描述&#34;&gt;&lt;a href=&#34;#%e7%ae%97%e6%b3%95%e6%8f%8f%e8%bf%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;算法描述
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-12-42.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-12-42&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;算法流程&#34;&gt;&lt;a href=&#34;#%e7%ae%97%e6%b3%95%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  算法流程
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-12-51.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-12-51&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-13-02.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-13-02&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;zab-协议&#34;&gt;&lt;a href=&#34;#zab-%e5%8d%8f%e8%ae%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ZAB 协议
+&lt;/h2&gt;&lt;p&gt;ZAB 协议并不像 Paxos 算法那样是一种通用的分布式一致性算法，ZAB 是一种特别为 Zookeeper 设计的崩溃可恢复的原子消息广播算法。在 ZooKeeper 中，主要依赖 ZAB 协议来实现分布式数据一致性，基于该协议，ZooKeeper 实现了一种主备模式的系统架构来保持集群中各个副本之间的数据一致性。ZAB 包括以下两种模式:&lt;/p&gt;
+&lt;h3 id=&#34;崩溃恢复&#34;&gt;&lt;a href=&#34;#%e5%b4%a9%e6%ba%83%e6%81%a2%e5%a4%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;崩溃恢复
+&lt;/h3&gt;&lt;p&gt;当整个服务框架在启动过程中，或是当 Leader 服务器出现网络中断、崩溃退出与重启等异常情况时，ZAB 协议就会进入恢复模式并选举产生新的 Leader 服务器。当选举产生了新的 Leader 服务器，同时集群中已经有过半的机器与该 Leader 服务器完成了状态同步之后，ZAB 协议就会退出恢复模式。其中，&lt;strong&gt;所谓的状态同步是指数据同步，用来保证集群中存在过半的机器能够和 Leader 服务器的数据状态保持一致&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-13-26.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-13-26&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-13-54.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-13-54&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;消息广播&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e5%b9%bf%e6%92%ad&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息广播
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;当集群中已经有过半的 Follower 服务器完成了和 Leader 服务器的状态同步，那么整个服务框架就可以进入消息广播模式了。&lt;/strong&gt; 当一台同样遵守 ZAB 协议的服务器启动后加入到集群中时，如果此时集群中已经存在一个 Leader 服务器在负责进行消息广播，那么新加入的服务器就会自觉地进入数据恢复模式：找到 Leader 所在的服务器，并与其进行数据同步，然后一起参与到消息广播流程中去。
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-14-26.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-14-26&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-14-52.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-14-52&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;cap-理论&#34;&gt;&lt;a href=&#34;#cap-%e7%90%86%e8%ae%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CAP 理论
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-15-34.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-15-34&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;zk-源码图示&#34;&gt;&lt;a href=&#34;#zk-%e6%ba%90%e7%a0%81%e5%9b%be%e7%a4%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ZK 源码图示  
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-15-43.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-15-43&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-17-12.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-17-12&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-17-01.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-17-01&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-16-53.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-16-53&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-16-36.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2025-08-01-22-16-36&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;小小面试题&#34;&gt;&lt;a href=&#34;#%e5%b0%8f%e5%b0%8f%e9%9d%a2%e8%af%95%e9%a2%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;小小面试题
+&lt;/h2&gt;&lt;h3 id=&#34;选举机制-1&#34;&gt;&lt;a href=&#34;#%e9%80%89%e4%b8%be%e6%9c%ba%e5%88%b6-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;选举机制
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;半数机制，超过半数的投票通过，即通过。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;第一次启动选举规则： 投票过半数时，服务器 id 大的胜出&lt;/li&gt;
+&lt;li&gt;第二次启动选举规则：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;EPOCH 大的直接胜出&lt;/p&gt;
+&lt;p&gt;EPOCH 相同，事务 id 大的胜出&lt;/p&gt;
+&lt;p&gt;事务 id 相同，服务器 id 大的胜出&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;生产集群安装多少-zk-合适&#34;&gt;&lt;a href=&#34;#%e7%94%9f%e4%ba%a7%e9%9b%86%e7%be%a4%e5%ae%89%e8%a3%85%e5%a4%9a%e5%b0%91-zk-%e5%90%88%e9%80%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  生产集群安装多少 zk 合适？
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;安装奇数台。&lt;/p&gt;
+&lt;p&gt;生产经验：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;10 台服务器：3 台 zk；&lt;/li&gt;
+&lt;li&gt;20 台服务器：5 台 zk；&lt;/li&gt;
+&lt;li&gt;100 台服务器：11 台 zk；&lt;/li&gt;
+&lt;li&gt;200 台服务器：11 台 zk&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
@@ -14738,7 +15165,7 @@ hdfs fsck path [-files [-blocks [-location]]]
         
         <guid>/zh-cn/post/2023/08/const%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%84%8F%E4%B9%89-----const-int-p%E5%92%8Cint-const-p/</guid>
         <description>&lt;h2 id=&#34;1修饰变量&#34;&gt;&lt;a href=&#34;#1%e4%bf%ae%e9%a5%b0%e5%8f%98%e9%87%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.修饰变量
-&lt;/h2&gt;&lt;h3 id=&#34;11const-int-p&#34;&gt;&lt;a href=&#34;#11const-int-p&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.const int* p
+&lt;/h2&gt;&lt;h3 id=&#34;const-int-p&#34;&gt;&lt;a href=&#34;#const-int-p&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;const int* p
 &lt;/h3&gt;&lt;br /&gt;
 &lt;pre&gt;&lt;code&gt;int n=10;
 int m=20;
@@ -14748,7 +15175,7 @@ const int* p=&amp;amp;m;
 p=&amp;amp;n;
 printf(&amp;quot;%d&amp;quot;,*p);//打印结果是10
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;12-int-const-p&#34;&gt;&lt;a href=&#34;#12-int-const-p&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2. int* const p
+&lt;h3 id=&#34;int-const-p&#34;&gt;&lt;a href=&#34;#int-const-p&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;int* const p
 &lt;/h3&gt;&lt;pre&gt;&lt;code&gt;int n=10;
 int m=20;
 int* const p=&amp;amp;n;
@@ -14759,15 +15186,15 @@ int* const p=&amp;amp;n;
 printf(&amp;quot;*p=%d,n=&amp;quot;,*p,n);//打印结果为60，60
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&#34;2修饰函数&#34;&gt;&lt;a href=&#34;#2%e4%bf%ae%e9%a5%b0%e5%87%bd%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.修饰函数
-&lt;/h2&gt;&lt;h3 id=&#34;21修饰函数的形参&#34;&gt;&lt;a href=&#34;#21%e4%bf%ae%e9%a5%b0%e5%87%bd%e6%95%b0%e7%9a%84%e5%bd%a2%e5%8f%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1.修饰函数的形参
+&lt;/h2&gt;&lt;h3 id=&#34;修饰函数的形参&#34;&gt;&lt;a href=&#34;#%e4%bf%ae%e9%a5%b0%e5%87%bd%e6%95%b0%e7%9a%84%e5%bd%a2%e5%8f%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;修饰函数的形参
 &lt;/h3&gt;&lt;pre&gt;&lt;code&gt;void StringCopy(char* dest, const char* src);
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这个字符串copy函数中，把src指向的字符串复制到dest中，也就是src的值是不需要改变的，而dest指针指向的值改变。对*src加上const后就可以防止其中的值被修改，起到保护作用。&lt;/p&gt;
+&lt;p&gt;这个字符串 copy 函数中，把 src 指向的字符串复制到 dest 中，也就是 src 的值是不需要改变的，而 dest 指针指向的值改变。对*src 加上 const 后就可以防止其中的值被修改，起到保护作用。&lt;/p&gt;
 &lt;p&gt;而起到保护作呕也能够的原因是：&lt;/p&gt;
-&lt;p&gt;在实参中，指针会指向一段内存地址，调用函数之后，函数会产生一个临时指针变量，这个临时指针变量的地址与实参的地址不同，但却指向同一块空间地址。那么**形参加上const 修饰之后，保护了这一块内存地址不被修改，如果刻意修改这一块内存，编译器会报错。当然，如果使用c++中的引用，效率会比指针更高，因为引用本身是一个变量，而这个变量仅仅是另外一个变量的别名，它不是指针，不占用内存空间，不会产生临时指针变量，并且不存在NULL空引用，无需assert，比指针更安全。**同时，理论上指针的级数没有限制;但引用只有一级。&lt;/p&gt;
+&lt;p&gt;在实参中，指针会指向一段内存地址，调用函数之后，函数会产生一个临时指针变量，这个临时指针变量的地址与实参的地址不同，但却指向同一块空间地址。那么**形参加上 const 修饰之后，保护了这一块内存地址不被修改，如果刻意修改这一块内存，编译器会报错。当然，如果使用 c++中的引用，效率会比指针更高，因为引用本身是一个变量，而这个变量仅仅是另外一个变量的别名，它不是指针，不占用内存空间，不会产生临时指针变量，并且不存在 NULL 空引用，无需 assert，比指针更安全。**同时，理论上指针的级数没有限制;但引用只有一级。&lt;/p&gt;
 &lt;p&gt;即不存在引用的引用，但可以有指针的指针。&lt;/p&gt;
-&lt;h3 id=&#34;22修饰函数的返回值&#34;&gt;&lt;a href=&#34;#22%e4%bf%ae%e9%a5%b0%e5%87%bd%e6%95%b0%e7%9a%84%e8%bf%94%e5%9b%9e%e5%80%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.2.修饰函数的返回值
-&lt;/h3&gt;&lt;p&gt;如果用const修饰返回值类型为指针，那么函数返回值（即指针）的内容不能被修改，该返回值只能被赋给加const 修饰的同类型指针。&lt;/p&gt;
+&lt;h3 id=&#34;修饰函数的返回值&#34;&gt;&lt;a href=&#34;#%e4%bf%ae%e9%a5%b0%e5%87%bd%e6%95%b0%e7%9a%84%e8%bf%94%e5%9b%9e%e5%80%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;修饰函数的返回值
+&lt;/h3&gt;&lt;p&gt;如果用 const 修饰返回值类型为指针，那么函数返回值（即指针）的内容不能被修改，该返回值只能被赋给加 const 修饰的同类型指针。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;const char * GetString(void);
 //const修饰的函数返回值类型是char*
 &lt;/code&gt;&lt;/pre&gt;
@@ -14776,8 +15203,6 @@ printf(&amp;quot;*p=%d,n=&amp;quot;,*p,n);//打印结果为60，60
 
 const char *str = GetString();//正确
 &lt;/code&gt;&lt;/pre&gt;
-&lt;br /&gt;
----
 </description>
         </item>
         <item>
@@ -14787,7 +15212,7 @@ const char *str = GetString();//正确
         
         <guid>/zh-cn/post/2023/08/c-%E6%8C%87%E9%92%88%E8%BF%9B%E9%98%B6--%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88-%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84-%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%8F%8A%E4%BC%A0%E5%8F%82/</guid>
         <description>&lt;h2 id=&#34;引导图&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e5%af%bc%e5%9b%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引导图
-&lt;/h2&gt;&lt;h2 id=&#34;2025-08-01-21-46-22&#34;&gt;&lt;a href=&#34;#2025-08-01-21-46-22&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-46-22.png&#34;
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-46-22.png&#34;
 	
 	
 	
@@ -14796,10 +15221,10 @@ const char *str = GetString();//正确
 		alt=&#34;2025-08-01-21-46-22&#34;
 	
 	
-&gt;
-&lt;/h2&gt;&lt;br /&gt;
+&gt;&lt;/p&gt;
+&lt;br /&gt;
 &lt;h2 id=&#34;正文&#34;&gt;&lt;a href=&#34;#%e6%ad%a3%e6%96%87&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;正文
-&lt;/h2&gt;&lt;h3 id=&#34;1数组指针&#34;&gt;&lt;a href=&#34;#1%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.数组指针
+&lt;/h2&gt;&lt;h3 id=&#34;数组指针&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数组指针
 &lt;/h3&gt;&lt;p&gt;先不讨论什么是数组指针，举个例子&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -14855,10 +15280,8 @@ const char *str = GetString();//正确
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;当然，若原数组&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arr元素为int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;那么数组指针写成&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;parr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;记住，它只是一个数组指针，只负责指向一个数组，至于数组的元素类型是 int 还是 int*，元素个数是&lt;/p&gt;
-\[5\]&lt;p&gt;还是&lt;/p&gt;
-\[6\]&lt;p&gt;,都是它所指向的数组决定的，而非指针决定，以下所有内容均可这样理解。至于为何写成（*parr）而不是*parr，这和符号优先级有关，看完下文的&amp;quot;指针数组&amp;quot;就明白了~&lt;/p&gt;
-&lt;h4 id=&#34;11数组指针作为形参接收二维数组&#34;&gt;&lt;a href=&#34;#11%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e4%bd%9c%e4%b8%ba%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e4%ba%8c%e7%bb%b4%e6%95%b0%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1.数组指针作为形参接收二维数组
+&lt;/div&gt;&lt;p&gt;记住，它只是一个数组指针，只负责指向一个数组，至于数组的元素类型是 int 还是 int*，元素个数是 5 还是 6,都是它所指向的数组决定的，而非指针决定，以下所有内容均可这样理解。至于为何写成（*parr）而不是*parr，这和符号优先级有关，看完下文的&amp;quot;指针数组&amp;quot;就明白了~&lt;/p&gt;
+&lt;h4 id=&#34;数组指针作为形参接收二维数组&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e4%bd%9c%e4%b8%ba%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e4%ba%8c%e7%bb%b4%e6%95%b0%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数组指针作为形参接收二维数组
 &lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -14930,7 +15353,7 @@ const char *str = GetString();//正确
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;test1 中，二维数组作形参接收二维数组参数，没毛病；在 test2 中，首先要说明的是，二维数组作为参数传参，传过去的是二维数组的第一行的地址（看个人理解），也就是 parr 里面放的是{9，8，7}这个一维数组的地址。我们让其+i 就是第 i 行的地址，然后*（parr+i），把第 i 行的地址取出来，再+j，此时得到第 i 行的第 j 个元素的地址(*(parr+i)+j)，再对其解引用*(*(parr+i)+j)得到第 i 行第 j 个元素的值。至于 test3，形参是整型指针，而实参是一个一维数组的地址，要用数组指针接收才行，错。test4，形参是整型指针数组，用来接收整型指针，而我们的实参是一维数组地址，驴唇不对马嘴，pass。test5，形参是二级指针，用来接收一级指针变量的地址或者二级指针，同样驴唇不对马嘴，pass。&lt;/p&gt;
-&lt;h3 id=&#34;2指针数组&#34;&gt;&lt;a href=&#34;#2%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.指针数组
+&lt;h3 id=&#34;指针数组&#34;&gt;&lt;a href=&#34;#%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;指针数组
 &lt;/h3&gt;&lt;p&gt;同上，先不讨论什么是指针数组，举个例子&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -14983,7 +15406,7 @@ const char *str = GetString();//正确
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;没错，只要是 int*类型的都可以放到数组 parr 里，因为 parr 就是存放整型指针的数组。&lt;/p&gt;
 &lt;p&gt;不用管数组 arr 里面几个元素，我们已经在 parr 里面放了数组 arr 的首元素地址，那么就可以借此访问数组 arr 的所有元素。&lt;/p&gt;
-&lt;h3 id=&#34;3指向指针数组的数组指针&#34;&gt;&lt;a href=&#34;#3%e6%8c%87%e5%90%91%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84%e7%9a%84%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3.指向指针数组的数组指针
+&lt;h3 id=&#34;指向指针数组的数组指针&#34;&gt;&lt;a href=&#34;#%e6%8c%87%e5%90%91%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84%e7%9a%84%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;指向指针数组的数组指针
 &lt;/h3&gt;&lt;p&gt;顾名思义，这是一个数组指针，只不过它指向的是指针数组，而这个数组里面存放的是指针。&lt;/p&gt;
 &lt;p&gt;它长个什么样呢？&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -15026,7 +15449,7 @@ const char *str = GetString();//正确
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//当然pc[2]可以写成pc[3],只要&amp;gt;=2就行，因为数组指针pc至少要指向2个指针数组pa和pb
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;4存放数组指针的指针数组&#34;&gt;&lt;a href=&#34;#4%e5%ad%98%e6%94%be%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e7%9a%84%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;4.存放数组指针的指针数组
+&lt;/div&gt;&lt;h3 id=&#34;存放数组指针的指针数组&#34;&gt;&lt;a href=&#34;#%e5%ad%98%e6%94%be%e6%95%b0%e7%bb%84%e6%8c%87%e9%92%88%e7%9a%84%e6%8c%87%e9%92%88%e6%95%b0%e7%bb%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;存放数组指针的指针数组
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -15065,8 +15488,8 @@ const char *str = GetString();//正确
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//同理pc[2]可以写成pc[3]，&amp;gt;=2就行，因为至少要存放2个数组指针pa和pb。
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;5函数指针&#34;&gt;&lt;a href=&#34;#5%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;5.函数指针&lt;/strong&gt;
-&lt;/h3&gt;&lt;h4 id=&#34;51函数指针作形参接收参数&#34;&gt;&lt;a href=&#34;#51%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e4%bd%9c%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e5%8f%82%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;5.1.函数指针作形参接收参数
+&lt;/div&gt;&lt;h3 id=&#34;函数指针&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数指针
+&lt;/h3&gt;&lt;h4 id=&#34;函数指针作形参接收参数&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e4%bd%9c%e5%bd%a2%e5%8f%82%e6%8e%a5%e6%94%b6%e5%8f%82%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数指针作形参接收参数
 &lt;/h4&gt;&lt;p&gt;先看看这个 qsort 函数，是 C 语言库函数之一，用于对任何元素类型的数组排序。它有 4 个形参，第一个是要排序数组的地址，第二个是数组元素个数，第三个是数组元素的字节大小，也就是跨越一个元素的步长，第四个就是本节重点，一个函数指针，用来接收数组排序所需的排序函数，比如冒泡，选择排序&amp;hellip;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-46-52.png&#34;
 	
@@ -15145,7 +15568,7 @@ const char *str = GetString();//正确
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;这就是函数指针。。。&lt;/p&gt;
-&lt;h4 id=&#34;52函数指针接收函数地址&#34;&gt;&lt;a href=&#34;#52%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e6%8e%a5%e6%94%b6%e5%87%bd%e6%95%b0%e5%9c%b0%e5%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;5.2.函数指针接收函数地址
+&lt;h4 id=&#34;函数指针接收函数地址&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88%e6%8e%a5%e6%94%b6%e5%87%bd%e6%95%b0%e5%9c%b0%e5%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数指针接收函数地址
 &lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-21-47-18.png&#34;
 	
 	
@@ -15221,8 +15644,8 @@ const char *str = GetString();//正确
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;//4.(*(void(*) ()) 0) () ---调用0地址处的函数
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;ok本文到此为止nnd-写了我四五个小时&#34;&gt;&lt;a href=&#34;#ok%e6%9c%ac%e6%96%87%e5%88%b0%e6%ad%a4%e4%b8%ba%e6%ad%a2nnd-%e5%86%99%e4%ba%86%e6%88%91%e5%9b%9b%e4%ba%94%e4%b8%aa%e5%b0%8f%e6%97%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;OK，本文到此为止，NND 写了我四五个小时&amp;hellip;.
-&lt;/h2&gt;</description>
+&lt;/div&gt;&lt;p&gt;OK，本文到此为止，NND 写了我四五个小时&amp;hellip;.&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>归档</title>
