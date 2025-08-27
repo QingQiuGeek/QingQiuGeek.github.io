@@ -13,8 +13,8 @@
         <pubDate>Sun, 28 Apr 2024 21:47:38 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/</guid>
-        <description>&lt;h1 id=&#34;事务puttake&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1puttake&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务（Put、Take）
-&lt;/h1&gt;&lt;p&gt;put 事务把数据批处理写入临时缓冲区 putList，，然后 doCommit 去检查 Channel 内存队列是否足够合并，如果不够，就回滚数据，如果够，就把 putList 的数据写入到 Channel，然后由 take 事务从 channel 中拉取，写入到临时缓冲区 takeList，然后把数据从 takeList 发送到 HDFS，发送完毕后清空缓冲区，如果某个数据发送失败，就回滚到 channel。&lt;/p&gt;
+        <description>&lt;h2 id=&#34;事务puttake&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1puttake&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务（Put、Take）
+&lt;/h2&gt;&lt;p&gt;put 事务把数据批处理写入临时缓冲区 putList，，然后 doCommit 去检查 Channel 内存队列是否足够合并，如果不够，就回滚数据，如果够，就把 putList 的数据写入到 Channel，然后由 take 事务从 channel 中拉取，写入到临时缓冲区 takeList，然后把数据从 takeList 发送到 HDFS，发送完毕后清空缓冲区，如果某个数据发送失败，就回滚到 channel。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image.png&#34;
 	width=&#34;1582&#34;
 	height=&#34;660&#34;
@@ -29,8 +29,8 @@
 		data-flex-basis=&#34;575px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h1 id=&#34;架构原理&#34;&gt;&lt;a href=&#34;#%e6%9e%b6%e6%9e%84%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;架构原理
-&lt;/h1&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1.png&#34;
+&lt;h2 id=&#34;架构原理&#34;&gt;&lt;a href=&#34;#%e6%9e%b6%e6%9e%84%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;架构原理
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1.png&#34;
 	width=&#34;1521&#34;
 	height=&#34;758&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1_hu_124a7a8d78fb58bb.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1_hu_8ff7e6529fb82c82.png 1024w&#34;
@@ -45,13 +45,14 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;在拦截阶段可以进行数据过滤清洗，洗掉脏数据。&lt;/p&gt;
-&lt;h2 id=&#34;channelselector&#34;&gt;&lt;a href=&#34;#channelselector&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ChannelSelector
-&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h3 id=&#34;channelselector&#34;&gt;&lt;a href=&#34;#channelselector&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ChannelSelector
+&lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;因为一个 source 可以对应对各 channel&lt;/strong&gt; ，ChannelSelector 的作用就是选出 Event 将要被发往哪个 Channel。其共有两种类型， 分别是 Replicating（复制）和 Multiplexing（多路复用）。 ReplicatingSelector 会将同一个 Event &lt;strong&gt;发往所有&lt;/strong&gt;的 Channel，Multiplexing 会根据自定义的配置，将不同的 Event 发往不同的 Channel，Multiplexing 要结合拦截器使用，Multiplexing 会根据数据的头信息来决定发送到哪个 channel。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;sinkprocessor&#34;&gt;&lt;a href=&#34;#sinkprocessor&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;SinkProcessor&lt;/strong&gt;
-&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h3 id=&#34;sinkprocessor&#34;&gt;&lt;a href=&#34;#sinkprocessor&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;SinkProcessor&lt;/strong&gt;
+&lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;一个 sink 只能绑定一个 channel，一个 channel 能绑定多个 sink。SinkProcessor 共 有 三 种 类 型 ， 分 别 是 DefaultSinkProcessor 、LoadBalancingSinkProcessor 和 FailoverSinkProcessor。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;DefaultSinkProcessor 对 应 的 是 单个的 Sink&lt;/strong&gt; ， LoadBalancingSinkProcessor 和 FailoverSinkProcessor 对应的是 &lt;strong&gt;Sink Group&lt;/strong&gt;,LoadBalancingSinkProcessor 可以实现负载均衡的功能，FailoverSinkProcessor 可以错误恢复的功能。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DefaultSinkProcessor 对 应 的 是 单个的 Sink&lt;/strong&gt; ， LoadBalancingSinkProcessor 和 FailoverSinkProcessor 对应的是 &lt;strong&gt;Sink Group&lt;/strong&gt;,LoadBalancingSinkProcessor 可以实现负载均衡的功能，FailoverSinkProcessor 可以错误恢复的功能。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
 &lt;p&gt;LoadBalancingSinkProcessor 负载均衡：&lt;/p&gt;
 &lt;p&gt;一个 channel 会发给多个 sink&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-2.png&#34;
@@ -67,7 +68,8 @@
 		data-flex-grow=&#34;235&#34;
 		data-flex-basis=&#34;565px&#34;
 	
-&gt;&lt;/p&gt;
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
 &lt;p&gt;FailoverSinkProcessor 故障转移：&lt;/p&gt;
 &lt;p&gt;当一个 sink 故障，任务会转移到其他 sink&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-3.png&#34;
@@ -84,9 +86,9 @@
 		data-flex-basis=&#34;592px&#34;
 	
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;拓扑结构&#34;&gt;&lt;a href=&#34;#%e6%8b%93%e6%89%91%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;拓扑结构
-&lt;/h1&gt;&lt;h2 id=&#34;简单串联&#34;&gt;&lt;a href=&#34;#%e7%ae%80%e5%8d%95%e4%b8%b2%e8%81%94&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;简单串联
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4.png&#34;
+&lt;h2 id=&#34;拓扑结构&#34;&gt;&lt;a href=&#34;#%e6%8b%93%e6%89%91%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;拓扑结构
+&lt;/h2&gt;&lt;h3 id=&#34;简单串联&#34;&gt;&lt;a href=&#34;#%e7%ae%80%e5%8d%95%e4%b8%b2%e8%81%94&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;简单串联
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4.png&#34;
 	width=&#34;1559&#34;
 	height=&#34;773&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4_hu_b3bf8623ae367e4c.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4_hu_d5fef3d1650295f0.png 1024w&#34;
@@ -100,8 +102,8 @@
 		data-flex-basis=&#34;484px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;复制和多路复用&#34;&gt;&lt;a href=&#34;#%e5%a4%8d%e5%88%b6%e5%92%8c%e5%a4%9a%e8%b7%af%e5%a4%8d%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;复制和多路复用
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5.png&#34;
+&lt;h3 id=&#34;复制和多路复用&#34;&gt;&lt;a href=&#34;#%e5%a4%8d%e5%88%b6%e5%92%8c%e5%a4%9a%e8%b7%af%e5%a4%8d%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;复制和多路复用
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5.png&#34;
 	width=&#34;1511&#34;
 	height=&#34;1105&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5_hu_83763143df0f54db.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5_hu_96e82b6105502e3e.png 1024w&#34;
@@ -115,8 +117,8 @@
 		data-flex-basis=&#34;328px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;负载均衡和故障转移&#34;&gt;&lt;a href=&#34;#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e5%92%8c%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;负载均衡和故障转移
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6.png&#34;
+&lt;h3 id=&#34;负载均衡和故障转移&#34;&gt;&lt;a href=&#34;#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e5%92%8c%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;负载均衡和故障转移
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6.png&#34;
 	width=&#34;1412&#34;
 	height=&#34;990&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6_hu_bc1860421569b8f8.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6_hu_778684d95d808a13.png 1024w&#34;
@@ -130,8 +132,8 @@
 		data-flex-basis=&#34;342px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;聚合&#34;&gt;&lt;a href=&#34;#%e8%81%9a%e5%90%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;聚合
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7.png&#34;
+&lt;h3 id=&#34;聚合&#34;&gt;&lt;a href=&#34;#%e8%81%9a%e5%90%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;聚合
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7.png&#34;
 	width=&#34;1116&#34;
 	height=&#34;960&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7_hu_ee6f522aef6ef785.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7_hu_76aeb26deaed92a8.png 1024w&#34;
@@ -145,8 +147,8 @@
 		data-flex-basis=&#34;279px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h1 id=&#34;单源多出口案例&#34;&gt;&lt;a href=&#34;#%e5%8d%95%e6%ba%90%e5%a4%9a%e5%87%ba%e5%8f%a3%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;单源多出口案例
-&lt;/h1&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8.png&#34;
+&lt;h2 id=&#34;单源多出口案例&#34;&gt;&lt;a href=&#34;#%e5%8d%95%e6%ba%90%e5%a4%9a%e5%87%ba%e5%8f%a3%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;单源多出口案例
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8.png&#34;
 	width=&#34;1248&#34;
 	height=&#34;653&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8_hu_23cd4d6dd707d84d.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8_hu_53d52d0fb571962a.png 1024w&#34;
@@ -168,13 +170,23 @@ flume1 在 linux03 监听 linux01 的 hive 日志，把 hive 日志的新内容�
 &lt;p&gt;&lt;strong&gt;剧透：&lt;/strong&gt;
 flume3 成功把 hive 日志的新内容写到 datas 文件夹，说明 linux03 确实监听到了 linux01 的 hive 日志并且成功把日志从 linux01 弄到了 linux03，但是 flume2 却没有把新内容写到 hdfs，猜想的可能是因为在 linux03 上写 flume2 的配置文件**sinks.k1.hdfs.path = hdfs://linux01:9820/flume/group1/%Y%m%d/%H，**linux01 和 linux03 是不同的服务器，跨服务器没写进去，所以建议在同一台服务器搞。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;在 flume/job 目录中新建文件夹 group1 来存放本次案例的任务配置文件&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;mkdir group1&lt;/p&gt;
-&lt;p&gt;cd group1&lt;/p&gt;
-&lt;p&gt;vim flume-file-flume.conf&lt;/p&gt;
-&lt;p&gt;vim flume-flume-hdfs.conf&lt;/p&gt;
-&lt;p&gt;vim flume-flume-dir.conf&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;三个 conf 配置如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir group1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cd group1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;vim flume-file-flume.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;vim flume-flume-hdfs.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;vim flume-flume-dir.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;三个 conf 配置如下：&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;flume-file-flume.conf&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -395,8 +407,8 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 		data-flex-basis=&#34;311px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h1 id=&#34;故障转移案例&#34;&gt;&lt;a href=&#34;#%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;故障转移案例
-&lt;/h1&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11.png&#34;
+&lt;h2 id=&#34;故障转移案例&#34;&gt;&lt;a href=&#34;#%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;故障转移案例
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11.png&#34;
 	width=&#34;1436&#34;
 	height=&#34;734&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11_hu_18a2ea47c6ee537e.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11_hu_af2f6474dc226e45.png 1024w&#34;
@@ -659,8 +671,8 @@ console1 接收成功 。
 		data-flex-basis=&#34;2203px&#34;
 	
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;负载均衡案例&#34;&gt;&lt;a href=&#34;#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;负载均衡案例
-&lt;/h1&gt;&lt;p&gt;尚硅谷 P25&lt;/p&gt;
+&lt;h2 id=&#34;负载均衡案例&#34;&gt;&lt;a href=&#34;#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;负载均衡案例
+&lt;/h2&gt;&lt;p&gt;尚硅谷 P25&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -720,8 +732,8 @@ console1 接收成功 。
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;配置文件和故障转移案例一样，只有 flume-netcat-flume.conf 需要改。&lt;/p&gt;
-&lt;h1 id=&#34;flume-聚合案例&#34;&gt;&lt;a href=&#34;#flume-%e8%81%9a%e5%90%88%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flume 聚合案例
-&lt;/h1&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18.png&#34;
+&lt;h2 id=&#34;flume-聚合案例&#34;&gt;&lt;a href=&#34;#flume-%e8%81%9a%e5%90%88%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flume 聚合案例
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18.png&#34;
 	width=&#34;1401&#34;
 	height=&#34;705&#34;
 	srcset=&#34;/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18_hu_b52e7eb81f2f0796.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18_hu_2c464d839e46192e.png 1024w&#34;
@@ -874,8 +886,8 @@ console1 接收成功 。
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k1.channel = c1
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h1 id=&#34;自定义拦截器&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义拦截器
-&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;案例需求&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;h2 id=&#34;自定义拦截器&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义拦截器
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;案例需求&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;使用 Flume 采集服务器本地日志，需要按照日志类型的不同，将不同种类的日志发往不 同的分析系统。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;需求分析&lt;/strong&gt;&lt;/p&gt;
@@ -896,8 +908,8 @@ console1 接收成功 。
 		data-flex-basis=&#34;586px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;自定义拦截器打成-jar-包&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8%e6%89%93%e6%88%90-jar-%e5%8c%85&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义拦截器打成 jar 包
-&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;h3 id=&#34;自定义拦截器打成-jar-包&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8%e6%89%93%e6%88%90-jar-%e5%8c%85&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义拦截器打成 jar 包
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
@@ -1122,8 +1134,8 @@ console1 接收成功 。
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;jar 包打好放到 flume 的 lib 目录下，flume 启动时会加载 lib 的所有 jar 包。&lt;/p&gt;
 &lt;p&gt;注意！！自定义拦截器的 jar 包源代码是定制的，里面的过滤拦截规则需要根据实际业务来编写，并且 jdk 最好是 1.8。&lt;/p&gt;
-&lt;h2 id=&#34;任务配置文件&#34;&gt;&lt;a href=&#34;#%e4%bb%bb%e5%8a%a1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;任务配置文件
-&lt;/h2&gt;&lt;p&gt;inux01 服务器的 flume 配置文件 job/group4/interceptor-flume1.conf：&lt;/p&gt;
+&lt;h3 id=&#34;任务配置文件&#34;&gt;&lt;a href=&#34;#%e4%bb%bb%e5%8a%a1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;任务配置文件
+&lt;/h3&gt;&lt;p&gt;inux01 服务器的 flume 配置文件 job/group4/interceptor-flume1.conf：&lt;/p&gt;
 &lt;p&gt;1 配置 1 个 netcat source，1 个 sink group（2 个 avro sink）， 并配置相应的 ChannelSelector 和 interceptor。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -1282,10 +1294,10 @@ console1 接收成功 。
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;尚硅谷 Flume P33&lt;/strong&gt;
 &lt;strong&gt;后面的以后再搞&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&#34;自定义-source&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89-source&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义 Source
-&lt;/h1&gt;&lt;h1 id=&#34;自定义-sink&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89-sink&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义 Sink
-&lt;/h1&gt;&lt;h1 id=&#34;事务源码&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1%e6%ba%90%e7%a0%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务源码
-&lt;/h1&gt;</description>
+&lt;h2 id=&#34;自定义-source&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89-source&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义 Source
+&lt;/h2&gt;&lt;h2 id=&#34;自定义-sink&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%ae%9a%e4%b9%89-sink&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自定义 Sink
+&lt;/h2&gt;&lt;h2 id=&#34;事务源码&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1%e6%ba%90%e7%a0%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务源码
+&lt;/h2&gt;</description>
         </item>
         <item>
         <title>Flume入门--万字详解</title>
@@ -1293,63 +1305,56 @@ console1 接收成功 。
         <pubDate>Mon, 22 Apr 2024 15:22:55 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/</guid>
-        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%A6%82%E8%BF%B0&#34; &gt;概述&lt;/a&gt;{#%E6%A6%82%E8%BF%B0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84&#34; &gt;基础架构&lt;/a&gt;{#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Agent&#34; &gt;Agent&lt;/a&gt;{#Agent-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Source&#34; &gt;Source&lt;/a&gt;{#Source-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Sink&#34; &gt;Sink&lt;/a&gt;{#Sink-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Channel&#34; &gt;Channel&lt;/a&gt;{#Channel-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#selector%C2%A0&#34; &gt;selector&lt;/a&gt;{#selector%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#interceptor&#34; &gt;interceptor&lt;/a&gt;{#interceptor-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Event&#34; &gt;Event&lt;/a&gt;{#Event-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2&#34; &gt;安装部署&lt;/a&gt;{#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Netcat&#34; &gt;Netcat&lt;/a&gt;{#Netcat-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B&#34; &gt;Flume入门案例&lt;/a&gt;{#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1%29netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7&#34; &gt;1)netcat本机端口监控&lt;/a&gt;{#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2%29%E7%9B%91%E6%8E%A7hive%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0hdfs&#34; &gt;2)监控hive日志上传hdfs&lt;/a&gt;{#2)%E7%9B%91%E6%8E%A7hive%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0hdfs-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3%29%E5%AE%9E%E6%97%B6%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%88%B0hdfs&#34; &gt;3)实时读取目录文件到hdfs&lt;/a&gt;{#3)%E5%AE%9E%E6%97%B6%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%88%B0hdfs-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4%29%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%BF%BD%E5%8A%A0%E6%96%87%E4%BB%B6&#34; &gt;4)实时监控目录下的多个追加文件&lt;/a&gt;{#4)%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%BF%BD%E5%8A%A0%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
-&lt;hr&gt;
-&lt;br /&gt;
-&lt;h2 id=&#34;概述-e6a682e8bfb0&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0-e6a682e8bfb0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述 {#%E6%A6%82%E8%BF%B0}
+        <description>&lt;h2 id=&#34;概述&#34;&gt;&lt;a href=&#34;#%e6%a6%82%e8%bf%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;概述
 &lt;/h2&gt;&lt;p&gt;Flume 是 Cloudera 提供的一个高可用的，高可靠的，分布式的海量&lt;strong&gt;日志采集&lt;/strong&gt;、聚合和传 输的系统。Flume 基于流式架构，灵活简单。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/2e3869480961b81ca25702e6d1970111.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image.png&#34;
+	width=&#34;1218&#34;
+	height=&#34;508&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image_hu_7fa87b03cd51f56f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image_hu_86396d462a02f120.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;239&#34;
+		data-flex-basis=&#34;575px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;基础架构-e59fbae7a180e69eb6e69e84&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84-e59fbae7a180e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基础架构 {#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}
-&lt;/h2&gt;&lt;p&gt;Flume运行的核心是 Agent。Flume是以agent为最小的独立运行单位。一个agent就是一个JVM。它是 一个完整的数据收集工具，含有三个核心组件，分别是source、 channel、 sink。通过这些组件， Event 可以从一个地方流向另一个地方。如下图所示：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/0ec63ccc446e6faf2bcafcbc179a7e34.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;基础架构&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基础架构
+&lt;/h2&gt;&lt;p&gt;Flume 运行的核心是 Agent。Flume 是以 agent 为最小的独立运行单位。一个 agent 就是一个 JVM。它是 一个完整的数据收集工具，含有三个核心组件，分别是 source、 channel、 sink。通过这些组件， Event 可以从一个地方流向另一个地方。如下图所示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1.png&#34;
+	width=&#34;1210&#34;
+	height=&#34;464&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1_hu_8561a55c375264ae.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1_hu_a84eee12f3e31d2f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;260&#34;
+		data-flex-basis=&#34;625px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;Agent&#34;&gt;&lt;a href=&#34;#Agent&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Agent
+&lt;h3 id=&#34;agent&#34;&gt;&lt;a href=&#34;#agent&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Agent
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Agent 是一个 JVM 进程，它以事件的形式将数据从源头送至目的。&lt;/li&gt;
-&lt;li&gt;Agent 主要有 3 个部分组成，Source、Channel、Sink。同一台服务器可以运行多个Agent，每个Agent可以有多个source、sink、channel。Agent的名字可以相同但是不能同时启动任务，否则会出现冲突。&lt;/li&gt;
+&lt;li&gt;Agent 主要有 3 个部分组成，Source、Channel、Sink。同一台服务器可以运行多个 Agent，每个 Agent 可以有多个 source、sink、channel。Agent 的名字可以相同但是不能同时启动任务，否则会出现冲突。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;Source&#34;&gt;&lt;a href=&#34;#Source&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Source
+&lt;h4 id=&#34;source&#34;&gt;&lt;a href=&#34;#source&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Source
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;Source 是负责接收数据到 Flume Agent 并传给Channel的组件。&lt;/li&gt;
-&lt;li&gt;Source 组件可以处理各种类型、各种格式的日志数据，包括 avro、thrift、exec、jms、spooling directory、netcat、taildir、 sequence generator、syslog、http、legacy这些不同的数据源。&lt;/li&gt;
+&lt;li&gt;Source 是负责接收数据到 Flume Agent 并传给 Channel 的组件。&lt;/li&gt;
+&lt;li&gt;Source 组件可以处理各种类型、各种格式的日志数据，包括 avro、thrift、exec、jms、spooling directory、netcat、taildir、 sequence generator、syslog、http、legacy 这些不同的数据源。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;Sink&#34;&gt;&lt;a href=&#34;#Sink&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Sink
+&lt;h4 id=&#34;sink&#34;&gt;&lt;a href=&#34;#sink&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Sink
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Sink 不断地轮询 Channel 中的事件且批量地移除它们，并将这些事件批量写入到存储系统或索引系统、或者被发送到另一个 Flume Agent。&lt;/li&gt;
 &lt;li&gt;Sink 组件目的地包括 hdfs、logger、avro、thrift、ipc、file、HBase、solr、自定义。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;Channel&#34;&gt;&lt;a href=&#34;#Channel&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Channel
+&lt;h4 id=&#34;channel&#34;&gt;&lt;a href=&#34;#channel&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Channel
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Channel 是位于 Source 和 Sink 之间的缓冲区。因此，Channel 允许 Source 和 Sink 运作在不同的速率上。&lt;/li&gt;
@@ -1358,32 +1363,38 @@ console1 接收成功 。
 &lt;li&gt;Memory Channel 是内存中的队列。Memory Channel 在不需要关心数据丢失的情景下适 用。如果需要关心数据丢失，那么 Memory Channel 就不应该使用，因为程序死亡、机器宕 机或者重启都会导致数据丢失。&lt;/li&gt;
 &lt;li&gt;File Channel 将所有事件写到磁盘。因此在程序关闭或机器宕机的情况下不会丢失数 据。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;selector-selectorc2a0&#34;&gt;&lt;a href=&#34;#selector-selectorc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;selector {#selector%C2%A0}
+&lt;h4 id=&#34;selector&#34;&gt;&lt;a href=&#34;#selector&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;selector
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;选择器，作用于source端，然后决定数据发往哪个目标。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;选择器，作用于 source 端，然后决定数据发往哪个目标。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h4 id=&#34;interceptor&#34;&gt;&lt;a href=&#34;#interceptor&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;interceptor
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;拦截器，flume允许使用拦截器拦截数据。允许使用拦截器链，作用于source和sink阶段。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;Event&#34;&gt;&lt;a href=&#34;#Event&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Event
+&lt;p&gt;拦截器，flume 允许使用拦截器拦截数据。允许使用拦截器链，作用于 source 和 sink 阶段。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;event&#34;&gt;&lt;a href=&#34;#event&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Event
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;传输单元，Flume 数据传输的基本单元，以 Event 的形式将数据从源头送至目的地。&lt;/li&gt;
 &lt;li&gt;Event 由 Header 和 Body 两部分组成，Header 用来存放该 event 的一些属性，为 K-V 结构， Body 用来存放该条数据，形式为字节数组。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/f38006431e7a0b773e856f928571ee27.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2.png&#34;
+	width=&#34;816&#34;
+	height=&#34;151&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2_hu_3f35ec154b3b11eb.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2_hu_10f158814c30aa1e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;540&#34;
+		data-flex-basis=&#34;1296px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;安装部署-e5ae89e8a385e983a8e7bdb2&#34;&gt;&lt;a href=&#34;#%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2-e5ae89e8a385e983a8e7bdb2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;安装部署 {#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2}
+&lt;h2 id=&#34;安装部署&#34;&gt;&lt;a href=&#34;#%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;安装部署
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;解压&lt;/p&gt;
 &lt;p&gt;tar -zxvf /export/server/apache-flume-1.9.0-bin.tar.gz /export/server/&lt;/p&gt;
 &lt;br /&gt;
-&lt;p&gt;为了让flume1.9兼容hadoop3.x，要删除flume lib包下的guava-11.0.2.jar&lt;/p&gt;
+&lt;p&gt;为了让 flume1.9 兼容 hadoop3.x，要删除 flume lib 包下的 guava-11.0.2.jar&lt;/p&gt;
 &lt;p&gt;rm guava-11.0.2.jar&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;Netcat&#34;&gt;&lt;a href=&#34;#Netcat&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Netcat
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;安装&lt;/strong&gt;&lt;/p&gt;
@@ -1391,35 +1402,760 @@ console1 接收成功 。
 &lt;p&gt;sudo yum install -y nc&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;简单案例&lt;/strong&gt;&lt;/p&gt;
 &lt;br /&gt;
-&lt;h2 id=&#34;flume入门案例-flumee585a5e997a8e6a188e4be8b&#34;&gt;&lt;a href=&#34;#flume%e5%85%a5%e9%97%a8%e6%a1%88%e4%be%8b-flumee585a5e997a8e6a188e4be8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flume入门案例 {#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B}
-&lt;/h2&gt;&lt;h3 id=&#34;1netcat本机端口监控-1netcate69cace69cbae7abafe58fa3e79b91e68ea7&#34;&gt;&lt;a href=&#34;#1netcat%e6%9c%ac%e6%9c%ba%e7%ab%af%e5%8f%a3%e7%9b%91%e6%8e%a7-1netcate69cace69cbae7abafe58fa3e79b91e68ea7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1)netcat本机端口监控 {#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7}
+&lt;h2 id=&#34;flume-入门案例&#34;&gt;&lt;a href=&#34;#flume-%e5%85%a5%e9%97%a8%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flume 入门案例
+&lt;/h2&gt;&lt;h3 id=&#34;netcat-本机端口监控&#34;&gt;&lt;a href=&#34;#netcat-%e6%9c%ac%e6%9c%ba%e7%ab%af%e5%8f%a3%e7%9b%91%e6%8e%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;netcat 本机端口监控
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;在flume文件夹下创建工作目录job&lt;/p&gt;
+&lt;p&gt;在 flume 文件夹下创建工作目录 job&lt;/p&gt;
 &lt;p&gt;mkdir job&lt;/p&gt;
-&lt;p&gt;在job目录下建立任务配置文件，文件名任取，建议见名知意，net表示数据源是端口，logger表示数据是日志文件&lt;/p&gt;
+&lt;p&gt;在 job 目录下建立任务配置文件，文件名任取，建议见名知意，net 表示数据源是端口，logger 表示数据是日志文件&lt;/p&gt;
 &lt;p&gt;vim net-flume-logger.conf&lt;/p&gt;
 &lt;p&gt;配置文件内容如下：&lt;/p&gt;&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;# Name the components on this agent
-a1.sources = r1 #a1是该agent名，不可重复
-a1.sinks = k1
-a1.channels = c1
-
-# Describe/configure the source
-a1.sources.r1.type = netcat
-a1.sources.r1.bind = localhost
-a1.sources.r1.port = 4444
-
-# Describe the sink
-a1.sinks.k1.type = logger
-
-# Use a channel which buffers events in memory
-a1.channels.c1.type = memory
-a1.channels.c1.capacity = 1000 #最多接收1000个event
-a1.channels.c1.transactionCapacity = 100 #100个事务，一次最多发送100个event，事务失败会回滚。capacity应该＜transactionCapacity
-
-# Bind the source and sink to
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Name the components on this agent
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.sources = r1 &lt;span class=&#34;ni&#34;&gt;#a1是该agent名&lt;/span&gt;，不可重复
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.sinks = k1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.channels = c1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe/configure the source
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.sources.r1.type = netcat
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.sources.r1.bind = localhost
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.sources.r1.port = 4444
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe the sink
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.sinks.k1.type = logger
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Use a channel which buffers events in memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.channels.c1.type = memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.channels.c1.capacity = 1000 &lt;span class=&#34;ni&#34;&gt;#最多接收1000个event&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a1.channels.c1.transactionCapacity = 100 &lt;span class=&#34;ni&#34;&gt;#100个事务&lt;/span&gt;，一次最多发送100个event，事务失败会回滚。capacity应该 &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nt&#34;&gt;transactionCapacity&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;err&#34;&gt;#&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;Bind&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;sink&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;to&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;the&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;channel&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;na&#34;&gt;a1&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sources&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;r1&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;channels &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;c1&lt;/span&gt; &lt;span class=&#34;ni&#34;&gt;#一个source可以绑定多个channel&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;na&#34;&gt;a1&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sinks&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;k1&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;channel &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;c1&lt;/span&gt; &lt;span class=&#34;ni&#34;&gt;#一个sink只能绑定一个channel&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;启动两个终端，一个终端启动监听任务：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;在 flume 目录下运行：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;flume-ng agent -c conf/ -n a1 -f job/flume-netcat-logger.conf -D flume.root.logger=INFO,console
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;参数说明：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;--conf/-c：表示配置文件存储在 conf/目录
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;--name/-n：表示给 agent 起名为 a1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;--conf-file/-f：flume 本次启动读取的配置文件是在 job 文件夹下的 flume-telnet.conf 文件.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-Dflume.root.logger=INFO,console ：-D 表示 flume 运行时动态修改 flume.root.logger 参数属性值，并将控制台日志打印级别设置为 INFO 级别。日志级别包括:log、info、warn、 error。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3.png&#34;
+	width=&#34;1530&#34;
+	height=&#34;653&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3_hu_c99cca4dd73c04ee.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3_hu_82ef1505922ff86c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;234&#34;
+		data-flex-basis=&#34;562px&#34;
+	
+&gt;
+另一个终端使用 netcat 向监听的端口发送内容：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;nc localhost 4444
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4.png&#34;
+	width=&#34;746&#34;
+	height=&#34;258&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4_hu_b88eeeed95de3eea.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4_hu_76944ab34e474c55.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;289&#34;
+		data-flex-basis=&#34;693px&#34;
+	
+&gt;
+检查启动任务的端口是否收到。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;监控-hive-日志上传-hdfs&#34;&gt;&lt;a href=&#34;#%e7%9b%91%e6%8e%a7-hive-%e6%97%a5%e5%bf%97%e4%b8%8a%e4%bc%a0-hdfs&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;监控 hive 日志上传 hdfs
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5.png&#34;
+	width=&#34;1221&#34;
+	height=&#34;507&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5_hu_9d7ee6a4efc594d2.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5_hu_d7e8bc859122f40b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;240&#34;
+		data-flex-basis=&#34;577px&#34;
+	
+&gt;
+在 job 目录下新建任务的配置文件 flume-file-hdfs.conf,内容如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Name the components on this agent
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sources = r2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks = k2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.channels = c2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe/configure the source
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sources.r2.type = exec
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sources.r2.command = tail -F /export/server/hive/logs/metastore.log
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#这里我监控的是hive的元数据日志&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe the sink
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.type = hdfs
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.path = hdfs://linux01:8020/flume/%Y%m%d/%H
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#8020端口不要搞错&lt;/span&gt;，具体查看hadoop的core-site.xml
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#上传文件的前缀&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.filePrefix = logs-
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否按照时间滚动文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.round = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#多少时间单位创建一个新的文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.roundValue = 1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#重新定义时间单位&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.roundUnit = hour
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否使用本地时间戳&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.useLocalTimeStamp = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#注意&lt;/span&gt;：对于所有与时间相关的转义序列，Event Header 中必须存在以 “timestamp”的
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    key（除非 hdfs.useLocalTimeStamp 设置为 true，此方法会使用 TimestampInterceptor 自
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    动添加 timestamp）。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#积攒多少个&lt;/span&gt; Event 才 flush 到 HDFS 一次
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.batchSize = 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#设置文件类型&lt;/span&gt;，可支持压缩
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.fileType = DataStream
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#多久生成一个新的文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.rollInterval = 60
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#设置每个文件的滚动大小&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.rollSize = 134217700
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#文件的滚动与&lt;/span&gt; Event 数量无关
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.hdfs.rollCount = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Use a channel which buffers events in memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.channels.c2.type = memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.channels.c2.capacity = 1000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.channels.c2.transactionCapacity = 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Bind the source and sink to the channel
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sources.r2.channels = c2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a2.sinks.k2.channel = c2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;先在 flume 文件夹下启动 flume 的监听任务：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bin/flume-ng agent -c conf/ -n a2 -f job/flume-file-hdfs.conf -D flume.root.logger=INFO,console
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;启动 hdfs 和 hive 的元数据服务
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;start-dfs.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;start-hivemetastore.sh（自己写的脚本）
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;启动 hive 开始操作
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hive 会产生元数据记录在 metastore.log 中，然后就会被 flume 监听到，flume 就会把监听到的日志写到 hdfs 的 flume 文件夹中。浏览器打开 linux01:9870 查看 hdfs 的文件目录，发现新建了 flume 文件夹，表示操作成功。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;![alt text](image-6.png)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;注意！监听的 metastore.log 一定要是有效的，如果无效那么 hive 的日志就不会写到里面，flume 就检测不到，具体去看 hive 的日志配置教程。另外启动的 agent 的任务名字和配置文件不要搞错了，是 a2 和 flume-file-hdfs.conf。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;实时读取目录文件到-hdfs&#34;&gt;&lt;a href=&#34;#%e5%ae%9e%e6%97%b6%e8%af%bb%e5%8f%96%e7%9b%ae%e5%bd%95%e6%96%87%e4%bb%b6%e5%88%b0-hdfs&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;实时读取目录文件到 hdfs
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7.png&#34;
+	width=&#34;1209&#34;
+	height=&#34;528&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7_hu_c1105467385bcae8.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7_hu_4fa73e60ceb8a8e2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;228&#34;
+		data-flex-basis=&#34;549px&#34;
+	
+&gt;
+job 目录下编写 flume-dir-hdfs.conf 配置文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;51
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;52
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;53
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;54
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;55
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;56
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;57
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;58
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;59
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources = r3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks = k3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels = c3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe/configure the source
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # source类型是目录
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.type = spooldir
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#定义监控目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.spoolDir = /export/server/flume/upload
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#定义文件上传完后缀&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.fileSuffix = .COMPLETED
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否有文件头&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.fileHeader = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#忽略所有以&lt;/span&gt;.tmp 结尾的文件，不上传
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.ignorePattern = ([^ ]*\.tmp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe the sink
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.type = hdfs
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.path = hdfs://linux01:8020/flume/upload/%Y%m%d/%H
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#hdfs的upload文件夹要提前手动创建好&lt;/span&gt;，flume不会自己创建，否则会报错。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#上传文件的前缀&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.filePrefix = upload-
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否按照时间滚动文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.round = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#多少时间单位创建一个新的文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.roundValue = 1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#重新定义时间单位&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.roundUnit = hour
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否使用本地时间戳&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.useLocalTimeStamp = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#积攒多少个&lt;/span&gt; Event 才 flush 到 HDFS 一次
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.batchSize = 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#设置文件类型&lt;/span&gt;，可支持压缩
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.fileType = DataStream
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#多久生成一个新的文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.rollInterval = 60
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#设置每个文件的滚动大小大概是&lt;/span&gt; 128M
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.rollSize = 134217700
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#文件的滚动与&lt;/span&gt; Event 数量无关
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.rollCount = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Use a channel which buffers events in memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels.c3.type = memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels.c3.capacity = 1000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels.c3.transactionCapacity = 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Bind the source and sink to the channel
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.channels = c3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.channel = c3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;flume 目录下启动 agent 任务：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;bin/flume-ng agent -c conf/ -n a3 -f job/flume-dir-hdfs.conf&lt;/p&gt;
+&lt;p&gt;注意不要有多余的空格或者不可见字符，启动失败就去 logs 文件夹看日志&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;任务启动后就往监控目录/flume/upload 文件夹里面放文件 ，放了 3 个不同的文件，其中 tmp 后缀的文件没有上传到 hdfs，因为在 conf 配置文件中把 tmp 后缀的排除了，其他两个上传完毕，并且文件后缀改成 COMPLETED：
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8.png&#34;
+	width=&#34;1132&#34;
+	height=&#34;287&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8_hu_119154576442338f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8_hu_638b356095ba52.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;394&#34;
+		data-flex-basis=&#34;946px&#34;
+	
+&gt;
+进入 linux01:9870 查看 hdfs 文件目录， 确实上传成功了。
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9.png&#34;
+	width=&#34;2437&#34;
+	height=&#34;1006&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9_hu_2110e997d452b344.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9_hu_2c54946dfe69fec2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;242&#34;
+		data-flex-basis=&#34;581px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意！&lt;/strong&gt; 配置文件的 a3.sinks.k3.hdfs.path 指定了 linux01:8020，那么 flume 任务就得在 linux01 上启动，在 linux02 上启动不会生效。我的 linux01 是主机，linux02 和 03 是从机，就算在 linux02 上启动 flume 任务，把 a3.sinks.k3.hdfs.path 改成 linux02:8020 也不行，必须在 linux01 上启动。
+&lt;strong&gt;注意！向/flume/upload 文件夹放的文件不能是以上传完成的后缀结尾，比如文件上传成功后缀是 COMPLETED，那么向里面放的文件后缀就不能是 COMPLETED。另外不能向 upload 里放文件名相同的文件，文件名相同的文件只有第一个会上传到 hdfs，之后的不会，因为 linux 同一目录不允许同名文件产生。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;实时监控目录下的多个追加文件&#34;&gt;&lt;a href=&#34;#%e5%ae%9e%e6%97%b6%e7%9b%91%e6%8e%a7%e7%9b%ae%e5%bd%95%e4%b8%8b%e7%9a%84%e5%a4%9a%e4%b8%aa%e8%bf%bd%e5%8a%a0%e6%96%87%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;实时监控目录下的多个追加文件
+&lt;/h3&gt;&lt;p&gt;案例 2 的 exec source 适用于监控一个实时追加的文件，不能断点续传，案例 3 的 spooldir source 适用于同步新文件，但不适用于实时监听同步追加日志的文件，而该案例的 Taildir Source 就适合于监听多个实时追加的文件，并能实现断点续传。
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10.png&#34;
+	width=&#34;1447&#34;
+	height=&#34;533&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10_hu_3bb935b9cd6bd98f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10_hu_20ded4dc11c4bc23.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;271&#34;
+		data-flex-basis=&#34;651px&#34;
+	
+&gt;
+job 目录下新建 flume-dir-hdfs.conf 配置文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources = r3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks = k3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels = c3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe/configure the source
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#定义source类型&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.type = TAILDIR
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.positionFile = /export/server/apache-flume-1.9.0-bin/tail_dir.json
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#注意&lt;/span&gt;！！这里我把软链接flume换成了本来的真实目录apache-flume-1.9.0-bin，原因后面讲
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#文件组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.filegroups = f1 f2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.filegroups.f1 = /export/server/flume/files/.*file.*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.filegroups.f2 = /export/server/flume/files2/.*log.*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Describe the sink
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.type = hdfs
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.path = hdfs://linux01:8020/flume/upload2/%Y%m%d/%H
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#上传文件的前缀&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.filePrefix = upload-
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否按照时间滚动文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.round = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#多少时间单位创建一个新的文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.roundValue = 1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#重新定义时间单位&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.roundUnit = hour
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#是否使用本地时间戳&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.useLocalTimeStamp = true
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#积攒多少个&lt;/span&gt; Event 才 flush 到 HDFS 一次
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.batchSize = 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#设置文件类型&lt;/span&gt;，可支持压缩
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.fileType = DataStream
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#多久生成一个新的文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.rollInterval = 60
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#设置每个文件的滚动大小大概是&lt;/span&gt; 128M
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.rollSize = 134217700
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;ni&#34;&gt;#文件的滚动与&lt;/span&gt; Event 数量无关
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.hdfs.rollCount = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Use a channel which buffers events in memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels.c3.type = memory
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels.c3.capacity = 1000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.channels.c3.transactionCapacity = 100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    # Bind the source and sink to the channel
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sources.r3.channels = c3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    a3.sinks.k3.channel = c3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;hdfs 文件中提前创建好 upload2 文件夹：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;hdfs dfs -mkdir /flume/upload2
+flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.txt 和 log1.log 用于追加内容让 flume 任务监控。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11.png&#34;
+	width=&#34;987&#34;
+	height=&#34;232&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11_hu_3d3be8253f4ea89.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11_hu_35e2622993d720d4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;425&#34;
+		data-flex-basis=&#34;1021px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12.png&#34;
+	width=&#34;954&#34;
+	height=&#34;188&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12_hu_ff914089d72061b5.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12_hu_8ba92ad258b85007.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;507&#34;
+		data-flex-basis=&#34;1217px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;flume 文件下启动监控任务：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;bin/flume-ng agent -c conf/ -n a3 -f job/flume-taildir-hdfs.conf&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;用 echo 命令向 file1.txt 和 log1.log 追加内容，追加的内容就会被 flume 检测到，filume 就会把追加的新内容上传到 hdfs 的 upload2 文件夹。
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13.png&#34;
+	width=&#34;2338&#34;
+	height=&#34;789&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13_hu_496ca9bcf5e7b220.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13_hu_a6a4961d82b88ca0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;296&#34;
+		data-flex-basis=&#34;711px&#34;
+	
+&gt;
+追加的内容被检测到，上传到 hdfs，案例成功！
+&lt;strong&gt;注意！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;配置文件中，之前是 a3.sources.r3.positionFile = /export/server/flume/tail_dir.json，此时启动 flume 任务能成功，但是追加的内容不会上传到 hdfs，也就是该案例没有成功。去 logs 文件中查看 flume.log 日志，发现有一段报错如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;21&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;四月&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;2024&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;22&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;52&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;844&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ERROR&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;poller&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;node&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;AbstractConfigurationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;loadSources&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;355&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Source&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r3&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;has&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;been&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;removed&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;due&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;an&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;during&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;configuration&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;FlumeException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Error&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;creating&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;positionFile&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;parent&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;directories&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;taildir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;TaildirSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;configure&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TaildirSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;170&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;conf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Configurables&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;configure&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Configurables&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;41&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;node&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;AbstractConfigurationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;loadSources&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AbstractConfigurationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;325&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;node&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;AbstractConfigurationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getConfiguration&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AbstractConfigurationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;105&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;node&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PollingPropertiesFileConfigurationProvider$FileWatcherRunnable&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PollingPropertiesFileConfigurationProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;145&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Executors$RunnableAdapter&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Executors&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;511&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;FutureTask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;runAndReset&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;FutureTask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;308&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ScheduledThreadPoolExecutor$ScheduledFutureTask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;access$301&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ScheduledThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;180&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ScheduledThreadPoolExecutor$ScheduledFutureTask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ScheduledThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;294&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;runWorker&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1149&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ThreadPoolExecutor$Worker&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;624&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Thread&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Thread&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;750&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Caused&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;FileAlreadyExistsException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;export&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sun&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;fs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;UnixException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;translateToIOException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UnixException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;88&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sun&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;fs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;UnixException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rethrowAsIOException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UnixException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;102&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sun&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;fs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;UnixException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rethrowAsIOException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UnixException&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;107&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sun&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;fs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;UnixFileSystemProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;createDirectory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UnixFileSystemProvider&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;384&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;createDirectory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;674&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;createAndCheckIsDirectory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;781&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;createDirectories&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Files&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;727&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;apache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;flume&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;taildir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;TaildirSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;configure&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TaildirSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;168&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;	&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;11&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;more&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;给 chatgpt 看看：
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14.png&#34;
+	width=&#34;2367&#34;
+	height=&#34;575&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14_hu_d8ff180d4f856e7e.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14_hu_1b7cc2868b1adaee.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;411&#34;
+		data-flex-basis=&#34;987px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;大概意思是 positionfile 文件创建失败，原因是出现命名冲突。因为我的 flume 是个软链接，类似于快捷方式，但是写到配置文件里面，flume 程序就会把配置文件的 flume 当成真实目录，进而就会尝试创建名为 flume 的目录并且去进到创建的 flume 目录创建 r3，然而我已经存在了名为 flume 的软链接，程序就会创建 flume 目录失败，进而无法创建 r3。所以把配置文件的 flume 换成真实的 apache-flume-1.9.0-bin 目录就可以了，这样就可以生成 r3，也就是 positionfile = tail_dir.json 文件。当然另一种解决方法就是把 positionfile 的位置放到 flume 软链接外面。&lt;/p&gt;
+&lt;p&gt;tail_dir.json 文件内容如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;inode&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;83899573&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;pos&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;44&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;file&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;/export/server/flume/files/file1.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;inode是文件的唯一标识&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，即使文件重命名也不会变，除非文件删除&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;pos表示读到哪里&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：监控文件的绝对路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;json文件靠inode和file两个值表示pos位置信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;注意！ log4j 日志框架每天凌晨会自动把前一天的 hive.log 的文件改名，后缀加上日期，这点对我们监控空间极不友好，假如我们监控的是 hive.log，然而 hive.log 会自动更名 hive.log.2024-xx-xx,监测的文件名发生改变,而 inode 不变，然而 json 文件中记录的绝对路径仍然是 hive.log，此时的 hive.log 是新的文件，inode 变化，就无法实现断点续传。&lt;/p&gt;
+&lt;p&gt;解决方案：1）不使用 log4j 2）修改 flume 源码包
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15.png&#34;
+	width=&#34;1254&#34;
+	height=&#34;358&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15_hu_ba0e6aa6ca72876.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15_hu_7ea1071690105aa1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;350&#34;
+		data-flex-basis=&#34;840px&#34;
+	
+&gt;
+&lt;strong&gt;修改源码包的 TailFile 和 ReliableTaildirEventReader：&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16.png&#34;
+	width=&#34;1832&#34;
+	height=&#34;407&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16_hu_8a8bb29403f12b75.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16_hu_b5c7c5bcf5a462e7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;450&#34;
+		data-flex-basis=&#34;1080px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17.png&#34;
+	width=&#34;1728&#34;
+	height=&#34;1402&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17_hu_2651a7ca432bfddb.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17_hu_f849167e43dfc987.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;123&#34;
+		data-flex-basis=&#34;295px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18.png&#34;
+	width=&#34;1742&#34;
+	height=&#34;1357&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18_hu_41296967dda0ef4e.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18_hu_b14b812135d32750.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;128&#34;
+		data-flex-basis=&#34;308px&#34;
+	
+&gt;
+修改后重新打包生成 flume-taildir-source-1.9.0.jar,进入 flume/lib 目录下，把原来的 jar 包替换掉：
+&lt;img src=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19.png&#34;
+	width=&#34;1593&#34;
+	height=&#34;96&#34;
+	srcset=&#34;/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19_hu_9bc37188bd235dcd.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19_hu_a5fd9ba123f64dc8.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1659&#34;
+		data-flex-basis=&#34;3982px&#34;
+	
+&gt;
+把原来的后缀改成 bak。&lt;/p&gt;
 </description>
         </item>
         

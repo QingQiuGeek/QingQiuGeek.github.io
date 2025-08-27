@@ -340,24 +340,10 @@
         <pubDate>Sun, 14 Apr 2024 12:23:06 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/</guid>
-        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%9C%AC%E8%B4%A8&#34; &gt;Hive本质&lt;/a&gt;{#Hive%E6%9C%AC%E8%B4%A8-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97&#34; &gt;Hive主要有以下3个模块&lt;/a&gt;{#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Metastore&#34; &gt;Metastore&lt;/a&gt;{#Metastore-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9E%B6%E6%9E%84%C2%A0&#34; &gt;架构&lt;/a&gt;{#%E6%9E%B6%E6%9E%84%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE&#34; &gt;Hive日志配置&lt;/a&gt;{#Hive%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B&#34; &gt;HQL执行过程&lt;/a&gt;{#HQL%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A&#34; &gt;Hive四种玩法：&lt;/a&gt;{#Hive%E5%9B%9B%E7%A7%8D%E7%8E%A9%E6%B3%95%EF%BC%9A-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1%EF%BC%89CLI&#34; &gt;1）CLI&lt;/a&gt;{#1%EF%BC%89CLI-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2%EF%BC%89HiveServer2&#34; &gt;2）HiveServer2&lt;/a&gt;{#2%EF%BC%89HiveServer2-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3%EF%BC%89Beeline&#34; &gt;3）Beeline&lt;/a&gt;{#3%EF%BC%89Beeline-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4%EF%BC%89Web%20UI&#34; &gt;4）Web UI&lt;/a&gt;{#4%EF%BC%89Web%20UI-toc}&lt;/p&gt;
-&lt;hr&gt;
-&lt;br /&gt;
-&lt;h2 id=&#34;hive-本质-hivee69cace8b4a8&#34;&gt;&lt;a href=&#34;#hive-%e6%9c%ac%e8%b4%a8-hivee69cace8b4a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Hive&lt;/strong&gt; &lt;strong&gt;本质&lt;/strong&gt; {#Hive%E6%9C%AC%E8%B4%A8}
-&lt;/h2&gt;&lt;p&gt;Hive是构建在hadoop上的数据仓库，也可以说是一个&lt;strong&gt;操作hdfs文件&lt;/strong&gt; 的客户端，它&lt;strong&gt;可以将结构化的数据文件映射成表&lt;/strong&gt;，并提供类 SQL查询功能，用于查询的 SQL 语句会被转化为 MapReduce 作业，然后提交到 Hadoop 上运行。&lt;strong&gt;Hive执行引擎可以是MapReduce、Spark、Tez，如果是MR，Hive就会把HQL翻译成MR进行数据计算。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;由于Hive是针对数据仓库应⽤设计的，⽽数据仓库的内容是读多写少的。因此，Hive中不⽀持 对数据的改写和添加，所有的数据都是在加载的时候中确定好的。&lt;/p&gt;
-&lt;p&gt;Hive不适合⽤于联机事务处理(OLTP)，也不提供实时查询功能。它最适合应⽤在基于⼤量不可变数据的批处理 作业。Hive 的特点是可伸缩（在Hadoop 的集群上动态的添加设备），可扩展、容错、输⼊格式的松散耦合。 Hive 的⼊⼝是DRIVER ，执⾏的SQL语句⾸先提交到DRIVER驱动，然后调COMPILER解释驱动，最终解释成 MapReduce 任务执⾏，最后将结果返回。&lt;/p&gt;
+        <description>&lt;h2 id=&#34;hive-本质&#34;&gt;&lt;a href=&#34;#hive-%e6%9c%ac%e8%b4%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Hive 本质&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Hive 是构建在 hadoop 上的数据仓库，也可以说是一个&lt;strong&gt;操作 hdfs 文件&lt;/strong&gt; 的客户端，它&lt;strong&gt;可以将结构化的数据文件映射成表&lt;/strong&gt;，并提供类 SQL 查询功能，用于查询的 SQL 语句会被转化为 MapReduce 作业，然后提交到 Hadoop 上运行。&lt;strong&gt;Hive 执行引擎可以是 MapReduce、Spark、Tez，如果是 MR，Hive 就会把 HQL 翻译成 MR 进行数据计算。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;由于 Hive 是针对数据仓库应⽤设计的，⽽数据仓库的内容是读多写少的。因此，Hive 中不⽀持 对数据的改写和添加，所有的数据都是在加载的时候中确定好的。&lt;/p&gt;
+&lt;p&gt;Hive 不适合⽤于联机事务处理(OLTP)，也不提供实时查询功能。它最适合应⽤在基于⼤量不可变数据的批处理 作业。Hive 的特点是可伸缩（在 Hadoop 的集群上动态的添加设备），可扩展、容错、输⼊格式的松散耦合。 Hive 的⼊⼝是 DRIVER ，执⾏的 SQL 语句⾸先提交到 DRIVER 驱动，然后调 COMPILER 解释驱动，最终解释成 MapReduce 任务执⾏，最后将结果返回。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -375,18 +361,312 @@
 &lt;ol start=&#34;5&#34;&gt;
 &lt;li&gt;执行延迟高，不适合做数据的实时处理，但适合做海量数据的离线处理。&lt;/li&gt;
 &lt;/ol&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/9785a8b5d20da5ab15eb5cf746fa5288.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image.png&#34;
+	width=&#34;1415&#34;
+	height=&#34;997&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image_hu_56e46a4d2510f5d9.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image_hu_8393fd4979f71c19.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;141&#34;
+		data-flex-basis=&#34;340px&#34;
+	
+&gt;
+&lt;br /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;hive-主要有以下-3-个模块&#34;&gt;&lt;a href=&#34;#hive-%e4%b8%bb%e8%a6%81%e6%9c%89%e4%bb%a5%e4%b8%8b-3-%e4%b8%aa%e6%a8%a1%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive 主要有以下 3 个模块:
+&lt;/h2&gt;&lt;h3 id=&#34;户接模块&#34;&gt;&lt;a href=&#34;#%e6%88%b7%e6%8e%a5%e6%a8%a1%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;⽤户接⼝模块
+&lt;/h3&gt;&lt;p&gt;含 CLI、HWI、JDBC、Thrift Server 等，⽤来实现对 Hive 的访问。CLI 是 Hive ⾃带 的命令⾏界⾯；HWI 是 Hive 的⼀个简单⽹⻚界⾯；JDBC、ODBC 以及 Thrift Server 可向⽤户提供进 ⾏编程的接⼝，其中 Thrift Server 是基于 Thrift 软件框架开发的，提供&lt;/p&gt;
+&lt;h3 id=&#34;hive-的-rpc-通信接&#34;&gt;&lt;a href=&#34;#hive-%e7%9a%84-rpc-%e9%80%9a%e4%bf%a1%e6%8e%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive 的 RPC 通信接⼝
+&lt;/h3&gt;&lt;p&gt;驱动模块（Driver）：含编译器 compiler、优化器 optimizer、执⾏器 executor 等，负责把 HiveQL 语句转换成⼀系列 MR 作业， 所有命令和查询都会进⼊驱动模块，通过该模块的解析变异，对计算过程进⾏优化，然后按照指定 的步骤执⾏。&lt;/p&gt;
+&lt;h3 id=&#34;元数据存储模块metastore&#34;&gt;&lt;a href=&#34;#%e5%85%83%e6%95%b0%e6%8d%ae%e5%ad%98%e5%82%a8%e6%a8%a1%e5%9d%97metastore&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;元数据存储模块（Metastore）&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;是⼀个独⽴的关系型数据库，通常与 MySQL 数据库连接后创建的 ⼀个 MySQL 实例，也可以是 Hive ⾃带的 Derby 数据库实例。此模块主要保存表模式和其他系统元数 据，如表的名称、表的列及其属性、表的分区及其属性、表的属性、表中数据所在位置信息等。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;metastore 是 Hive 最重要的部件，在 Hive 中，表名、表结构、字段名、字段类型、表的分隔符等统一被称为元数据。所有的元数据默认存储在 Hive 内置的 derby 数据库中，但由于 derby 只能有一个实例，也就是说不能有多个命令行客户端同时访问，所以在实际生产环境中，通常使用 MySQL 中的自建数据库代替 derby。Hive 进行的是统一的元数据管理，就是说你在 Hive 上创建了一张表，然后在 presto、impala、sparksql 中都是可以直接使用的，它们会从 Metastore 中获取统一的元数据信息，同样的你在 presto、impala、sparksql 中创建一张表，在 Hive 中也可以直接使用。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;hive 创建的内部表，默认放在 hdfs 的/usr/hive/warehouse 文件夹下
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-1.png&#34;
+	width=&#34;882&#34;
+	height=&#34;902&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-1_hu_a450e0f272720c15.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-1_hu_f2d454cd1d9857ac.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;97&#34;
+		data-flex-basis=&#34;234px&#34;
+	
+&gt;
+可以看到 db_msg.db、myhive.db 是数据库，其他的是表，而这些表创建时默认放在另一个 default 库中只是在 hdfs 中没有显示，在 hive 中才能显示出来。由此可见 hive 的表和库其实就是一个个 hdfs 文件夹，表和库可以是并列同级关系。表有内外之分，创建时默认是内部表，而 external_stu1 是外部表，外部表和内部表的区别就在于外部表只是把 hdfs 的文件数据和 hive 的表相关联，在 hive 中删除外部表，hdfs 的文件数据依然存在不会被删除，而删除内部表，表的文件数据和表本身会一同删除。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-2.png&#34;
+	width=&#34;931&#34;
+	height=&#34;730&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-2_hu_b0464d693e7c6130.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-2_hu_425bc9dbf21459fc.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;127&#34;
+		data-flex-basis=&#34;306px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;br /&gt;
-&lt;h2 id=&#34;hive主要有以下3个模块-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34;&gt;&lt;a href=&#34;#hive%e4%b8%bb%e8%a6%81%e6%9c%89%e4%bb%a5%e4%b8%8b3%e4%b8%aa%e6%a8%a1%e5%9d%97-hivee4b8bbe8a681e69c89e4bba5e4b88b3e4b8aae6a8a1e59d97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive主要有以下3个模块 {#Hive%E4%B8%BB%E8%A6%81%E6%9C%89%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E6%A8%A1%E5%9D%97}
-&lt;/h2&gt;&lt;h2 id=&#34;户接模块含clihwijdbcthrift-server等来实现对hive的访问cli是hive带-的命令界hwi是hive的个简单界jdbcodbc以及thrift-server可向户提供进-编程的接其中thrift-server是基于thrift软件框架开发的提供hi&#34;&gt;&lt;a href=&#34;#%e6%88%b7%e6%8e%a5%e6%a8%a1%e5%9d%97%e5%90%abclihwijdbcthrift-server%e7%ad%89%e6%9d%a5%e5%ae%9e%e7%8e%b0%e5%af%b9hive%e7%9a%84%e8%ae%bf%e9%97%aecli%e6%98%afhive%e5%b8%a6-%e7%9a%84%e5%91%bd%e4%bb%a4%e7%95%8chwi%e6%98%afhive%e7%9a%84%e4%b8%aa%e7%ae%80%e5%8d%95%e7%95%8cjdbcodbc%e4%bb%a5%e5%8f%8athrift-server%e5%8f%af%e5%90%91%e6%88%b7%e6%8f%90%e4%be%9b%e8%bf%9b-%e7%bc%96%e7%a8%8b%e7%9a%84%e6%8e%a5%e5%85%b6%e4%b8%adthrift-server%e6%98%af%e5%9f%ba%e4%ba%8ethrift%e8%bd%af%e4%bb%b6%e6%a1%86%e6%9e%b6%e5%bc%80%e5%8f%91%e7%9a%84%e6%8f%90%e4%be%9bhi&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;**⽤户接⼝模块：**含CLI、HWI、JDBC、Thrift Server等，⽤来实现对Hive的访问。CLI是Hive⾃带 的命令⾏界⾯；HWI是Hive的⼀个简单⽹⻚界⾯；JDBC、ODBC以及Thrift Server可向⽤户提供进 ⾏编程的接⼝，其中Thrift Server是基于Thrift软件框架开发的，提供Hi
-&lt;/h2&gt;</description>
+&lt;h2 id=&#34;架构&#34;&gt;&lt;a href=&#34;#%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;架构
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-3.png&#34;
+	width=&#34;883&#34;
+	height=&#34;449&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-3_hu_bf3e07e9994421d7.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-3_hu_391526594d3c51ad.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;196&#34;
+		data-flex-basis=&#34;471px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;hive-日志配置&#34;&gt;&lt;a href=&#34;#hive-%e6%97%a5%e5%bf%97%e9%85%8d%e7%bd%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive 日志配置
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-- Hive中的日志分为两种
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1. 系统日志，记录了hive的运行情况，错误状况。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2. Job 日志，记录了Hive 中job的执行的历史过程。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;系统日志存储在什么地方呢 ？
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;在hive/conf/hive-log4j.properties 文件中记录了Hive日志的存储情况，
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;如果没有hive-log4j.properties。那么需要找到该文件夹下的hive-log4j.properties.templete,这个是模板文件，运行mv命令把templete重命名成properties文件即可。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;properties文件默认的存储情况：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;property.hive.root.logger=WARN,DRFA
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;property.hive.log.dir=/tmp/${user.name} # 默认的存储位置,一般是/tmp/root，此处改成hive/logs
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;property.hive.log.file=hive.log  # 默认的文件名
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Job日志又存储在什么地方呢 ？
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;//Location of Hive run time structured log file
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    HIVEHISTORYFILELOC(&amp;#34;hive.querylog.location&amp;#34;, &amp;#34;/tmp/&amp;#34; + System.getProperty(&amp;#34;user.name&amp;#34;)),
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;默认存储与在/tmp/{user.name}目录下。但是我没找到。。。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;properties 文件的日志存放目录修改之后如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-4.png&#34;
+	width=&#34;837&#34;
+	height=&#34;353&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-4_hu_4520e8acf4e7fef4.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-4_hu_a65bc72b2afcc3fc.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;237&#34;
+		data-flex-basis=&#34;569px&#34;
+	
+&gt;
+日志目录是后来配置的，于是又把/tmp/root 目录下的 hive 日志手动移到了 hive/logs 下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-5.png&#34;
+	width=&#34;1274&#34;
+	height=&#34;367&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-5_hu_172101a3a70a1991.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-5_hu_9d8401827ae7467f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;347&#34;
+		data-flex-basis=&#34;833px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;hql-执行过程&#34;&gt;&lt;a href=&#34;#hql-%e6%89%a7%e8%a1%8c%e8%bf%87%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HQL 执行过程
+&lt;/h2&gt;&lt;p&gt;Hive 在执行一条 HQL 的时候，会经过以下步骤：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;语法解析：Antlr 定义 SQL 的语法规则，完成 SQL 词法，语法解析，将 SQL 转化为抽象 语法树 AST Tree；&lt;/li&gt;
+&lt;li&gt;语义解析：遍历 AST Tree，抽象出查询的基本组成单元 QueryBlock；&lt;/li&gt;
+&lt;li&gt;生成逻辑执行计划：遍历 QueryBlock，翻译为执行操作树 OperatorTree；&lt;/li&gt;
+&lt;li&gt;优化逻辑执行计划：逻辑层优化器进行 OperatorTree 变换，合并不必要的 * ReduceSinkOperator，减少 shuffle 数据量；&lt;/li&gt;
+&lt;li&gt;生成物理执行计划：遍历 OperatorTree，翻译为 MapReduce 任务；&lt;/li&gt;
+&lt;li&gt;优化物理执行计划：物理层优化器进行 MapReduce 任务的变换，生成最终的执行计划。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;hive-四种玩法&#34;&gt;&lt;a href=&#34;#hive-%e5%9b%9b%e7%a7%8d%e7%8e%a9%e6%b3%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Hive 四种玩法：
+&lt;/h2&gt;&lt;h3 id=&#34;cli&#34;&gt;&lt;a href=&#34;#cli&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CLI
+&lt;/h3&gt;&lt;p&gt;配置 hive 环境变量（通常是/etc/profile 文件）后，在任意目录下直接输入命令 hive 即可启动（或者 hive &amp;ndash;service cli），前提是要启动 hdfs（start-dfs.sh）和 hive 元数据服务（start-hivemetastore.sh 自己写的脚本配置到环境变量），因为 hive 就是操作 hdfs 的文件的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意！！！&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-6.png&#34;
+	width=&#34;1421&#34;
+	height=&#34;191&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-6_hu_e8fcf768d70661e7.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-6_hu_96ea3df9b92e66e2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;743&#34;
+		data-flex-basis=&#34;1785px&#34;
+	
+&gt;
+注意第一行提到 Hive-on -MR is deprecated 在 2.x 版本已经废弃不推荐使用，后续都是 hive on spark （on Tez），但是 MapReduce 的 hive 优化还是建议学一下。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-7.png&#34;
+	width=&#34;1423&#34;
+	height=&#34;150&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-7_hu_52aaf1bc603a5f5a.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-7_hu_5454dee5108ecc8a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;948&#34;
+		data-flex-basis=&#34;2276px&#34;
+	
+&gt;
+上面这种情况可能就是没启动元数据服务。
+hive 通常是在集群环境中使用的，如果只启动了一台服务器，那么在启动 hive 时会报错，如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-8.png&#34;
+	width=&#34;1771&#34;
+	height=&#34;235&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-8_hu_780d886e66dd009a.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-8_hu_c5c8b2a013ac174e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;753&#34;
+		data-flex-basis=&#34;1808px&#34;
+	
+&gt;
+name node 处于安全模式，服务器数量少于最小要求数量，这种情况要么等 18s 后重新启动 cli，要么启动第二台服务器并启动上面的 hdfs。&lt;/p&gt;
+&lt;h3 id=&#34;hiveserver2&#34;&gt;&lt;a href=&#34;#hiveserver2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;HiveServer2
+&lt;/h3&gt;&lt;p&gt;启动 hiveserver2 服务，提供 thrift 端口供其他客户连接，启动之后就可以使用 hive 之外的其他工具操作 hdfs 文件，比如 DBserver，IDEA 的数据库插件&lt;/p&gt;
+&lt;p&gt;需要在 hdfs 的 core-site.xml 文件中加如下配置：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hadoop.proxyuser.root.groups&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;*&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nt&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;允许root用户代理任何其他用户&lt;span class=&#34;nt&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hadoop.proxyuser.root.hosts&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;*&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;nt&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;允许代理任意服务器的请求&lt;span class=&#34;nt&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    root也可以换成hadoop等其他用户，我这里设置成了超级用户root
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;任意目录下启动 hiveserver2（前台）或者切换到后台。
+自己写的后台脚本，配置到环境变量中&lt;/p&gt;
+&lt;p&gt;[root@linux01 bin]# cat start-hiveserver2.sh&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;nohup &lt;span class=&#34;nv&#34;&gt;$HIVE_HOME&lt;/span&gt;/bin/hive --service hiveserver2 &amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;$HIVE_HOME&lt;/span&gt;/logs/hiveserver2.log 2&amp;gt;&lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#启动hiveserver2服务，提供thrift端口供其他客户连接&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;beeline&#34;&gt;&lt;a href=&#34;#beeline&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Beeline
+&lt;/h3&gt;&lt;p&gt;启动 beeline 必须先启动 hiveserver2，启动 beeline 后，键入&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-md&#34; data-lang=&#34;md&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;!connect jdbc:hive2://linux01:10000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;并输入用户名密码即可，这里的登录用户可以是任意用户因为 hadoop 的 core-site.xml 设置了 root 用户可以代理任意用户。linux01 是我的服务器名。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-9.png&#34;
+	width=&#34;1089&#34;
+	height=&#34;459&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-9_hu_2a432c89e502a252.png 480w, /zh-cn/post/2024/04/hive%E6%9C%AC%E8%B4%A8%E6%9E%B6%E6%9E%84%E7%8E%A9%E6%B3%95/image-9_hu_a19ee912d4b86804.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;237&#34;
+		data-flex-basis=&#34;569px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;web-ui&#34;&gt;&lt;a href=&#34;#web-ui&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web UI
+&lt;/h3&gt;&lt;p&gt;在 hive-site-xml 中添加 hive 配置。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hive.server2.webui.host&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c&#34;&gt;&amp;lt;!--主机名或ip--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;linux01&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hive.server2.webui.port&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;10002&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;/propert&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;启动 hive，浏览器即可访问 10002 端口&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>Hive调优</title>
@@ -394,122 +674,106 @@
         <pubDate>Sat, 13 Apr 2024 20:49:38 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/</guid>
-        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn和MR资源配置&lt;/a&gt;{#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;Yarn资源配置&lt;/a&gt;{#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE&#34; &gt;MR资源配置&lt;/a&gt;{#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92&#34; &gt;Explain查看执行计划&lt;/a&gt;{#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96&#34; &gt;分组聚合优化&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E&#34; &gt;优化前VS优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E4%BC%98%E5%8C%96&#34; &gt;Join优化&lt;/a&gt;{#Join%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89&#34; &gt;Common Join（普通join）&lt;/a&gt;{#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%20Join&#34; &gt;Map Join&lt;/a&gt;{#Map%20Join-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%C2%A0&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA&#34; &gt;法一：hint提示&lt;/a&gt;{#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91&#34; &gt;法二：自动触发&lt;/a&gt;{#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Bucket%20Map%20Join&#34; &gt;Bucket Map Join&lt;/a&gt;{#Bucket%20Map%20Join-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#hint%E6%8F%90%E7%A4%BA%C2%A0&#34; &gt;hint提示&lt;/a&gt;{#hint%E6%8F%90%E7%A4%BA%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B&#34; &gt;优化案例&lt;/a&gt;{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Sort%20Merge%20Bucket%20Map%20Join%28SMB%20map%20join%29&#34; &gt;Sort Merge Bucket Map Join(SMB map join)&lt;/a&gt;{#Sort%20Merge%20Bucket%20Map%20Join(SMB%20map%20join)-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%8E%9F%E7%90%86&#34; &gt;原理&lt;/a&gt;{#%E5%8E%9F%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96&#34; &gt;优化&lt;/a&gt;{#%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96&#34; &gt;数据倾斜优化&lt;/a&gt;{#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;分组聚合导致的数据倾斜&lt;/a&gt;{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map-Side%E8%81%9A%E5%90%88&#34; &gt;Map-Side聚合&lt;/a&gt;{#Map-Side%E8%81%9A%E5%90%88-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Skew-GroupBy%E4%BC%98%E5%8C%96&#34; &gt;Skew-GroupBy优化&lt;/a&gt;{#Skew-GroupBy%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%89%8D&#34; &gt;优化前&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%89%8D-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0&#34; &gt;优化后&lt;/a&gt;{#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C&#34; &gt;Join导致的数据倾斜&lt;/a&gt;{#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#map%20join&#34; &gt;map join&lt;/a&gt;{#map%20join-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#skew%20join&#34; &gt;skew join&lt;/a&gt;{#skew%20join-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96&#34; &gt;任务并行度优化&lt;/a&gt;{#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Map端并行度&lt;/a&gt;{#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6&#34; &gt;Reduce端并行度&lt;/a&gt;{#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96&#34; &gt;小文件合并优化&lt;/a&gt;{#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Map端输入的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6&#34; &gt;合并Reduce端输出的小文件&lt;/a&gt;{#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96&#34; &gt;其他优化&lt;/a&gt;{#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#CBO%E4%BC%98%E5%8C%96&#34; &gt;CBO优化&lt;/a&gt;{#CBO%E4%BC%98%E5%8C%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8&#34; &gt;谓词下推&lt;/a&gt;{#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2&#34; &gt;矢量化查询&lt;/a&gt;{#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Fetch%E6%8A%93%E5%8F%96&#34; &gt;Fetch抓取&lt;/a&gt;{#Fetch%E6%8A%93%E5%8F%96-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F&#34; &gt;本地模式&lt;/a&gt;{#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C&#34; &gt;并行执行&lt;/a&gt;{#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F&#34; &gt;严格模式&lt;/a&gt;{#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-toc}&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e5%92%8cmr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne5928cmre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+        <description>&lt;h2 id=&#34;yarn-和-mr-资源配置&#34;&gt;&lt;a href=&#34;#yarn-%e5%92%8c-mr-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn 和 MR 资源配置
 &lt;/h2&gt;&lt;p&gt;配置项参考官网：&lt;a class=&#34;link&#34; href=&#34;https://apache.github.io/hadoop/&#34;  title=&#34;https://apache.github.io/hadoop/&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://apache.github.io/hadoop/&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;yarn资源配置-yarne8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#yarn%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
-&lt;/h3&gt;&lt;p&gt;修改yarn-site.xml,调整的Yarn参数均与CPU、内存等资源有关，配置如下：&lt;/p&gt;
+&lt;h3 id=&#34;yarn-资源配置&#34;&gt;&lt;a href=&#34;#yarn-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Yarn 资源配置
+&lt;/h3&gt;&lt;p&gt;修改 yarn-site.xml,调整的 Yarn 参数均与 CPU、内存等资源有关，配置如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;yarn.nodemanager.resource.memory-mb&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;65536&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&lt;span class=&#34;nt&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;yarn.nodemanager.resource.cpu-vcores&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;16&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&lt;span class=&#34;nt&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;yarn.scheduler.maximum-allocation-mb&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;16384&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;单个Container能够使用的最大内存。&lt;span class=&#34;nt&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;yarn.scheduler.minimum-allocation-mb&lt;span class=&#34;nt&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;512&lt;span class=&#34;nt&#34;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;单个Container能够使用的最小内存。&lt;span class=&#34;nt&#34;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;修改后重新分发该配置文件并重启 Yarn&lt;/p&gt;
+&lt;h3 id=&#34;mr-资源配置&#34;&gt;&lt;a href=&#34;#mr-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MR 资源配置
+&lt;/h3&gt;&lt;p&gt;MapReduce 资源配置主要包括 Map Task 的内存和 CPU 核数，以及 Reduce Task 的内存和 CPU 核数。核心配置参数如下：&lt;/p&gt;
+&lt;h4 id=&#34;mapreducemapmemorymb&#34;&gt;&lt;a href=&#34;#mapreducemapmemorymb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;mapreduce.map.memory.mb&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;该参数的含义是，单个 Map Task 申请的 container 容器内存大小，其默认值为 1024。该值不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.memory-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;value&amp;gt;65536&amp;lt;/value&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&amp;lt;/description&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;name&amp;gt;yarn.nodemanager.resource.cpu-vcores&amp;lt;/name&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;value&amp;gt;16&amp;lt;/value&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;description&amp;gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&amp;lt;/description&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.maximum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;value&amp;gt;16384&amp;lt;/value&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最大内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;property&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;name&amp;gt;yarn.scheduler.minimum-allocation-mb&amp;lt;/name&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;value&amp;gt;512&amp;lt;/value&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;description&amp;gt;单个Container能够使用的最小内存。&amp;lt;/description&amp;gt;&lt;/p&gt;
-&lt;p&gt;&amp;lt;/property&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;修改后重新分发该配置文件并重启Yarn&lt;/p&gt;
-&lt;h3 id=&#34;mr资源配置-mre8b584e6ba90e9858de7bdae&#34;&gt;&lt;a href=&#34;#mr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-mre8b584e6ba90e9858de7bdae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
-&lt;/h3&gt;&lt;p&gt;MapReduce资源配置主要包括Map Task的内存和CPU核数，以及Reduce Task的内存和CPU核数。核心配置参数如下：&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;{#_Hlk110418691}&lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.memory.mb&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;该参数的含义是，单个Map Task申请的container容器内存大小，其默认值为1024。该值不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在 hive 中，可直接使用如下方式为每个 SQL 语句单独进行配置：set mapreduce.map.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;mapreducemapcpuvcores&#34;&gt;&lt;a href=&#34;#mapreducemapcpuvcores&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;mapreduce.map.cpu.vcores&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;该参数的含义是，单个 Map Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）&lt;/p&gt;
+&lt;h4 id=&#34;mapreducereducecpuvcores&#34;&gt;&lt;a href=&#34;#mapreducereducecpuvcores&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;mapreduce.reduce.cpu.vcores&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;该参数的含义是，单个 Reduce Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）&lt;/p&gt;
+&lt;h4 id=&#34;mapreducereducememorymb&#34;&gt;&lt;a href=&#34;#mapreducereducememorymb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;mapreduce.reduce.memory.mb&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;该参数的含义是，单个 Reduce Task 申请的 container 容器内存大小，其默认值为 1024。该值同样不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.map.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt; &lt;strong&gt;）&lt;/strong&gt; &lt;strong&gt;mapreduce.map.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;该参数的含义是，单个Map Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;3）&lt;/strong&gt; &lt;strong&gt;mapreduce.reduce.cpu.vcores&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;4）mapreduce.reduce.memory.mb&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;该参数的含义是，单个Reduce Task申请的container容器内存大小，其默认值为1024。该值同样不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.reduce.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34;&gt;&lt;a href=&#34;#explain%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92-explaine69fa5e79c8be689a7e8a18ce8aea1e58892&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}
-&lt;/h2&gt;&lt;p&gt;Explain用于呈现HQL语句的详细执行步骤，由一系列Stage组成，简单的理解为HQL查询语句的不同执行阶段，这一系列Stage具有依赖关系，每个Stage对应一个MapReduce Job或一个文件系统操作等。&lt;/p&gt;
-&lt;p&gt;若某个Stage对应的一个MapReduce Job，则其Map端和Reduce端的计算逻辑分别由Map Operator Tree和Reduce Operator Tree进行描述，Operator Tree由一系列的Operator组成，一个Operator代表在Map或Reduce阶段的一个单一的逻辑操作，例如TableScan Operator，Select Operator，Join Operator等。具体如下图：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/4da9891258984bbe1a892f0ccafcb92b.png&#34;
-	
-	
-	
+&lt;p&gt;该参数需要根据不同的计算任务单独进行配置，在 hive 中，可直接使用如下方式为每个 SQL 语句单独进行配置：set mapreduce.reduce.memory.mb=2048;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;explain-查看执行计划&#34;&gt;&lt;a href=&#34;#explain-%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Explain 查看执行计划
+&lt;/h2&gt;&lt;p&gt;Explain 用于呈现 HQL 语句的详细执行步骤，由一系列 Stage 组成，简单的理解为 HQL 查询语句的不同执行阶段，这一系列 Stage 具有依赖关系，每个 Stage 对应一个 MapReduce Job 或一个文件系统操作等。&lt;/p&gt;
+&lt;p&gt;若某个 Stage 对应的一个 MapReduce Job，则其 Map 端和 Reduce 端的计算逻辑分别由 Map Operator Tree 和 Reduce Operator Tree 进行描述，Operator Tree 由一系列的 Operator 组成，一个 Operator 代表在 Map 或 Reduce 阶段的一个单一的逻辑操作，例如 TableScan Operator，Select Operator，Join Operator 等。具体如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image.png&#34;
+	width=&#34;213&#34;
+	height=&#34;681&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image_hu_47b669486afcd8ad.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image_hu_6f7640515ae32138.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;31&#34;
+		data-flex-basis=&#34;75px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;常见的Operator及其作用如下&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;TableScan：表扫描操作，通常map端第一个操作肯定是表扫描操作&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;常见的 Operator 及其作用如下&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;TableScan：表扫描操作，通常 map 端第一个操作肯定是表扫描操作&lt;/p&gt;
 &lt;p&gt;Select Operator：选取操作&lt;/p&gt;
-&lt;p&gt;Group By Operator：map端的分组聚合操作，在后面的分组聚合中会讲到&lt;/p&gt;
+&lt;p&gt;Group By Operator：map 端的分组聚合操作，在后面的分组聚合中会讲到&lt;/p&gt;
 &lt;p&gt;Reduce Output Operator：输出到 reduce 操作&lt;/p&gt;
 &lt;p&gt;Filter Operator：过滤操作&lt;/p&gt;
 &lt;p&gt;Join Operator：join 操作&lt;/p&gt;
 &lt;p&gt;File Output Operator：文件输出操作&lt;/p&gt;
-&lt;p&gt;Fetch Operator 客户端获取数据操作
-&lt;strong&gt;Explain语法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Fetch Operator 客户端获取数据操作&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Explain 语法&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;EXPLAIN &lt;/p&gt;
 \[FORMATTED \| EXTENDED \| DEPENDENCY\]&lt;p&gt; query-sql&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;FORMATTED：将执行计划以JSON字符串的形式输出&lt;/li&gt;
+&lt;li&gt;FORMATTED：将执行计划以 JSON 字符串的形式输出&lt;/li&gt;
 &lt;li&gt;EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息&lt;/li&gt;
 &lt;li&gt;DEPENDENCY：输出执行计划读取的表及分区&lt;/li&gt;
 &lt;/ul&gt;
@@ -517,76 +781,793 @@
 &lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
 &lt;p&gt;explain formatted&lt;/p&gt;
 &lt;p&gt;select user_id,count(*) from order_detail group by user_id;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/d475c4d504540aaa12554c7c9480202c.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1.png&#34;
+	width=&#34;1435&#34;
+	height=&#34;886&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1_hu_df40e0082aa7426d.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1_hu_38c1b7e1fc123ebc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;161&#34;
+		data-flex-basis=&#34;388px&#34;
 	
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96-e58886e7bb84e8819ae59088e4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;分组聚合优化&lt;/strong&gt; {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}
-&lt;/h2&gt;&lt;p&gt;分组聚合是通过MR Job实现的，map端读取数据，并按照分组字段分区，通过shuffle，把数据发到reduce，各组数据在reduce端完成最终的聚合运算。&lt;/p&gt;
-&lt;p&gt;分组聚合的优化主要围绕减少shuffle数据量进行，具体做法是map-side聚合。map-side聚合是在map端维护一个hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到reduce端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个map端的部分聚合过程，以减少shuffle的工作量，进而减少reduce端的聚合工作量。&lt;/p&gt;
+&lt;h2 id=&#34;分组聚合优化&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;分组聚合优化&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;分组聚合是通过 MR Job 实现的，map 端读取数据，并按照分组字段分区，通过 shuffle，把数据发到 reduce，各组数据在 reduce 端完成最终的聚合运算。&lt;/p&gt;
+&lt;p&gt;分组聚合的优化主要围绕减少 shuffle 数据量进行，具体做法是 map-side 聚合。map-side 聚合是在 map 端维护一个 hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到 reduce 端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个 map 端的部分聚合过程，以减少 shuffle 的工作量，进而减少 reduce 端的聚合工作量。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;map-side聚合相关参数如下&lt;/p&gt;
-&lt;p&gt;&amp;ndash;启用map-side聚合，默认是true&lt;/p&gt;
+&lt;p&gt;map-side 聚合相关参数如下&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用 map-side 聚合，默认是 true&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.map.aggr=true;&lt;/strong&gt;&lt;/p&gt;
 &lt;br /&gt;
-&lt;p&gt;&amp;ndash;用于检测源表数据是否适合进行map-side聚合。检测的方法是：系统自动先对若干条数据进行map-side聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行map-side聚合；否则，认为该表数据不适合进行map-side聚合，后续数据便不再进行map-side聚合。0.5意味着平均有2条数据可以聚合成1条，1意味着没有出现任何的聚合&lt;/p&gt;
+&lt;p&gt;&amp;ndash;用于检测源表数据是否适合进行 map-side 聚合。检测的方法是：系统自动先对若干条数据进行 map-side 聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行 map-side 聚合；否则，认为该表数据不适合进行 map-side 聚合，后续数据便不再进行 map-side 聚合。0.5 意味着平均有 2 条数据可以聚合成 1 条，1 意味着没有出现任何的聚合&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.min.reduction=0.5;&lt;/strong&gt;&lt;/p&gt;
 &lt;br /&gt;
-&lt;p&gt;&amp;ndash;用于&lt;strong&gt;hive.map.aggr.hash.min.reduction=0.5&lt;/strong&gt; 检测源表是否适合map-side聚合的条数。&lt;/p&gt;
+&lt;p&gt;&amp;ndash;用于&lt;strong&gt;hive.map.aggr.hash.min.reduction=0.5&lt;/strong&gt; 检测源表是否适合 map-side 聚合的条数。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.groupby.mapaggr.checkinterval=100000;&lt;/strong&gt;&lt;/p&gt;
 &lt;br /&gt;
-&lt;p&gt;&amp;ndash;map-side聚合所用的hash table占用map task堆内存的最大比例，若超出该值，则会对hash table进行一次flush。&lt;/p&gt;
+&lt;p&gt;&amp;ndash;map-side 聚合所用的 hash table 占用 map task 堆内存的最大比例，若超出该值，则会对 hash table 进行一次 flush。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;set hive.map.aggr.hash.force.flush.memory.threshold=0.7;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8dvs%e4%bc%98%e5%8c%96%e5%90%8e-e4bc98e58c96e5898dvse4bc98e58c96e5908e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}
-&lt;/h3&gt;&lt;p&gt;set hive.map.aggr=false关闭分组聚合优化，查看执行效果，在Map端没有了Group By Operator&lt;/p&gt;
+&lt;h3 id=&#34;优化前-vs-优化后&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8d-vs-%e4%bc%98%e5%8c%96%e5%90%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前 VS 优化后
+&lt;/h3&gt;&lt;p&gt;set hive.map.aggr=false 关闭分组聚合优化，查看执行效果，在 Map 端没有了 Group By Operator&lt;/p&gt;
 &lt;br /&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/bef7cc2560feaf0c03af5c376dadbac4.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2.png&#34;
+	width=&#34;538&#34;
+	height=&#34;871&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2_hu_d4e494b7ea248a44.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2_hu_c61e4d2575f0ab2a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;61&#34;
+		data-flex-basis=&#34;148px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;set hive.map.aggr=true开启分组聚合优化，查看执行效果，在Map端有了Group By Operator，&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/fd582dc168193eedd0302e6cdccc7d17.png&#34;
-	
-	
-	
+&lt;p&gt;set hive.map.aggr=true 开启分组聚合优化，查看执行效果，在 Map 端有了 Group By Operator，&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3.png&#34;
+	width=&#34;493&#34;
+	height=&#34;888&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3_hu_53044b8f5a377993.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3_hu_ae68419ad1ada840.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;55&#34;
+		data-flex-basis=&#34;133px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;br /&gt;
-&lt;p&gt;若发生map-side优化，优化后比优化前的HQL执行耗时应该有所减少，且map的output数量明显小于input数量。&lt;/p&gt;
-&lt;p&gt;若没有触发map-side，则map的output数量虽然比input数量有所减少但可以忽略不计。具体有没有触发map-side可以去web UI界面查看map日志。&lt;/p&gt;
-&lt;p&gt;注意！！map-side聚合不够智能，即map端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据&lt;strong&gt;分区分桶&lt;/strong&gt;，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。&lt;/p&gt;
+&lt;p&gt;若发生 map-side 优化，优化后比优化前的 HQL 执行耗时应该有所减少，且 map 的 output 数量明显小于 input 数量。&lt;/p&gt;
+&lt;p&gt;若没有触发 map-side，则 map 的 output 数量虽然比 input 数量有所减少但可以忽略不计。具体有没有触发 map-side 可以去 web UI 界面查看 map 日志。&lt;/p&gt;
+&lt;p&gt;注意！！map-side 聚合不够智能，即 map 端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据&lt;strong&gt;分区分桶&lt;/strong&gt;，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;例：&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;1）select province_id,count(*) from order_detail group by province_id;&lt;/p&gt;
-&lt;p&gt;该语句查询所有订单，根据省份id分组聚合，省份只有34个，这样map后的数据应该只有34条，所以聚合结果是应该是比较可观的。所以group by 的基数越小，一般越适合聚合。&lt;/p&gt;
+&lt;p&gt;该语句查询所有订单，根据省份 id 分组聚合，省份只有 34 个，这样 map 后的数据应该只有 34 条，所以聚合结果是应该是比较可观的。所以 group by 的基数越小，一般越适合聚合。&lt;/p&gt;
 &lt;p&gt;2）select product_id,count(*) from order_detail group by product_id;&lt;/p&gt;
-&lt;p&gt;若product_id这一分组字段在order_detail表中分布比较散，那么可能会导致hive在表中切片抽样进行map-side检测的时候测试聚合结果&amp;gt;0.5，那么最终就没有使用map-side聚合。所以说如果能保证抽样数据的测试结果&amp;lt;=0.5，就会实现分组聚合，当然也可以调整&lt;strong&gt;hive.map.aggr.hash.min.reduction&lt;/strong&gt; 的值以提高map-side的命中率。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;若100w&lt;/strong&gt; &lt;strong&gt;的数据集分组聚合之后的输出&lt;/strong&gt; &lt;strong&gt;&amp;gt;100w,&lt;/strong&gt; &lt;strong&gt;可能的原因是多次触发了&lt;/strong&gt; &lt;strong&gt;hash table&lt;/strong&gt; &lt;strong&gt;的&lt;/strong&gt; &lt;strong&gt;flush&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;join优化-joine4bc98e58c96&#34;&gt;&lt;a href=&#34;#join%e4%bc%98%e5%8c%96-joine4bc98e58c96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Join优化 {#Join%E4%BC%98%E5%8C%96}
-&lt;/h2&gt;&lt;p&gt;Join优化就是控制HQL语句走哪种join算法，这些join算法有的快，有的慢，有的激进，有的保守。我们要做的就是让HQL走最适合自己的join算法。&lt;/p&gt;
-&lt;h3 id=&#34;common-join普通join-common20joinefbc88e699aee9809ajoinefbc89&#34;&gt;&lt;a href=&#34;#common-join%e6%99%ae%e9%80%9ajoin-common20joinefbc88e699aee9809ajoinefbc89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}
-&lt;/h3&gt;&lt;h4 id=&#34;原理-e58e9fe79086&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-e58e9fe79086&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理 {#%E5%8E%9F%E7%90%86}
-&lt;/h4&gt;&lt;p&gt;hive中最稳定的join算法，其通过一个MapReduce Job完成一个join操作。Map端负责读取join操作所需表的数据，并按照关联字段进行分区，通过Shuffle，将其发送到Reduce端，相同key的数据在Reduce端完成最终的Join操作。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/blog_migrate/c93be2b01fce05ed73c439a062480a2f.png&#34;
-	
-	
-	
+&lt;p&gt;若 product_id 这一分组字段在 order_detail 表中分布比较散，那么可能会导致 hive 在表中切片抽样进行 map-side 检测的时候测试聚合结果&amp;gt;0.5，那么最终就没有使用 map-side 聚合。所以说如果能保证抽样数据的测试结果&amp;lt;=0.5，就会实现分组聚合，当然也可以调整&lt;strong&gt;hive.map.aggr.hash.min.reduction&lt;/strong&gt; 的值以提高 map-side 的命中率。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;若 100w 的数据集分组聚合之后的输出&amp;gt;100w,可能的原因是多次触发了 hash table 的 flush&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;join-优化&#34;&gt;&lt;a href=&#34;#join-%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Join 优化
+&lt;/h2&gt;&lt;p&gt;Join 优化就是控制 HQL 语句走哪种 join 算法，这些 join 算法有的快，有的慢，有的激进，有的保守。我们要做的就是让 HQL 走最适合自己的 join 算法。&lt;/p&gt;
+&lt;h3 id=&#34;common-join普通-join&#34;&gt;&lt;a href=&#34;#common-join%e6%99%ae%e9%80%9a-join&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Common Join(普通 join)
+&lt;/h3&gt;&lt;h4 id=&#34;原理&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理
+&lt;/h4&gt;&lt;p&gt;hive 中最稳定的 join 算法，其通过一个 MapReduce Job 完成一个 join 操作。Map 端负责读取 join 操作所需表的数据，并按照关联字段进行分区，通过 Shuffle，将其发送到 Reduce 端，相同 key 的数据在 Reduce 端完成最终的 Join 操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4.png&#34;
+	width=&#34;641&#34;
+	height=&#34;479&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4_hu_d8fba809e1779fb4.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4_hu_d946e815b71cef4d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;133&#34;
+		data-flex-basis=&#34;321px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表&#34;&gt;&lt;a href=&#34;#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f-%e7%9a%84%e6%98%afhql%e8%af%ad%e5%8f%a5%e4%b8%ad%e7%9a%84join%e6%93%8d%e4%bd%9c%e5%92%8c%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92%e4%b8%ad%e7%9a%84common-join%e4%bb%bb%e5%8a%a1%e5%b9%b6%e9%9d%9e%e4%b8%80%e5%af%b9%e4%b8%80%e7%9a%84%e5%85%b3%e7%b3%bb%e5%8d%b3hql%e4%b8%ad%e7%9a%84a%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;需要&lt;strong&gt;注意&lt;/strong&gt; 的是，&lt;strong&gt;HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系&lt;/strong&gt;，即HQL中的A&lt;strong&gt;表&lt;/strong&gt;
-&lt;/h2&gt;</description>
+&lt;p&gt;需要注意的是，HQL 语句中的 join 操作和执行计划中的 Common Join 任务并非一对一的关系，即 HQL 中的 A 表 join B 表 join C 表在 common join 中未必也是两个 join 操作，一个 HQL 语句中的相邻的且关联字段相同的多个 join 操作可以合并为一个 Common Join 任务。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;例：
+1）hive (default)&lt;/p&gt;
+&lt;p&gt;select a.val, b.val, c.val from&lt;/p&gt;
+&lt;p&gt;a join b on (a.key = b.key1) join c on (c.key = b.key1)&lt;/p&gt;
+&lt;p&gt;上述 sql 语句中两个 join 操作的关联字段均为 b 表的 key1 字段，则该语句中的两个 join 操作可由一个 Common Join 任务实现，也就是可通过 1 个 Map Reduce 任务实现。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;2）hive (default)&amp;gt; select a.val, b.val, c.val from&lt;/p&gt;
+&lt;p&gt;a join b on (a.key = b.key1) join c on (c.key = b.key2)&lt;/p&gt;
+&lt;p&gt;上述 sql 语句中的两个 join 操作关联字段各不相同，则该语句的两个 join 操作需要各自通过一个 Common Join 任务实现，也就是通过 2 个 Map Reduce 任务实现。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;map-join&#34;&gt;&lt;a href=&#34;#map-join&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Map Join
+&lt;/h3&gt;&lt;h4 id=&#34;原理-1&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理
+&lt;/h4&gt;&lt;p&gt;Map Join 算法可以通过一个 MR 和一个 MapJoin 阶段完成一个 join 操作，省去了 shuffle 和 reduce，在第二个 map 阶段进行表的 join，不需要进入 reduce 阶段。其适用场景为大表 join 小表。第一个 Job 会读取小表数据，将其制作为 hash table，并上传至 Hadoop 分布式缓存（本质上是上传至 HDFS）。第二个 Job 会先从分布式缓存中读取小表数据，并缓存在 Map Task 的内存中，然后扫描大表数据，这样在 map 端即可完成关联操作。如下图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5.png&#34;
+	width=&#34;865&#34;
+	height=&#34;514&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5_hu_c9f21c1f5ca0940b.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5_hu_1529fb5d47ecf2d4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;168&#34;
+		data-flex-basis=&#34;403px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;mapreduce local task 是本地任务，读取小表数据，因为小表数据占用内存资源少，所以不上传到 yarn，直接在本地读取效率更高 ，读取后序列化生成 hash table 并上传到 hdfs 的 cache 中。&lt;/p&gt;
+&lt;p&gt;其中 Mapper 是实现 Map 阶段功能的代码组件。它接受原始数据作为输入，执行某种转换操作，然后输出一组键值对。这些键值对会作为 Reduce 阶段的输入。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;例：SELECT a.key, a.value FROM a JOIN b ON a.key = b.key&lt;/p&gt;
+&lt;p&gt;前提 b 表是一张小表，具体小表有多小，由参数 hive.mapjoin.smalltable.filesize 来决定，默认值是 25M。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参数列表：&lt;/p&gt;
+&lt;p&gt;1）小表自动选择 Mapjoin&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=true;&lt;/p&gt;
+&lt;p&gt;默认值：false。该参数为 true 时，Hive 自动对左边的表统计量，若是小表就加入内存，即对小表使用 Map join
+2）小表阀值
+set hive.mapjoin.smalltable.filesize=25000000;
+?默认值：25M&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;优化&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;法一：hint 提示&lt;/strong&gt;
+手动指定通过 map join 算法，该方式已经过时，不推荐使用。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;hive (default)&amp;gt; select /_+ map join(ta) _/&lt;/p&gt;
+&lt;p&gt;ta.id, tb.id from table_a ta join table_b tb on ta.id=tb.id;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;法二：自动触发&lt;/strong&gt;
+Hive 在编译 HQL 语句阶段，起初所有的 join 操作均采用 Common Join 算法实现。&lt;/p&gt;
+&lt;p&gt;之后在物理优化阶段，Hive 会根据每个 Common Join 任务所需表的大小判断该 Common Join 任务是否能够转换为 Map Join 任务，若满足要求（小表大小&amp;lt;指定的阈值），便将 Common Join 任务自动转换为 Map Join 任务。&lt;/p&gt;
+&lt;p&gt;但有些 Common Join 任务所需的表大小，在 HQL 的编译阶段是未知的（例如对子查询进行 join 操作），所以这种 Common Join 任务是否能转换成 Map Join 任务在编译阶是无法确定的。&lt;/p&gt;
+&lt;p&gt;针对这种情况，Hive 会在编译阶段生成一个条件任务（Conditional Task），其下会包含一个计划列表，计划列表中包含转换后的 Map Join 任务以及原有的 Common Join 任务。最终具体采用哪个计划，是在运行时决定的。大致思路如下图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6.png&#34;
+	width=&#34;865&#34;
+	height=&#34;609&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6_hu_9b1e73b062f06732.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6_hu_ba70a549f87b60b1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;142&#34;
+		data-flex-basis=&#34;340px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Map join 自动转换的具体判断逻辑如下图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7.png&#34;
+	width=&#34;863&#34;
+	height=&#34;680&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7_hu_ab3561a231e66273.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7_hu_122f568ab470925a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;126&#34;
+		data-flex-basis=&#34;304px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;图片详情看尚硅谷 P135&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;寻找大表候选人时还不知道每张表的大小&lt;/strong&gt;，那么选择规则是看 join 方式，有 innner join、left join、right join 等等。&lt;/p&gt;
+&lt;p&gt;inner join：每个表都可能是大表候选人。&lt;/p&gt;
+&lt;p&gt;left join：默认左表为大表候选人，右表当作小表，这样小表会缓存到内存中，以大表为主，从大表中一条条 join 内存中的小表，如果反过来把大表缓存到内存中，以小表为主，从小表中一条条 join 内存中的大表，若出现大表有该字段而小表没有的情况，这种情况下就会出现大量数据 join 失败，小表数据少，大表数据多，那么会因为小表浪费很多数据，所以通常是左表为大表，右表为小表。&lt;/p&gt;
+&lt;p&gt;right join：左表当作小表，右表为大表候选人。&lt;/p&gt;
+&lt;p&gt;full outer join：找不到大表候选人，因为全外联要返回两个表的全部数据，两个表都要去遍历，就无法 map join 优化。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;涉及参数：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启动 Map Join 自动转换&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;一个 Common Join operator 转为 Map Join operator 的判断条件：若该 Common Join 相关的表中,把每一个表都当作大表候选人，若除大表之外的任意一张已知大小的表的大小&amp;gt;大表候选人，则该组合不成立，不生成 map join，反之生成一个 Map Join 计划。此时可能存在多种组合均满足该条件,则 hive 会为每种满足条件的组合均生成一个 Map Join 计划,同时还会保留原有的 Common Join 计划作为后备(back up)计划,实际运行时,优先执行 Map Join 计划，若不能执行成功，则启动 Common Join 后备计划。&lt;/p&gt;
+&lt;p&gt;set hive.mapjoin.smalltable.filesize=250000;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;开启无条件转 Map Join&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join.noconditionaltask=true; -无条件转 Map Join 时的小表之和阈值,若一个 Common Join operator 相关的表中，存在 n-1 张表的大小总和&amp;lt;=该值,此时 hive 便不会再为每种 n-1 张表的组合均生成 Map Join 计划,同时也不会保留 Common Join 作为后备计划。而是只生成一个最优的 Map Join 计划。
+set hive.auto.convert.join.noconditionaltask.size=10000000;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;优化案例&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;优化案例&lt;/strong&gt;
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;hive (default)&amp;gt; select * from order_detail od&lt;/p&gt;
+&lt;p&gt;join product_info product on od.product_id = product.id&lt;/p&gt;
+&lt;p&gt;join province_info province on od.province_id = province.id;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;优化前&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;上述 SQL 语句共有三张表进行两次 join 操作，且两次 join 操作的关联字段不同。故优化前的执行计划应该包含两个 Common Join operator，也就是由两个 MapReduce 任务实现。执行计划如下图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8.png&#34;
+	width=&#34;445&#34;
+	height=&#34;1391&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8_hu_3e6bbe204819d3d6.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8_hu_63b78982ef539f4b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;31&#34;
+		data-flex-basis=&#34;76px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优化思路&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用如下语句获取表/分区的大小信息：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
+&lt;p&gt;desc formatted table_name partition(partition_col=&amp;lsquo;partition&amp;rsquo;);&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;经分析，参与 join 的三张表，数据量如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9.png&#34;
+	width=&#34;1474&#34;
+	height=&#34;371&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9_hu_53b2492ddd32221d.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9_hu_a661e9dca70d29c4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;397&#34;
+		data-flex-basis=&#34;953px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方案一：&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启用 Map Join 自动转换。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=true;&lt;/p&gt;
+&lt;p&gt;不使用无条件转 Map Join。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join.noconditionaltask=false;&lt;/p&gt;
+&lt;p&gt;调整 hive.mapjoin.smalltable.filesize 参数，使其大于等于 product_info。&lt;/p&gt;
+&lt;p&gt;set hive.mapjoin.smalltable.filesize=25285707;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这样可保证将两个 Common Join operator 均可转为 Map Join operator，并保留 Common Join 作为后备计划，保证计算任务的稳定。调整完的执行计划如下图：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10.png&#34;
+	width=&#34;541&#34;
+	height=&#34;1422&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10_hu_4df7790955068a83.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10_hu_75b79a59c50968c3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;38&#34;
+		data-flex-basis=&#34;91px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方案二：&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启用 Map Join 自动转换。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=true;&lt;/p&gt;
+&lt;p&gt;使用无条件转 Map Join。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join.noconditionaltask=true;&lt;/p&gt;
+&lt;p&gt;调整 hive.auto.convert.join.noconditionaltask.size 参数，使其大于等于 product_info 和 province_info 之和。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join.noconditionaltask.size=25286076;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这样可直接将两个 Common Join operator 转为两个 Map Join operator，并且由于两个 Map Join operator 的小表大小之和小于等于 hive.auto.convert.join.noconditionaltask.size，故两个 Map Join operator 任务可合并为同一个。这个方案计算效率最高，但需要的内存也是最多的。&lt;/p&gt;
+&lt;p&gt;调整完的执行计划如下图：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11.png&#34;
+	width=&#34;334&#34;
+	height=&#34;805&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11_hu_d1095692a79431fe.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11_hu_7607218a1c33454a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;41&#34;
+		data-flex-basis=&#34;99px&#34;
+	
+&gt;
+&lt;strong&gt;方案三：&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;启用 Map Join 自动转换。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=true;&lt;/p&gt;
+&lt;p&gt;使用无条件转 Map Join。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join.noconditionaltask=true;&lt;/p&gt;
+&lt;p&gt;调整 hive.auto.convert.join.noconditionaltask.size 参数，使其等于 product_info。&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join.noconditionaltask.size=25285707;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这样可直接将两个 Common Join operator 转为 Map Join operator，但不会将两个 Map Join 的任务合并。该方案计算效率比方案二低，但需要的内存也更少。
+调整完的执行计划如下图：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12.png&#34;
+	width=&#34;191&#34;
+	height=&#34;1408&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12_hu_c31777942e896c7e.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12_hu_10df58072d93e378.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;13&#34;
+		data-flex-basis=&#34;32px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;bucket-map-join&#34;&gt;&lt;a href=&#34;#bucket-map-join&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Bucket Map Join
+&lt;/h3&gt;&lt;h4 id=&#34;原理-2&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理
+&lt;/h4&gt;&lt;p&gt;Bucket Map Join 是对 Map Join 算法的改进，其打破了 Map Join 只适用于大表 join 小表的限制，可用于大表 join 大表的场景。分桶其实就是把大表化成了“小表”，然后 Map-Side Join 解决。&lt;/p&gt;
+&lt;p&gt;Bucket Map Join 的核心思想是：若能保证参与 join 的表均为分桶表，且关联字段为分桶字段，且其中一张表的分桶数量是另外一张表分桶数量的整数倍，就能保证参与 join 的两张表的分桶之间具有明确的关联关系，所以就可以在两表的分桶间进行 Map Join 操作了。这样一来，第二个 Job 的 Map 端就无需再缓存小表的全表数据了，而只需缓存其所需的分桶即可。其原理如图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13.png&#34;
+	width=&#34;1235&#34;
+	height=&#34;705&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13_hu_cb5f7dc2b3847456.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13_hu_f86c97fcd542db0d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;175&#34;
+		data-flex-basis=&#34;420px&#34;
+	
+&gt;
+第一个 map 对较小的表 tableB 的每个 bucket 序列化成 hash table，上传到 hdfs cache 中，第二个 map 对较大的表 tableA 的每个桶单独切片，有几个桶就有几个 mapper&lt;/p&gt;
+&lt;h4 id=&#34;优化-1&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;hint 提示&lt;/strong&gt;
+Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x 已经放弃维护 MR 计算引擎，建议使用 spark 等计算引擎（看到这乐死我了 tmd 白学了）。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14.png&#34;
+	width=&#34;2160&#34;
+	height=&#34;190&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14_hu_aa3268172124e9c2.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14_hu_ef09d34419541475.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1136&#34;
+		data-flex-basis=&#34;2728px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;参数：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;关闭 cbo 优化，cbo 会导致 hint 信息被忽略&lt;/p&gt;
+&lt;p&gt;set hive.cbo.enable=false;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;map join hint 默认会被忽略(因为已经过时)，需将如下参数设置为 false&lt;/p&gt;
+&lt;p&gt;set hive.ignore.mapjoin.hint=false;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用 bucket map join 优化功能&lt;/p&gt;
+&lt;p&gt;set hive.optimize.bucketmapjoin = true;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;优化案例-1&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;优化案例&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;hive (default)&amp;gt; select _ from( select _ from order_detail where dt=&amp;lsquo;2020-06-14&amp;rsquo;) od&lt;/p&gt;
+&lt;p&gt;join( select * from payment_detail where dt=&amp;lsquo;2020-06-14&amp;rsquo;) pd on od.id=pd.order_detail_id;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优化前&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;上述 SQL 语句共有两张表一次 join 操作，故优化前的执行计划应包含一个 Common Join 任务，通过一个 MapReduce Job 实现。执行计划如下图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15.png&#34;
+	width=&#34;556&#34;
+	height=&#34;1002&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15_hu_d6b5c402d156a695.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15_hu_3ccb68d6dbe1bffb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;55&#34;
+		data-flex-basis=&#34;133px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优化思路&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;经分析，参与 join 的两张表，数据量如下。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16.png&#34;
+	width=&#34;1467&#34;
+	height=&#34;301&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16_hu_86b016ba9c62bbb1.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16_hu_b55ec376440037ac.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;487&#34;
+		data-flex-basis=&#34;1169px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;两张表都相对较大，若采用普通的 Map Join 算法，则 Map 端需要较多的内存来缓存数据，可以选择为 Map 段分配更多的内存，来保证任务运行成功。但是，Map 端的内存不可能无上限的分配，所以当参与 Join 的表数据量均过大时，可以考虑采用 Bucket Map Join 算法。&lt;/p&gt;
+&lt;p&gt;创建两个分桶表，order_detail 建议分 16 个 bucket，payment_detail 建议分 8 个 bucket,注意分桶个数的倍数关系以及分桶字段。然后向其中导入数据。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;设置优化参数：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;关闭 cbo 优化，cbo 会导致 hint 信息被忽略，需将如下参数修改为 false&lt;/p&gt;
+&lt;p&gt;set hive.cbo.enable=false;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;map join hint 默认会被忽略(因为已经过时)，需将如下参数修改为 false&lt;/p&gt;
+&lt;p&gt;set hive.ignore.mapjoin.hint=false;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用 bucket map join 优化功能,默认不启用，需将如下参数修改为 true&lt;/p&gt;
+&lt;p&gt;set hive.optimize.bucketmapjoin = true;&lt;/p&gt;
+&lt;p&gt;重写 SQL 语句：&lt;/p&gt;
+&lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
+&lt;p&gt;select /_+ mapjoin(pd) _/ * from order_detail_bucketed od&lt;/p&gt;
+&lt;p&gt;join payment_detail_bucketed pd on od.id = pd.order_detail_id;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;执行结果如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17.png&#34;
+	width=&#34;256&#34;
+	height=&#34;1015&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17_hu_2ff263283659683b.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17_hu_557c941ca036804f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;25&#34;
+		data-flex-basis=&#34;60px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;使用&lt;/p&gt;
+&lt;p&gt;hive (default)&amp;gt;&lt;/p&gt;
+&lt;p&gt;explain extended select /_+ mapjoin(pd) _/ *&lt;/p&gt;
+&lt;p&gt;from order_detail_bucketed od&lt;/p&gt;
+&lt;p&gt;join payment_detail_bucketed pd on od.id = pd.order_detail_id;查看执行计划，在 Map Join Operator 中看到 “BucketMapJoin: true”&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;sort-merge-bucket-map-joinsmb-map-join&#34;&gt;&lt;a href=&#34;#sort-merge-bucket-map-joinsmb-map-join&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Sort Merge Bucket Map Join(SMB map join)
+&lt;/h3&gt;&lt;h4 id=&#34;原理-3&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86-3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理
+&lt;/h4&gt;&lt;p&gt;SMB Map Join 基于 Bucket Map Join。SMB Map Join 要求，参与 join 的表均为分桶表，且需保证分桶内的数据是有序的，且分桶字段、排序字段和关联字段为相同字段，且其中一张表的分桶数量是另外一张表分桶数量的整数倍。&lt;/p&gt;
+&lt;p&gt;SMB Map Join 同 Bucket Join 一样，同样是利用两表各分桶之间的关联关系，在分桶之间进行 join 操作，不同的是，分桶之间的 join 操作的实现原理。Bucket Map Join，两个分桶之间的 join 实现原理为 Hash Join 算法；而 SMB Map Join，两个分桶之间的 join 实现原理为 Sort Merge Join 算法。&lt;/p&gt;
+&lt;p&gt;Hash Join 和 Sort Merge Join 均为关系型数据库中常见的 Join 实现算法。Hash Join 的原理相对简单，就是对参与 join 的一张表构建 hash table，然后扫描另外一张表，然后进行逐行匹配。Sort Merge Join 需要在两张按照关联字段排好序的表中进行，其原理如图所示：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18.png&#34;
+	width=&#34;1234&#34;
+	height=&#34;709&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18_hu_cd814555b30c2367.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18_hu_7676e8dcb67afaab.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;174&#34;
+		data-flex-basis=&#34;417px&#34;
+	
+&gt;
+Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 Join 操作。可以看出，SMB Map Join 与 Bucket Map Join 相比，在进行 Join 操作时，Map 端是无需对整个 Bucket 构建 hash table，也无需在 Map 端缓存整个 Bucket 数据的，每个 Mapper 只需按顺序逐个 key 读取两个分桶的数据进行 join 即可。&lt;/p&gt;
+&lt;h4 id=&#34;优化-2&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96-2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化
+&lt;/h4&gt;&lt;p&gt;Sort Merge Bucket Map Join 有两种触发方式，包括 Hint 提示和自动转换。Hint 提示已过时，不推荐使用。下面是自动转换的相关参数：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ndash;启动 Sort Merge Bucket Map Join 优化&lt;/p&gt;
+&lt;p&gt;set hive.optimize.bucketmapjoin.sortedmerge=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;使用自动转换 SMB Join&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.sortmerge.join=true;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;和 bucket map join 一样，创建分桶表并导入数据 ，设置参数，运行 HQL，结果如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19.png&#34;
+	width=&#34;317&#34;
+	height=&#34;654&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19_hu_9e5a0b4b5771431a.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19_hu_a812c6d9b6d4878f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;48&#34;
+		data-flex-basis=&#34;116px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;数据倾斜优化&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e5%80%be%e6%96%9c%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据倾斜优化
+&lt;/h2&gt;&lt;p&gt;数据倾斜问题，通常是指参与计算的数据分布不均，即某个 key 或者某些 key 的数据量远超其他 key，导致在 shuffle 阶段，大量相同 key 的数据被发往同一个 Reduce，进而导致该 Reduce 所需的时间远超其他 Reduce，成为整个任务的瓶颈。&lt;/p&gt;
+&lt;p&gt;Hive 中的数据倾斜常出现在分组聚合和 join 操作的场景中，下面分别介绍在上述两种场景下的优化思路。&lt;/p&gt;
+&lt;h3 id=&#34;分组聚合导致的数据倾斜&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e5%af%bc%e8%87%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e5%80%be%e6%96%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分组聚合导致的数据倾斜
+&lt;/h3&gt;&lt;p&gt;Hive 中未经优化的分组聚合，是通过一个 MapReduce Job 实现的。Map 端负责读取数据，并按照分组字段分区，通过 Shuffle，将数据发往 Reduce 端，各组数据在 Reduce 端完成最终的聚合运算。&lt;/p&gt;
+&lt;p&gt;如果 group by 分组字段的值分布不均，就可能导致大量相同的 key 进入同一 Reduce，从而导致数据倾斜问题。&lt;/p&gt;
+&lt;p&gt;由分组聚合导致的数据倾斜问题，有以下两种解决思路：&lt;/p&gt;
+&lt;h4 id=&#34;map-side-聚合&#34;&gt;&lt;a href=&#34;#map-side-%e8%81%9a%e5%90%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Map-Side 聚合
+&lt;/h4&gt;&lt;p&gt;前文提过，此处略过&lt;/p&gt;
+&lt;h4 id=&#34;skew-groupby-优化&#34;&gt;&lt;a href=&#34;#skew-groupby-%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Skew-GroupBy 优化
+&lt;/h4&gt;&lt;p&gt;原理是启动两个 MR 任务，第一个 MR 按照随机数分区，将数据分散发送到 Reduce，完成部分聚合，第二个 MR 把打散的数据按照分组字段分区，完成最终聚合。&lt;/p&gt;
+&lt;h5 id=&#34;优化前&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化前
+&lt;/h5&gt;&lt;p&gt;该表数据中的 province_id 字段是存在倾斜的，若不经过优化，通过观察任务的执行过程，是能够看出数据倾斜现象的。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20.png&#34;
+	width=&#34;869&#34;
+	height=&#34;245&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20_hu_4c7b5ee5d955b18c.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20_hu_4bd4157092ae801d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;354&#34;
+		data-flex-basis=&#34;851px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h5 id=&#34;优化后&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%90%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化后
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&amp;ndash;启用 skew-groupby&lt;/p&gt;
+&lt;p&gt;set hive.groupby.skewindata=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;关闭 map-side 聚合（map side 聚合默认是开启的）&lt;/p&gt;
+&lt;p&gt;set hive.map.aggr=false;&lt;/p&gt;
+&lt;p&gt;开启 Skew-GroupBy 优化后，可以很明显看到该 sql 执行在 yarn 上启动了两个 mr 任务，第一个 mr 打散数据，第二个 mr 把打散后的数据进行分组聚合。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21.png&#34;
+	width=&#34;869&#34;
+	height=&#34;204&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21_hu_a9f85e157a440921.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21_hu_41134c8a7aa5bf1f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;425&#34;
+		data-flex-basis=&#34;1022px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;join-导致的数据倾斜&#34;&gt;&lt;a href=&#34;#join-%e5%af%bc%e8%87%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e5%80%be%e6%96%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Join 导致的数据倾斜
+&lt;/h3&gt;&lt;p&gt;未经优化的 join 操作，默认是使用 common join 算法，也就是通过一个 MapReduce Job 完成计算。Map 端负责读取 join 操作所需表的数据，并按照关联字段进行分区，通过 Shuffle，将其发送到 Reduce 端，相同 key 的数据在 Reduce 端完成最终的 Join 操作。&lt;/p&gt;
+&lt;p&gt;如果关联字段的值分布不均，就可能导致大量相同的 key 进入同一 Reduce，从而导致数据倾斜问题。由 join 导致的数据倾斜问题，有如下三种解决方案：&lt;/p&gt;
+&lt;h4 id=&#34;map-join-1&#34;&gt;&lt;a href=&#34;#map-join-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;map join
+&lt;/h4&gt;&lt;p&gt;略过&lt;/p&gt;
+&lt;h4 id=&#34;skew-join&#34;&gt;&lt;a href=&#34;#skew-join&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;skew join
+&lt;/h4&gt;&lt;p&gt;原理是为倾斜的大 key 单独启动一个 map join 任务进行计算，其余 key 进行正常的 common join。原理图如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22.png&#34;
+	width=&#34;865&#34;
+	height=&#34;453&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22_hu_56fdabed3e095d99.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22_hu_ce6b8a273fee43e9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;190&#34;
+		data-flex-basis=&#34;458px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ndash;启用 skew join 优化&lt;/p&gt;
+&lt;p&gt;set hive.optimize.skewjoin=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;触发 skew join 的阈值，若某个 key 的行数超过该参数值，则触发&lt;/p&gt;
+&lt;p&gt;set hive.skewjoin.key=100000;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这种方案对参与 join 的源表大小没有要求，但是对两表中倾斜的 key 的数据量有要求，要求一张表中的倾斜 key 的数据量比较小（方便走 map join）。&lt;/p&gt;
+&lt;h2 id=&#34;任务并行度优化&#34;&gt;&lt;a href=&#34;#%e4%bb%bb%e5%8a%a1%e5%b9%b6%e8%a1%8c%e5%ba%a6%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;任务并行度优化
+&lt;/h2&gt;&lt;p&gt;Hive 的计算任务由 MapReduce 完成，故并行度的调整需要分为 Map 端和 Reduce 端。&lt;/p&gt;
+&lt;h3 id=&#34;map-端并行度&#34;&gt;&lt;a href=&#34;#map-%e7%ab%af%e5%b9%b6%e8%a1%8c%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Map 端并行度
+&lt;/h3&gt;&lt;p&gt;Map 端的并行度，也就是 Map 的个数。是由输入文件的切片数决定的。一般情况下，Map 端的并行度无需手动调整。&lt;/p&gt;
+&lt;p&gt;以下特殊情况可考虑调整 map 端并行度：
+&lt;strong&gt;1）查询的表中存在大量小文件&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;按照 Hadoop 默认的切片策略，一个小文件会单独启动一个 map task 负责计算。若查询的表中存在大量小文件，则会启动大量 map task，造成计算资源的浪费。这种情况下，可以使用 Hive 提供的 CombineHiveInputFormat，多个小文件合并为一个切片，从而控制 map task 个数。相关参数如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2）map 端有复杂的查询逻辑&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;若 SQL 语句中有正则替换、json 解析等复杂耗时的查询逻辑时，map 端的计算会相对慢一些。若想加快计算速度，在计算资源充足的情况下，可考虑增大 map 端的并行度，令 map task 多一些，每个 map task 计算的数据少一些。相关参数如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ndash;一个切片的最大值&lt;/p&gt;
+&lt;p&gt;set mapreduce.input.fileinputformat.split.maxsize=256000000;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;reduce-端并行度&#34;&gt;&lt;a href=&#34;#reduce-%e7%ab%af%e5%b9%b6%e8%a1%8c%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Reduce 端并行度
+&lt;/h3&gt;&lt;p&gt;Reduce 端的并行度，可由用户自己指定，也可由 Hive 自行根据该 MR Job 输入的文件大小进行估算。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Reduce 端的并行度的相关参数如下：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;指定 Reduce 端并行度，默认值为-1，表示用户未指定&lt;/p&gt;
+&lt;p&gt;set mapreduce.job.reduces;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;Reduce 端并行度最大值&lt;/p&gt;
+&lt;p&gt;set hive.exec.reducers.max;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;单个 Reduce Task 计算的数据量，用于估算 Reduce 并行度&lt;/p&gt;
+&lt;p&gt;set hive.exec.reducers.bytes.per.reducer;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Reduce 端并行度的确定逻辑如下：&lt;/p&gt;
+&lt;p&gt;若指定参数 mapreduce.job.reduces 的值为一个非负整数，则 Reduce 并行度为指定值。否则，Hive 自行估算 Reduce 并行度，估算逻辑如下：&lt;/p&gt;
+&lt;p&gt;假设 Job 输入的文件大小为 totalInputBytes&lt;/p&gt;
+&lt;p&gt;参数 hive.exec.reducers.bytes.per.reducer 的值为 bytesPerReducer。&lt;/p&gt;
+&lt;p&gt;参数 hive.exec.reducers.max 的值为 maxReducers。&lt;/p&gt;
+&lt;p&gt;则 Reduce 端的并行度为：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23.png&#34;
+	width=&#34;638&#34;
+	height=&#34;98&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23_hu_21010bf6e8750fb7.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23_hu_4938c6195bbe484e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;651&#34;
+		data-flex-basis=&#34;1562px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;根据上述描述，可以看出，Hive 自行估算 Reduce 并行度时，是以整个 MR Job 输入的文件大小作为依据的。因此，在某些情况下其估计的并行度很可能并不准确，此时就需要用户根据实际情况来指定 Reduce 并行度了。&lt;/p&gt;
+&lt;p&gt;在默认情况下，是会进行 map-side 聚合的，也就是 Reduce 端接收的数据，实际上是 map 端完成聚合之后的结果。观察任务的执行过程，会发现，每个 map 端输出的数据只有 34 条记录，共有 5 个 map task。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24.png&#34;
+	width=&#34;869&#34;
+	height=&#34;374&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24_hu_f3c3a8909f90ec92.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24_hu_8d200be734c58711.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;232&#34;
+		data-flex-basis=&#34;557px&#34;
+	
+&gt;
+也就是说 Reduce 端实际只会接收 170（34*5）条记录，故理论上 Reduce 端并行度设置为 1 就足够了。这种情况下，用户可通过以下参数，自行设置 Reduce 端并行度为 1，这样把 5 个文件合并为只输出 1 个文件。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ndash;指定 Reduce 端并行度，默认值为-1，表示用户未指定&lt;/p&gt;
+&lt;p&gt;set mapreduce.job.reduces=1;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;小文件合并优化&#34;&gt;&lt;a href=&#34;#%e5%b0%8f%e6%96%87%e4%bb%b6%e5%90%88%e5%b9%b6%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;小文件合并优化
+&lt;/h2&gt;&lt;p&gt;Map 端输入的小文件合并，和 Reduce 端输出的小文件合并。&lt;/p&gt;
+&lt;h3 id=&#34;合并-map-端输入的小文件&#34;&gt;&lt;a href=&#34;#%e5%90%88%e5%b9%b6-map-%e7%ab%af%e8%be%93%e5%85%a5%e7%9a%84%e5%b0%8f%e6%96%87%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;合并 Map 端输入的小文件
+&lt;/h3&gt;&lt;p&gt;将多个小文件划分到一个切片中，进而由一个 Map Task 去处理。目的是防止为单个小文件启动一个 Map Task，浪费计算资源。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数为：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;可将多个小文件切片，合并为一个切片，进而由一个 map 任务处理（默认）
+set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;合并-reduce-端输出的小文件&#34;&gt;&lt;a href=&#34;#%e5%90%88%e5%b9%b6-reduce-%e7%ab%af%e8%be%93%e5%87%ba%e7%9a%84%e5%b0%8f%e6%96%87%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;合并 Reduce 端输出的小文件
+&lt;/h3&gt;&lt;p&gt;将多个小文件合并成大文件。目的是减少 HDFS 小文件数量。其原理是根据计算任务输出文件的平均大小进行判断，若符合条件，则单独启动 1 个额外的任务进行合并。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数为：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;开启合并 map only 任务输出的小文件，默认 false&lt;/p&gt;
+&lt;p&gt;set hive.merge.mapfiles=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;开启合并 map reduce 任务输出的小文件，默认 false&lt;/p&gt;
+&lt;p&gt;set hive.merge.mapredfiles=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;合并后的文件大小&lt;/p&gt;
+&lt;p&gt;set hive.merge.size.per.task=256000000;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;触发小文件合并任务的阈值，若某计算任务输出的文件平均大小低于该值，则触发合并&lt;/p&gt;
+&lt;p&gt;set hive.merge.smallfiles.avgsize=16000000;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;若 reduce 端设置并行度为 5，则输出 5 个文件。下图为输出文件，可以看出，5 个均为小文件：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25.png&#34;
+	width=&#34;869&#34;
+	height=&#34;379&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25_hu_87c8501899639239.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25_hu_19398f78240c4efd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;229&#34;
+		data-flex-basis=&#34;550px&#34;
+	
+&gt;
+要避免 5 个小文件产生，可以设置 reduce 端并行度为 1，有几个 reduce 并行就有几个文件产生，保证其输出结果只有一个文件或启用 hive 合并小文件优化。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;启用 Hive 合并小文件优化&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;设置以下参数：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;开启合并 map reduce 任务输出的小文件&lt;/p&gt;
+&lt;p&gt;set hive.merge.mapredfiles=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;合并后的文件大小&lt;/p&gt;
+&lt;p&gt;set hive.merge.size.per.task=256000000;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;触发小文件合并任务的阈值，若某计算任务输出的文件平均大小低于该值，则触发合并&lt;/p&gt;
+&lt;p&gt;set hive.merge.smallfiles.avgsize=16000000;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这样输出文件就合并为一个了
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26.png&#34;
+	width=&#34;869&#34;
+	height=&#34;303&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26_hu_7e0b9aa0a00b8312.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26_hu_3d9e91230e8317b1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;286&#34;
+		data-flex-basis=&#34;688px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;其他优化&#34;&gt;&lt;a href=&#34;#%e5%85%b6%e4%bb%96%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;其他优化
+&lt;/h2&gt;&lt;h3 id=&#34;cbo-优化&#34;&gt;&lt;a href=&#34;#cbo-%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CBO 优化
+&lt;/h3&gt;&lt;p&gt;CBO 是指 Cost based Optimizer，即基于计算成本的优化。&lt;/p&gt;
+&lt;p&gt;在 Hive 中，计算成本模型考虑到了：数据的行数、CPU、本地 IO、HDFS IO、网络 IO 等方面。Hive 会计算同一 SQL 语句的不同执行计划的计算成本，并选出成本最低的执行计划。目前 CBO 在 hive 的 MR 引擎下主要用于 join 的优化，例如多表 join 的 join 顺序。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数为：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;是否启用 cbo 优化&lt;/p&gt;
+&lt;p&gt;set hive.cbo.enable=true;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1）示例 HQL&lt;/p&gt;
+&lt;p&gt;hive (default)&amp;gt; select * from order_detail od&lt;/p&gt;
+&lt;p&gt;join product_info product on od.product_id=product.id&lt;/p&gt;
+&lt;p&gt;join province_info province on od.province_id=province.id;&lt;/p&gt;
+&lt;p&gt;2）关闭 CBO 优化&lt;/p&gt;
+&lt;p&gt;&amp;ndash;关闭 cbo 优化&lt;/p&gt;
+&lt;p&gt;set hive.cbo.enable=false;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;为了测试效果更加直观，关闭 map join 自动转换&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=false;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;根据执行计划，可以看出，三张表的 join 顺序如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27.png&#34;
+	width=&#34;660&#34;
+	height=&#34;294&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27_hu_40e2f0ee95980f6.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27_hu_1e3b627e737906da.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;224&#34;
+		data-flex-basis=&#34;538px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;3）开启 CBO 优化&lt;/p&gt;
+&lt;p&gt;&amp;ndash;开启 cbo 优化&lt;/p&gt;
+&lt;p&gt;set hive.cbo.enable=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;为了测试效果更加直观，关闭 map join 自动转换&lt;/p&gt;
+&lt;p&gt;set hive.auto.convert.join=false;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;根据执行计划，可以看出，三张表的 join 顺序如下：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28.png&#34;
+	width=&#34;669&#34;
+	height=&#34;298&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28_hu_7ceeab9ab8aa26e.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28_hu_45dd3c1250222a77.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;224&#34;
+		data-flex-basis=&#34;538px&#34;
+	
+&gt;
+CBO 优化对于执行计划中 join 顺序是有影响的，其之所以会将 province_info 的 join 顺序提前，是因为 province info 的数据量较小，将其提前，会有更大的概率使得中间结果的数据量变小，从而使整个计算任务的数据量减小，也就是使计算成本变小。&lt;/p&gt;
+&lt;h3 id=&#34;谓词下推&#34;&gt;&lt;a href=&#34;#%e8%b0%93%e8%af%8d%e4%b8%8b%e6%8e%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;谓词下推
+&lt;/h3&gt;&lt;p&gt;谓词下推（predicate pushdown）是指，尽量将过滤操作前移，以减少后续计算步骤的数据量。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数为：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;是否启动谓词下推（predicate pushdown）优化&lt;/p&gt;
+&lt;p&gt;set hive.optimize.ppd = true;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;需要注意的是：CBO 优化也会完成一部分的谓词下推优化工作，因为在执行计划中，谓词越靠前，整个计划的计算成本就会越低。
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29.png&#34;
+	width=&#34;684&#34;
+	height=&#34;568&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29_hu_e70a14f380e3cc42.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29_hu_87d64db6b104c96b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;120&#34;
+		data-flex-basis=&#34;289px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;矢量化查询&#34;&gt;&lt;a href=&#34;#%e7%9f%a2%e9%87%8f%e5%8c%96%e6%9f%a5%e8%af%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;矢量化查询
+&lt;/h3&gt;&lt;p&gt;Hive 的矢量化查询优化，依赖于 CPU 的矢量化计算，CPU 的矢量化计算的基本原理如下图：
+&lt;img src=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30.png&#34;
+	width=&#34;960&#34;
+	height=&#34;540&#34;
+	srcset=&#34;/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30_hu_e362fffa2298c231.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30_hu_aeb22a57936a7ac0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数如下：&lt;/p&gt;
+&lt;p&gt;set hive.vectorized.execution.enabled=true;&lt;/p&gt;
+&lt;p&gt;若执行计划中，出现“Execution mode: vectorized”字样，即表明使用了矢量化计算。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;fetch-抓取&#34;&gt;&lt;a href=&#34;#fetch-%e6%8a%93%e5%8f%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Fetch 抓取
+&lt;/h3&gt;&lt;p&gt;Fetch 抓取是指，Hive 中对某些情况的查询可以不必使用 MapReduce 计算。例如：select * from emp;在这种情况下，Hive 可以简单地读取 emp 对应的存储目录下的文件，然后输出查询结果到控制台。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数如下：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;是否在特定场景转换为 fetch 任务&lt;/p&gt;
+&lt;p&gt;&amp;ndash;设置为 none 表示不转换&lt;/p&gt;
+&lt;p&gt;&amp;ndash;设置为 minimal 表示支持 select *，分区字段过滤，Limit 等&lt;/p&gt;
+&lt;p&gt;&amp;ndash;设置为 more 表示支持 select 任意字段,包括函数，过滤，和 limit 等&lt;/p&gt;
+&lt;p&gt;set hive.fetch.task.conversion=more;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;本地模式&#34;&gt;&lt;a href=&#34;#%e6%9c%ac%e5%9c%b0%e6%a8%a1%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;本地模式
+&lt;/h3&gt;&lt;p&gt;大多数的 Hadoop Job 是需要 Hadoop 提供的完整的可扩展性来处理大数据集的。不过，有时 Hive 的输入数据量是非常小的。在这种情况下，为查询触发执行任务消耗的时间可能会比实际 job 的执行时间要多的多。对于大多数这种情况，Hive 可以通过本地模式在单台机器上处理所有的任务，不必提交到 Yarn。对于小数据集，执行时间可以明显被缩短。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数如下：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;开启自动转换为本地模式&lt;/p&gt;
+&lt;p&gt;set hive.exec.mode.local.auto=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;设置 local MapReduce 的最大输入数据量，当输入数据量小于这个值时采用 local MapReduce 的方式，默认为 134217728，即 128M&lt;/p&gt;
+&lt;p&gt;set hive.exec.mode.local.auto.inputbytes.max=50000000;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;设置 local MapReduce 的最大输入文件个数，当输入文件个数小于这个值时采用 local MapReduce 的方式，默认为 4&lt;/p&gt;
+&lt;p&gt;set hive.exec.mode.local.auto.input.files.max=10;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;并行执行&#34;&gt;&lt;a href=&#34;#%e5%b9%b6%e8%a1%8c%e6%89%a7%e8%a1%8c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;并行执行
+&lt;/h3&gt;&lt;p&gt;Hive 会将一个 SQL 语句转化成一个或者多个 Stage，每个 Stage 对应一个 MR Job。默认情况下，Hive 同时只会执行一个 Stage。但是某 SQL 语句可能会包含多个 Stage，但这多个 Stage 可能并非完全互相依赖，也就是说有些 Stage 是可以并行执行的。此处提到的并行执行就是指这些 Stage 的并行执行。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;相关参数如下：&lt;/p&gt;
+&lt;p&gt;&amp;ndash;启用并行执行优化&lt;/p&gt;
+&lt;p&gt;set hive.exec.parallel=true;&lt;/p&gt;
+&lt;p&gt;&amp;ndash;同一个 sql 允许最大并行度，默认为 8&lt;/p&gt;
+&lt;p&gt;set hive.exec.parallel.thread.number=8;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;严格模式&#34;&gt;&lt;a href=&#34;#%e4%b8%a5%e6%a0%bc%e6%a8%a1%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;严格模式
+&lt;/h3&gt;&lt;p&gt;Hive 可以通过设置某些参数防止危险操作：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1）分区表不使用分区过滤&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;将 hive.strict.checks.no.partition.filter 设置为 true 时，对于分区表，除非 where 语句中含有分区字段过滤条件来限制范围，否则不允许执行。换句话说，就是用户不允许扫描所有分区。进行这个限制的原因是，通常分区表都拥有非常大的数据集，而且数据增加迅速。没有进行分区限制的查询可能会消耗令人不可接受的巨大资源来处理这个表。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2）使用 order by 没有 limit 过滤&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;将 hive.strict.checks.orderby.no.limit 设置为 true 时，对于使用了 order by 语句的查询，要求必须使用 limit 语句。因为 order by 为了执行排序过程会将所有的结果数据分发到同一个 Reduce 中进行处理，强制要求用户增加这个 limit 语句可以防止 Reduce 额外执行很长一段时间（开启了 limit 可以在数据进入到 Reduce 之前就减少一部分数据）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3）笛卡尔积&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;将 hive.strict.checks.cartesian.product 设置为 true 时，会限制笛卡尔积的查询。对关系型数据库非常了解的用户可能期望在执行 JOIN 查询的时候不使用 ON 语句而是使用 where 语句，这样关系数据库的执行优化器就可以高效地将 WHERE 语句转化成那个 ON 语句。不幸的是，Hive 并不会执行这种优化，因此，如果表足够大，那么这个查询就会出现不可控的情况。&lt;/p&gt;
+</description>
         </item>
         
     </channel>

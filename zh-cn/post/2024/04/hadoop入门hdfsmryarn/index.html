@@ -11,7 +11,7 @@
 <meta property='og:description' content="hadoop生态及架构，HDFS存储方式、Yarn资源调度、MR并行计算">
 <meta property='og:url' content='/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hadoop' /><meta property='article:tag' content='hadoop' /><meta property='article:tag' content='hdfs' /><meta property='article:tag' content='大数据' /><meta property='article:tag' content='big data' /><meta property='article:published_time' content='2024-04-15T14:38:50&#43;00:00'/><meta property='article:modified_time' content='2024-04-15T14:38:50&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hadoop' /><meta property='article:tag' content='HDFS' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-15T14:38:50&#43;00:00'/><meta property='article:modified_time' content='2024-04-15T14:38:50&#43;00:00'/>
 <meta name="twitter:title" content="Hadoop入门—HDFS、MR、Yarn">
 <meta name="twitter:description" content="hadoop生态及架构，HDFS存储方式、Yarn资源调度、MR并行计算">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,24 +336,66 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#hadoop简介-hadoope7ae80e4bb8b">Hadoop简介 {#Hadoop%E7%AE%80%E4%BB%8B}</a>
+    <li><a href="#hadoop-简介">Hadoop 简介</a>
       <ol>
-        <li><a href="#hadoop-三大发行版本-hadoop20e4b889e5a4a7e58f91e8a18ce78988e69cac">Hadoop 三大发行版本 {#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC}</a></li>
-        <li><a href="#hadoop优势-hadoope4bc98e58abf">Hadoop优势 {#Hadoop%E4%BC%98%E5%8A%BF}</a></li>
-        <li><a href="#hadoop基本组成-hadoope59fbae69cace7bb84e68890">Hadoop基本组成 {#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90}</a></li>
-        <li><a href="#常用shell命令-e5b8b8e794a8shelle591bde4bba4">常用Shell命令 {#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4}</a></li>
+        <li><a href="#hadoop-三大发行版本">Hadoop 三大发行版本</a></li>
+        <li><a href="#hadoop-优势">Hadoop 优势</a></li>
+        <li><a href="#hadoop-基本组成">Hadoop 基本组成</a></li>
+        <li><a href="#常用-shell-命令">常用 Shell 命令</a></li>
       </ol>
     </li>
-    <li><a href="#hdfs分布存储-hdfse58886e5b883e5ad98e582a8">HDFS分布存储 {#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8}</a>
+    <li><a href="#hdfs-分布存储">HDFS 分布存储</a>
       <ol>
-        <li><a href="#hdfs启停-hdfse590afe5819c"><strong>HDFS启停</strong> {#HDFS%E5%90%AF%E5%81%9C}</a></li>
-        <li><a href="#namenodenn-namenodeefbc88nnefbc89">NameNode（NN） {#NameNode%EF%BC%88NN%EF%BC%89}</a></li>
-        <li><a href="#datanodedn-datanodeefbc88dnefbc89">DataNode（DN） {#DataNode%EF%BC%88DN%EF%BC%89}</a></li>
-        <li><a href="#secondarynamenodesnn-secondarynamenodeefbc88snnefbc89">SecondaryNameNode（SNN） {#SecondaryNameNode%EF%BC%88SNN%EF%BC%89}</a></li>
-        <li><a href="#文件写入流程-e69687e4bbb6e58699e585a5e6b581e7a88b">文件写入流程 {#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B}</a></li>
+        <li><a href="#hdfs-启停">HDFS 启停</a></li>
+        <li><a href="#namenodenn">NameNode（NN）</a></li>
+        <li><a href="#datanodedn">DataNode（DN）</a></li>
+        <li><a href="#secondarynamenodesnn">SecondaryNameNode（SNN）</a></li>
+        <li><a href="#文件写入流程">文件写入流程</a></li>
+        <li><a href="#hdfs-架构的稳定性">HDFS 架构的稳定性</a>
+          <ol>
+            <li><a href="#心跳机制和重新复制">心跳机制和重新复制</a></li>
+            <li><a href="#数据的完整性">数据的完整性</a></li>
+          </ol>
+        </li>
+        <li><a href="#元数据的磁盘故障">元数据的磁盘故障</a>
+          <ol>
+            <li><a href="#支持快照">支持快照</a></li>
+          </ol>
+        </li>
+        <li><a href="#文件读取流程">文件读取流程</a></li>
+        <li><a href="#存储方式">存储方式</a>
+          <ol>
+            <li><a href="#block-块和多副本">Block 块和多副本</a></li>
+            <li><a href="#edits-和-fsimage-文件">edits 和 fsimage 文件</a></li>
+            <li><a href="#元数据合并及控制参数">元数据合并及控制参数</a></li>
+          </ol>
+        </li>
+        <li><a href="#hdfs-漫画">HDFS 漫画</a>
+          <ol>
+            <li><a href="#读写数据">读写数据</a></li>
+            <li><a href="#hdfs-故障类型和检测方法">HDFS 故障类型和检测方法</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
-    <li><a href="#发送的写入请求通过后客户端会根据nn返回的信息自动把数据分块向网络距离最近的dn写入数据同时dn会完成备份操作把备份传到其他的dn然后由其他的dn再次做备份传播直到满足设置的备份数量nb">发送的写入请求通过后，客户端会根据NN返回的信息自动把数据分块，向<strong>网络距离最近</strong>的DN写入数据。同时，DN会完成备份操作，把备份传到其他的DN，然后由其他的DN再次做备份传播，直到满足设置的备份数量&amp;nb</a></li>
+    <li><a href="#mapreduce-分布式并行计算框架">MapReduce 分布式并行计算框架</a>
+      <ol>
+        <li><a href="#计算模式">计算模式</a></li>
+        <li><a href="#map-和-reduce">Map 和 Reduce</a></li>
+        <li><a href="#mr-执行原理">MR 执行原理</a></li>
+      </ol>
+    </li>
+    <li><a href="#yarn-作业调度资源管理">Yarn 作业调度、资源管理</a>
+      <ol>
+        <li><a href="#yarn-启停">Yarn 启停</a></li>
+        <li><a href="#resourcemanager">ResourceManager</a></li>
+        <li><a href="#nodemanager">NodeManager</a></li>
+        <li><a href="#applicationmaster">ApplicationMaster</a></li>
+        <li><a href="#jobhistoryserver">JobHistoryServer</a></li>
+        <li><a href="#container">Container</a></li>
+      </ol>
+    </li>
+    <li><a href="#hadoop-一键启停">Hadoop 一键启停</a></li>
   </ol>
 </nav>
         </div>
@@ -417,7 +459,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 6 分钟
+                阅读时长: 7 分钟
             </time>
         </div>
         
@@ -443,17 +485,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/hdfs/">Hdfs</a> 
+            <a href="/zh-cn/tags/hdfs/">HDFS</a> 
             
             
             , 
             
             <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/big-data/">Big Data</a> 
             
             
         </div>
@@ -469,61 +506,34 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#Hadoop%E7%AE%80%E4%BB%8B" >Hadoop简介</a>{#Hadoop%E7%AE%80%E4%BB%8B-toc}</p>
-<p><a class="link" href="#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC" >Hadoop 三大发行版本</a>{#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC-toc}</p>
-<p><a class="link" href="#Hadoop%E4%BC%98%E5%8A%BF" >Hadoop优势</a>{#Hadoop%E4%BC%98%E5%8A%BF-toc}</p>
-<p><a class="link" href="#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90" >Hadoop基本组成</a>{#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90-toc}</p>
-<p><a class="link" href="#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4" >常用Shell命令</a>{#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4-toc}</p>
-<p><a class="link" href="#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8" >HDFS分布存储</a>{#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8-toc}</p>
-<p><a class="link" href="#HDFS%E5%90%AF%E5%81%9C" >HDFS启停</a>{#HDFS%E5%90%AF%E5%81%9C-toc}</p>
-<p><a class="link" href="#NameNode%EF%BC%88NN%EF%BC%89" >NameNode（NN）</a>{#NameNode%EF%BC%88NN%EF%BC%89-toc}</p>
-<p><a class="link" href="#DataNode%EF%BC%88DN%EF%BC%89" >DataNode（DN）</a>{#DataNode%EF%BC%88DN%EF%BC%89-toc}</p>
-<p><a class="link" href="#SecondaryNameNode%EF%BC%88SNN%EF%BC%89" >SecondaryNameNode（SNN）</a>{#SecondaryNameNode%EF%BC%88SNN%EF%BC%89-toc}</p>
-<p><a class="link" href="#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B" >文件写入流程</a>{#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B-toc}</p>
-<p><a class="link" href="#HDFS%E6%9E%B6%E6%9E%84%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7" >HDFS架构的稳定性</a>{#HDFS%E6%9E%B6%E6%9E%84%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7-toc}</p>
-<p><a class="link" href="#%C2%A0%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B" >文件读取流程</a>{#%C2%A0%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B-toc}</p>
-<p><a class="link" href="#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F" >存储方式</a>{#%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F-toc}</p>
-<p><a class="link" href="#Block%E5%9D%97%E5%92%8C%E5%A4%9A%E5%89%AF%E6%9C%AC" >Block块和多副本</a>{#Block%E5%9D%97%E5%92%8C%E5%A4%9A%E5%89%AF%E6%9C%AC-toc}</p>
-<p><a class="link" href="#edits%E5%92%8Cfsimage%E6%96%87%E4%BB%B6" >edits和fsimage文件</a>{#edits%E5%92%8Cfsimage%E6%96%87%E4%BB%B6-toc}</p>
-<p><a class="link" href="#%C2%A0%E5%85%83%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6%E5%8F%8A%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0" >元数据合并及控制参数</a>{#%C2%A0%E5%85%83%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6%E5%8F%8A%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0-toc}</p>
-<p><a class="link" href="#HDFS%E6%BC%AB%E7%94%BB" >HDFS漫画</a>{#HDFS%E6%BC%AB%E7%94%BB-toc}</p>
-<br />
-<p><a class="link" href="#Mapreduce%E5%88%86%E5%B8%83%E5%BC%8F%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6" >Mapreduce分布式并行计算框架</a>{#Mapreduce%E5%88%86%E5%B8%83%E5%BC%8F%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6-toc}</p>
-<p><a class="link" href="#%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%BC%8F" >计算模式</a>{#%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%BC%8F-toc}</p>
-<p><a class="link" href="#Map%E5%92%8CReduce" >Map和Reduce</a>{#Map%E5%92%8CReduce-toc}</p>
-<p><a class="link" href="#MR%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86" >MR执行原理</a>{#MR%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86-toc}</p>
-<p><a class="link" href="#Yarn%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E3%80%81%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86" >Yarn作业调度、资源管理</a>{#Yarn%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E3%80%81%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86-toc}</p>
-<p><a class="link" href="#Yarn%E5%90%AF%E5%81%9C%C2%A0" >Yarn启停</a>{#Yarn%E5%90%AF%E5%81%9C%C2%A0-toc}</p>
-<p><a class="link" href="#ResourceManager" >ResourceManager</a>{#ResourceManager-toc}</p>
-<p><a class="link" href="#NodeManager%C2%A0" >NodeManager</a>{#NodeManager%C2%A0-toc}</p>
-<p><a class="link" href="#ApplicationMaster" >ApplicationMaster</a>{#ApplicationMaster-toc}</p>
-<p><a class="link" href="#JobHistoryServer" >JobHistoryServer</a>{#JobHistoryServer-toc}</p>
-<p><a class="link" href="#Container" >Container</a>{#Container-toc}</p>
-<p><a class="link" href="#Hadoop%E4%B8%80%E9%94%AE%E5%90%AF%E5%81%9C%C2%A0" >Hadoop一键启停</a>{#Hadoop%E4%B8%80%E9%94%AE%E5%90%AF%E5%81%9C%C2%A0-toc}</p>
-<hr>
-<br />
-<h2 id="hadoop简介-hadoope7ae80e4bb8b"><a href="#hadoop%e7%ae%80%e4%bb%8b-hadoope7ae80e4bb8b" class="header-anchor"></a>Hadoop简介 {#Hadoop%E7%AE%80%E4%BB%8B}
-</h2><p>狭义来说，hadoop是Apache基金会开发的分布式系统基础架构，用来解决海量数据的存储和海量数据的分析计算问题。广义上来说，Hadoop 通常是指一个更广泛的概念 &mdash;&mdash; Hadoop 生态圈。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/0fd7c932e8ae6ff521f32eee46cd8663.png"
-	
-	
-	
+    <h2 id="hadoop-简介"><a href="#hadoop-%e7%ae%80%e4%bb%8b" class="header-anchor"></a>Hadoop 简介
+</h2><hr>
+<p>狭义来说，hadoop 是 Apache 基金会开发的分布式系统基础架构，用来解决海量数据的存储和海量数据的分析计算问题。广义上来说，Hadoop 通常是指一个更广泛的概念 &mdash;&mdash; Hadoop 生态圈。</p>
+<p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image.png"
+	width="849"
+	height="406"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image_hu_ae871aaf7cbe79af.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image_hu_abb20e2b328fbc6b.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="501px"
 	
 ></p>
-<h3 id="hadoop-三大发行版本-hadoop20e4b889e5a4a7e58f91e8a18ce78988e69cac"><a href="#hadoop-%e4%b8%89%e5%a4%a7%e5%8f%91%e8%a1%8c%e7%89%88%e6%9c%ac-hadoop20e4b889e5a4a7e58f91e8a18ce78988e69cac" class="header-anchor"></a>Hadoop 三大发行版本 {#Hadoop%20%E4%B8%89%E5%A4%A7%E5%8F%91%E8%A1%8C%E7%89%88%E6%9C%AC}
+<h3 id="hadoop-三大发行版本"><a href="#hadoop-%e4%b8%89%e5%a4%a7%e5%8f%91%e8%a1%8c%e7%89%88%e6%9c%ac" class="header-anchor"></a>Hadoop 三大发行版本
 </h3><p>Apache、Cloudera、Hortonworks</p>
 <p>Apache 版本最原始（最基础）的版本，对于入门学习最好。</p>
-<p>Cloudera在大型互联网企业中用的较多。其主要产品有CDH、Cloudera Manager，Cloudera Support</p>
-<h3 id="hadoop优势-hadoope4bc98e58abf"><a href="#hadoop%e4%bc%98%e5%8a%bf-hadoope4bc98e58abf" class="header-anchor"></a>Hadoop优势 {#Hadoop%E4%BC%98%E5%8A%BF}
+<p>Cloudera 在大型互联网企业中用的较多。其主要产品有 CDH、Cloudera Manager，Cloudera Support</p>
+<h3 id="hadoop-优势"><a href="#hadoop-%e4%bc%98%e5%8a%bf" class="header-anchor"></a>Hadoop 优势
 </h3><p><strong>高可靠性：</strong> Hadoop 底层维护多个数据副本，所以即使 Hadoop 某个计算元素或存储出现故障，也不会导致数据的丢失。<br>
 <strong>高扩展性：</strong> 在集群间分配任务数据，可方便的扩展数以千计的节点。<br>
 高效性： 在 MapReduce 的思想下，Hadoop 是并行工作的，以加快任务处理速度。<br>
 <strong>高容错性：</strong> 能够自动将失败的任务重新分配。</p>
-<p>**低成本：**Hadoop不要求机器的配置达到极高的标准，大部分普通商用服务器即可满足要求，通过提供多个副本和容错机制提高集群的可靠性</p>
-<h3 id="hadoop基本组成-hadoope59fbae69cace7bb84e68890"><a href="#hadoop%e5%9f%ba%e6%9c%ac%e7%bb%84%e6%88%90-hadoope59fbae69cace7bb84e68890" class="header-anchor"></a>Hadoop基本组成 {#Hadoop%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90}
+<p>**低成本：**Hadoop 不要求机器的配置达到极高的标准，大部分普通商用服务器即可满足要求，通过提供多个副本和容错机制提高集群的可靠性</p>
+<h3 id="hadoop-基本组成"><a href="#hadoop-%e5%9f%ba%e6%9c%ac%e7%bb%84%e6%88%90" class="header-anchor"></a>Hadoop 基本组成
 </h3><p><img src="https://i-blog.csdnimg.cn/blog_migrate/fd575291df78b55069687df62b245798.png"
 	
 	
@@ -532,7 +542,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 	
 	
 ></p>
-<h3 id="常用shell命令-e5b8b8e794a8shelle591bde4bba4"><a href="#%e5%b8%b8%e7%94%a8shell%e5%91%bd%e4%bb%a4-e5b8b8e794a8shelle591bde4bba4" class="header-anchor"></a>常用Shell命令 {#%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4}
+<h3 id="常用-shell-命令"><a href="#%e5%b8%b8%e7%94%a8-shell-%e5%91%bd%e4%bb%a4" class="header-anchor"></a>常用 Shell 命令
 </h3><pre><code>hdfs dfs -ls &lt;path&gt;：列出指定 HDFS 路径下的文件和目录
 hdfs dfs -mkdir &lt;path&gt;：在 HDFS 中创建新目录
 hdfs dfs -put &lt;localsrc&gt; &lt;dst&gt;：将本地文件（或目录）复制到 HDFS
@@ -548,43 +558,450 @@ hdfs fsck path [-files [-blocks [-location]]]
 -files -blocks输出文件块报告（几个块，几个副本）
 -files -blocks -locations 输出每个block的详情
 </code></pre>
-<h2 id="hdfs分布存储-hdfse58886e5b883e5ad98e582a8"><a href="#hdfs%e5%88%86%e5%b8%83%e5%ad%98%e5%82%a8-hdfse58886e5b883e5ad98e582a8" class="header-anchor"></a>HDFS分布存储 {#HDFS%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8}
-</h2><p>HDFS是一个分布式文件系统，具有高容错、高吞吐 量等特性，<strong>分布在多个集群节点上的文件系统。有NN、DN、SNN三种角色。</strong></p>
-<h3 id="hdfs启停-hdfse590afe5819c"><a href="#hdfs%e5%90%af%e5%81%9c-hdfse590afe5819c" class="header-anchor"></a><strong>HDFS启停</strong> {#HDFS%E5%90%AF%E5%81%9C}
-</h3><p><img src="https://i-blog.csdnimg.cn/blog_migrate/307c647c8aa7e460c1ae34a79304e357.png"
-	
-	
-	
+<h2 id="hdfs-分布存储"><a href="#hdfs-%e5%88%86%e5%b8%83%e5%ad%98%e5%82%a8" class="header-anchor"></a>HDFS 分布存储
+</h2><hr>
+<p>HDFS 是一个分布式文件系统，具有高容错、高吞吐 量等特性，<strong>分布在多个集群节点上的文件系统。有 NN、DN、SNN 三种角色。</strong></p>
+<h3 id="hdfs-启停"><a href="#hdfs-%e5%90%af%e5%81%9c" class="header-anchor"></a>HDFS 启停
+</h3><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1.png"
+	width="1296"
+	height="368"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1_hu_9f50d72e4713275a.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-1_hu_e892968554c81460.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="352"
+		data-flex-basis="845px"
 	
 ></p>
-<h3 id="namenodenn-namenodeefbc88nnefbc89"><a href="#namenodenn-namenodeefbc88nnefbc89" class="header-anchor"></a>NameNode（NN） {#NameNode%EF%BC%88NN%EF%BC%89}
-</h3><p>HDFS的主角色，负责管理每个文件的块所在的 DataNode、整个HDFS文件系统、存储文件的元数据，如文件名，文件目录结构，文件属性（生成时间、副本数、文件权限）等。</p>
-<h3 id="datanodedn-datanodeefbc88dnefbc89"><a href="#datanodedn-datanodeefbc88dnefbc89" class="header-anchor"></a>DataNode（DN） {#DataNode%EF%BC%88DN%EF%BC%89}
-</h3><p>HDFS从角色，负责处理客户端的读写请求，存储删除文件块，以及块数据校验和。</p>
-<h3 id="secondarynamenodesnn-secondarynamenodeefbc88snnefbc89"><a href="#secondarynamenodesnn-secondarynamenodeefbc88snnefbc89" class="header-anchor"></a>SecondaryNameNode（SNN） {#SecondaryNameNode%EF%BC%88SNN%EF%BC%89}
-</h3><p>NN的辅助角色，帮NN打杂，监控 HDFS 状态的辅助后台程序，每隔一段时间获取 HDFS 元数据的快照。</p>
-<p><strong>可通过9870端口（默认9870）访问web界面，查看集群各节点状态及信息</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/06b13a99d15316eb579548d13d808452.png"
-	
-	
-	
+<h3 id="namenodenn"><a href="#namenodenn" class="header-anchor"></a>NameNode（NN）
+</h3><p>HDFS 的主角色，负责管理每个文件的块所在的 DataNode、整个 HDFS 文件系统、存储文件的元数据，如文件名，文件目录结构，文件属性（生成时间、副本数、文件权限）等。</p>
+<h3 id="datanodedn"><a href="#datanodedn" class="header-anchor"></a>DataNode（DN）
+</h3><p>HDFS 从角色，负责处理客户端的读写请求，存储删除文件块，以及块数据校验和。</p>
+<h3 id="secondarynamenodesnn"><a href="#secondarynamenodesnn" class="header-anchor"></a>SecondaryNameNode（SNN）
+</h3><p>NN 的辅助角色，帮 NN 打杂，监控 HDFS 状态的辅助后台程序，每隔一段时间获取 HDFS 元数据的快照。</p>
+<p><strong>可通过 9870 端口（默认 9870）访问 web 界面，查看集群各节点状态及信息</strong></p>
+<p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2.png"
+	width="2880"
+	height="1620"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2_hu_57d3224414c2e837.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-2_hu_d5435fb5eaa6d337.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
 	
 ></p>
-<h3 id="文件写入流程-e69687e4bbb6e58699e585a5e6b581e7a88b"><a href="#%e6%96%87%e4%bb%b6%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b-e69687e4bbb6e58699e585a5e6b581e7a88b" class="header-anchor"></a>文件写入流程 {#%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B}
-</h3><p><img src="https://i-blog.csdnimg.cn/blog_migrate/15300fba96e9072b20673cad977f7de1.png"
-	
-	
-	
+<h3 id="文件写入流程"><a href="#%e6%96%87%e4%bb%b6%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b" class="header-anchor"></a>文件写入流程
+</h3><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3.png"
+	width="1462"
+	height="644"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3_hu_fbf8ea63e84c9d64.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-3_hu_cd5ef232b66b9c88.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="544px"
+	
+>
+发送的写入请求通过后，客户端会根据 NN 返回的信息自动把数据分块，向<strong>网络距离最近</strong>的 DN 写入数据。同时，DN 会完成备份操作，把备份传到其他的 DN，然后由其他的 DN 再次做备份传播，直到满足设置的备份数量。当数据写入完成后，客户端会通知 NN，由 NN 完成元数据记录。
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4.png"
+	width="1070"
+	height="1148"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4_hu_493c72faaa0d005a.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-4_hu_ba3abf22a2a6c6b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="93"
+		data-flex-basis="223px"
 	
 ></p>
-<h2 id="发送的写入请求通过后客户端会根据nn返回的信息自动把数据分块向网络距离最近的dn写入数据同时dn会完成备份操作把备份传到其他的dn然后由其他的dn再次做备份传播直到满足设置的备份数量nb"><a href="#%e5%8f%91%e9%80%81%e7%9a%84%e5%86%99%e5%85%a5%e8%af%b7%e6%b1%82%e9%80%9a%e8%bf%87%e5%90%8e%e5%ae%a2%e6%88%b7%e7%ab%af%e4%bc%9a%e6%a0%b9%e6%8d%aenn%e8%bf%94%e5%9b%9e%e7%9a%84%e4%bf%a1%e6%81%af%e8%87%aa%e5%8a%a8%e6%8a%8a%e6%95%b0%e6%8d%ae%e5%88%86%e5%9d%97%e5%90%91%e7%bd%91%e7%bb%9c%e8%b7%9d%e7%a6%bb%e6%9c%80%e8%bf%91%e7%9a%84dn%e5%86%99%e5%85%a5%e6%95%b0%e6%8d%ae%e5%90%8c%e6%97%b6dn%e4%bc%9a%e5%ae%8c%e6%88%90%e5%a4%87%e4%bb%bd%e6%93%8d%e4%bd%9c%e6%8a%8a%e5%a4%87%e4%bb%bd%e4%bc%a0%e5%88%b0%e5%85%b6%e4%bb%96%e7%9a%84dn%e7%84%b6%e5%90%8e%e7%94%b1%e5%85%b6%e4%bb%96%e7%9a%84dn%e5%86%8d%e6%ac%a1%e5%81%9a%e5%a4%87%e4%bb%bd%e4%bc%a0%e6%92%ad%e7%9b%b4%e5%88%b0%e6%bb%a1%e8%b6%b3%e8%ae%be%e7%bd%ae%e7%9a%84%e5%a4%87%e4%bb%bd%e6%95%b0%e9%87%8fnb" class="header-anchor"></a>发送的写入请求通过后，客户端会根据NN返回的信息自动把数据分块，向<strong>网络距离最近</strong>的DN写入数据。同时，DN会完成备份操作，把备份传到其他的DN，然后由其他的DN再次做备份传播，直到满足设置的备份数量&amp;nb
-</h2>
+<h3 id="hdfs-架构的稳定性"><a href="#hdfs-%e6%9e%b6%e6%9e%84%e7%9a%84%e7%a8%b3%e5%ae%9a%e6%80%a7" class="header-anchor"></a>HDFS 架构的稳定性
+</h3><h4 id="心跳机制和重新复制"><a href="#%e5%bf%83%e8%b7%b3%e6%9c%ba%e5%88%b6%e5%92%8c%e9%87%8d%e6%96%b0%e5%a4%8d%e5%88%b6" class="header-anchor"></a>心跳机制和重新复制
+</h4><p>每个 DataNode 定期向 NameNode 发送心跳消息，如果超过指定时间没有收到心跳消息，则将 DataNode 标记为死亡。NameNode 不会将任何新的 IO 请求转发给标记为死亡的 DataNode，也不会 再使用这些 DataNode 上的数据。 由于数据不再可用，可能会导致某些块的复制因子小于其指定值， NameNode 会跟踪这些块，并在必要的时候进行重新复制。</p>
+<h4 id="数据的完整性"><a href="#%e6%95%b0%e6%8d%ae%e7%9a%84%e5%ae%8c%e6%95%b4%e6%80%a7" class="header-anchor"></a>数据的完整性
+</h4><p>由于存储设备故障等原因，存储在 DataNode 上的数据块也会发生损坏。为了避免读取到已经损坏的数 据而导致错误，HDFS 提供了数据完整性校验机制来保证数据的完整性，具体操作如下： 当客户端创建 HDFS 文件时，它会计算文件的每个块的 校验和 ，并将 校验和 存储在同一 HDFS 命名空 间下的单独的隐藏文件中。当客户端检索文件内容时，它会验证从每个 DataNode 接收的数据是否与存 储在关联校验和文件中的 校验和 匹配。如果匹配失败，则证明数据已经损坏，此时客户端会选择从其 他 DataNode 获取该块的其他可用副本。</p>
+<h3 id="元数据的磁盘故障"><a href="#%e5%85%83%e6%95%b0%e6%8d%ae%e7%9a%84%e7%a3%81%e7%9b%98%e6%95%85%e9%9a%9c" class="header-anchor"></a>元数据的磁盘故障
+</h3><p>FsImage 和 EditLog 是 HDFS 的核心数据，这些数据的意外丢失可能会导致整个 HDFS 服务不可 用。为了避免这个问题，可以配置 NameNode 使其支持 FsImage 和 EditLog 多副本同步，这样 FsImage 或 EditLog 的任何改变都会引起每个副本 FsImage 和 EditLog 的同步更新。</p>
+<h4 id="支持快照"><a href="#%e6%94%af%e6%8c%81%e5%bf%ab%e7%85%a7" class="header-anchor"></a>支持快照
+</h4><p>快照支持在特定时刻存储数据副本，在数据意外损坏时，可以通过回滚操作恢复到健康的数据状态。</p>
+<h3 id="文件读取流程"><a href="#%e6%96%87%e4%bb%b6%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b" class="header-anchor"></a>文件读取流程
+</h3><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5.png"
+	width="1920"
+	height="887"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5_hu_4d4e26163a453731.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-5_hu_66e2c8639fa1ca70.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="519px"
+	
+></p>
+<h3 id="存储方式"><a href="#%e5%ad%98%e5%82%a8%e6%96%b9%e5%bc%8f" class="header-anchor"></a>存储方式
+</h3><h4 id="block-块和多副本"><a href="#block-%e5%9d%97%e5%92%8c%e5%a4%9a%e5%89%af%e6%9c%ac" class="header-anchor"></a>Block 块和多副本
+</h4><p>由于文件大小不一，不利于统一管理，hdfs 设定了统一的存储单位 Block 块，Block 块是 hdfs 最小存储单位，通常每个 128MB（可修改 dfs.blocksize）。hdfs 会按照 Block 块大小把文件切分成多份存储在多个 datanode 上也就是多个服务器上，同时为了保证整个文件的完成性（防止 Block 块丢失或损坏），hdfs 会对每个 Block 块做多个备份存储在其他节点上，备份的数量默认是 3，可以在 hdfs-site.xml 中配置数量，修改后要重新分发该文件，保证每个服务器的配置文件相同！</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">    <span class="nt">&lt;property&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;name&gt;</span>dfs.replication<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;value&gt;</span>3<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/property&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同时还可以<strong>临时决定</strong>上传文件的副本数量：</p>
+<blockquote>
+<p>hdfs fs -D dfs.replication=5 -put test.tst /data/test</p></blockquote>
+<p>还可以修改已存在的 hdfs 文件的副本数量：</p>
+<blockquote>
+<p>hdfs fs -setrep [-R] 5 path
+path 是指定文件路径，-R 表示对子目录也生效</p></blockquote>
+<h4 id="edits-和-fsimage-文件"><a href="#edits-%e5%92%8c-fsimage-%e6%96%87%e4%bb%b6" class="header-anchor"></a>edits 和 fsimage 文件
+</h4><p>hdfs 中文件被划分成一堆堆 block 块，为了方便整理记录文件和 block 的关系，namenode 基于一批 edits 文件和一个 fsimage 文件完成整个文件系统的维护管理。</p>
+<p>edits 文件是一个流水账文件，记录了 hdfs 的每一次操作以及该次操作影响的文件及其对应的 block。为了保证 edits 文件检索性能，会有多个 edits 文件，每一个 edits 文件存储到达一定数量会开启新的 edits，保证不出现超大的 edits 文件。最终所有 edits 文件会合并为一个 fsimage 文件，这个 fsimage 文件就记录了最终状态的文件操作信息。如果已经有了 fsimage，就会把全部的 edits 和已存在的 fsimage 进行新的合并，生成新的 fsimage。
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6.png"
+	width="1296"
+	height="481"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6_hu_52dfd5d1e1ebfb29.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-6_hu_11dd4332aaa90aaa.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="269"
+		data-flex-basis="646px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7.png"
+	width="1069"
+	height="588"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7_hu_2625dce4698b9464.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-7_hu_de1611f6402ed05e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="436px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8.png"
+	width="1891"
+	height="688"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8_hu_52c0bd3ecacf8461.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-8_hu_cefe06dc3ddf1ff3.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="274"
+		data-flex-basis="659px"
+	
+></p>
+<h4 id="元数据合并及控制参数"><a href="#%e5%85%83%e6%95%b0%e6%8d%ae%e5%90%88%e5%b9%b6%e5%8f%8a%e6%8e%a7%e5%88%b6%e5%8f%82%e6%95%b0" class="header-anchor"></a>元数据合并及控制参数
+</h4><p>**注意！**元数据（eidts 和 fsimage）的合并不是由 NN 完成的，而是 SNN，NN 只是基于元数据对整个文件系统进行维护管理，负责元数据记录和权限审批，NN 是管理者，不是员工。</p>
+<p><strong>SNN 会通过 http 从 NN 拉取 edits 和 fsimage 然后合并元数据并提供给 NN 使用</strong>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9.png"
+	width="1322"
+	height="573"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9_hu_fdcc81a3d0edfece.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-9_hu_c4d2baad5f67d482.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="553px"
+	
+></p>
+<h3 id="hdfs-漫画"><a href="#hdfs-%e6%bc%ab%e7%94%bb" class="header-anchor"></a>HDFS 漫画
+</h3><h4 id="读写数据"><a href="#%e8%af%bb%e5%86%99%e6%95%b0%e6%8d%ae" class="header-anchor"></a>读写数据
+</h4><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10.png"
+	width="1121"
+	height="1256"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10_hu_157753679e8ec94b.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-10_hu_128645316d4622f6.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="89"
+		data-flex-basis="214px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11.png"
+	width="1134"
+	height="639"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11_hu_5749475ab96244d1.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-11_hu_fdb712f4675e0e4c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="425px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12.png"
+	width="1140"
+	height="696"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12_hu_cbb94e5392c1e693.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-12_hu_3fa0523a2f6f2f2b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="393px"
+	
+></p>
+<h4 id="hdfs-故障类型和检测方法"><a href="#hdfs-%e6%95%85%e9%9a%9c%e7%b1%bb%e5%9e%8b%e5%92%8c%e6%a3%80%e6%b5%8b%e6%96%b9%e6%b3%95" class="header-anchor"></a>HDFS 故障类型和检测方法
+</h4><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13.png"
+	width="1194"
+	height="1261"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13_hu_4b1cee605bbbf67f.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-13_hu_58e809ec424f960c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="94"
+		data-flex-basis="227px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14.png"
+	width="1174"
+	height="781"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14_hu_f1b4c4dcb189bb05.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-14_hu_ca4e5674b708f30f.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="360px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15.png"
+	width="1032"
+	height="1308"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15_hu_3c0d662c6bd6c4dc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-15_hu_3c58c6056ad8f8ae.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="78"
+		data-flex-basis="189px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16.png"
+	width="1032"
+	height="1308"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16_hu_3c0d662c6bd6c4dc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-16_hu_3c58c6056ad8f8ae.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="78"
+		data-flex-basis="189px"
+	
+></p>
+<h2 id="mapreduce-分布式并行计算框架"><a href="#mapreduce-%e5%88%86%e5%b8%83%e5%bc%8f%e5%b9%b6%e8%a1%8c%e8%ae%a1%e7%ae%97%e6%a1%86%e6%9e%b6" class="header-anchor"></a>MapReduce 分布式并行计算框架
+</h2><blockquote>
+<p>MapReduce 是基于 Yarn 运行的，没有 Yarn 就无法运行 MapReduce，MapReduce 有 RM、NM、AM 三种角色。</p>
+<p>MR 不适合实时计算，不适合流式计算，不适合有向图计算。</p>
+<p>可通过 8042 端口（默认 8042）访问 web 界面，查看 MR 任务的执行信息
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17.png"
+	width="2880"
+	height="1620"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17_hu_f4034a3b5f774256.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-17_hu_c2d144baf5c37545.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p></blockquote>
+<h3 id="计算模式"><a href="#%e8%ae%a1%e7%ae%97%e6%a8%a1%e5%bc%8f" class="header-anchor"></a>计算模式
+</h3><p><strong>MapReduce 属于分散汇总。spark、flink 属于中心调度.</strong>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18.png"
+	width="2005"
+	height="844"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18_hu_8fee4c51ba5bc4bc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-18_hu_233fa6c8244e1f4c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="570px"
+	
+>
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19.png"
+	width="1668"
+	height="955"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19_hu_e796581b28647e17.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-19_hu_a7bfd4eb965f4d88.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<h3 id="map-和-reduce"><a href="#map-%e5%92%8c-reduce" class="header-anchor"></a>Map 和 Reduce
+</h3><p>Map 接口提供“分散”功能，Reduce 提供“汇总聚合”功能，用户可以通过 Java、python 等编程调用 mapreduce 接口完成开发，不过现在已经有了 Hive on MR（稍微过时），sparkSQL 等客户端。不懂编程仅用 SQL 就能完成开发，使用更方便，逐渐成为主流。</p>
+<h3 id="mr-执行原理"><a href="#mr-%e6%89%a7%e8%a1%8c%e5%8e%9f%e7%90%86" class="header-anchor"></a>MR 执行原理
+</h3><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20.png"
+	width="1403"
+	height="1232"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20_hu_68e96f09be2f3bc.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-20_hu_58f862bcd0565186.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="113"
+		data-flex-basis="273px"
+	
+></p>
+<h2 id="yarn-作业调度资源管理"><a href="#yarn-%e4%bd%9c%e4%b8%9a%e8%b0%83%e5%ba%a6%e8%b5%84%e6%ba%90%e7%ae%a1%e7%90%86" class="header-anchor"></a>Yarn 作业调度、资源管理
+</h2><p>Yarn 管控整个集群的资源调度，MR 程序运行时，是在 Yarn 的监督下运行的，MR 程序会把计算任务分成若干个 map 和 reduce，然后向 Yarn 申请资源并运行任务。Yarn 有四种角色：ResourceManager（RM）、NodeManager（NM）、ProxyServer（PS）、JobHistoryServer（JHS）
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21.png"
+	width="889"
+	height="513"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21_hu_54781fad034c5888.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-21_hu_c4ac2a9b591cc19d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="415px"
+	
+></p>
+<h3 id="yarn-启停"><a href="#yarn-%e5%90%af%e5%81%9c" class="header-anchor"></a>Yarn 启停
+</h3><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22.png"
+	width="1253"
+	height="291"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22_hu_7b46bce3de21f748.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-22_hu_775d8f0fe7403c04.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="430"
+		data-flex-basis="1033px"
+	
+></p>
+<h3 id="resourcemanager"><a href="#resourcemanager" class="header-anchor"></a>ResourceManager
+</h3><p>集群资源总管家，整个集群资源调度者，负责协调调度各个程序所需资源。</p>
+<h3 id="nodemanager"><a href="#nodemanager" class="header-anchor"></a>NodeManager
+</h3><p>单机资源管家，单个服务器的资源调度者，负责协调调度单个服务器的资源供程序使用。同时负责该节点内所有容器的生命周期的管 理，监视资源和跟踪节点健康。具体如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">启动时向 ResourceManager 注册并定时发送心跳消息，等待 ResourceManager 的指令；
+</span></span><span class="line"><span class="cl">维护 Container 的生命周期，监控 Container 的资源使用情况；
+</span></span><span class="line"><span class="cl">管理任务运行时的相关依赖，根据 ApplicationMaster 的需要，在启动 Container 之前将需 要的程序及其依赖拷贝到本地。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="applicationmaster"><a href="#applicationmaster" class="header-anchor"></a>ApplicationMaster
+</h3><p>在用户提交一个应用程序时，YARN 会启动一个轻量级的进程 ApplicationMaster 。 ApplicationMaster 负责协调来自 ResourceManager 的资源，并通过 NodeManager 监视容器内资 源的使用情况，同时还负责任务的监控与容错。具体如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">根据应用的运行状态来决定动态计算资源需求；
+</span></span><span class="line"><span class="cl">向 ResourceManager 申请资源，监控申请的资源的使用情况；
+</span></span><span class="line"><span class="cl">跟踪任务状态和进度，报告资源的使用情况和应用的进度信息；
+</span></span><span class="line"><span class="cl">负责任务的容错。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>运行时可通过服务器的 8088 端口（默认 8088）访问 web 界面</strong></p>
+<h3 id="jobhistoryserver"><a href="#jobhistoryserver" class="header-anchor"></a>JobHistoryServer
+</h3><p>记录历史运行程序的信息及产生的日志，把每个程序的运行日志统一收集到 hdfs，可通过 19888 端口访问 web 界面
+<img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23.png"
+	width="2880"
+	height="1620"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23_hu_30a5329cc559fcde.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-23_hu_d5dd26fb9b003a81.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<h3 id="container"><a href="#container" class="header-anchor"></a>Container
+</h3><p>Container 是 Yarn 中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等。</p>
+<h2 id="hadoop-一键启停"><a href="#hadoop-%e4%b8%80%e9%94%ae%e5%90%af%e5%81%9c" class="header-anchor"></a>Hadoop 一键启停
+</h2><p><img src="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24.png"
+	width="1483"
+	height="658"
+	srcset="/zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24_hu_f5e5925f43b6c9ad.png 480w, /zh-cn/post/2024/04/hadoop%E5%85%A5%E9%97%A8hdfsmryarn/image-24_hu_e523a5cfc8834ca0.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="540px"
+	
+></p>
+
 </section>
 
 
@@ -650,19 +1067,6 @@ hdfs fsck path [-files [-blocks [-location]]]
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">Hive调优</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/04/hive%E5%85%A5%E9%97%A8-hql%E8%A1%A8%E6%93%8D%E4%BD%9C%E5%BA%93%E6%93%8D%E4%BD%9C%E8%A7%86%E5%9B%BE%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Hive入门-HQL、表操作、库操作、视图、索引、数据类型</h2>
             
         </div>
     </a>

@@ -11,7 +11,7 @@
 <meta property='og:description' content="Hive调优汇总：分组聚合优化、join优化、数据倾斜优化、任务并行度优化、小文件合并优化等">
 <meta property='og:url' content='/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hive' /><meta property='article:tag' content='hive' /><meta property='article:tag' content='数据仓库' /><meta property='article:tag' content='big data' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-13T20:49:38&#43;00:00'/><meta property='article:modified_time' content='2024-04-13T20:49:38&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hive' /><meta property='article:tag' content='数据仓库' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-13T20:49:38&#43;00:00'/><meta property='article:modified_time' content='2024-04-13T20:49:38&#43;00:00'/>
 <meta name="twitter:title" content="Hive调优">
 <meta name="twitter:description" content="Hive调优汇总：分组聚合优化、join优化、数据倾斜优化、任务并行度优化、小文件合并优化等">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,28 +336,93 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae">Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}</a>
+    <li><a href="#yarn-和-mr-资源配置">Yarn 和 MR 资源配置</a>
       <ol>
-        <li><a href="#yarn资源配置-yarne8b584e6ba90e9858de7bdae">Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}</a></li>
-        <li><a href="#mr资源配置-mre8b584e6ba90e9858de7bdae">MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}</a></li>
-      </ol>
-    </li>
-    <li><a href="#explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892">Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}</a></li>
-    <li><a href="#分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96"><strong>分组聚合优化</strong> {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}</a>
-      <ol>
-        <li><a href="#优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e">优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}</a></li>
-      </ol>
-    </li>
-    <li><a href="#join优化-joine4bc98e58c96">Join优化 {#Join%E4%BC%98%E5%8C%96}</a>
-      <ol>
-        <li><a href="#common-join普通join-common20joinefbc88e699aee9809ajoinefbc89">Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}</a>
+        <li><a href="#yarn-资源配置">Yarn 资源配置</a></li>
+        <li><a href="#mr-资源配置">MR 资源配置</a>
           <ol>
-            <li><a href="#原理-e58e9fe79086">原理 {#%E5%8E%9F%E7%90%86}</a></li>
+            <li><a href="#mapreducemapmemorymb"><strong>mapreduce.map.memory.mb</strong></a></li>
+            <li><a href="#mapreducemapcpuvcores"><strong>mapreduce.map.cpu.vcores</strong></a></li>
+            <li><a href="#mapreducereducecpuvcores"><strong>mapreduce.reduce.cpu.vcores</strong></a></li>
+            <li><a href="#mapreducereducememorymb"><strong>mapreduce.reduce.memory.mb</strong></a></li>
           </ol>
         </li>
       </ol>
     </li>
-    <li><a href="#需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表">需要<strong>注意</strong> 的是，<strong>HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系</strong>，即HQL中的A<strong>表</strong></a></li>
+    <li><a href="#explain-查看执行计划">Explain 查看执行计划</a></li>
+    <li><a href="#分组聚合优化"><strong>分组聚合优化</strong></a>
+      <ol>
+        <li><a href="#优化前-vs-优化后">优化前 VS 优化后</a></li>
+      </ol>
+    </li>
+    <li><a href="#join-优化">Join 优化</a>
+      <ol>
+        <li><a href="#common-join普通-join">Common Join(普通 join)</a>
+          <ol>
+            <li><a href="#原理">原理</a></li>
+          </ol>
+        </li>
+        <li><a href="#map-join">Map Join</a>
+          <ol>
+            <li><a href="#原理-1">原理</a></li>
+            <li><a href="#优化">优化</a></li>
+            <li><a href="#优化案例"><strong>优化案例</strong></a></li>
+          </ol>
+        </li>
+        <li><a href="#bucket-map-join">Bucket Map Join</a>
+          <ol>
+            <li><a href="#原理-2">原理</a></li>
+            <li><a href="#优化-1">优化</a></li>
+            <li><a href="#优化案例-1"><strong>优化案例</strong></a></li>
+          </ol>
+        </li>
+        <li><a href="#sort-merge-bucket-map-joinsmb-map-join">Sort Merge Bucket Map Join(SMB map join)</a>
+          <ol>
+            <li><a href="#原理-3">原理</a></li>
+            <li><a href="#优化-2">优化</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#数据倾斜优化">数据倾斜优化</a>
+      <ol>
+        <li><a href="#分组聚合导致的数据倾斜">分组聚合导致的数据倾斜</a>
+          <ol>
+            <li><a href="#map-side-聚合">Map-Side 聚合</a></li>
+            <li><a href="#skew-groupby-优化">Skew-GroupBy 优化</a></li>
+          </ol>
+        </li>
+        <li><a href="#join-导致的数据倾斜">Join 导致的数据倾斜</a>
+          <ol>
+            <li><a href="#map-join-1">map join</a></li>
+            <li><a href="#skew-join">skew join</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#任务并行度优化">任务并行度优化</a>
+      <ol>
+        <li><a href="#map-端并行度">Map 端并行度</a></li>
+        <li><a href="#reduce-端并行度">Reduce 端并行度</a></li>
+      </ol>
+    </li>
+    <li><a href="#小文件合并优化">小文件合并优化</a>
+      <ol>
+        <li><a href="#合并-map-端输入的小文件">合并 Map 端输入的小文件</a></li>
+        <li><a href="#合并-reduce-端输出的小文件">合并 Reduce 端输出的小文件</a></li>
+      </ol>
+    </li>
+    <li><a href="#其他优化">其他优化</a>
+      <ol>
+        <li><a href="#cbo-优化">CBO 优化</a></li>
+        <li><a href="#谓词下推">谓词下推</a></li>
+        <li><a href="#矢量化查询">矢量化查询</a></li>
+        <li><a href="#fetch-抓取">Fetch 抓取</a></li>
+        <li><a href="#本地模式">本地模式</a></li>
+        <li><a href="#并行执行">并行执行</a></li>
+        <li><a href="#严格模式">严格模式</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -421,7 +486,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 12 分钟
+                阅读时长: 22 分钟
             </time>
         </div>
         
@@ -452,11 +517,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/big-data/">Big Data</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
             
             
@@ -473,122 +533,106 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE" >Yarn和MR资源配置</a>{#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE" >Yarn资源配置</a>{#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE" >MR资源配置</a>{#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92" >Explain查看执行计划</a>{#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92-toc}</p>
-<p><a class="link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96" >分组聚合优化</a>{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E" >优化前VS优化后</a>{#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E-toc}</p>
-<p><a class="link" href="#Join%E4%BC%98%E5%8C%96" >Join优化</a>{#Join%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89" >Common Join（普通join）</a>{#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89-toc}</p>
-<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
-<p><a class="link" href="#Map%20Join" >Map Join</a>{#Map%20Join-toc}</p>
-<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
-<p><a class="link" href="#%E4%BC%98%E5%8C%96%C2%A0" >优化</a>{#%E4%BC%98%E5%8C%96%C2%A0-toc}</p>
-<p><a class="link" href="#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA" >法一：hint提示</a>{#%E6%B3%95%E4%B8%80%EF%BC%9Ahint%E6%8F%90%E7%A4%BA-toc}</p>
-<p><a class="link" href="#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91" >法二：自动触发</a>{#%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91-toc}</p>
-<p><a class="link" href="#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B" >优化案例</a>{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}</p>
-<p><a class="link" href="#Bucket%20Map%20Join" >Bucket Map Join</a>{#Bucket%20Map%20Join-toc}</p>
-<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
-<p><a class="link" href="#%E4%BC%98%E5%8C%96" >优化</a>{#%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#hint%E6%8F%90%E7%A4%BA%C2%A0" >hint提示</a>{#hint%E6%8F%90%E7%A4%BA%C2%A0-toc}</p>
-<p><a class="link" href="#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B" >优化案例</a>{#%C2%A0%E4%BC%98%E5%8C%96%E6%A1%88%E4%BE%8B-toc}</p>
-<p><a class="link" href="#Sort%20Merge%20Bucket%20Map%20Join%28SMB%20map%20join%29" >Sort Merge Bucket Map Join(SMB map join)</a>{#Sort%20Merge%20Bucket%20Map%20Join(SMB%20map%20join)-toc}</p>
-<p><a class="link" href="#%E5%8E%9F%E7%90%86" >原理</a>{#%E5%8E%9F%E7%90%86-toc}</p>
-<p><a class="link" href="#%E4%BC%98%E5%8C%96" >优化</a>{#%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96" >数据倾斜优化</a>{#%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C" >分组聚合导致的数据倾斜</a>{#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}</p>
-<p><a class="link" href="#Map-Side%E8%81%9A%E5%90%88" >Map-Side聚合</a>{#Map-Side%E8%81%9A%E5%90%88-toc}</p>
-<p><a class="link" href="#Skew-GroupBy%E4%BC%98%E5%8C%96" >Skew-GroupBy优化</a>{#Skew-GroupBy%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#%E4%BC%98%E5%8C%96%E5%89%8D" >优化前</a>{#%E4%BC%98%E5%8C%96%E5%89%8D-toc}</p>
-<p><a class="link" href="#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0" >优化后</a>{#%E4%BC%98%E5%8C%96%E5%90%8E%C2%A0-toc}</p>
-<p><a class="link" href="#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C" >Join导致的数据倾斜</a>{#Join%E5%AF%BC%E8%87%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C-toc}</p>
-<p><a class="link" href="#map%20join" >map join</a>{#map%20join-toc}</p>
-<p><a class="link" href="#skew%20join" >skew join</a>{#skew%20join-toc}</p>
-<p><a class="link" href="#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96" >任务并行度优化</a>{#%E4%BB%BB%E5%8A%A1%E5%B9%B6%E8%A1%8C%E5%BA%A6%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6" >Map端并行度</a>{#Map%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}</p>
-<p><a class="link" href="#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6" >Reduce端并行度</a>{#Reduce%E7%AB%AF%E5%B9%B6%E8%A1%8C%E5%BA%A6-toc}</p>
-<p><a class="link" href="#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96" >小文件合并优化</a>{#%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6" >合并Map端输入的小文件</a>{#%E5%90%88%E5%B9%B6Map%E7%AB%AF%E8%BE%93%E5%85%A5%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}</p>
-<p><a class="link" href="#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6" >合并Reduce端输出的小文件</a>{#%E5%90%88%E5%B9%B6Reduce%E7%AB%AF%E8%BE%93%E5%87%BA%E7%9A%84%E5%B0%8F%E6%96%87%E4%BB%B6-toc}</p>
-<p><a class="link" href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96" >其他优化</a>{#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#CBO%E4%BC%98%E5%8C%96" >CBO优化</a>{#CBO%E4%BC%98%E5%8C%96-toc}</p>
-<p><a class="link" href="#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8" >谓词下推</a>{#%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8-toc}</p>
-<p><a class="link" href="#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2" >矢量化查询</a>{#%E7%9F%A2%E9%87%8F%E5%8C%96%E6%9F%A5%E8%AF%A2-toc}</p>
-<p><a class="link" href="#Fetch%E6%8A%93%E5%8F%96" >Fetch抓取</a>{#Fetch%E6%8A%93%E5%8F%96-toc}</p>
-<p><a class="link" href="#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F" >本地模式</a>{#%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%BC%8F-toc}</p>
-<p><a class="link" href="#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C" >并行执行</a>{#%E5%B9%B6%E8%A1%8C%E6%89%A7%E8%A1%8C-toc}</p>
-<p><a class="link" href="#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F" >严格模式</a>{#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-toc}</p>
-<hr>
-<h2 id="yarn和mr资源配置-yarne5928cmre8b584e6ba90e9858de7bdae"><a href="#yarn%e5%92%8cmr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne5928cmre8b584e6ba90e9858de7bdae" class="header-anchor"></a>Yarn和MR资源配置 {#Yarn%E5%92%8CMR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
+    <h2 id="yarn-和-mr-资源配置"><a href="#yarn-%e5%92%8c-mr-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae" class="header-anchor"></a>Yarn 和 MR 资源配置
 </h2><p>配置项参考官网：<a class="link" href="https://apache.github.io/hadoop/"  title="https://apache.github.io/hadoop/"
      target="_blank" rel="noopener"
     >https://apache.github.io/hadoop/</a></p>
-<h3 id="yarn资源配置-yarne8b584e6ba90e9858de7bdae"><a href="#yarn%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-yarne8b584e6ba90e9858de7bdae" class="header-anchor"></a>Yarn资源配置 {#Yarn%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
-</h3><p>修改yarn-site.xml,调整的Yarn参数均与CPU、内存等资源有关，配置如下：</p>
+<h3 id="yarn-资源配置"><a href="#yarn-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae" class="header-anchor"></a>Yarn 资源配置
+</h3><p>修改 yarn-site.xml,调整的 Yarn 参数均与 CPU、内存等资源有关，配置如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;property&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.resource.memory-mb<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>65536<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量<span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/property&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;property&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>yarn.nodemanager.resource.cpu-vcores<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>16<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。<span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/property&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;property&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>yarn.scheduler.maximum-allocation-mb<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>16384<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>单个Container能够使用的最大内存。<span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/property&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;property&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>yarn.scheduler.minimum-allocation-mb<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;value&gt;</span>512<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;description&gt;</span>单个Container能够使用的最小内存。<span class="nt">&lt;/description&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/property&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>修改后重新分发该配置文件并重启 Yarn</p>
+<h3 id="mr-资源配置"><a href="#mr-%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae" class="header-anchor"></a>MR 资源配置
+</h3><p>MapReduce 资源配置主要包括 Map Task 的内存和 CPU 核数，以及 Reduce Task 的内存和 CPU 核数。核心配置参数如下：</p>
+<h4 id="mapreducemapmemorymb"><a href="#mapreducemapmemorymb" class="header-anchor"></a><strong>mapreduce.map.memory.mb</strong>
+</h4><p>该参数的含义是，单个 Map Task 申请的 container 容器内存大小，其默认值为 1024。该值不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。</p>
 <blockquote>
-<p>&lt;property&gt;</p>
-<p>&lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;</p>
-<p>&lt;value&gt;65536&lt;/value&gt;</p>
-<p>&lt;description&gt;一个NodeManager节点分配给Container使用的内存。该参数的配置，取决于NodeManager所在节点的总内存容量和该节点运行的其他服务的数量&lt;/description&gt;</p>
-<p>&lt;/property&gt;</p>
-<p>&lt;property&gt;</p>
-<p>&lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;/name&gt;</p>
-<p>&lt;value&gt;16&lt;/value&gt;</p>
-<p>&lt;description&gt;一个NodeManager节点分配给Container使用的CPU核数。该参数的配置，同样取决于NodeManager所在节点的总CPU核数和该节点运行的其他服务。&lt;/description&gt;</p>
-<p>&lt;/property&gt;</p>
-<p>&lt;property&gt;</p>
-<p>&lt;name&gt;yarn.scheduler.maximum-allocation-mb&lt;/name&gt;</p>
-<p>&lt;value&gt;16384&lt;/value&gt;</p>
-<p>&lt;description&gt;单个Container能够使用的最大内存。&lt;/description&gt;</p>
-<p>&lt;/property&gt;</p>
-<p>&lt;property&gt;</p>
-<p>&lt;name&gt;yarn.scheduler.minimum-allocation-mb&lt;/name&gt;</p>
-<p>&lt;value&gt;512&lt;/value&gt;</p>
-<p>&lt;description&gt;单个Container能够使用的最小内存。&lt;/description&gt;</p>
-<p>&lt;/property&gt;</p></blockquote>
-<p>修改后重新分发该配置文件并重启Yarn</p>
-<h3 id="mr资源配置-mre8b584e6ba90e9858de7bdae"><a href="#mr%e8%b5%84%e6%ba%90%e9%85%8d%e7%bd%ae-mre8b584e6ba90e9858de7bdae" class="header-anchor"></a>MR资源配置 {#MR%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE}
-</h3><p>MapReduce资源配置主要包括Map Task的内存和CPU核数，以及Reduce Task的内存和CPU核数。核心配置参数如下：</p>
-<p><strong>1</strong>{#_Hlk110418691}<strong>）</strong> <strong>mapreduce.map.memory.mb</strong></p>
-<p>该参数的含义是，单个Map Task申请的container容器内存大小，其默认值为1024。该值不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。</p>
+<p>该参数需要根据不同的计算任务单独进行配置，在 hive 中，可直接使用如下方式为每个 SQL 语句单独进行配置：set mapreduce.map.memory.mb=2048;</p></blockquote>
+<h4 id="mapreducemapcpuvcores"><a href="#mapreducemapcpuvcores" class="header-anchor"></a><strong>mapreduce.map.cpu.vcores</strong>
+</h4><p>该参数的含义是，单个 Map Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）</p>
+<h4 id="mapreducereducecpuvcores"><a href="#mapreducereducecpuvcores" class="header-anchor"></a><strong>mapreduce.reduce.cpu.vcores</strong>
+</h4><p>该参数的含义是，单个 Reduce Task 申请的 container 容器 cpu 核数，其默认值为 1。该值一般无需调整。如需调整要修改 mapred-site.xml 文件（mapred-default.xml）</p>
+<h4 id="mapreducereducememorymb"><a href="#mapreducereducememorymb" class="header-anchor"></a><strong>mapreduce.reduce.memory.mb</strong>
+</h4><p>该参数的含义是，单个 Reduce Task 申请的 container 容器内存大小，其默认值为 1024。该值同样不能超出 yarn.scheduler.maximum-allocation-mb 和 yarn.scheduler.minimum-allocation-mb 规定的范围。</p>
 <blockquote>
-<p>该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.map.memory.mb=2048;</p></blockquote>
-<p><strong>2</strong> <strong>）</strong> <strong>mapreduce.map.cpu.vcores</strong></p>
-<p>该参数的含义是，单个Map Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）</p>
-<p><strong>3）</strong> <strong>mapreduce.reduce.cpu.vcores</strong></p>
-<p>该参数的含义是，单个Reduce Task申请的container容器cpu核数，其默认值为1。该值一般无需调整。如需调整要修改mapred-site.xml文件（mapred-default.xml）</p>
-<p><strong>4）mapreduce.reduce.memory.mb</strong></p>
-<p>该参数的含义是，单个Reduce Task申请的container容器内存大小，其默认值为1024。该值同样不能超出yarn.scheduler.maximum-allocation-mb和yarn.scheduler.minimum-allocation-mb规定的范围。</p>
-<blockquote>
-<p>该参数需要根据不同的计算任务单独进行配置，在hive中，可直接使用如下方式为每个SQL语句单独进行配置：set mapreduce.reduce.memory.mb=2048;</p></blockquote>
-<h2 id="explain查看执行计划-explaine69fa5e79c8be689a7e8a18ce8aea1e58892"><a href="#explain%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92-explaine69fa5e79c8be689a7e8a18ce8aea1e58892" class="header-anchor"></a>Explain查看执行计划 {#Explain%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92}
-</h2><p>Explain用于呈现HQL语句的详细执行步骤，由一系列Stage组成，简单的理解为HQL查询语句的不同执行阶段，这一系列Stage具有依赖关系，每个Stage对应一个MapReduce Job或一个文件系统操作等。</p>
-<p>若某个Stage对应的一个MapReduce Job，则其Map端和Reduce端的计算逻辑分别由Map Operator Tree和Reduce Operator Tree进行描述，Operator Tree由一系列的Operator组成，一个Operator代表在Map或Reduce阶段的一个单一的逻辑操作，例如TableScan Operator，Select Operator，Join Operator等。具体如下图：</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/4da9891258984bbe1a892f0ccafcb92b.png"
-	
-	
-	
+<p>该参数需要根据不同的计算任务单独进行配置，在 hive 中，可直接使用如下方式为每个 SQL 语句单独进行配置：set mapreduce.reduce.memory.mb=2048;</p></blockquote>
+<h2 id="explain-查看执行计划"><a href="#explain-%e6%9f%a5%e7%9c%8b%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92" class="header-anchor"></a>Explain 查看执行计划
+</h2><p>Explain 用于呈现 HQL 语句的详细执行步骤，由一系列 Stage 组成，简单的理解为 HQL 查询语句的不同执行阶段，这一系列 Stage 具有依赖关系，每个 Stage 对应一个 MapReduce Job 或一个文件系统操作等。</p>
+<p>若某个 Stage 对应的一个 MapReduce Job，则其 Map 端和 Reduce 端的计算逻辑分别由 Map Operator Tree 和 Reduce Operator Tree 进行描述，Operator Tree 由一系列的 Operator 组成，一个 Operator 代表在 Map 或 Reduce 阶段的一个单一的逻辑操作，例如 TableScan Operator，Select Operator，Join Operator 等。具体如下图：</p>
+<p><img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image.png"
+	width="213"
+	height="681"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image_hu_47b669486afcd8ad.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image_hu_6f7640515ae32138.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="31"
+		data-flex-basis="75px"
 	
 ></p>
 <blockquote>
-<p><strong>常见的Operator及其作用如下</strong></p>
-<p>TableScan：表扫描操作，通常map端第一个操作肯定是表扫描操作</p>
+<p><strong>常见的 Operator 及其作用如下</strong></p>
+<p>TableScan：表扫描操作，通常 map 端第一个操作肯定是表扫描操作</p>
 <p>Select Operator：选取操作</p>
-<p>Group By Operator：map端的分组聚合操作，在后面的分组聚合中会讲到</p>
+<p>Group By Operator：map 端的分组聚合操作，在后面的分组聚合中会讲到</p>
 <p>Reduce Output Operator：输出到 reduce 操作</p>
 <p>Filter Operator：过滤操作</p>
 <p>Join Operator：join 操作</p>
 <p>File Output Operator：文件输出操作</p>
-<p>Fetch Operator 客户端获取数据操作
-<strong>Explain语法</strong></p>
+<p>Fetch Operator 客户端获取数据操作</p></blockquote>
+<blockquote>
+<p><strong>Explain 语法</strong></p>
 <p>EXPLAIN </p>
 \[FORMATTED \| EXTENDED \| DEPENDENCY\]<p> query-sql</p>
 <ul>
-<li>FORMATTED：将执行计划以JSON字符串的形式输出</li>
+<li>FORMATTED：将执行计划以 JSON 字符串的形式输出</li>
 <li>EXTENDED：输出执行计划中的额外信息，通常是读写的文件名等信息</li>
 <li>DEPENDENCY：输出执行计划读取的表及分区</li>
 </ul>
@@ -596,76 +640,793 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p>hive (default)&gt;</p>
 <p>explain formatted</p>
 <p>select user_id,count(*) from order_detail group by user_id;</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/d475c4d504540aaa12554c7c9480202c.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1.png"
+	width="1435"
+	height="886"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1_hu_df40e0082aa7426d.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-1_hu_38c1b7e1fc123ebc.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
 	
 ></p></blockquote>
-<h2 id="分组聚合优化-e58886e7bb84e8819ae59088e4bc98e58c96"><a href="#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96-e58886e7bb84e8819ae59088e4bc98e58c96" class="header-anchor"></a><strong>分组聚合优化</strong> {#%E5%88%86%E7%BB%84%E8%81%9A%E5%90%88%E4%BC%98%E5%8C%96}
-</h2><p>分组聚合是通过MR Job实现的，map端读取数据，并按照分组字段分区，通过shuffle，把数据发到reduce，各组数据在reduce端完成最终的聚合运算。</p>
-<p>分组聚合的优化主要围绕减少shuffle数据量进行，具体做法是map-side聚合。map-side聚合是在map端维护一个hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到reduce端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个map端的部分聚合过程，以减少shuffle的工作量，进而减少reduce端的聚合工作量。</p>
+<h2 id="分组聚合优化"><a href="#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e4%bc%98%e5%8c%96" class="header-anchor"></a><strong>分组聚合优化</strong>
+</h2><p>分组聚合是通过 MR Job 实现的，map 端读取数据，并按照分组字段分区，通过 shuffle，把数据发到 reduce，各组数据在 reduce 端完成最终的聚合运算。</p>
+<p>分组聚合的优化主要围绕减少 shuffle 数据量进行，具体做法是 map-side 聚合。map-side 聚合是在 map 端维护一个 hash table，先利用其完成数据的部分聚合，再把聚合的结果按照分组字段分区，发到 reduce 端完成最终聚合，以此提高分组聚合运算效率。简而言之就是增加了一个 map 端的部分聚合过程，以减少 shuffle 的工作量，进而减少 reduce 端的聚合工作量。</p>
 <blockquote>
-<p>map-side聚合相关参数如下</p>
-<p>&ndash;启用map-side聚合，默认是true</p>
+<p>map-side 聚合相关参数如下</p>
+<p>&ndash;启用 map-side 聚合，默认是 true</p>
 <p><strong>set hive.map.aggr=true;</strong></p>
 <br />
-<p>&ndash;用于检测源表数据是否适合进行map-side聚合。检测的方法是：系统自动先对若干条数据进行map-side聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行map-side聚合；否则，认为该表数据不适合进行map-side聚合，后续数据便不再进行map-side聚合。0.5意味着平均有2条数据可以聚合成1条，1意味着没有出现任何的聚合</p>
+<p>&ndash;用于检测源表数据是否适合进行 map-side 聚合。检测的方法是：系统自动先对若干条数据进行 map-side 聚合，若聚合后的条数和聚合前的条数比值小于该值，则认为该表适合进行 map-side 聚合；否则，认为该表数据不适合进行 map-side 聚合，后续数据便不再进行 map-side 聚合。0.5 意味着平均有 2 条数据可以聚合成 1 条，1 意味着没有出现任何的聚合</p>
 <p><strong>set hive.map.aggr.hash.min.reduction=0.5;</strong></p>
 <br />
-<p>&ndash;用于<strong>hive.map.aggr.hash.min.reduction=0.5</strong> 检测源表是否适合map-side聚合的条数。</p>
+<p>&ndash;用于<strong>hive.map.aggr.hash.min.reduction=0.5</strong> 检测源表是否适合 map-side 聚合的条数。</p>
 <p><strong>set hive.groupby.mapaggr.checkinterval=100000;</strong></p>
 <br />
-<p>&ndash;map-side聚合所用的hash table占用map task堆内存的最大比例，若超出该值，则会对hash table进行一次flush。</p>
+<p>&ndash;map-side 聚合所用的 hash table 占用 map task 堆内存的最大比例，若超出该值，则会对 hash table 进行一次 flush。</p>
 <p><strong>set hive.map.aggr.hash.force.flush.memory.threshold=0.7;</strong></p></blockquote>
-<h3 id="优化前vs优化后-e4bc98e58c96e5898dvse4bc98e58c96e5908e"><a href="#%e4%bc%98%e5%8c%96%e5%89%8dvs%e4%bc%98%e5%8c%96%e5%90%8e-e4bc98e58c96e5898dvse4bc98e58c96e5908e" class="header-anchor"></a>优化前VS优化后 {#%E4%BC%98%E5%8C%96%E5%89%8DVS%E4%BC%98%E5%8C%96%E5%90%8E}
-</h3><p>set hive.map.aggr=false关闭分组聚合优化，查看执行效果，在Map端没有了Group By Operator</p>
+<h3 id="优化前-vs-优化后"><a href="#%e4%bc%98%e5%8c%96%e5%89%8d-vs-%e4%bc%98%e5%8c%96%e5%90%8e" class="header-anchor"></a>优化前 VS 优化后
+</h3><p>set hive.map.aggr=false 关闭分组聚合优化，查看执行效果，在 Map 端没有了 Group By Operator</p>
 <br />
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/bef7cc2560feaf0c03af5c376dadbac4.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2.png"
+	width="538"
+	height="871"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2_hu_d4e494b7ea248a44.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-2_hu_c61e4d2575f0ab2a.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="61"
+		data-flex-basis="148px"
 	
 ></p>
-<p>set hive.map.aggr=true开启分组聚合优化，查看执行效果，在Map端有了Group By Operator，</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/fd582dc168193eedd0302e6cdccc7d17.png"
-	
-	
-	
+<p>set hive.map.aggr=true 开启分组聚合优化，查看执行效果，在 Map 端有了 Group By Operator，</p>
+<p><img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3.png"
+	width="493"
+	height="888"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3_hu_53044b8f5a377993.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-3_hu_ae68419ad1ada840.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="55"
+		data-flex-basis="133px"
 	
 ></p>
 <br />
-<p>若发生map-side优化，优化后比优化前的HQL执行耗时应该有所减少，且map的output数量明显小于input数量。</p>
-<p>若没有触发map-side，则map的output数量虽然比input数量有所减少但可以忽略不计。具体有没有触发map-side可以去web UI界面查看map日志。</p>
-<p>注意！！map-side聚合不够智能，即map端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据<strong>分区分桶</strong>，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。</p>
+<p>若发生 map-side 优化，优化后比优化前的 HQL 执行耗时应该有所减少，且 map 的 output 数量明显小于 input 数量。</p>
+<p>若没有触发 map-side，则 map 的 output 数量虽然比 input 数量有所减少但可以忽略不计。具体有没有触发 map-side 可以去 web UI 界面查看 map 日志。</p>
+<p>注意！！map-side 聚合不够智能，即 map 端的分组聚合是否执行一定程度上会受到分组字段在表中存储的位置和分布的影响，这是底层存储问题，未必是因为数据真的不适合分组聚合。要解决此问题可以提前对数据<strong>分区分桶</strong>，使用分区分桶表，使得同一区域存储的数据分布具有一定的相似性，这样聚合结果会有所提升。</p>
 <blockquote>
 <p><strong>例：</strong></p>
 <p>1）select province_id,count(*) from order_detail group by province_id;</p>
-<p>该语句查询所有订单，根据省份id分组聚合，省份只有34个，这样map后的数据应该只有34条，所以聚合结果是应该是比较可观的。所以group by 的基数越小，一般越适合聚合。</p>
+<p>该语句查询所有订单，根据省份 id 分组聚合，省份只有 34 个，这样 map 后的数据应该只有 34 条，所以聚合结果是应该是比较可观的。所以 group by 的基数越小，一般越适合聚合。</p>
 <p>2）select product_id,count(*) from order_detail group by product_id;</p>
-<p>若product_id这一分组字段在order_detail表中分布比较散，那么可能会导致hive在表中切片抽样进行map-side检测的时候测试聚合结果&gt;0.5，那么最终就没有使用map-side聚合。所以说如果能保证抽样数据的测试结果&lt;=0.5，就会实现分组聚合，当然也可以调整<strong>hive.map.aggr.hash.min.reduction</strong> 的值以提高map-side的命中率。</p></blockquote>
-<p><strong>若100w</strong> <strong>的数据集分组聚合之后的输出</strong> <strong>&gt;100w,</strong> <strong>可能的原因是多次触发了</strong> <strong>hash table</strong> <strong>的</strong> <strong>flush</strong></p>
-<h2 id="join优化-joine4bc98e58c96"><a href="#join%e4%bc%98%e5%8c%96-joine4bc98e58c96" class="header-anchor"></a>Join优化 {#Join%E4%BC%98%E5%8C%96}
-</h2><p>Join优化就是控制HQL语句走哪种join算法，这些join算法有的快，有的慢，有的激进，有的保守。我们要做的就是让HQL走最适合自己的join算法。</p>
-<h3 id="common-join普通join-common20joinefbc88e699aee9809ajoinefbc89"><a href="#common-join%e6%99%ae%e9%80%9ajoin-common20joinefbc88e699aee9809ajoinefbc89" class="header-anchor"></a>Common Join（普通join） {#Common%20Join%EF%BC%88%E6%99%AE%E9%80%9Ajoin%EF%BC%89}
-</h3><h4 id="原理-e58e9fe79086"><a href="#%e5%8e%9f%e7%90%86-e58e9fe79086" class="header-anchor"></a>原理 {#%E5%8E%9F%E7%90%86}
-</h4><p>hive中最稳定的join算法，其通过一个MapReduce Job完成一个join操作。Map端负责读取join操作所需表的数据，并按照关联字段进行分区，通过Shuffle，将其发送到Reduce端，相同key的数据在Reduce端完成最终的Join操作。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/c93be2b01fce05ed73c439a062480a2f.png"
-	
-	
-	
+<p>若 product_id 这一分组字段在 order_detail 表中分布比较散，那么可能会导致 hive 在表中切片抽样进行 map-side 检测的时候测试聚合结果&gt;0.5，那么最终就没有使用 map-side 聚合。所以说如果能保证抽样数据的测试结果&lt;=0.5，就会实现分组聚合，当然也可以调整<strong>hive.map.aggr.hash.min.reduction</strong> 的值以提高 map-side 的命中率。</p></blockquote>
+<p><strong>若 100w 的数据集分组聚合之后的输出&gt;100w,可能的原因是多次触发了 hash table 的 flush</strong></p>
+<h2 id="join-优化"><a href="#join-%e4%bc%98%e5%8c%96" class="header-anchor"></a>Join 优化
+</h2><p>Join 优化就是控制 HQL 语句走哪种 join 算法，这些 join 算法有的快，有的慢，有的激进，有的保守。我们要做的就是让 HQL 走最适合自己的 join 算法。</p>
+<h3 id="common-join普通-join"><a href="#common-join%e6%99%ae%e9%80%9a-join" class="header-anchor"></a>Common Join(普通 join)
+</h3><h4 id="原理"><a href="#%e5%8e%9f%e7%90%86" class="header-anchor"></a>原理
+</h4><p>hive 中最稳定的 join 算法，其通过一个 MapReduce Job 完成一个 join 操作。Map 端负责读取 join 操作所需表的数据，并按照关联字段进行分区，通过 Shuffle，将其发送到 Reduce 端，相同 key 的数据在 Reduce 端完成最终的 Join 操作。</p>
+<p><img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4.png"
+	width="641"
+	height="479"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4_hu_d8fba809e1779fb4.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-4_hu_d946e815b71cef4d.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="321px"
 	
 ></p>
-<h2 id="需要注意-的是hql语句中的join操作和执行计划中的common-join任务并非一对一的关系即hql中的a表"><a href="#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f-%e7%9a%84%e6%98%afhql%e8%af%ad%e5%8f%a5%e4%b8%ad%e7%9a%84join%e6%93%8d%e4%bd%9c%e5%92%8c%e6%89%a7%e8%a1%8c%e8%ae%a1%e5%88%92%e4%b8%ad%e7%9a%84common-join%e4%bb%bb%e5%8a%a1%e5%b9%b6%e9%9d%9e%e4%b8%80%e5%af%b9%e4%b8%80%e7%9a%84%e5%85%b3%e7%b3%bb%e5%8d%b3hql%e4%b8%ad%e7%9a%84a%e8%a1%a8" class="header-anchor"></a>需要<strong>注意</strong> 的是，<strong>HQL语句中的join操作和执行计划中的Common Join任务并非一对一的关系</strong>，即HQL中的A<strong>表</strong>
-</h2>
+<p>需要注意的是，HQL 语句中的 join 操作和执行计划中的 Common Join 任务并非一对一的关系，即 HQL 中的 A 表 join B 表 join C 表在 common join 中未必也是两个 join 操作，一个 HQL 语句中的相邻的且关联字段相同的多个 join 操作可以合并为一个 Common Join 任务。</p>
+<blockquote>
+<p>例：
+1）hive (default)</p>
+<p>select a.val, b.val, c.val from</p>
+<p>a join b on (a.key = b.key1) join c on (c.key = b.key1)</p>
+<p>上述 sql 语句中两个 join 操作的关联字段均为 b 表的 key1 字段，则该语句中的两个 join 操作可由一个 Common Join 任务实现，也就是可通过 1 个 Map Reduce 任务实现。</p></blockquote>
+<blockquote>
+<p>2）hive (default)&gt; select a.val, b.val, c.val from</p>
+<p>a join b on (a.key = b.key1) join c on (c.key = b.key2)</p>
+<p>上述 sql 语句中的两个 join 操作关联字段各不相同，则该语句的两个 join 操作需要各自通过一个 Common Join 任务实现，也就是通过 2 个 Map Reduce 任务实现。</p></blockquote>
+<h3 id="map-join"><a href="#map-join" class="header-anchor"></a>Map Join
+</h3><h4 id="原理-1"><a href="#%e5%8e%9f%e7%90%86-1" class="header-anchor"></a>原理
+</h4><p>Map Join 算法可以通过一个 MR 和一个 MapJoin 阶段完成一个 join 操作，省去了 shuffle 和 reduce，在第二个 map 阶段进行表的 join，不需要进入 reduce 阶段。其适用场景为大表 join 小表。第一个 Job 会读取小表数据，将其制作为 hash table，并上传至 Hadoop 分布式缓存（本质上是上传至 HDFS）。第二个 Job 会先从分布式缓存中读取小表数据，并缓存在 Map Task 的内存中，然后扫描大表数据，这样在 map 端即可完成关联操作。如下图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5.png"
+	width="865"
+	height="514"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5_hu_c9f21c1f5ca0940b.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-5_hu_1529fb5d47ecf2d4.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="168"
+		data-flex-basis="403px"
+	
+></p>
+<p>mapreduce local task 是本地任务，读取小表数据，因为小表数据占用内存资源少，所以不上传到 yarn，直接在本地读取效率更高 ，读取后序列化生成 hash table 并上传到 hdfs 的 cache 中。</p>
+<p>其中 Mapper 是实现 Map 阶段功能的代码组件。它接受原始数据作为输入，执行某种转换操作，然后输出一组键值对。这些键值对会作为 Reduce 阶段的输入。</p>
+<blockquote>
+<p>例：SELECT a.key, a.value FROM a JOIN b ON a.key = b.key</p>
+<p>前提 b 表是一张小表，具体小表有多小，由参数 hive.mapjoin.smalltable.filesize 来决定，默认值是 25M。</p></blockquote>
+<blockquote>
+<p>参数列表：</p>
+<p>1）小表自动选择 Mapjoin</p>
+<p>set hive.auto.convert.join=true;</p>
+<p>默认值：false。该参数为 true 时，Hive 自动对左边的表统计量，若是小表就加入内存，即对小表使用 Map join
+2）小表阀值
+set hive.mapjoin.smalltable.filesize=25000000;
+?默认值：25M</p></blockquote>
+<h4 id="优化"><a href="#%e4%bc%98%e5%8c%96" class="header-anchor"></a>优化
+</h4><p><strong>法一：hint 提示</strong>
+手动指定通过 map join 算法，该方式已经过时，不推荐使用。</p>
+<blockquote>
+<p>hive (default)&gt; select /_+ map join(ta) _/</p>
+<p>ta.id, tb.id from table_a ta join table_b tb on ta.id=tb.id;</p></blockquote>
+<p><strong>法二：自动触发</strong>
+Hive 在编译 HQL 语句阶段，起初所有的 join 操作均采用 Common Join 算法实现。</p>
+<p>之后在物理优化阶段，Hive 会根据每个 Common Join 任务所需表的大小判断该 Common Join 任务是否能够转换为 Map Join 任务，若满足要求（小表大小&lt;指定的阈值），便将 Common Join 任务自动转换为 Map Join 任务。</p>
+<p>但有些 Common Join 任务所需的表大小，在 HQL 的编译阶段是未知的（例如对子查询进行 join 操作），所以这种 Common Join 任务是否能转换成 Map Join 任务在编译阶是无法确定的。</p>
+<p>针对这种情况，Hive 会在编译阶段生成一个条件任务（Conditional Task），其下会包含一个计划列表，计划列表中包含转换后的 Map Join 任务以及原有的 Common Join 任务。最终具体采用哪个计划，是在运行时决定的。大致思路如下图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6.png"
+	width="865"
+	height="609"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6_hu_9b1e73b062f06732.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-6_hu_ba70a549f87b60b1.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="142"
+		data-flex-basis="340px"
+	
+></p>
+<p>Map join 自动转换的具体判断逻辑如下图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7.png"
+	width="863"
+	height="680"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7_hu_ab3561a231e66273.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-7_hu_122f568ab470925a.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="126"
+		data-flex-basis="304px"
+	
+></p>
+<p>图片详情看尚硅谷 P135</p>
+<p><strong>寻找大表候选人时还不知道每张表的大小</strong>，那么选择规则是看 join 方式，有 innner join、left join、right join 等等。</p>
+<p>inner join：每个表都可能是大表候选人。</p>
+<p>left join：默认左表为大表候选人，右表当作小表，这样小表会缓存到内存中，以大表为主，从大表中一条条 join 内存中的小表，如果反过来把大表缓存到内存中，以小表为主，从小表中一条条 join 内存中的大表，若出现大表有该字段而小表没有的情况，这种情况下就会出现大量数据 join 失败，小表数据少，大表数据多，那么会因为小表浪费很多数据，所以通常是左表为大表，右表为小表。</p>
+<p>right join：左表当作小表，右表为大表候选人。</p>
+<p>full outer join：找不到大表候选人，因为全外联要返回两个表的全部数据，两个表都要去遍历，就无法 map join 优化。</p>
+<blockquote>
+<p><strong>涉及参数：</strong></p>
+<p>&ndash;启动 Map Join 自动转换</p>
+<p>set hive.auto.convert.join=true;</p>
+<p>&ndash;一个 Common Join operator 转为 Map Join operator 的判断条件：若该 Common Join 相关的表中,把每一个表都当作大表候选人，若除大表之外的任意一张已知大小的表的大小&gt;大表候选人，则该组合不成立，不生成 map join，反之生成一个 Map Join 计划。此时可能存在多种组合均满足该条件,则 hive 会为每种满足条件的组合均生成一个 Map Join 计划,同时还会保留原有的 Common Join 计划作为后备(back up)计划,实际运行时,优先执行 Map Join 计划，若不能执行成功，则启动 Common Join 后备计划。</p>
+<p>set hive.mapjoin.smalltable.filesize=250000;</p>
+<p>&ndash;开启无条件转 Map Join</p>
+<p>set hive.auto.convert.join.noconditionaltask=true; -无条件转 Map Join 时的小表之和阈值,若一个 Common Join operator 相关的表中，存在 n-1 张表的大小总和&lt;=该值,此时 hive 便不会再为每种 n-1 张表的组合均生成 Map Join 计划,同时也不会保留 Common Join 作为后备计划。而是只生成一个最优的 Map Join 计划。
+set hive.auto.convert.join.noconditionaltask.size=10000000;</p></blockquote>
+<h4 id="优化案例"><a href="#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b" class="header-anchor"></a><strong>优化案例</strong>
+</h4><blockquote>
+<p>hive (default)&gt; select * from order_detail od</p>
+<p>join product_info product on od.product_id = product.id</p>
+<p>join province_info province on od.province_id = province.id;</p></blockquote>
+<p><strong>优化前</strong></p>
+<p>上述 SQL 语句共有三张表进行两次 join 操作，且两次 join 操作的关联字段不同。故优化前的执行计划应该包含两个 Common Join operator，也就是由两个 MapReduce 任务实现。执行计划如下图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8.png"
+	width="445"
+	height="1391"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8_hu_3e6bbe204819d3d6.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-8_hu_63b78982ef539f4b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="31"
+		data-flex-basis="76px"
+	
+></p>
+<p><strong>优化思路</strong></p>
+<p>使用如下语句获取表/分区的大小信息：</p>
+<blockquote>
+<p>hive (default)&gt;</p>
+<p>desc formatted table_name partition(partition_col=&lsquo;partition&rsquo;);</p></blockquote>
+<p>经分析，参与 join 的三张表，数据量如下：</p>
+<p><img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9.png"
+	width="1474"
+	height="371"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9_hu_53b2492ddd32221d.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-9_hu_a661e9dca70d29c4.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="397"
+		data-flex-basis="953px"
+	
+></p>
+<p><strong>方案一：</strong></p>
+<blockquote>
+<p>启用 Map Join 自动转换。</p>
+<p>set hive.auto.convert.join=true;</p>
+<p>不使用无条件转 Map Join。</p>
+<p>set hive.auto.convert.join.noconditionaltask=false;</p>
+<p>调整 hive.mapjoin.smalltable.filesize 参数，使其大于等于 product_info。</p>
+<p>set hive.mapjoin.smalltable.filesize=25285707;</p></blockquote>
+<p>这样可保证将两个 Common Join operator 均可转为 Map Join operator，并保留 Common Join 作为后备计划，保证计算任务的稳定。调整完的执行计划如下图：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10.png"
+	width="541"
+	height="1422"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10_hu_4df7790955068a83.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-10_hu_75b79a59c50968c3.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="38"
+		data-flex-basis="91px"
+	
+></p>
+<p><strong>方案二：</strong></p>
+<blockquote>
+<p>启用 Map Join 自动转换。</p>
+<p>set hive.auto.convert.join=true;</p>
+<p>使用无条件转 Map Join。</p>
+<p>set hive.auto.convert.join.noconditionaltask=true;</p>
+<p>调整 hive.auto.convert.join.noconditionaltask.size 参数，使其大于等于 product_info 和 province_info 之和。</p>
+<p>set hive.auto.convert.join.noconditionaltask.size=25286076;</p></blockquote>
+<p>这样可直接将两个 Common Join operator 转为两个 Map Join operator，并且由于两个 Map Join operator 的小表大小之和小于等于 hive.auto.convert.join.noconditionaltask.size，故两个 Map Join operator 任务可合并为同一个。这个方案计算效率最高，但需要的内存也是最多的。</p>
+<p>调整完的执行计划如下图：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11.png"
+	width="334"
+	height="805"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11_hu_d1095692a79431fe.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-11_hu_7607218a1c33454a.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="41"
+		data-flex-basis="99px"
+	
+>
+<strong>方案三：</strong></p>
+<blockquote>
+<p>启用 Map Join 自动转换。</p>
+<p>set hive.auto.convert.join=true;</p>
+<p>使用无条件转 Map Join。</p>
+<p>set hive.auto.convert.join.noconditionaltask=true;</p>
+<p>调整 hive.auto.convert.join.noconditionaltask.size 参数，使其等于 product_info。</p>
+<p>set hive.auto.convert.join.noconditionaltask.size=25285707;</p></blockquote>
+<p>这样可直接将两个 Common Join operator 转为 Map Join operator，但不会将两个 Map Join 的任务合并。该方案计算效率比方案二低，但需要的内存也更少。
+调整完的执行计划如下图：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12.png"
+	width="191"
+	height="1408"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12_hu_c31777942e896c7e.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-12_hu_10df58072d93e378.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="13"
+		data-flex-basis="32px"
+	
+></p>
+<h3 id="bucket-map-join"><a href="#bucket-map-join" class="header-anchor"></a>Bucket Map Join
+</h3><h4 id="原理-2"><a href="#%e5%8e%9f%e7%90%86-2" class="header-anchor"></a>原理
+</h4><p>Bucket Map Join 是对 Map Join 算法的改进，其打破了 Map Join 只适用于大表 join 小表的限制，可用于大表 join 大表的场景。分桶其实就是把大表化成了“小表”，然后 Map-Side Join 解决。</p>
+<p>Bucket Map Join 的核心思想是：若能保证参与 join 的表均为分桶表，且关联字段为分桶字段，且其中一张表的分桶数量是另外一张表分桶数量的整数倍，就能保证参与 join 的两张表的分桶之间具有明确的关联关系，所以就可以在两表的分桶间进行 Map Join 操作了。这样一来，第二个 Job 的 Map 端就无需再缓存小表的全表数据了，而只需缓存其所需的分桶即可。其原理如图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13.png"
+	width="1235"
+	height="705"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13_hu_cb5f7dc2b3847456.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-13_hu_f86c97fcd542db0d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="420px"
+	
+>
+第一个 map 对较小的表 tableB 的每个 bucket 序列化成 hash table，上传到 hdfs cache 中，第二个 map 对较大的表 tableA 的每个桶单独切片，有几个桶就有几个 mapper</p>
+<h4 id="优化-1"><a href="#%e4%bc%98%e5%8c%96-1" class="header-anchor"></a>优化
+</h4><p><strong>hint 提示</strong>
+Bucket Map Join 不支持自动转换，啊！原来是 hive 团队在 hive2.x 已经放弃维护 MR 计算引擎，建议使用 spark 等计算引擎（看到这乐死我了 tmd 白学了）。
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14.png"
+	width="2160"
+	height="190"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14_hu_aa3268172124e9c2.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-14_hu_ef09d34419541475.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1136"
+		data-flex-basis="2728px"
+	
+></p>
+<blockquote>
+<p><strong>参数：</strong></p>
+<p>&ndash;关闭 cbo 优化，cbo 会导致 hint 信息被忽略</p>
+<p>set hive.cbo.enable=false;</p>
+<p>&ndash;map join hint 默认会被忽略(因为已经过时)，需将如下参数设置为 false</p>
+<p>set hive.ignore.mapjoin.hint=false;</p>
+<p>&ndash;启用 bucket map join 优化功能</p>
+<p>set hive.optimize.bucketmapjoin = true;</p></blockquote>
+<h4 id="优化案例-1"><a href="#%e4%bc%98%e5%8c%96%e6%a1%88%e4%be%8b-1" class="header-anchor"></a><strong>优化案例</strong>
+</h4><p>hive (default)&gt; select _ from( select _ from order_detail where dt=&lsquo;2020-06-14&rsquo;) od</p>
+<p>join( select * from payment_detail where dt=&lsquo;2020-06-14&rsquo;) pd on od.id=pd.order_detail_id;</p>
+<p><strong>优化前</strong></p>
+<p>上述 SQL 语句共有两张表一次 join 操作，故优化前的执行计划应包含一个 Common Join 任务，通过一个 MapReduce Job 实现。执行计划如下图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15.png"
+	width="556"
+	height="1002"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15_hu_d6b5c402d156a695.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-15_hu_3ccb68d6dbe1bffb.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="55"
+		data-flex-basis="133px"
+	
+></p>
+<p><strong>优化思路</strong></p>
+<p>经分析，参与 join 的两张表，数据量如下。
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16.png"
+	width="1467"
+	height="301"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16_hu_86b016ba9c62bbb1.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-16_hu_b55ec376440037ac.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="487"
+		data-flex-basis="1169px"
+	
+></p>
+<p>两张表都相对较大，若采用普通的 Map Join 算法，则 Map 端需要较多的内存来缓存数据，可以选择为 Map 段分配更多的内存，来保证任务运行成功。但是，Map 端的内存不可能无上限的分配，所以当参与 Join 的表数据量均过大时，可以考虑采用 Bucket Map Join 算法。</p>
+<p>创建两个分桶表，order_detail 建议分 16 个 bucket，payment_detail 建议分 8 个 bucket,注意分桶个数的倍数关系以及分桶字段。然后向其中导入数据。</p>
+<blockquote>
+<p>设置优化参数：</p>
+<p>&ndash;关闭 cbo 优化，cbo 会导致 hint 信息被忽略，需将如下参数修改为 false</p>
+<p>set hive.cbo.enable=false;</p>
+<p>&ndash;map join hint 默认会被忽略(因为已经过时)，需将如下参数修改为 false</p>
+<p>set hive.ignore.mapjoin.hint=false;</p>
+<p>&ndash;启用 bucket map join 优化功能,默认不启用，需将如下参数修改为 true</p>
+<p>set hive.optimize.bucketmapjoin = true;</p>
+<p>重写 SQL 语句：</p>
+<p>hive (default)&gt;</p>
+<p>select /_+ mapjoin(pd) _/ * from order_detail_bucketed od</p>
+<p>join payment_detail_bucketed pd on od.id = pd.order_detail_id;</p></blockquote>
+<p>执行结果如下：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17.png"
+	width="256"
+	height="1015"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17_hu_2ff263283659683b.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-17_hu_557c941ca036804f.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="25"
+		data-flex-basis="60px"
+	
+></p>
+<blockquote>
+<p>使用</p>
+<p>hive (default)&gt;</p>
+<p>explain extended select /_+ mapjoin(pd) _/ *</p>
+<p>from order_detail_bucketed od</p>
+<p>join payment_detail_bucketed pd on od.id = pd.order_detail_id;查看执行计划，在 Map Join Operator 中看到 “BucketMapJoin: true”</p></blockquote>
+<h3 id="sort-merge-bucket-map-joinsmb-map-join"><a href="#sort-merge-bucket-map-joinsmb-map-join" class="header-anchor"></a>Sort Merge Bucket Map Join(SMB map join)
+</h3><h4 id="原理-3"><a href="#%e5%8e%9f%e7%90%86-3" class="header-anchor"></a>原理
+</h4><p>SMB Map Join 基于 Bucket Map Join。SMB Map Join 要求，参与 join 的表均为分桶表，且需保证分桶内的数据是有序的，且分桶字段、排序字段和关联字段为相同字段，且其中一张表的分桶数量是另外一张表分桶数量的整数倍。</p>
+<p>SMB Map Join 同 Bucket Join 一样，同样是利用两表各分桶之间的关联关系，在分桶之间进行 join 操作，不同的是，分桶之间的 join 操作的实现原理。Bucket Map Join，两个分桶之间的 join 实现原理为 Hash Join 算法；而 SMB Map Join，两个分桶之间的 join 实现原理为 Sort Merge Join 算法。</p>
+<p>Hash Join 和 Sort Merge Join 均为关系型数据库中常见的 Join 实现算法。Hash Join 的原理相对简单，就是对参与 join 的一张表构建 hash table，然后扫描另外一张表，然后进行逐行匹配。Sort Merge Join 需要在两张按照关联字段排好序的表中进行，其原理如图所示：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18.png"
+	width="1234"
+	height="709"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18_hu_cd814555b30c2367.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-18_hu_7676e8dcb67afaab.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="417px"
+	
+>
+Hive 中的 SMB Map Join 就是对两个分桶的数据按照上述思路进行 Join 操作。可以看出，SMB Map Join 与 Bucket Map Join 相比，在进行 Join 操作时，Map 端是无需对整个 Bucket 构建 hash table，也无需在 Map 端缓存整个 Bucket 数据的，每个 Mapper 只需按顺序逐个 key 读取两个分桶的数据进行 join 即可。</p>
+<h4 id="优化-2"><a href="#%e4%bc%98%e5%8c%96-2" class="header-anchor"></a>优化
+</h4><p>Sort Merge Bucket Map Join 有两种触发方式，包括 Hint 提示和自动转换。Hint 提示已过时，不推荐使用。下面是自动转换的相关参数：</p>
+<blockquote>
+<p>&ndash;启动 Sort Merge Bucket Map Join 优化</p>
+<p>set hive.optimize.bucketmapjoin.sortedmerge=true;</p>
+<p>&ndash;使用自动转换 SMB Join</p>
+<p>set hive.auto.convert.sortmerge.join=true;</p></blockquote>
+<p>和 bucket map join 一样，创建分桶表并导入数据 ，设置参数，运行 HQL，结果如下：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19.png"
+	width="317"
+	height="654"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19_hu_9e5a0b4b5771431a.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-19_hu_a812c6d9b6d4878f.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="48"
+		data-flex-basis="116px"
+	
+></p>
+<h2 id="数据倾斜优化"><a href="#%e6%95%b0%e6%8d%ae%e5%80%be%e6%96%9c%e4%bc%98%e5%8c%96" class="header-anchor"></a>数据倾斜优化
+</h2><p>数据倾斜问题，通常是指参与计算的数据分布不均，即某个 key 或者某些 key 的数据量远超其他 key，导致在 shuffle 阶段，大量相同 key 的数据被发往同一个 Reduce，进而导致该 Reduce 所需的时间远超其他 Reduce，成为整个任务的瓶颈。</p>
+<p>Hive 中的数据倾斜常出现在分组聚合和 join 操作的场景中，下面分别介绍在上述两种场景下的优化思路。</p>
+<h3 id="分组聚合导致的数据倾斜"><a href="#%e5%88%86%e7%bb%84%e8%81%9a%e5%90%88%e5%af%bc%e8%87%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e5%80%be%e6%96%9c" class="header-anchor"></a>分组聚合导致的数据倾斜
+</h3><p>Hive 中未经优化的分组聚合，是通过一个 MapReduce Job 实现的。Map 端负责读取数据，并按照分组字段分区，通过 Shuffle，将数据发往 Reduce 端，各组数据在 Reduce 端完成最终的聚合运算。</p>
+<p>如果 group by 分组字段的值分布不均，就可能导致大量相同的 key 进入同一 Reduce，从而导致数据倾斜问题。</p>
+<p>由分组聚合导致的数据倾斜问题，有以下两种解决思路：</p>
+<h4 id="map-side-聚合"><a href="#map-side-%e8%81%9a%e5%90%88" class="header-anchor"></a>Map-Side 聚合
+</h4><p>前文提过，此处略过</p>
+<h4 id="skew-groupby-优化"><a href="#skew-groupby-%e4%bc%98%e5%8c%96" class="header-anchor"></a>Skew-GroupBy 优化
+</h4><p>原理是启动两个 MR 任务，第一个 MR 按照随机数分区，将数据分散发送到 Reduce，完成部分聚合，第二个 MR 把打散的数据按照分组字段分区，完成最终聚合。</p>
+<h5 id="优化前"><a href="#%e4%bc%98%e5%8c%96%e5%89%8d" class="header-anchor"></a>优化前
+</h5><p>该表数据中的 province_id 字段是存在倾斜的，若不经过优化，通过观察任务的执行过程，是能够看出数据倾斜现象的。
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20.png"
+	width="869"
+	height="245"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20_hu_4c7b5ee5d955b18c.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-20_hu_4bd4157092ae801d.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="354"
+		data-flex-basis="851px"
+	
+></p>
+<h5 id="优化后"><a href="#%e4%bc%98%e5%8c%96%e5%90%8e" class="header-anchor"></a>优化后
+</h5><blockquote>
+<p>&ndash;启用 skew-groupby</p>
+<p>set hive.groupby.skewindata=true;</p>
+<p>&ndash;关闭 map-side 聚合（map side 聚合默认是开启的）</p>
+<p>set hive.map.aggr=false;</p>
+<p>开启 Skew-GroupBy 优化后，可以很明显看到该 sql 执行在 yarn 上启动了两个 mr 任务，第一个 mr 打散数据，第二个 mr 把打散后的数据进行分组聚合。
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21.png"
+	width="869"
+	height="204"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21_hu_a9f85e157a440921.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-21_hu_41134c8a7aa5bf1f.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="425"
+		data-flex-basis="1022px"
+	
+></p></blockquote>
+<h3 id="join-导致的数据倾斜"><a href="#join-%e5%af%bc%e8%87%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e5%80%be%e6%96%9c" class="header-anchor"></a>Join 导致的数据倾斜
+</h3><p>未经优化的 join 操作，默认是使用 common join 算法，也就是通过一个 MapReduce Job 完成计算。Map 端负责读取 join 操作所需表的数据，并按照关联字段进行分区，通过 Shuffle，将其发送到 Reduce 端，相同 key 的数据在 Reduce 端完成最终的 Join 操作。</p>
+<p>如果关联字段的值分布不均，就可能导致大量相同的 key 进入同一 Reduce，从而导致数据倾斜问题。由 join 导致的数据倾斜问题，有如下三种解决方案：</p>
+<h4 id="map-join-1"><a href="#map-join-1" class="header-anchor"></a>map join
+</h4><p>略过</p>
+<h4 id="skew-join"><a href="#skew-join" class="header-anchor"></a>skew join
+</h4><p>原理是为倾斜的大 key 单独启动一个 map join 任务进行计算，其余 key 进行正常的 common join。原理图如下：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22.png"
+	width="865"
+	height="453"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22_hu_56fdabed3e095d99.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-22_hu_ce6b8a273fee43e9.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="458px"
+	
+></p>
+<blockquote>
+<p>&ndash;启用 skew join 优化</p>
+<p>set hive.optimize.skewjoin=true;</p>
+<p>&ndash;触发 skew join 的阈值，若某个 key 的行数超过该参数值，则触发</p>
+<p>set hive.skewjoin.key=100000;</p></blockquote>
+<p>这种方案对参与 join 的源表大小没有要求，但是对两表中倾斜的 key 的数据量有要求，要求一张表中的倾斜 key 的数据量比较小（方便走 map join）。</p>
+<h2 id="任务并行度优化"><a href="#%e4%bb%bb%e5%8a%a1%e5%b9%b6%e8%a1%8c%e5%ba%a6%e4%bc%98%e5%8c%96" class="header-anchor"></a>任务并行度优化
+</h2><p>Hive 的计算任务由 MapReduce 完成，故并行度的调整需要分为 Map 端和 Reduce 端。</p>
+<h3 id="map-端并行度"><a href="#map-%e7%ab%af%e5%b9%b6%e8%a1%8c%e5%ba%a6" class="header-anchor"></a>Map 端并行度
+</h3><p>Map 端的并行度，也就是 Map 的个数。是由输入文件的切片数决定的。一般情况下，Map 端的并行度无需手动调整。</p>
+<p>以下特殊情况可考虑调整 map 端并行度：
+<strong>1）查询的表中存在大量小文件</strong></p>
+<p>按照 Hadoop 默认的切片策略，一个小文件会单独启动一个 map task 负责计算。若查询的表中存在大量小文件，则会启动大量 map task，造成计算资源的浪费。这种情况下，可以使用 Hive 提供的 CombineHiveInputFormat，多个小文件合并为一个切片，从而控制 map task 个数。相关参数如下：</p>
+<blockquote>
+<p>set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;</p></blockquote>
+<p><strong>2）map 端有复杂的查询逻辑</strong></p>
+<p>若 SQL 语句中有正则替换、json 解析等复杂耗时的查询逻辑时，map 端的计算会相对慢一些。若想加快计算速度，在计算资源充足的情况下，可考虑增大 map 端的并行度，令 map task 多一些，每个 map task 计算的数据少一些。相关参数如下：</p>
+<blockquote>
+<p>&ndash;一个切片的最大值</p>
+<p>set mapreduce.input.fileinputformat.split.maxsize=256000000;</p></blockquote>
+<h3 id="reduce-端并行度"><a href="#reduce-%e7%ab%af%e5%b9%b6%e8%a1%8c%e5%ba%a6" class="header-anchor"></a>Reduce 端并行度
+</h3><p>Reduce 端的并行度，可由用户自己指定，也可由 Hive 自行根据该 MR Job 输入的文件大小进行估算。</p>
+<blockquote>
+<p>Reduce 端的并行度的相关参数如下：</p>
+<p>&ndash;指定 Reduce 端并行度，默认值为-1，表示用户未指定</p>
+<p>set mapreduce.job.reduces;</p>
+<p>&ndash;Reduce 端并行度最大值</p>
+<p>set hive.exec.reducers.max;</p>
+<p>&ndash;单个 Reduce Task 计算的数据量，用于估算 Reduce 并行度</p>
+<p>set hive.exec.reducers.bytes.per.reducer;</p></blockquote>
+<p>Reduce 端并行度的确定逻辑如下：</p>
+<p>若指定参数 mapreduce.job.reduces 的值为一个非负整数，则 Reduce 并行度为指定值。否则，Hive 自行估算 Reduce 并行度，估算逻辑如下：</p>
+<p>假设 Job 输入的文件大小为 totalInputBytes</p>
+<p>参数 hive.exec.reducers.bytes.per.reducer 的值为 bytesPerReducer。</p>
+<p>参数 hive.exec.reducers.max 的值为 maxReducers。</p>
+<p>则 Reduce 端的并行度为：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23.png"
+	width="638"
+	height="98"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23_hu_21010bf6e8750fb7.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-23_hu_4938c6195bbe484e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="651"
+		data-flex-basis="1562px"
+	
+></p>
+<p>根据上述描述，可以看出，Hive 自行估算 Reduce 并行度时，是以整个 MR Job 输入的文件大小作为依据的。因此，在某些情况下其估计的并行度很可能并不准确，此时就需要用户根据实际情况来指定 Reduce 并行度了。</p>
+<p>在默认情况下，是会进行 map-side 聚合的，也就是 Reduce 端接收的数据，实际上是 map 端完成聚合之后的结果。观察任务的执行过程，会发现，每个 map 端输出的数据只有 34 条记录，共有 5 个 map task。
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24.png"
+	width="869"
+	height="374"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24_hu_f3c3a8909f90ec92.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-24_hu_8d200be734c58711.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="232"
+		data-flex-basis="557px"
+	
+>
+也就是说 Reduce 端实际只会接收 170（34*5）条记录，故理论上 Reduce 端并行度设置为 1 就足够了。这种情况下，用户可通过以下参数，自行设置 Reduce 端并行度为 1，这样把 5 个文件合并为只输出 1 个文件。</p>
+<blockquote>
+<p>&ndash;指定 Reduce 端并行度，默认值为-1，表示用户未指定</p>
+<p>set mapreduce.job.reduces=1;</p></blockquote>
+<h2 id="小文件合并优化"><a href="#%e5%b0%8f%e6%96%87%e4%bb%b6%e5%90%88%e5%b9%b6%e4%bc%98%e5%8c%96" class="header-anchor"></a>小文件合并优化
+</h2><p>Map 端输入的小文件合并，和 Reduce 端输出的小文件合并。</p>
+<h3 id="合并-map-端输入的小文件"><a href="#%e5%90%88%e5%b9%b6-map-%e7%ab%af%e8%be%93%e5%85%a5%e7%9a%84%e5%b0%8f%e6%96%87%e4%bb%b6" class="header-anchor"></a>合并 Map 端输入的小文件
+</h3><p>将多个小文件划分到一个切片中，进而由一个 Map Task 去处理。目的是防止为单个小文件启动一个 Map Task，浪费计算资源。</p>
+<blockquote>
+<p>相关参数为：</p>
+<p>&ndash;可将多个小文件切片，合并为一个切片，进而由一个 map 任务处理（默认）
+set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;</p></blockquote>
+<h3 id="合并-reduce-端输出的小文件"><a href="#%e5%90%88%e5%b9%b6-reduce-%e7%ab%af%e8%be%93%e5%87%ba%e7%9a%84%e5%b0%8f%e6%96%87%e4%bb%b6" class="header-anchor"></a>合并 Reduce 端输出的小文件
+</h3><p>将多个小文件合并成大文件。目的是减少 HDFS 小文件数量。其原理是根据计算任务输出文件的平均大小进行判断，若符合条件，则单独启动 1 个额外的任务进行合并。</p>
+<blockquote>
+<p>相关参数为：</p>
+<p>&ndash;开启合并 map only 任务输出的小文件，默认 false</p>
+<p>set hive.merge.mapfiles=true;</p>
+<p>&ndash;开启合并 map reduce 任务输出的小文件，默认 false</p>
+<p>set hive.merge.mapredfiles=true;</p>
+<p>&ndash;合并后的文件大小</p>
+<p>set hive.merge.size.per.task=256000000;</p>
+<p>&ndash;触发小文件合并任务的阈值，若某计算任务输出的文件平均大小低于该值，则触发合并</p>
+<p>set hive.merge.smallfiles.avgsize=16000000;</p></blockquote>
+<p>若 reduce 端设置并行度为 5，则输出 5 个文件。下图为输出文件，可以看出，5 个均为小文件：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25.png"
+	width="869"
+	height="379"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25_hu_87c8501899639239.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-25_hu_19398f78240c4efd.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="550px"
+	
+>
+要避免 5 个小文件产生，可以设置 reduce 端并行度为 1，有几个 reduce 并行就有几个文件产生，保证其输出结果只有一个文件或启用 hive 合并小文件优化。</p>
+<p><strong>启用 Hive 合并小文件优化</strong></p>
+<blockquote>
+<p>设置以下参数：</p>
+<p>&ndash;开启合并 map reduce 任务输出的小文件</p>
+<p>set hive.merge.mapredfiles=true;</p>
+<p>&ndash;合并后的文件大小</p>
+<p>set hive.merge.size.per.task=256000000;</p>
+<p>&ndash;触发小文件合并任务的阈值，若某计算任务输出的文件平均大小低于该值，则触发合并</p>
+<p>set hive.merge.smallfiles.avgsize=16000000;</p></blockquote>
+<p>这样输出文件就合并为一个了
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26.png"
+	width="869"
+	height="303"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26_hu_7e0b9aa0a00b8312.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-26_hu_3d9e91230e8317b1.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="286"
+		data-flex-basis="688px"
+	
+></p>
+<h2 id="其他优化"><a href="#%e5%85%b6%e4%bb%96%e4%bc%98%e5%8c%96" class="header-anchor"></a>其他优化
+</h2><h3 id="cbo-优化"><a href="#cbo-%e4%bc%98%e5%8c%96" class="header-anchor"></a>CBO 优化
+</h3><p>CBO 是指 Cost based Optimizer，即基于计算成本的优化。</p>
+<p>在 Hive 中，计算成本模型考虑到了：数据的行数、CPU、本地 IO、HDFS IO、网络 IO 等方面。Hive 会计算同一 SQL 语句的不同执行计划的计算成本，并选出成本最低的执行计划。目前 CBO 在 hive 的 MR 引擎下主要用于 join 的优化，例如多表 join 的 join 顺序。</p>
+<blockquote>
+<p>相关参数为：</p>
+<p>&ndash;是否启用 cbo 优化</p>
+<p>set hive.cbo.enable=true;</p></blockquote>
+<blockquote>
+<p>1）示例 HQL</p>
+<p>hive (default)&gt; select * from order_detail od</p>
+<p>join product_info product on od.product_id=product.id</p>
+<p>join province_info province on od.province_id=province.id;</p>
+<p>2）关闭 CBO 优化</p>
+<p>&ndash;关闭 cbo 优化</p>
+<p>set hive.cbo.enable=false;</p>
+<p>&ndash;为了测试效果更加直观，关闭 map join 自动转换</p>
+<p>set hive.auto.convert.join=false;</p></blockquote>
+<p>根据执行计划，可以看出，三张表的 join 顺序如下：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27.png"
+	width="660"
+	height="294"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27_hu_40e2f0ee95980f6.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-27_hu_1e3b627e737906da.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="538px"
+	
+></p>
+<blockquote>
+<p>3）开启 CBO 优化</p>
+<p>&ndash;开启 cbo 优化</p>
+<p>set hive.cbo.enable=true;</p>
+<p>&ndash;为了测试效果更加直观，关闭 map join 自动转换</p>
+<p>set hive.auto.convert.join=false;</p></blockquote>
+<p>根据执行计划，可以看出，三张表的 join 顺序如下：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28.png"
+	width="669"
+	height="298"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28_hu_7ceeab9ab8aa26e.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-28_hu_45dd3c1250222a77.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="538px"
+	
+>
+CBO 优化对于执行计划中 join 顺序是有影响的，其之所以会将 province_info 的 join 顺序提前，是因为 province info 的数据量较小，将其提前，会有更大的概率使得中间结果的数据量变小，从而使整个计算任务的数据量减小，也就是使计算成本变小。</p>
+<h3 id="谓词下推"><a href="#%e8%b0%93%e8%af%8d%e4%b8%8b%e6%8e%a8" class="header-anchor"></a>谓词下推
+</h3><p>谓词下推（predicate pushdown）是指，尽量将过滤操作前移，以减少后续计算步骤的数据量。</p>
+<blockquote>
+<p>相关参数为：</p>
+<p>&ndash;是否启动谓词下推（predicate pushdown）优化</p>
+<p>set hive.optimize.ppd = true;</p></blockquote>
+<p>需要注意的是：CBO 优化也会完成一部分的谓词下推优化工作，因为在执行计划中，谓词越靠前，整个计划的计算成本就会越低。
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29.png"
+	width="684"
+	height="568"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29_hu_e70a14f380e3cc42.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-29_hu_87d64db6b104c96b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="120"
+		data-flex-basis="289px"
+	
+></p>
+<h3 id="矢量化查询"><a href="#%e7%9f%a2%e9%87%8f%e5%8c%96%e6%9f%a5%e8%af%a2" class="header-anchor"></a>矢量化查询
+</h3><p>Hive 的矢量化查询优化，依赖于 CPU 的矢量化计算，CPU 的矢量化计算的基本原理如下图：
+<img src="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30.png"
+	width="960"
+	height="540"
+	srcset="/zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30_hu_e362fffa2298c231.png 480w, /zh-cn/post/2024/04/hive%E8%B0%83%E4%BC%98/image-30_hu_aeb22a57936a7ac0.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<blockquote>
+<p>相关参数如下：</p>
+<p>set hive.vectorized.execution.enabled=true;</p>
+<p>若执行计划中，出现“Execution mode: vectorized”字样，即表明使用了矢量化计算。</p></blockquote>
+<h3 id="fetch-抓取"><a href="#fetch-%e6%8a%93%e5%8f%96" class="header-anchor"></a>Fetch 抓取
+</h3><p>Fetch 抓取是指，Hive 中对某些情况的查询可以不必使用 MapReduce 计算。例如：select * from emp;在这种情况下，Hive 可以简单地读取 emp 对应的存储目录下的文件，然后输出查询结果到控制台。</p>
+<blockquote>
+<p>相关参数如下：</p>
+<p>&ndash;是否在特定场景转换为 fetch 任务</p>
+<p>&ndash;设置为 none 表示不转换</p>
+<p>&ndash;设置为 minimal 表示支持 select *，分区字段过滤，Limit 等</p>
+<p>&ndash;设置为 more 表示支持 select 任意字段,包括函数，过滤，和 limit 等</p>
+<p>set hive.fetch.task.conversion=more;</p></blockquote>
+<h3 id="本地模式"><a href="#%e6%9c%ac%e5%9c%b0%e6%a8%a1%e5%bc%8f" class="header-anchor"></a>本地模式
+</h3><p>大多数的 Hadoop Job 是需要 Hadoop 提供的完整的可扩展性来处理大数据集的。不过，有时 Hive 的输入数据量是非常小的。在这种情况下，为查询触发执行任务消耗的时间可能会比实际 job 的执行时间要多的多。对于大多数这种情况，Hive 可以通过本地模式在单台机器上处理所有的任务，不必提交到 Yarn。对于小数据集，执行时间可以明显被缩短。</p>
+<blockquote>
+<p>相关参数如下：</p>
+<p>&ndash;开启自动转换为本地模式</p>
+<p>set hive.exec.mode.local.auto=true;</p>
+<p>&ndash;设置 local MapReduce 的最大输入数据量，当输入数据量小于这个值时采用 local MapReduce 的方式，默认为 134217728，即 128M</p>
+<p>set hive.exec.mode.local.auto.inputbytes.max=50000000;</p>
+<p>&ndash;设置 local MapReduce 的最大输入文件个数，当输入文件个数小于这个值时采用 local MapReduce 的方式，默认为 4</p>
+<p>set hive.exec.mode.local.auto.input.files.max=10;</p></blockquote>
+<h3 id="并行执行"><a href="#%e5%b9%b6%e8%a1%8c%e6%89%a7%e8%a1%8c" class="header-anchor"></a>并行执行
+</h3><p>Hive 会将一个 SQL 语句转化成一个或者多个 Stage，每个 Stage 对应一个 MR Job。默认情况下，Hive 同时只会执行一个 Stage。但是某 SQL 语句可能会包含多个 Stage，但这多个 Stage 可能并非完全互相依赖，也就是说有些 Stage 是可以并行执行的。此处提到的并行执行就是指这些 Stage 的并行执行。</p>
+<blockquote>
+<p>相关参数如下：</p>
+<p>&ndash;启用并行执行优化</p>
+<p>set hive.exec.parallel=true;</p>
+<p>&ndash;同一个 sql 允许最大并行度，默认为 8</p>
+<p>set hive.exec.parallel.thread.number=8;</p></blockquote>
+<h3 id="严格模式"><a href="#%e4%b8%a5%e6%a0%bc%e6%a8%a1%e5%bc%8f" class="header-anchor"></a>严格模式
+</h3><p>Hive 可以通过设置某些参数防止危险操作：</p>
+<p><strong>1）分区表不使用分区过滤</strong></p>
+<p>将 hive.strict.checks.no.partition.filter 设置为 true 时，对于分区表，除非 where 语句中含有分区字段过滤条件来限制范围，否则不允许执行。换句话说，就是用户不允许扫描所有分区。进行这个限制的原因是，通常分区表都拥有非常大的数据集，而且数据增加迅速。没有进行分区限制的查询可能会消耗令人不可接受的巨大资源来处理这个表。</p>
+<p><strong>2）使用 order by 没有 limit 过滤</strong></p>
+<p>将 hive.strict.checks.orderby.no.limit 设置为 true 时，对于使用了 order by 语句的查询，要求必须使用 limit 语句。因为 order by 为了执行排序过程会将所有的结果数据分发到同一个 Reduce 中进行处理，强制要求用户增加这个 limit 语句可以防止 Reduce 额外执行很长一段时间（开启了 limit 可以在数据进入到 Reduce 之前就减少一部分数据）。</p>
+<p><strong>3）笛卡尔积</strong></p>
+<p>将 hive.strict.checks.cartesian.product 设置为 true 时，会限制笛卡尔积的查询。对关系型数据库非常了解的用户可能期望在执行 JOIN 查询的时候不使用 ON 语句而是使用 where 语句，这样关系数据库的执行优化器就可以高效地将 WHERE 语句转化成那个 ON 语句。不幸的是，Hive 并不会执行这种优化，因此，如果表足够大，那么这个查询就会出现不可控的情况。</p>
+
 </section>
 
 

@@ -336,20 +336,34 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#channelselector">ChannelSelector</a></li>
-    <li><a href="#sinkprocessor"><strong>SinkProcessor</strong></a></li>
-  </ol>
-
-  <ol>
-    <li><a href="#简单串联">简单串联</a></li>
-    <li><a href="#复制和多路复用">复制和多路复用</a></li>
-    <li><a href="#负载均衡和故障转移">负载均衡和故障转移</a></li>
-    <li><a href="#聚合">聚合</a></li>
-  </ol>
-
-  <ol>
-    <li><a href="#自定义拦截器打成-jar-包">自定义拦截器打成 jar 包</a></li>
-    <li><a href="#任务配置文件">任务配置文件</a></li>
+    <li><a href="#事务puttake">事务（Put、Take）</a></li>
+    <li><a href="#架构原理">架构原理</a>
+      <ol>
+        <li><a href="#channelselector">ChannelSelector</a></li>
+        <li><a href="#sinkprocessor"><strong>SinkProcessor</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#拓扑结构">拓扑结构</a>
+      <ol>
+        <li><a href="#简单串联">简单串联</a></li>
+        <li><a href="#复制和多路复用">复制和多路复用</a></li>
+        <li><a href="#负载均衡和故障转移">负载均衡和故障转移</a></li>
+        <li><a href="#聚合">聚合</a></li>
+      </ol>
+    </li>
+    <li><a href="#单源多出口案例">单源多出口案例</a></li>
+    <li><a href="#故障转移案例">故障转移案例</a></li>
+    <li><a href="#负载均衡案例">负载均衡案例</a></li>
+    <li><a href="#flume-聚合案例">Flume 聚合案例</a></li>
+    <li><a href="#自定义拦截器">自定义拦截器</a>
+      <ol>
+        <li><a href="#自定义拦截器打成-jar-包">自定义拦截器打成 jar 包</a></li>
+        <li><a href="#任务配置文件">任务配置文件</a></li>
+      </ol>
+    </li>
+    <li><a href="#自定义-source">自定义 Source</a></li>
+    <li><a href="#自定义-sink">自定义 Sink</a></li>
+    <li><a href="#事务源码">事务源码</a></li>
   </ol>
 </nav>
         </div>
@@ -455,8 +469,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h1 id="事务puttake"><a href="#%e4%ba%8b%e5%8a%a1puttake" class="header-anchor"></a>事务（Put、Take）
-</h1><p>put 事务把数据批处理写入临时缓冲区 putList，，然后 doCommit 去检查 Channel 内存队列是否足够合并，如果不够，就回滚数据，如果够，就把 putList 的数据写入到 Channel，然后由 take 事务从 channel 中拉取，写入到临时缓冲区 takeList，然后把数据从 takeList 发送到 HDFS，发送完毕后清空缓冲区，如果某个数据发送失败，就回滚到 channel。</p>
+    <h2 id="事务puttake"><a href="#%e4%ba%8b%e5%8a%a1puttake" class="header-anchor"></a>事务（Put、Take）
+</h2><p>put 事务把数据批处理写入临时缓冲区 putList，，然后 doCommit 去检查 Channel 内存队列是否足够合并，如果不够，就回滚数据，如果够，就把 putList 的数据写入到 Channel，然后由 take 事务从 channel 中拉取，写入到临时缓冲区 takeList，然后把数据从 takeList 发送到 HDFS，发送完毕后清空缓冲区，如果某个数据发送失败，就回滚到 channel。</p>
 <p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image.png"
 	width="1582"
 	height="660"
@@ -471,8 +485,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-basis="575px"
 	
 ></p>
-<h1 id="架构原理"><a href="#%e6%9e%b6%e6%9e%84%e5%8e%9f%e7%90%86" class="header-anchor"></a>架构原理
-</h1><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1.png"
+<h2 id="架构原理"><a href="#%e6%9e%b6%e6%9e%84%e5%8e%9f%e7%90%86" class="header-anchor"></a>架构原理
+</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1.png"
 	width="1521"
 	height="758"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1_hu_124a7a8d78fb58bb.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-1_hu_8ff7e6529fb82c82.png 1024w"
@@ -487,13 +501,14 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 	
 ></p>
 <p>在拦截阶段可以进行数据过滤清洗，洗掉脏数据。</p>
-<h2 id="channelselector"><a href="#channelselector" class="header-anchor"></a>ChannelSelector
-</h2><blockquote>
+<h3 id="channelselector"><a href="#channelselector" class="header-anchor"></a>ChannelSelector
+</h3><blockquote>
 <p><strong>因为一个 source 可以对应对各 channel</strong> ，ChannelSelector 的作用就是选出 Event 将要被发往哪个 Channel。其共有两种类型， 分别是 Replicating（复制）和 Multiplexing（多路复用）。 ReplicatingSelector 会将同一个 Event <strong>发往所有</strong>的 Channel，Multiplexing 会根据自定义的配置，将不同的 Event 发往不同的 Channel，Multiplexing 要结合拦截器使用，Multiplexing 会根据数据的头信息来决定发送到哪个 channel。</p></blockquote>
-<h2 id="sinkprocessor"><a href="#sinkprocessor" class="header-anchor"></a><strong>SinkProcessor</strong>
-</h2><blockquote>
+<h3 id="sinkprocessor"><a href="#sinkprocessor" class="header-anchor"></a><strong>SinkProcessor</strong>
+</h3><blockquote>
 <p>一个 sink 只能绑定一个 channel，一个 channel 能绑定多个 sink。SinkProcessor 共 有 三 种 类 型 ， 分 别 是 DefaultSinkProcessor 、LoadBalancingSinkProcessor 和 FailoverSinkProcessor。</p>
-<p><strong>DefaultSinkProcessor 对 应 的 是 单个的 Sink</strong> ， LoadBalancingSinkProcessor 和 FailoverSinkProcessor 对应的是 <strong>Sink Group</strong>,LoadBalancingSinkProcessor 可以实现负载均衡的功能，FailoverSinkProcessor 可以错误恢复的功能。</p>
+<p><strong>DefaultSinkProcessor 对 应 的 是 单个的 Sink</strong> ， LoadBalancingSinkProcessor 和 FailoverSinkProcessor 对应的是 <strong>Sink Group</strong>,LoadBalancingSinkProcessor 可以实现负载均衡的功能，FailoverSinkProcessor 可以错误恢复的功能。</p></blockquote>
+<blockquote>
 <p>LoadBalancingSinkProcessor 负载均衡：</p>
 <p>一个 channel 会发给多个 sink</p>
 <p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-2.png"
@@ -509,7 +524,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-grow="235"
 		data-flex-basis="565px"
 	
-></p>
+></p></blockquote>
+<blockquote>
 <p>FailoverSinkProcessor 故障转移：</p>
 <p>当一个 sink 故障，任务会转移到其他 sink</p>
 <p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-3.png"
@@ -526,9 +542,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-basis="592px"
 	
 ></p></blockquote>
-<h1 id="拓扑结构"><a href="#%e6%8b%93%e6%89%91%e7%bb%93%e6%9e%84" class="header-anchor"></a>拓扑结构
-</h1><h2 id="简单串联"><a href="#%e7%ae%80%e5%8d%95%e4%b8%b2%e8%81%94" class="header-anchor"></a>简单串联
-</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4.png"
+<h2 id="拓扑结构"><a href="#%e6%8b%93%e6%89%91%e7%bb%93%e6%9e%84" class="header-anchor"></a>拓扑结构
+</h2><h3 id="简单串联"><a href="#%e7%ae%80%e5%8d%95%e4%b8%b2%e8%81%94" class="header-anchor"></a>简单串联
+</h3><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4.png"
 	width="1559"
 	height="773"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4_hu_b3bf8623ae367e4c.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-4_hu_d5fef3d1650295f0.png 1024w"
@@ -542,8 +558,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-basis="484px"
 	
 ></p>
-<h2 id="复制和多路复用"><a href="#%e5%a4%8d%e5%88%b6%e5%92%8c%e5%a4%9a%e8%b7%af%e5%a4%8d%e7%94%a8" class="header-anchor"></a>复制和多路复用
-</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5.png"
+<h3 id="复制和多路复用"><a href="#%e5%a4%8d%e5%88%b6%e5%92%8c%e5%a4%9a%e8%b7%af%e5%a4%8d%e7%94%a8" class="header-anchor"></a>复制和多路复用
+</h3><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5.png"
 	width="1511"
 	height="1105"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5_hu_83763143df0f54db.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-5_hu_96e82b6105502e3e.png 1024w"
@@ -557,8 +573,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-basis="328px"
 	
 ></p>
-<h2 id="负载均衡和故障转移"><a href="#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e5%92%8c%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb" class="header-anchor"></a>负载均衡和故障转移
-</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6.png"
+<h3 id="负载均衡和故障转移"><a href="#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e5%92%8c%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb" class="header-anchor"></a>负载均衡和故障转移
+</h3><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6.png"
 	width="1412"
 	height="990"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6_hu_bc1860421569b8f8.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-6_hu_778684d95d808a13.png 1024w"
@@ -572,8 +588,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-basis="342px"
 	
 ></p>
-<h2 id="聚合"><a href="#%e8%81%9a%e5%90%88" class="header-anchor"></a>聚合
-</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7.png"
+<h3 id="聚合"><a href="#%e8%81%9a%e5%90%88" class="header-anchor"></a>聚合
+</h3><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7.png"
 	width="1116"
 	height="960"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7_hu_ee6f522aef6ef785.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-7_hu_76aeb26deaed92a8.png 1024w"
@@ -587,8 +603,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		data-flex-basis="279px"
 	
 ></p>
-<h1 id="单源多出口案例"><a href="#%e5%8d%95%e6%ba%90%e5%a4%9a%e5%87%ba%e5%8f%a3%e6%a1%88%e4%be%8b" class="header-anchor"></a>单源多出口案例
-</h1><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8.png"
+<h2 id="单源多出口案例"><a href="#%e5%8d%95%e6%ba%90%e5%a4%9a%e5%87%ba%e5%8f%a3%e6%a1%88%e4%be%8b" class="header-anchor"></a>单源多出口案例
+</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8.png"
 	width="1248"
 	height="653"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8_hu_23cd4d6dd707d84d.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-8_hu_53d52d0fb571962a.png 1024w"
@@ -610,13 +626,23 @@ flume1 在 linux03 监听 linux01 的 hive 日志，把 hive 日志的新内容�
 <p><strong>剧透：</strong>
 flume3 成功把 hive 日志的新内容写到 datas 文件夹，说明 linux03 确实监听到了 linux01 的 hive 日志并且成功把日志从 linux01 弄到了 linux03，但是 flume2 却没有把新内容写到 hdfs，猜想的可能是因为在 linux03 上写 flume2 的配置文件**sinks.k1.hdfs.path = hdfs://linux01:9820/flume/group1/%Y%m%d/%H，**linux01 和 linux03 是不同的服务器，跨服务器没写进去，所以建议在同一台服务器搞。</p></blockquote>
 <p>在 flume/job 目录中新建文件夹 group1 来存放本次案例的任务配置文件</p>
-<blockquote>
-<p>mkdir group1</p>
-<p>cd group1</p>
-<p>vim flume-file-flume.conf</p>
-<p>vim flume-flume-hdfs.conf</p>
-<p>vim flume-flume-dir.conf</p></blockquote>
-<p>三个 conf 配置如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir group1
+</span></span><span class="line"><span class="cl">cd group1
+</span></span><span class="line"><span class="cl">vim flume-file-flume.conf
+</span></span><span class="line"><span class="cl">vim flume-flume-hdfs.conf
+</span></span><span class="line"><span class="cl">vim flume-flume-dir.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>三个 conf 配置如下：</p>
 <p><strong>flume-file-flume.conf</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -837,8 +863,8 @@ datas 确实产生了新文件，但是有很多空的，不知道咋回事，�
 		data-flex-basis="311px"
 	
 ></p>
-<h1 id="故障转移案例"><a href="#%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb%e6%a1%88%e4%be%8b" class="header-anchor"></a>故障转移案例
-</h1><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11.png"
+<h2 id="故障转移案例"><a href="#%e6%95%85%e9%9a%9c%e8%bd%ac%e7%a7%bb%e6%a1%88%e4%be%8b" class="header-anchor"></a>故障转移案例
+</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11.png"
 	width="1436"
 	height="734"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11_hu_18a2ea47c6ee537e.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-11_hu_af2f6474dc226e45.png 1024w"
@@ -1101,8 +1127,8 @@ console1 接收成功 。
 		data-flex-basis="2203px"
 	
 ></p></blockquote>
-<h1 id="负载均衡案例"><a href="#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e6%a1%88%e4%be%8b" class="header-anchor"></a>负载均衡案例
-</h1><p>尚硅谷 P25</p>
+<h2 id="负载均衡案例"><a href="#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e6%a1%88%e4%be%8b" class="header-anchor"></a>负载均衡案例
+</h2><p>尚硅谷 P25</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1162,8 +1188,8 @@ console1 接收成功 。
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>配置文件和故障转移案例一样，只有 flume-netcat-flume.conf 需要改。</p>
-<h1 id="flume-聚合案例"><a href="#flume-%e8%81%9a%e5%90%88%e6%a1%88%e4%be%8b" class="header-anchor"></a>Flume 聚合案例
-</h1><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18.png"
+<h2 id="flume-聚合案例"><a href="#flume-%e8%81%9a%e5%90%88%e6%a1%88%e4%be%8b" class="header-anchor"></a>Flume 聚合案例
+</h2><p><img src="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18.png"
 	width="1401"
 	height="705"
 	srcset="/zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18_hu_b52e7eb81f2f0796.png 480w, /zh-cn/post/2024/04/flume%E8%BF%9B%E9%98%B6--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E8%80%81%E5%A4%A7%E7%88%B7%E4%B9%9F%E8%83%BD%E5%AD%A6%E4%BC%9A/image-18_hu_2c464d839e46192e.png 1024w"
@@ -1316,8 +1342,8 @@ console1 接收成功 。
 </span></span><span class="line"><span class="cl">    a3.sinks.k1.channel = c1
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="自定义拦截器"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8" class="header-anchor"></a>自定义拦截器
-</h1><p><strong>案例需求</strong></p>
+</div><h2 id="自定义拦截器"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8" class="header-anchor"></a>自定义拦截器
+</h2><p><strong>案例需求</strong></p>
 <blockquote>
 <p>使用 Flume 采集服务器本地日志，需要按照日志类型的不同，将不同种类的日志发往不 同的分析系统。</p></blockquote>
 <p><strong>需求分析</strong></p>
@@ -1338,8 +1364,8 @@ console1 接收成功 。
 		data-flex-basis="586px"
 	
 ></p>
-<h2 id="自定义拦截器打成-jar-包"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8%e6%89%93%e6%88%90-jar-%e5%8c%85" class="header-anchor"></a>自定义拦截器打成 jar 包
-</h2><div class="highlight"><div class="chroma">
+<h3 id="自定义拦截器打成-jar-包"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e6%8b%a6%e6%88%aa%e5%99%a8%e6%89%93%e6%88%90-jar-%e5%8c%85" class="header-anchor"></a>自定义拦截器打成 jar 包
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1564,8 +1590,8 @@ console1 接收成功 。
 </div>
 </div><p>jar 包打好放到 flume 的 lib 目录下，flume 启动时会加载 lib 的所有 jar 包。</p>
 <p>注意！！自定义拦截器的 jar 包源代码是定制的，里面的过滤拦截规则需要根据实际业务来编写，并且 jdk 最好是 1.8。</p>
-<h2 id="任务配置文件"><a href="#%e4%bb%bb%e5%8a%a1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="header-anchor"></a>任务配置文件
-</h2><p>inux01 服务器的 flume 配置文件 job/group4/interceptor-flume1.conf：</p>
+<h3 id="任务配置文件"><a href="#%e4%bb%bb%e5%8a%a1%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="header-anchor"></a>任务配置文件
+</h3><p>inux01 服务器的 flume 配置文件 job/group4/interceptor-flume1.conf：</p>
 <p>1 配置 1 个 netcat source，1 个 sink group（2 个 avro sink）， 并配置相应的 ChannelSelector 和 interceptor。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1724,10 +1750,10 @@ console1 接收成功 。
 ></p></blockquote>
 <p><strong>尚硅谷 Flume P33</strong>
 <strong>后面的以后再搞</strong></p>
-<h1 id="自定义-source"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89-source" class="header-anchor"></a>自定义 Source
-</h1><h1 id="自定义-sink"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89-sink" class="header-anchor"></a>自定义 Sink
-</h1><h1 id="事务源码"><a href="#%e4%ba%8b%e5%8a%a1%e6%ba%90%e7%a0%81" class="header-anchor"></a>事务源码
-</h1>
+<h2 id="自定义-source"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89-source" class="header-anchor"></a>自定义 Source
+</h2><h2 id="自定义-sink"><a href="#%e8%87%aa%e5%ae%9a%e4%b9%89-sink" class="header-anchor"></a>自定义 Sink
+</h2><h2 id="事务源码"><a href="#%e4%ba%8b%e5%8a%a1%e6%ba%90%e7%a0%81" class="header-anchor"></a>事务源码
+</h2>
 </section>
 
 

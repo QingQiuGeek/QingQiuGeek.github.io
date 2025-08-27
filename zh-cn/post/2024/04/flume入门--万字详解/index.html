@@ -11,7 +11,7 @@
 <meta property='og:description' content="Flume基础架构、安装部署、入门案例、断点续传源码修改">
 <meta property='og:url' content='/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='flume' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-22T15:22:55&#43;00:00'/><meta property='article:modified_time' content='2024-04-22T15:22:55&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Flume' /><meta property='article:tag' content='大数据' /><meta property='article:published_time' content='2024-04-22T15:22:55&#43;00:00'/><meta property='article:modified_time' content='2024-04-22T15:22:55&#43;00:00'/>
 <meta name="twitter:title" content="Flume入门--万字详解">
 <meta name="twitter:description" content="Flume基础架构、安装部署、入门案例、断点续传源码修改">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,26 +336,29 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#概述-e6a682e8bfb0">概述 {#%E6%A6%82%E8%BF%B0}</a></li>
-    <li><a href="#基础架构-e59fbae7a180e69eb6e69e84">基础架构 {#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}</a>
+    <li><a href="#概述">概述</a></li>
+    <li><a href="#基础架构">基础架构</a>
       <ol>
-        <li><a href="#Agent">Agent</a>
+        <li><a href="#agent">Agent</a>
           <ol>
-            <li><a href="#Source">Source</a></li>
-            <li><a href="#Sink">Sink</a></li>
-            <li><a href="#Channel">Channel</a></li>
-            <li><a href="#selector-selectorc2a0">selector {#selector%C2%A0}</a></li>
+            <li><a href="#source">Source</a></li>
+            <li><a href="#sink">Sink</a></li>
+            <li><a href="#channel">Channel</a></li>
+            <li><a href="#selector">selector</a></li>
             <li><a href="#interceptor">interceptor</a></li>
-            <li><a href="#Event">Event</a></li>
+            <li><a href="#event">Event</a></li>
           </ol>
         </li>
       </ol>
     </li>
-    <li><a href="#安装部署-e5ae89e8a385e983a8e7bdb2">安装部署 {#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2}</a></li>
+    <li><a href="#安装部署">安装部署</a></li>
     <li><a href="#Netcat">Netcat</a></li>
-    <li><a href="#flume入门案例-flumee585a5e997a8e6a188e4be8b">Flume入门案例 {#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B}</a>
+    <li><a href="#flume-入门案例">Flume 入门案例</a>
       <ol>
-        <li><a href="#1netcat本机端口监控-1netcate69cace69cbae7abafe58fa3e79b91e68ea7">1)netcat本机端口监控 {#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7}</a></li>
+        <li><a href="#netcat-本机端口监控">netcat 本机端口监控</a></li>
+        <li><a href="#监控-hive-日志上传-hdfs">监控 hive 日志上传 hdfs</a></li>
+        <li><a href="#实时读取目录文件到-hdfs">实时读取目录文件到 hdfs</a></li>
+        <li><a href="#实时监控目录下的多个追加文件">实时监控目录下的多个追加文件</a></li>
       </ol>
     </li>
   </ol>
@@ -421,7 +424,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 4 分钟
+                阅读时长: 9 分钟
             </time>
         </div>
         
@@ -463,63 +466,56 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#%E6%A6%82%E8%BF%B0" >概述</a>{#%E6%A6%82%E8%BF%B0-toc}</p>
-<p><a class="link" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84" >基础架构</a>{#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#Agent" >Agent</a>{#Agent-toc}</p>
-<p><a class="link" href="#Source" >Source</a>{#Source-toc}</p>
-<p><a class="link" href="#Sink" >Sink</a>{#Sink-toc}</p>
-<p><a class="link" href="#Channel" >Channel</a>{#Channel-toc}</p>
-<p><a class="link" href="#selector%C2%A0" >selector</a>{#selector%C2%A0-toc}</p>
-<p><a class="link" href="#interceptor" >interceptor</a>{#interceptor-toc}</p>
-<p><a class="link" href="#Event" >Event</a>{#Event-toc}</p>
-<p><a class="link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2" >安装部署</a>{#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2-toc}</p>
-<p><a class="link" href="#Netcat" >Netcat</a>{#Netcat-toc}</p>
-<p><a class="link" href="#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B" >Flume入门案例</a>{#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B-toc}</p>
-<p><a class="link" href="#1%29netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7" >1)netcat本机端口监控</a>{#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7-toc}</p>
-<p><a class="link" href="#2%29%E7%9B%91%E6%8E%A7hive%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0hdfs" >2)监控hive日志上传hdfs</a>{#2)%E7%9B%91%E6%8E%A7hive%E6%97%A5%E5%BF%97%E4%B8%8A%E4%BC%A0hdfs-toc}</p>
-<p><a class="link" href="#3%29%E5%AE%9E%E6%97%B6%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%88%B0hdfs" >3)实时读取目录文件到hdfs</a>{#3)%E5%AE%9E%E6%97%B6%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E5%88%B0hdfs-toc}</p>
-<p><a class="link" href="#4%29%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%BF%BD%E5%8A%A0%E6%96%87%E4%BB%B6" >4)实时监控目录下的多个追加文件</a>{#4)%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%A4%9A%E4%B8%AA%E8%BF%BD%E5%8A%A0%E6%96%87%E4%BB%B6-toc}</p>
-<hr>
-<br />
-<h2 id="概述-e6a682e8bfb0"><a href="#%e6%a6%82%e8%bf%b0-e6a682e8bfb0" class="header-anchor"></a>概述 {#%E6%A6%82%E8%BF%B0}
+    <h2 id="概述"><a href="#%e6%a6%82%e8%bf%b0" class="header-anchor"></a>概述
 </h2><p>Flume 是 Cloudera 提供的一个高可用的，高可靠的，分布式的海量<strong>日志采集</strong>、聚合和传 输的系统。Flume 基于流式架构，灵活简单。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/2e3869480961b81ca25702e6d1970111.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image.png"
+	width="1218"
+	height="508"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image_hu_7fa87b03cd51f56f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image_hu_86396d462a02f120.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="239"
+		data-flex-basis="575px"
 	
 ></p>
-<h2 id="基础架构-e59fbae7a180e69eb6e69e84"><a href="#%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84-e59fbae7a180e69eb6e69e84" class="header-anchor"></a>基础架构 {#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}
-</h2><p>Flume运行的核心是 Agent。Flume是以agent为最小的独立运行单位。一个agent就是一个JVM。它是 一个完整的数据收集工具，含有三个核心组件，分别是source、 channel、 sink。通过这些组件， Event 可以从一个地方流向另一个地方。如下图所示：</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/0ec63ccc446e6faf2bcafcbc179a7e34.png"
-	
-	
-	
+<h2 id="基础架构"><a href="#%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84" class="header-anchor"></a>基础架构
+</h2><p>Flume 运行的核心是 Agent。Flume 是以 agent 为最小的独立运行单位。一个 agent 就是一个 JVM。它是 一个完整的数据收集工具，含有三个核心组件，分别是 source、 channel、 sink。通过这些组件， Event 可以从一个地方流向另一个地方。如下图所示：</p>
+<p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1.png"
+	width="1210"
+	height="464"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1_hu_8561a55c375264ae.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-1_hu_a84eee12f3e31d2f.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="260"
+		data-flex-basis="625px"
 	
 ></p>
-<h3 id="Agent"><a href="#Agent" class="header-anchor"></a>Agent
+<h3 id="agent"><a href="#agent" class="header-anchor"></a>Agent
 </h3><blockquote>
 <ul>
 <li>Agent 是一个 JVM 进程，它以事件的形式将数据从源头送至目的。</li>
-<li>Agent 主要有 3 个部分组成，Source、Channel、Sink。同一台服务器可以运行多个Agent，每个Agent可以有多个source、sink、channel。Agent的名字可以相同但是不能同时启动任务，否则会出现冲突。</li>
+<li>Agent 主要有 3 个部分组成，Source、Channel、Sink。同一台服务器可以运行多个 Agent，每个 Agent 可以有多个 source、sink、channel。Agent 的名字可以相同但是不能同时启动任务，否则会出现冲突。</li>
 </ul></blockquote>
-<h4 id="Source"><a href="#Source" class="header-anchor"></a>Source
+<h4 id="source"><a href="#source" class="header-anchor"></a>Source
 </h4><blockquote>
 <ul>
-<li>Source 是负责接收数据到 Flume Agent 并传给Channel的组件。</li>
-<li>Source 组件可以处理各种类型、各种格式的日志数据，包括 avro、thrift、exec、jms、spooling directory、netcat、taildir、 sequence generator、syslog、http、legacy这些不同的数据源。</li>
+<li>Source 是负责接收数据到 Flume Agent 并传给 Channel 的组件。</li>
+<li>Source 组件可以处理各种类型、各种格式的日志数据，包括 avro、thrift、exec、jms、spooling directory、netcat、taildir、 sequence generator、syslog、http、legacy 这些不同的数据源。</li>
 </ul></blockquote>
-<h4 id="Sink"><a href="#Sink" class="header-anchor"></a>Sink
+<h4 id="sink"><a href="#sink" class="header-anchor"></a>Sink
 </h4><ul>
 <li>Sink 不断地轮询 Channel 中的事件且批量地移除它们，并将这些事件批量写入到存储系统或索引系统、或者被发送到另一个 Flume Agent。</li>
 <li>Sink 组件目的地包括 hdfs、logger、avro、thrift、ipc、file、HBase、solr、自定义。</li>
 </ul>
-<h4 id="Channel"><a href="#Channel" class="header-anchor"></a>Channel
+<h4 id="channel"><a href="#channel" class="header-anchor"></a>Channel
 </h4><blockquote>
 <ul>
 <li>Channel 是位于 Source 和 Sink 之间的缓冲区。因此，Channel 允许 Source 和 Sink 运作在不同的速率上。</li>
@@ -528,32 +524,38 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li>Memory Channel 是内存中的队列。Memory Channel 在不需要关心数据丢失的情景下适 用。如果需要关心数据丢失，那么 Memory Channel 就不应该使用，因为程序死亡、机器宕 机或者重启都会导致数据丢失。</li>
 <li>File Channel 将所有事件写到磁盘。因此在程序关闭或机器宕机的情况下不会丢失数 据。</li>
 </ul></blockquote>
-<h4 id="selector-selectorc2a0"><a href="#selector-selectorc2a0" class="header-anchor"></a>selector {#selector%C2%A0}
+<h4 id="selector"><a href="#selector" class="header-anchor"></a>selector
 </h4><blockquote>
-<p>选择器，作用于source端，然后决定数据发往哪个目标。</p></blockquote>
+<p>选择器，作用于 source 端，然后决定数据发往哪个目标。</p></blockquote>
 <h4 id="interceptor"><a href="#interceptor" class="header-anchor"></a>interceptor
 </h4><blockquote>
-<p>拦截器，flume允许使用拦截器拦截数据。允许使用拦截器链，作用于source和sink阶段。</p></blockquote>
-<h4 id="Event"><a href="#Event" class="header-anchor"></a>Event
+<p>拦截器，flume 允许使用拦截器拦截数据。允许使用拦截器链，作用于 source 和 sink 阶段。</p></blockquote>
+<h4 id="event"><a href="#event" class="header-anchor"></a>Event
 </h4><blockquote>
 <ul>
 <li>传输单元，Flume 数据传输的基本单元，以 Event 的形式将数据从源头送至目的地。</li>
 <li>Event 由 Header 和 Body 两部分组成，Header 用来存放该 event 的一些属性，为 K-V 结构， Body 用来存放该条数据，形式为字节数组。</li>
 </ul></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/f38006431e7a0b773e856f928571ee27.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2.png"
+	width="816"
+	height="151"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2_hu_3f35ec154b3b11eb.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-2_hu_10f158814c30aa1e.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="540"
+		data-flex-basis="1296px"
 	
 ></p>
-<h2 id="安装部署-e5ae89e8a385e983a8e7bdb2"><a href="#%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2-e5ae89e8a385e983a8e7bdb2" class="header-anchor"></a>安装部署 {#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2}
+<h2 id="安装部署"><a href="#%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2" class="header-anchor"></a>安装部署
 </h2><blockquote>
 <p>解压</p>
 <p>tar -zxvf /export/server/apache-flume-1.9.0-bin.tar.gz /export/server/</p>
 <br />
-<p>为了让flume1.9兼容hadoop3.x，要删除flume lib包下的guava-11.0.2.jar</p>
+<p>为了让 flume1.9 兼容 hadoop3.x，要删除 flume lib 包下的 guava-11.0.2.jar</p>
 <p>rm guava-11.0.2.jar</p></blockquote>
 <h2 id="Netcat"><a href="#Netcat" class="header-anchor"></a>Netcat
 </h2><p><strong>安装</strong></p>
@@ -561,35 +563,760 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p>sudo yum install -y nc</p></blockquote>
 <p><strong>简单案例</strong></p>
 <br />
-<h2 id="flume入门案例-flumee585a5e997a8e6a188e4be8b"><a href="#flume%e5%85%a5%e9%97%a8%e6%a1%88%e4%be%8b-flumee585a5e997a8e6a188e4be8b" class="header-anchor"></a>Flume入门案例 {#Flume%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B}
-</h2><h3 id="1netcat本机端口监控-1netcate69cace69cbae7abafe58fa3e79b91e68ea7"><a href="#1netcat%e6%9c%ac%e6%9c%ba%e7%ab%af%e5%8f%a3%e7%9b%91%e6%8e%a7-1netcate69cace69cbae7abafe58fa3e79b91e68ea7" class="header-anchor"></a>1)netcat本机端口监控 {#1)netcat%E6%9C%AC%E6%9C%BA%E7%AB%AF%E5%8F%A3%E7%9B%91%E6%8E%A7}
+<h2 id="flume-入门案例"><a href="#flume-%e5%85%a5%e9%97%a8%e6%a1%88%e4%be%8b" class="header-anchor"></a>Flume 入门案例
+</h2><h3 id="netcat-本机端口监控"><a href="#netcat-%e6%9c%ac%e6%9c%ba%e7%ab%af%e5%8f%a3%e7%9b%91%e6%8e%a7" class="header-anchor"></a>netcat 本机端口监控
 </h3><blockquote>
-<p>在flume文件夹下创建工作目录job</p>
+<p>在 flume 文件夹下创建工作目录 job</p>
 <p>mkdir job</p>
-<p>在job目录下建立任务配置文件，文件名任取，建议见名知意，net表示数据源是端口，logger表示数据是日志文件</p>
+<p>在 job 目录下建立任务配置文件，文件名任取，建议见名知意，net 表示数据源是端口，logger 表示数据是日志文件</p>
 <p>vim net-flume-logger.conf</p>
 <p>配置文件内容如下：</p></blockquote>
-<pre><code># Name the components on this agent
-a1.sources = r1 #a1是该agent名，不可重复
-a1.sinks = k1
-a1.channels = c1
-
-# Describe/configure the source
-a1.sources.r1.type = netcat
-a1.sources.r1.bind = localhost
-a1.sources.r1.port = 4444
-
-# Describe the sink
-a1.sinks.k1.type = logger
-
-# Use a channel which buffers events in memory
-a1.channels.c1.type = memory
-a1.channels.c1.capacity = 1000 #最多接收1000个event
-a1.channels.c1.transactionCapacity = 100 #100个事务，一次最多发送100个event，事务失败会回滚。capacity应该＜transactionCapacity
-
-# Bind the source and sink to
-</code></pre>
-<hr>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">    # Name the components on this agent
+</span></span><span class="line"><span class="cl">    a1.sources = r1 <span class="ni">#a1是该agent名</span>，不可重复
+</span></span><span class="line"><span class="cl">    a1.sinks = k1
+</span></span><span class="line"><span class="cl">    a1.channels = c1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe/configure the source
+</span></span><span class="line"><span class="cl">    a1.sources.r1.type = netcat
+</span></span><span class="line"><span class="cl">    a1.sources.r1.bind = localhost
+</span></span><span class="line"><span class="cl">    a1.sources.r1.port = 4444
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe the sink
+</span></span><span class="line"><span class="cl">    a1.sinks.k1.type = logger
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Use a channel which buffers events in memory
+</span></span><span class="line"><span class="cl">    a1.channels.c1.type = memory
+</span></span><span class="line"><span class="cl">    a1.channels.c1.capacity = 1000 <span class="ni">#最多接收1000个event</span>
+</span></span><span class="line"><span class="cl">    a1.channels.c1.transactionCapacity = 100 <span class="ni">#100个事务</span>，一次最多发送100个event，事务失败会回滚。capacity应该 <span class="p">&lt;</span> <span class="nt">transactionCapacity</span>
+</span></span><span class="line"><span class="cl">    <span class="err">#</span> <span class="na">Bind</span> <span class="na">the</span> <span class="na">source</span> <span class="na">and</span> <span class="na">sink</span> <span class="na">to</span> <span class="na">the</span> <span class="na">channel</span>
+</span></span><span class="line"><span class="cl">    <span class="na">a1</span><span class="err">.</span><span class="na">sources</span><span class="err">.</span><span class="na">r1</span><span class="err">.</span><span class="na">channels </span><span class="o">=</span> <span class="s">c1</span> <span class="ni">#一个source可以绑定多个channel</span>
+</span></span><span class="line"><span class="cl">    <span class="na">a1</span><span class="err">.</span><span class="na">sinks</span><span class="err">.</span><span class="na">k1</span><span class="err">.</span><span class="na">channel </span><span class="o">=</span> <span class="s">c1</span> <span class="ni">#一个sink只能绑定一个channel</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>启动两个终端，一个终端启动监听任务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">在 flume 目录下运行：
+</span></span><span class="line"><span class="cl">flume-ng agent -c conf/ -n a1 -f job/flume-netcat-logger.conf -D flume.root.logger=INFO,console
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">参数说明：
+</span></span><span class="line"><span class="cl">--conf/-c：表示配置文件存储在 conf/目录
+</span></span><span class="line"><span class="cl">--name/-n：表示给 agent 起名为 a1
+</span></span><span class="line"><span class="cl">--conf-file/-f：flume 本次启动读取的配置文件是在 job 文件夹下的 flume-telnet.conf 文件.
+</span></span><span class="line"><span class="cl">-Dflume.root.logger=INFO,console ：-D 表示 flume 运行时动态修改 flume.root.logger 参数属性值，并将控制台日志打印级别设置为 INFO 级别。日志级别包括:log、info、warn、 error。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3.png"
+	width="1530"
+	height="653"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3_hu_c99cca4dd73c04ee.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-3_hu_82ef1505922ff86c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="234"
+		data-flex-basis="562px"
+	
+>
+另一个终端使用 netcat 向监听的端口发送内容：</p>
+<blockquote>
+<p>nc localhost 4444
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4.png"
+	width="746"
+	height="258"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4_hu_b88eeeed95de3eea.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-4_hu_76944ab34e474c55.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="693px"
+	
+>
+检查启动任务的端口是否收到。</p></blockquote>
+<h3 id="监控-hive-日志上传-hdfs"><a href="#%e7%9b%91%e6%8e%a7-hive-%e6%97%a5%e5%bf%97%e4%b8%8a%e4%bc%a0-hdfs" class="header-anchor"></a>监控 hive 日志上传 hdfs
+</h3><p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5.png"
+	width="1221"
+	height="507"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5_hu_9d7ee6a4efc594d2.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-5_hu_d7e8bc859122f40b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="577px"
+	
+>
+在 job 目录下新建任务的配置文件 flume-file-hdfs.conf,内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">    # Name the components on this agent
+</span></span><span class="line"><span class="cl">    a2.sources = r2
+</span></span><span class="line"><span class="cl">    a2.sinks = k2
+</span></span><span class="line"><span class="cl">    a2.channels = c2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe/configure the source
+</span></span><span class="line"><span class="cl">    a2.sources.r2.type = exec
+</span></span><span class="line"><span class="cl">    a2.sources.r2.command = tail -F /export/server/hive/logs/metastore.log
+</span></span><span class="line"><span class="cl">    <span class="ni">#这里我监控的是hive的元数据日志</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe the sink
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.type = hdfs
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.path = hdfs://linux01:8020/flume/%Y%m%d/%H
+</span></span><span class="line"><span class="cl">    <span class="ni">#8020端口不要搞错</span>，具体查看hadoop的core-site.xml
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#上传文件的前缀</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.filePrefix = logs-
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否按照时间滚动文件夹</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.round = true
+</span></span><span class="line"><span class="cl">    <span class="ni">#多少时间单位创建一个新的文件夹</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.roundValue = 1
+</span></span><span class="line"><span class="cl">    <span class="ni">#重新定义时间单位</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.roundUnit = hour
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否使用本地时间戳</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.useLocalTimeStamp = true
+</span></span><span class="line"><span class="cl">    <span class="ni">#注意</span>：对于所有与时间相关的转义序列，Event Header 中必须存在以 “timestamp”的
+</span></span><span class="line"><span class="cl">    key（除非 hdfs.useLocalTimeStamp 设置为 true，此方法会使用 TimestampInterceptor 自
+</span></span><span class="line"><span class="cl">    动添加 timestamp）。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#积攒多少个</span> Event 才 flush 到 HDFS 一次
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.batchSize = 100
+</span></span><span class="line"><span class="cl">    <span class="ni">#设置文件类型</span>，可支持压缩
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.fileType = DataStream
+</span></span><span class="line"><span class="cl">    <span class="ni">#多久生成一个新的文件</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.rollInterval = 60
+</span></span><span class="line"><span class="cl">    <span class="ni">#设置每个文件的滚动大小</span>
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.rollSize = 134217700
+</span></span><span class="line"><span class="cl">    <span class="ni">#文件的滚动与</span> Event 数量无关
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.hdfs.rollCount = 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Use a channel which buffers events in memory
+</span></span><span class="line"><span class="cl">    a2.channels.c2.type = memory
+</span></span><span class="line"><span class="cl">    a2.channels.c2.capacity = 1000
+</span></span><span class="line"><span class="cl">    a2.channels.c2.transactionCapacity = 100
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Bind the source and sink to the channel
+</span></span><span class="line"><span class="cl">    a2.sources.r2.channels = c2
+</span></span><span class="line"><span class="cl">    a2.sinks.k2.channel = c2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">先在 flume 文件夹下启动 flume 的监听任务：
+</span></span><span class="line"><span class="cl">bin/flume-ng agent -c conf/ -n a2 -f job/flume-file-hdfs.conf -D flume.root.logger=INFO,console
+</span></span><span class="line"><span class="cl">启动 hdfs 和 hive 的元数据服务
+</span></span><span class="line"><span class="cl">start-dfs.sh
+</span></span><span class="line"><span class="cl">start-hivemetastore.sh（自己写的脚本）
+</span></span><span class="line"><span class="cl">启动 hive 开始操作
+</span></span><span class="line"><span class="cl">hive 会产生元数据记录在 metastore.log 中，然后就会被 flume 监听到，flume 就会把监听到的日志写到 hdfs 的 flume 文件夹中。浏览器打开 linux01:9870 查看 hdfs 的文件目录，发现新建了 flume 文件夹，表示操作成功。
+</span></span><span class="line"><span class="cl">![alt text](image-6.png)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意！监听的 metastore.log 一定要是有效的，如果无效那么 hive 的日志就不会写到里面，flume 就检测不到，具体去看 hive 的日志配置教程。另外启动的 agent 的任务名字和配置文件不要搞错了，是 a2 和 flume-file-hdfs.conf。</strong></p>
+<h3 id="实时读取目录文件到-hdfs"><a href="#%e5%ae%9e%e6%97%b6%e8%af%bb%e5%8f%96%e7%9b%ae%e5%bd%95%e6%96%87%e4%bb%b6%e5%88%b0-hdfs" class="header-anchor"></a>实时读取目录文件到 hdfs
+</h3><p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7.png"
+	width="1209"
+	height="528"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7_hu_c1105467385bcae8.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-7_hu_4fa73e60ceb8a8e2.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="549px"
+	
+>
+job 目录下编写 flume-dir-hdfs.conf 配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">    a3.sources = r3
+</span></span><span class="line"><span class="cl">    a3.sinks = k3
+</span></span><span class="line"><span class="cl">    a3.channels = c3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe/configure the source
+</span></span><span class="line"><span class="cl">    # source类型是目录
+</span></span><span class="line"><span class="cl">    a3.sources.r3.type = spooldir
+</span></span><span class="line"><span class="cl">    <span class="ni">#定义监控目录</span>
+</span></span><span class="line"><span class="cl">    a3.sources.r3.spoolDir = /export/server/flume/upload
+</span></span><span class="line"><span class="cl">    <span class="ni">#定义文件上传完后缀</span>
+</span></span><span class="line"><span class="cl">    a3.sources.r3.fileSuffix = .COMPLETED
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否有文件头</span>
+</span></span><span class="line"><span class="cl">    a3.sources.r3.fileHeader = true
+</span></span><span class="line"><span class="cl">    <span class="ni">#忽略所有以</span>.tmp 结尾的文件，不上传
+</span></span><span class="line"><span class="cl">    a3.sources.r3.ignorePattern = ([^ ]*\.tmp)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe the sink
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.type = hdfs
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.path = hdfs://linux01:8020/flume/upload/%Y%m%d/%H
+</span></span><span class="line"><span class="cl">    <span class="ni">#hdfs的upload文件夹要提前手动创建好</span>，flume不会自己创建，否则会报错。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#上传文件的前缀</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.filePrefix = upload-
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否按照时间滚动文件夹</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.round = true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#多少时间单位创建一个新的文件夹</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.roundValue = 1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#重新定义时间单位</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.roundUnit = hour
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否使用本地时间戳</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.useLocalTimeStamp = true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#积攒多少个</span> Event 才 flush 到 HDFS 一次
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.batchSize = 100
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#设置文件类型</span>，可支持压缩
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.fileType = DataStream
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#多久生成一个新的文件</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.rollInterval = 60
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#设置每个文件的滚动大小大概是</span> 128M
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.rollSize = 134217700
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#文件的滚动与</span> Event 数量无关
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.rollCount = 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Use a channel which buffers events in memory
+</span></span><span class="line"><span class="cl">    a3.channels.c3.type = memory
+</span></span><span class="line"><span class="cl">    a3.channels.c3.capacity = 1000
+</span></span><span class="line"><span class="cl">    a3.channels.c3.transactionCapacity = 100
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Bind the source and sink to the channel
+</span></span><span class="line"><span class="cl">    a3.sources.r3.channels = c3
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.channel = c3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>flume 目录下启动 agent 任务：</p>
+<blockquote>
+<p>bin/flume-ng agent -c conf/ -n a3 -f job/flume-dir-hdfs.conf</p>
+<p>注意不要有多余的空格或者不可见字符，启动失败就去 logs 文件夹看日志</p></blockquote>
+<p>任务启动后就往监控目录/flume/upload 文件夹里面放文件 ，放了 3 个不同的文件，其中 tmp 后缀的文件没有上传到 hdfs，因为在 conf 配置文件中把 tmp 后缀的排除了，其他两个上传完毕，并且文件后缀改成 COMPLETED：
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8.png"
+	width="1132"
+	height="287"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8_hu_119154576442338f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-8_hu_638b356095ba52.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="394"
+		data-flex-basis="946px"
+	
+>
+进入 linux01:9870 查看 hdfs 文件目录， 确实上传成功了。
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9.png"
+	width="2437"
+	height="1006"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9_hu_2110e997d452b344.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-9_hu_2c54946dfe69fec2.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="581px"
+	
+></p>
+<p><strong>注意！</strong> 配置文件的 a3.sinks.k3.hdfs.path 指定了 linux01:8020，那么 flume 任务就得在 linux01 上启动，在 linux02 上启动不会生效。我的 linux01 是主机，linux02 和 03 是从机，就算在 linux02 上启动 flume 任务，把 a3.sinks.k3.hdfs.path 改成 linux02:8020 也不行，必须在 linux01 上启动。
+<strong>注意！向/flume/upload 文件夹放的文件不能是以上传完成的后缀结尾，比如文件上传成功后缀是 COMPLETED，那么向里面放的文件后缀就不能是 COMPLETED。另外不能向 upload 里放文件名相同的文件，文件名相同的文件只有第一个会上传到 hdfs，之后的不会，因为 linux 同一目录不允许同名文件产生。</strong></p>
+<h3 id="实时监控目录下的多个追加文件"><a href="#%e5%ae%9e%e6%97%b6%e7%9b%91%e6%8e%a7%e7%9b%ae%e5%bd%95%e4%b8%8b%e7%9a%84%e5%a4%9a%e4%b8%aa%e8%bf%bd%e5%8a%a0%e6%96%87%e4%bb%b6" class="header-anchor"></a>实时监控目录下的多个追加文件
+</h3><p>案例 2 的 exec source 适用于监控一个实时追加的文件，不能断点续传，案例 3 的 spooldir source 适用于同步新文件，但不适用于实时监听同步追加日志的文件，而该案例的 Taildir Source 就适合于监听多个实时追加的文件，并能实现断点续传。
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10.png"
+	width="1447"
+	height="533"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10_hu_3bb935b9cd6bd98f.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-10_hu_20ded4dc11c4bc23.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="271"
+		data-flex-basis="651px"
+	
+>
+job 目录下新建 flume-dir-hdfs.conf 配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">    a3.sources = r3
+</span></span><span class="line"><span class="cl">    a3.sinks = k3
+</span></span><span class="line"><span class="cl">    a3.channels = c3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe/configure the source
+</span></span><span class="line"><span class="cl">    <span class="ni">#定义source类型</span>
+</span></span><span class="line"><span class="cl">    a3.sources.r3.type = TAILDIR
+</span></span><span class="line"><span class="cl">    a3.sources.r3.positionFile = /export/server/apache-flume-1.9.0-bin/tail_dir.json
+</span></span><span class="line"><span class="cl">    <span class="ni">#注意</span>！！这里我把软链接flume换成了本来的真实目录apache-flume-1.9.0-bin，原因后面讲
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="ni">#文件组</span>
+</span></span><span class="line"><span class="cl">    a3.sources.r3.filegroups = f1 f2
+</span></span><span class="line"><span class="cl">    a3.sources.r3.filegroups.f1 = /export/server/flume/files/.*file.*
+</span></span><span class="line"><span class="cl">    a3.sources.r3.filegroups.f2 = /export/server/flume/files2/.*log.*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    # Describe the sink
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.type = hdfs
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.path = hdfs://linux01:8020/flume/upload2/%Y%m%d/%H
+</span></span><span class="line"><span class="cl">    <span class="ni">#上传文件的前缀</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.filePrefix = upload-
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否按照时间滚动文件夹</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.round = true
+</span></span><span class="line"><span class="cl">    <span class="ni">#多少时间单位创建一个新的文件夹</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.roundValue = 1
+</span></span><span class="line"><span class="cl">    <span class="ni">#重新定义时间单位</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.roundUnit = hour
+</span></span><span class="line"><span class="cl">    <span class="ni">#是否使用本地时间戳</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.useLocalTimeStamp = true
+</span></span><span class="line"><span class="cl">    <span class="ni">#积攒多少个</span> Event 才 flush 到 HDFS 一次
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.batchSize = 100
+</span></span><span class="line"><span class="cl">    <span class="ni">#设置文件类型</span>，可支持压缩
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.fileType = DataStream
+</span></span><span class="line"><span class="cl">    <span class="ni">#多久生成一个新的文件</span>
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.rollInterval = 60
+</span></span><span class="line"><span class="cl">    <span class="ni">#设置每个文件的滚动大小大概是</span> 128M
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.rollSize = 134217700
+</span></span><span class="line"><span class="cl">    <span class="ni">#文件的滚动与</span> Event 数量无关
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.hdfs.rollCount = 0
+</span></span><span class="line"><span class="cl">    # Use a channel which buffers events in memory
+</span></span><span class="line"><span class="cl">    a3.channels.c3.type = memory
+</span></span><span class="line"><span class="cl">    a3.channels.c3.capacity = 1000
+</span></span><span class="line"><span class="cl">    a3.channels.c3.transactionCapacity = 100
+</span></span><span class="line"><span class="cl">    # Bind the source and sink to the channel
+</span></span><span class="line"><span class="cl">    a3.sources.r3.channels = c3
+</span></span><span class="line"><span class="cl">    a3.sinks.k3.channel = c3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>hdfs 文件中提前创建好 upload2 文件夹：</p>
+<blockquote>
+<p>hdfs dfs -mkdir /flume/upload2
+flume 文件夹中创建 files 和 files2 文件夹，分别在里面写 file1.txt 和 log1.log 用于追加内容让 flume 任务监控。</p></blockquote>
+<p><img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11.png"
+	width="987"
+	height="232"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11_hu_3d3be8253f4ea89.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-11_hu_35e2622993d720d4.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="425"
+		data-flex-basis="1021px"
+	
+>
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12.png"
+	width="954"
+	height="188"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12_hu_ff914089d72061b5.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-12_hu_8ba92ad258b85007.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="507"
+		data-flex-basis="1217px"
+	
+></p>
+<p>flume 文件下启动监控任务：</p>
+<blockquote>
+<p>bin/flume-ng agent -c conf/ -n a3 -f job/flume-taildir-hdfs.conf</p></blockquote>
+<p>用 echo 命令向 file1.txt 和 log1.log 追加内容，追加的内容就会被 flume 检测到，filume 就会把追加的新内容上传到 hdfs 的 upload2 文件夹。
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13.png"
+	width="2338"
+	height="789"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13_hu_496ca9bcf5e7b220.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-13_hu_a6a4961d82b88ca0.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="296"
+		data-flex-basis="711px"
+	
+>
+追加的内容被检测到，上传到 hdfs，案例成功！
+<strong>注意！</strong></p>
+<p>配置文件中，之前是 a3.sources.r3.positionFile = /export/server/flume/tail_dir.json，此时启动 flume 任务能成功，但是追加的内容不会上传到 hdfs，也就是该案例没有成功。去 logs 文件中查看 flume.log 日志，发现有一段报错如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="w">    </span><span class="n">21</span><span class="w"> </span><span class="n">四月</span><span class="w"> </span><span class="n">2024</span><span class="w"> </span><span class="n">22</span><span class="p">:</span><span class="n">52</span><span class="p">:</span><span class="n">16</span><span class="p">,</span><span class="n">844</span><span class="w"> </span><span class="n">ERROR</span><span class="w"> </span><span class="o">[</span><span class="n">conf</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">poller</span><span class="o">-</span><span class="n">0</span><span class="o">]</span><span class="w"> </span><span class="p">(</span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">node</span><span class="p">.</span><span class="na">AbstractConfigurationProvider</span><span class="p">.</span><span class="na">loadSources</span><span class="p">:</span><span class="n">355</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">Source</span><span class="w"> </span><span class="n">r3</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">been</span><span class="w"> </span><span class="n">removed</span><span class="w"> </span><span class="n">due</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">during</span><span class="w"> </span><span class="n">configuration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">FlumeException</span><span class="p">:</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="n">creating</span><span class="w"> </span><span class="n">positionFile</span><span class="w"> </span><span class="n">parent</span><span class="w"> </span><span class="n">directories</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">source</span><span class="p">.</span><span class="na">taildir</span><span class="p">.</span><span class="na">TaildirSource</span><span class="p">.</span><span class="na">configure</span><span class="p">(</span><span class="n">TaildirSource</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">170</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">conf</span><span class="p">.</span><span class="na">Configurables</span><span class="p">.</span><span class="na">configure</span><span class="p">(</span><span class="n">Configurables</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">41</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">node</span><span class="p">.</span><span class="na">AbstractConfigurationProvider</span><span class="p">.</span><span class="na">loadSources</span><span class="p">(</span><span class="n">AbstractConfigurationProvider</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">325</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">node</span><span class="p">.</span><span class="na">AbstractConfigurationProvider</span><span class="p">.</span><span class="na">getConfiguration</span><span class="p">(</span><span class="n">AbstractConfigurationProvider</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">105</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">node</span><span class="p">.</span><span class="na">PollingPropertiesFileConfigurationProvider$FileWatcherRunnable</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">PollingPropertiesFileConfigurationProvider</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">145</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">concurrent</span><span class="p">.</span><span class="na">Executors$RunnableAdapter</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">Executors</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">511</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">concurrent</span><span class="p">.</span><span class="na">FutureTask</span><span class="p">.</span><span class="na">runAndReset</span><span class="p">(</span><span class="n">FutureTask</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">308</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">concurrent</span><span class="p">.</span><span class="na">ScheduledThreadPoolExecutor$ScheduledFutureTask</span><span class="p">.</span><span class="na">access$301</span><span class="p">(</span><span class="n">ScheduledThreadPoolExecutor</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">180</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">concurrent</span><span class="p">.</span><span class="na">ScheduledThreadPoolExecutor$ScheduledFutureTask</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">ScheduledThreadPoolExecutor</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">294</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">concurrent</span><span class="p">.</span><span class="na">ThreadPoolExecutor</span><span class="p">.</span><span class="na">runWorker</span><span class="p">(</span><span class="n">ThreadPoolExecutor</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">1149</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">util</span><span class="p">.</span><span class="na">concurrent</span><span class="p">.</span><span class="na">ThreadPoolExecutor$Worker</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">ThreadPoolExecutor</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">624</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">lang</span><span class="p">.</span><span class="na">Thread</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">750</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Caused</span><span class="w"> </span><span class="n">by</span><span class="p">:</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">file</span><span class="p">.</span><span class="na">FileAlreadyExistsException</span><span class="p">:</span><span class="w"> </span><span class="o">/</span><span class="n">export</span><span class="o">/</span><span class="n">server</span><span class="o">/</span><span class="n">flume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">sun</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">fs</span><span class="p">.</span><span class="na">UnixException</span><span class="p">.</span><span class="na">translateToIOException</span><span class="p">(</span><span class="n">UnixException</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">88</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">sun</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">fs</span><span class="p">.</span><span class="na">UnixException</span><span class="p">.</span><span class="na">rethrowAsIOException</span><span class="p">(</span><span class="n">UnixException</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">102</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">sun</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">fs</span><span class="p">.</span><span class="na">UnixException</span><span class="p">.</span><span class="na">rethrowAsIOException</span><span class="p">(</span><span class="n">UnixException</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">107</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">sun</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">fs</span><span class="p">.</span><span class="na">UnixFileSystemProvider</span><span class="p">.</span><span class="na">createDirectory</span><span class="p">(</span><span class="n">UnixFileSystemProvider</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">384</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">file</span><span class="p">.</span><span class="na">Files</span><span class="p">.</span><span class="na">createDirectory</span><span class="p">(</span><span class="n">Files</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">674</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">file</span><span class="p">.</span><span class="na">Files</span><span class="p">.</span><span class="na">createAndCheckIsDirectory</span><span class="p">(</span><span class="n">Files</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">781</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">nio</span><span class="p">.</span><span class="na">file</span><span class="p">.</span><span class="na">Files</span><span class="p">.</span><span class="na">createDirectories</span><span class="p">(</span><span class="n">Files</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">727</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">at</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">flume</span><span class="p">.</span><span class="na">source</span><span class="p">.</span><span class="na">taildir</span><span class="p">.</span><span class="na">TaildirSource</span><span class="p">.</span><span class="na">configure</span><span class="p">(</span><span class="n">TaildirSource</span><span class="p">.</span><span class="na">java</span><span class="p">:</span><span class="n">168</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">...</span><span class="w"> </span><span class="n">11</span><span class="w"> </span><span class="n">more</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>给 chatgpt 看看：
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14.png"
+	width="2367"
+	height="575"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14_hu_d8ff180d4f856e7e.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-14_hu_1b7cc2868b1adaee.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="411"
+		data-flex-basis="987px"
+	
+></p>
+<p>大概意思是 positionfile 文件创建失败，原因是出现命名冲突。因为我的 flume 是个软链接，类似于快捷方式，但是写到配置文件里面，flume 程序就会把配置文件的 flume 当成真实目录，进而就会尝试创建名为 flume 的目录并且去进到创建的 flume 目录创建 r3，然而我已经存在了名为 flume 的软链接，程序就会创建 flume 目录失败，进而无法创建 r3。所以把配置文件的 flume 换成真实的 apache-flume-1.9.0-bin 目录就可以了，这样就可以生成 r3，也就是 positionfile = tail_dir.json 文件。当然另一种解决方法就是把 positionfile 的位置放到 flume 软链接外面。</p>
+<p>tail_dir.json 文件内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="p">{</span><span class="s2">&#34;inode&#34;</span><span class="p">:</span><span class="mi">83899573</span><span class="p">,</span><span class="s2">&#34;pos&#34;</span><span class="p">:</span><span class="mi">44</span><span class="p">,</span><span class="s2">&#34;file&#34;</span><span class="p">:</span><span class="s2">&#34;/export/server/flume/files/file1.txt&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">inode是文件的唯一标识</span><span class="err">，即使文件重命名也不会变，除非文件删除</span>
+</span></span><span class="line"><span class="cl"><span class="n">pos表示读到哪里</span>
+</span></span><span class="line"><span class="cl"><span class="n">file</span><span class="err">：监控文件的绝对路径</span>
+</span></span><span class="line"><span class="cl"><span class="n">json文件靠inode和file两个值表示pos位置信息</span><span class="err">。</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意！ log4j 日志框架每天凌晨会自动把前一天的 hive.log 的文件改名，后缀加上日期，这点对我们监控空间极不友好，假如我们监控的是 hive.log，然而 hive.log 会自动更名 hive.log.2024-xx-xx,监测的文件名发生改变,而 inode 不变，然而 json 文件中记录的绝对路径仍然是 hive.log，此时的 hive.log 是新的文件，inode 变化，就无法实现断点续传。</p>
+<p>解决方案：1）不使用 log4j 2）修改 flume 源码包
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15.png"
+	width="1254"
+	height="358"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15_hu_ba0e6aa6ca72876.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-15_hu_7ea1071690105aa1.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="350"
+		data-flex-basis="840px"
+	
+>
+<strong>修改源码包的 TailFile 和 ReliableTaildirEventReader：</strong>
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16.png"
+	width="1832"
+	height="407"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16_hu_8a8bb29403f12b75.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-16_hu_b5c7c5bcf5a462e7.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="450"
+		data-flex-basis="1080px"
+	
+>
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17.png"
+	width="1728"
+	height="1402"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17_hu_2651a7ca432bfddb.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-17_hu_f849167e43dfc987.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="123"
+		data-flex-basis="295px"
+	
+>
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18.png"
+	width="1742"
+	height="1357"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18_hu_41296967dda0ef4e.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-18_hu_b14b812135d32750.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="128"
+		data-flex-basis="308px"
+	
+>
+修改后重新打包生成 flume-taildir-source-1.9.0.jar,进入 flume/lib 目录下，把原来的 jar 包替换掉：
+<img src="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19.png"
+	width="1593"
+	height="96"
+	srcset="/zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19_hu_9bc37188bd235dcd.png 480w, /zh-cn/post/2024/04/flume%E5%85%A5%E9%97%A8--%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3/image-19_hu_a5fd9ba123f64dc8.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1659"
+		data-flex-basis="3982px"
+	
+>
+把原来的后缀改成 bak。</p>
 
 </section>
 
