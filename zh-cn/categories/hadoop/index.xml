@@ -29,12 +29,8 @@
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;特点&#34;&gt;&lt;a href=&#34;#%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;特点
 &lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;-&lt;strong&gt;顺序一致性&lt;/strong&gt;：从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中； -&lt;strong&gt;原子性&lt;/strong&gt;：所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况，一次数据更新要么成功要么失败。 -&lt;strong&gt;单一视图（全局数据一致）&lt;/strong&gt;：每个 server 保存相同的数据副本，无论 client 连接哪个 server，看到的数据一致； -&lt;strong&gt;可靠性&lt;/strong&gt;：一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改； -&lt;strong&gt;实时性&lt;/strong&gt;：一旦一个事务被成功应用后，在一定时间范围内，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;**顺序一致性：**从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中；&lt;/li&gt;
-&lt;li&gt;**原子性：**所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况，一次数据更新要么成功要么失败。&lt;/li&gt;
-&lt;li&gt;**单一视图（全局数据一致）：**每个 server 保存相同的数据副本，无论 client 连接哪个 server，看到的数据一致；&lt;/li&gt;
-&lt;li&gt;**可靠性：**一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改；&lt;/li&gt;
-&lt;li&gt;**实时性：**一旦一个事务被成功应用后，在一定时间范围内，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。&lt;/li&gt;
 &lt;li&gt;集群中只要有&lt;strong&gt;半数以上节点存活&lt;/strong&gt;，zk 集群就可以正常服务，所以 zk 适合安装奇数台。&lt;/li&gt;
 &lt;li&gt;一个 leader，多个 follower，&lt;strong&gt;leader 挂掉之后会从 follower 中重新选举&lt;/strong&gt;。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
@@ -111,11 +107,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;**标识节点序号  **&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;标识节点序号&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;分别在三台主机的 dataDir 目录下新建 myid 文件,并写入对应的节点标识。Zookeeper 集群通过 myid 文件识别集群节点，并通过上文配置的节点通信端口和选举端口来进行节点通信，选举出 Leader 节点。&lt;/p&gt;
 &lt;p&gt;在&lt;strong&gt;每个服务器&lt;/strong&gt;上的/export/server/zookeeper/下创建 data 目录，在里面创建 myid 文件并写入各自序号，这个序号必须和 zoo.cfg 文件的序号相同。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
-&lt;p&gt;**分别在三台主机上启动 ZK 集群  **&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;分别在三台主机上启动 ZK 集群&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;zkServer.sh start&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;集群验证&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;zkServer.sh status&lt;/p&gt;
@@ -137,7 +133,7 @@
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;Zookeeper 客户端通过 TCP 长连接连接到服务集群，会话 (Session) 从第一次连接开始就已经建立，之 后通过心跳检测机制来保持有效的会话状态。通过这个连接，客户端可以发送请求并接收响应，同时也 可以接收到 Watch 事件的通知。&lt;/li&gt;
-&lt;li&gt;关于会话中另外一个核心的概念是 &lt;strong&gt;sessionTimeOut(会话超时时间)&lt;/strong&gt;，当由于网络故障或者客户端主动 断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。&lt;/li&gt;
+&lt;li&gt;关于会话中另外一个核心的概念是&lt;strong&gt;sessionTimeOut(会话超时时间)&lt;/strong&gt;，当由于网络故障或者客户端主动 断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;watcher&#34;&gt;&lt;a href=&#34;#watcher&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Watcher
 &lt;/h2&gt;&lt;p&gt;Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注 册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是 Zookeeper 实现分布式协调服务的重要特性。&lt;/p&gt;
@@ -264,8 +260,8 @@
 &lt;h3 id=&#34;节点类型&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点类型
 &lt;/h3&gt;&lt;p&gt;Zookeeper 中节点可以分为两大类：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;**持久节点 ：**节点一旦创建，除非被主动删除，否则一直存在；&lt;/p&gt;
-&lt;p&gt;**临时节点 ：**一旦创建该节点的客户端会话失效，则所有该客户端创建的临时节点都会被删除。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;持久节点&lt;/strong&gt;：节点一旦创建，除非被主动删除，否则一直存在；&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;临时节点&lt;/strong&gt;：一旦创建该节点的客户端会话失效，则所有该客户端创建的临时节点都会被删除。&lt;/p&gt;
 &lt;p&gt;临时节点和持久节点都可以添加一个特殊的属性： SEQUENTIAL ，代表该节点是否具有递增属性。如果指定该属性，那么在这个节点创建时，Zookeeper 会自动在其节点名称后面追加一个由父节点维护的递增数字。这个递增数字可以被用于为所有的事件进行全局排序，这样客户端可以通过顺序号推断事件的顺序。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;节点信息&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e4%bf%a1%e6%81%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点信息
 &lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://cdn.jsdelivr.net/gh/QingQiuGeek/imgRepo/picGo/2025-08-01-22-10-57.png&#34;
@@ -353,7 +349,7 @@
 &lt;p&gt;version No is not valid : /hadoop   #无效的版本号&lt;/p&gt;
 &lt;p&gt;[zk: localhost:2181(CONNECTED) 37] delete /hadoop 1&lt;/p&gt;
 &lt;p&gt;[zk: localhost:2181(CONNECTED) 38]&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;要想删除某个节点及其所有后代节点，可以使用递归删除，命令为 **rmr path **。&lt;/p&gt;
+&lt;p&gt;要想删除某个节点及其所有后代节点，可以使用递归删除，命令为&lt;strong&gt;rmr path&lt;/strong&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;退出-zk&#34;&gt;&lt;a href=&#34;#%e9%80%80%e5%87%ba-zk&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;退出 ZK 
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;[zk: localhost:2181(CONNECTED) 12] quit&lt;/p&gt;&lt;/blockquote&gt;
