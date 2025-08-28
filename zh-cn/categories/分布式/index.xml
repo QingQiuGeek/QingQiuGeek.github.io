@@ -7,7 +7,439 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 11 Jul 2024 23:06:25 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 04 Sep 2024 00:12:24 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>一文入门大数据准流式计算引擎 Spark【万字详解，全网最新】</title>
+        <link>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</link>
+        <pubDate>Wed, 04 Sep 2024 00:12:24 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</guid>
+        <description>&lt;h2 id=&#34;spark-简介&#34;&gt;&lt;a href=&#34;#spark-%e7%ae%80%e4%bb%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark 简介
+&lt;/h2&gt;&lt;p&gt;Spark 于 2009 年诞生于加州大学伯克利分校 AMPLab，2013 年被捐赠给 Apache 软件基金会，2014 年 2 月成为 Apache 的顶级项目。&lt;/p&gt;
+&lt;p&gt;相对于 MapReduce 的批处理计算，&lt;strong&gt;Spark 基于内存计算&lt;/strong&gt;，可以带来上百倍的性能提升，因此它成为继 MapReduce 之后，最为广泛使用的&lt;strong&gt;分布式计算框架、大数据分析引擎&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;spark-特点&#34;&gt;&lt;a href=&#34;#spark-%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark 特点
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;快&lt;/strong&gt;：采用&lt;strong&gt;DAG 执行引擎，支持循环数据流和内存计算&lt;/strong&gt;，使得 Spark 速度更快，在内存中的速度 是 Hadoop MR 的百倍，在磁盘上的速度是 Hadoop MR 的十倍(官网数据)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;通用&lt;/strong&gt;：Spark 提供了统一的解决方案。Spark 可以⽤于批处理、交互式查询（Spark SQL）、实时流处理（Spark Streaming）、机器学习（Spark MLlib）和图计算（GraphX）。这些不同类型的处理都可以在同⼀个应用中无缝使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;易用&lt;/strong&gt;：Spark 支持 Java、Python、Scala 的 API 和超过 80 种⾼级算法，⽽且⽀持交互式的 Python 和 Scala 的 shell。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;兼容&lt;/strong&gt;：Spark 可以使⽤ Hadoop 的 YARN 和 Apache Mesos 作为它的资源管理和调度器，器，并且不需要任何数据迁移就可以处理所有 Hadoop 支持的数据，包括 HDFS、HBase 和 Cassandra 等。Spark 也可以不依赖于第三⽅的资源管理和调度器，它实现了 Standalone 作为其内置的资源管理和调度框架。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;spark-和-mr-处理任务对比&#34;&gt;&lt;a href=&#34;#spark-%e5%92%8c-mr-%e5%a4%84%e7%90%86%e4%bb%bb%e5%8a%a1%e5%af%b9%e6%af%94&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark 和 MR 处理任务对比
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image.png&#34;
+	width=&#34;1035&#34;
+	height=&#34;335&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image_hu_89e9ef41d7701caf.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image_hu_f7a2df21a1ec0d1c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;308&#34;
+		data-flex-basis=&#34;741px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-1.png&#34;
+	width=&#34;1087&#34;
+	height=&#34;353&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-1_hu_970b3d5f166717f5.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-1_hu_7983b45c642d74f9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;307&#34;
+		data-flex-basis=&#34;739px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;spark-组件&#34;&gt;&lt;a href=&#34;#spark-%e7%bb%84%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark 组件
+&lt;/h2&gt;&lt;h3 id=&#34;spark-core&#34;&gt;&lt;a href=&#34;#spark-core&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark Core
+&lt;/h3&gt;&lt;p&gt;Spark Core 实现了 Spark 的基本功能，包含任务调度、内存管理、错误恢复、与存储系统 交互等模块。Spark Core 中还包含 了对弹性分布式数据集(resilient distributed dataset，简称 RDD)的 API 定义。&lt;/p&gt;
+&lt;h4 id=&#34;rdd-算子&#34;&gt;&lt;a href=&#34;#rdd-%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 算子
+&lt;/h4&gt;&lt;h5 id=&#34;为什么有-rdd&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%9c%89-rdd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么有 RDD？
+&lt;/h5&gt;&lt;p&gt;在许多迭代式算法(比如机器学习、图算法等)和交互式数据挖掘中，不同计算阶段之间会重用中间结果，即&lt;strong&gt;一个阶段的输出结果会作为下一个阶段的输入&lt;/strong&gt;。但是， 之前的 &lt;strong&gt;MapReduce 框架采用非循环式的数据流模型&lt;/strong&gt;，把中间结果写入到 HDFS 中，带来了大量的数据复制、磁盘 IO 和序列化开销，且这些框架只能支持一些 特定的计算模式(map/reduce)，并没有提供一种&lt;strong&gt;通用的数据抽象&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;RDD 提供了一个抽象的数据模型，让我们不必担心底层数据的分布式特性，只需&lt;strong&gt;将具体的应用逻辑表达为一系列转换操作(函数)&lt;/strong&gt; ，不同 RDD 之间的转换操作之间还可以形成依赖关系，进而实现&lt;strong&gt;管道化&lt;/strong&gt;，从而&lt;strong&gt;避免了中间结果的存储&lt;/strong&gt;，大大降低数据复制、磁盘 IO 和序列化开销，并且还提供了更多的 API 操作！&lt;/p&gt;
+&lt;h5 id=&#34;rdd-介绍&#34;&gt;&lt;a href=&#34;#rdd-%e4%bb%8b%e7%bb%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 介绍
+&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;RDD（Resilient Distributed Dataset）叫做&lt;strong&gt;弹性分布式数据集&lt;/strong&gt;，是 Spark 中&lt;strong&gt;最基本的数据抽象&lt;/strong&gt;，是 Spark 计算的基石，它代表⼀个不可变、可分区、里面的元素可并行计算的集合。&lt;/li&gt;
+&lt;li&gt;RDD 具有数据流模型的特点：自动容错、位置感知性调度和可伸缩性。RDD 允许用户在执⾏多个查询时显式地将⼯作集缓存在内存中，后续的查询能够&lt;strong&gt;重⽤⼯作集&lt;/strong&gt;，这极⼤地提升了查询速度。&lt;/li&gt;
+&lt;li&gt;MR 中对数据是没有进行抽象的，而在 Spark 中对数据进行了抽象，提供⼀些列处理⽅法也就是 RDD，为用户屏蔽了底层对数据的复杂抽象和处理，为⽤户提供了⼀组⽅便 的数据转换与求值方法，好比 Java 中类的封装。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;注意 : RDD 本身是不存储数据，而是记录了数据的位置，数据的转换关系(调用什么方法、传入什么函数)！！！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;以下是 RDD 源码翻译解读：&lt;/strong&gt; &lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-2.png&#34;
+	width=&#34;1083&#34;
+	height=&#34;1150&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-2_hu_1a232703d894b756.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-2_hu_b23baff52680b4e9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;94&#34;
+		data-flex-basis=&#34;226px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;rdd-特点&#34;&gt;&lt;a href=&#34;#rdd-%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 特点
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;弹性体现：
+&lt;ol&gt;
+&lt;li&gt;存储的弹性：内存与磁盘的自动切换；&lt;/li&gt;
+&lt;li&gt;容错的弹性：RDD 的血统（Lineag）会&lt;strong&gt;记录 RDD 的元数据信息和转换行为&lt;/strong&gt; ，当 RDD 的部分分区数据丢失时，它可以根据这些信息来重新运算并恢复丢失的数据分区。&lt;/li&gt;
+&lt;li&gt;计算的弹性：计算出错重试机制；&lt;/li&gt;
+&lt;li&gt;分片的弹性：可根据需要重新分片；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;分布式：数据存储在大数据集群不同节点上&lt;/li&gt;
+&lt;li&gt;数据集：RDD&lt;strong&gt;封装了计算逻辑&lt;/strong&gt;，并不保存数据&lt;/li&gt;
+&lt;li&gt;数据抽象：RDD 是⼀个抽象，需要具体实现&lt;/li&gt;
+&lt;li&gt;不可变：RDD 封装的&lt;strong&gt;计算逻辑不可改变&lt;/strong&gt;，想要改变只能产⽣新的 RDD&lt;/li&gt;
+&lt;li&gt;可分区、并行计算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;rdd-做了什么&#34;&gt;&lt;a href=&#34;#rdd-%e5%81%9a%e4%ba%86%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 做了什么
+&lt;/h4&gt;&lt;p&gt;从计算的角度来讲，数据处理过程中需要计算资源（内存 &amp;amp; CPU）和计算模型（逻辑）。执⾏时，需要&lt;strong&gt;将计算资源 和计算模型进行协调和整合&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;Spark 框架在执行时，先申请资源，然后将应⽤程序的数据处理逻辑&lt;strong&gt;分解成⼀个⼀个的计算任务&lt;/strong&gt;。然后将&lt;strong&gt;任务分发到已经分配资源的计算节点&lt;/strong&gt;上, &lt;strong&gt;按照指定的计算模型进行数据计算&lt;/strong&gt;。最后得到计算结果。&lt;/p&gt;
+&lt;h4 id=&#34;rdd-的转换和行动操作&#34;&gt;&lt;a href=&#34;#rdd-%e7%9a%84%e8%bd%ac%e6%8d%a2%e5%92%8c%e8%a1%8c%e5%8a%a8%e6%93%8d%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 的转换和行动操作
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;RDD 算子分为两种类型的操作：&lt;strong&gt;转换操作和行动操作&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;转换操作是返回⼀个新的 RDD 的操作&lt;/strong&gt;，比如 map 和 flatMap&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;行动操作则是向 Driver 返回结果或将结果写出到外部存在设备&lt;/strong&gt;，比如 collect 和 saveAsTextFile&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;transformation转换算子概述&#34;&gt;&lt;a href=&#34;#transformation%e8%bd%ac%e6%8d%a2%e7%ae%97%e5%ad%90%e6%a6%82%e8%bf%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  Transformation(转换)算子概述
+&lt;/h5&gt;&lt;p&gt;RDD 中的所有转换都是&lt;strong&gt;延迟加载&lt;/strong&gt;的，它们只是记住这些应⽤到基础数据集上的转换动作，并&lt;strong&gt;不会直接计算结果&lt;/strong&gt;。只有当发生⼀个要求返回结果给 Driver 的动作时，这些转换才会真正运 行。&lt;strong&gt;这样可以在 Action 时对 RDD 操作形成 DAG 有向无环图进行 Stage 的划分和并行优化，这这种设计让 Spark 更加有效率地运行！&lt;/strong&gt; 列举部分算子：
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-3.png&#34;
+	width=&#34;1023&#34;
+	height=&#34;1298&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-3_hu_c5d2997a79139ab.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-3_hu_cb7a2e436729642b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;78&#34;
+		data-flex-basis=&#34;189px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h5 id=&#34;action行动算子概述&#34;&gt;&lt;a href=&#34;#action%e8%a1%8c%e5%8a%a8%e7%ae%97%e5%ad%90%e6%a6%82%e8%bf%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Action(行动)算子概述  
+&lt;/h5&gt;&lt;p&gt;&lt;strong&gt;在 RDD 上运⾏计算,并返回结果给 Driver 或写入文件系统&lt;/strong&gt;， 列举部分算子：
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-4.png&#34;
+	width=&#34;1251&#34;
+	height=&#34;1100&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-4_hu_9d60be3e9c41d5f1.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-4_hu_778af530c8906f5b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;113&#34;
+		data-flex-basis=&#34;272px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;rdd-持久化和缓存&#34;&gt;&lt;a href=&#34;#rdd-%e6%8c%81%e4%b9%85%e5%8c%96%e5%92%8c%e7%bc%93%e5%ad%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 持久化和缓存
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Spark 速度非常快的原因之⼀，就是在不同操作中可以&lt;strong&gt;在内存中持久化或缓存多个数据集&lt;/strong&gt;。当持久化某个 RDD 后， 每⼀个节点都将把计算的分片结果保存在内存中，并在对此 RDD 或衍⽣出的 RDD 进行的其他动作中&lt;strong&gt;重⽤&lt;/strong&gt;，这使得后续的动作变得更加迅速！&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缓存是 Spark 构建迭代式算法和快速交互式查询的关键&lt;/strong&gt;。如果⼀个有持久化数据的节点发⽣故障，&lt;strong&gt;Spark 会在需要⽤到缓存的数据时重算丢失的数据分区&lt;/strong&gt;。如果希望节点故障的情况不会拖累我们的执⾏速度，也可以把数据备份到多个节点上。&lt;/li&gt;
+&lt;li&gt;RDD 通过 &lt;strong&gt;persist 或 cache 方法&lt;/strong&gt;可以将前面的计算结果缓存，但是&lt;strong&gt;并不是这两个方法被调用时立即缓存&lt;/strong&gt;，而是触发后面的 action 时，该 RDD 将会被缓存在 计算节点的内存中，并供后面重用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;存储级别&#34;&gt;&lt;a href=&#34;#%e5%ad%98%e5%82%a8%e7%ba%a7%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;存储级别
+&lt;/h4&gt;&lt;p&gt;默认的存储级别都是&lt;strong&gt;仅在内存存储一份&lt;/strong&gt;，Spark 的存储级别还有好多种，存储级别在 object StorageLevel 中定义的。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-5.png&#34;
+	width=&#34;1080&#34;
+	height=&#34;332&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-5_hu_c4d5bafc32f65d98.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-5_hu_5824fac9db300d96.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;325&#34;
+		data-flex-basis=&#34;780px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-6.png&#34;
+	width=&#34;1097&#34;
+	height=&#34;562&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-6_hu_dce8c9f1f7f4dbd6.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-6_hu_c6cb38245d53f62f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;468px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;checkpoint-检查点机制&#34;&gt;&lt;a href=&#34;#checkpoint-%e6%a3%80%e6%9f%a5%e7%82%b9%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Checkpoint 检查点机制  
+&lt;/h4&gt;&lt;p&gt;Spark 中对于数据的保存除了持久化操作之外，还提供了⼀种&lt;strong&gt;检查点的机制&lt;/strong&gt;，检查点（本质是通过将 RDD 写入 Disk 做检查点）是为了&lt;strong&gt;通过血统（lineage）做持久化容错的辅助&lt;/strong&gt;，lineage 过长会造成容错成本过高，这样就不如在中间阶段做检查点容错，如果之后有节点出现问题⽽丢失分区，&lt;strong&gt;从做检查点的 RDD 开始重做 Lineage&lt;/strong&gt;，就会减少资源开销。检查点通过将数据写⼊到 HDFS 文件系统实现了 RDD 的检查点功能。&lt;/p&gt;
+&lt;h4 id=&#34;rdd-宽窄依赖&#34;&gt;&lt;a href=&#34;#rdd-%e5%ae%bd%e7%aa%84%e4%be%9d%e8%b5%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RDD 宽窄依赖
+&lt;/h4&gt;&lt;p&gt;RDD 和 它依赖的父 RDD 的关系有两种不同的类型，&lt;/p&gt;
+&lt;p&gt;宽依赖(wide dependency/shuffle dependency) ：父 RDD 的一个分区被子 RDD 的多个分区依赖(涉及到 shuffle)&lt;/p&gt;
+&lt;p&gt;窄依赖(narrow dependency）：父 RDD 的一个分区只会被子 RDD 的一个分区依赖；
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-7.png&#34;
+	width=&#34;1065&#34;
+	height=&#34;289&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-7_hu_51d87d4518550f98.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-7_hu_a820f9abd888888e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;368&#34;
+		data-flex-basis=&#34;884px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-8.png&#34;
+	width=&#34;1033&#34;
+	height=&#34;754&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-8_hu_95162decf3b9916a.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-8_hu_a724399596932073.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;328px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h5 id=&#34;为什么要设计宽窄依赖&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e8%ae%be%e8%ae%a1%e5%ae%bd%e7%aa%84%e4%be%9d%e8%b5%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么要设计宽窄依赖
+&lt;/h5&gt;&lt;p&gt;对于窄依赖： 窄依赖的多个分区可以并行计算；窄依赖的一个分区的数据如果丢失只需要重新计算对应的分区的数据就可以了。&lt;/p&gt;
+&lt;p&gt;对于宽依赖： 划分 Stage(阶段)的依据，对于宽依赖，必须等到上一阶段计算完成才能计算下 一阶段。&lt;/p&gt;
+&lt;h5 id=&#34;dag-生成和划分-stage&#34;&gt;&lt;a href=&#34;#dag-%e7%94%9f%e6%88%90%e5%92%8c%e5%88%92%e5%88%86-stage&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DAG 生成和划分 Stage
+&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;DAG 是什么？&lt;/strong&gt;&lt;br&gt;
+DAG(有向无环图)指的是&lt;strong&gt;数据转换执行的过程&lt;/strong&gt;，有方向，无闭环(其实就是 RDD 执行的流程)；&lt;strong&gt;原始的 RDD 通过一系列的转换操作就形成了 DAG 有向无环图&lt;/strong&gt;，任务执行时，可以按照 DAG 的描述，执行真正的计算(数据被操作的一个过程)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DAG 的边界&lt;/strong&gt;&lt;br&gt;
+开始：通过 SparkContext 创建的 RDD&lt;br&gt;
+结束：触发 Action，一旦触发 Action 就会形成一个完整的 DAG&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;DAG 划分 Stage&lt;/strong&gt; &lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-9.png&#34;
+	width=&#34;1004&#34;
+	height=&#34;334&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-9_hu_a38ceff118ea72f0.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-9_hu_244cfc01d9359b3c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;300&#34;
+		data-flex-basis=&#34;721px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;一个 Spark 程序可以有多个 DAG&lt;/strong&gt;(有几个 Action，就有几个 DAG)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;一个 DAG 可以有多个 Stage&lt;/strong&gt;(根据宽依赖/shuffle 进行划分)。&lt;/li&gt;
+&lt;li&gt;同一个 Stage 可以有多个 Task 并行执行(task 数=分区数，如上图，Stage1 中 有三个分区 P1、P2、P3，对应的也有三个 Task)。&lt;/li&gt;
+&lt;li&gt;可以看到这个 DAG 中 &lt;strong&gt;reduceByKey 操作是一个宽依赖，Spark 内核会以此为边界将其前后划分成不同的 Stage。&lt;/strong&gt; 同时在图 Stage1 中，从 textFile 到 flatMap 到 map 都是窄依赖，这几步操作可以形成一个流水线操作，通过 flatMap 操作生成 partition 不用等待整个 RDD 计算结束，可以直接进行 map 操作，这样大大 提高了计算的效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;spark-sql&#34;&gt;&lt;a href=&#34;#spark-sql&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark SQL
+&lt;/h3&gt;&lt;h4 id=&#34;spark-sql-发展精彩&#34;&gt;&lt;a href=&#34;#spark-sql-%e5%8f%91%e5%b1%95%e7%b2%be%e5%bd%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark SQL 发展（精彩）
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;Spark SQL 是构建在 SparkCore 基础之上的⼀个基于 SQL 的计算模块&lt;/strong&gt;。 SparkSQL 的前身叫【Shark】，最开始 Shark 的底层代码优化、sql 的解析、执行引擎等完全基于 Hive（Shark On Hive），Hive 实现了 SQL on Hadoop，使用 MapReduce 执行任务，但是使用 MapReduce 做计算（Hive On MR），使得 Hive 的查询延迟比较高，而 Shark 改写 Hive 的物理执行计划，使用 Shark 代替 MapReduce 物理引擎（Hive On Shark），使用列式内存存储，使得 Shark 执行速度比 Hive 快，然而 Shark 执行计划的生成严重依赖 Hive（Shark On Hive On Shark），想要增加新的优化非常困难； &lt;strong&gt;并且 Hive 是进程级别的并行，Spark 是线程级别的并行&lt;/strong&gt;，所以 Hive 中很多线程不安全的代码不适用于 Shark，所以在 15 年中旬的时候，Shark 负责⼈，将 Shark 项⽬结束掉，重新独⽴出来的⼀个项⽬，就是 SparkSQL，不再依赖 Hive，此后逐渐的形成两条互相独立的业务：SparkSQL 和 Hive-On-Spark。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;如果说 Hive 是将 SQL 转化为 MR，那么 SparkSQL 是将 SQL 转换成 RDD+优化执行，因为我们直接操作 RDD 需要编程实现（学习成本），有了 SQL 我们即使不懂编程也可以实现 RDD 计算！&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&#34;spark-sql-概述&#34;&gt;&lt;a href=&#34;#spark-sql-%e6%a6%82%e8%bf%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark SQL 概述
+&lt;/h4&gt;&lt;p&gt;Spark SQL&lt;strong&gt;主要用于结构化数据（数据分为结构化数据、半结构化数据、非结构化数据）RDD 主要用于处理非结构化、半结构化、结构化数据。与 RDD API 编程式操作不同，Spark SQL 可以使用 SQL 完成数据分析计算&lt;/strong&gt;，Spark SQL 提供的接口为 Spark&lt;strong&gt;提供了有关数据结构和正在执⾏的计算的更多信息&lt;/strong&gt;。在内部，Spark SQL 使⽤这些额外的信息来执⾏&lt;strong&gt;额外的优化&lt;/strong&gt;。有几种与 Spark SQL 交互的⽅法，包括 SQL 和 Dataset API。计算结果时，将使⽤相同的执⾏引擎，这与⽤于表示计算的 API/语⾔⽆关。这种统⼀意味着开发⼈员可以轻松地在不同的 API 之间来回切换，基于 API 的切换提供了表示给定转换的最⾃然的⽅式。&lt;/p&gt;
+&lt;h4 id=&#34;spark-sql-特点&#34;&gt;&lt;a href=&#34;#spark-sql-%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark SQL 特点
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;集成性&lt;/li&gt;
+&lt;li&gt;统一性&lt;/li&gt;
+&lt;li&gt;集成 Hive&lt;/li&gt;
+&lt;li&gt;支持多种数据源&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;spark-sql-数据模型-dataframe-和-dataset&#34;&gt;&lt;a href=&#34;#spark-sql-%e6%95%b0%e6%8d%ae%e6%a8%a1%e5%9e%8b-dataframe-%e5%92%8c-dataset&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark SQL 数据模型 DataFrame 和 Dataset
+&lt;/h4&gt;&lt;p&gt;我们可以通过两种方式使用 Spark，一种是命令式，使用 Spark shell 编程操作 RDD，另一种是通过 SparkSQL 的数据模型 DataFrame 和 Dataset&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DataFrame 和 Dataset 可以理解为是⼀张 mysql 中的⼆维表，表有什么？表头，表名，字段，字段类型。&lt;strong&gt;RDD 其实说白了也是⼀张二维表，但是这张二维表相比较于 DataFrame 和 Dataset 却少了很多东西，比如表头，表名，字段，字段类型，只有数据和操作数据的方法&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;DataFrame 是 1.3 的时候出现的，Dataset 是在 spark 1.6.2 出现的，**早期的时候 DataFrame 叫 SchemaRDD，SchemaRDD 和 RDD 相比，就多了 Schema，所谓元数据信息。**相比 DataFrame，&lt;strong&gt;Dataset 提供了编译时类型检查&lt;/strong&gt;，对于分布式程序来讲，提交⼀次作业要编译、打包、上传、运行，到提交到集群运行时才发现错误，很麻烦，这也是引⼊ Dataset 的⼀个重要原因！&lt;/li&gt;
+&lt;li&gt;⼀般的，将 RDD 称之为 Spark 体系中的第一代编程模型；&lt;strong&gt;DataFrame 比 RDD 多了⼀个 Schema 元数据信息&lt;/strong&gt;，被称之为 Spark 体系中的第⼆代编程模型；Dataset 吸收了 RDD 的优点(强类型推断、函数式编程)和 DataFrame 中的优化(SQL 优化引擎、内存列存储)，成为 Spark 的最新⼀代的编程模型。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-10.png&#34;
+	width=&#34;1205&#34;
+	height=&#34;705&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-10_hu_e1c418e12b863467.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-10_hu_f17bda282b48d1ff.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;170&#34;
+		data-flex-basis=&#34;410px&#34;
+	
+&gt; &lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-11.png&#34;
+	width=&#34;1214&#34;
+	height=&#34;290&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-11_hu_dc655840c25e6a22.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-11_hu_3aebb3b080d30b91.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;418&#34;
+		data-flex-basis=&#34;1004px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;如何进行-sparksql-编&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e8%bf%9b%e8%a1%8c-sparksql-%e7%bc%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何进行 SparkSQL 编
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Spark Core 中，如果想要执行应用程序，需要首先&lt;strong&gt;构建上下文环境对象 SparkContext&lt;/strong&gt;，&lt;strong&gt;Spark SQL 其实可以理解为对 Spark Core 的⼀种封装，不仅仅在模型上进行了封装，上下文环境对象也进行了封装。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;在老的版本中，SparkSQL 提供两种 SQL 查询起始点：⼀个叫&lt;strong&gt;SQLContext&lt;/strong&gt;，⽤于 Spark 自己提供的 SQL 查询； ⼀个叫&lt;strong&gt;HiveContext&lt;/strong&gt;，⽤于连接 Hive 的查询。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SparkSession 是 Spark 最新的 SQL 查询起始点，实质上是 SQLContext 和 HiveContext 的组合&lt;/strong&gt;，所以在 SQLContex 和 HiveContext 上可⽤的 API 在 Spark Session 上同样是可以使⽤的。&lt;/li&gt;
+&lt;li&gt;SparkSession 内部封装了 SparkContext，所以计算实际上是由 sparkContext 完成的。 &lt;strong&gt;构建 SparkSession 需要依赖 SparkConf 或者 SparkContext&lt;/strong&gt;，可以使⽤⼯⼚构建器(Builder ⽅式)模式创建 SparkSession。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;spark-streaming&#34;&gt;&lt;a href=&#34;#spark-streaming&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark Streaming
+&lt;/h3&gt;&lt;h4 id=&#34;简介&#34;&gt;&lt;a href=&#34;#%e7%ae%80%e4%bb%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;简介
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;Spark Streaming 是 Spark 提供的对&lt;strong&gt;实时数据&lt;/strong&gt;进行**流式计算（实时计算）**的组件。提供了用来操作数据流的 API，并且与 Spark Core 中的 RDD API 高度对应。&lt;/li&gt;
+&lt;li&gt;从计算的延迟上⾯，又可以分为&lt;strong&gt;纯实时流式计算和准实时流式计算，SparkStreaming 属于准实时计算框架&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;所谓纯实时的计算，指的是&lt;strong&gt;来⼀条记录(event 事件)，启动⼀次计算的作业&lt;/strong&gt;；离线计算指的是每次计算非常大的⼀批(比如几百 G，好几个 T)数据；准实时则是介于纯实时和离线计算之间的⼀种计算方式，那就是微批处理，即&lt;strong&gt;把大量数据微分成多小批进行计算&lt;/strong&gt;，近似看成流计算。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;流式计算特点&#34;&gt;&lt;a href=&#34;#%e6%b5%81%e5%bc%8f%e8%ae%a1%e7%ae%97%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;流式计算特点
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;数据是无界的(unbounded)&lt;/li&gt;
+&lt;li&gt;数据是动态的&lt;/li&gt;
+&lt;li&gt;计算速度快&lt;/li&gt;
+&lt;li&gt;计算不止一次&lt;/li&gt;
+&lt;li&gt;计算不能终止&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;离线计算特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据是有界的(Bounded)&lt;/li&gt;
+&lt;li&gt;数据静态的&lt;/li&gt;
+&lt;li&gt;计算速度通常较慢&lt;/li&gt;
+&lt;li&gt;计算只执⾏⼀次&lt;/li&gt;
+&lt;li&gt;计算终会终⽌&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;常见流式计算和离线计算框架&#34;&gt;&lt;a href=&#34;#%e5%b8%b8%e8%a7%81%e6%b5%81%e5%bc%8f%e8%ae%a1%e7%ae%97%e5%92%8c%e7%a6%bb%e7%ba%bf%e8%ae%a1%e7%ae%97%e6%a1%86%e6%9e%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;常见流式计算和离线计算框架
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;离线&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;mapreduce&lt;/li&gt;
+&lt;li&gt;spark-core&lt;/li&gt;
+&lt;li&gt;flink 的 dataset&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;流式&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;storm  第⼀代的流式处理框架&lt;/li&gt;
+&lt;li&gt;sparkStreaming（其实是为微批处理）第二代的流式处理框架&lt;/li&gt;
+&lt;li&gt;flink 的 datastream  第三代的流式处理框架
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-12.png&#34;
+	width=&#34;1094&#34;
+	height=&#34;642&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-12_hu_e0935637f0e3394d.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-12_hu_42c4bb90cd92c470.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;170&#34;
+		data-flex-basis=&#34;408px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;sparkstreaming-的基本工作原理&#34;&gt;&lt;a href=&#34;#sparkstreaming-%e7%9a%84%e5%9f%ba%e6%9c%ac%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;SparkStreaming 的基本工作原理
+&lt;/h4&gt;&lt;p&gt;SparkCore 的数据模型是 RDD，SparkSQL 数据模型是 DataFrame 和 DataSet，&lt;strong&gt;SparkStreaming 的数据模型是 DStream，DStream 和 RDD 一样，是一种高级抽象，它基于内存处理连续的数据流，本质上还是 RDD 的基于内存的计算。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;接收实时输入数据流，然后将数据拆分成多个 batch，比如每收集 1 秒的数据封装为⼀个 batch，然后将每个 batch 交给 Spark 的计算引擎进行处理，最后会⽣产出⼀个结果数据流，其中的数据，也是由一个一个的 batch 所组成的。&lt;/li&gt;
+&lt;li&gt;DStream，英⽂全称为 Discretized Stream，中文翻译为“离散流”，它代表了⼀个持续不断的数据流。DStream 可以通过输入数据源来创建，比如 Kafka、Flume、ZMQ 和 Kinesis；也可以通过对其他 DStream 应用高阶函数来创建，比如 map、reduce、join、window。&lt;/li&gt;
+&lt;li&gt;**DStream 的内部，其实是一系列时间上连续的 RDD。DStream 中的每个 RDD 都包含了⼀个时间段内的数据。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-13.png&#34;
+	width=&#34;1087&#34;
+	height=&#34;221&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-13_hu_c85dd40cb892b784.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-13_hu_5a46580c8c95213a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;491&#34;
+		data-flex-basis=&#34;1180px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;对 DStream 应⽤的算子，比如 map，其实在底层会被翻译为对 DStream 中每个 RDD 的操作。比如&lt;strong&gt;对⼀个 DStream 执行⼀个 map 操作，会产生⼀个新的 DStream&lt;/strong&gt;。但是，在底层，其实是对输入 DStream 中&lt;strong&gt;每个时间段的 RDD&lt;/strong&gt;，都来⼀遍 map 操作，然后**⽣成的新的 RDD**，即作为新的 DStream 中的那个时间段的⼀个 RDD。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;sparkstreaming-的缓存&#34;&gt;&lt;a href=&#34;#sparkstreaming-%e7%9a%84%e7%bc%93%e5%ad%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;SparkStreaming 的缓存
+&lt;/h4&gt;&lt;p&gt;SparkStreaming 的缓存，说白了就是 DStream 的缓存，DStream 的缓存就只有⼀个⽅⾯，那就是 DStream 对应的 RDD 缓存，RDD 如何缓存？&lt;strong&gt;rdd.persist()&lt;/strong&gt;，所以 DStream 的缓存说⽩了就是 RDD 的缓存，使⽤ persist()指定，并指定持久化策略，⼤多算⼦默认情况下，持久化策略为 MEMORY_AND_DISK_SER_2&lt;/p&gt;
+&lt;h4 id=&#34;sparkstreaming-的容错&#34;&gt;&lt;a href=&#34;#sparkstreaming-%e7%9a%84%e5%ae%b9%e9%94%99&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;SparkStreaming 的容错
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;每⼀个 Spark Streaming 应⽤，正常来说都是要 7*24 ⼩时运转的，这也是实时计算程序的特点。因为要持续不断的对数据进⾏计算，因此对实时计算应⽤的要求必须进行&lt;strong&gt;容错保底&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;Spark Streaming 程序就必须将足够的信息 checkpoint 到容错的存储系统上，从⽽让它能够从失败中进行恢复。有两种数据需要被 checkpoint：&lt;/li&gt;
+&lt;li&gt;元数据 checkpoint：将定义了流式计算逻辑的信息，保存到容错的存储系统上，⽐如 HDFS。当运行 Spark Streaming 应⽤程序的 Driver 进程所在节点失败时，该信息可以⽤于进⾏恢复。元数据信息包括了： 创建 Spark Streaming 应⽤程序的&lt;strong&gt;配置信息&lt;/strong&gt;，比如 SparkConf 中的信息。 定义了 Spark Stream 应⽤程序的计算逻辑的&lt;strong&gt;DStream 操作信息&lt;/strong&gt;。 定义了那些 job 正在排队，还&lt;strong&gt;未处理的 batch 信息&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;数据 checkpoint：&lt;strong&gt;将实时计算过程中产生的 RDD 的数据保存到可靠的存储系统中&lt;/strong&gt;。 对于一些将多个 batch 的数据进⾏聚合的，有状态的 transformation 操作，这是⾮常有⽤的。在这种 &lt;strong&gt;transformation 操作中，生成的 RDD 是依赖于之前的 batch 的 RDD，这会导致随着时间的推移，RDD 的依赖链条变得越来越长。 要避免由于依赖链条越来越长，导致的⼀起变得越来越长的失败恢复时间，有状态的 transformation 操作执⾏过程中间产⽣的 RDD，会定期地被 checkpoint 到可靠的存储系统上&lt;/strong&gt;，比如 HDFS。从而削减 RDD 的依赖链条，进而缩短失败恢复时，RDD 的恢复时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;dstream-操作&#34;&gt;&lt;a href=&#34;#dstream-%e6%93%8d%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DStream 操作
+&lt;/h4&gt;&lt;p&gt;DStream 上的操作与 RDD 的类似，分为以下两种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Transformations(转换)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;**无状态转换：**每批次处理不依赖于之前批次的数据
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-14.png&#34;
+	width=&#34;965&#34;
+	height=&#34;701&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-14_hu_89af84bc9099ba16.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-14_hu_e344be5ff2174862.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;**有状态转换：**当前批次的处理需要使用之前批次的数据或者中间结果，有状态转换包括基于追踪状态变化的转换(updateStateByKey)和滑动窗口的转换：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Output Operations(输出)/Action&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Output Operations 可以将 DStream 的数据输出到外部的数据库或文件系统。 当某个 Output Operations 被调用时，spark streaming 程序才会开始真正的 计算过程(与 RDD 的 Action 类似)。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-16.png&#34;
+	width=&#34;947&#34;
+	height=&#34;274&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-16_hu_da10acb9d2b6b537.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-16_hu_781bc4d2e6d69df3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;345&#34;
+		data-flex-basis=&#34;829px&#34;
+	
+&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-15.png&#34;
+	width=&#34;940&#34;
+	height=&#34;211&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-15_hu_701c0ed1923876b2.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-15_hu_1494eb3aed1eab78.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;445&#34;
+		data-flex-basis=&#34;1069px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;mllib&#34;&gt;&lt;a href=&#34;#mllib&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MLlib
+&lt;/h3&gt;&lt;p&gt;提供常见的机器学习(ML)功能的程序库。包括分类、回归、聚类、协同过滤等，还提供了模型评估、数据导入等额 外的⽀持功能&lt;/p&gt;
+&lt;h3 id=&#34;graphx&#34;&gt;&lt;a href=&#34;#graphx&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Graphx
+&lt;/h3&gt;&lt;p&gt;GraphX 在 Spark 基础上提供了一站式的数据解决⽅案，可以⾼效地完成图计算的完整流⽔作业。GraphX 是⽤于图 计算和并⾏图计算的新的（alpha）Spark API。通过引⼊弹性分布式属性图（Resilient Distributed Property Graph），⼀种顶点和边都带有属性的有向多重图，扩展了 Spark RDD&lt;/p&gt;
+&lt;h2 id=&#34;spark-多种部署模式&#34;&gt;&lt;a href=&#34;#spark-%e5%a4%9a%e7%a7%8d%e9%83%a8%e7%bd%b2%e6%a8%a1%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Spark 多种部署模式
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Local 多⽤于本地测试，如在 eclipse，idea 中写程序测试等。&lt;/li&gt;
+&lt;li&gt;Standalone 是 Spark ⾃带的⼀个资源调度框架，它⽀持完全分布式。&lt;/li&gt;
+&lt;li&gt;Yarn ⽣态圈⾥⾯的⼀个资源调度框架，Spark 也是可以基于 Yarn 来计算的。&lt;/li&gt;
+&lt;li&gt;Mesos 资源调度框架，与 Yarn 类似。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Redis实现消息队列：list、PubSub、Stream，基于Stream的异步秒杀</title>
         <link>/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/</link>
         <pubDate>Thu, 11 Jul 2024 23:06:25 +0000</pubDate>
@@ -965,8 +1397,6 @@
 	srcset=&#34;/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image_hu_6ac21c9547596d8e.png 480w, /zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image_hu_3e15779d52931341.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;221&#34;
@@ -992,8 +1422,6 @@
 	srcset=&#34;/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-1_hu_1445ca7d2526fc49.png 480w, /zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-1_hu_610cf592bf5de23c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;206&#34;
@@ -1005,8 +1433,6 @@
 	height=&#34;708&#34;
 	srcset=&#34;/zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-2_hu_9e8e3bbdd7eadc4.png 480w, /zh-cn/post/2024/07/redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/image-2_hu_402a042d927d03b8.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

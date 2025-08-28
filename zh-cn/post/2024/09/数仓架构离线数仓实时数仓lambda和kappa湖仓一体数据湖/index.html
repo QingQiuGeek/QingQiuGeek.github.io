@@ -11,7 +11,7 @@
 <meta property='og:description' content="数仓架构，离线数仓的数据集市架构、Inmon架构、Kimball架构、混合型架构，实时数仓的lambda架构、kappa架构，湖仓一体数据湖">
 <meta property='og:url' content='/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='数仓架构' /><meta property='article:tag' content='大数据' /><meta property='article:tag' content='数据仓库' /><meta property='article:tag' content='离线数仓' /><meta property='article:tag' content='实时数仓' /><meta property='article:tag' content='kappa架构' /><meta property='article:tag' content='lambda架构' /><meta property='article:published_time' content='2024-09-01T00:53:40&#43;00:00'/><meta property='article:modified_time' content='2024-09-01T00:53:40&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='数仓架构' /><meta property='article:tag' content='大数据' /><meta property='article:tag' content='数据仓库' /><meta property='article:tag' content='离线数仓' /><meta property='article:tag' content='实时数仓' /><meta property='article:tag' content='Kappa架构' /><meta property='article:tag' content='Lambda架构' /><meta property='article:published_time' content='2024-09-01T00:53:40&#43;00:00'/><meta property='article:modified_time' content='2024-09-01T00:53:40&#43;00:00'/>
 <meta name="twitter:title" content="数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖">
 <meta name="twitter:description" content="数仓架构，离线数仓的数据集市架构、Inmon架构、Kimball架构、混合型架构，实时数仓的lambda架构、kappa架构，湖仓一体数据湖">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,11 +336,22 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#往期推荐-e5be80e69c9fe68ea8e88d90"><strong>往期推荐</strong> {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}</a>
+    <li><a href="#数仓架构">数仓架构</a>
       <ol>
-        <li><a href="#11-离线数仓架构-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84">1.1 离线数仓架构 {#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84}</a>
+        <li><a href="#离线数仓架构">离线数仓架构</a>
           <ol>
-            <li><a href="#111-数据集市架构-2120e695b0e68daee99b86e5b882e69eb6e69e84">1.1.1 数据集市架构 {#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84}</a></li>
+            <li><a href="#数据集市架构">数据集市架构</a></li>
+            <li><a href="#inmon-企业信息工厂架构"> Inmon 企业信息工厂架构</a></li>
+            <li><a href="#kimball-数据仓库架构">Kimball 数据仓库架构</a></li>
+            <li><a href="#混合型数据仓库架构">混合型数据仓库架构</a></li>
+          </ol>
+        </li>
+        <li><a href="#实时数仓架构">实时数仓架构</a>
+          <ol>
+            <li><a href="#lambda-架构">Lambda 架构</a></li>
+            <li><a href="#kappa-架构">Kappa 架构</a></li>
+            <li><a href="#kappa-和-lambda-对比">Kappa 和 Lambda 对比</a></li>
+            <li><a href="#湖仓一体数据湖">  湖仓一体—数据湖  </a></li>
           </ol>
         </li>
       </ol>
@@ -408,7 +419,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 5 分钟
+                阅读时长: 6 分钟
             </time>
         </div>
         
@@ -468,88 +479,238 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<h2 id="往期推荐-e5be80e69c9fe68ea8e88d90"><a href="#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90" class="header-anchor"></a><strong>往期推荐</strong> {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
-</h2><p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140753124"  title="大数据HBase图文简介-CSDN博客"
-     target="_blank" rel="noopener"
-    >大数据HBase图文简介-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140786773"  title="数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客"
-     target="_blank" rel="noopener"
-    >数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140798330"  title="数仓常见名词解析和名词之间的关系-CSDN博客"
-     target="_blank" rel="noopener"
-    >数仓常见名词解析和名词之间的关系-CSDN博客</a></p></blockquote>
-<p>=========================================================================</p>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90" >往期推荐</a>{#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90-toc}</p>
-<p><a class="link" href="#0.%20%E5%89%8D%E8%A8%80" >1. 数仓架构</a>{#0.%20%E5%89%8D%E8%A8%80-toc}</p>
-<p><a class="link" href="#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84" >1.1 离线数仓架构</a>{#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84" >1.1.1 数据集市架构</a>{#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82" >1.1.1.2 独立数据集市</a>{#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-toc}</p>
-<p><a class="link" href="#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82" >1.1.1.2 从属数据集市</a>{#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82-toc}</p>
-<p><a class="link" href="#2.2%20Inmon%E4%BC%81%E4%B8%9A%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%8E%82%E6%9E%B6%E6%9E%84" >1.1.2 Inmon企业信息工厂架构</a>{#2.2%20Inmon%E4%BC%81%E4%B8%9A%E4%BF%A1%E6%81%AF%E5%B7%A5%E5%8E%82%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#2.3%20Kimball%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84" >1.1.3 Kimball数据仓库架构</a>{#2.3%20Kimball%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#2.4%20%E6%B7%B7%E5%90%88%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84" >1.1.4 混合型数据仓库架构</a>{#2.4%20%E6%B7%B7%E5%90%88%E5%9E%8B%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#2.2%20%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%C2%A0" >1.2 实时数仓架构</a>{#2.2%20%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%C2%A0-toc}</p>
-<p><a class="link" href="#2.2.1%20Lambda%E6%9E%B6%E6%9E%84" >1.2.1 Lambda架构</a>{#2.2.1%20Lambda%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#2.2.1.1%20%E4%BC%A0%E7%BB%9F%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91" >1.2.1.1 传统的Lambda实时开发</a>{#2.2.1.1%20%E4%BC%A0%E7%BB%9F%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91-toc}</p>
-<p><a class="link" href="#2.2.1.2%C2%A0%E5%8D%87%E7%BA%A7%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91" >1.2.1.2 升级的Lambda实时开发</a>{#2.2.1.2%C2%A0%E5%8D%87%E7%BA%A7%E7%9A%84Lambda%E5%AE%9E%E6%97%B6%E5%BC%80%E5%8F%91-toc}</p>
-<p><a class="link" href="#1.2.1.3%C2%A0%E4%B8%BA%E4%BB%80%E4%B9%88Lambda%E6%9E%B6%E6%9E%84%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E6%B5%81%E5%A4%84%E7%90%86%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%9F" >1.2.1.3 为什么Lambda架构同时存在流处理和批处理？</a>{#1.2.1.3%C2%A0%E4%B8%BA%E4%BB%80%E4%B9%88Lambda%E6%9E%B6%E6%9E%84%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E6%B5%81%E5%A4%84%E7%90%86%E5%92%8C%E6%89%B9%E5%A4%84%E7%90%86%EF%BC%9F-toc}</p>
-<p><a class="link" href="#1.2.1.4%20Lambda%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9" >1.2.1.4 Lambda架构缺点</a>{#1.2.1.4%20Lambda%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9-toc}</p>
-<p><a class="link" href="#2.2.2%20Kappa%E6%9E%B6%E6%9E%84" >1.2.2 Kappa架构</a>{#2.2.2%20Kappa%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#1.2.2.1%20Kappa%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9%C2%A0" >1.2.2.1 Kappa架构缺点</a>{#1.2.2.1%20Kappa%E6%9E%B6%E6%9E%84%E7%BC%BA%E7%82%B9%C2%A0-toc}</p>
-<p><a class="link" href="#Kappa%E5%92%8CLambda%E5%AF%B9%E6%AF%94" >1.2.3 Kappa和Lambda对比</a>{#Kappa%E5%92%8CLambda%E5%AF%B9%E6%AF%94-toc}</p>
-<p><a class="link" href="#2.2.3%20%E6%95%B0%E6%8D%AE%E6%B9%96%E5%87%BA%E7%8E%B0%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%89%B9%E6%B5%81%E4%B8%80%E4%BD%93" >1.2.4 湖仓一体&mdash;数据湖</a>{#2.2.3%20%E6%95%B0%E6%8D%AE%E6%B9%96%E5%87%BA%E7%8E%B0%E5%8E%9F%E5%9B%A0%EF%BC%9A%E6%89%B9%E6%B5%81%E4%B8%80%E4%BD%93-toc}</p>
-<p>=========================================================================</p>
-<ol>
-<li>数仓架构 {#0.%20%E5%89%8D%E8%A8%80}</li>
-</ol>
-<hr>
-<p><img src="https://i-blog.csdnimg.cn/direct/3777f513a36341459145f21b7a2e5e37.png"
-	
-	
-	
+    <h2 id="数仓架构"><a href="#%e6%95%b0%e4%bb%93%e6%9e%b6%e6%9e%84" class="header-anchor"></a>数仓架构
+</h2><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image.png"
+	width="1696"
+	height="572"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image_hu_7e6a0ff07c243f2a.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image_hu_cc71e5828ebe9dfe.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<p><strong>数仓架构大致分为离线数仓架构和实时数仓架构</strong>，数仓架构可以简单理解为构成数仓的各层关系，如ODS、DWM、DWD、DWS，具体分层这里不赘述。</p>
-<h3 id="11-离线数仓架构-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84"><a href="#11-%e7%a6%bb%e7%ba%bf%e6%95%b0%e4%bb%93%e6%9e%b6%e6%9e%84-11c2a0e7a6bbe7babfe695b0e4bb93e69eb6e69e84" class="header-anchor"></a>1.1 离线数仓架构 {#1.1%C2%A0%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84}
-</h3><p><img src="https://i-blog.csdnimg.cn/direct/2671ec1cfe104f8f8a115b0c195715ee.png"
+		class="gallery-image" 
+		data-flex-grow="296"
+		data-flex-basis="711px"
 	
-	
-	
+></p>
+<p><strong>数仓架构大致分为离线数仓架构和实时数仓架构</strong>，数仓架构可以简单理解为构成数仓的各层关系，如 ODS、DWM、DWD、DWS，具体分层这里不赘述。</p>
+<h3 id="离线数仓架构"><a href="#%e7%a6%bb%e7%ba%bf%e6%95%b0%e4%bb%93%e6%9e%b6%e6%9e%84" class="header-anchor"></a>离线数仓架构
+</h3><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-1.png"
+	width="2001"
+	height="787"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-1_hu_c31f25fb758a335.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-1_hu_1b395ee76f362f9c.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<blockquote>
+		class="gallery-image" 
+		data-flex-grow="254"
+		data-flex-basis="610px"
+	
+></p>
 <p><strong>显而易见，这种架构不能处理实时数据，那么必然会有数据的流失。</strong></p>
 <p>任何事物都是随着时间的演进变得越来越完善，当然也是越来越复杂，数仓也不例外。</p>
-<p><strong>离线数仓架构</strong> 包括<strong>数据集市架构、Inmon企业信息工厂架构、Kimball数据仓库架构、混合型数据仓库架构</strong>，接下来就详细说说这几种架构。</p></blockquote>
-<h4 id="111-数据集市架构-2120e695b0e68daee99b86e5b882e69eb6e69e84"><a href="#111-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e6%9e%b6%e6%9e%84-2120e695b0e68daee99b86e5b882e69eb6e69e84" class="header-anchor"></a>1.1.1 数据集市架构 {#2.1%20%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82%E6%9E%B6%E6%9E%84}
+<p><strong>离线数仓架构</strong> 包括<strong>数据集市架构、Inmon 企业信息工厂架构、Kimball 数据仓库架构、混合型数据仓库架构</strong>，接下来就详细说说这几种架构。</p>
+<h4 id="数据集市架构"><a href="#%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82%e6%9e%b6%e6%9e%84" class="header-anchor"></a>数据集市架构
 </h4><p>数据集市架构重点在于<strong>集市</strong> 二字，数据集市是按<strong>主题域</strong> 组织的数据集合，用于支持<strong>部门级的决策</strong>。有两种类型的数据集市：独立数据集市 和 从属数据集市。</p>
-<br />
-<blockquote>
-<h5 id="1112-独立数据集市-21120e78bace7ab8be695b0e68daee99b86e5b882"><a href="#1112-%e7%8b%ac%e7%ab%8b%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82-21120e78bace7ab8be695b0e68daee99b86e5b882" class="header-anchor"></a>1.1.1.2 独立数据集市 {#2.1.1%20%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82}
+<h5 id="独立数据集市"><a href="#%e7%8b%ac%e7%ab%8b%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82" class="header-anchor"></a>独立数据集市
 </h5><p>独立数据集市集中于部门所关心的<strong>单一主题域</strong> ，<strong>数据以部门为基础</strong>，例如制造部门、人力资源部门和其他部门都各自有他们自己的数据集市。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/067762e2511c4969911e4343147186b2.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-2.png"
+	width="1200"
+	height="715"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-2_hu_c77e04856e7b7f9a.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-2_hu_ad2a24a99787845d.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
+		class="gallery-image" 
+		data-flex-grow="167"
+		data-flex-basis="402px"
+	
+></p>
 <ul>
 <li>优点：因为一个部门的业务相对于整个企业要简单，数据量也小得多，所以部门的独立数据集市<strong>周期短、见效快</strong>。</li>
-<li>缺点：独立数据集市各自为政。从业务角度看，当部门的分析<strong>需求扩展</strong> 或者<strong>跨部门跨主题域分析</strong> 时，独立数据市场会力不从心。 当<strong>数据存在歧义</strong> ，比如同一个产品在A部门和B部门的定义不同，将无法在部门间进行信息比较。 每个部门使用不同的技术，建立不同的ETL的过程，处理不同的事务系统，而在多个独立的数据集市之间还会存在数据的交叉与重叠，甚至会有<strong>数据不一致</strong>的情况！</li>
-</ul></blockquote>
-<br />
-<blockquote>
-<h5 id="1112-从属数据集市-21220e4bb8ee5b19ee695b0e68daee99b86e5b882"><a href="#1112-%e4%bb%8e%e5%b1%9e%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82-21220e4bb8ee5b19ee695b0e68daee99b86e5b882" class="header-anchor"></a>1.1.1.2 从属数据集市 {#2.1.2%20%E4%BB%8E%E5%B1%9E%E6%95%B0%E6%8D%AE%E9%9B%86%E5%B8%82}
-</h5><p>从属数据集市的数据<strong>来源于数据仓库</strong></p></blockquote>
-<hr>
+<li>缺点：独立数据集市各自为政。从业务角度看，当部门的分析<strong>需求扩展</strong> 或者<strong>跨部门跨主题域分析</strong> 时，独立数据市场会力不从心。 当<strong>数据存在歧义</strong> ，比如同一个产品在 A 部门和 B 部门的定义不同，将无法在部门间进行信息比较。 每个部门使用不同的技术，建立不同的 ETL 的过程，处理不同的事务系统，而在多个独立的数据集市之间还会存在数据的交叉与重叠，甚至会有<strong>数据不一致</strong>的情况！</li>
+</ul>
+<h5 id="从属数据集市"><a href="#%e4%bb%8e%e5%b1%9e%e6%95%b0%e6%8d%ae%e9%9b%86%e5%b8%82" class="header-anchor"></a>从属数据集市
+</h5><p>从属数据集市的数据<strong>来源于数据仓库</strong>
+从属数据集市的数据<strong>来源于数据仓库</strong>，即从属于数据仓库。</p>
+<p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-3.png"
+	width="1227"
+	height="711"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-3_hu_540ae30a441fa4bd.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-3_hu_3ac590a49fe7b0b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="414px"
+	
+> <strong>优点：</strong></p>
+<ul>
+<li>性能：当数据仓库的查询性能出现问题，可以考虑建立几个从属数据集市，将查询从数据仓库移出到数据集市。</li>
+<li>安全：每个部门可以完全控制他们自己的数据。</li>
+<li>数据一致：因为每个数据集市的数据来源都是同一个数据仓库，<strong>有效消除了数据不一致</strong>的情况。</li>
+</ul>
+<h4 id="inmon-企业信息工厂架构"><a href="#inmon-%e4%bc%81%e4%b8%9a%e4%bf%a1%e6%81%af%e5%b7%a5%e5%8e%82%e6%9e%b6%e6%9e%84" class="header-anchor"></a> Inmon 企业信息工厂架构
+</h4><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-4.png"
+	width="1038"
+	height="523"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-4_hu_1c14e7bed420b672.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-4_hu_3633c1a2b51e5fb1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="476px"
+	
+></p>
+<ul>
+<li><strong>Inmon 架构是范式建模</strong></li>
+<li><strong>企业级</strong>数据仓库是企业级别的，正如 Inmon 数据仓库所定义的，企业级数据仓库是一个细节数据的集成资源库。其中的数据以最低粒度级别被捕获，存储在满足三范式设计的关系数据库中。</li>
+<li><strong>部门级</strong>数据集市是企业中部门级别的，是面向主题数据的部门级视图，数据从企业级数据仓库获取。数据在进入部门数据集市时可能进行聚合。数据集市使用多维模型设计，用于数据分析。重要的一点是，<strong>所有的报表工具、BI 工具或其他数据分析应用都应该从数据集市查询数据，而不是直接查询企业级数据仓库</strong>。</li>
+</ul>
+<h4 id="kimball-数据仓库架构"><a href="#kimball-%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e6%9e%b6%e6%9e%84" class="header-anchor"></a>Kimball 数据仓库架构
+</h4><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-5.png"
+	width="1055"
+	height="652"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-5_hu_1097b5e275684fc7.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-5_hu_a9c4447d45e6edce.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="161"
+		data-flex-basis="388px"
+	
+></p>
+<ul>
+<li>对比上一张图可以看到，Kimball 与 Inmon 两种架构的<strong>主要区别在于数据仓库的设计和建立。</strong> Kimball 的数据仓库包含<strong>高粒度</strong>的企业数据，使用<strong>多维</strong>模型设计，是<strong>维度建模</strong>，这也意味着数据仓库由<strong>星型模式</strong>的维度表和事实表构成。分析系统或报表工具可以<strong>直接访问多维数据仓库</strong>里的数据。</li>
+<li>在此架构中的数据集市也与 Inmon 中的不同。<strong>这里的数据集市是一个逻辑概念，只是多维数据仓库中的主题域划分，并没有自己的物理存储，也可以说是虚拟的数据集市</strong>。</li>
+</ul>
+<h4 id="混合型数据仓库架构"><a href="#%e6%b7%b7%e5%90%88%e5%9e%8b%e6%95%b0%e6%8d%ae%e4%bb%93%e5%ba%93%e6%9e%b6%e6%9e%84" class="header-anchor"></a>混合型数据仓库架构
+</h4><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-6.png"
+	width="1065"
+	height="532"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-6_hu_99daeed36bdc4ad6.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-6_hu_b248f92a52a25278.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<ul>
+<li>所谓的混合型结构，指的是在一个数据仓库环境中，<strong>联合使用 Inmon 和 Kimball 两种架构。</strong></li>
+<li>从架构图可以看到，这种架构将 Inmon 方法中的<strong>数据集市替换成了一个多维数据仓库</strong>，而数据集市则是多维数据仓库上的<strong>逻辑视图</strong>。</li>
+<li>使用这种架构的<strong>好处</strong>是：既可以利用规范化设计消除数据冗余，保证数据的粒度足够细；又可以利用多维结构更灵活地在企业级实现报表和分析。</li>
+</ul>
+<h3 id="实时数仓架构"><a href="#%e5%ae%9e%e6%97%b6%e6%95%b0%e4%bb%93%e6%9e%b6%e6%9e%84" class="header-anchor"></a>实时数仓架构
+</h3><p>在某些场景中，数据的价值随着时间的推移而逐渐减少。所以在传统大数据离线数仓的基础上，逐渐对 数据的实时性提出了更高的要求。</p>
+<h4 id="lambda-架构"><a href="#lambda-%e6%9e%b6%e6%9e%84" class="header-anchor"></a>Lambda 架构
+</h4><h5 id="传统的-lambda-实时开发"><a href="#%e4%bc%a0%e7%bb%9f%e7%9a%84-lambda-%e5%ae%9e%e6%97%b6%e5%bc%80%e5%8f%91" class="header-anchor"></a>传统的 Lambda 实时开发
+</h5><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-7.png"
+	width="2007"
+	height="967"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-7_hu_1e434f2dd077419.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-7_hu_b9d0b59f91422561.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="498px"
+	
+></p>
+<p><strong>上述架构，在实时计算链路中，如果存在多个实时业务，每个业务都要对自己的数据进行数据清洗等操作，而数据清洗这操作是重复的。所以对其进行了如下优化，提高数据复用</strong></p>
+<h5 id="升级的-lambda-实时开发"><a href="#%e5%8d%87%e7%ba%a7%e7%9a%84-lambda-%e5%ae%9e%e6%97%b6%e5%bc%80%e5%8f%91" class="header-anchor"></a>  升级的 Lambda 实时开发
+</h5><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-8.png"
+	width="1989"
+	height="910"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-8_hu_c61cdecacdba28.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-8_hu_e8621ed39dc0f557.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p><strong>对实时链路进行数据分层，改成实时数仓，解决了数据复用的问题，可以对数据进行统一清洗等操作。</strong></p>
+<h5 id="为什么-lambda-架构同时存在流处理和批处理"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-lambda-%e6%9e%b6%e6%9e%84%e5%90%8c%e6%97%b6%e5%ad%98%e5%9c%a8%e6%b5%81%e5%a4%84%e7%90%86%e5%92%8c%e6%89%b9%e5%a4%84%e7%90%86" class="header-anchor"></a>为什么 Lambda 架构同时存在流处理和批处理？
+</h5><ul>
+<li>假如整个系统只有一个批处理层，会导致用户必须等待很久才能获取计算结果，一般有<strong>时间延迟</strong>。电商数据分析部门只能查看前一天的统计分析结果，无法获取当前的结果，这对于实时决策来说有 一个巨大的<strong>时间鸿沟</strong>，很可能导致管理者错过最佳决策时机。</li>
+<li>Lambda 架构属于较早的一种架构方式，早期的流处理不如现在这样成熟，在准确性、扩展性和容错性 上，流处理层无法直接取代批处理层，只能给用户提供一个近似结果，还不能为用户提供一个一致准确的结果。因此 Lambda 架构中，出现了批处理和流处理并存的现象。</li>
+</ul>
+<h5 id="lambda-架构缺点"><a href="#lambda-%e6%9e%b6%e6%9e%84%e7%bc%ba%e7%82%b9" class="header-anchor"></a>Lambda 架构缺点
+</h5><p>不管是传统的还是升级后的 Lambda 架构，严格来说并**不是纯正的实时数仓，而是离线+实时！**这就导致 Lambda 有如下缺点：</p>
+<ul>
+<li><strong>同样的需求要开发两套一样的代码，比如批处理要统计昨天一天的人数，流处理要统计实时在线人数，都是统计人数，却要开发两套代码。</strong></li>
+<li>跑两套相同的代码，集群资源使用增多</li>
+<li>离线结果和实时结果可能不一致，当然以离线为主</li>
+<li>离线批量计算 T+1 可能算不完，数据量大</li>
+<li>服务器存储压力大</li>
+</ul>
+<p><strong>既然离线数仓占用计算压力大，存储压力大，那就不使用离线，使用纯实时的 kappa 架构</strong></p>
+<h4 id="kappa-架构"><a href="#kappa-%e6%9e%b6%e6%9e%84" class="header-anchor"></a>Kappa 架构
+</h4><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-9.png"
+	width="1927"
+	height="766"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-9_hu_3c1b3e3ffeba5553.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-9_hu_820ab240f24a9894.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="603px"
+	
+></p>
+<h5 id="kappa-架构缺点"><a href="#kappa-%e6%9e%b6%e6%9e%84%e7%bc%ba%e7%82%b9" class="header-anchor"></a>Kappa 架构缺点  
+</h5><ul>
+<li><strong>只支持流处理，没有批处理</strong></li>
+<li><strong>使用 kafka 进行消息缓存</strong>，kafka 不支撑海量数据存储，数据存储也有时间限制</li>
+<li>kafka 不支持 OLAP，即<strong>无法用 SQL 语句进行简单的数据校验</strong></li>
+<li><strong>无法复用数据血缘管理体系（数据治理），因为 kafka 没有 schema 那种字段</strong></li>
+<li>kafka 中的数据是 append 追加，不支持数据的更新、插入</li>
+</ul>
+<h4 id="kappa-和-lambda-对比"><a href="#kappa-%e5%92%8c-lambda-%e5%af%b9%e6%af%94" class="header-anchor"></a>Kappa 和 Lambda 对比
+</h4><p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-10.png"
+	width="1466"
+	height="898"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-10_hu_c7f2c7bd8d8ffe05.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-10_hu_89cc1a119ce724de.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="163"
+		data-flex-basis="391px"
+	
+></p>
+<h4 id="湖仓一体数据湖"><a href="#%e6%b9%96%e4%bb%93%e4%b8%80%e4%bd%93%e6%95%b0%e6%8d%ae%e6%b9%96" class="header-anchor"></a>  湖仓一体—数据湖  
+</h4><p><strong>基于 Lambda 和 Kappa 架构的缺点，出现了批流一体</strong></p>
+<ul>
+<li>从架构角度来看类似 Lambda 架构，批流一体既可以处理批数据，又可以处理流数据；</li>
+<li>从计算框架角度来看，就是 flink、spark 框架，既支持批处理，又支持流处理；</li>
+<li>从 SQL 角度来看，就是数仓各层统一支持 SQL，这就弥补了 kappa 中 kafka 不支持 SQL 的缺点；</li>
+<li>从存储层面来看，能做到海量数据的存储，而不是像 kappa 一样存储在 kafka 缓存中；</li>
+</ul>
+<p><img src="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-11.png"
+	width="1943"
+	height="889"
+	srcset="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-11_hu_8a8c122827cf955b.png 480w, /zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/image-11_hu_1fe41bb1e4b89f7a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p><strong>Kafka 换成了 Iceberg</strong>，IceBerg 就是数据湖技术的一种，介于上层计算引擎和底层存储格式之间的一个中间层，我们可以把它定义成一种“数据组织格式”，底层存储还是 HDFS。除此之外数据湖还有 Hudi（发展最完善）这里不具体阐述。</p>
+<p>数据湖支持 SQL 查询，解决了如下问题：</p>
+<ul>
+<li><strong>存储统一</strong></li>
+<li>底层存储是 HDFS，解决了 kafka 存储量小，数据有时间限制的问题</li>
+<li><strong>任意分层都可以 OLAP（支持 SQL 查询）</strong></li>
+<li>Iceberg 有 Schema 概念，可以追踪数据的血缘关系（数据治理）</li>
+<li><strong>支持数据实时更新，数据可以 update/insert</strong></li>
+</ul>
 
 </section>
 
@@ -597,6 +758,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2024/08/dw%E5%B1%82%E7%9A%84%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">DW层的数仓建模：范式建模、维度建模及数据分析模型、实体建模</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/">
 
         
@@ -629,19 +803,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">Hive调优</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/08/dw%E5%B1%82%E7%9A%84%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">DW层的数仓建模：范式建模、维度建模及数据分析模型、实体建模</h2>
             
         </div>
     </a>

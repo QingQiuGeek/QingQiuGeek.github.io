@@ -8,129 +8,61 @@
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
         <lastBuildDate>Thu, 05 Sep 2024 23:07:21 +0000</lastBuildDate><atom:link href="/zh-cn/categories/flink/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】</title>
-        <link>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Eflink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</link>
+        <title>一文搞懂大数据流式计算引擎 Flink【万字详解，史上最全】</title>
+        <link>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</link>
         <pubDate>Thu, 05 Sep 2024 23:07:21 +0000</pubDate>
         
-        <guid>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Eflink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</guid>
-        <description>&lt;blockquote&gt;
-&lt;h2 id=&#34;往期推荐-e5be80e69c9fe68ea8e88d90&#34;&gt;&lt;a href=&#34;#%e5%be%80%e6%9c%9f%e6%8e%a8%e8%8d%90-e5be80e69c9fe68ea8e88d90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;往期推荐 {#%E5%BE%80%E6%9C%9F%E6%8E%A8%E8%8D%90}
-&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141861919&#34;  title=&#34;一文入门大数据准流式计算引擎Spark【万字详解，全网最新】-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;一文入门大数据准流式计算引擎Spark【万字详解，全网最新】-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&lt;/a&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/141761563&#34;  title=&#34;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140786773&#34;  title=&#34;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS_ods dwd dws ads dm-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;数仓分层ODS、DWD、DWM、DWS、DIM、DM、ADS_ods dwd dws ads dm-CSDN博客&lt;/a&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/140787541&#34;  title=&#34;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#0.%20Flink%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1&#34; &gt;0. Flink知识图谱&lt;/a&gt;{#0.%20Flink%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.%C2%A0Flink%E5%8F%91%E5%B1%95&#34; &gt;1. Flink发展&lt;/a&gt;{#1.%C2%A0Flink%E5%8F%91%E5%B1%95-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#1.1%20%E5%9B%9B%E4%BB%A3%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E&#34; &gt;1.1 四代计算引擎&lt;/a&gt;{#1.1%20%E5%9B%9B%E4%BB%A3%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.%20Flink%E7%AE%80%E4%BB%8B&#34; &gt;2. Flink简介&lt;/a&gt;{#2.%20Flink%E7%AE%80%E4%BB%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.1%20Flink%E7%89%B9%E7%82%B9%C2%A0&#34; &gt;2.1 Flink特点&lt;/a&gt;{#2.1%20Flink%E7%89%B9%E7%82%B9%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.2%20%E6%89%B9%E5%A4%84%E7%90%86%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%C2%A0&#34; &gt;2.2 批处理和流处理&lt;/a&gt;{#2.2%20%E6%89%B9%E5%A4%84%E7%90%86%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.3%20%E6%9C%89%E7%95%8C%E6%B5%81%E5%92%8C%E6%97%A0%E7%95%8C%E6%B5%81&#34; &gt;2.3 有界流和无界流&lt;/a&gt;{#2.3%20%E6%9C%89%E7%95%8C%E6%B5%81%E5%92%8C%E6%97%A0%E7%95%8C%E6%B5%81-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#2.4%20Flink%E5%92%8CSpark%20Streaming&#34; &gt;2.4 Flink和Spark Streaming&lt;/a&gt;{#2.4%20Flink%E5%92%8CSpark%20Streaming-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.%20Flink%E4%B8%89%E5%B1%82%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84&#34; &gt;3. Flink三层核心架构&lt;/a&gt;{#3.%20Flink%E4%B8%89%E5%B1%82%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1%20API%20%26%20Libraries%E5%B1%82%E8%AF%A6%E8%A7%A3&#34; &gt;3.1 API &amp;amp; Libraries层详解&lt;/a&gt;{#3.1%20API%20%26%20Libraries%E5%B1%82%E8%AF%A6%E8%A7%A3-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1.1%20SQL%26Table%20API%E5%B1%82&#34; &gt;3.1.1 SQL&amp;amp;Table API层&lt;/a&gt;{#3.1.1%20SQL%26Table%20API%E5%B1%82-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1.2%C2%A0DataStream%20%26%20DataSet%20API%E5%B1%82&#34; &gt;3.1.2 DataStream &amp;amp; DataSet API层&lt;/a&gt;{#3.1.2%C2%A0DataStream%20%26%20DataSet%20API%E5%B1%82-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#3.1.3%C2%A0Stateful%20Stream%20Processing%E5%B1%82&#34; &gt;3.1.3 Stateful Stream Processing层&lt;/a&gt;{#3.1.3%C2%A0Stateful%20Stream%20Processing%E5%B1%82-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4.%20%E4%B8%89%E7%A7%8DTime%E6%A6%82%E5%BF%B5&#34; &gt;4. 三种Time概念&lt;/a&gt;{#4.%20%E4%B8%89%E7%A7%8DTime%E6%A6%82%E5%BF%B5-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#4.1%C2%A0WaterMark%E6%B0%B4%E5%8D%B0&#34; &gt;4.1 WaterMark水印&lt;/a&gt;{#4.1%C2%A0WaterMark%E6%B0%B4%E5%8D%B0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.%20Windows%E7%AA%97%E5%8F%A3%E7%B1%BB%E5%9E%8B&#34; &gt;5. Windows窗口类型&lt;/a&gt;{#5.%20Windows%E7%AA%97%E5%8F%A3%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1%20%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3&#34; &gt;5.1 时间窗口&lt;/a&gt;{#5.1%20%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.1%20%E6%BB%9A%E5%8A%A8%E7%AA%97%E5%8F%A3Tumbling%20Windows&#34; &gt;5.1.1 滚动窗口Tumbling Windows&lt;/a&gt;{#5.1.1%20%E6%BB%9A%E5%8A%A8%E7%AA%97%E5%8F%A3Tumbling%20Windows-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.2%20%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3Sliding%20Windows&#34; &gt;5.1.2 滑动窗口Sliding Windows&lt;/a&gt;{#5.1.2%20%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3Sliding%20Windows-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.3%20%E4%BC%9A%E8%AF%9D%E7%AA%97%E5%8F%A3Session%20Windows&#34; &gt;5.1.3 会话窗口Session Windows&lt;/a&gt;{#5.1.3%20%E4%BC%9A%E8%AF%9D%E7%AA%97%E5%8F%A3Session%20Windows-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.1.4%20%E5%85%A8%E5%B1%80%E7%AA%97%E5%8F%A3Global%20Windows&#34; &gt;5.1.4 全局窗口Global Windows&lt;/a&gt;{#5.1.4%20%E5%85%A8%E5%B1%80%E7%AA%97%E5%8F%A3Global%20Windows-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#5.2%20%E8%AE%A1%E6%95%B0%E7%AA%97%E5%8F%A3&#34; &gt;5.2 计数窗口&lt;/a&gt;{#5.2%20%E8%AE%A1%E6%95%B0%E7%AA%97%E5%8F%A3-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.%20%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86&#34; &gt;6. 状态管理&lt;/a&gt;{#6.%20%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.1%C2%A0%E7%8A%B6%E6%80%81%E7%9A%84Flink%E5%AE%98%E6%96%B9%E5%AE%9A%E4%B9%89&#34; &gt;6.1 状态的Flink官方定义&lt;/a&gt;{#6.1%C2%A0%E7%8A%B6%E6%80%81%E7%9A%84Flink%E5%AE%98%E6%96%B9%E5%AE%9A%E4%B9%89-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2%C2%A0%E7%8A%B6%E6%80%81%E5%88%86%E7%B1%BB%E5%8F%8A%E7%8A%B6%E6%80%81%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B&#34; &gt;6.2 状态分类及状态存储类型&lt;/a&gt;{#6.2%C2%A0%E7%8A%B6%E6%80%81%E5%88%86%E7%B1%BB%E5%8F%8A%E7%8A%B6%E6%80%81%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2.1%20%E7%AE%97%E5%AD%90%E7%8A%B6%E6%80%81&#34; &gt;6.2.1 算子状态&lt;/a&gt;{#6.2.1%20%E7%AE%97%E5%AD%90%E7%8A%B6%E6%80%81-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2.2%20%E9%94%AE%E6%8E%A7%E7%8A%B6%E6%80%81&#34; &gt;6.2.2 键控状态&lt;/a&gt;{#6.2.2%20%E9%94%AE%E6%8E%A7%E7%8A%B6%E6%80%81-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.2.3%C2%A0Broadcast%20State&#34; &gt;6.2.3 Broadcast State&lt;/a&gt;{#6.2.3%C2%A0Broadcast%20State-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#6.3.%20%E7%8A%B6%E6%80%81%E5%90%8E%E7%AB%AF%EF%BC%88%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%EF%BC%89&#34; &gt;6.3. 状态后端（持久化存储）&lt;/a&gt;{#6.3.%20%E7%8A%B6%E6%80%81%E5%90%8E%E7%AB%AF%EF%BC%88%E6%8C%81%E4%B9%85%E5%8C%96%E5%AD%98%E5%82%A8%EF%BC%89-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.%20Flink%E7%AE%97%E5%AD%90&#34; &gt;7. Flink算子&lt;/a&gt;{#7.%20Flink%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1%20DataSet%E6%89%B9%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90&#34; &gt;7.1 DataSet批处理算子&lt;/a&gt;{#7.1%20DataSet%E6%89%B9%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1.1%20Source%E7%AE%97%E5%AD%90&#34; &gt;7.1.1 Source算子&lt;/a&gt;{#7.1.1%20Source%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1.2%C2%A0Transform%20%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90&#34; &gt;7.1.2 Transform 转换算子&lt;/a&gt;{#7.1.2%C2%A0Transform%20%E8%BD%AC%E6%8D%A2%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.1.3%C2%A0Sink%20%E8%BE%93%E5%87%BA%E7%AE%97%E5%AD%90&#34; &gt;7.1.3 Sink 输出算子&lt;/a&gt;{#7.1.3%C2%A0Sink%20%E8%BE%93%E5%87%BA%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#7.2%20DataStream%E6%B5%81%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90&#34; &gt;7.2 DataStream流处理算子&lt;/a&gt;{#7.2%20DataStream%E6%B5%81%E5%A4%84%E7%90%86%E7%AE%97%E5%AD%90-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#8.%20Flink%E5%AE%B9%E9%94%99&#34; &gt;8. Flink容错&lt;/a&gt;{#8.%20Flink%E5%AE%B9%E9%94%99-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#8.1%C2%A0Checkpoint%E6%9C%BA%E5%88%B6&#34; &gt;8.1 Checkpoint机制&lt;/a&gt;{#8.1%C2%A0Checkpoint%E6%9C%BA%E5%88%B6-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#9.%20Flink%20CEP&#34; &gt;9. Flink CEP&lt;/a&gt;{#9.%20Flink%20CEP-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#9.1%20%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%C2%A0&#34; &gt;9.1 使用场景&lt;/a&gt;{#9.1%20%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#9.2%C2%A0CEP%20API&#34; &gt;9.2 CEP API&lt;/a&gt;{#9.2%C2%A0CEP%20API-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#10.%20Flink%20CDC&#34; &gt;10. Flink CDC&lt;/a&gt;{#10.%20Flink%20CDC-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#10.1%20CDC%E7%A7%8D%E7%B1%BB&#34; &gt;10.1 CDC种类&lt;/a&gt;{#10.1%20CDC%E7%A7%8D%E7%B1%BB-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#11.%20Flink%20SQL&#34; &gt;11. Flink SQL&lt;/a&gt;{#11.%20Flink%20SQL-toc}&lt;/p&gt;
-&lt;hr&gt;
-&lt;ol start=&#34;0&#34;&gt;
-&lt;li&gt;Flink知识图谱&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/6d8c45618d4c4585b10441448471b332.png&#34;
-	
-	
-	
+        <guid>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</guid>
+        <description>&lt;h2 id=&#34;flink-知识图谱&#34;&gt;&lt;a href=&#34;#flink-%e7%9f%a5%e8%af%86%e5%9b%be%e8%b0%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 知识图谱
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image.png&#34;
+	width=&#34;1151&#34;
+	height=&#34;769&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image_hu_525e59219e7dae9d.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image_hu_d12f9b84c09fa02f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;149&#34;
+		data-flex-basis=&#34;359px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Flink发展 {#1.%C2%A0Flink%E5%8F%91%E5%B1%95}&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Apache Flink 诞生于柏林工业大学的一个研究性项目，&lt;strong&gt;原名 StratoSphere&lt;/strong&gt; 。2014 年，由 StratoSphere 项目孵化出 Flink，并于同年捐赠 Apache，之后成为 Apache 的顶级项目。2019 年 1 年，&lt;strong&gt;阿里巴巴收购了 Flink 的母公司 Data Artisans，并宣布开源内部的 Blink&lt;/strong&gt;，Blink 是阿里巴巴基于 Flink 优化后的版本，增加了大量的新功能，并在性能和稳定性上进行了各种优化，经历过阿里内部多种复杂业务的挑战和检验。同时阿里巴巴也表示会逐步将这些新功能和特性 Merge 回社区版本的 Flink 中，因此 Flink 成为目前最为火热的大数据处理框架。&lt;/p&gt;
-&lt;h3 id=&#34;11-四代计算引擎-1120e59b9be4bba3e8aea1e7ae97e5bc95e6938e&#34;&gt;&lt;a href=&#34;#11-%e5%9b%9b%e4%bb%a3%e8%ae%a1%e7%ae%97%e5%bc%95%e6%93%8e-1120e59b9be4bba3e8aea1e7ae97e5bc95e6938e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 四代计算引擎 {#1.1%20%E5%9B%9B%E4%BB%A3%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E}
+&lt;h2 id=&#34;flink-发展&#34;&gt;&lt;a href=&#34;#flink-%e5%8f%91%e5%b1%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 发展
+&lt;/h2&gt;&lt;p&gt;Apache Flink 诞生于柏林工业大学的一个研究性项目，&lt;strong&gt;原名 StratoSphere&lt;/strong&gt; 。2014 年，由 StratoSphere 项目孵化出 Flink，并于同年捐赠 Apache，之后成为 Apache 的顶级项目。2019 年 1 年，&lt;strong&gt;阿里巴巴收购了 Flink 的母公司 Data Artisans，并宣布开源内部的 Blink&lt;/strong&gt;，Blink 是阿里巴巴基于 Flink 优化后的版本，增加了大量的新功能，并在性能和稳定性上进行了各种优化，经历过阿里内部多种复杂业务的挑战和检验。同时阿里巴巴也表示会逐步将这些新功能和特性 Merge 回社区版本的 Flink 中，因此 Flink 成为目前最为火热的大数据处理框架。&lt;/p&gt;
+&lt;h3 id=&#34;四代计算引擎&#34;&gt;&lt;a href=&#34;#%e5%9b%9b%e4%bb%a3%e8%ae%a1%e7%ae%97%e5%bc%95%e6%93%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;四代计算引擎
 &lt;/h3&gt;&lt;p&gt;在国外一些社区，有很多人&lt;strong&gt;将大数据的计算引擎分成了 4 代&lt;/strong&gt;，当然，也有很多人不会认同。我们先姑且这么认为和讨论。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;首先&lt;strong&gt;第一代的计算引擎，无疑就是 Hadoop 承载的 MapReduce&lt;/strong&gt;。这里大家应该都 不会对 MapReduce 陌生，它将计算分为两个阶段，分别为 Map 和 Reduce。对于上层应用来说，就不得不想方设法去拆分算法，甚至于不得不在上层应用实现 多个 Job 的&lt;strong&gt;串联&lt;/strong&gt;，以完成一个完整的算法，例如&lt;strong&gt;迭代计算&lt;/strong&gt; 。 由于这样的弊端，&lt;strong&gt;催生了支持 DAG 框架的产生&lt;/strong&gt;。&lt;/li&gt;
 &lt;li&gt;因此，&lt;strong&gt;支持 DAG 的框架被划分为第二代计算引擎&lt;/strong&gt;。如 Tez 以及更上层的 Oozie。这里我们不去细究各种 DAG 实现之间的区别，不过对于当时的 Tez 和 Oozie 来说，&lt;strong&gt;大多还是批处理的任务&lt;/strong&gt;。&lt;/li&gt;
 &lt;li&gt;接下来就是&lt;strong&gt;以 Spark 为代表的第三代的计算引擎&lt;/strong&gt;。第三代计算引擎的特点主要 是 Job 内部的 DAG 支持（不跨越 Job），以及强调的&lt;strong&gt;准实时计算&lt;/strong&gt;。在这里，很多人也会认为第三代计算引擎也能够很好的运行批处理的 Job。 随着第三代计算引擎的出现，促进了上层应用快速发展，例如各种迭代计算的性能以及对流计算和 SQL 等的支持。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Flink 的诞生就被归在了第四代&lt;/strong&gt;。这应该主 要表现在 Flink 对流计算的支持，以及更一步的实时性上面。当然 Flink 也可 以支持 Batch 的任务，以及 DAG 的运算。&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;Flink简介 {#2.%20Flink%E7%AE%80%E4%BB%8B}&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Flink 是一个分布式、高性能、&lt;strong&gt;&lt;strong&gt;有状态&lt;/strong&gt;&lt;/strong&gt;的流处理框架&lt;/strong&gt;，它能够对&lt;strong&gt;有界和无界&lt;/strong&gt;的数据流进行高效的处理。Flink 的 **核心是流处理（DataStream），当然也支持批处理（DataSet），Flink 将批处理看成是流处理的一种特殊情况，即数据流是有 明确界限的。**这和 Spark Streaming 的思想是完全相反的，Spark Streaming 的核心是批处理，它将流处理看成是批处理的一种特殊情况， 即把数据流进行极小粒度的拆分，拆分为多个微批处理。&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;21-flink特点-2120flinke789b9e782b9c2a0&#34;&gt;&lt;a href=&#34;#21-flink%e7%89%b9%e7%82%b9-2120flinke789b9e782b9c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.1 Flink特点 {#2.1%20Flink%E7%89%B9%E7%82%B9%C2%A0}
-&lt;/h3&gt;&lt;blockquote&gt;
-&lt;ul&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;flink-简介&#34;&gt;&lt;a href=&#34;#flink-%e7%ae%80%e4%bb%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 简介
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Flink 是一个分布式、高性能、**&lt;strong&gt;有状态*&lt;/strong&gt;*的流处理框架&lt;/strong&gt;，它能够对&lt;strong&gt;有界和无界&lt;/strong&gt;的数据流进行高效的处理。Flink 的 **核心是流处理（DataStream），当然也支持批处理（DataSet），Flink 将批处理看成是流处理的一种特殊情况，即数据流是有 明确界限的。**这和 Spark Streaming 的思想是完全相反的，Spark Streaming 的核心是批处理，它将流处理看成是批处理的一种特殊情况， 即把数据流进行极小粒度的拆分，拆分为多个微批处理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;flink-特点&#34;&gt;&lt;a href=&#34;#flink-%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 特点
+&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;支持高吞吐、低延迟、高性能的流处理&lt;/li&gt;
-&lt;li&gt;结果准确，Flink提供了事件时间和处理时间，对乱序数据仍能提供一直准确的结果&lt;/li&gt;
+&lt;li&gt;结果准确，Flink 提供了事件时间和处理时间，对乱序数据仍能提供一直准确的结果&lt;/li&gt;
 &lt;li&gt;支持高度灵活的窗口（Window）操作，支持基于 time、count、session， 以及 data-driven 的窗口操作&lt;/li&gt;
 &lt;li&gt;支持基于轻量级分布式快照（Snapshot）实现的容错&lt;/li&gt;
 &lt;li&gt;一个运行时&lt;strong&gt;同时支持&lt;/strong&gt; Batch on Streaming 处理和 Streaming 处理&lt;/li&gt;
 &lt;li&gt;Flink 在 JVM 内部实现了自己的内存管理&lt;/li&gt;
-&lt;li&gt;支持迭代计算，Spark也支持&lt;/li&gt;
+&lt;li&gt;支持迭代计算，Spark 也支持&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;支持程序自动优化&lt;/strong&gt;：避免特定情况下 Shuffle、排序等昂贵操作，中间结果有必要进行缓存&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;22-批处理和流处理-2220e689b9e5a484e79086e5928ce6b581e5a484e79086c2a0&#34;&gt;&lt;a href=&#34;#22-%e6%89%b9%e5%a4%84%e7%90%86%e5%92%8c%e6%b5%81%e5%a4%84%e7%90%86-2220e689b9e5a484e79086e5928ce6b581e5a484e79086c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.2 批处理和流处理 {#2.2%20%E6%89%B9%E5%A4%84%E7%90%86%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%C2%A0}
-&lt;/h3&gt;&lt;blockquote&gt;
-&lt;ul&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;批处理和流处理&#34;&gt;&lt;a href=&#34;#%e6%89%b9%e5%a4%84%e7%90%86%e5%92%8c%e6%b5%81%e5%a4%84%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;批处理和流处理
+&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;批处理&lt;br&gt;
 有界、持久、大量，一般用于离线计算&lt;/li&gt;
 &lt;li&gt;流处理&lt;br&gt;
 无界、实时，流处理方式无需对整个数据集执行操作，而是&lt;strong&gt;对通过系统传输的每个数据项执行操作&lt;/strong&gt;，一般用于实时统计&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;在 Spark 生态体系中，对于批处理和流处理采用了不同的技术框架，&lt;strong&gt;批处理由 SparkSQL 实现，流处理由 Spark Streaming 实现&lt;/strong&gt;，这也是大部分框架采用的策略，使用独立的处理器实现批处理和流处理，而 Flink 可以同时实现批处理和流处理，Flink 将批处理（即处理 有限的静态数据）视作一种特殊的流处理，即&lt;strong&gt;把数据看作是有界的 ！&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;23-有界流和无界流-2320e69c89e7958ce6b581e5928ce697a0e7958ce6b581&#34;&gt;&lt;a href=&#34;#23-%e6%9c%89%e7%95%8c%e6%b5%81%e5%92%8c%e6%97%a0%e7%95%8c%e6%b5%81-2320e69c89e7958ce6b581e5928ce697a0e7958ce6b581&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.3 有界流和无界流 {#2.3%20%E6%9C%89%E7%95%8C%E6%B5%81%E5%92%8C%E6%97%A0%E7%95%8C%E6%B5%81}
-&lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;无界数据流：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在 Spark 生态体系中，对于批处理和流处理采用了不同的技术框架，&lt;strong&gt;批处理由 SparkSQL 实现，流处理由 Spark Streaming 实现&lt;/strong&gt;，这也是大部分框架采用的策略，使用独立的处理器实现批处理和流处理，而 Flink 可以同时实现批处理和流处理，Flink 将批处理（即处理 有限的静态数据）视作一种特殊的流处理，即&lt;strong&gt;把数据看作是有界的 ！&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;有界流和无界流&#34;&gt;&lt;a href=&#34;#%e6%9c%89%e7%95%8c%e6%b5%81%e5%92%8c%e6%97%a0%e7%95%8c%e6%b5%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;有界流和无界流
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;无界数据流：&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;有定义流的开始，但没有定义流的结束&lt;/strong&gt;；&lt;/li&gt;
 &lt;li&gt;它们会无休止的产生数据&lt;/li&gt;
@@ -143,34 +75,349 @@
 &lt;li&gt;有界流可以在摄取所有数据后再进行计算&lt;/li&gt;
 &lt;li&gt;有界流所有数据可以被排序，所以并不需要有序摄取&lt;/li&gt;
 &lt;li&gt;有界流处理通常被称为批处理。&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;24-flink和spark-streaming-2420flinke5928cspark20streaming&#34;&gt;&lt;a href=&#34;#24-flink%e5%92%8cspark-streaming-2420flinke5928cspark20streaming&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.4 Flink和Spark Streaming {#2.4%20Flink%E5%92%8CSpark%20Streaming}
-&lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Spark本质是批处理&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Spark数据模型：Spak采用RDD模型，Spark Streaming的&lt;strong&gt;DStream实际上也就是一组组小批据RDD的集合&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Spark运行时架构：Spark是批计算，将DAG划分为不同的stage,一个完成后才可以计算下一个&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Flink以流处理为根本&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;flink-和-spark-streaming&#34;&gt;&lt;a href=&#34;#flink-%e5%92%8c-spark-streaming&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 和 Spark Streaming
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Spark 本质是批处理&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Flink数据模型：Flink基本据模型是数据流，以及事件(Event)序列&lt;/li&gt;
-&lt;li&gt;Flink运行时架构：Flink是标准的流执行模式，一个事件在一个节点处理完后可以直接发往下一个节点进行处理&lt;/li&gt;
+&lt;li&gt;Spark 数据模型：Spak 采用 RDD 模型，Spark Streaming 的&lt;strong&gt;DStream 实际上也就是一组组小批据 RDD 的集合&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Spark 运行时架构：Spark 是批计算，将 DAG 划分为不同的 stage,一个完成后才可以计算下一个&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/827856b2eddc4f55bbb7a9f47af7e75c.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;strong&gt;Flink 以流处理为根本&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Flink 数据模型：Flink 基本据模型是数据流，以及事件(Event)序列&lt;/li&gt;
+&lt;li&gt;Flink 运行时架构：Flink 是标准的流执行模式，一个事件在一个节点处理完后可以直接发往下一个节点进行处理
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-1.png&#34;
+	width=&#34;1095&#34;
+	height=&#34;433&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-1_hu_9ca1dd98d5e3fb30.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-1_hu_fa45f08d20e349ff.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+		alt=&#34;alt text&#34;
 	
-&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;Flink三层核心架构 {#3.%20Flink%E4%B8%89%E5%B1%82%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84}&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;下图为 Flink 技术栈的核心组成部分，由上而下分别是 &lt;strong&gt;API &amp;amp; Libraries 层、Runtime 核心层以及物理部署层。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;252&#34;
+		data-flex-basis=&#34;606px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;flink-三层核心架构&#34;&gt;&lt;a href=&#34;#flink-%e4%b8%89%e5%b1%82%e6%a0%b8%e5%bf%83%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 三层核心架构
+&lt;/h2&gt;&lt;p&gt;下图为 Flink 技术栈的核心组成部分，由上而下分别是 &lt;strong&gt;API &amp;amp; Libraries 层、Runtime 核心层以及物理部署层。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;*&lt;strong&gt;*A&lt;/strong&gt;PI &amp;amp; Libraries 层，&lt;strong&gt;提供了面向流式处理的接口（&lt;strong&gt;DataStream API&lt;/strong&gt;）、面向批处理的接口（&lt;strong&gt;DataSet API&lt;/strong&gt;）、用于复杂&lt;/strong&gt;事件处理的 CEP 库**、用于&lt;strong&gt;结构化数据查询的 SQL &amp;amp; Table 库&lt;/strong&gt;、基于**批处理的机器学习库 FlinkML 和 图形处理库 Gelly**。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Runtime 核心层，&lt;strong&gt;这一层是 Flink 分布式计算框架的&lt;/strong&gt;核心实现层&lt;/strong&gt;，包括作业转换，任务调度，资源分配，任务执行等功能，基于这一层的实现，可以在流式引擎下&lt;strong&gt;同时进行&lt;/strong&gt;流处理和批处理。&lt;/li&gt;
+&lt;li&gt;**物理部署层，**用于支持在不同平台上部署运行 Flink 应用。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-2.png&#34;
+	width=&#34;1141&#34;
+	height=&#34;710&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-2_hu_62a954499df047d2.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-2_hu_bea4f2ef6babbcf.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;160&#34;
+		data-flex-basis=&#34;385px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;api--libraries-层详解&#34;&gt;&lt;a href=&#34;#api--libraries-%e5%b1%82%e8%af%a6%e8%a7%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;API &amp;amp; Libraries 层详解
+&lt;/h3&gt;&lt;p&gt;在 API &amp;amp; Libraries 层，有如下更细致的划分，API 的&lt;strong&gt;一致性由下至上依次递增，接口的表现能力由下至上依次递减。&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-3.png&#34;
+	width=&#34;1134&#34;
+	height=&#34;461&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-3_hu_88170cbc0aee8778.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-3_hu_6e052cc6b154f1b2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;245&#34;
+		data-flex-basis=&#34;590px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;sqltable-api-层&#34;&gt;&lt;a href=&#34;#sqltable-api-%e5%b1%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;SQL&amp;amp;Table API 层
+&lt;/h4&gt;&lt;p&gt;SQL &amp;amp; Table API &lt;strong&gt;同时适用于批处理和流处理&lt;/strong&gt;，这意味着可以对有界数据流和无界数据流以相同的语义进行查询，并产生相同的结果。除了基本查询外， 它还支持自定义的标量函数，聚合函数以及表值函数，可以满足多样化的查询需求。&lt;/p&gt;
+&lt;h4 id=&#34;datastream--dataset-api-层&#34;&gt;&lt;a href=&#34;#datastream--dataset-api-%e5%b1%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; DataStream &amp;amp; DataSet API 层
+&lt;/h4&gt;&lt;p&gt;DataStream &amp;amp; DataSet API 是 Flink 数据处理的&lt;strong&gt;核心 API&lt;/strong&gt;，支持使用 Java 语言或 Scala 语言进行调用，提供了数据读取，数据转换和数据输出等一系列常用操作的封装。&lt;/p&gt;
+&lt;h4 id=&#34;stateful-stream-processing-层&#34;&gt;&lt;a href=&#34;#stateful-stream-processing-%e5%b1%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Stateful Stream Processing 层
+&lt;/h4&gt;&lt;p&gt;Stateful Stream Processing 是&lt;strong&gt;最低级别的抽象&lt;/strong&gt;，它通过 Process Function 函数内嵌到 DataStream API 中。 Process Function 是 Flink 提供的最底层 API，具有最大的灵活性，允许开发者&lt;strong&gt;对时间和状态进行细粒度的控制&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;三种-time-概念&#34;&gt;&lt;a href=&#34;#%e4%b8%89%e7%a7%8d-time-%e6%a6%82%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;三种 Time 概念
+&lt;/h2&gt;&lt;p&gt;在 Flink 中，如果以时间段划分边界的话，那么时间就是一个极其重要的字段。 Flink 中的时间有三种类型，如下图所示：
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-4.png&#34;
+	width=&#34;1155&#34;
+	height=&#34;573&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-4_hu_d5f257a2deabc01d.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-4_hu_6ba617f9c2e1caa1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;201&#34;
+		data-flex-basis=&#34;483px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Event Time：是事件创建的时间。它通常由事件中的时间戳描述，即事件本身就要携带时间信息，例如采集的日志数据中，每一条日志都会记录自己的生成时间，Flink 通过时间戳分配器访问事件时间戳。&lt;/li&gt;
+&lt;li&gt;Ingestion Time：是数据进入 Flink 的时间。&lt;/li&gt;
+&lt;li&gt;Processing Time：是每一个执行基于时间操作的算子的本地系统时间，与机器相关，默认的时间属性就是 Processing Time&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在 Flink 的流式处理中，绝大部分的业务都会使用 eventTime，一般只在 eventTime 无法使用时，才会被迫使用 ProcessingTime&lt;/p&gt;
+&lt;h3 id=&#34;watermark-水印&#34;&gt;&lt;a href=&#34;#watermark-%e6%b0%b4%e5%8d%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; WaterMark 水印
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;流处理从事件产生，到流经 source，再到 operator，中间有一个过程和时间，虽然大部分情况下，流到 operator 的数据都是&lt;strong&gt;按照事件产生的 时间顺序&lt;/strong&gt;来的，但是也不排除&lt;strong&gt;由于网络、背压等原因，导致乱序的产生&lt;/strong&gt;，所谓乱序，就是指 Flink 接收到的事件的先后顺序不是严格按照事件的 Event Time 顺序排列的，所以 Flink 最初设计的时候，就考虑到了网络延迟，网络乱序等问题，所以提出了一个抽象概念：水印（WaterMark）&lt;/li&gt;
+&lt;li&gt;当出现乱序，如果只根据 EventTime 决定 Window 的运行，我们不能明确数据是否全部到位，但又不能无限期的等下去， 此时必须要有个机制来保证一个特定的时间后，必须触发 Window 去进行计算了， 这个特别的机制，就是 Watermark。&lt;/li&gt;
+&lt;li&gt;Watermark 是用于处理乱序事件的，通常用 Watermark 机制结合 Window 来实现。 数据流中的 Watermark 用于表示 timestamp 小于 Watermark 的数据，都已经到达了，因此，Window 的执行也是由 Watermark 触发的。 Watermark 可以理解成一个延迟触发机制，我们可以设置 Watermark 的延时时长 t ，每次系统会校验已经到达的数据中最大的 maxEventTime，然后认定 EventTime 小于 maxEventTime - t 的所有数据都已经到达，如果有窗口的停止时间等于 maxEventTime - t，那么这个窗口被触发执行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;对延迟数据的理解&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;延迟数据是指： 在当前窗口【假设窗口范围为 10-15】已经计算之后，又来了一个属于该窗口的 数据【假设事件时间为 13】，这时候仍会触发 Window 操作，这种数据就称为 延迟数据。&lt;/li&gt;
+&lt;li&gt;那么问题来了，延迟时间怎么计算呢？&lt;br&gt;
+假设窗口范围为 10-15，延迟时间为 2s，则只要 WaterMark=15+2， 10-15 这个窗口就不能再触发 Window 操作，即使新来的数据的 Event Time 属 于这个窗口时间内 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;windows-窗口类型&#34;&gt;&lt;a href=&#34;#windows-%e7%aa%97%e5%8f%a3%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Windows 窗口类型
+&lt;/h2&gt;&lt;p&gt;在大多数场景下，我们需要统计的数据流都是无界的，因此我们无法等待整个数据流终止后才进行统 计。通常情况下，我们只需要&lt;strong&gt;对某个时间范围或者数量范围内的数据&lt;/strong&gt;进行统计分析（&lt;strong&gt;把无限数据分割成块进行计算分析&lt;/strong&gt;）：如每隔五分钟统计一次过去一小时内所有商品的点击量；或者每发生 1000 次点击后，都去统计一下每个商品点击率的占比。在 Flink 中，可以使用窗口 (Window) 来实现这类功能。按照统计维度的不同，Flink 中的窗口可以分为&lt;strong&gt;时间窗口 (Time Windows) 和计数窗口 (Count Windows) 。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;时间窗口&#34;&gt;&lt;a href=&#34;#%e6%97%b6%e9%97%b4%e7%aa%97%e5%8f%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;时间窗口
+&lt;/h3&gt;&lt;p&gt;时间窗口以时间点来定义窗口的开始（start）和结束（end），所以截取出的就是某一时间段的数据。到达结束时间时，窗口不再收集数据，触发计算输出结果，并将窗口关闭销毁。所以可以说基本思路就是“定点发车”。&lt;/p&gt;
+&lt;h4 id=&#34;滚动窗口-tumbling-windows&#34;&gt;&lt;a href=&#34;#%e6%bb%9a%e5%8a%a8%e7%aa%97%e5%8f%a3-tumbling-windows&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;滚动窗口 Tumbling Windows
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;滚动窗口指彼此之间没有重叠的窗口&lt;/strong&gt;。例如：每隔 1 小时统计过去 1 小时内的商品点击量，那么 1 天就只能分为 24 个窗口，每个窗口之间是&lt;strong&gt;不存在重叠&lt;/strong&gt;的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：时间对齐，长度固定，窗口不重叠&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-5.png&#34;
+	width=&#34;1025&#34;
+	height=&#34;627&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-5_hu_48597f479e73129c.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-5_hu_e6c741da5984e184.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;163&#34;
+		data-flex-basis=&#34;392px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;滑动窗口-sliding-windows&#34;&gt;&lt;a href=&#34;#%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3-sliding-windows&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;滑动窗口 Sliding Windows
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;滑动窗口用于滚动进行聚合分析&lt;/strong&gt;，例如：每隔 6 分钟统计一次过去一小时内所有商品的点击量，那么 1 天可以分为 240 个窗口，统计窗口之间存在重叠。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：时间对齐，长度固定，窗口重叠&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-6.png&#34;
+	width=&#34;1039&#34;
+	height=&#34;663&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-6_hu_6fc72321f98f70e9.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-6_hu_d026d5c08cd8c04.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;156&#34;
+		data-flex-basis=&#34;376px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;会话窗口-session-windows&#34;&gt;&lt;a href=&#34;#%e4%bc%9a%e8%af%9d%e7%aa%97%e5%8f%a3-session-windows&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;会话窗口 Session Windows
+&lt;/h4&gt;&lt;p&gt;当用户在进行持续浏览时，可能每时每刻都会有点击数据，例如在活动区间内，用户可能频繁的将某类 商品加入和移除购物车，而你只想知道用户本次浏览&lt;strong&gt;最终&lt;/strong&gt;的购物车情况，此时就&lt;strong&gt;等用户持有的会话结束后再进行统计&lt;/strong&gt;。想要实现这类统计，可以通过 Session Windows 来进行实现。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;特点：时间不对齐，长度不固定，窗口不重叠&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-7.png&#34;
+	width=&#34;1081&#34;
+	height=&#34;626&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-7_hu_662b7d65ae53d43a.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-7_hu_fae8d4f126e02735.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;172&#34;
+		data-flex-basis=&#34;414px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;全局窗口-global-windows&#34;&gt;&lt;a href=&#34;#%e5%85%a8%e5%b1%80%e7%aa%97%e5%8f%a3-global-windows&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;全局窗口 Global Windows
+&lt;/h4&gt;&lt;p&gt;全局窗口会将所有 &lt;strong&gt;key 相同的元素分配到同一个窗口&lt;/strong&gt;中，其通常配合触发器 (trigger) 进行使用。如果没有相应触发器，则计算将不会被执行。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-8.png&#34;
+	width=&#34;1042&#34;
+	height=&#34;587&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-8_hu_15ffce3c19ad12b5.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-8_hu_7ebd2ababe86490e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;计数窗口&#34;&gt;&lt;a href=&#34;#%e8%ae%a1%e6%95%b0%e7%aa%97%e5%8f%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;计数窗口
+&lt;/h3&gt;&lt;p&gt;计数窗口基于元素的个数来截取数据，到达固定的个数时就触发计算并关闭窗口。每个窗口截取数据的个数， 就是窗口的大小。基本思路是“人齐发车”。&lt;/p&gt;
+&lt;p&gt;Count Windows 用于以数量为维度来进行数据聚合，同样也分为&lt;strong&gt;滚动窗口和滑动窗口&lt;/strong&gt;，实现方式也和 时间窗口基本一致。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意：CountWindow 的 window_size 指的是相同 Key 的元素的个数，不是输入的所有元素的总数&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;tumbling-count-window (无重叠数据)&lt;/li&gt;
+&lt;li&gt;sliding-count-window (有重叠数据)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;状态管理&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e7%ae%a1%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态管理
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;参考博客：&lt;/strong&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/ytp552200ytp/article/details/124793108#:~:text=Flink%20%E6%8F%90%E4%BE%9B%23:~:text=Flink%20%E6%8F%90%E4%BE%9B&#34;  title=&#34;Flink 状态管理详解（超全收藏）_flink状态后端的应用场景-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Flink 状态管理详解（超全收藏）_flink 状态后端的应用场景-CSDN 博客&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;状态的-flink-官方定义&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e7%9a%84-flink-%e5%ae%98%e6%96%b9%e5%ae%9a%e4%b9%89&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  状态的 Flink 官方定义
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;当前计算流程需要依赖到之前计算的结果，那么之前计算的结果就是状态。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;状态分类及状态存储类型&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e5%88%86%e7%b1%bb%e5%8f%8a%e7%8a%b6%e6%80%81%e5%ad%98%e5%82%a8%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  状态分类及状态存储类型
+&lt;/h3&gt;&lt;p&gt;相对于其他流计算框架，Flink 一个比较重要的特性就是其**支持有状态计算，即你可以将中间的计算结果进行保存，并提供给后续的计算使用（Spark 的 RDD 也可以保存计算结果供下个 RDD 使用，DAG）&lt;br&gt;
+具体而言，Flink 有两种基本类型的状态 (State) ：  键控状态（Keyed State） 与算子状态（Operator State）。**这两种状态可以以两种形式存在：原始状态(raw state) 、托管状态(managed state），托管状态是由 Flink 框架管理的状态，原始状态由用户自行管理状态。&lt;/p&gt;
+&lt;h4 id=&#34;算子状态&#34;&gt;&lt;a href=&#34;#%e7%ae%97%e5%ad%90%e7%8a%b6%e6%80%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;算子状态
+&lt;/h4&gt;&lt;p&gt;算子状态是和算子进行绑定的，与 Key 无关，一个算子的状态不能被其他算子所访问到。官方文档上对 Operator State 的解释是：each operator state is bound to one parallel operator instance，所以更为确切的说一个算子状态是与一个并发的算子实例所绑定的，即假设算子的并行度是 2，那么其应有两个对应的算子状态：
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-9.png&#34;
+	width=&#34;1031&#34;
+	height=&#34;697&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-9_hu_845c1b444311144b.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-9_hu_740e14d8da63aae9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;147&#34;
+		data-flex-basis=&#34;355px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;算子状态存储类型&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ListState：存储列表类型的状态。&lt;/li&gt;
+&lt;li&gt;UnionListState：存储列表类型的状态，与 ListState 的区别在于：如果并行度发生变化， ListState 会将该算子的所有并发的状态实例进行汇总，然后均分给新的 Task；而 UnionListState 只是将所有并发的状态实例汇总起来，具体的划分行为则由用户进行定义。&lt;/li&gt;
+&lt;li&gt;BroadcastState：用于广播的算子状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;键控状态&#34;&gt;&lt;a href=&#34;#%e9%94%ae%e6%8e%a7%e7%8a%b6%e6%80%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;键控状态
+&lt;/h4&gt;&lt;p&gt;键控状态是一种特殊的算子状态，即&lt;strong&gt;状态是根据 key 值进行区分&lt;/strong&gt;的，Flink 会&lt;strong&gt;为每类键值维护一个状态实例&lt;/strong&gt;。如下图所示，每个颜色代表不同 key 值，对应四个不同的状态实例。需要注意的 是键控状态只能在 KeyedStream 上进行使用，我们可以通过 stream.keyBy(&amp;hellip;) 来得到 KeyedStream 。
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-10.png&#34;
+	width=&#34;1058&#34;
+	height=&#34;781&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-10_hu_ccfc34a839158b78.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-10_hu_93d51cafda194689.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;135&#34;
+		data-flex-basis=&#34;325px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;键控状态存储类型&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ValueState：存储单值类型的状态。可以使用 update(T) 进行更新，并通过 T value() 进行 检索。&lt;/li&gt;
+&lt;li&gt;ListState：存储列表类型的状态。可以使用 add(T) 或 addAll(List) 添加元素；并通过 get() 获得整个列表。&lt;/li&gt;
+&lt;li&gt;ReducingState：用于存储经过 ReduceFunction 计算后的结果，使用 add(T) 增加元素。 AggregatingState：用于存储经过 AggregatingState 计算后的结果，使用 add(IN) 添加元素。&lt;/li&gt;
+&lt;li&gt;FoldingState：已被标识为废弃，会在未来版本中移除，官方推荐使用 AggregatingState 代 替。&lt;/li&gt;
+&lt;li&gt;MapState：维护 Map 类型的状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;broadcast-state&#34;&gt;&lt;a href=&#34;#broadcast-state&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; Broadcast State
+&lt;/h4&gt;&lt;p&gt;Broadcast State 是 Flink 1.5 引入的新特性。在开发过程中，如果遇到需要 下发/广播配置、规则等低吞吐事件流到下游所有 task 时，就可以使用 Broadcast State 特性。下游的 task 接收这些配置、规则并保存为 BroadcastState, 将这些配置应用到另一个数据流的计算中 。&lt;/p&gt;
+&lt;h3 id=&#34;状态后端持久化存储&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e5%90%8e%e7%ab%af%e6%8c%81%e4%b9%85%e5%8c%96%e5%ad%98%e5%82%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态后端(持久化存储)
+&lt;/h3&gt;&lt;p&gt;默认情况下，&lt;strong&gt;所有的状态都存储在 JVM 的堆内存中，在状态数据过多的情况下，这种方式很有可能导致内存溢出&lt;/strong&gt;，因此 Flink 该提供了其它方式来&lt;strong&gt;存储状态数据&lt;/strong&gt;，这些存储方式统一称为状态后端 (或状态管理器)，主要有以下三种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MemoryStateBackend&lt;/strong&gt;&lt;br&gt;
+默认的方式，即基于 &lt;strong&gt;JVM 的堆内存&lt;/strong&gt;进行存储，主要适用于本地开发和调试。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;FsStateBackend&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;基于文件系统进行存储，可以是本地文件系统，也可以是 HDFS 等分布式文件系统&lt;/strong&gt;。 需要注意而是虽然选择使用了 FsStateBackend ，但正在进行的数据仍然是存储在 TaskManager 的内存中的，只有在 checkpoint 时，才会将状态快照写入到指定文件系统上。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RocksDBStateBackend&lt;/strong&gt;&lt;br&gt;
+RocksDBStateBackend 是 Flink 内置的&lt;strong&gt;第三方状态管理器&lt;/strong&gt;，采用&lt;strong&gt;嵌入式的 key-value 型数据库 RocksDB&lt;/strong&gt; 来存储正在进行的数据。等到 checkpoint 时，再将其中的数据持久化到指定的文件系统中， 所以采用 RocksDBStateBackend 时也&lt;strong&gt;需要配置持久化存储的文件系统&lt;/strong&gt;。之所以这样做是因为 RocksDB 作为嵌入式数据库安全性比较低，但比起全文件系统的方式，其读取速率更快；比起全内存的方式，其 存储空间更大，因此它是一种比较均衡的方案。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;flink-算子&#34;&gt;&lt;a href=&#34;#flink-%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 算子
+&lt;/h2&gt;&lt;h3 id=&#34;dataset-批处理算子&#34;&gt;&lt;a href=&#34;#dataset-%e6%89%b9%e5%a4%84%e7%90%86%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DataSet 批处理算子
+&lt;/h3&gt;&lt;h4 id=&#34;source-算子&#34;&gt;&lt;a href=&#34;#source-%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Source 算子
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;fromCollection：从本地集合读取数据&lt;/li&gt;
+&lt;li&gt;readTextFile：从文件中读取&lt;/li&gt;
+&lt;li&gt;readTextFile：遍历目录&lt;/li&gt;
+&lt;li&gt;readTextFile：读取压缩文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;transform-转换算子&#34;&gt;&lt;a href=&#34;#transform-%e8%bd%ac%e6%8d%a2%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; Transform 转换算子
+&lt;/h4&gt;&lt;p&gt;Transform 算子基于 Source 算子操作，所以要首先构建 Flink 执行环境及 Source 算子。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数据源读入数据之后，就可以使用各种转换算子，将一个或多个 DataStream 转换为新的 DataStream。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;基本转换算子（&lt;strong&gt;map/ filter/ flatMap&lt;/strong&gt;）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;map：将 DataSet 中的每一个元素转换为另外一个元素&lt;/li&gt;
+&lt;li&gt;flatMap：将 DataSet 中的每一个元素转换为 0&amp;hellip;n 个元素&lt;/li&gt;
+&lt;li&gt;filter：过滤出来一些符合条件的元素，返回 boolean 值为 true 的元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;聚合算子（&lt;strong&gt;Aggregation&lt;/strong&gt;）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;reduce：可以对一个 dataset 或者一个 group 来进行聚合计算，最终聚合成一个元素 reduceGroup：将一个 dataset 或者一个 group 聚合成一个或多个元素。reduceGroup 是 reduce 的一种优化方案； 它会先分组 reduce，然后在做整体的 reduce；这样做的好处就是可以减少网络 IO&lt;/li&gt;
+&lt;li&gt;minBy 和 maxBy：选择具有最小值或最大值的元素&lt;/li&gt;
+&lt;li&gt;Aggregate：在数据集上进行聚合求最值（最大值、最小值），注意： 使用 aggregate，只能使用字段索引名或索引名称来进行分组 groupBy(0) ，否则会报一下错误: Exception in thread &amp;ldquo;main&amp;rdquo; java.lang.UnsupportedOperationException: Aggregate does not support grouping with KeySelector functions, yet.&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&amp;hellip;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;sink-输出算子&#34;&gt;&lt;a href=&#34;#sink-%e8%be%93%e5%87%ba%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; Sink 输出算子
+&lt;/h4&gt;&lt;p&gt;Flink 作为数据处理框架，最终还是要把计算处理的结果写入外部存储，为外部应用提供 支持。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;collect 将数据输出到本地集合&lt;/li&gt;
+&lt;li&gt;writeAsText 将数据输出到文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;datastream-流处理算子&#34;&gt;&lt;a href=&#34;#datastream-%e6%b5%81%e5%a4%84%e7%90%86%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DataStream 流处理算子
+&lt;/h3&gt;&lt;p&gt;流处理算子和批处理算子差不多，就不详细解释了。&lt;/p&gt;
+&lt;p&gt;参考博客：&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/shudaqi2010/article/details/119115127&#34;  title=&#34;一文学完Flink流计算常用算子（Flink算子大全）_flink算子scala-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;一文学完 Flink 流计算常用算子（Flink 算子大全）_flink 算子 scala-CSDN 博客&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;flink-容错&#34;&gt;&lt;a href=&#34;#flink-%e5%ae%b9%e9%94%99&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink 容错
+&lt;/h2&gt;&lt;h3 id=&#34;checkpoint-机制&#34;&gt;&lt;a href=&#34;#checkpoint-%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; Checkpoint 机制
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Flink 的 checkpoint 机制原理来自“Chandy-Lamport algorithm”算法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;为了&lt;strong&gt;使状态具有良好的容错性&lt;/strong&gt;，Flink 提供了检查点机制 (CheckPoints) 。通过检查点机制， Flink 定期在数据流上生成 checkpoint barrier ，当某个算子收到 barrier 时，即会基于当前状态生成一份&lt;strong&gt;快照&lt;/strong&gt;，然后再将该 barrier 传递到下游算子，下游算子接收到该 barrier 后，也基于当前状态生成一份快照，&lt;strong&gt;依次传递直至到最后的 Sink 算子上&lt;/strong&gt;。当出现异常后，Flink 就可以根据最近的一次的快照数据将所有算子恢复到先前的状态。（Spark 也有 Checkpoint 机制）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;简单理解为 checkpoint 是把 state 数据定时持久化存储了&lt;/strong&gt;
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-11.png&#34;
+	width=&#34;1194&#34;
+	height=&#34;493&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-11_hu_4adf5fa87f2aec5f.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-11_hu_724f20ef0a7405f1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;242&#34;
+		data-flex-basis=&#34;581px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;flink-cep&#34;&gt;&lt;a href=&#34;#flink-cep&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink CEP
+&lt;/h2&gt;&lt;p&gt;Complex Event Processing，复杂事件处理，Flink CEP 是一个基于 Flink 的复杂事件处理库，可以从多个数据流中&lt;strong&gt;发现复杂事件，识别有意义的事件&lt;/strong&gt;（例如机会或者威胁），并尽快的做出响应，而不是需要等待几天或则几个月相当长的时间，才发现问题。&lt;/p&gt;
+&lt;h3 id=&#34;使用场景&#34;&gt;&lt;a href=&#34;#%e4%bd%bf%e7%94%a8%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;使用场景  
+&lt;/h3&gt;&lt;p&gt;检测恶意用户和刷屏用户&lt;/p&gt;
+&lt;p&gt;实时反作弊和风控&lt;/p&gt;
+&lt;p&gt;实时营销&lt;/p&gt;
+&lt;p&gt;实时网络攻击检测&lt;/p&gt;
+&lt;h3 id=&#34;cep-api&#34;&gt;&lt;a href=&#34;#cep-api&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CEP API
+&lt;/h3&gt;&lt;p&gt;CEP API 的核心是 &lt;strong&gt;Pattern(模式) API，它允许你快速定义复杂的事件模式&lt;/strong&gt;。每 个模式包含多个阶段（stage）或者也可称为状态（state）。从一个状态切换到另一个状态，用户可以指定条件，这些条件可以作用在邻近的事件或独立事件上。&lt;/p&gt;
+&lt;h2 id=&#34;flink-cdc&#34;&gt;&lt;a href=&#34;#flink-cdc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink CDC
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;CDC 是 Change Data Capture（&lt;strong&gt;变更数据获取&lt;/strong&gt;）的简称。核心思想是，&lt;strong&gt;监测并捕获数据库的变动&lt;/strong&gt;（包括数据或数据表的插入、更新以及删除等，和 Flume 很像，不过 Flume 是监控的系统日志），将这些变更&lt;strong&gt;按发生的顺序完整记录&lt;/strong&gt;下来，&lt;strong&gt;写入到消息中间件中以供其他服务进行订阅及消费&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;在广义的概念上，只要能捕获数据变更的技术，我们都可以称为 CDC 。通常我们说的 CDC 技术&lt;strong&gt;主要面向数据库的变更&lt;/strong&gt;，是一种用于捕获数据库中数据变更的技术。&lt;/li&gt;
+&lt;li&gt;CDC 技术应用场景非常广泛：&lt;br&gt;
+数据同步，用于备份，容灾；&lt;br&gt;
+数据分发，一个数据源分发给多个下游；&lt;br&gt;
+数据采集(E)，面向数据仓库/数据湖的 ETL 数据集成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cdc-种类&#34;&gt;&lt;a href=&#34;#cdc-%e7%a7%8d%e7%b1%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CDC 种类
+&lt;/h3&gt;&lt;p&gt;CDC 主要分为基于查询和基于 Binlog 两种方式，我们主要了解一下这两种之间的区别：
+&lt;img src=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-12.png&#34;
+	width=&#34;1006&#34;
+	height=&#34;380&#34;
+	srcset=&#34;/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-12_hu_3b9489096a84d916.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/image-12_hu_a6bd3090da142ce7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;264&#34;
+		data-flex-basis=&#34;635px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;flink-sql&#34;&gt;&lt;a href=&#34;#flink-sql&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Flink SQL
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Flink SQL 是 Flink 实时计算为简化计算模型，&lt;strong&gt;降低用户使用实时计算门槛而设计的一套符合标准 SQL 语义的开发语言（为了降低 Spark 门槛，也有 Spark SQL；为了降低 HBase 门槛，有了 Phoneix；为了方便的操作 HDFS 文件，有了 Hive SQL&amp;hellip;&amp;hellip;）&lt;/strong&gt;。 自 2015 年开始，阿里巴巴开始调 研开源流计算引擎，最终决定基于 Flink 打造新一代计算引擎，针对 Flink 存在的不足进行优化和改进，并且在 2019 年初将最终代码开源，也就是我们熟知 的 Blink。Blink 在原来的 Flink 基础上最显著的一个贡献就是 Flink SQL 的 实现。&lt;/li&gt;
+&lt;li&gt;Flink SQL 是面向用户的 API 层，在我们传统的流式计算领域，比如 Storm、 Spark Streaming 都会提供一些 Function 或者 Datastream API，用户通过 Java 或 Scala 写业务逻辑，这种方式虽然灵活，但有一些不足，比如具备一定门槛且调优较难，随着版本的不断更新，API 也出现了很多不兼容的地方。在这个背景下，毫无疑问，SQL 就成了我们最佳选择！&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         

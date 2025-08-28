@@ -528,7 +528,7 @@
         <description></description>
         </item>
         <item>
-        <title>Ci/Cd</title>
+        <title>CI/CD</title>
         <link>/zh-cn/tags/ci/cd/</link>
         <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
         
@@ -536,11 +536,11 @@
         <description></description>
         </item>
         <item>
-        <title>Kubernetes</title>
-        <link>/zh-cn/tags/kubernetes/</link>
+        <title>K8S</title>
+        <link>/zh-cn/tags/k8s/</link>
         <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/tags/kubernetes/</guid>
+        <guid>/zh-cn/tags/k8s/</guid>
         <description></description>
         </item>
         <item>
@@ -552,11 +552,11 @@
         <description></description>
         </item>
         <item>
-        <title>Service_mesh</title>
-        <link>/zh-cn/tags/service_mesh/</link>
+        <title>ServiceMesh</title>
+        <link>/zh-cn/tags/servicemesh/</link>
         <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/tags/service_mesh/</guid>
+        <guid>/zh-cn/tags/servicemesh/</guid>
         <description></description>
         </item>
         <item>
@@ -565,14 +565,6 @@
         <pubDate>Fri, 11 Oct 2024 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Axios</title>
-        <link>/zh-cn/tags/axios/</link>
-        <pubDate>Tue, 08 Oct 2024 00:35:44 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/axios/</guid>
         <description></description>
         </item>
         <item>
@@ -616,11 +608,11 @@
         <description></description>
         </item>
         <item>
-        <title>分布式计算框架</title>
-        <link>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/</link>
+        <title>分布式</title>
+        <link>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
         <pubDate>Wed, 04 Sep 2024 00:12:24 +0000</pubDate>
         
-        <guid>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/</guid>
+        <guid>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</guid>
         <description></description>
         </item>
         <item>
@@ -693,38 +685,6 @@
         <pubDate>Sun, 01 Sep 2024 00:53:40 +0000</pubDate>
         
         <guid>/zh-cn/tags/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Ant Design</title>
-        <link>/zh-cn/tags/ant-design/</link>
-        <pubDate>Sat, 10 Aug 2024 23:28:45 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/ant-design/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Ant Design Pro</title>
-        <link>/zh-cn/tags/ant-design-pro/</link>
-        <pubDate>Sat, 10 Aug 2024 23:28:45 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/ant-design-pro/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>前端框架</title>
-        <link>/zh-cn/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</link>
-        <pubDate>Sat, 10 Aug 2024 23:28:45 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>数学建模</title>
-        <link>/zh-cn/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</link>
-        <pubDate>Fri, 02 Aug 2024 11:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</guid>
         <description></description>
         </item>
         <item>
@@ -805,14 +765,6 @@
         <pubDate>Tue, 23 Jul 2024 17:48:45 +0000</pubDate>
         
         <guid>/zh-cn/tags/spring-security/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>分布式</title>
-        <link>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
-        <pubDate>Thu, 11 Jul 2024 23:06:25 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</guid>
         <description></description>
         </item>
         <item>

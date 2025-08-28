@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Spark 发展、特点、概述，三大组件：Spark Core、Saprk SQL、Spark Streaming，RDD 算子、RDD 转换和行动操作、RDD 持久化和缓存、检查点机制、宽窄依赖、DAG、Stage，Spark、SQL 发展、概述、特点、dataframe、dataset，Spark Streaming 工作机制、缓存、容错、DStream、常见流式计算和离线计算，Spark 多种部署方式">
+<title>一文入门大数据准流式计算引擎 Spark【万字详解，全网最新】</title>
+
+<link rel='canonical' href='/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<meta property='og:title' content="一文入门大数据准流式计算引擎 Spark【万字详解，全网最新】">
+<meta property='og:description' content="Spark 发展、特点、概述，三大组件：Spark Core、Saprk SQL、Spark Streaming，RDD 算子、RDD 转换和行动操作、RDD 持久化和缓存、检查点机制、宽窄依赖、DAG、Stage，Spark、SQL 发展、概述、特点、dataframe、dataset，Spark Streaming 工作机制、缓存、容错、DStream、常见流式计算和离线计算，Spark 多种部署方式">
+<meta property='og:url' content='/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Spark' /><meta property='article:tag' content='大数据' /><meta property='article:tag' content='分布式' /><meta property='article:published_time' content='2024-09-04T00:12:24&#43;00:00'/><meta property='article:modified_time' content='2024-09-04T00:12:24&#43;00:00'/>
+<meta name="twitter:title" content="一文入门大数据准流式计算引擎 Spark【万字详解，全网最新】">
+<meta name="twitter:description" content="Spark 发展、特点、概述，三大组件：Spark Core、Saprk SQL、Spark Streaming，RDD 算子、RDD 转换和行动操作、RDD 持久化和缓存、检查点机制、宽窄依赖、DAG、Stage，Spark、SQL 发展、概述、特点、dataframe、dataset，Spark Streaming 工作机制、缓存、容错、DStream、常见流式计算和离线计算，Spark 多种部署方式">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGkAAABYCAYAAAD2pNkyAAAAIGNIUk0AAHomAACAhAAA+gAAAIDo
+AAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAADsMAAA7DAcdv
+qGQAAAv9SURBVHja7Zp9cFzVdcB/577Vl23FfBmpJrSEEINDnGAZl+x6V2vFslETYsIg2R7CBMJ4
+Ok2BUpJCM2kyiiFMIBBIjEMat2GCh8TYVpKZ0CmKv99qJTmMsZvw4fAZSkONP7CNLUvySntP/5Bt
+9r3dlXYXhukf9zf2jN5955577zl77se5DxwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD
+4XA4HA6Hw+FwOByO/5dIOcKqKrpsbtRm7TwRzlfVvxDhCMJeweyQuilb5TF/uNLOJJPJKaqjn8Xq
+bEEvBCIKxzA8C/K07/emRUQr1N0oNjPHqlyM6AUgZwARUY2ocBDhVaP88ZyG87Z2dXUNvd+G7uzs
+NKmtGz+dVS4DaRTRyarytgj7Mbpj+/a+54uNrSQn2esXTtbhg3cq3Ijwl+OIHheVnwiT7jVd6QPl
+GFCzmbuB64BJRQWV1/BYKVL9I9/3RyfSu2DBgrNHTwx9S9HPAReV2J1BRP5TDPf5ft/OchzR2to6
+dWTk+Pl1dVNf7u7uPgHQFo9PGyT7DeB64Jxxqu8DWSle1Urf9wdyX0zoJNs+p92KfQj4cMm9VQ4Z
++LLp2v2biUST8egyhdVAfanqBZ5VU7U0lUrtGU+uOR7tAeLlGDowClgzacrUf+ju7j464TgS0W+r
+8i3AILyQ6um/dH4ierNV7gWmlNHun70qc9W2bb2/zxlvcbJLZt91suFKGDVi5pv1z/QWH9i8W1Tt
+ynH6YQFT5N1R8WRBsV/7woULJ58YGhjgvfNMVc2kK7ds2fJ2MYHm5uhsLLty+y3wuMKXKmzzGIZk
+KtW/m3EMQLZ99iOFHSRbQG40Ssyod4kRFovKg8CxkGBE0ZuK6W9JRJtV7Q8IOmhAkB9G8D5VO6n+
+bL+nL4KpmgHcBrI/pOJDmtUfF9Nvh4YaChT/FGNuiEhkzqQpU6ee23jeJPGq62okcqERWSawBsiG
+6swZyQymFi+OFY10UbkiVGQKOOgt4H5P5ErxmImp+rgR2gT5PkJ4aajHsjaZTEYAIoUaHe2Y/XcK
+Xwl15b+NsMys37UjJP4i8KReF/+OzRxfpcJ171pKi64bWeV+wMvRvz+CadmaTr9wukQE4GXg5dbW
+1scyJ44/gdKWo2aWqkqhBXfE2AZsoGgwle5fXqQ7fzr5f92CePyeEck+ijLv9Fvl4+8c4m7gHwtX
+12mMz6qauilf37Rp0/FQ+R7gt21tbXcNDbzzcMixF4sdWQr8PC+S7JLLPwE8FCp+zmh1UwEHvWvi
+X6QPe127vwh8HVCUITHew4VkF8TjFwJ/HaiP3pzroDCbN29+55KZsxajbM6p1Vt0R2Q1GEnKW5TA
+lnT6JTHVbQi9wep6S0vLvE8VdBEUdZIgX02l+28t4KDTdHd3H93e03ejQE9Ar+rVUGC6s5pdBdTm
+FB30TPXnTdeOQ6UMMrJh931GvE8aqi4163c+V0hmxOjF4bLqOlIT6V69evVI7eT6pQLrBZ4Ur+qG
+osYR0xAqKMlJAL7vD3gRuQHI5BR72VG9rUhrhZ0kPO6n+x6iBERE1ZhVuWUKCQg5yS5rugJIhqr/
+i6z73eulDhDArN/5nOl6+k9F31vJ2y1lhuS7p+bg8di4ceMhP92/1E/3L/Z9/8/F5KxqY9BeWrKT
+ALZt63sV4SeBQtXPd3R0eHnCyrn5GmR/bV39bZSBiL4UKjpXVSXopCx3hhp/0eOjPy2noVI4p7Fx
+F3Ak2JTepDbzfDIe+8qiRYvOes+NSHC6U2FfuSo8eCLc9QN79+Zt6aXQmmTkjo0bN5Y0++RoCm/V
+R0VETzvJ3tpWg+rfBBviUdmwIVuK+nLo6uoaEuGevBfKDEUfGR48tq85Ht2WjMdub2mJfbSSNkQJ
+rUmlT3enaP7Moh3AoaAanZXf7bw16WBDw/QnKBPNj8j9kDvd7dt3BUJdroQRb20lBioFv6f/AZAH
+iryOAPMVfTA7oq8k49E/JOOx29vi8Yl2UTnGDDmpzOkOYMWKFRbh5aAh9bzQs5CXSZCfbdiwITNh
+AyFENeykfZDjJKsSXIuUN826nf9TbkPlkEr33SGeSYD8djw5hVmKPjhI9o3mePTh1tbY9AmVhyPJ
+lB9JY4bjzcAzGmj7qkTiDEJHGYN2V9KWhvos4UgS1b8K9o7dlTRULr7fm06l+9owNAH3I7w0jngt
+cEtmWPckE7HlE6gODDiiXkVOUmEwVBQ41A4X2H5XT6qvyHYiwelOw5GkImcGKmj5C+17IZXq351K
+99+Z6um/WDxmgvwzkIbQkXSMD6nqvzXHo98rpKu9vb0ubExTYyuNpKkBw4kcyX0e9fKmqMHyNwwn
+dRN0kkh4TUIDTkLy0jwfGL7f/8dUuu97qXR/Qrzq8wT5KmMZgTB3JOOx68OFBw4cyEsJRSL1lf7o
+zgiaRQ/nPquGIqnEQ3NBQhsHzXcSwXsgYXLFjb2P+L7/lp/ue0i86hkg32QsO50zLr0//3w1Gjgj
+oRw+dXVQDp2dnUYhsJtTlWCUWBt0UhmH5gIEI8lKcLoTkb2BzlgmXpw/QHzfH02l++4B7g29apRs
+JrDpyUsJiVQURdu3b2oiL5LMM0GpYLah3ENzkODUacKRpFZfC9WIamenKUHzB4p4rMkv5JLcR6v6
+nrffAJrVL4aKhqc1NvrBpnlfIunkbBBcciKhSDKYTaGBn6V7nlxYqTELDlpVkvHYA83x6N7meKyz
+Eh3G5CdUrUpN0E5UnLfLMdoFwN8HTUJP/tV6ONtQ2Q+idmzaDNyrVY+a0Bb80qt2hhc9q3q3/u2c
+qkoa1Y45cdvedI3m5LrmJ+YtV/RrQCPot+cnYteWq9eO6MfCZYIG7mNUJZRtKM9wixfH6jWbWQtU
+B9QYWRWWzcsSVJDZABg22fBmR4eNOQC5TlqxwmLyMgBz7SG7WjsnTnye1tyZjGQ7mlZmsT1W9FdW
+X/nu6XfovFxZq/r4/ETs6nIGo8LN4bKqWhOYgghHUhk7rtbW2PQjh/Up4NPBN7I1lerL/xxAgtOd
+VnhoNjYvJXTo1HccJihY/QjKGyGj3Jh9/ljKLpndPK7xOpMRXTLnC9kXjvYoemtO/dvtrW01Y+OR
+34eq1VrVXzUnYmubm5tnjm+81qnJeHRd6NIPQXZv3twb6LOE1iRjzISGa4vHpzXHY9/IDOuewIXf
+GMMRzO1FqgacFFFT0SbFhiMyJyEcTGd07RiyS5qusVbTgTyeaNQq/mh70yuCptXwKiqHETUC01SZ
+lX3haAwKpewxcnSoDjgxrXH6v+7f9+ZSlNzrZoPqMnRkaTIe+y8V3YHK6wIjCBHQKaoSzwwfjxG8
+5zpFoSv0wBZc1V6djEePG2G/EBkelWwNSK2M5eHmoswdJHsZUGhqH8aYxVtT6T+U4qRKD83hgyzK
+6c8F8qYxs37XLrv08mutza6F4Gkb0YsULho7qeipf+Miwjp5zD8CY9nvtra2RYMDR58EDUemKDob
+ZfbYxS45ygu3IvDU9p7efz95zZ474IbQ8zXANVkFGOWU8hI+4DuGMdemUr2bCr1sbW2dmhk+HnDs
+mWdOryyzAeeG+nM6kgpusc26nU8Z5XKQsr47C1kqI8h3pKHhy7nF3d3dR1sWLGwB+RpQ8UeIAr+u
+P+Ps9iLX54NlK8znl5HqupnFHASQyWTCv/7DlWS/AVTCKSEpPN3lYrp2vwLMte1Nn7Oi/4SSQPCY
+mNdFWSPUrDYbdrxZSGDFihUWeDCZTK7R7MiXBF2uMLME3QBPY8z3/VTv+qJ9h+stchfo5YR2aBNw
+CGRtRLxHt/b07JpIuE51YGjs6yLvZMOV3xqoBgJG0I3v/l0i9qZYPQMnElb1MhHOQfXsMQ3ytlp9
+GzGvedArG555o1SduSxKJM4/oXopkv2EwgyQelH1VDgicBiVZ00V/du29b1aqs6Ojo7qgwf/d6Yd
+sTMU+QgwTeAs0CkqZFCOgBwR9CU1VTtbWlpePPkDKpn5ieiVVlkw5iT5dSrV11/J+JPJ5AXYzHKg
+CqXHT/f/RyV6HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XCUyP8BdT6l
+KncUIK8AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjUtMDYtMDFUMTc6MjQ6MzQrMDA6MDC/mtbVAAAA
+JXRFWHRkYXRlOm1vZGlmeQAyMDI1LTA2LTAxVDE3OjI0OjM0KzAwOjAwzsduaQAAACh0RVh0ZGF0
+ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/page/about/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#spark-简介">Spark 简介</a>
+      <ol>
+        <li><a href="#spark-特点">Spark 特点</a></li>
+        <li><a href="#spark-和-mr-处理任务对比">Spark 和 MR 处理任务对比</a></li>
+      </ol>
+    </li>
+    <li><a href="#spark-组件">Spark 组件</a>
+      <ol>
+        <li><a href="#spark-core">Spark Core</a>
+          <ol>
+            <li><a href="#rdd-算子">RDD 算子</a></li>
+            <li><a href="#rdd-特点">RDD 特点</a></li>
+            <li><a href="#rdd-做了什么">RDD 做了什么</a></li>
+            <li><a href="#rdd-的转换和行动操作">RDD 的转换和行动操作</a></li>
+            <li><a href="#rdd-持久化和缓存">RDD 持久化和缓存</a></li>
+            <li><a href="#存储级别">存储级别</a></li>
+            <li><a href="#checkpoint-检查点机制">Checkpoint 检查点机制  </a></li>
+            <li><a href="#rdd-宽窄依赖">RDD 宽窄依赖</a></li>
+          </ol>
+        </li>
+        <li><a href="#spark-sql">Spark SQL</a>
+          <ol>
+            <li><a href="#spark-sql-发展精彩">Spark SQL 发展（精彩）</a></li>
+            <li><a href="#spark-sql-概述">Spark SQL 概述</a></li>
+            <li><a href="#spark-sql-特点">Spark SQL 特点</a></li>
+            <li><a href="#spark-sql-数据模型-dataframe-和-dataset">Spark SQL 数据模型 DataFrame 和 Dataset</a></li>
+            <li><a href="#如何进行-sparksql-编">如何进行 SparkSQL 编</a></li>
+          </ol>
+        </li>
+        <li><a href="#spark-streaming">Spark Streaming</a>
+          <ol>
+            <li><a href="#简介">简介</a></li>
+            <li><a href="#流式计算特点">流式计算特点</a></li>
+            <li><a href="#常见流式计算和离线计算框架">常见流式计算和离线计算框架</a></li>
+            <li><a href="#sparkstreaming-的基本工作原理">SparkStreaming 的基本工作原理</a></li>
+            <li><a href="#sparkstreaming-的缓存">SparkStreaming 的缓存</a></li>
+            <li><a href="#sparkstreaming-的容错">SparkStreaming 的容错</a></li>
+            <li><a href="#dstream-操作">DStream 操作</a></li>
+          </ol>
+        </li>
+        <li><a href="#mllib">MLlib</a></li>
+        <li><a href="#graphx">Graphx</a></li>
+      </ol>
+    </li>
+    <li><a href="#spark-多种部署模式">Spark 多种部署模式</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/">一文入门大数据准流式计算引擎 Spark【万字详解，全网最新】</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            Spark 发展、特点、概述，三大组件：Spark Core、Saprk SQL、Spark Streaming，RDD 算子、RDD 转换和行动操作、RDD 持久化和缓存、检查点机制、宽窄依赖、DAG、Stage，Spark、SQL 发展、概述、特点、dataframe、dataset，Spark Streaming 工作机制、缓存、容错、DStream、常见流式计算和离线计算，Spark 多种部署方式
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 04, 2024</time>
+        </div>
+        
+
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 14 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/spark/">Spark</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="spark-简介"><a href="#spark-%e7%ae%80%e4%bb%8b" class="header-anchor"></a>Spark 简介
+</h2><p>Spark 于 2009 年诞生于加州大学伯克利分校 AMPLab，2013 年被捐赠给 Apache 软件基金会，2014 年 2 月成为 Apache 的顶级项目。</p>
+<p>相对于 MapReduce 的批处理计算，<strong>Spark 基于内存计算</strong>，可以带来上百倍的性能提升，因此它成为继 MapReduce 之后，最为广泛使用的<strong>分布式计算框架、大数据分析引擎</strong>。</p>
+<h3 id="spark-特点"><a href="#spark-%e7%89%b9%e7%82%b9" class="header-anchor"></a>Spark 特点
+</h3><ul>
+<li><strong>快</strong>：采用<strong>DAG 执行引擎，支持循环数据流和内存计算</strong>，使得 Spark 速度更快，在内存中的速度 是 Hadoop MR 的百倍，在磁盘上的速度是 Hadoop MR 的十倍(官网数据)。</li>
+<li><strong>通用</strong>：Spark 提供了统一的解决方案。Spark 可以⽤于批处理、交互式查询（Spark SQL）、实时流处理（Spark Streaming）、机器学习（Spark MLlib）和图计算（GraphX）。这些不同类型的处理都可以在同⼀个应用中无缝使用。</li>
+<li><strong>易用</strong>：Spark 支持 Java、Python、Scala 的 API 和超过 80 种⾼级算法，⽽且⽀持交互式的 Python 和 Scala 的 shell。</li>
+<li><strong>兼容</strong>：Spark 可以使⽤ Hadoop 的 YARN 和 Apache Mesos 作为它的资源管理和调度器，器，并且不需要任何数据迁移就可以处理所有 Hadoop 支持的数据，包括 HDFS、HBase 和 Cassandra 等。Spark 也可以不依赖于第三⽅的资源管理和调度器，它实现了 Standalone 作为其内置的资源管理和调度框架。</li>
+</ul>
+<h3 id="spark-和-mr-处理任务对比"><a href="#spark-%e5%92%8c-mr-%e5%a4%84%e7%90%86%e4%bb%bb%e5%8a%a1%e5%af%b9%e6%af%94" class="header-anchor"></a>Spark 和 MR 处理任务对比
+</h3><p><img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image.png"
+	width="1035"
+	height="335"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image_hu_89e9ef41d7701caf.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image_hu_f7a2df21a1ec0d1c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="308"
+		data-flex-basis="741px"
+	
+>
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-1.png"
+	width="1087"
+	height="353"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-1_hu_970b3d5f166717f5.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-1_hu_7983b45c642d74f9.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="307"
+		data-flex-basis="739px"
+	
+></p>
+<h2 id="spark-组件"><a href="#spark-%e7%bb%84%e4%bb%b6" class="header-anchor"></a>Spark 组件
+</h2><h3 id="spark-core"><a href="#spark-core" class="header-anchor"></a>Spark Core
+</h3><p>Spark Core 实现了 Spark 的基本功能，包含任务调度、内存管理、错误恢复、与存储系统 交互等模块。Spark Core 中还包含 了对弹性分布式数据集(resilient distributed dataset，简称 RDD)的 API 定义。</p>
+<h4 id="rdd-算子"><a href="#rdd-%e7%ae%97%e5%ad%90" class="header-anchor"></a>RDD 算子
+</h4><h5 id="为什么有-rdd"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%9c%89-rdd" class="header-anchor"></a>为什么有 RDD？
+</h5><p>在许多迭代式算法(比如机器学习、图算法等)和交互式数据挖掘中，不同计算阶段之间会重用中间结果，即<strong>一个阶段的输出结果会作为下一个阶段的输入</strong>。但是， 之前的 <strong>MapReduce 框架采用非循环式的数据流模型</strong>，把中间结果写入到 HDFS 中，带来了大量的数据复制、磁盘 IO 和序列化开销，且这些框架只能支持一些 特定的计算模式(map/reduce)，并没有提供一种<strong>通用的数据抽象</strong>。</p>
+<p>RDD 提供了一个抽象的数据模型，让我们不必担心底层数据的分布式特性，只需<strong>将具体的应用逻辑表达为一系列转换操作(函数)</strong> ，不同 RDD 之间的转换操作之间还可以形成依赖关系，进而实现<strong>管道化</strong>，从而<strong>避免了中间结果的存储</strong>，大大降低数据复制、磁盘 IO 和序列化开销，并且还提供了更多的 API 操作！</p>
+<h5 id="rdd-介绍"><a href="#rdd-%e4%bb%8b%e7%bb%8d" class="header-anchor"></a>RDD 介绍
+</h5><ul>
+<li>RDD（Resilient Distributed Dataset）叫做<strong>弹性分布式数据集</strong>，是 Spark 中<strong>最基本的数据抽象</strong>，是 Spark 计算的基石，它代表⼀个不可变、可分区、里面的元素可并行计算的集合。</li>
+<li>RDD 具有数据流模型的特点：自动容错、位置感知性调度和可伸缩性。RDD 允许用户在执⾏多个查询时显式地将⼯作集缓存在内存中，后续的查询能够<strong>重⽤⼯作集</strong>，这极⼤地提升了查询速度。</li>
+<li>MR 中对数据是没有进行抽象的，而在 Spark 中对数据进行了抽象，提供⼀些列处理⽅法也就是 RDD，为用户屏蔽了底层对数据的复杂抽象和处理，为⽤户提供了⼀组⽅便 的数据转换与求值方法，好比 Java 中类的封装。</li>
+</ul>
+<p><strong>注意 : RDD 本身是不存储数据，而是记录了数据的位置，数据的转换关系(调用什么方法、传入什么函数)！！！</strong></p>
+<p><strong>以下是 RDD 源码翻译解读：</strong> <img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-2.png"
+	width="1083"
+	height="1150"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-2_hu_1a232703d894b756.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-2_hu_b23baff52680b4e9.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="94"
+		data-flex-basis="226px"
+	
+></p>
+<h4 id="rdd-特点"><a href="#rdd-%e7%89%b9%e7%82%b9" class="header-anchor"></a>RDD 特点
+</h4><ul>
+<li>弹性体现：
+<ol>
+<li>存储的弹性：内存与磁盘的自动切换；</li>
+<li>容错的弹性：RDD 的血统（Lineag）会<strong>记录 RDD 的元数据信息和转换行为</strong> ，当 RDD 的部分分区数据丢失时，它可以根据这些信息来重新运算并恢复丢失的数据分区。</li>
+<li>计算的弹性：计算出错重试机制；</li>
+<li>分片的弹性：可根据需要重新分片；</li>
+</ol>
+</li>
+<li>分布式：数据存储在大数据集群不同节点上</li>
+<li>数据集：RDD<strong>封装了计算逻辑</strong>，并不保存数据</li>
+<li>数据抽象：RDD 是⼀个抽象，需要具体实现</li>
+<li>不可变：RDD 封装的<strong>计算逻辑不可改变</strong>，想要改变只能产⽣新的 RDD</li>
+<li>可分区、并行计算</li>
+</ul>
+<h4 id="rdd-做了什么"><a href="#rdd-%e5%81%9a%e4%ba%86%e4%bb%80%e4%b9%88" class="header-anchor"></a>RDD 做了什么
+</h4><p>从计算的角度来讲，数据处理过程中需要计算资源（内存 &amp; CPU）和计算模型（逻辑）。执⾏时，需要<strong>将计算资源 和计算模型进行协调和整合</strong>。</p>
+<p>Spark 框架在执行时，先申请资源，然后将应⽤程序的数据处理逻辑<strong>分解成⼀个⼀个的计算任务</strong>。然后将<strong>任务分发到已经分配资源的计算节点</strong>上, <strong>按照指定的计算模型进行数据计算</strong>。最后得到计算结果。</p>
+<h4 id="rdd-的转换和行动操作"><a href="#rdd-%e7%9a%84%e8%bd%ac%e6%8d%a2%e5%92%8c%e8%a1%8c%e5%8a%a8%e6%93%8d%e4%bd%9c" class="header-anchor"></a>RDD 的转换和行动操作
+</h4><ul>
+<li>RDD 算子分为两种类型的操作：<strong>转换操作和行动操作</strong></li>
+<li><strong>转换操作是返回⼀个新的 RDD 的操作</strong>，比如 map 和 flatMap</li>
+<li><strong>行动操作则是向 Driver 返回结果或将结果写出到外部存在设备</strong>，比如 collect 和 saveAsTextFile</li>
+</ul>
+<h5 id="transformation转换算子概述"><a href="#transformation%e8%bd%ac%e6%8d%a2%e7%ae%97%e5%ad%90%e6%a6%82%e8%bf%b0" class="header-anchor"></a>  Transformation(转换)算子概述
+</h5><p>RDD 中的所有转换都是<strong>延迟加载</strong>的，它们只是记住这些应⽤到基础数据集上的转换动作，并<strong>不会直接计算结果</strong>。只有当发生⼀个要求返回结果给 Driver 的动作时，这些转换才会真正运 行。<strong>这样可以在 Action 时对 RDD 操作形成 DAG 有向无环图进行 Stage 的划分和并行优化，这这种设计让 Spark 更加有效率地运行！</strong> 列举部分算子：
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-3.png"
+	width="1023"
+	height="1298"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-3_hu_c5d2997a79139ab.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-3_hu_cb7a2e436729642b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="78"
+		data-flex-basis="189px"
+	
+></p>
+<h5 id="action行动算子概述"><a href="#action%e8%a1%8c%e5%8a%a8%e7%ae%97%e5%ad%90%e6%a6%82%e8%bf%b0" class="header-anchor"></a>Action(行动)算子概述  
+</h5><p><strong>在 RDD 上运⾏计算,并返回结果给 Driver 或写入文件系统</strong>， 列举部分算子：
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-4.png"
+	width="1251"
+	height="1100"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-4_hu_9d60be3e9c41d5f1.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-4_hu_778af530c8906f5b.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="113"
+		data-flex-basis="272px"
+	
+></p>
+<h4 id="rdd-持久化和缓存"><a href="#rdd-%e6%8c%81%e4%b9%85%e5%8c%96%e5%92%8c%e7%bc%93%e5%ad%98" class="header-anchor"></a>RDD 持久化和缓存
+</h4><ul>
+<li>Spark 速度非常快的原因之⼀，就是在不同操作中可以<strong>在内存中持久化或缓存多个数据集</strong>。当持久化某个 RDD 后， 每⼀个节点都将把计算的分片结果保存在内存中，并在对此 RDD 或衍⽣出的 RDD 进行的其他动作中<strong>重⽤</strong>，这使得后续的动作变得更加迅速！</li>
+<li><strong>缓存是 Spark 构建迭代式算法和快速交互式查询的关键</strong>。如果⼀个有持久化数据的节点发⽣故障，<strong>Spark 会在需要⽤到缓存的数据时重算丢失的数据分区</strong>。如果希望节点故障的情况不会拖累我们的执⾏速度，也可以把数据备份到多个节点上。</li>
+<li>RDD 通过 <strong>persist 或 cache 方法</strong>可以将前面的计算结果缓存，但是<strong>并不是这两个方法被调用时立即缓存</strong>，而是触发后面的 action 时，该 RDD 将会被缓存在 计算节点的内存中，并供后面重用。</li>
+</ul>
+<h4 id="存储级别"><a href="#%e5%ad%98%e5%82%a8%e7%ba%a7%e5%88%ab" class="header-anchor"></a>存储级别
+</h4><p>默认的存储级别都是<strong>仅在内存存储一份</strong>，Spark 的存储级别还有好多种，存储级别在 object StorageLevel 中定义的。
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-5.png"
+	width="1080"
+	height="332"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-5_hu_c4d5bafc32f65d98.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-5_hu_5824fac9db300d96.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="325"
+		data-flex-basis="780px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-6.png"
+	width="1097"
+	height="562"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-6_hu_dce8c9f1f7f4dbd6.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-6_hu_c6cb38245d53f62f.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
+	
+></p>
+<h4 id="checkpoint-检查点机制"><a href="#checkpoint-%e6%a3%80%e6%9f%a5%e7%82%b9%e6%9c%ba%e5%88%b6" class="header-anchor"></a>Checkpoint 检查点机制  
+</h4><p>Spark 中对于数据的保存除了持久化操作之外，还提供了⼀种<strong>检查点的机制</strong>，检查点（本质是通过将 RDD 写入 Disk 做检查点）是为了<strong>通过血统（lineage）做持久化容错的辅助</strong>，lineage 过长会造成容错成本过高，这样就不如在中间阶段做检查点容错，如果之后有节点出现问题⽽丢失分区，<strong>从做检查点的 RDD 开始重做 Lineage</strong>，就会减少资源开销。检查点通过将数据写⼊到 HDFS 文件系统实现了 RDD 的检查点功能。</p>
+<h4 id="rdd-宽窄依赖"><a href="#rdd-%e5%ae%bd%e7%aa%84%e4%be%9d%e8%b5%96" class="header-anchor"></a>RDD 宽窄依赖
+</h4><p>RDD 和 它依赖的父 RDD 的关系有两种不同的类型，</p>
+<p>宽依赖(wide dependency/shuffle dependency) ：父 RDD 的一个分区被子 RDD 的多个分区依赖(涉及到 shuffle)</p>
+<p>窄依赖(narrow dependency）：父 RDD 的一个分区只会被子 RDD 的一个分区依赖；
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-7.png"
+	width="1065"
+	height="289"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-7_hu_51d87d4518550f98.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-7_hu_a820f9abd888888e.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="368"
+		data-flex-basis="884px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-8.png"
+	width="1033"
+	height="754"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-8_hu_95162decf3b9916a.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-8_hu_a724399596932073.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="328px"
+	
+></p>
+<h5 id="为什么要设计宽窄依赖"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e8%ae%be%e8%ae%a1%e5%ae%bd%e7%aa%84%e4%be%9d%e8%b5%96" class="header-anchor"></a>为什么要设计宽窄依赖
+</h5><p>对于窄依赖： 窄依赖的多个分区可以并行计算；窄依赖的一个分区的数据如果丢失只需要重新计算对应的分区的数据就可以了。</p>
+<p>对于宽依赖： 划分 Stage(阶段)的依据，对于宽依赖，必须等到上一阶段计算完成才能计算下 一阶段。</p>
+<h5 id="dag-生成和划分-stage"><a href="#dag-%e7%94%9f%e6%88%90%e5%92%8c%e5%88%92%e5%88%86-stage" class="header-anchor"></a>DAG 生成和划分 Stage
+</h5><ul>
+<li><strong>DAG 是什么？</strong><br>
+DAG(有向无环图)指的是<strong>数据转换执行的过程</strong>，有方向，无闭环(其实就是 RDD 执行的流程)；<strong>原始的 RDD 通过一系列的转换操作就形成了 DAG 有向无环图</strong>，任务执行时，可以按照 DAG 的描述，执行真正的计算(数据被操作的一个过程)。</li>
+<li><strong>DAG 的边界</strong><br>
+开始：通过 SparkContext 创建的 RDD<br>
+结束：触发 Action，一旦触发 Action 就会形成一个完整的 DAG</li>
+</ul>
+<p><strong>DAG 划分 Stage</strong> <img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-9.png"
+	width="1004"
+	height="334"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-9_hu_a38ceff118ea72f0.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-9_hu_244cfc01d9359b3c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="300"
+		data-flex-basis="721px"
+	
+></p>
+<ul>
+<li><strong>一个 Spark 程序可以有多个 DAG</strong>(有几个 Action，就有几个 DAG)。</li>
+<li><strong>一个 DAG 可以有多个 Stage</strong>(根据宽依赖/shuffle 进行划分)。</li>
+<li>同一个 Stage 可以有多个 Task 并行执行(task 数=分区数，如上图，Stage1 中 有三个分区 P1、P2、P3，对应的也有三个 Task)。</li>
+<li>可以看到这个 DAG 中 <strong>reduceByKey 操作是一个宽依赖，Spark 内核会以此为边界将其前后划分成不同的 Stage。</strong> 同时在图 Stage1 中，从 textFile 到 flatMap 到 map 都是窄依赖，这几步操作可以形成一个流水线操作，通过 flatMap 操作生成 partition 不用等待整个 RDD 计算结束，可以直接进行 map 操作，这样大大 提高了计算的效率。</li>
+</ul>
+<h3 id="spark-sql"><a href="#spark-sql" class="header-anchor"></a>Spark SQL
+</h3><h4 id="spark-sql-发展精彩"><a href="#spark-sql-%e5%8f%91%e5%b1%95%e7%b2%be%e5%bd%a9" class="header-anchor"></a>Spark SQL 发展（精彩）
+</h4><p><strong>Spark SQL 是构建在 SparkCore 基础之上的⼀个基于 SQL 的计算模块</strong>。 SparkSQL 的前身叫【Shark】，最开始 Shark 的底层代码优化、sql 的解析、执行引擎等完全基于 Hive（Shark On Hive），Hive 实现了 SQL on Hadoop，使用 MapReduce 执行任务，但是使用 MapReduce 做计算（Hive On MR），使得 Hive 的查询延迟比较高，而 Shark 改写 Hive 的物理执行计划，使用 Shark 代替 MapReduce 物理引擎（Hive On Shark），使用列式内存存储，使得 Shark 执行速度比 Hive 快，然而 Shark 执行计划的生成严重依赖 Hive（Shark On Hive On Shark），想要增加新的优化非常困难； <strong>并且 Hive 是进程级别的并行，Spark 是线程级别的并行</strong>，所以 Hive 中很多线程不安全的代码不适用于 Shark，所以在 15 年中旬的时候，Shark 负责⼈，将 Shark 项⽬结束掉，重新独⽴出来的⼀个项⽬，就是 SparkSQL，不再依赖 Hive，此后逐渐的形成两条互相独立的业务：SparkSQL 和 Hive-On-Spark。</p>
+<p><strong>如果说 Hive 是将 SQL 转化为 MR，那么 SparkSQL 是将 SQL 转换成 RDD+优化执行，因为我们直接操作 RDD 需要编程实现（学习成本），有了 SQL 我们即使不懂编程也可以实现 RDD 计算！</strong></p>
+<h4 id="spark-sql-概述"><a href="#spark-sql-%e6%a6%82%e8%bf%b0" class="header-anchor"></a>Spark SQL 概述
+</h4><p>Spark SQL<strong>主要用于结构化数据（数据分为结构化数据、半结构化数据、非结构化数据）RDD 主要用于处理非结构化、半结构化、结构化数据。与 RDD API 编程式操作不同，Spark SQL 可以使用 SQL 完成数据分析计算</strong>，Spark SQL 提供的接口为 Spark<strong>提供了有关数据结构和正在执⾏的计算的更多信息</strong>。在内部，Spark SQL 使⽤这些额外的信息来执⾏<strong>额外的优化</strong>。有几种与 Spark SQL 交互的⽅法，包括 SQL 和 Dataset API。计算结果时，将使⽤相同的执⾏引擎，这与⽤于表示计算的 API/语⾔⽆关。这种统⼀意味着开发⼈员可以轻松地在不同的 API 之间来回切换，基于 API 的切换提供了表示给定转换的最⾃然的⽅式。</p>
+<h4 id="spark-sql-特点"><a href="#spark-sql-%e7%89%b9%e7%82%b9" class="header-anchor"></a>Spark SQL 特点
+</h4><ul>
+<li>集成性</li>
+<li>统一性</li>
+<li>集成 Hive</li>
+<li>支持多种数据源</li>
+</ul>
+<h4 id="spark-sql-数据模型-dataframe-和-dataset"><a href="#spark-sql-%e6%95%b0%e6%8d%ae%e6%a8%a1%e5%9e%8b-dataframe-%e5%92%8c-dataset" class="header-anchor"></a>Spark SQL 数据模型 DataFrame 和 Dataset
+</h4><p>我们可以通过两种方式使用 Spark，一种是命令式，使用 Spark shell 编程操作 RDD，另一种是通过 SparkSQL 的数据模型 DataFrame 和 Dataset</p>
+<ul>
+<li>DataFrame 和 Dataset 可以理解为是⼀张 mysql 中的⼆维表，表有什么？表头，表名，字段，字段类型。<strong>RDD 其实说白了也是⼀张二维表，但是这张二维表相比较于 DataFrame 和 Dataset 却少了很多东西，比如表头，表名，字段，字段类型，只有数据和操作数据的方法</strong>。</li>
+<li>DataFrame 是 1.3 的时候出现的，Dataset 是在 spark 1.6.2 出现的，**早期的时候 DataFrame 叫 SchemaRDD，SchemaRDD 和 RDD 相比，就多了 Schema，所谓元数据信息。**相比 DataFrame，<strong>Dataset 提供了编译时类型检查</strong>，对于分布式程序来讲，提交⼀次作业要编译、打包、上传、运行，到提交到集群运行时才发现错误，很麻烦，这也是引⼊ Dataset 的⼀个重要原因！</li>
+<li>⼀般的，将 RDD 称之为 Spark 体系中的第一代编程模型；<strong>DataFrame 比 RDD 多了⼀个 Schema 元数据信息</strong>，被称之为 Spark 体系中的第⼆代编程模型；Dataset 吸收了 RDD 的优点(强类型推断、函数式编程)和 DataFrame 中的优化(SQL 优化引擎、内存列存储)，成为 Spark 的最新⼀代的编程模型。
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-10.png"
+	width="1205"
+	height="705"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-10_hu_e1c418e12b863467.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-10_hu_f17bda282b48d1ff.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="410px"
+	
+> <img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-11.png"
+	width="1214"
+	height="290"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-11_hu_dc655840c25e6a22.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-11_hu_3aebb3b080d30b91.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="418"
+		data-flex-basis="1004px"
+	
+></li>
+</ul>
+<h4 id="如何进行-sparksql-编"><a href="#%e5%a6%82%e4%bd%95%e8%bf%9b%e8%a1%8c-sparksql-%e7%bc%96" class="header-anchor"></a>如何进行 SparkSQL 编
+</h4><ul>
+<li>Spark Core 中，如果想要执行应用程序，需要首先<strong>构建上下文环境对象 SparkContext</strong>，<strong>Spark SQL 其实可以理解为对 Spark Core 的⼀种封装，不仅仅在模型上进行了封装，上下文环境对象也进行了封装。</strong></li>
+<li>在老的版本中，SparkSQL 提供两种 SQL 查询起始点：⼀个叫<strong>SQLContext</strong>，⽤于 Spark 自己提供的 SQL 查询； ⼀个叫<strong>HiveContext</strong>，⽤于连接 Hive 的查询。</li>
+<li><strong>SparkSession 是 Spark 最新的 SQL 查询起始点，实质上是 SQLContext 和 HiveContext 的组合</strong>，所以在 SQLContex 和 HiveContext 上可⽤的 API 在 Spark Session 上同样是可以使⽤的。</li>
+<li>SparkSession 内部封装了 SparkContext，所以计算实际上是由 sparkContext 完成的。 <strong>构建 SparkSession 需要依赖 SparkConf 或者 SparkContext</strong>，可以使⽤⼯⼚构建器(Builder ⽅式)模式创建 SparkSession。</li>
+</ul>
+<h3 id="spark-streaming"><a href="#spark-streaming" class="header-anchor"></a>Spark Streaming
+</h3><h4 id="简介"><a href="#%e7%ae%80%e4%bb%8b" class="header-anchor"></a>简介
+</h4><ul>
+<li>Spark Streaming 是 Spark 提供的对<strong>实时数据</strong>进行**流式计算（实时计算）**的组件。提供了用来操作数据流的 API，并且与 Spark Core 中的 RDD API 高度对应。</li>
+<li>从计算的延迟上⾯，又可以分为<strong>纯实时流式计算和准实时流式计算，SparkStreaming 属于准实时计算框架</strong></li>
+<li>所谓纯实时的计算，指的是<strong>来⼀条记录(event 事件)，启动⼀次计算的作业</strong>；离线计算指的是每次计算非常大的⼀批(比如几百 G，好几个 T)数据；准实时则是介于纯实时和离线计算之间的⼀种计算方式，那就是微批处理，即<strong>把大量数据微分成多小批进行计算</strong>，近似看成流计算。</li>
+</ul>
+<h4 id="流式计算特点"><a href="#%e6%b5%81%e5%bc%8f%e8%ae%a1%e7%ae%97%e7%89%b9%e7%82%b9" class="header-anchor"></a>流式计算特点
+</h4><ul>
+<li>数据是无界的(unbounded)</li>
+<li>数据是动态的</li>
+<li>计算速度快</li>
+<li>计算不止一次</li>
+<li>计算不能终止</li>
+</ul>
+<p>离线计算特点：</p>
+<ul>
+<li>数据是有界的(Bounded)</li>
+<li>数据静态的</li>
+<li>计算速度通常较慢</li>
+<li>计算只执⾏⼀次</li>
+<li>计算终会终⽌</li>
+</ul>
+<h4 id="常见流式计算和离线计算框架"><a href="#%e5%b8%b8%e8%a7%81%e6%b5%81%e5%bc%8f%e8%ae%a1%e7%ae%97%e5%92%8c%e7%a6%bb%e7%ba%bf%e8%ae%a1%e7%ae%97%e6%a1%86%e6%9e%b6" class="header-anchor"></a>常见流式计算和离线计算框架
+</h4><p><strong>离线</strong></p>
+<ul>
+<li>mapreduce</li>
+<li>spark-core</li>
+<li>flink 的 dataset</li>
+</ul>
+<p><strong>流式</strong></p>
+<ul>
+<li>storm  第⼀代的流式处理框架</li>
+<li>sparkStreaming（其实是为微批处理）第二代的流式处理框架</li>
+<li>flink 的 datastream  第三代的流式处理框架
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-12.png"
+	width="1094"
+	height="642"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-12_hu_e0935637f0e3394d.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-12_hu_42c4bb90cd92c470.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="408px"
+	
+></li>
+</ul>
+<h4 id="sparkstreaming-的基本工作原理"><a href="#sparkstreaming-%e7%9a%84%e5%9f%ba%e6%9c%ac%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="header-anchor"></a>SparkStreaming 的基本工作原理
+</h4><p>SparkCore 的数据模型是 RDD，SparkSQL 数据模型是 DataFrame 和 DataSet，<strong>SparkStreaming 的数据模型是 DStream，DStream 和 RDD 一样，是一种高级抽象，它基于内存处理连续的数据流，本质上还是 RDD 的基于内存的计算。</strong></p>
+<ul>
+<li>接收实时输入数据流，然后将数据拆分成多个 batch，比如每收集 1 秒的数据封装为⼀个 batch，然后将每个 batch 交给 Spark 的计算引擎进行处理，最后会⽣产出⼀个结果数据流，其中的数据，也是由一个一个的 batch 所组成的。</li>
+<li>DStream，英⽂全称为 Discretized Stream，中文翻译为“离散流”，它代表了⼀个持续不断的数据流。DStream 可以通过输入数据源来创建，比如 Kafka、Flume、ZMQ 和 Kinesis；也可以通过对其他 DStream 应用高阶函数来创建，比如 map、reduce、join、window。</li>
+<li>**DStream 的内部，其实是一系列时间上连续的 RDD。DStream 中的每个 RDD 都包含了⼀个时间段内的数据。
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-13.png"
+	width="1087"
+	height="221"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-13_hu_c85dd40cb892b784.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-13_hu_5a46580c8c95213a.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="491"
+		data-flex-basis="1180px"
+	
+></li>
+<li>对 DStream 应⽤的算子，比如 map，其实在底层会被翻译为对 DStream 中每个 RDD 的操作。比如<strong>对⼀个 DStream 执行⼀个 map 操作，会产生⼀个新的 DStream</strong>。但是，在底层，其实是对输入 DStream 中<strong>每个时间段的 RDD</strong>，都来⼀遍 map 操作，然后**⽣成的新的 RDD**，即作为新的 DStream 中的那个时间段的⼀个 RDD。</li>
+</ul>
+<h4 id="sparkstreaming-的缓存"><a href="#sparkstreaming-%e7%9a%84%e7%bc%93%e5%ad%98" class="header-anchor"></a>SparkStreaming 的缓存
+</h4><p>SparkStreaming 的缓存，说白了就是 DStream 的缓存，DStream 的缓存就只有⼀个⽅⾯，那就是 DStream 对应的 RDD 缓存，RDD 如何缓存？<strong>rdd.persist()</strong>，所以 DStream 的缓存说⽩了就是 RDD 的缓存，使⽤ persist()指定，并指定持久化策略，⼤多算⼦默认情况下，持久化策略为 MEMORY_AND_DISK_SER_2</p>
+<h4 id="sparkstreaming-的容错"><a href="#sparkstreaming-%e7%9a%84%e5%ae%b9%e9%94%99" class="header-anchor"></a>SparkStreaming 的容错
+</h4><ul>
+<li>每⼀个 Spark Streaming 应⽤，正常来说都是要 7*24 ⼩时运转的，这也是实时计算程序的特点。因为要持续不断的对数据进⾏计算，因此对实时计算应⽤的要求必须进行<strong>容错保底</strong>。</li>
+<li>Spark Streaming 程序就必须将足够的信息 checkpoint 到容错的存储系统上，从⽽让它能够从失败中进行恢复。有两种数据需要被 checkpoint：</li>
+<li>元数据 checkpoint：将定义了流式计算逻辑的信息，保存到容错的存储系统上，⽐如 HDFS。当运行 Spark Streaming 应⽤程序的 Driver 进程所在节点失败时，该信息可以⽤于进⾏恢复。元数据信息包括了： 创建 Spark Streaming 应⽤程序的<strong>配置信息</strong>，比如 SparkConf 中的信息。 定义了 Spark Stream 应⽤程序的计算逻辑的<strong>DStream 操作信息</strong>。 定义了那些 job 正在排队，还<strong>未处理的 batch 信息</strong>。</li>
+<li>数据 checkpoint：<strong>将实时计算过程中产生的 RDD 的数据保存到可靠的存储系统中</strong>。 对于一些将多个 batch 的数据进⾏聚合的，有状态的 transformation 操作，这是⾮常有⽤的。在这种 <strong>transformation 操作中，生成的 RDD 是依赖于之前的 batch 的 RDD，这会导致随着时间的推移，RDD 的依赖链条变得越来越长。 要避免由于依赖链条越来越长，导致的⼀起变得越来越长的失败恢复时间，有状态的 transformation 操作执⾏过程中间产⽣的 RDD，会定期地被 checkpoint 到可靠的存储系统上</strong>，比如 HDFS。从而削减 RDD 的依赖链条，进而缩短失败恢复时，RDD 的恢复时间。</li>
+</ul>
+<h4 id="dstream-操作"><a href="#dstream-%e6%93%8d%e4%bd%9c" class="header-anchor"></a>DStream 操作
+</h4><p>DStream 上的操作与 RDD 的类似，分为以下两种：</p>
+<ul>
+<li>Transformations(转换)</li>
+</ul>
+<p>**无状态转换：**每批次处理不依赖于之前批次的数据
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-14.png"
+	width="965"
+	height="701"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-14_hu_89af84bc9099ba16.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-14_hu_e344be5ff2174862.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
+	
+></p>
+<p>**有状态转换：**当前批次的处理需要使用之前批次的数据或者中间结果，有状态转换包括基于追踪状态变化的转换(updateStateByKey)和滑动窗口的转换：</p>
+<ul>
+<li>Output Operations(输出)/Action</li>
+</ul>
+<p>Output Operations 可以将 DStream 的数据输出到外部的数据库或文件系统。 当某个 Output Operations 被调用时，spark streaming 程序才会开始真正的 计算过程(与 RDD 的 Action 类似)。
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-16.png"
+	width="947"
+	height="274"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-16_hu_da10acb9d2b6b537.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-16_hu_781bc4d2e6d69df3.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="345"
+		data-flex-basis="829px"
+	
+>
+<img src="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-15.png"
+	width="940"
+	height="211"
+	srcset="/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-15_hu_701c0ed1923876b2.png 480w, /zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/image-15_hu_1494eb3aed1eab78.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="445"
+		data-flex-basis="1069px"
+	
+></p>
+<h3 id="mllib"><a href="#mllib" class="header-anchor"></a>MLlib
+</h3><p>提供常见的机器学习(ML)功能的程序库。包括分类、回归、聚类、协同过滤等，还提供了模型评估、数据导入等额 外的⽀持功能</p>
+<h3 id="graphx"><a href="#graphx" class="header-anchor"></a>Graphx
+</h3><p>GraphX 在 Spark 基础上提供了一站式的数据解决⽅案，可以⾼效地完成图计算的完整流⽔作业。GraphX 是⽤于图 计算和并⾏图计算的新的（alpha）Spark API。通过引⼊弹性分布式属性图（Resilient Distributed Property Graph），⼀种顶点和边都带有属性的有向多重图，扩展了 Spark RDD</p>
+<h2 id="spark-多种部署模式"><a href="#spark-%e5%a4%9a%e7%a7%8d%e9%83%a8%e7%bd%b2%e6%a8%a1%e5%bc%8f" class="header-anchor"></a>Spark 多种部署模式
+</h2><ul>
+<li>Local 多⽤于本地测试，如在 eclipse，idea 中写程序测试等。</li>
+<li>Standalone 是 Spark ⾃带的⼀个资源调度框架，它⽀持完全分布式。</li>
+<li>Yarn ⽣态圈⾥⾯的⼀个资源调度框架，Spark 也是可以基于 Yarn 来计算的。</li>
+<li>Mesos 资源调度框架，与 Yarn 类似。</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">kafka实战 集群搭建-Kraft模式</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Kafka入门到入土——万字详解，图文并茂</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/04/hahadoop%E9%AB%98%E5%8F%AF%E7%94%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">HA—Hadoop高可用</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/09/%E6%B5%85%E8%B0%88%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E4%BD%95%E4%B8%BA%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖</h2>
+            
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

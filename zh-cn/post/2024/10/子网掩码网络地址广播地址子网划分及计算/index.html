@@ -11,7 +11,7 @@
 <meta property='og:description' content="由上图可见网络号和主机号之和是32，而且此多彼少。例：IP地址为192.168.2.131，转换成二进制1111 1111.1010 1000.0000 0010.1000 0011，因为192为C类IP地址，那么左边24位是网络位，代表网段，右边的8位是主机号，代表该网段内的唯一一台主机。以C类网络为例，左边24位是网络号，每一位是0或1，因为第一字节十进制范围是192-233，也就说24位网络号变化范围是。">
 <meta property='og:url' content='/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2024-10-12T22:07:11&#43;00:00'/><meta property='article:modified_time' content='2024-10-12T22:07:11&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2024-10-12T22:07:11&#43;00:00'/><meta property='article:modified_time' content='2024-10-12T22:07:11&#43;00:00'/>
 <meta name="twitter:title" content="子网掩码、网络地址、广播地址、子网划分及计算">
 <meta name="twitter:description" content="由上图可见网络号和主机号之和是32，而且此多彼少。例：IP地址为192.168.2.131，转换成二进制1111 1111.1010 1000.0000 0010.1000 0011，因为192为C类IP地址，那么左边24位是网络位，代表网段，右边的8位是主机号，代表该网段内的唯一一台主机。以C类网络为例，左边24位是网络号，每一位是0或1，因为第一字节十进制范围是192-233，也就说24位网络号变化范围是。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,17 +336,22 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li>
+    <li><a href="#ipv4-地址分类及组成">IPV4 地址分类及组成</a></li>
+    <li><a href="#子网掩码">子网掩码</a></li>
+    <li><a href="#网络地址">网络地址</a></li>
+    <li><a href="#广播地址">广播地址</a></li>
+    <li><a href="#计算主机号范围及数量">计算主机号范围及数量</a></li>
+    <li><a href="#子网划分">子网划分</a>
       <ol>
-        <li><a href="#61-为什么要子网划分-6120e4b8bae4bb80e4b988e8a681e5ad90e7bd91e58892e58886">6.1 为什么要子网划分 {#6.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86}</a></li>
-        <li><a href="#62-子网划分思想-6220e5ad90e7bd91e58892e58886e6809de683b3">6.2 子网划分思想 {#6.2%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E6%80%9D%E6%83%B3}</a></li>
-        <li><a href="#63-子网计算步骤-6320e5ad90e7bd91e8aea1e7ae97e6ada5e9aaa4">6.3 子网计算步骤 {#6.3%20%E5%AD%90%E7%BD%91%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4}</a>
+        <li><a href="#为什么要子网划分">为什么要子网划分</a></li>
+        <li><a href="#子网划分思想">子网划分思想</a></li>
+        <li><a href="#子网计算步骤">子网计算步骤</a>
           <ol>
-            <li><a href="#631-确定借几位子网号-63120e7a1aee5ae9ae5809fe587a0e4bd8de5ad90e7bd91e58fb7"><strong>6.3.1 确定借几位子网号</strong> {#6.3.1%20%E7%A1%AE%E5%AE%9A%E5%80%9F%E5%87%A0%E4%BD%8D%E5%AD%90%E7%BD%91%E5%8F%B7}</a></li>
-            <li><a href="#632-确定每个子网的子网掩码-63220e7a1aee5ae9ae6af8fe4b8aae5ad90e7bd91e79a84e5ad90e7bd91e68ea9e7a081">6.3.2 确定每个子网的子网掩码 {#6.3.2%20%E7%A1%AE%E5%AE%9A%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%BD%91%E7%9A%84%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81}</a></li>
-            <li><a href="#633-确定子网的网络地址-633c2a0e7a1aee5ae9ae5ad90e7bd91e79a84e7bd91e7bb9ce59cb0e59d80">6.3.3 确定子网的网络地址 {#6.3.3%C2%A0%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80}</a></li>
-            <li><a href="#634确定子网的广播地址-634e7a1aee5ae9ae5ad90e7bd91e79a84e5b9bfe692ade59cb0e59d80">6.3.4确定子网的广播地址 {#6.3.4%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80}</a></li>
-            <li><a href="#635-确定子网的可用ip地址范围-63520e7a1aee5ae9ae5ad90e7bd91e79a84e58fafe794a8ipe59cb0e59d80e88c83e59bb4">6.3.5 确定子网的可用IP地址范围 {#6.3.5%20%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%8F%AF%E7%94%A8IP%E5%9C%B0%E5%9D%80%E8%8C%83%E5%9B%B4}</a></li>
+            <li><a href="#确定借几位子网号">确定借几位子网号</a></li>
+            <li><a href="#确定每个子网的子网掩码">确定每个子网的子网掩码</a></li>
+            <li><a href="#确定子网的网络地址">确定子网的网络地址</a></li>
+            <li><a href="#确定子网的广播地址">确定子网的广播地址</a></li>
+            <li><a href="#确定子网的可用-ip-地址范围">确定子网的可用 IP 地址范围</a></li>
           </ol>
         </li>
       </ol>
@@ -414,7 +419,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 7 分钟
+                阅读时长: 3 分钟
             </time>
         </div>
         
@@ -451,55 +456,24 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141861919"  title="一文入门大数据准流式计算引擎Spark【万字详解，全网最新】_大数据 spark-CSDN博客"
-     target="_blank" rel="noopener"
-    >一文入门大数据准流式计算引擎Spark【万字详解，全网最新】_大数据 spark-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141899842"  title="一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客"
-     target="_blank" rel="noopener"
-    >一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/142739157"  title="浅学React和JSX-CSDN博客"
-     target="_blank" rel="noopener"
-    >浅学React和JSX-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/142787997"  title="浅谈云原生--微服务、CICD、Serverless、服务网格_springboot serverless 和服务网格的区别-CSDN博客"
-     target="_blank" rel="noopener"
-    >浅谈云原生&ndash;微服务、CICD、Serverless、服务网格_springboot serverless 和服务网格的区别-CSDN博客</a></p></blockquote>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#1.%20IPV4%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB%E5%8F%8A%E7%BB%84%E6%88%90" >1. IPV4地址分类及组成</a>{#1.%20IPV4%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB%E5%8F%8A%E7%BB%84%E6%88%90-toc}</p>
-<p><a class="link" href="#2.%20%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%C2%A0" >2. 子网掩码</a>{#2.%20%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%C2%A0-toc}</p>
-<p><a class="link" href="#3.%20%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80" >3. 网络地址</a>{#3.%20%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80-toc}</p>
-<p><a class="link" href="#4.%20%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80" >4. 广播地址</a>{#4.%20%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80-toc}</p>
-<p><a class="link" href="#5.%20%E8%AE%A1%E7%AE%97%E4%B8%BB%E6%9C%BA%E5%8F%B7%E8%8C%83%E5%9B%B4%E5%8F%8A%E6%95%B0%E9%87%8F" >5. 计算主机号范围及数量</a>{#5.%20%E8%AE%A1%E7%AE%97%E4%B8%BB%E6%9C%BA%E5%8F%B7%E8%8C%83%E5%9B%B4%E5%8F%8A%E6%95%B0%E9%87%8F-toc}</p>
-<p><a class="link" href="#6.%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%C2%A0" >6. 子网划分</a>{#6.%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%C2%A0-toc}</p>
-<p><a class="link" href="#6.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86" >6.1 为什么要子网划分</a>{#6.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86-toc}</p>
-<p><a class="link" href="#6.2%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E6%80%9D%E6%83%B3" >6.2 子网划分思想</a>{#6.2%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E6%80%9D%E6%83%B3-toc}</p>
-<p><a class="link" href="#6.3%20%E5%AD%90%E7%BD%91%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4" >6.3 子网计算步骤</a>{#6.3%20%E5%AD%90%E7%BD%91%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4-toc}</p>
-<p><a class="link" href="#6.3.1%20%E7%A1%AE%E5%AE%9A%E5%80%9F%E5%87%A0%E4%BD%8D%E5%AD%90%E7%BD%91%E5%8F%B7" >6.3.1 确定借几位子网号</a>{#6.3.1%20%E7%A1%AE%E5%AE%9A%E5%80%9F%E5%87%A0%E4%BD%8D%E5%AD%90%E7%BD%91%E5%8F%B7-toc}</p>
-<p><a class="link" href="#6.3.2%20%E7%A1%AE%E5%AE%9A%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%BD%91%E7%9A%84%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81" >6.3.2 确定每个子网的子网掩码</a>{#6.3.2%20%E7%A1%AE%E5%AE%9A%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%BD%91%E7%9A%84%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81-toc}</p>
-<p><a class="link" href="#6.3.3%C2%A0%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80" >6.3.3 确定子网的网络地址</a>{#6.3.3%C2%A0%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80-toc}</p>
-<p><a class="link" href="#6.3.4%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80" >6.3.4确定子网的广播地址</a>{#6.3.4%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80-toc}</p>
-<p><a class="link" href="#6.3.5%20%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%8F%AF%E7%94%A8IP%E5%9C%B0%E5%9D%80%E8%8C%83%E5%9B%B4" >6.3.5 确定子网的可用IP地址范围</a>{#6.3.5%20%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%8F%AF%E7%94%A8IP%E5%9C%B0%E5%9D%80%E8%8C%83%E5%9B%B4-toc}</p>
-<hr>
-<ol>
-<li>IPV4地址分类及组成</li>
-</ol>
-<hr>
-<blockquote>
-<p><strong>IP地址=网络地址+主机地址，（又称：主机号和网络号）</strong></p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/c8b7850226dd42929947245838599ccb.png"
-	
-	
-	
+    <h2 id="ipv4-地址分类及组成"><a href="#ipv4-%e5%9c%b0%e5%9d%80%e5%88%86%e7%b1%bb%e5%8f%8a%e7%bb%84%e6%88%90" class="header-anchor"></a>IPV4 地址分类及组成
+</h2><p><strong>IP 地址=网络地址+主机地址，（又称：主机号和网络号）</strong> <img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image.png"
+	width="905"
+	height="525"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image_hu_a36698e78626d1ba.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image_hu_f6fb933203bd894f.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-></p>
-<blockquote>
-<p>由上图可见网络号和主机号之和是32，而且此多彼少。</p>
-<p>例：IP地址为192.168.2.131，转换成二进制1111 1111.1010 1000.0000 0010.1000 0011，因为192为C类IP地址，那么左边24位是网络位，代表网段，右边的8位是主机号，代表该网段内的唯一一台主机。</p>
-<br />
-<p>以C类网络为例，左边24位是网络号，每一位是0或1，因为第一字节十进制范围是192-233，也就说24位网络号变化范围是<strong>110</strong> x xxxx.xxxx xxxx.xxxx xxxx到1110 1001.xxxx xxxx.xxxx xxxx，那么共有<img src="https://latex.csdn.net/eq?2%5E%7B21%7D%3D2097152"
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="413px"
+	
+>
+由上图可见网络号和主机号之和是 32，而且此多彼少。</p>
+<p>例：IP 地址为 192.168.2.131，转换成二进制 1111 1111.1010 1000.0000 0010.1000 0011，因为 192 为 C 类 IP 地址，那么左边 24 位是网络位，代表网段，右边的 8 位是主机号，代表该网段内的唯一一台主机。</p>
+<p>以 C 类网络为例，左边 24 位是网络号，每一位是 0 或 1，因为第一字节十进制范围是 192-233，也就说 24 位网络号变化范围是<strong>110</strong> x xxxx.xxxx xxxx.xxxx xxxx 到 1110 1001.xxxx xxxx.xxxx xxxx，那么共有<img src="https://latex.csdn.net/eq?2%5E%7B21%7D%3D2097152"
 	
 	
 	
@@ -508,7 +482,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		alt="2^{21}=2097152"
 	
 	
->个网段，同理右边8位共有<img src="https://latex.csdn.net/eq?2%5E%7B8%7D-2%3D254"
+>个网段，同理右边 8 位共有<img src="https://latex.csdn.net/eq?2%5E%7B8%7D-2%3D254"
 	
 	
 	
@@ -517,125 +491,139 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		alt="2^{8}-2=254"
 	
 	
->个主机，也就是说每个网段下可以最多254个主机。<strong>那么为什么-2呢？是因为要除掉1111 1111和0000 0000两种特殊情况（网络地址和广播地址）</strong><br>
-<strong>同理，A类网段数128，主机数16777214，B类网段数16384，主机数65534。</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/4470f203abd0489694a7b493880cb2e8.png"
-	
-	
-	
+>个主机，也就是说每个网段下可以最多 254 个主机。<strong>那么为什么-2 呢？是因为要除掉 1111 1111 和 0000 0000 两种特殊情况（网络地址和广播地址）</strong><br>
+<strong>同理，A 类网段数 128，主机数 16777214，B 类网段数 16384，主机数 65534。</strong><br>
+<img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-1.png"
+	width="1260"
+	height="541"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-1_hu_9f01b3ce10ad7da3.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-1_hu_81e9af8828d89a67.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-></p></blockquote>
-<ol start="2">
-<li>子网掩码 {#2.%20%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%C2%A0}</li>
-</ol>
-<hr>
-<p><a class="link" href="https://blog.csdn.net/Leeeoplod/article/details/127764744"  title="子网掩码的计算_子网掩码计算-CSDN博客"
+	
+		class="gallery-image" 
+		data-flex-grow="232"
+		data-flex-basis="558px"
+	
+></p>
+<h2 id="子网掩码"><a href="#%e5%ad%90%e7%bd%91%e6%8e%a9%e7%a0%81" class="header-anchor"></a>子网掩码
+</h2><p><a class="link" href="https://blog.csdn.net/Leeeoplod/article/details/127764744"  title="子网掩码的计算_子网掩码计算-CSDN博客"
      target="_blank" rel="noopener"
-    >子网掩码的计算_子网掩码计算-CSDN博客</a></p>
-<blockquote>
-<p><strong>子网掩码用于判断任意两台计算机的IP地址是否属于同一子网，也可以判断IP地址的网络位和主机位，</strong> <strong>它的特征是左边全1，右边全0。</strong></p>
+    >子网掩码的计算_子网掩码计算-CSDN 博客</a></p>
+<p><strong>子网掩码用于判断任意两台计算机的 IP 地址是否属于同一子网，也可以判断 IP 地址的网络位和主机位，</strong> <strong>它的特征是左边全 1，右边全 0。</strong></p>
 <ul>
-<li><strong>判断方法</strong> ：两台计算机各自的<strong>IP地址与子网掩码进行与运算得到网络地址</strong>，结果相同则说明这两台计算机是处于同一个子网，可以进行直接的通讯。</li>
+<li><strong>判断方法</strong> ：两台计算机各自的<strong>IP 地址与子网掩码进行与运算得到网络地址</strong>，结果相同则说明这两台计算机是处于同一个子网，可以进行直接的通讯。</li>
 </ul>
 <p>同时，我们可以根据<strong>子网掩码可以计算出广播地址、主机号范围、主机数量</strong>
-通常我们会见到这样的IP地址写法：192.168.2.131/24，其中 / 右边的24即为子网掩码，/24是CIDR的简写形式，解析如下：</p>
-<p>24是网络位，全是1，剩余8位是主机位，全是0，那么写成二进制是：1111 1111.1111 1111.1111 1111.0000 0000，再转化成十进制：255.255.255.0，所以上述IP也可写成192.168.2.131/<strong>255.255.255.0</strong> ，那么<strong>一般情况</strong> 下可以得到如下结果：</p>
-<p>|&mdash;-|&mdash;&ndash;|&mdash;&ndash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-|
-|    | 网络位 | 主机位 | 默认子网掩码            |
-| A类 | 8   | 24  | 255.0.0.0或 8      |
-| B类 | 16  | 16  | 255.255.0.0或 16   |
-| C类 | 24  | 8   | 255.255.255.0或 24 |</p>
-<p><strong>注意表格中的子网掩码是默认的，分别是8、16、24，子网掩码和IP地址类别没有必然关系，并不是说A类就必须是8，B类必须是16，A类也可以是22！</strong></p></blockquote>
-<ol start="3">
-<li>网络地址 {#3.%20%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80}</li>
-</ol>
-<hr>
-<blockquote>
-<p><strong>网络地址=IP地址和掩码与运算</strong></p>
-<p>以16.158.165.91/22为例 ：掩码22位，即网络位占22，主机位占10</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/f486cd9c9fe1482599a801869208fcad.png"
-	
-	
-	
+通常我们会见到这样的 IP 地址写法：192.168.2.131/24，其中 / 右边的 24 即为子网掩码，/24 是 CIDR 的简写形式，解析如下：</p>
+<p>24 是网络位，全是 1，剩余 8 位是主机位，全是 0，那么写成二进制是：1111 1111.1111 1111.1111 1111.0000 0000，再转化成十进制：255.255.255.0，所以上述 IP 也可写成 192.168.2.131/<strong>255.255.255.0</strong> ，那么<strong>一般情况</strong> 下可以得到如下结果：</p>
+<p><img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-11.png"
+	width="1465"
+	height="483"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-11_hu_e69ba63b1c84b62c.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-11_hu_cb51d128f1f95504.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="303"
+		data-flex-basis="727px"
+	
+></p>
+<p><strong>注意表格中的子网掩码是默认的，分别是 8、16、24，子网掩码和 IP 地址类别没有必然关系，并不是说 A 类就必须是 8，B 类必须是 16，A 类也可以是 22！</strong></p>
+<h2 id="网络地址"><a href="#%e7%bd%91%e7%bb%9c%e5%9c%b0%e5%9d%80" class="header-anchor"></a>网络地址
+</h2><p><strong>网络地址=IP 地址和掩码与运算</strong></p>
+<p>以 16.158.165.91/22 为例 ：掩码 22 位，即网络位占 22，主机位占 10
+<img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-2.png"
+	width="619"
+	height="233"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-2_hu_eddc8fccae6f3453.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-2_hu_7a19cce141f886d3.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="265"
+		data-flex-basis="637px"
 	
 ></p>
 <ul>
-<li><strong>也可以将网络地址的网络号不变，主机号全部变0取得。</strong></li>
-</ul></blockquote>
-<ol start="4">
-<li>广播地址 {#4.%20%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80}</li>
-</ol>
-<hr>
-<blockquote>
-<p><strong>广播地址=掩码取反和网络地址或运算</strong></p>
-<p>仍以16.158.165.91/22为例：</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/ab9b082f48b04a89a9131d252a1f4b22.png"
-	
-	
-	
+<li><strong>也可以将网络地址的网络号不变，主机号全部变 0 取得。</strong></li>
+</ul>
+<h2 id="广播地址"><a href="#%e5%b9%bf%e6%92%ad%e5%9c%b0%e5%9d%80" class="header-anchor"></a>广播地址
+</h2><p><strong>广播地址=掩码取反和网络地址或运算</strong></p>
+<p>仍以 16.158.165.91/22 为例：</p>
+<p><img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-3.png"
+	width="610"
+	height="226"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-3_hu_7c3e9aae1cfa2814.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-3_hu_f907bc63a57dc6e8.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="269"
+		data-flex-basis="647px"
 	
 ></p>
 <ul>
-<li><strong>也可以将网络地址的网络号不变，主机号全部变1取得。</strong></li>
-</ul></blockquote>
-<ol start="5">
-<li>计算主机号范围及数量 {#5.%20%E8%AE%A1%E7%AE%97%E4%B8%BB%E6%9C%BA%E5%8F%B7%E8%8C%83%E5%9B%B4%E5%8F%8A%E6%95%B0%E9%87%8F}</li>
-</ol>
-<hr>
-<blockquote>
-<p>可用IP地址范围=</p>
+<li><strong>也可以将网络地址的网络号不变，主机号全部变 1 取得。</strong></li>
+</ul>
+<h2 id="计算主机号范围及数量"><a href="#%e8%ae%a1%e7%ae%97%e4%b8%bb%e6%9c%ba%e5%8f%b7%e8%8c%83%e5%9b%b4%e5%8f%8a%e6%95%b0%e9%87%8f" class="header-anchor"></a>计算主机号范围及数量
+</h2><p>可用 IP 地址范围=</p>
 \[ 网络地址+1，广播地址-1 \]<p><br>
-上述案例中的可用IP地址范围：</p>
+上述案例中的可用 IP 地址范围：</p>
 \[ 16.158.164.1，16.158.167.254 \]<p><br>
 主机数量=2^主机位二进制数位-2**（不包括网络地址和广播地址）**<br>
-案例中的数量为：2^10 -2=1024-2=1022</p></blockquote>
-<ol start="6">
-<li>子网划分 {#6.%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%C2%A0}</li>
-</ol>
-<hr>
-<h3 id="61-为什么要子网划分-6120e4b8bae4bb80e4b988e8a681e5ad90e7bd91e58892e58886"><a href="#61-%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%ad%90%e7%bd%91%e5%88%92%e5%88%86-6120e4b8bae4bb80e4b988e8a681e5ad90e7bd91e58892e58886" class="header-anchor"></a>6.1 为什么要子网划分 {#6.1%20%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86}
-</h3><blockquote>
-<p><a class="link" href="https://www.bilibili.com/video/BV1xu411f7UW/?vd_source=994ef84085f1517f12e3ce00fb751c00"  title="IPv4地址和子网掩码_哔哩哔哩_bilibili"
+案例中的数量为：2^10 -2=1024-2=1022</p>
+<h2 id="子网划分"><a href="#%e5%ad%90%e7%bd%91%e5%88%92%e5%88%86" class="header-anchor"></a>子网划分
+</h2><h3 id="为什么要子网划分"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%ad%90%e7%bd%91%e5%88%92%e5%88%86" class="header-anchor"></a>为什么要子网划分
+</h3><p><a class="link" href="https://www.bilibili.com/video/BV1xu411f7UW/?vd_source=994ef84085f1517f12e3ce00fb751c00"  title="IPv4地址和子网掩码_哔哩哔哩_bilibili"
      target="_blank" rel="noopener"
-    >IPv4地址和子网掩码_哔哩哔哩_bilibili</a></p></blockquote>
-<h3 id="62-子网划分思想-6220e5ad90e7bd91e58892e58886e6809de683b3"><a href="#62-%e5%ad%90%e7%bd%91%e5%88%92%e5%88%86%e6%80%9d%e6%83%b3-6220e5ad90e7bd91e58892e58886e6809de683b3" class="header-anchor"></a>6.2 子网划分思想 {#6.2%20%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E6%80%9D%E6%83%B3}
-</h3><blockquote>
-<p>最开始我们说，IP地址=网络号+主机号，其实这是<strong>不需要子网划分</strong> 的IP地址组成，如果IP地址<strong>需要子网划分</strong> ，那么还要<strong>从主机号中借用几位作为子网号，此时的IP地址=网络号+子网号+主机号。</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/10c24e1beff04022a67a0a4b5a2be7cc.png"
-	
-	
-	
+    >IPv4 地址和子网掩码_哔哩哔哩_bilibili</a></p>
+<h3 id="子网划分思想"><a href="#%e5%ad%90%e7%bd%91%e5%88%92%e5%88%86%e6%80%9d%e6%83%b3" class="header-anchor"></a>子网划分思想
+</h3><p>最开始我们说，IP 地址=网络号+主机号，其实这是<strong>不需要子网划分</strong> 的 IP 地址组成，如果 IP 地址<strong>需要子网划分</strong> ，那么还要<strong>从主机号中借用几位作为子网号，此时的 IP 地址=网络号+子网号+主机号。</strong> <img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-4.png"
+	width="1206"
+	height="557"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-4_hu_a8a98dfdb93e06e1.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-4_hu_9ab985ec9e96d5d3.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-></p></blockquote>
-<h3 id="63-子网计算步骤-6320e5ad90e7bd91e8aea1e7ae97e6ada5e9aaa4"><a href="#63-%e5%ad%90%e7%bd%91%e8%ae%a1%e7%ae%97%e6%ad%a5%e9%aa%a4-6320e5ad90e7bd91e8aea1e7ae97e6ada5e9aaa4" class="header-anchor"></a>6.3 子网计算步骤 {#6.3%20%E5%AD%90%E7%BD%91%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4}
-</h3><blockquote>
-<p><a class="link" href="https://blog.csdn.net/Leeeoplod/article/details/127764744"  title="子网掩码的计算_子网掩码计算-CSDN博客"
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="519px"
+	
+></p>
+<h3 id="子网计算步骤"><a href="#%e5%ad%90%e7%bd%91%e8%ae%a1%e7%ae%97%e6%ad%a5%e9%aa%a4" class="header-anchor"></a>子网计算步骤
+</h3><p><a class="link" href="https://blog.csdn.net/Leeeoplod/article/details/127764744"  title="子网掩码的计算_子网掩码计算-CSDN博客"
      target="_blank" rel="noopener"
-    >子网掩码的计算_子网掩码计算-CSDN博客</a><a class="link" href="https://www.bilibili.com/video/BV19D4y197uD?vd_source=994ef84085f1517f12e3ce00fb751c00"  title="十分钟理解子网划分 路由技术基础_哔哩哔哩_bilibili"
+    >子网掩码的计算_子网掩码计算-CSDN 博客</a><a class="link" href="https://www.bilibili.com/video/BV19D4y197uD?vd_source=994ef84085f1517f12e3ce00fb751c00"  title="十分钟理解子网划分 路由技术基础_哔哩哔哩_bilibili"
      target="_blank" rel="noopener"
     >十分钟理解子网划分 路由技术基础_哔哩哔哩_bilibili</a><a class="link" href="https://blog.csdn.net/Leeeoplod/article/details/127764744"  title="子网掩码的计算_子网掩码计算-CSDN博客"
      target="_blank" rel="noopener"
-    >子网掩码的计算_子网掩码计算-CSDN博客</a></p>
-<p><strong>例：</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/569ea24542d1430a86a6ca6f499a2c59.png"
-	
-	
-	
+    >子网掩码的计算_子网掩码计算-CSDN 博客</a></p>
+<p><strong>例：</strong> <img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-5.png"
+	width="1416"
+	height="704"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-5_hu_fb922cbed8720ecc.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-5_hu_a69cf6f18c743f23.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-></p></blockquote>
-<h4 id="631-确定借几位子网号-63120e7a1aee5ae9ae5809fe587a0e4bd8de5ad90e7bd91e58fb7"><a href="#631-%e7%a1%ae%e5%ae%9a%e5%80%9f%e5%87%a0%e4%bd%8d%e5%ad%90%e7%bd%91%e5%8f%b7-63120e7a1aee5ae9ae5809fe587a0e4bd8de5ad90e7bd91e58fb7" class="header-anchor"></a><strong>6.3.1 确定借几位子网号</strong> {#6.3.1%20%E7%A1%AE%E5%AE%9A%E5%80%9F%E5%87%A0%E4%BD%8D%E5%AD%90%E7%BD%91%E5%8F%B7}
-</h4><blockquote>
-<p>因为上述案例中有三个部门，所以子网数&gt;=3，那么要<strong>借</strong>2位子网号，可以表示4个子网（00，01，10，11），每个子网可分配主机数<img src="https://latex.csdn.net/eq?2%5E%7B6%7D-2%3D62"
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="482px"
+	
+></p>
+<h4 id="确定借几位子网号"><a href="#%e7%a1%ae%e5%ae%9a%e5%80%9f%e5%87%a0%e4%bd%8d%e5%ad%90%e7%bd%91%e5%8f%b7" class="header-anchor"></a>确定借几位子网号
+</h4><p>因为上述案例中有三个部门，所以子网数=3，那么要<strong>借</strong>2 位子网号，可以表示 4 个子网（00，01，10，11），每个子网可分配主机数<img src="https://latex.csdn.net/eq?2%5E%7B6%7D-2%3D62"
 	
 	
 	
@@ -644,60 +632,83 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 		alt="2^{6}-2=62"
 	
 	
->(减掉全0和全1)</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/24e70c3e862046e7b7368b1137f70362.png"
-	
-	
-	
+>(减掉全 0 和全 1)</p>
+<p><img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-6.png"
+	width="1032"
+	height="504"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-6_hu_b04aa40f1f450d4c.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-6_hu_e2eb0cd86df587fc.png 1024w"
 	loading="lazy"
 	
-	
-></p></blockquote>
-<h4 id="632-确定每个子网的子网掩码-63220e7a1aee5ae9ae6af8fe4b8aae5ad90e7bd91e79a84e5ad90e7bd91e68ea9e7a081"><a href="#632-%e7%a1%ae%e5%ae%9a%e6%af%8f%e4%b8%aa%e5%ad%90%e7%bd%91%e7%9a%84%e5%ad%90%e7%bd%91%e6%8e%a9%e7%a0%81-63220e7a1aee5ae9ae6af8fe4b8aae5ad90e7bd91e79a84e5ad90e7bd91e68ea9e7a081" class="header-anchor"></a>6.3.2 确定每个子网的子网掩码 {#6.3.2%20%E7%A1%AE%E5%AE%9A%E6%AF%8F%E4%B8%AA%E5%AD%90%E7%BD%91%E7%9A%84%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81}
-</h4><blockquote>
-<p>上述C类网段掩码是24，借了2位就是26，（<strong>注意！！这里是从主机号那里借了2位作为子网号</strong>）写成二进制：1111 1111.1111 1111.1111 1111.xx00 0000，再写成十进制即是每个子网的子网掩码，xx就是00，11，01，10</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/7c2c5c0f1c594b8ebebc29690b92747e.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="491px"
 	
+></p>
+<h4 id="确定每个子网的子网掩码"><a href="#%e7%a1%ae%e5%ae%9a%e6%af%8f%e4%b8%aa%e5%ad%90%e7%bd%91%e7%9a%84%e5%ad%90%e7%bd%91%e6%8e%a9%e7%a0%81" class="header-anchor"></a>确定每个子网的子网掩码
+</h4><p>上述 C 类网段掩码是 24，借了 2 位就是 26，（<strong>注意！！这里是从主机号那里借了 2 位作为子网号</strong>）写成二进制：1111 1111.1111 1111.1111 1111.xx00 0000，再写成十进制即是每个子网的子网掩码，xx 就是 00，11，01，10<br>
+<img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-7.png"
+	width="1096"
+	height="515"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-7_hu_48b9e3f99c0293a2.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-7_hu_77b174566a979d88.png 1024w"
 	loading="lazy"
 	
-	
-></p></blockquote>
-<h4 id="633-确定子网的网络地址-633c2a0e7a1aee5ae9ae5ad90e7bd91e79a84e7bd91e7bb9ce59cb0e59d80"><a href="#633-%e7%a1%ae%e5%ae%9a%e5%ad%90%e7%bd%91%e7%9a%84%e7%bd%91%e7%bb%9c%e5%9c%b0%e5%9d%80-633c2a0e7a1aee5ae9ae5ad90e7bd91e79a84e7bd91e7bb9ce59cb0e59d80" class="header-anchor"></a>6.3.3 确定子网的网络地址 {#6.3.3%C2%A0%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80}
-</h4><blockquote>
-<p><strong>网络地址=子网掩码和IP地址与运算</strong> ，得出每个子网的网络地址如下：</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/39fa33ec3d2a4a3eace86a5981e5d6bd.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="510px"
 	
+></p>
+<h4 id="确定子网的网络地址"><a href="#%e7%a1%ae%e5%ae%9a%e5%ad%90%e7%bd%91%e7%9a%84%e7%bd%91%e7%bb%9c%e5%9c%b0%e5%9d%80" class="header-anchor"></a>确定子网的网络地址
+</h4><p><strong>网络地址=子网掩码和 IP 地址与运算</strong> ，得出每个子网的网络地址如下：
+<img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-8.png"
+	width="1228"
+	height="596"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-8_hu_b5db9efb0983b924.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-8_hu_9fc8b3f717219090.png 1024w"
 	loading="lazy"
 	
-	
-></p></blockquote>
-<h4 id="634确定子网的广播地址-634e7a1aee5ae9ae5ad90e7bd91e79a84e5b9bfe692ade59cb0e59d80"><a href="#634%e7%a1%ae%e5%ae%9a%e5%ad%90%e7%bd%91%e7%9a%84%e5%b9%bf%e6%92%ad%e5%9c%b0%e5%9d%80-634e7a1aee5ae9ae5ad90e7bd91e79a84e5b9bfe692ade59cb0e59d80" class="header-anchor"></a>6.3.4确定子网的广播地址 {#6.3.4%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80}
-</h4><blockquote>
-<p><strong>广播地址=掩码取反和网络地址或运算</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/37528c6461f248b9962d7202b3f63656.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="494px"
 	
+></p>
+<h4 id="确定子网的广播地址"><a href="#%e7%a1%ae%e5%ae%9a%e5%ad%90%e7%bd%91%e7%9a%84%e5%b9%bf%e6%92%ad%e5%9c%b0%e5%9d%80" class="header-anchor"></a>确定子网的广播地址
+</h4><p><strong>广播地址=掩码取反和网络地址或运算</strong> <img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-9.png"
+	width="1037"
+	height="510"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-9_hu_2a1b9410a56fbc1.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-9_hu_d20311092eb8c1d7.png 1024w"
 	loading="lazy"
 	
-	
-></p></blockquote>
-<h4 id="635-确定子网的可用ip地址范围-63520e7a1aee5ae9ae5ad90e7bd91e79a84e58fafe794a8ipe59cb0e59d80e88c83e59bb4"><a href="#635-%e7%a1%ae%e5%ae%9a%e5%ad%90%e7%bd%91%e7%9a%84%e5%8f%af%e7%94%a8ip%e5%9c%b0%e5%9d%80%e8%8c%83%e5%9b%b4-63520e7a1aee5ae9ae5ad90e7bd91e79a84e58fafe794a8ipe59cb0e59d80e88c83e59bb4" class="header-anchor"></a>6.3.5 确定子网的可用IP地址范围 {#6.3.5%20%E7%A1%AE%E5%AE%9A%E5%AD%90%E7%BD%91%E7%9A%84%E5%8F%AF%E7%94%A8IP%E5%9C%B0%E5%9D%80%E8%8C%83%E5%9B%B4}
-</h4><blockquote>
-<p><strong>可用IP地址范围=\[ 网络地址+1，广播地址-1 \]</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/db2aca93060943e2bd3faafb88eb71bb.png"
+		alt="alt text"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="488px"
 	
+></p>
+<h4 id="确定子网的可用-ip-地址范围"><a href="#%e7%a1%ae%e5%ae%9a%e5%ad%90%e7%bd%91%e7%9a%84%e5%8f%af%e7%94%a8-ip-%e5%9c%b0%e5%9d%80%e8%8c%83%e5%9b%b4" class="header-anchor"></a>确定子网的可用 IP 地址范围
+</h4><p><strong>可用 IP 地址范围=\[ 网络地址+1，广播地址-1 \]</strong> <img src="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-10.png"
+	width="1037"
+	height="511"
+	srcset="/zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-10_hu_f07eb1180c989e2.png 480w, /zh-cn/post/2024/10/%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9D%80%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80%E5%AD%90%E7%BD%91%E5%88%92%E5%88%86%E5%8F%8A%E8%AE%A1%E7%AE%97/image-10_hu_f70f6a9b19fcc5fb.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-></p></blockquote>
-<hr>
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="487px"
+	
+></p>
 
 </section>
 

@@ -11,7 +11,7 @@
 <meta property='og:description' content="真实dom虚拟dom，jsx语法规则，虚拟dom内联样式写法，函数式组件和类组件，state，props，ref，ajax和axios请求，js实现代理，路由传参">
 <meta property='og:url' content='/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='react' /><meta property='article:tag' content='axios' /><meta property='article:published_time' content='2024-10-08T00:35:44&#43;00:00'/><meta property='article:modified_time' content='2024-10-08T00:35:44&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='React' /><meta property='article:published_time' content='2024-10-08T00:35:44&#43;00:00'/><meta property='article:modified_time' content='2024-10-08T00:35:44&#43;00:00'/>
 <meta name="twitter:title" content="浅学React和JSX">
 <meta name="twitter:description" content="真实dom虚拟dom，jsx语法规则，虚拟dom内联样式写法，函数式组件和类组件，state，props，ref，ajax和axios请求，js实现代理，路由传参">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,27 +336,41 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li>
+    <li><a href="#真实-dom-和虚拟-dom">真实 DOM 和虚拟 DOM</a></li>
+    <li><a href="#jsx-语法规则">JSX 语法规则</a></li>
+    <li><a href="#虚拟-dom-中使用内联样式">虚拟 DOM 中使用内联样式</a></li>
+    <li><a href="#render-渲染虚拟-dom">render 渲染虚拟 DOM</a></li>
+    <li><a href="#函数式组件和类式组件">函数式组件和类式组件</a></li>
+    <li><a href="#state-状态">State 状态</a>
       <ol>
-        <li><a href="#61-类的基本知识-6120e7b1bbe79a84e59fbae69cace79fa5e8af86">6.1 类的基本知识 {#6.1%20%E7%B1%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86}</a></li>
-        <li><a href="#62-state复杂写法-6220statee5a48de69d82e58699e6b395">6.2 state复杂写法 {#6.2%20state%E5%A4%8D%E6%9D%82%E5%86%99%E6%B3%95}</a></li>
-        <li><a href="#63-state简单写法-6320statee7ae80e58d95e58699e6b395c2a0">6.3 state简单写法 {#6.3%20state%E7%AE%80%E5%8D%95%E5%86%99%E6%B3%95%C2%A0}</a></li>
+        <li><a href="#类的基本知识">类的基本知识</a></li>
+        <li><a href="#state-复杂写法">state 复杂写法</a></li>
+        <li><a href="#state-简单写法">state 简单写法</a></li>
       </ol>
     </li>
-    <li><a href="#7.Props">7.Props</a>
+    <li><a href="#props">Props</a>
       <ol>
-        <li><a href="#71-基本使用-7120e59fbae69cace4bdbfe794a8">7.1 基本使用 {#7.1%20%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8}</a></li>
-        <li><a href="#72-类型限制-7220e7b1bbe59e8be99990e588b6">7.2 类型限制 {#7.2%20%E7%B1%BB%E5%9E%8B%E9%99%90%E5%88%B6}</a></li>
-        <li><a href="#91-字符串形式的ref-8120e5ad97e7aca6e4b8b2e5bda2e5bc8fe79a84refc2a0">9.1 字符串形式的ref {#8.1%20%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E7%9A%84ref%C2%A0}</a></li>
-        <li><a href="#92-回调函数的ref-8220e59b9ee8b083e587bde695b0e79a84ref">9.2 回调函数的ref {#8.2%20%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84ref}</a></li>
-        <li><a href="#93-createref-8320createref">9.3 createRef() {#8.3%20createRef()}</a></li>
-        <li><a href="#101-前置说明-9120e5898de7bdaee8afb4e6988e">10.1 前置说明 {#9.1%20%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E}</a></li>
-        <li><a href="#102-ajax请求库-9220ajaxe8afb7e6b182e5ba93">10.2 Ajax请求库 {#9.2%20Ajax%E8%AF%B7%E6%B1%82%E5%BA%93}</a></li>
-        <li><a href="#103-axios请求-9320axiose8afb7e6b182c2a0">10.3 Axios请求 {#9.3%20Axios%E8%AF%B7%E6%B1%82%C2%A0}</a></li>
-        <li><a href="#104-serverjs代理-9420serverjse4bba3e79086">10.4 Server.js代理 {#9.4%20Server.js%E4%BB%A3%E7%90%86}</a></li>
+        <li><a href="#基本使用">基本使用</a></li>
+        <li><a href="#类型限制">类型限制</a></li>
       </ol>
     </li>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/56dcb2550e4643688229c42e7f0122eb.png" alt=""></a></li>
+    <li><a href="#订阅-发布-pubsub">订阅-发布 PubSub</a></li>
+    <li><a href="#ref">Ref</a>
+      <ol>
+        <li><a href="#字符串形式的-ref">字符串形式的 ref</a></li>
+        <li><a href="#回调函数的-ref">回调函数的 ref</a></li>
+        <li><a href="#createref">createRef()</a></li>
+      </ol>
+    </li>
+    <li><a href="#ajax-和-axios">Ajax 和 Axios</a>
+      <ol>
+        <li><a href="#前置说明">前置说明</a></li>
+        <li><a href="#ajax-请求库">Ajax 请求库</a></li>
+        <li><a href="#axios-请求">Axios 请求</a></li>
+        <li><a href="#serverjs-代理">Server.js 代理</a></li>
+      </ol>
+    </li>
+    <li><a href="#路由">路由</a></li>
   </ol>
 </nav>
         </div>
@@ -420,7 +434,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 21 分钟
+                阅读时长: 17 分钟
             </time>
         </div>
         
@@ -449,11 +463,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/react/">React</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/axios/">Axios</a> 
-            
-            
         </div>
         
     </footer>
@@ -467,56 +476,18 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141899842"  title="一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客"
-     target="_blank" rel="noopener"
-    >一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141761563"  title="数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客"
-     target="_blank" rel="noopener"
-    >数仓架构：离线数仓、实时数仓Lambda和Kappa、湖仓一体数据湖-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141861919"  title="一文入门大数据准流式计算引擎Spark【万字详解，全网最新】_大数据 spark-CSDN博客"
-     target="_blank" rel="noopener"
-    >一文入门大数据准流式计算引擎Spark【万字详解，全网最新】_大数据 spark-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140787541"  title="浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_数据建模金博尔-CSDN博客"
-     target="_blank" rel="noopener"
-    >浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_数据建模金博尔-CSDN博客</a></p></blockquote>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#1.%20%E7%9C%9F%E5%AE%9EDOM%E5%92%8C%E8%99%9A%E6%8B%9FDOM" >1. 真实DOM和虚拟DOM</a>{#1.%20%E7%9C%9F%E5%AE%9EDOM%E5%92%8C%E8%99%9A%E6%8B%9FDOM-toc}</p>
-<p><a class="link" href="#2.%20JSX%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99" >2. JSX语法规则</a>{#2.%20JSX%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99-toc}</p>
-<p><a class="link" href="#3.%20%E8%99%9A%E6%8B%9FDOM%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F" >3. 虚拟DOM中使用内联样式</a>{#3.%20%E8%99%9A%E6%8B%9FDOM%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F-toc}</p>
-<p><a class="link" href="#4.%20render%E6%B8%B2%E6%9F%93%E8%99%9A%E6%8B%9FDOM" >4. render渲染虚拟DOM</a>{#4.%20render%E6%B8%B2%E6%9F%93%E8%99%9A%E6%8B%9FDOM-toc}</p>
-<p><a class="link" href="#5.%20%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%E5%92%8C%E7%B1%BB%E5%BC%8F%E7%BB%84%E4%BB%B6%C2%A0" >5. 函数式组件和类式组件</a>{#5.%20%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%E5%92%8C%E7%B1%BB%E5%BC%8F%E7%BB%84%E4%BB%B6%C2%A0-toc}</p>
-<p><a class="link" href="#6.%20State%E7%8A%B6%E6%80%81" >6. State状态</a>{#6.%20State%E7%8A%B6%E6%80%81-toc}</p>
-<p><a class="link" href="#6.1%20%E7%B1%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86" >6.1 类的基本知识</a>{#6.1%20%E7%B1%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86-toc}</p>
-<p><a class="link" href="#6.2%20state%E5%A4%8D%E6%9D%82%E5%86%99%E6%B3%95" >6.2 state复杂写法</a>{#6.2%20state%E5%A4%8D%E6%9D%82%E5%86%99%E6%B3%95-toc}</p>
-<p><a class="link" href="#6.3%20state%E7%AE%80%E5%8D%95%E5%86%99%E6%B3%95%C2%A0" >6.3 state简单写法</a>{#6.3%20state%E7%AE%80%E5%8D%95%E5%86%99%E6%B3%95%C2%A0-toc}</p>
-<p><a class="link" href="#7.Props" >7.Props</a>{#7.Props-toc}</p>
-<p><a class="link" href="#7.1%20%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8" >7.1 基本使用</a>{#7.1%20%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-toc}</p>
-<p><a class="link" href="#7.2%20%E7%B1%BB%E5%9E%8B%E9%99%90%E5%88%B6" >7.2 类型限制</a>{#7.2%20%E7%B1%BB%E5%9E%8B%E9%99%90%E5%88%B6-toc}</p>
-<p><a class="link" href="#8.%C2%A0Ref" >8. Ref</a>{#8.%C2%A0Ref-toc}</p>
-<p><a class="link" href="#8.1%20%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E7%9A%84ref%C2%A0" >8.1 字符串形式的ref</a>{#8.1%20%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E7%9A%84ref%C2%A0-toc}</p>
-<p><a class="link" href="#8.2%20%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84ref" >8.2 回调函数的ref</a>{#8.2%20%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84ref-toc}</p>
-<p><a class="link" href="#8.3%20createRef%28%29" >8.3 createRef()</a>{#8.3%20createRef()-toc}</p>
-<p><a class="link" href="#9.%20Ajax%E5%92%8CAxios" >9. Ajax和Axios</a>{#9.%20Ajax%E5%92%8CAxios-toc}</p>
-<p><a class="link" href="#9.1%20%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E" >9.1 前置说明</a>{#9.1%20%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E-toc}</p>
-<p><a class="link" href="#9.2%20Ajax%E8%AF%B7%E6%B1%82%E5%BA%93" >9.2 Ajax请求库</a>{#9.2%20Ajax%E8%AF%B7%E6%B1%82%E5%BA%93-toc}</p>
-<p><a class="link" href="#9.3%20Axios%E8%AF%B7%E6%B1%82%C2%A0" >9.3 Axios请求</a>{#9.3%20Axios%E8%AF%B7%E6%B1%82%C2%A0-toc}</p>
-<p><a class="link" href="#9.4%20Server.js%E4%BB%A3%E7%90%86" >9.4 Server.js代理</a>{#9.4%20Server.js%E4%BB%A3%E7%90%86-toc}</p>
-<p><a class="link" href="#10.%20%E8%B7%AF%E7%94%B1" >10. 路由</a>{#10.%20%E8%B7%AF%E7%94%B1-toc}</p>
-<hr>
-<p>用antd做个人博客卡到前端了，迫不得已来学react，也是干上全栈了&ndash; &ndash;学自尚硅谷张天禹react</p>
+    <p>用 antd 做个人博客卡到前端了，迫不得已来学 react，也是干上全栈了&ndash; &ndash;学自尚硅谷张天禹 react</p>
 <blockquote>
-<p><strong>React就是js框架，可以理解为对js做了封装，那么封装后的肯定用起来更方便。</strong></p></blockquote>
-<p><strong>相关JS库</strong></p>
+<p><strong>React 就是 js 框架，可以理解为对 js 做了封装，那么封装后的肯定用起来更方便。</strong></p></blockquote>
+<p><strong>相关 JS 库</strong></p>
 <blockquote>
 <ol>
-<li>react.js：React核心库。</li>
-<li>react-dom.js：提供操作DOM的react扩展库。</li>
-<li>babel.min.js：解析JSX语法代码转为JS代码的库。<br>
-浏览器不能直接解析JSX代码, 需要babel转译为纯JS的代码才能运行。只要用了JSX，都要加上type=&ldquo;text/babel&rdquo;, 声明需要babel来处理。</li>
+<li>react.js：React 核心库。</li>
+<li>react-dom.js：提供操作 DOM 的 react 扩展库。</li>
+<li>babel.min.js：解析 JSX 语法代码转为 JS 代码的库。<br>
+浏览器不能直接解析 JSX 代码, 需要 babel 转译为纯 JS 的代码才能运行。只要用了 JSX，都要加上 type=&ldquo;text/babel&rdquo;, 声明需要 babel 来处理。</li>
 </ol></blockquote>
-<p><strong>JS库示例 ：</strong></p>
+<p><strong>JS 库示例 ：</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -581,23 +552,26 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">/html&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>浏览器控制台可能会报如下错误：</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/934deb5c29664493b136c28102641985.png"
-	
-	
-	
+</div><p>浏览器控制台可能会报如下错误：
+<img src="/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image.png"
+	width="1743"
+	height="449"
+	srcset="/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image_hu_838d7f7d0202469.png 480w, /zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image_hu_e5572f8d0fa7b037.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="388"
+		data-flex-basis="931px"
 	
 ></p>
-<p>找不到favicon.ico的资源，那么左上角的标签页就不显示图标。解决方法是在项目中根目录下放一个同名图标即可。</p>
-<ol>
-<li>真实DOM和虚拟DOM {#1.%20%E7%9C%9F%E5%AE%9EDOM%E5%92%8C%E8%99%9A%E6%8B%9FDOM}</li>
-</ol>
-<hr>
-<blockquote>
-<p>React提供了一些API来创建虚拟DOM对象</p>
-<p><strong>虚拟dom定义在&lt;script type=&ldquo;text/babel&rdquo;&gt; &lt;/script&gt;中！！！</strong></p>
+<p>找不到 favicon.ico 的资源，那么左上角的标签页就不显示图标。解决方法是在项目中根目录下放一个同名图标即可。</p>
+<h2 id="真实-dom-和虚拟-dom"><a href="#%e7%9c%9f%e5%ae%9e-dom-%e5%92%8c%e8%99%9a%e6%8b%9f-dom" class="header-anchor"></a>真实 DOM 和虚拟 DOM
+</h2><blockquote>
+<p>React 提供了一些 API 来创建虚拟 DOM 对象</p>
+<p><strong>虚拟 dom 定义在&lt;script type=&ldquo;text/babel&rdquo;&gt; &lt;/script&gt;中！！！</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -625,12 +599,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>我们编码时基本只需要操作react的虚拟DOM相关数据, react会转换为真实DOM变化而更新界。</li>
-<li>虚拟DOM对象最终都会被React转换为真实的DOM。</li>
-<li>虚拟dom本质是一个Object（控制台输出VDOM instanceof Object的结果为true）。</li>
-<li>虚拟dom内部元素少，真实dom内部元素多，因为虚拟dom是react内用，无需真实dom那么多属性。</li>
+<li>我们编码时基本只需要操作 react 的虚拟 DOM 相关数据, react 会转换为真实 DOM 变化而更新界。</li>
+<li>虚拟 DOM 对象最终都会被 React 转换为真实的 DOM。</li>
+<li>虚拟 dom 本质是一个 Object（控制台输出 VDOM instanceof Object 的结果为 true）。</li>
+<li>虚拟 dom 内部元素少，真实 dom 内部元素多，因为虚拟 dom 是 react 内用，无需真实 dom 那么多属性。</li>
 </ul>
-<p><strong>注意！创建的虚拟dom只能有一个根标签</strong>，并且内部的标签<strong>必须闭合（有 /&gt; 结束）</strong>，如：</p>
+<p><strong>注意！创建的虚拟 dom 只能有一个根标签</strong>，并且内部的标签<strong>必须闭合（有 /&gt; 结束）</strong>，如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -685,36 +659,33 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">    <span class="c1">//&lt;input type=&#34;text&#34; &gt; 错误，没有闭合
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text&#34;</span><span class="o">/&gt;</span> <span class="nx">或</span> <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text&#34;</span><span class="o">/&gt;</span> <span class="o">&lt;</span><span class="err">/input&gt;</span>
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><br /></blockquote>
-<ol start="2">
-<li>JSX语法规则 {#2.%20JSX%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99}</li>
-</ol>
-<hr>
-<blockquote>
-<p><strong>全称是JavaScript XML，是react定义的一种类似于XML的JS扩展语法，可以把js和html写在一起，类似JSP。</strong></p>
-<p>JS + XML本质是<strong>React.createElement</strong> <strong>(</strong> <strong>component</strong> <strong>,</strong> <strong>props</strong> <strong>, &hellip;</strong> <strong>children</strong> **)**方法的语法糖</p>
+<h2 id="jsx-语法规则"><a href="#jsx-%e8%af%ad%e6%b3%95%e8%a7%84%e5%88%99" class="header-anchor"></a>JSX 语法规则
+</h2><blockquote>
+<p><strong>全称是 JavaScript XML，是 react 定义的一种类似于 XML 的 JS 扩展语法，可以把 js 和 html 写在一起，类似 JSP。</strong></p>
+<p>JS + XML 本质是<strong>React.createElement</strong> <strong>(</strong> <strong>component</strong> <strong>,</strong> <strong>props</strong> <strong>, &hellip;</strong> <strong>children</strong> **)**方法的语法糖</p>
 <ul>
 <li>
-<p>作用: 用来<strong>简化创建虚拟DOM</strong></p>
+<p>作用: 用来<strong>简化创建虚拟 DOM</strong></p>
 </li>
 <li>
 <p>写法：<strong>var</strong> <strong>VDOM</strong> <strong>=</strong> <strong>&lt;h1&gt;</strong> <strong>Hello JSX&lt;/h1&gt;</strong></p>
 </li>
 <li>
-<p>注意：<strong>这样创建的&lt;h1&gt;不是字符串, 也不是HTML/XML标签，它最终产生的就是一个JS对象</strong></p>
+<p>注意：<strong>这样创建的&lt;h1&gt;不是字符串, 也不是 HTML/XML 标签，它最终产生的就是一个 JS 对象</strong></p>
 </li>
 <li>
-<p><strong>标签名和标签属性任意</strong>，可以是HTML标签属性或其它</p>
+<p><strong>标签名和标签属性任意</strong>，可以是 HTML 标签属性或其它</p>
 </li>
 <li>
 <p>语法规则：</p>
 </li>
 <li>
-<p>遇到 &lt; 开头的代码, 以标签的语法解析: <strong>与html同名标签则转换为html同名元素</strong> , 其它标签需要<strong>特别解析</strong>，如：</p>
+<p>遇到 &lt; 开头的代码, 以标签的语法解析: <strong>与 html 同名标签则转换为 html 同名元素</strong> , 其它标签需要<strong>特别解析</strong>，如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -725,24 +696,32 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">//自定义的h1会被替换成html中同名的标签&lt;h1&gt;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">vdom1</span><span class="o">=&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">hello</span><span class="o">&lt;</span><span class="err">/h1&gt;</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">vdom1</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">h1</span><span class="o">&gt;</span><span class="nx">hello</span><span class="o">&lt;</span><span class="err">/h1&gt;;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//自定义的Good在html中不存在同名标签,浏览器控制台会报错
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">vdom2</span><span class="o">=&lt;</span><span class="nx">good</span><span class="o">&gt;</span><span class="nx">hello</span><span class="o">&lt;</span><span class="err">/good&gt;</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">vdom2</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">good</span><span class="o">&gt;</span><span class="nx">hello</span><span class="o">&lt;</span><span class="err">/good&gt;;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="https://i-blog.csdnimg.cn/direct/15835dc6bcf448f7b919b51efb6fd8eb.png"
-	
-	
-	
+</div></li>
+</ul>
+<p><img src="/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-1.png"
+	width="1262"
+	height="162"
+	srcset="/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-1_hu_5a8e1972aac8e2a4.png 480w, /zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-1_hu_5f9471178f9af23e.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
-><br>
-也就是说，定义的虚拟dom中，开头小写的标签会去html中寻找同名的元素并替换，找不到就会报上面的错误。<strong>如果是开头大写的标签，那么就是自定义的组件</strong> ，如果写成Good，那么浏览器就会去渲染Good组件，因此Good组件需要提前定义，否则会undefined。</p>
-</li>
+	
+		class="gallery-image" 
+		data-flex-grow="779"
+		data-flex-basis="1869px"
+	
+>
+也就是说，定义的虚拟 dom 中，开头小写的标签会去 html 中寻找同名的元素并替换，找不到就会报上面的错误。<strong>如果是开头大写的标签，那么就是自定义的组件</strong> ，如果写成 Good，那么浏览器就会去渲染 Good 组件，因此 Good 组件需要提前定义，否则会 undefined。</p>
+<ul>
 <li>
-<p>遇到以 { 开头的代码，以JS语法解析，<strong>标签中的JS表达式必须用{ }包含</strong>，比如要在标签中引用自定义的变量，就要用{ }把自定义变量包裹起来，如：</p>
+<p>遇到以 { 开头的代码，以 JS 语法解析，<strong>标签中的 JS 表达式必须用{ }包含</strong>，比如要在标签中引用自定义的变量，就要用{ }把自定义变量包裹起来，如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -758,8 +737,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">myId</span><span class="o">=</span><span class="s2">&#34;青秋&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">myData</span><span class="o">=</span><span class="s2">&#34;青秋博客&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">myId</span> <span class="o">=</span> <span class="s1">&#39;青秋&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">myData</span> <span class="o">=</span> <span class="s1">&#39;青秋博客&#39;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//1.创建虚拟DOM
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">VDOM</span> <span class="o">=</span> <span class="p">(</span>
@@ -768,18 +747,15 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">			<span class="o">&lt;</span><span class="nx">span</span><span class="o">&gt;</span><span class="p">{</span><span class="nx">myData</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/span&gt;</span>
 </span></span><span class="line"><span class="cl">		<span class="o">&lt;</span><span class="err">/h2&gt;</span>
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div></li>
 </ul></blockquote>
-<ol start="3">
-<li>虚拟DOM中使用内联样式 {#3.%20%E8%99%9A%E6%8B%9FDOM%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F}</li>
-</ol>
-<hr>
-<blockquote>
-<p>在虚拟dom中使用内联样式（直接在标签中写style），需要<strong>用{{ }}包裹</strong>，其中外层的{ }代表标签里要写js表达式，内层的{ }代表要写的是一个对象。</p>
-<p>另外{{ }}的style属性名是小驼峰的形式，比如font-size写成fontSize。真实dom的类名是class，**虚拟dom的类名是className。**如：</p>
+<h2 id="虚拟-dom-中使用内联样式"><a href="#%e8%99%9a%e6%8b%9f-dom-%e4%b8%ad%e4%bd%bf%e7%94%a8%e5%86%85%e8%81%94%e6%a0%b7%e5%bc%8f" class="header-anchor"></a>虚拟 DOM 中使用内联样式
+</h2><blockquote>
+<p>在虚拟 dom 中使用内联样式（直接在标签中写 style），需要<strong>用{{ }}包裹</strong>，其中外层的{ }代表标签里要写 js 表达式，内层的{ }代表要写的是一个对象。</p>
+<p>另外{{ }}的 style 属性名是小驼峰的形式，比如 font-size 写成 fontSize。真实 dom 的类名是 class，**虚拟 dom 的类名是 className。**如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -796,34 +772,28 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">//真实dom内联样式
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s2">&#34;dom&#34;</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="nx">h2</span> <span class="nx">style</span><span class="o">=</span><span class="s2">&#34;color: black;font-size: large;&#34;</span><span class="o">&gt;</span><span class="nx">青秋博客</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">/div&gt;</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">&lt;</span><span class="nx">div</span> <span class="kr">class</span><span class="o">=</span><span class="s1">&#39;dom&#39;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="nx">h2</span> <span class="nx">style</span><span class="o">=</span><span class="s1">&#39;color: black;font-size: large;&#39;</span><span class="o">&gt;</span><span class="nx">青秋博客</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">/div&gt;;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//虚拟DOM内联样式
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">VDOM</span> <span class="o">=</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">&#34;vdom&#34;</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl">		<span class="o">&lt;</span><span class="nx">h2</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span><span class="nx">color</span><span class="o">:</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="nx">fontSize</span><span class="o">:</span><span class="s1">&#39;29px&#39;</span><span class="p">}}</span><span class="o">&gt;</span><span class="nx">青秋博客</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s1">&#39;vdom&#39;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">		<span class="o">&lt;</span><span class="nx">h2</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span> <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="nx">fontSize</span><span class="o">:</span> <span class="s1">&#39;29px&#39;</span> <span class="p">}}</span><span class="o">&gt;</span><span class="nx">青秋博客</span><span class="o">&lt;</span><span class="err">/h2&gt;</span>
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div></blockquote>
-<ol start="4">
-<li>render渲染虚拟DOM {#4.%20render%E6%B8%B2%E6%9F%93%E8%99%9A%E6%8B%9FDOM}</li>
-</ol>
-<hr>
-<blockquote>
+<h2 id="render-渲染虚拟-dom"><a href="#render-%e6%b8%b2%e6%9f%93%e8%99%9a%e6%8b%9f-dom" class="header-anchor"></a>render 渲染虚拟 DOM
+</h2><blockquote>
 <p>语法: <strong>ReactDOM</strong> <strong>.</strong> <strong>render</strong> <strong>(</strong>&lt;MyComponent/&gt;,document.getElementById(&rsquo;test&rsquo;)<strong>)</strong><br>
-作用: 将定义的虚拟DOM元素渲染到页面中的真实DOM中显示。<br>
-参数说明：MyComponent**是创建的虚拟dom对象；**document.getElementById(&rsquo;test&rsquo;)<strong>是根据id获取的真实dom容器，是用来用来包含虚拟dom的。</strong></p></blockquote>
-<ol start="5">
-<li>函数式组件和类式组件 {#5.%20%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BB%84%E4%BB%B6%E5%92%8C%E7%B1%BB%E5%BC%8F%E7%BB%84%E4%BB%B6%C2%A0}</li>
-</ol>
-<hr>
-<blockquote>
+作用: 将定义的虚拟 DOM 元素渲染到页面中的真实 DOM 中显示。<br>
+参数说明：MyComponent**是创建的虚拟 dom 对象；**document.getElementById(&rsquo;test&rsquo;)<strong>是根据 id 获取的真实 dom 容器，是用来用来包含虚拟 dom 的。</strong></p></blockquote>
+<h2 id="函数式组件和类式组件"><a href="#%e5%87%bd%e6%95%b0%e5%bc%8f%e7%bb%84%e4%bb%b6%e5%92%8c%e7%b1%bb%e5%bc%8f%e7%bb%84%e4%bb%b6" class="header-anchor"></a>函数式组件和类式组件
+</h2><blockquote>
 <p><strong>简单组件</strong></p>
-<p><strong>组件名必须首字母大写！！小写则会去html中寻找同名元素</strong></p>
+<p><strong>组件名必须首字母大写！！小写则会去 html 中寻找同名元素</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -850,7 +820,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">		<span class="c1">//2.渲染组件到页面
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">MyComponent</span><span class="o">/&gt;</span><span class="p">,</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">		<span class="cm">/* 
+</span></span><span class="line"><span class="cl">		<span class="cm">/*
 </span></span></span><span class="line"><span class="cl"><span class="cm">			执行了ReactDOM.render(&lt;MyComponent/&gt;.......之后，发生了什么？
 </span></span></span><span class="line"><span class="cl"><span class="cm">					1.React解析组件标签，找到了MyComponent组件。
 </span></span></span><span class="line"><span class="cl"><span class="cm">					2.发现组件是使用函数定义的，随后调用该函数，将返回的虚拟DOM转为真实DOM，随后呈现在页面中。
@@ -858,8 +828,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><br />
-<p><strong>复杂组件</strong></p>
+</div><p><strong>复杂组件</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -895,7 +864,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">		<span class="c1">//2.渲染组件到页面
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">MyComponent</span><span class="o">/&gt;</span><span class="p">,</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">		<span class="cm">/* 
+</span></span><span class="line"><span class="cl">		<span class="cm">/*
 </span></span></span><span class="line"><span class="cl"><span class="cm">			执行了ReactDOM.render(&lt;MyComponent/&gt;.......之后，发生了什么？
 </span></span></span><span class="line"><span class="cl"><span class="cm">					1.React解析组件标签，找到了MyComponent组件。
 </span></span></span><span class="line"><span class="cl"><span class="cm">					2.发现组件是使用类定义的，随后new出来该类的实例，并通过该实例调用到原型上的render方法。
@@ -905,11 +874,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></code></pre></td></tr></table>
 </div>
 </div><br /></blockquote>
-<ol start="6">
-<li>State状态 {#6.%20State%E7%8A%B6%E6%80%81}</li>
-</ol>
-<hr>
-<h3 id="61-类的基本知识-6120e7b1bbe79a84e59fbae69cace79fa5e8af86"><a href="#61-%e7%b1%bb%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%9f%a5%e8%af%86-6120e7b1bbe79a84e59fbae69cace79fa5e8af86" class="header-anchor"></a>6.1 类的基本知识 {#6.1%20%E7%B1%BB%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86}
+<h2 id="state-状态"><a href="#state-%e7%8a%b6%e6%80%81" class="header-anchor"></a>State 状态
+</h2><h3 id="类的基本知识"><a href="#%e7%b1%bb%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%9f%a5%e8%af%86" class="header-anchor"></a>类的基本知识
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1028,7 +994,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;我很努力的学习&#39;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">			<span class="p">}</span>
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">		
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">		<span class="kr">class</span> <span class="nx">Car</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">			<span class="nx">constructor</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="nx">price</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">				<span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span>
@@ -1051,18 +1017,18 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </div><blockquote>
 <ul>
 <li>状态即数据，状态变化会驱动视图变化，可以简单理解为存储数据的对象。</li>
-<li>复杂组件即类定义组件有this，那么就有state，可以理解为一个对象的属性，可以通过constructor()传递参数，而简单组件的this是undefined就没有state一说。</li>
-<li><strong>render方法中的this就是组件实例对象</strong></li>
-<li>组件自定义的方法中this为undefined，如何解决？
+<li>复杂组件即类定义组件有 this，那么就有 state，可以理解为一个对象的属性，可以通过 constructor()传递参数，而简单组件的 this 是 undefined 就没有 state 一说。</li>
+<li><strong>render 方法中的 this 就是组件实例对象</strong></li>
+<li>组件自定义的方法中 this 为 undefined，如何解决？
 <ol>
-<li>强制绑定this，通过函数对象的bind() 2.箭头函数</li>
+<li>强制绑定 this，通过函数对象的 bind() 2.箭头函数</li>
 </ol>
 </li>
 </ul>
-<p><strong>注意！！状态必须通过setState进行更新，不能直接更改。</strong><br>
+<p><strong>注意！！状态必须通过 setState 进行更新，不能直接更改。</strong><br>
 <strong>正确的：this.setState({isHot:!isHot})
 错误的：this.state.isHot = !isHot</strong></p></blockquote>
-<h3 id="62-state复杂写法-6220statee5a48de69d82e58699e6b395"><a href="#62-state%e5%a4%8d%e6%9d%82%e5%86%99%e6%b3%95-6220statee5a48de69d82e58699e6b395" class="header-anchor"></a>6.2 state复杂写法 {#6.2%20state%E5%A4%8D%E6%9D%82%E5%86%99%E6%B3%95}
+<h3 id="state-复杂写法"><a href="#state-%e5%a4%8d%e6%9d%82%e5%86%99%e6%b3%95" class="header-anchor"></a>state 复杂写法
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1161,7 +1127,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="63-state简单写法-6320statee7ae80e58d95e58699e6b395c2a0"><a href="#63-state%e7%ae%80%e5%8d%95%e5%86%99%e6%b3%95-6320statee7ae80e58d95e58699e6b395c2a0" class="header-anchor"></a>6.3 state简单写法 {#6.3%20state%E7%AE%80%E5%8D%95%E5%86%99%E6%B3%95%C2%A0}
+</div><h3 id="state-简单写法"><a href="#state-%e7%ae%80%e5%8d%95%e5%86%99%e6%b3%95" class="header-anchor"></a>state 简单写法
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1211,10 +1177,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></code></pre></td></tr></table>
 </div>
 </div><br />
-<h2 id="7.Props"><a href="#7.Props" class="header-anchor"></a>7.Props
+<h2 id="props"><a href="#props" class="header-anchor"></a>Props
 </h2><blockquote>
-<p><strong>props用于父组件向子组件传递数据，props只读无法修改（）</strong></p></blockquote>
-<h3 id="71-基本使用-7120e59fbae69cace4bdbfe794a8"><a href="#71-%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8-7120e59fbae69cace4bdbfe794a8" class="header-anchor"></a>7.1 基本使用 {#7.1%20%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8}
+<p><strong>props 用于父组件向子组件传递数据，props 只读无法修改（）</strong></p></blockquote>
+<h3 id="基本使用"><a href="#%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8" class="header-anchor"></a>基本使用
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1261,7 +1227,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="72-类型限制-7220e7b1bbe59e8be99990e588b6"><a href="#72-%e7%b1%bb%e5%9e%8b%e9%99%90%e5%88%b6-7220e7b1bbe59e8be99990e588b6" class="header-anchor"></a>7.2 类型限制 {#7.2%20%E7%B1%BB%E5%9E%8B%E9%99%90%E5%88%B6}
+</div><h3 id="类型限制"><a href="#%e7%b1%bb%e5%9e%8b%e9%99%90%e5%88%b6" class="header-anchor"></a>类型限制
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1346,13 +1312,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="8">
-<li>订阅-发布PubSub</li>
-</ol>
-<hr>
-<blockquote>
+</div><h2 id="订阅-发布-pubsub"><a href="#%e8%ae%a2%e9%98%85-%e5%8f%91%e5%b8%83-pubsub" class="header-anchor"></a>订阅-发布 PubSub
+</h2><blockquote>
 <p>订阅发布用于兄弟组件传递数据，在之前，一个父亲有两个儿子，两个儿子要通信，要借助父亲来传达消息，而现在使用发布订阅，不需要借助父亲，两个儿子可以直接通信。</p></blockquote>
-<p><strong>如List和Search两个兄弟组件</strong></p>
+<p><strong>如 List 和 Search 两个兄弟组件</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1435,11 +1398,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">78
 </span><span class="lnt">79
 </span><span class="lnt">80
-</span><span class="lnt">81
-</span><span class="lnt">82
-</span><span class="lnt">83
-</span><span class="lnt">84
-</span><span class="lnt">85
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;react&#39;</span>
@@ -1453,7 +1411,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">isFirst</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span> <span class="c1">//是否为第一次打开页面
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">isLoading</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span><span class="c1">//标识是否处于加载中
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">err</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="c1">//存储请求相关的错误信息
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">}</span> 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nx">componentDidMount</span><span class="p">(){</span>
 </span></span><span class="line"><span class="cl">		<span class="k">this</span><span class="p">.</span><span class="nx">token</span> <span class="o">=</span> <span class="nx">PubSub</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;atguigu&#39;</span><span class="p">,(</span><span class="nx">_</span><span class="p">,</span><span class="nx">stateObj</span><span class="p">)=&gt;{</span>
@@ -1490,11 +1448,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">Search</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nx">search</span> <span class="o">=</span> <span class="p">()=&gt;{</span>
@@ -1529,14 +1482,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="9">
-<li>Ref {#8.%C2%A0Ref}</li>
-</ol>
-<hr>
-<blockquote>
+</div><h2 id="ref"><a href="#ref" class="header-anchor"></a>Ref
+</h2><blockquote>
 <p>为自定义的标签打标识</p></blockquote>
-<h3 id="91-字符串形式的ref-8120e5ad97e7aca6e4b8b2e5bda2e5bc8fe79a84refc2a0"><a href="#91-%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%bd%a2%e5%bc%8f%e7%9a%84ref-8120e5ad97e7aca6e4b8b2e5bda2e5bc8fe79a84refc2a0" class="header-anchor"></a>9.1 字符串形式的ref {#8.1%20%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%BD%A2%E5%BC%8F%E7%9A%84ref%C2%A0}
-</h3><p>string形式的 ref 存在效率问题，不推荐使用</p>
+<h3 id="字符串形式的-ref"><a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%bd%a2%e5%bc%8f%e7%9a%84-ref" class="header-anchor"></a>字符串形式的 ref
+</h3><p>string 形式的 ref 存在效率问题，不推荐使用</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1597,7 +1547,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="92-回调函数的ref-8220e59b9ee8b083e587bde695b0e79a84ref"><a href="#92-%e5%9b%9e%e8%b0%83%e5%87%bd%e6%95%b0%e7%9a%84ref-8220e59b9ee8b083e587bde695b0e79a84ref" class="header-anchor"></a>9.2 回调函数的ref {#8.2%20%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84ref}
+</div><h3 id="回调函数的-ref"><a href="#%e5%9b%9e%e8%b0%83%e5%87%bd%e6%95%b0%e7%9a%84-ref" class="header-anchor"></a>回调函数的 ref
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1658,7 +1608,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="93-createref-8320createref"><a href="#93-createref-8320createref" class="header-anchor"></a>9.3 createRef() {#8.3%20createRef()}
+</div><h3 id="createref"><a href="#createref" class="header-anchor"></a>createRef()
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1695,7 +1645,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text/babel&#34;</span><span class="o">&gt;</span>
 </span></span><span class="line"><span class="cl">		<span class="c1">//创建组件
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="kr">class</span> <span class="nx">Demo</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="cm">/* 
+</span></span><span class="line"><span class="cl">			<span class="cm">/*
 </span></span></span><span class="line"><span class="cl"><span class="cm">				React.createRef调用后可以返回一个容器，该容器可以存储被ref所标识的节点,该容器是&#34;专人专用&#34;的
 </span></span></span><span class="line"><span class="cl"><span class="cm">			 */</span>
 </span></span><span class="line"><span class="cl">			<span class="nx">myRef</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createRef</span><span class="p">()</span>
@@ -1723,30 +1673,27 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="err">/script&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="10">
-<li>Ajax和Axios {#9.%20Ajax%E5%92%8CAxios}</li>
-</ol>
-<hr>
-<h3 id="101-前置说明-9120e5898de7bdaee8afb4e6988e"><a href="#101-%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e-9120e5898de7bdaee8afb4e6988e" class="header-anchor"></a>10.1 前置说明 {#9.1%20%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E}
+</div><h2 id="ajax-和-axios"><a href="#ajax-%e5%92%8c-axios" class="header-anchor"></a>Ajax 和 Axios
+</h2><h3 id="前置说明"><a href="#%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e" class="header-anchor"></a>前置说明
 </h3><blockquote>
 <ol>
-<li><strong>React本身只关注于界面, 并不包含发送ajax请求的代码</strong></li>
-<li><strong>前端应用需要通过ajax请求与后台进行交互(json数据)</strong></li>
-<li><strong>react应用中需要集成第三方ajax库(或自己封装)</strong></li>
+<li><strong>React 本身只关注于界面, 并不包含发送 ajax 请求的代码</strong></li>
+<li><strong>前端应用需要通过 ajax 请求与后台进行交互(json 数据)</strong></li>
+<li><strong>react 应用中需要集成第三方 ajax 库(或自己封装)</strong></li>
 </ol></blockquote>
-<h3 id="102-ajax请求库-9220ajaxe8afb7e6b182e5ba93"><a href="#102-ajax%e8%af%b7%e6%b1%82%e5%ba%93-9220ajaxe8afb7e6b182e5ba93" class="header-anchor"></a>10.2 Ajax请求库 {#9.2%20Ajax%E8%AF%B7%E6%B1%82%E5%BA%93}
+<h3 id="ajax-请求库"><a href="#ajax-%e8%af%b7%e6%b1%82%e5%ba%93" class="header-anchor"></a>Ajax 请求库
 </h3><blockquote>
 <ol>
 <li>jQuery: 比较重, 如果需要另外引入不建议使用</li>
 <li>axios: 轻量级, 建议使用
 <ol>
-<li>封装XmlHttpRequest对象的ajax（XHR）</li>
-<li>promise风格</li>
-<li>可以用在浏览器端和node服务器端</li>
+<li>封装 XmlHttpRequest 对象的 ajax（XHR）</li>
+<li>promise 风格</li>
+<li>可以用在浏览器端和 node 服务器端</li>
 </ol>
 </li>
 </ol></blockquote>
-<h3 id="103-axios请求-9320axiose8afb7e6b182c2a0"><a href="#103-axios%e8%af%b7%e6%b1%82-9320axiose8afb7e6b182c2a0" class="header-anchor"></a>10.3 Axios请求 {#9.3%20Axios%E8%AF%B7%E6%B1%82%C2%A0}
+<h3 id="axios-请求"><a href="#axios-%e8%af%b7%e6%b1%82" class="header-anchor"></a>Axios 请求
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1819,10 +1766,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">  <span class="p">});</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="104-serverjs代理-9420serverjse4bba3e79086"><a href="#104-serverjs%e4%bb%a3%e7%90%86-9420serverjse4bba3e79086" class="header-anchor"></a>10.4 Server.js代理 {#9.4%20Server.js%E4%BB%A3%E7%90%86}
+</div><h3 id="serverjs-代理"><a href="#serverjs-%e4%bb%a3%e7%90%86" class="header-anchor"></a>Server.js 代理
 </h3><blockquote>
 <ul>
-<li>除了熟知的nginx代理，还可以用js实现代理。</li>
+<li>除了熟知的 nginx 代理，还可以用 js 实现代理。</li>
 <li>代理是为了解决跨域请求，在前后端交互中，前端发给后端的请求被后端接收到，但是后端返回给前端的数据却无法被前端接收。</li>
 </ul></blockquote>
 <div class="highlight"><div class="chroma">
@@ -1873,23 +1820,35 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">44
 </span><span class="lnt">45
 </span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">App</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">getStudentData</span> <span class="o">=</span> <span class="p">()=&gt;{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">getStudentData</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;http://localhost:3000/api1/students&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">response</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;成功了&#39;</span><span class="p">,</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);},</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">error</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;失败了&#39;</span><span class="p">,</span><span class="nx">error</span><span class="p">);}</span>
-</span></span><span class="line"><span class="cl">		<span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;成功了&#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="p">},</span>
+</span></span><span class="line"><span class="cl">			<span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;失败了&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">getCarData</span> <span class="o">=</span> <span class="p">()=&gt;{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">getCarData</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;http://localhost:3000/api2/cars&#39;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">response</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;成功了&#39;</span><span class="p">,</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);},</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">error</span> <span class="p">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;失败了&#39;</span><span class="p">,</span><span class="nx">error</span><span class="p">);}</span>
-</span></span><span class="line"><span class="cl">		<span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;成功了&#39;</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="p">},</span>
+</span></span><span class="line"><span class="cl">			<span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;失败了&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">};</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="p">(</span>
@@ -1897,68 +1856,69 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">				<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">getStudentData</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">点我获取学生数据</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
 </span></span><span class="line"><span class="cl">				<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">getCarData</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">点我获取汽车数据</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
 </span></span><span class="line"><span class="cl">			<span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span></span><span class="line"><span class="cl">		<span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="o">================================</span><span class="nx">代理</span><span class="o">===============================</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">//引入了 http-proxy-middleware 库，它提供了一种简单的方法来创建代理中间件。
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">proxy</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http-proxy-middleware&#39;</span><span class="p">)</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kr">const</span> <span class="nx">proxy</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http-proxy-middleware&#39;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">app</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">proxy</span><span class="p">(</span><span class="s1">&#39;/api1&#39;</span><span class="p">,{</span> <span class="c1">//遇见/api1前缀的请求，就会触发该代理配置
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">target</span><span class="o">:</span><span class="s1">&#39;http://localhost:5000&#39;</span><span class="p">,</span> <span class="c1">//请求转发给谁
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">changeOrigin</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span><span class="c1">//控制服务器收到的请求头中Host的值。Host请求标识请求来源
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">pathRewrite</span><span class="o">:</span><span class="p">{</span><span class="s1">&#39;^/api1&#39;</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">}</span> <span class="c1">//重写请求路径(必须)
+</span></span><span class="line"><span class="cl">		<span class="nx">proxy</span><span class="p">(</span><span class="s1">&#39;/api1&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="c1">//遇见/api1前缀的请求，就会触发该代理配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;http://localhost:5000&#39;</span><span class="p">,</span> <span class="c1">//请求转发给谁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">changeOrigin</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">//控制服务器收到的请求头中Host的值。Host请求标识请求来源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">pathRewrite</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;^/api1&#39;</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">},</span> <span class="c1">//重写请求路径(必须)
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="p">}),</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">proxy</span><span class="p">(</span><span class="s1">&#39;/api2&#39;</span><span class="p">,{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">target</span><span class="o">:</span><span class="s1">&#39;http://localhost:5001&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">changeOrigin</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">pathRewrite</span><span class="o">:</span><span class="p">{</span><span class="s1">&#39;^/api2&#39;</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}),</span>
-</span></span><span class="line"><span class="cl">	<span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">proxy</span><span class="p">(</span><span class="s1">&#39;/api2&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;http://localhost:5001&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">changeOrigin</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">pathRewrite</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;^/api2&#39;</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="p">})</span>
+</span></span><span class="line"><span class="cl">	<span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="11">
-<li>路由 {#10.%20%E8%B7%AF%E7%94%B1}</li>
-</ol>
-<hr>
-<p><strong>哈希路由和浏览器路由</strong></p>
+</div><h2 id="路由"><a href="#%e8%b7%af%e7%94%b1" class="header-anchor"></a>路由
+</h2><p><strong>哈希路由和浏览器路由</strong></p>
 <blockquote>
-<p>BrowserRouter与HashRouter的区别<br>
+<p>BrowserRouter 与 HashRouter 的区别<br>
 1.底层原理不一样：<br>
-BrowserRouter使用的是H5的history API，不兼容IE9及以下版本。<br>
-HashRouter使用的是URL的哈希值。<br>
-2.path表现形式不一样<br>
-BrowserRouter的路径中没有#,例如：localhost:3000/demo/test<br>
-HashRouter的路径包含#,例如：localhost:3000/#/demo/test<br>
-3.刷新后对路由state参数的影响<br>
-(1).BrowserRouter没有任何影响，因为state保存在history对象中。<br>
-(2).HashRouter刷新后会导致路由state参数的丢失！！！<br>
-4.备注：HashRouter可以用于解决一些路径错误相关的问题。</p></blockquote>
+BrowserRouter 使用的是 H5 的 history API，不兼容 IE9 及以下版本。<br>
+HashRouter 使用的是 URL 的哈希值。<br>
+2.path 表现形式不一样<br>
+BrowserRouter 的路径中没有#,例如：localhost:3000/demo/test<br>
+HashRouter 的路径包含#,例如：localhost:3000/#/demo/test<br>
+3.刷新后对路由 state 参数的影响<br>
+(1).BrowserRouter 没有任何影响，因为 state 保存在 history 对象中。<br>
+(2).HashRouter 刷新后会导致路由 state 参数的丢失！！！<br>
+4.备注：HashRouter 可以用于解决一些路径错误相关的问题。</p></blockquote>
 <p><strong>编程式路由导航</strong></p>
 <blockquote>
 <p><strong>不需要用户触发，可以自动跳转链接</strong></p>
-<p>借助this.prosp.history对象上的API对操作路由跳转、前进、后退<br>
+<p>借助 this.prosp.history 对象上的 API 对操作路由跳转、前进、后退<br>
 -this.prosp.history.push()<br>
 -this.prosp.history.replace()<br>
 -this.prosp.history.goBack()<br>
 -this.prosp.history.goForward()<br>
 -this.prosp.history.go()</p></blockquote>
-<p><strong>向路由组件传参</strong></p>
-<h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/56dcb2550e4643688229c42e7f0122eb.png"
-	
-	
-	
+<p><strong>向路由组件传参</strong>
+<img src="/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-2.png"
+	width="1925"
+	height="811"
+	srcset="/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-2_hu_1118d8b204701de8.png 480w, /zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-2_hu_5baa7d64995f99d8.png 1024w"
 	loading="lazy"
 	
+		alt="alt text"
 	
->
-</h2>
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="569px"
+	
+></p>
+
 </section>
 
 

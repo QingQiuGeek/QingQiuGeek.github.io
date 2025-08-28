@@ -572,10 +572,10 @@
     <loc>/zh-cn/tags/ci/cd/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/kubernetes/</loc>
+    <loc>/zh-cn/categories/k8s/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/tags/kubernetes/</loc>
+    <loc>/zh-cn/tags/k8s/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/serverless/</loc>
@@ -584,10 +584,10 @@
     <loc>/zh-cn/tags/serverless/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/service_mesh/</loc>
+    <loc>/zh-cn/categories/servicemesh/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/tags/service_mesh/</loc>
+    <loc>/zh-cn/tags/servicemesh/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>
@@ -596,14 +596,8 @@
     <loc>/zh-cn/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/post/2024/10/%E4%BA%91%E5%8E%9F%E7%94%9F--%E5%BE%AE%E6%9C%8D%E5%8A%A1cicdsaaspaasiaas/</loc>
+    <loc>/zh-cn/post/2024/10/%E4%BA%91%E5%8E%9F%E7%94%9F--%E5%BE%AE%E6%9C%8D%E5%8A%A1ci/cdsaaspaasiaas/</loc>
     <lastmod>2024-10-11T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/axios/</loc>
-    <lastmod>2024-10-08T00:35:44+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/axios/</loc>
-    <lastmod>2024-10-08T00:35:44+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/react/</loc>
     <lastmod>2024-10-08T00:35:44+00:00</lastmod>
@@ -632,7 +626,7 @@
     <loc>/zh-cn/tags/%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97/</loc>
     <lastmod>2024-09-05T23:07:21+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Eflink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</loc>
+    <loc>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-flink%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8/</loc>
     <lastmod>2024-09-05T23:07:21+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/spark/</loc>
@@ -641,25 +635,25 @@
     <loc>/zh-cn/tags/spark/</loc>
     <lastmod>2024-09-04T00:12:24+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/</loc>
+    <loc>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/</loc>
     <lastmod>2024-09-04T00:12:24+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6/</loc>
+    <loc>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</loc>
     <lastmod>2024-09-04T00:12:24+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8Espark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</loc>
+    <loc>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</loc>
     <lastmod>2024-09-04T00:12:24+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/kappa/</loc>
-    <lastmod>2024-09-01T21:34:40+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/kappa/</loc>
     <lastmod>2024-09-01T21:34:40+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/lambda/</loc>
+    <loc>/zh-cn/categories/kappa%E6%9E%B6%E6%9E%84/</loc>
     <lastmod>2024-09-01T21:34:40+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/lambda/</loc>
+    <lastmod>2024-09-01T21:34:40+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/lambda%E6%9E%B6%E6%9E%84/</loc>
     <lastmod>2024-09-01T21:34:40+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93/</loc>
@@ -689,13 +683,7 @@
     <loc>/zh-cn/tags/%E6%95%B0%E6%8D%AE%E6%B9%96/</loc>
     <lastmod>2024-09-01T21:34:40+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/kappa%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2024-09-01T00:53:40+00:00</lastmod>
-  </url><url>
     <loc>/zh-cn/tags/kappa%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2024-09-01T00:53:40+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/lambda%E6%9E%B6%E6%9E%84/</loc>
     <lastmod>2024-09-01T00:53:40+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/lambda%E6%9E%B6%E6%9E%84/</loc>
@@ -710,34 +698,10 @@
     <loc>/zh-cn/post/2024/09/%E6%95%B0%E4%BB%93%E6%9E%B6%E6%9E%84%E7%A6%BB%E7%BA%BF%E6%95%B0%E4%BB%93%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93lambda%E5%92%8Ckappa%E6%B9%96%E4%BB%93%E4%B8%80%E4%BD%93%E6%95%B0%E6%8D%AE%E6%B9%96/</loc>
     <lastmod>2024-09-01T00:53:40+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/ant-design/</loc>
-    <lastmod>2024-08-10T23:28:45+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/ant-design/</loc>
-    <lastmod>2024-08-10T23:28:45+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/ant-design-pro/</loc>
-    <lastmod>2024-08-10T23:28:45+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/ant-design-pro/</loc>
-    <lastmod>2024-08-10T23:28:45+00:00</lastmod>
-  </url><url>
     <loc>/zh-cn/post/2024/08/ant-design-pro%E5%88%9D%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2024-08-10T23:28:45+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</loc>
-    <lastmod>2024-08-10T23:28:45+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/</loc>
-    <lastmod>2024-08-10T23:28:45+00:00</lastmod>
-  </url><url>
     <loc>/zh-cn/post/2024/08/dw%E5%B1%82%E7%9A%84%E6%95%B0%E4%BB%93%E5%BB%BA%E6%A8%A1%E8%8C%83%E5%BC%8F%E5%BB%BA%E6%A8%A1%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E5%8F%8A%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%A8%A1%E5%9E%8B%E5%AE%9E%E4%BD%93%E5%BB%BA%E6%A8%A1/</loc>
-    <lastmod>2024-08-02T11:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</loc>
-    <lastmod>2024-08-02T11:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/</loc>
     <lastmod>2024-08-02T11:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2024/08/%E6%95%B0%E4%BB%93%E5%88%86%E5%B1%82odsdwddwmdwsdimdmads/</loc>
@@ -828,12 +792,6 @@
     <lastmod>2024-07-14T18:14:45+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/</loc>
-    <lastmod>2024-07-11T23:06:25+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/</loc>
-    <lastmod>2024-07-11T23:06:25+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</loc>
     <lastmod>2024-07-11T23:06:25+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E5%92%8C%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%9A%E5%8A%A1/</loc>
