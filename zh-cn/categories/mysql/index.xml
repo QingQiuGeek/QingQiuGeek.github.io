@@ -63,7 +63,7 @@
 </description>
         </item>
         <item>
-        <title>Mysql索引失效的几种场景、回表、索引覆盖、索引下推</title>
+        <title>MySQL索引失效的几种场景、回表、索引覆盖、索引下推</title>
         <link>/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/</link>
         <pubDate>Sat, 15 Feb 2025 10:33:28 +0000</pubDate>
         
