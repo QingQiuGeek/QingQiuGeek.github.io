@@ -471,7 +471,7 @@ failed: Connection timed out: connect
         <guid>/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/</guid>
         <description>&lt;h2 id=&#34;最终解决方案&#34;&gt;&lt;a href=&#34;#%e6%9c%80%e7%bb%88%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;最终解决方案
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;mysq 版本 l8.0.35，驱动是 8.0.26，com.mysql.cj.jdbc.Driver&lt;/p&gt;
+&lt;p&gt;mysql 版本 l8.0.35，驱动是 8.0.26，com.mysql.cj.jdbc.Driver&lt;/p&gt;
 &lt;p&gt;jdbc 的 url：&lt;/p&gt;
 &lt;p&gt;jdbc:mysql://&lt;strong&gt;云服务器的主机地址（127.0.0.1 和 localhost 都不行）&lt;/strong&gt;:3306/hotkey_db?useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=true&amp;amp;autoReconnect=true&amp;amp;failOverReadOnly=false&amp;amp;serverTimezone=GMT&amp;amp;useTimezone=true&lt;/p&gt;
 &lt;p&gt;（有些参数应该是没用的，但是懒得改了，能跑就行）&lt;/p&gt;&lt;/blockquote&gt;
@@ -479,8 +479,8 @@ failed: Connection timed out: connect
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;这两天在云服务器的 docker 上部署了 jar 包，jar 包要连另一个容器的 mysql，在本地测试过本地运行的 jar 包可以连接云服务器的 mysql，但是云服务器的 docker 的 jar 包连不上。具体展示如下：jar 包成功运行后登录时就会报这样的错误，执行 sql 查询失败，说是连不上 mysql ，以下是 jar 包的部分日志。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;报错日志&#34;&gt;&lt;a href=&#34;#%e6%8a%a5%e9%94%99%e6%97%a5%e5%bf%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;报错日志
-&lt;/h2&gt;&lt;p&gt;登录时执行 mysql 查询失败，因为连不上 mysql，用 docker network 查看了网络信息，这些个容器启动时候已经在&lt;strong&gt;同一个 docker 网络&lt;/strong&gt;了，并且在 jar 包的容器中可以 ping 通 mysql 的网关
-&lt;img src=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image.png&#34;
+&lt;/h2&gt;&lt;p&gt;登录时执行 mysql 查询失败，因为连不上 mysql，用 docker network 查看了网络信息，这些个容器启动时候已经在&lt;strong&gt;同一个 docker 网络&lt;/strong&gt;了，并且在 jar 包的容器中可以 ping 通 mysql 的网关&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image.png&#34;
 	width=&#34;2718&#34;
 	height=&#34;311&#34;
 	srcset=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image_hu_adf52b79e88e85be.png 480w, /zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image_hu_e53b2a8081fe9de7.png 1024w&#34;

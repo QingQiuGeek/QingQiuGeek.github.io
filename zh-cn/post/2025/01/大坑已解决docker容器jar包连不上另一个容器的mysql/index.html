@@ -11,7 +11,7 @@
 <meta property='og:description' content="docker容器jar包连不上另一个容器的mysql">
 <meta property='og:url' content='/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='运维' /><meta property='article:published_time' content='2025-01-21T16:35:43&#43;00:00'/><meta property='article:modified_time' content='2025-01-21T16:35:43&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='Docker' /><meta property='article:published_time' content='2025-01-21T16:35:43&#43;00:00'/><meta property='article:modified_time' content='2025-01-21T16:35:43&#43;00:00'/>
 <meta name="twitter:title" content="【大坑！已解决】docker容器jar包连不上另一个容器的mysql">
 <meta name="twitter:description" content="docker容器jar包连不上另一个容器的mysql">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -432,11 +432,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/docker/">Docker</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E8%BF%90%E7%BB%B4/">运维</a> 
-            
-            
         </div>
         
     </footer>
@@ -452,7 +447,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     <h2 id="最终解决方案"><a href="#%e6%9c%80%e7%bb%88%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88" class="header-anchor"></a>最终解决方案
 </h2><blockquote>
-<p>mysq 版本 l8.0.35，驱动是 8.0.26，com.mysql.cj.jdbc.Driver</p>
+<p>mysql 版本 l8.0.35，驱动是 8.0.26，com.mysql.cj.jdbc.Driver</p>
 <p>jdbc 的 url：</p>
 <p>jdbc:mysql://<strong>云服务器的主机地址（127.0.0.1 和 localhost 都不行）</strong>:3306/hotkey_db?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;serverTimezone=GMT&amp;useTimezone=true</p>
 <p>（有些参数应该是没用的，但是懒得改了，能跑就行）</p></blockquote>
@@ -460,8 +455,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </h2><blockquote>
 <p>这两天在云服务器的 docker 上部署了 jar 包，jar 包要连另一个容器的 mysql，在本地测试过本地运行的 jar 包可以连接云服务器的 mysql，但是云服务器的 docker 的 jar 包连不上。具体展示如下：jar 包成功运行后登录时就会报这样的错误，执行 sql 查询失败，说是连不上 mysql ，以下是 jar 包的部分日志。</p></blockquote>
 <h2 id="报错日志"><a href="#%e6%8a%a5%e9%94%99%e6%97%a5%e5%bf%97" class="header-anchor"></a>报错日志
-</h2><p>登录时执行 mysql 查询失败，因为连不上 mysql，用 docker network 查看了网络信息，这些个容器启动时候已经在<strong>同一个 docker 网络</strong>了，并且在 jar 包的容器中可以 ping 通 mysql 的网关
-<img src="/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image.png"
+</h2><p>登录时执行 mysql 查询失败，因为连不上 mysql，用 docker network 查看了网络信息，这些个容器启动时候已经在<strong>同一个 docker 网络</strong>了，并且在 jar 包的容器中可以 ping 通 mysql 的网关</p>
+<p><img src="/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image.png"
 	width="2718"
 	height="311"
 	srcset="/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image_hu_adf52b79e88e85be.png 480w, /zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image_hu_e53b2a8081fe9de7.png 1024w"
