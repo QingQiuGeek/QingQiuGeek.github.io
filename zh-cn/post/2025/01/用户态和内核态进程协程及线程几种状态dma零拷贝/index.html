@@ -11,7 +11,7 @@
 <meta property='og:description' content="用户态、内核态切换，进程和线程、文件传输优化、DMA、零拷贝、sendfile、mmap、pagecache">
 <meta property='og:url' content='/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='操作系统' /><meta property='article:tag' content='操作系统' /><meta property='article:tag' content='零拷贝' /><meta property='article:tag' content='用户态' /><meta property='article:tag' content='内核态' /><meta property='article:published_time' content='2025-01-18T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-18T12:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='操作系统' /><meta property='article:tag' content='零拷贝' /><meta property='article:published_time' content='2025-01-18T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-18T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝">
 <meta name="twitter:description" content="用户态、内核态切换，进程和线程、文件传输优化、DMA、零拷贝、sendfile、mmap、pagecache">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -451,16 +451,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/%E9%9B%B6%E6%8B%B7%E8%B4%9D/">零拷贝</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E7%94%A8%E6%88%B7%E6%80%81/">用户态</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E5%86%85%E6%A0%B8%E6%80%81/">内核态</a> 
-            
-            
         </div>
         
     </footer>
@@ -482,57 +472,57 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li><strong>内核态(Kernel Mode)</strong> ：内核态运行的进程几乎可以访问计算机的任何资源包括系统的内存空间、设备、驱动程序等，不受限制，拥有非常高的权限。当操作系统接收到进程的系统调用请求时，就会<strong>从用户态切换到内核态，执行相应的系统调用，并将结果返回给进程</strong>，最后再从内核态切换回用户态。</li>
 </ul>
 <p>不过，由于切换内核态需要付出较高的开销（需要进行一系列的上下文切换和权限检查），应该尽量减少进入内核态的次数，以提高系统的性能和稳定性。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/09725426433c448195b6983f359f44c9.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image.png"
+	width="1296"
+	height="515"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image_hu_1e870b4c92582ebc.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image_hu_eea5689c43ae9380.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="251"
+		data-flex-basis="603px"
 	
 ></p></blockquote>
 <h3 id="用户态和内核态如何切换"><a href="#%e7%94%a8%e6%88%b7%e6%80%81%e5%92%8c%e5%86%85%e6%a0%b8%e6%80%81%e5%a6%82%e4%bd%95%e5%88%87%e6%8d%a2" class="header-anchor"></a>用户态和内核态如何切换
 </h3><blockquote>
 <p>用户态切换到内核态的 3 种方式：</p>
 <ul>
-<li>
-<p><strong>系统调用（Trap）</strong> ：用户态进程 <strong>主动</strong> 要求切换到内核态的一种方式，主要是为了使用内核态才能做的事情比如读取磁盘资源。系统调用的机制其核心还是使用了操作系统为用户特别开放的一个中断来实现。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/cae6b7241fd3411e92749dacad81cc08.png"
-	
-	
-	
+<li><strong>系统调用（Trap）</strong> ：用户态进程 <strong>主动</strong> 要求切换到内核态的一种方式，主要是为了使用内核态才能做的事情比如读取磁盘资源。系统调用的机制其核心还是使用了操作系统为用户特别开放的一个中断来实现。
+<img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-1.png"
+	width="1308"
+	height="299"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-1_hu_f1eaf03a23ee5160.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-1_hu_70a47b0b4732d40d.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-</li>
-<li>
-<p><strong>中断（Interrupt）</strong> ：当外围设备完成用户请求的操作后，会向 CPU 发出相应的中断信号，这时 CPU 会<strong>暂停</strong>执行下一条即将要执行的指令转而去执行与中断信号对应的处理程序，如果先前执行的指令是用户态下的程序，那么这个转换的过程自然也就发生了由用户态到内核态的切换。比如硬盘读写操作完成，系统会切换到硬盘读写的中断处理程序中执行后续操作等。</p>
-</li>
-<li>
-<p><strong>异常（Exception）</strong>：当 CPU 在执行运行在用户态下的程序时，发生了某些事先不可知的异常，这时会触发由当前运行进程切换到处理此异常的内核相关程序中，也就转到了内核态，比如缺页异常。</p>
-</li>
+		class="gallery-image" 
+		data-flex-grow="437"
+		data-flex-basis="1049px"
+	
+></li>
+<li><strong>中断（Interrupt）</strong> ：当外围设备完成用户请求的操作后，会向 CPU 发出相应的中断信号，这时 CPU 会<strong>暂停</strong>执行下一条即将要执行的指令转而去执行与中断信号对应的处理程序，如果先前执行的指令是用户态下的程序，那么这个转换的过程自然也就发生了由用户态到内核态的切换。比如硬盘读写操作完成，系统会切换到硬盘读写的中断处理程序中执行后续操作等。</li>
+<li><strong>异常（Exception）</strong>：当 CPU 在执行运行在用户态下的程序时，发生了某些事先不可知的异常，这时会触发由当前运行进程切换到处理此异常的内核相关程序中，也就转到了内核态，比如缺页异常。</li>
 </ul></blockquote>
 <h2 id="进程和线程"><a href="#%e8%bf%9b%e7%a8%8b%e5%92%8c%e7%ba%bf%e7%a8%8b" class="header-anchor"></a>进程和线程
 </h2><blockquote>
 <ul>
-<li>
-<p><strong>进程（Process）</strong> 是指计算机中正在运行的一个程序实例。比如打开某个应用。</p>
-</li>
-<li>
-<p><strong>线程（Thread）</strong> 轻量级进程，多个线程可以在同一个进程中同时执行，并且<strong>共享进程的资源</strong>比如内存空间、文件句柄、网络连接等。举例：你打开的微信里就有一个线程专门用来拉取别人发你的最新的消息。</p>
-</li>
-<li>
-<p><strong>协程</strong> 是一种<strong>用户态</strong> 的<strong>轻量级线程</strong> ，其调度完全由用户程序控制，而不需要内核的参与。协程拥有自己的寄存器上下文和栈，但与其他协程共享堆内存。协程的切换开销非常小，因为只需要保存和恢复协程的上下文，而无需进行内核级的上下文切换。这使得协程在处理大量并发任务时具有非常高的效率。然而，协程需要程序员显式地进行调度和管理，相对于线程和进程来说，其编程模型更为复杂。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/a96815b0d4ae44b8a41519b428f7fd45.png"
-	
-	
-	
+<li><strong>进程（Process）</strong> 是指计算机中正在运行的一个程序实例。比如打开某个应用。</li>
+<li><strong>线程（Thread）</strong> 轻量级进程，多个线程可以在同一个进程中同时执行，并且<strong>共享进程的资源</strong>比如内存空间、文件句柄、网络连接等。举例：你打开的微信里就有一个线程专门用来拉取别人发你的最新的消息。</li>
+<li><strong>协程</strong> 是一种<strong>用户态</strong> 的<strong>轻量级线程</strong> ，其调度完全由用户程序控制，而不需要内核的参与。协程拥有自己的寄存器上下文和栈，但与其他协程共享堆内存。协程的切换开销非常小，因为只需要保存和恢复协程的上下文，而无需进行内核级的上下文切换。这使得协程在处理大量并发任务时具有非常高的效率。然而，协程需要程序员显式地进行调度和管理，相对于线程和进程来说，其编程模型更为复杂。</li>
+</ul>
+<p><img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-2.png"
+	width="560"
+	height="680"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-2_hu_9f85a8bca5f21f7b.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-2_hu_9cdbd67f210a030c.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-</li>
-</ul></blockquote>
+		class="gallery-image" 
+		data-flex-grow="82"
+		data-flex-basis="197px"
+	
+></p></blockquote>
 <h3 id="进程的几种状态"><a href="#%e8%bf%9b%e7%a8%8b%e7%9a%84%e5%87%a0%e7%a7%8d%e7%8a%b6%e6%80%81" class="header-anchor"></a>进程的几种状态
 </h3><blockquote>
 <p>和线程的状态很像</p>
@@ -570,96 +560,109 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </table></div></blockquote>
 <h2 id="dmadirect-memory-access"><a href="#dmadirect-memory-access" class="header-anchor"></a>DMA（direct memory access）
 </h2><blockquote>
-<p>在没有DMA技术之前，I/O过程是这样的：</p>
+<p>在没有 DMA 技术之前，I/O 过程是这样的：</p>
 <ol>
-<li>
-<p><strong>用户进程发起read调用，切换用户态到内核态</strong></p>
-</li>
-<li>
-<p><strong>CPU发出I/O请求给磁盘控制器，然后返回</strong></p>
-</li>
-<li>
-<p><strong>磁盘控制器收到请求开始准备数据，把数据放到磁盘控制器的内部缓冲区，然后产生一个中断</strong></p>
-</li>
-<li>
-<p><strong>CPU收到中断信号，停下手头的工作，把磁盘控制器缓冲区的数据一次一个字节地读进自己的寄存器，然后再把寄存器里的数据写入到内存，而在数据传输的期间 CPU 是无法执行其他任务的</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/ffc10122b85f403ea4e622e140a14c45.png"
-	
-	
-	
+<li><strong>用户进程发起 read 调用，切换用户态到内核态</strong></li>
+<li><strong>CPU 发出 I/O 请求给磁盘控制器，然后返回</strong></li>
+<li><strong>磁盘控制器收到请求开始准备数据，把数据放到磁盘控制器的内部缓冲区，然后产生一个中断</strong></li>
+<li><strong>CPU 收到中断信号，停下手头的工作，把磁盘控制器缓冲区的数据一次一个字节地读进自己的寄存器，然后再把寄存器里的数据写入到内存，而在数据传输的期间 CPU 是无法执行其他任务的</strong> &gt;<img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-3.png"
+	width="1276"
+	height="763"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-3_hu_735dc43254f3eed9.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-3_hu_8ac3b3ffd6b0daba.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-</li>
+		class="gallery-image" 
+		data-flex-grow="167"
+		data-flex-basis="401px"
+	
+></li>
 </ol>
-<p>由上可见整个数据传输过程中，都需要CPU亲自参与，期间cpu不能做其他事，非常拉低性能。于是有了DMA。</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/89f0b19a98224a08ac310009f099db35.png"
-	
-	
-	
+<p>由上可见整个数据传输过程中，都需要 CPU 亲自参与，期间 cpu 不能做其他事，非常拉低性能。于是有了 DMA。
+<img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-4.png"
+	width="1282"
+	height="647"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-4_hu_213a398399d99644.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-4_hu_59d9120ee1bee128.png 1024w"
 	loading="lazy"
 	
 	
-></p>
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="475px"
+	
+></p></blockquote>
 <h2 id="传统的文件传输"><a href="#%e4%bc%a0%e7%bb%9f%e7%9a%84%e6%96%87%e4%bb%b6%e4%bc%a0%e8%be%93" class="header-anchor"></a>传统的文件传输
 </h2><blockquote>
 <p>进程文件传输，最简单的方式就是把磁盘文件读取出来，通过网络协议发出去。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/aa9fc61965b24a06b85eac89d4b487c5.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-5.png"
+	width="1265"
+	height="818"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-5_hu_fdbbc5d9c80ad1ad.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-5_hu_758182a1e548295.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="371px"
+	
 ></p>
-<p>期间发生<strong>四次</strong> 用户态和内核态的切换，因为发生了**两次系统调用，一次是 <code>read()</code> ，一次是 <code>write()，</code>**每次系统调用都得先从用户态切换到内核态，等内核完成任务后，再从内核态切换回用户态。</p></blockquote>
+<p>期间发生<strong>四次</strong> 用户态和内核态的切换，因为发生了两次系统调用，一次是 <code>read()</code> ，一次是 <code>write()</code>每次系统调用都得先从用户态切换到内核态，等内核完成任务后，再从内核态切换回用户态。</p></blockquote>
 <h3 id="如何优化文件传输性能"><a href="#%e5%a6%82%e4%bd%95%e4%bc%98%e5%8c%96%e6%96%87%e4%bb%b6%e4%bc%a0%e8%be%93%e6%80%a7%e8%83%bd" class="header-anchor"></a>如何优化文件传输性能
 </h3><blockquote>
 <p>在读取磁盘数据的时候之所以要发生上下文切换，是因为用户空间没有权限操作磁盘或网卡，需要切换到内核态来完成，而<strong>一次系统调用必然发生两次上下文切换</strong>：用户到内核、内核到用户，所以要减少上下文切换次数，就要减少系统调用次数！</p>
-<p>在前面我们知道了，传统的文件传输方式会历经4次数据拷贝，而且这里面，从内核</p>
-<p>的读缓冲区拷贝到用户的缓冲区里，再从用户的缓冲区里拷贝到socket的缓冲区里，</p>
+<p>在前面我们知道了，传统的文件传输方式会历经 4 次数据拷贝，而且这里面，从内核</p>
+<p>的读缓冲区拷贝到用户的缓冲区里，再从用户的缓冲区里拷贝到 socket 的缓冲区里，</p>
 <p>这个过程是没有必要的。因为文件传输的应用场景中，<strong>在用户空间我们并不会对数据再加工，所以数据实际上可以不用搬运到用户空间，因此用户的缓冲区是没有必要存在的</strong>。</p></blockquote>
 <h3 id="如何实现零拷贝"><a href="#%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e9%9b%b6%e6%8b%b7%e8%b4%9d" class="header-anchor"></a>如何实现零拷贝
 </h3><h4 id="mmap--write"><a href="#mmap--write" class="header-anchor"></a>mmap + write
 </h4><blockquote>
-<p>在前面我们知道，read()系统调用的过程中会把内核缓冲区的数据拷贝到用户的缓冲区里，于是为了减少这一步开销，可以用<strong>mmap()替换read()系统</strong>调用函数。</p>
+<p>在前面我们知道，read()系统调用的过程中会把内核缓冲区的数据拷贝到用户的缓冲区里，于是为了减少这一步开销，可以用<strong>mmap()替换 read()系统</strong>调用函数。</p>
 <p><code>mmap()</code> 系统调用函数会直接把内核缓冲区里的数据「<strong>映射</strong>」到用户空间，这样，操作系统内核与用户空间就不需要再进行任何的数据拷贝操作。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/9e8c6b9440b443f3a2d8f459c7ad3647.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-6.png"
+	width="1269"
+	height="851"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-6_hu_be3ea3a89fd51ba3.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-6_hu_8f8e6390534ed0fe.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="149"
+		data-flex-basis="357px"
 	
 ></p>
-<p>这种方式仍然是两次系统调用，四次上下文切换，只不过少了1次拷贝。</p></blockquote>
+<p>这种方式仍然是两次系统调用，四次上下文切换，只不过少了 1 次拷贝。</p></blockquote>
 <h4 id="sendfile"><a href="#sendfile" class="header-anchor"></a>sendfile
 </h4><blockquote>
-<p><strong>linux内核2.1</strong>中的sendfile是专门发送文件的系统调用函数，仅有一次系统调用，可以代替read和write两次系统调用。该系统调用，可以直接把内核缓冲区里的数据拷贝到 socket 缓冲区里，不再拷贝到用户态，这样就只有 2 次上下文切换，和 3 次数据拷贝。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/4a86d87191894c02b9d7bd9f3d1863c4.png"
-	
-	
-	
+<p><strong>linux 内核 2.1</strong>中的 sendfile 是专门发送文件的系统调用函数，仅有一次系统调用，可以代替 read 和 write 两次系统调用。该系统调用，可以直接把内核缓冲区里的数据拷贝到 socket 缓冲区里，不再拷贝到用户态，这样就只有 2 次上下文切换，和 3 次数据拷贝。</p>
+<p><img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-7.png"
+	width="1290"
+	height="860"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-7_hu_c6c8873726b01c61.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-7_hu_863e5bf9a84bda48.png 1024w"
 	loading="lazy"
 	
 	
->
-<strong>linux 内核 <code>2.4</code></strong> ，在网卡支持SG-DMA的情况下，可以用sendfile直接把文件从内核缓冲区拷贝到网卡。这才是真正的零拷贝，<strong>因为我们没有在内存层面去拷贝数据，也就是说全程没有通过 CPU 来搬运数据，所有的数据都是通过 DMA 来进行传输的。</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/66db6c6cb573401d81f6f6afe95e8376.png"
+		class="gallery-image" 
+		data-flex-grow="150"
+		data-flex-basis="360px"
 	
-	
-	
+> &gt; <strong>linux 内核 <code>2.4</code></strong> ，在网卡支持 SG-DMA 的情况下，可以用 sendfile 直接把文件从内核缓冲区拷贝到网卡。这才是真正的零拷贝，<strong>因为我们没有在内存层面去拷贝数据，也就是说全程没有通过 CPU 来搬运数据，所有的数据都是通过 DMA 来进行传输的。</strong></p>
+<p><img src="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-8.png"
+	width="1290"
+	height="824"
+	srcset="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-8_hu_deba7015a73b5c0d.png 480w, /zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/image-8_hu_c009fa096b79d6b.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="375px"
 	
 ></p></blockquote>
 <h3 id="pagecache"><a href="#pagecache" class="header-anchor"></a>PageCache
 </h3><blockquote>
 <p>回顾前面说道文件传输过程，其中第一步都是先需要先把磁盘文件数据拷贝「内核缓冲</p>
 <p>区」里，这个「内核缓冲区」实际上是磁盘高速缓存(PageCache)。</p>
-<p>PageCache会缓存<strong>最近被访问的数据</strong> （把磁盘数据读到缓存中），来提高读写性能。同时会进行<strong>预读</strong>，比如实际要从磁盘读取32kb数据，那么内核会把32-64kb的数据也提前读到缓存。</p></blockquote>
-<hr>
+<p>PageCache 会缓存<strong>最近被访问的数据</strong> （把磁盘数据读到缓存中），来提高读写性能。同时会进行<strong>预读</strong>，比如实际要从磁盘读取 32kb 数据，那么内核会把 32-64kb 的数据也提前读到缓存。</p></blockquote>
 
 </section>
 

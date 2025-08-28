@@ -336,19 +336,21 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li>
+    <li><a href="#聚簇索引和二级索引">聚簇索引和二级索引</a></li>
+    <li><a href="#回表和索引覆盖">回表和索引覆盖  </a></li>
+    <li><a href="#索引失效场景">索引失效场景</a>
       <ol>
-        <li><a href="#31-like-xx或like-xx">3.1 like %xx或like %xx%</a></li>
-        <li><a href="#32-对索引使用函数"><strong>3.2 对索引使用函数</strong></a></li>
-        <li><a href="#33-对索引表达式计算">3.3 对索引表达式计算</a></li>
-        <li><a href="#34-对索引隐式类型转换">3.4 对索引隐式类型转换</a></li>
-        <li><a href="#35-联合索引不满足最左匹配">3.5 联合索引不满足最左匹配</a></li>
-        <li><a href="#36-where中使用or">3.6 where中使用or</a></li>
-        <li><a href="#37-两个索引列做比较">3.7 两个索引列做比较</a></li>
-        <li><a href="#38-不等于比较">3.8 不等于比较</a></li>
-        <li><a href="#39-is-not-null">3.9 is not null</a></li>
-        <li><a href="#310-not-in和not-exists">3.10 not in和not exists</a></li>
-        <li><a href="#311-order-by">3.11 order by</a></li>
+        <li><a href="#like-xx-或-like-xx">like %xx 或 like %xx%</a></li>
+        <li><a href="#对索引使用函数">对索引使用函数</a></li>
+        <li><a href="#对索引表达式计算">对索引表达式计算</a></li>
+        <li><a href="#对索引隐式类型转换">对索引隐式类型转换</a></li>
+        <li><a href="#联合索引不满足最左匹配">联合索引不满足最左匹配</a></li>
+        <li><a href="#where-中使用-or">where 中使用 or</a></li>
+        <li><a href="#两个索引列做比较">两个索引列做比较</a></li>
+        <li><a href="#不等于比较">不等于比较</a></li>
+        <li><a href="#is-not-null">is not null</a></li>
+        <li><a href="#not-in-和-not-exists">not in 和 not exists</a></li>
+        <li><a href="#order-by">order by</a></li>
       </ol>
     </li>
   </ol>
@@ -414,7 +416,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 6 分钟
+                阅读时长: 5 分钟
             </time>
         </div>
         
@@ -435,7 +437,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/mysql/">Mysql</a> 
+            <a href="/zh-cn/tags/mysql/">MySQL</a> 
             
             
             , 
@@ -457,110 +459,103 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144744188"  title="MySQL三大日志_mysql 大事务 回滚 记录binlog吗-CSDN博客"
-     target="_blank" rel="noopener"
-    >MySQL三大日志_mysql 大事务 回滚 记录binlog吗-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145594188"  title="符号引用和直接引用、强引用、软引用、弱引用、虚引用-CSDN博客"
-     target="_blank" rel="noopener"
-    >符号引用和直接引用、强引用、软引用、弱引用、虚引用-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145601415"  title="已老实！再学消息队列、死信队列-CSDN博客"
-     target="_blank" rel="noopener"
-    >已老实！再学消息队列、死信队列-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145537558"  title="synchronized如何实现可重入，和Lock区别-CSDN博客"
-     target="_blank" rel="noopener"
-    >synchronized如何实现可重入，和Lock区别-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144992720"  title="如何设计一个能根据任务优先级来执行的线程池-CSDN博客"
-     target="_blank" rel="noopener"
-    >如何设计一个能根据任务优先级来执行的线程池-CSDN博客</a></p></blockquote>
-<ol>
-<li>聚簇索引和二级索引</li>
-</ol>
-<hr>
-<blockquote>
-<p>innodb使用b+树作为索引数据结构。在创建表时，InnoDB <strong>默认会创建一个主键索引（primary key），也就是聚簇索引，而其它索引都属于二级索引</strong>。</p>
-<p>如果没有指明主键索引，就自动在后台创建 <strong>隐藏的 6 字节 row_id 列</strong> 作为主键索引。</p>
-<p>值得一提的是，InnoDB和MyISAM都支持B+树索引，但是它们数据的存储结构实现方式不同。InnoDB存储擎的B+树索引的叶子节点保存数据本身（图1），MylSAM存储引擎的B+树索引的叶子节点保存数据的物理地址（图2）；</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/f5de65c97ef64247ae7830ecc9b9acd3.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/0f430f6770b14a659222111cce14c4c7.png"
-	
-	
-	
-	loading="lazy"
-	
-	
->
-InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二级索引。区别在于，聚簇索引的叶子节点存放的是实际数据，所有完整的用户数据都存放在聚簇索引的叶子节点，而<strong>二级索引的叶子节点存放的是主键值，而不是实际数据</strong> 。如果将 name 字段设置为普通索引，那么这个<strong>二级索引</strong>长下图这样：</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/24a45fb41b6d414392f867b0ba8b5834.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<ol start="2">
-<li>回表和索引覆盖</li>
-</ol>
-<hr>
-<blockquote>
 <ul>
-<li><strong>如果使用主键索引作为条件查询</strong> ，查询<strong>聚簇索引</strong>的叶子节点数据（图1），那么就直接在叶子节点读取到要查询的数据，比如select * from user where id=1 (id是主键索引)</li>
-<li><strong>如果使用二级索引字段作为条件查询</strong> ，查询<strong>聚簇索引</strong> 的叶子节点数据，那么需要检索两颗B+树：<br>
-先在二级索引的B+树找到对应的叶子节点，获取主键值（图3），然后用获取的主键值，在聚簇索引中的B+树检索到对应的叶子节点（图1），然后获取要查询的数据。这个过程叫做<strong>回表</strong>，如select * from user where name=&ldquo;林某&rdquo;（name是二级索引）</li>
-<li><strong>如果使用二级索引字段作为条件查询</strong> ，<strong>查询二级索引的叶子节点数据</strong> （图3），那么只需在二级索引的 B+ 树找到对应的叶子节点，然后读取要查询的数据，不需要用到主键索引，这个过程叫做<strong>覆盖索引</strong>。如select id from user where name=&ldquo;林某&rdquo;（name是二级索引，id正好存在于二级索引中）</li>
+<li>按「数据结构」分类：B+tree 索引、Hash 索引、Full-text 索引。</li>
+<li>按「物理存储」分类：聚簇索引（主键索引）、非聚簇索引（二级索引、辅助索引）。</li>
+<li>按「字段特性」分类：主键索引、唯一索引、普通索引、前缀索引。</li>
+<li>按「字段个数」分类：单列索引、联合索引。</li>
 </ul></blockquote>
-<ol start="3">
-<li>索引失效场景</li>
-</ol>
-<hr>
-<h3 id="31-like-xx或like-xx"><a href="#31-like-xx%e6%88%96like-xx" class="header-anchor"></a>3.1 like %xx或like %xx%
+<h2 id="聚簇索引和二级索引"><a href="#%e8%81%9a%e7%b0%87%e7%b4%a2%e5%bc%95%e5%92%8c%e4%ba%8c%e7%ba%a7%e7%b4%a2%e5%bc%95" class="header-anchor"></a>聚簇索引和二级索引
+</h2><blockquote>
+<p>innodb 使用 b+树作为索引数据结构。在创建表时，InnoDB <strong>默认会创建一个主键索引（primary key），也就是聚簇索引，而其它索引都属于二级索引</strong>。</p>
+<p>如果没有指明主键索引，就自动在后台创建 <strong>隐藏的 6 字节 row_id 列</strong> 作为主键索引。</p>
+<p>值得一提的是，InnoDB 和 MyISAM 都支持 B+树索引，但是它们数据的存储结构实现方式不同。InnoDB 存储擎的 B+树索引的叶子节点保存数据本身（图 1），MylSAM 存储引擎的 B+树索引的叶子节点保存数据的物理地址（图 2）；</p>
+<p><img src="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image.png"
+	width="1080"
+	height="633"
+	srcset="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image_hu_71e86be3883abdc8.png 480w, /zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image_hu_8fc3667f7bd5df4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="409px"
+	
+></p>
+<p><img src="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image-1.png"
+	width="914"
+	height="569"
+	srcset="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image-1_hu_cca700ad0675f431.png 480w, /zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image-1_hu_97c6a84ec1ec53f5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="385px"
+	
+></p></blockquote>
+<blockquote>
+<p>InnoDB 存储引擎根据索引类型不同，分为聚簇索引（图 1）和二级索引。区别在于，聚簇索引的叶子节点存放的是实际数据，所有完整的用户数据都存放在聚簇索引的叶子节点，而<strong>二级索引的叶子节点存放的是主键值，而不是实际数据</strong>。如果将 name 字段设置为普通索引，那么这个<strong>二级索引</strong>长下图这样：</p></blockquote>
+<p><img src="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image-2.png"
+	width="1676"
+	height="872"
+	srcset="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image-2_hu_2941517050fef206.png 480w, /zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/image-2_hu_ad4f09b55f9cabec.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<h2 id="回表和索引覆盖"><a href="#%e5%9b%9e%e8%a1%a8%e5%92%8c%e7%b4%a2%e5%bc%95%e8%a6%86%e7%9b%96" class="header-anchor"></a>回表和索引覆盖  
+</h2><blockquote>
+<ul>
+<li><strong>如果使用主键索引作为条件查询</strong>，查询<strong>聚簇索引</strong>的叶子节点数据（图 1），那么就直接在叶子节点读取到要查询的数据，比如 select * from user where id=1 (id 是主键索引)</li>
+<li><strong>如果使用二级索引字段作为条件查询</strong>，查询<strong>聚簇索引</strong>的叶子节点数据，那么需要检索两颗 B+树：<br>
+先在二级索引的 B+树找到对应的叶子节点，获取主键值（图 3），然后用获取的主键值，在聚簇索引中的 B+树检索到对应的叶子节点（图 1），然后获取要查询的数据。这个过程叫做<strong>回表</strong>，如 select * from user where name=&ldquo;林某&rdquo;（name 是二级索引）</li>
+<li><strong>如果使用二级索引字段作为条件查询</strong>，<strong>查询二级索引的叶子节点数据</strong>（图 3），那么只需在二级索引的 B+ 树找到对应的叶子节点，然后读取要查询的数据，不需要用到主键索引，这个过程叫做<strong>覆盖索引</strong>。如 select id from user where name=&ldquo;林某&rdquo;（name 是二级索引，id 正好存在于二级索引中）</li>
+</ul></blockquote>
+<h2 id="索引失效场景"><a href="#%e7%b4%a2%e5%bc%95%e5%a4%b1%e6%95%88%e5%9c%ba%e6%99%af" class="header-anchor"></a>索引失效场景
+</h2><h3 id="like-xx-或-like-xx"><a href="#like-xx-%e6%88%96-like-xx" class="header-anchor"></a>like %xx 或 like %xx%
 </h3><blockquote>
-<p><strong>因为索引 B+ 树是按照「索引值」有序排列存储的，只能根据前缀进行比较。</strong> 对索引使用左或左右模糊匹配，此时会走<strong>全表扫描</strong></p></blockquote>
-<h3 id="32-对索引使用函数"><a href="#32-%e5%af%b9%e7%b4%a2%e5%bc%95%e4%bd%bf%e7%94%a8%e5%87%bd%e6%95%b0" class="header-anchor"></a><strong>3.2 对索引使用函数</strong>
+<p><strong>因为索引 B+ 树是按照「索引值」有序排列存储的，只能根据前缀进行比较。<strong>对索引使用左或左右模糊匹配，此时会走</strong>全表扫描</strong></p></blockquote>
+<h3 id="对索引使用函数"><a href="#%e5%af%b9%e7%b4%a2%e5%bc%95%e4%bd%bf%e7%94%a8%e5%87%bd%e6%95%b0" class="header-anchor"></a>对索引使用函数
 </h3><blockquote>
-<p>select * from user where length(name)=3（name是二级索引），因为索引保存的是索引字段原始值，而不是经过函数计算后的值，自然就没办法走索引了而是全表扫描。</p>
-<p>不过，从MySQL8.0开始，索引特性增加了函数索引，可以针对函数计算后的值建立一个索引，也就是说该索引的值是函数计算后的值，所以就可以通过扫描索引来查询数据。</p></blockquote>
-<h3 id="33-对索引表达式计算"><a href="#33-%e5%af%b9%e7%b4%a2%e5%bc%95%e8%a1%a8%e8%be%be%e5%bc%8f%e8%ae%a1%e7%ae%97" class="header-anchor"></a>3.3 对索引表达式计算
+<p>select * from user where length(name)=3（name 是二级索引），因为索引保存的是索引字段原始值，而不是经过函数计算后的值，自然就没办法走索引了而是全表扫描。</p>
+<p>不过，从 MySQL8.0 开始，索引特性增加了函数索引，可以针对函数计算后的值建立一个索引，也就是说该索引的值是函数计算后的值，所以就可以通过扫描索引来查询数据。</p></blockquote>
+<h3 id="对索引表达式计算"><a href="#%e5%af%b9%e7%b4%a2%e5%bc%95%e8%a1%a8%e8%be%be%e5%bc%8f%e8%ae%a1%e7%ae%97" class="header-anchor"></a>对索引表达式计算
 </h3><blockquote>
-<p>select * from from where id +1=10会走全表扫描，因为索引保存的是索引字段的原始值，而不是 id + 1 表达式计算后的值，而select * from from where id = 10 -1则会走索引查询。</p></blockquote>
-<h3 id="34-对索引隐式类型转换"><a href="#34-%e5%af%b9%e7%b4%a2%e5%bc%95%e9%9a%90%e5%bc%8f%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2" class="header-anchor"></a>3.4 对索引隐式类型转换
+<p>select * from from where id +1=10 会走全表扫描，因为索引保存的是索引字段的原始值，而不是 id + 1 表达式计算后的值，而 select * from from where id = 10 -1 则会走索引查询。</p></blockquote>
+<h3 id="对索引隐式类型转换"><a href="#%e5%af%b9%e7%b4%a2%e5%bc%95%e9%9a%90%e5%bc%8f%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2" class="header-anchor"></a>对索引隐式类型转换
 </h3><blockquote>
-<p>如果索引字段是字符串类型，但是在条件查询中，输入的参数是整型的话就会走全表扫描，而如果反过来，索引字段是整型，查询参数是字符串，此时会走索引，**因为mysql在字符串和整型比较时会自动把字符串变成数字，**所以字符串类型的索引，在使用整型参数查询时，还得把字符串索引变成整型才行，也就相当于调用了函数。</p></blockquote>
-<h3 id="35-联合索引不满足最左匹配"><a href="#35-%e8%81%94%e5%90%88%e7%b4%a2%e5%bc%95%e4%b8%8d%e6%bb%a1%e8%b6%b3%e6%9c%80%e5%b7%a6%e5%8c%b9%e9%85%8d" class="header-anchor"></a>3.5 联合索引不满足最左匹配
+<p>如果索引字段是字符串类型，但是在条件查询中，输入的参数是整型的话就会走全表扫描，而如果反过来，索引字段是整型，查询参数是字符串，此时会走索引，**因为 mysql 在字符串和整型比较时会自动把字符串变成数字，**所以字符串类型的索引，在使用整型参数查询时，还得把字符串索引变成整型才行，也就相当于调用了函数。</p></blockquote>
+<h3 id="联合索引不满足最左匹配"><a href="#%e8%81%94%e5%90%88%e7%b4%a2%e5%bc%95%e4%b8%8d%e6%bb%a1%e8%b6%b3%e6%9c%80%e5%b7%a6%e5%8c%b9%e9%85%8d" class="header-anchor"></a>联合索引不满足最左匹配
 </h3><blockquote>
-<p>对主键字段建立的索引叫做聚簇索引，对普通字段建立的索引叫做二级索引。那么**多个普通字段组合在一起创建的索引就叫做联合索引（组合索引），**在使用联合索引时要遵循最左匹配，比如创建联合索引（a,b,c），查询时where b=1；where c=3；where b=2 and c=3；这三种情况都会使联合索引失效。</p>
-<p>有一个比较特殊的查询条件：<strong>where a &gt; 1 and c = 3</strong> ，这属于<strong>索引截断</strong> ，不同版本处理方式也不一样。MySQL5.5的话，前面a会走索引，在联合索引找到主键值后，开始回表，到主键索引读取数据行交给Server层，在Server层再比对c字段的值。从MySQL5.6之后，有一个<strong>索引下推</strong> ，即在存储引擎层进行索引遍历时，对索引中包含的字段先做判断（a和c都在索引中），直接过滤掉不满足条件的记录，再返还给Server层，从而<strong>减少回表次数</strong>。</p>
-<p>当然<strong>回表只发生在用二级索引查询聚簇索引的数据</strong>，如果用主键索引查聚簇索引的数据就不存在回表了。
-<strong>索引下推原理</strong></p>
-<p>截断的字段不会在Server层进行条件判断，而是会被下推到「存储引擎层」进行条件判断（因为c字段的值是在(a,b,c)联合索引里的)，然后过滤出符合条件的数据后再返回给Server层。由于在引擎层就过滤掉大量的数据，无需再回表读取数据来进行判断，减少回表次数，从而提升了性能。</p>
-<br />
-<p>没索引下推：存储引擎先定位到第一条a&gt;1的数据，然后拿着其主键去回表，读取出数据给server层，然后server层判断是否满足c=3，来决定是否给客户端，然后存储引擎重复上面操作，反复回表。<br>
-有索引下推: 就直接在存储引擎层过滤，减少回表操作。</p>
-<p>联合索引的匹配遵循 <strong>最左前缀原则</strong> ，且 <strong>从最左列开始按顺序匹配</strong> 。当遇到第一个范围查询时，<strong>后续列的索引将不再生效</strong>；而等值查询则允许后续列继续匹配索引，直到遇到范围查询为止。</p></blockquote>
-<h3 id="36-where中使用or"><a href="#36-where%e4%b8%ad%e4%bd%bf%e7%94%a8or" class="header-anchor"></a>3.6 where中使用or
+<p>对主键字段建立的索引叫做聚簇索引，对普通字段建立的索引叫做二级索引。那么**多个普通字段组合在一起创建的索引就叫做联合索引（组合索引），**在使用联合索引时要遵循最左匹配，比如创建联合索引（a,b,c），查询时 where b=1；where c=3；where b=2 and c=3；这三种情况都会使联合索引失效。</p>
+<p>有一个比较特殊的查询条件：<strong>where a = 1 and c = 3</strong>，这属于<strong>索引截断</strong>，不同版本处理方式也不一样。MySQL5.5 的话，前面 a 会走索引，在联合索引找到主键值后，开始回表，到主键索引读取数据行交给 Server 层，在 Server 层再比对 c 字段的值。从 MySQL5.6 之后，有一个<strong>索引下推</strong>，即在存储引擎层进行索引遍历时，对索引中包含的字段先做判断（a 和 c 都在索引中），直接过滤掉不满足条件的记录，再返还给 Server 层，从而<strong>减少回表次数</strong>。</p>
+<p>当然<strong>回表只发生在用二级索引查询聚簇索引的数据</strong>，如果用主键索引查聚簇索引的数据就不存在回表了。</p></blockquote>
+<blockquote>
+<p><strong>索引下推原理</strong></p>
+<p>截断的字段不会在 Server 层进行条件判断，而是会被下推到「存储引擎层」进行条件判断（因为 c 字段的值是在(a,b,c)联合索引里的)，然后过滤出符合条件的数据后再返回给 Server 层。由于在引擎层就过滤掉大量的数据，无需再回表读取数据来进行判断，减少回表次数，从而提升了性能。</p>
+<p>没索引下推：存储引擎先定位到第一条 a=1 的数据，然后拿着其主键去回表，读取出数据给 server 层，然后 server 层判断是否满足 c=3，来决定是否给客户端，然后存储引擎重复上面操作，反复回表。<br>
+有索引下推:    就直接在存储引擎层过滤，减少回表操作。</p>
+<p>联合索引的匹配遵循  <strong>最左前缀原则</strong>，且  <strong>从最左列开始按顺序匹配</strong>。当遇到第一个范围查询时，<strong>后续列的索引将不再生效</strong>；而等值查询则允许后续列继续匹配索引，直到遇到范围查询为止。</p></blockquote>
+<h3 id="where-中使用-or"><a href="#where-%e4%b8%ad%e4%bd%bf%e7%94%a8-or" class="header-anchor"></a>where 中使用 or
 </h3><blockquote>
-<p>在 WHERE 子句中，如果 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效。因为 OR 的含义就是两个只要满足一个即可，因此只有一个条件列是索引列是没有意义的，只要有条件列不是索引列，就会进行全表扫描</p></blockquote>
-<h3 id="37-两个索引列做比较"><a href="#37-%e4%b8%a4%e4%b8%aa%e7%b4%a2%e5%bc%95%e5%88%97%e5%81%9a%e6%af%94%e8%be%83" class="header-anchor"></a>3.7 两个索引列做比较
+<p>在 WHERE 子句中，如果  OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效。因为 OR 的含义就是两个只要满足一个即可，因此只有一个条件列是索引列是没有意义的，只要有条件列不是索引列，就会进行全表扫描</p></blockquote>
+<h3 id="两个索引列做比较"><a href="#%e4%b8%a4%e4%b8%aa%e7%b4%a2%e5%bc%95%e5%88%97%e5%81%9a%e6%af%94%e8%be%83" class="header-anchor"></a>两个索引列做比较
 </h3><blockquote>
-<p>MySQL的索引（如B+Tree索引）是<strong>按列值单独排序</strong>的。每个索引独立存储某列的值及其行位置（ROWID）。当比较两列时：</p>
-<p>若使用 <code>column1</code> 的索引，只能快速定位到 <code>column1</code> 的特定值，但无法直接关联到 <code>column2</code> 的值。同理，<code>column2</code> 的索引也无法关联到 <code>column1</code> 的值。优化器无法通过索引直接找到满足 <code>column1 = column2</code> 的行，只能通过全表扫描逐行比较。</p></blockquote>
-<h3 id="38-不等于比较"><a href="#38-%e4%b8%8d%e7%ad%89%e4%ba%8e%e6%af%94%e8%be%83" class="header-anchor"></a>3.8 不等于比较
-</h3><h3 id="39-is-not-null"><a href="#39-is-not-null" class="header-anchor"></a>3.9 is not null
-</h3><h3 id="310-not-in和not-exists"><a href="#310-not-in%e5%92%8cnot-exists" class="header-anchor"></a>3.10 not in和not exists
+<p>MySQL 的索引（如 B+Tree 索引）是<strong>按列值单独排序</strong>的。每个索引独立存储某列的值及其行位置（ROWID）。当比较两列时：</p>
+<p>若使用  <code>column1</code>  的索引，只能快速定位到  <code>column1</code>  的特定值，但无法直接关联到  <code>column2</code>  的值。同理，<code>column2</code>  的索引也无法关联到  <code>column1</code>  的值。优化器无法通过索引直接找到满足  <code>column1 = column2</code>  的行，只能通过全表扫描逐行比较。</p></blockquote>
+<h3 id="不等于比较"><a href="#%e4%b8%8d%e7%ad%89%e4%ba%8e%e6%af%94%e8%be%83" class="header-anchor"></a>不等于比较
+</h3><h3 id="is-not-null"><a href="#is-not-null" class="header-anchor"></a>is not null
+</h3><h3 id="not-in-和-not-exists"><a href="#not-in-%e5%92%8c-not-exists" class="header-anchor"></a>not in 和 not exists
 </h3><blockquote>
-<p>查询条件使用not in时，如果是主键索引则走索引，如果是普通索引，则索引失效。</p></blockquote>
-<h3 id="311-order-by"><a href="#311-order-by" class="header-anchor"></a>3.11 order by
+<p>查询条件使用 not in 时，如果是主键索引则走索引，如果是普通索引，则索引失效。</p></blockquote>
+<h3 id="order-by"><a href="#order-by" class="header-anchor"></a>order by
 </h3><blockquote>
-<p>对索引order by导致全表排序</p></blockquote>
-<hr>
+<p>对索引 order by 导致全表排序</p></blockquote>
 
 </section>
 
@@ -627,19 +622,6 @@ InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二�
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">MySQL三大日志</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/mybatisplus-mapper%E5%B1%82%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E9%94%99%E8%AF%AF/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">mybatisplus Mapper层绑定参数错误</h2>
             
         </div>
     </a>

@@ -11,7 +11,7 @@
 <meta property='og:description' content="事务方法A被事务方法B调用，就要指定事务如何传播，是两者共用同一事务还是另起一个新事务。注解默认使用就是这个事务传播行为。如果当前存在事务，则该事务；如果当前没有事务，则创建一个新的事务。先创建一个，如果当前存在事务则把当前事务。也就是说不管外部方法是否开启事务，修饰的内部方法都会新开启自己的事务，且如果当前存在事务，则该事务；如果当前没有事务，以非事务的方式运行。如果当前存在事务，则把当前事务。如果当前没有事务，以非事务方式运行。如果当前存在事务，则该事务；如果当前没有事务，则抛出异常。">
 <meta property='og:url' content='/zh-cn/post/2025/07/spring7%E4%B8%AA%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA%E5%92%8C5%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='spring' /><meta property='article:tag' content='java' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2025-07-19T19:20:50&#43;00:00'/><meta property='article:modified_time' content='2025-07-19T19:20:50&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Spring' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='MySQL' /><meta property='article:published_time' content='2025-07-19T19:20:50&#43;00:00'/><meta property='article:modified_time' content='2025-07-19T19:20:50&#43;00:00'/>
 <meta name="twitter:title" content="Spring7个事务传播行为和5个隔离级别">
 <meta name="twitter:description" content="事务方法A被事务方法B调用，就要指定事务如何传播，是两者共用同一事务还是另起一个新事务。注解默认使用就是这个事务传播行为。如果当前存在事务，则该事务；如果当前没有事务，则创建一个新的事务。先创建一个，如果当前存在事务则把当前事务。也就是说不管外部方法是否开启事务，修饰的内部方法都会新开启自己的事务，且如果当前存在事务，则该事务；如果当前没有事务，以非事务的方式运行。如果当前存在事务，则把当前事务。如果当前没有事务，以非事务方式运行。如果当前存在事务，则该事务；如果当前没有事务，则抛出异常。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -432,7 +432,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a> 
+            <a href="/zh-cn/tags/mysql/">MySQL</a> 
             
             
         </div>
@@ -451,10 +451,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <h2 id="传播行为"><a href="#%e4%bc%a0%e6%92%ad%e8%a1%8c%e4%b8%ba" class="header-anchor"></a>传播行为
 </h2><blockquote>
 <p><strong>事务传播行为是为了解决业务层方法之间互相调用的事务问题。</strong></p>
-<p>事务方法A被事务方法B调用，就要指定事务如何传播，是两者共用同一事务还是另起一个新事务。</p>
+<p>事务方法 A 被事务方法 B 调用，就要指定事务如何传播，是两者共用同一事务还是另起一个新事务。</p>
 <p><a class="link" href="https://blog.csdn.net/qq_27184497/article/details/116525588"  title="图解spring中七种事务传播行为 终于有人讲明白了_spring七种事务传播行为-CSDN博客"
      target="_blank" rel="noopener"
-    >图解spring中七种事务传播行为 终于有人讲明白了_spring七种事务传播行为-CSDN博客</a></p></blockquote>
+    >图解 spring 中七种事务传播行为 终于有人讲明白了_spring 七种事务传播行为-CSDN 博客</a></p></blockquote>
 <p><strong>1. REQUIRED</strong></p>
 <blockquote>
 <p><code>@Transactional</code>注解默认使用就是这个事务传播行为。</p>
@@ -473,16 +473,16 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p><strong>有事务就蹭，没事务就抛异常。</strong> 如果当前存在事务，则<strong>加入</strong>该事务；如果当前没有事务，则抛出异常。（mandatory：强制性）</p></blockquote>
 <p><strong>6. NEVER</strong></p>
 <blockquote>
-<p>如果当前存在事务，则<strong>抛出异常</strong>。如果当前没有事务，以非事务方式运行，</p></blockquote>
+<p>如果当前存在事务，则<strong>抛出异常</strong>。如果当前没有事务，以非事务方式运行。</p></blockquote>
 <p><strong>7.NEST（嵌套）</strong></p>
 <blockquote>
 <p>如果当前存在事务，则创建一个新事务作为当前事务的嵌套事务来运行；如果当前没有事务，则创建新事务。</p></blockquote>
 <h2 id="隔离级别"><a href="#%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab" class="header-anchor"></a>隔离级别
 </h2><blockquote>
-<p>spring的事务隔离级别和mysql几乎一模一样。</p></blockquote>
+<p>spring 的事务隔离级别和 mysql 几乎一模一样。</p></blockquote>
 <p><strong>DEFAULT</strong></p>
 <blockquote>
-<p>使用后端数据库默认隔离级别，Mysql默认是可重复读</p></blockquote>
+<p>使用后端数据库默认隔离级别，Mysql 默认是可重复读</p></blockquote>
 <p><strong>READ_UNCOMMITED</strong></p>
 <blockquote>
 <p>最低的隔离级别，允许读取尚未提交的数据变更，有脏读、幻读、不可重复读的问题。</p></blockquote>
@@ -495,8 +495,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p><strong>SERIALIZABLE</strong></p>
 <blockquote>
 <p>最高的隔离级别，完全服从 ACID 的隔离级别。所有的事务依次逐个执行，这样事务之间就不产生干扰，阻止幻读。</p></blockquote>
-<br />
----
 
 </section>
 
@@ -544,19 +542,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/02/spring%E4%BA%8B%E5%8A%A1%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Spring事务失效的几种场景</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
     <a href="/zh-cn/post/2025/02/spring%E7%9A%84bean%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
 
         
@@ -570,12 +555,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3rediscache%E6%B3%A8%E8%A7%A3%E5%A4%B1%E6%95%88%E6%B2%A1%E5%86%99cacheconfig/">
+    <a href="/zh-cn/post/2025/02/spring%E4%BA%8B%E5%8A%A1%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">【已解决】redisCache注解失效，没写cacheConfig</h2>
+            <h2 class="article-title">Spring事务失效的几种场景</h2>
             
         </div>
     </a>
@@ -583,12 +568,25 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/mybatisplus-mapper%E5%B1%82%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E9%94%99%E8%AF%AF/">
+    <a href="/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">mybatisplus Mapper层绑定参数错误</h2>
+            <h2 class="article-title">微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">一文入门SpringSecurity 5</h2>
             
         </div>
     </a>

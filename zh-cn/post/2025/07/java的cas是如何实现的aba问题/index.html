@@ -11,7 +11,7 @@
 <meta property='og:description' content="Java的CAS是如何实现的、ABA问题">
 <meta property='og:url' content='/zh-cn/post/2025/07/java%E7%9A%84cas%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84aba%E9%97%AE%E9%A2%98/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='java' /><meta property='article:tag' content='开发语言' /><meta property='article:published_time' content='2025-07-19T19:22:50&#43;00:00'/><meta property='article:modified_time' content='2025-07-19T19:22:50&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2025-07-19T19:22:50&#43;00:00'/><meta property='article:modified_time' content='2025-07-19T19:22:50&#43;00:00'/>
 <meta name="twitter:title" content="Java的CAS是如何实现的、ABA问题">
 <meta name="twitter:description" content="Java的CAS是如何实现的、ABA问题">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,11 +336,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#cas的关键实现">CAS的关键实现</a></li>
-    <li><a href="#unsafe的具体使用">Unsafe的具体使用</a></li>
-    <li><a href="#cas执行流程">CAS执行流程</a></li>
-    <li><a href="#cas问题">CAS问题</a></li>
-    <li><a href="#3只能保证一个共享变量的原子操作">3.只能保证一个共享变量的原子操作</a></li>
+    <li><a href="#cas-的关键实现">CAS 的关键实现</a></li>
+    <li><a href="#unsafe-的具体使用">Unsafe 的具体使用</a></li>
+    <li><a href="#cas-执行流程">CAS 执行流程</a></li>
+    <li><a href="#cas-问题">CAS 问题</a></li>
   </ol>
 </nav>
         </div>
@@ -428,11 +427,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/java/">Java</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/">开发语言</a> 
-            
-            
         </div>
         
     </footer>
@@ -446,9 +440,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h2 id="cas的关键实现"><a href="#cas%e7%9a%84%e5%85%b3%e9%94%ae%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>CAS的关键实现
+    <h2 id="cas-的关键实现"><a href="#cas-%e7%9a%84%e5%85%b3%e9%94%ae%e5%ae%9e%e7%8e%b0" class="header-anchor"></a>CAS 的关键实现
 </h2><blockquote>
-<p>在 Java 中，实现 CAS操作的一个关键类是Unsafe，位于sun.misc包下：</p>
+<p>在 Java 中，实现 CAS 操作的一个关键类是 Unsafe，位于 sun.misc 包下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -459,11 +453,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="line"><span class="cl">A collection of methods for performing low-level, unsafe operations. 
-</span></span><span class="line"><span class="cl">Although the class and all methods are public, use of this class is limited because only trusted code can obtain instances of it. 
-</span></span><span class="line"><span class="cl">Note: It is the resposibility of the caller to make sure arguments are checked before methods of this class are called. 
-</span></span><span class="line"><span class="cl">While some rudimentary checks are performed on the input, the checks are best effort and when performance is an overriding priority, 
-</span></span><span class="line"><span class="cl">as when methods of this class are optimized by the runtime compiler, some or all checks (if any) may be elided. 
+<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="line"><span class="cl">A collection of methods for performing low-level, unsafe operations.
+</span></span><span class="line"><span class="cl">Although the class and all methods are public, use of this class is limited because only trusted code can obtain instances of it.
+</span></span><span class="line"><span class="cl">Note: It is the resposibility of the caller to make sure arguments are checked before methods of this class are called.
+</span></span><span class="line"><span class="cl">While some rudimentary checks are performed on the input, the checks are best effort and when performance is an overriding priority,
+</span></span><span class="line"><span class="cl">as when methods of this class are optimized by the runtime compiler, some or all checks (if any) may be elided.
 </span></span><span class="line"><span class="cl">Hence, the caller must not rely on the checks and corresponding exceptions!
 </span></span></code></pre></td></tr></table>
 </div>
@@ -483,7 +477,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">jdk</span><span class="p">.</span><span class="na">internal</span><span class="p">.</span><span class="na">misc</span><span class="p">.</span><span class="na">Unsafe</span><span class="w"> </span><span class="n">theInternalUnsafe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jdk</span><span class="p">.</span><span class="na">internal</span><span class="p">.</span><span class="na">misc</span><span class="p">.</span><span class="na">Unsafe</span><span class="p">.</span><span class="na">getUnsafe</span><span class="p">();</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nd">@ForceInline</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">compareAndSwapInt</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w">
@@ -515,8 +509,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">                                                 </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="unsafe的具体使用"><a href="#unsafe%e7%9a%84%e5%85%b7%e4%bd%93%e4%bd%bf%e7%94%a8" class="header-anchor"></a>Unsafe的具体使用
-</h2><p>在juc包的atomic包提供了一些原子操作类，这些atomic类依赖于CAS乐观锁保证原子性，以AtomicInteger核心源码为例：</p>
+</div><h2 id="unsafe-的具体使用"><a href="#unsafe-%e7%9a%84%e5%85%b7%e4%bd%93%e4%bd%bf%e7%94%a8" class="header-anchor"></a>Unsafe 的具体使用
+</h2><p>在 juc 包的 atomic 包提供了一些原子操作类，这些 atomic 类依赖于 CAS 乐观锁保证原子性，以 AtomicInteger 核心源码为例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -593,7 +587,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>sun.internal.misc.Unsafe类有如下方法：</p>
+</div><p>sun.internal.misc.Unsafe 类有如下方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -620,7 +614,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="cas执行流程"><a href="#cas%e6%89%a7%e8%a1%8c%e6%b5%81%e7%a8%8b" class="header-anchor"></a>CAS执行流程
+</div><h2 id="cas-执行流程"><a href="#cas-%e6%89%a7%e8%a1%8c%e6%b5%81%e7%a8%8b" class="header-anchor"></a>CAS 执行流程
 </h2><blockquote>
 <ul>
 <li>线程从主存读取要修改的值存到本地线程缓存中</li>
@@ -629,13 +623,13 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li>如果修改成功，将修改后的值写入主内存，并返回修改结果；如果失败，则返回当前主内存中的值；</li>
 <li>在多线程并发执行的情况下，如果多个线程同时执行 CAS 操作，只有一个线程的 CAS 操作会成功，其他线程的 CAS 操作都会失败，这也是 CAS 的原子性保证。</li>
 </ul></blockquote>
-<h2 id="cas问题"><a href="#cas%e9%97%ae%e9%a2%98" class="header-anchor"></a>CAS问题
-</h2><p>1.ABA问题</p>
+<h2 id="cas-问题"><a href="#cas-%e9%97%ae%e9%a2%98" class="header-anchor"></a>CAS 问题
+</h2><p>1.ABA 问题</p>
 <blockquote>
-<p>线程读取某变量的时候值为A，再次读取的时候值仍为A，不能说明该变量是否被其他线程改过，解决思路是在变量前面追加上<strong>版本号或者时间戳</strong> 。JDK 1.5 以后的 <code>AtomicStampedReference</code> 类就是用来解决 ABA 问题的，其中的 <code>compareAndSet()</code> 方法就是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p></blockquote>
+<p>线程读取某变量的时候值为 A，再次读取的时候值仍为 A，不能说明该变量是否被其他线程改过，解决思路是在变量前面追加上<strong>版本号或者时间戳</strong> 。JDK 1.5 以后的 <code>AtomicStampedReference</code> 类就是用来解决 ABA 问题的，其中的 <code>compareAndSet()</code> 方法就是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p></blockquote>
 <p>2.循环时间长开销大</p>
-<h2 id="3只能保证一个共享变量的原子操作"><a href="#3%e5%8f%aa%e8%83%bd%e4%bf%9d%e8%af%81%e4%b8%80%e4%b8%aa%e5%85%b1%e4%ba%ab%e5%8f%98%e9%87%8f%e7%9a%84%e5%8e%9f%e5%ad%90%e6%93%8d%e4%bd%9c" class="header-anchor"></a>3.只能保证一个共享变量的原子操作
-</h2>
+<p>3.只能保证一个共享变量的原子操作</p>
+
 </section>
 
 
@@ -682,12 +676,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/">
+    <a href="/zh-cn/post/2025/07/spring7%E4%B8%AA%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA%E5%92%8C5%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java内存模型（Memory Model）</h2>
+            <h2 class="article-title">Spring7个事务传播行为和5个隔离级别</h2>
             
         </div>
     </a>
@@ -695,38 +689,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/02/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
+    <a href="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">字符串常量池</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%83%BD%E6%A0%B9%E6%8D%AE%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7%E6%9D%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">如何设计一个能根据任务优先级来执行的线程池</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/java-io%E6%A8%A1%E5%9E%8B----bionioaioio%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java io模型----BIO、NIO、AIO、IO多路复用、零拷贝</h2>
+            <h2 class="article-title">前后端分离场景下的用户登录玩法&amp;Sa-token框架使用</h2>
             
         </div>
     </a>
@@ -740,6 +708,32 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">StringBuffer和StringBuilder</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/02/spring%E7%9A%84bean%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Spring的bean初始化过程、生命周期</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/02/concurrenthashmap/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">ConcurrentHashMap</h2>
             
         </div>
     </a>

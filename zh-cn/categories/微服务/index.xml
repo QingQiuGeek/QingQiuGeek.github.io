@@ -13,26 +13,174 @@
         <pubDate>Wed, 05 Feb 2025 16:56:07 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/</guid>
-        <description>&lt;p&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/142787997&#34;  title=&#34;浅谈云原生--微服务、CICD、Serverless、服务网格_cicd 云原生-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;浅谈云原生&amp;ndash;微服务、CICD、Serverless、服务网格_cicd 云原生-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145355561&#34;  title=&#34;【排坑】云服务器docker部署前后端分离项目&amp;#43;域名解析&amp;#43;OSS-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;【排坑】云服务器docker部署前后端分离项目+域名解析+OSS-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145433870&#34;  title=&#34;练习两年半，我的全栈博客出生了-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;练习两年半，我的全栈博客出生了-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145311064&#34;  title=&#34;https://blog.csdn.net/qq_73181349/article/details/145311064&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://blog.csdn.net/qq_73181349/article/details/145311064&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;1分布式基础&#34;&gt;&lt;a href=&#34;#1%e5%88%86%e5%b8%83%e5%bc%8f%e5%9f%ba%e7%a1%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;1.分布式基础&lt;/strong&gt;
-&lt;/h2&gt;&lt;h3 id=&#34;11-微服务&#34;&gt;&lt;a href=&#34;#11-%e5%be%ae%e6%9c%8d%e5%8a%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.1 微服务
+        <description>&lt;h2 id=&#34;分布式基础&#34;&gt;&lt;a href=&#34;#%e5%88%86%e5%b8%83%e5%bc%8f%e5%9f%ba%e7%a1%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分布式基础
+&lt;/h2&gt;&lt;h3 id=&#34;微服务&#34;&gt;&lt;a href=&#34;#%e5%be%ae%e6%9c%8d%e5%8a%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;微服务
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;所谓微服务，就是把传统的单体项目的各个服务拆分出来单独部署，每个&lt;strong&gt;小服务&lt;/strong&gt; 运行在&lt;strong&gt;自己&lt;/strong&gt; 的&lt;strong&gt;进程&lt;/strong&gt;中，他们之间通过HTTP调用进行通信。提高服务弹性、可维护性。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;12&#34;&gt;&lt;a href=&#34;#12&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2
-&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;所谓微服务，就是把传统的单体项目的各个服务拆分出来单独部署，每个&lt;strong&gt;小服务&lt;/strong&gt; 运行在&lt;strong&gt;自己&lt;/strong&gt; 的&lt;strong&gt;进程&lt;/strong&gt;中，他们之间通过 HTTP 调用进行通信。提高服务弹性、可维护性。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;集群分布式节点&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e7%be%a4%e5%88%86%e5%b8%83%e5%bc%8f%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  集群&amp;amp;分布式&amp;amp;节点
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;集群指的是将几台服务器集中在一起，实现同一业务。&lt;/li&gt;
+&lt;li&gt;分布式是指将不同的业务分布在不同的地方，也就是多个节点。&lt;/li&gt;
+&lt;li&gt;每个节点都可以做个集群，比如一个项目有 ABC 三个服务分别部署，这就是分布式，每个服务可能要部署在多个服务器提高并发量如 A1、A2、A3、B1、B2、B3，每个服务就形成了自己的集群。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;远程调用负载均衡&#34;&gt;&lt;a href=&#34;#%e8%bf%9c%e7%a8%8b%e8%b0%83%e7%94%a8%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;远程调用+负载均衡
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;各个微服务之间一般通过 http+json 完成调用，若 A 服务调用 B 服务，B 服务部署了多个服务器，那么 A 调用任意一个服务器均可完成功能。 为了使每一个服务器都不要太忙或者太闲，可以负载均衡的调用每一个服务器，提升网站的健壮性。&lt;/p&gt;
+&lt;p&gt;常见负载均衡算法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;**轮询：**按顺序往后依次调用，然后循环。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;最小连接：&lt;strong&gt;优先选择连接数最少，也就是压力最小的后端服务器，在&lt;/strong&gt;会话较长&lt;/strong&gt;的情况下可以考虑采取这种方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;散列：&lt;strong&gt;根据请求源的 IP 的散列（hash）来选择要转发的服务器。这种方式可以一定程度上保证特定用户能连接到相同的服务器。如果应用需要处理状态而要求用户&lt;/strong&gt;能连接到和之前相同的服务器&lt;/strong&gt;，可以考虑采取这种方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;服务注册发现注册中心&#34;&gt;&lt;a href=&#34;#%e6%9c%8d%e5%8a%a1%e6%b3%a8%e5%86%8c%e5%8f%91%e7%8e%b0%e6%b3%a8%e5%86%8c%e4%b8%ad%e5%bf%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  服务注册发现&amp;amp;注册中心
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;A 服务调用 B 服务，就得知道 B 服务的 IP 地址、哪个服务可以正常调用，哪个服务已经下线。解决这个问题可以引入注册中心；每个服务上线后把自己注册到注册中心，其他服务要调用时就从注册中心获取可调用的服务 IP 地址即可。
+&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image.png&#34;
+	width=&#34;1175&#34;
+	height=&#34;562&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image_hu_57f1523f87e323e5.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image_hu_aa154e7a7b0a4e4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;501px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;配置中心&#34;&gt;&lt;a href=&#34;#%e9%85%8d%e7%bd%ae%e4%b8%ad%e5%bf%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;配置中心
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;每个服务单独部署出来，可能配置是不同的，如果单独写死在服务上可维护扩展性差，为了满足灵活的配置变更，可以把所有服务的配置写在配置中心，让每个服务在配置中心获取自己的配置。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-1.png&#34;
+	width=&#34;1324&#34;
+	height=&#34;749&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-1_hu_cd1f7f3cc93e33cc.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-1_hu_72982482d973f46b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;176&#34;
+		data-flex-basis=&#34;424px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;服务熔断降级&#34;&gt;&lt;a href=&#34;#%e6%9c%8d%e5%8a%a1%e7%86%94%e6%96%ad%e9%99%8d%e7%ba%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;服务熔断&amp;amp;降级
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在微服务架构中，服务之间往往形成链式调用，A-&amp;gt;B-&amp;gt;C，假如在 B 服务不可用，可能会阻塞到该服务，导致后续的服务进来后也一直阻塞直到资源耗尽，整条链路发生雪崩，因此要有熔断和降级机制保护服务。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;服务熔断&lt;/strong&gt;&lt;br&gt;
+设置服务的&lt;strong&gt;超时&lt;/strong&gt;，当被调用的服务在规定时间内没返回数据或达到一定失败次数，就触发断路保护机制，后来的请求不再去调用这个服务，本地直接返回默认的数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务降级&lt;/strong&gt;&lt;br&gt;
+在运维期间，当系统处于高峰期，系统资源紧张，我们可以让非核心业务降级运行。降级：某些服务不处理，或者简单处理【抛异常、返回 NULL、调用 Mock 数据、调用 Fallback 处理逻辑】&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;api-网关&#34;&gt;&lt;a href=&#34;#api-%e7%bd%91%e5%85%b3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;API 网关
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;一夫当关，万夫莫开。微服务的入口，一般抽象了微服务中都需要的公共功能，同时提供了客户端&lt;strong&gt;负载均衡&lt;/strong&gt;，&lt;strong&gt;服务自动熔断&lt;/strong&gt;，&lt;strong&gt;灰度发布&lt;/strong&gt;，&lt;strong&gt;统一认证&lt;/strong&gt;，&lt;strong&gt;限流流控&lt;/strong&gt;，&lt;strong&gt;日志统计&lt;/strong&gt;等丰富的功能。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-2.png&#34;
+	width=&#34;1314&#34;
+	height=&#34;578&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-2_hu_50502fbfed1b898e.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-2_hu_8d8f5d8816276138.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;227&#34;
+		data-flex-basis=&#34;545px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;微服务解决方案工具&#34;&gt;&lt;a href=&#34;#%e5%be%ae%e6%9c%8d%e5%8a%a1%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88%e5%b7%a5%e5%85%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;微服务解决方案&amp;amp;工具
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;个人以为常用的微服务解决体系大概有两套，分别是 SpringCloud 和 SpringCloudAlibaba，比如 API 网关，SpringCloud 用的是 GateWay，SpringCloudAlibaba 则是 Higress，当然两者的各个工具也是可以混用的。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://spring.io/projects/spring-cloud&#34;  title=&#34;Spring Cloud&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spring Cloud&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sca.aliyun.com/&#34;  title=&#34;Spring Cloud Alibaba官网_基于Springboot的微服务教程-阿里云&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spring Cloud Alibaba 官网_基于 Springboot 的微服务教程-阿里云&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;nacos&#34;&gt;&lt;a href=&#34;#nacos&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Nacos
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;Nacos 通常作为注册配置中心，用于服务注册、发现、配置管理等&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;面试题&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-3.png&#34;
+	width=&#34;1568&#34;
+	height=&#34;997&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-3_hu_42d6d69e0c4d884b.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-3_hu_6e956068d8e7be1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;157&#34;
+		data-flex-basis=&#34;377px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;openfeign&#34;&gt;&lt;a href=&#34;#openfeign&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt; OpenFeign
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;OpenFeign 是一个&lt;strong&gt;声明式&lt;/strong&gt;http 远程调用工具，底层内置 Ribbon，可以直接&lt;strong&gt;根据服务名称去注册中心&lt;/strong&gt;拿到指定的&lt;strong&gt;可用服务 IP 集合&lt;/strong&gt;，并进行&lt;strong&gt;负载均衡&lt;/strong&gt;式的调用，还可以设置超时、重试机制、兜底返回 fallback，该方式简化了微服务之间的通信，减少了代码编写。&lt;/p&gt;
+&lt;p&gt;除了声明式，还有编程式 RestTemplate，该方式需要在代码中手动编程调用。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;有意思的是，如果 MVC 的注解写在 controll 层就是接受请求，写在 FeignClient 就是发送请求，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-4.png&#34;
+	width=&#34;1437&#34;
+	height=&#34;681&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-4_hu_5c50ae4f0a292032.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-4_hu_b95f9d56e1854889.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;506px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;客户端和服务端负载均衡区别&#34;&gt;&lt;a href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af%e5%92%8c%e6%9c%8d%e5%8a%a1%e7%ab%af%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;客户端和服务端负载均衡区别
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-5.png&#34;
+	width=&#34;1234&#34;
+	height=&#34;854&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-5_hu_42e4199976fa06d9.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-5_hu_53a4a3ecb3d848fe.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;144&#34;
+		data-flex-basis=&#34;346px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;sentinel&#34;&gt;&lt;a href=&#34;#sentinel&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Sentinel
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;资源&amp;amp;规则&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;所有 web 接口皆可视为资源，除此之外还要设置资源的访问规则，如流量控制规则、熔断降级规则、系统保护规则、来源访问控制规则、热点参数规则
+&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-6.png&#34;
+	width=&#34;830&#34;
+	height=&#34;991&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-6_hu_2f097aed61eeb2cd.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-6_hu_c84509dc15e5a757.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;83&#34;
+		data-flex-basis=&#34;201px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-7.png&#34;
+	width=&#34;1144&#34;
+	height=&#34;585&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-7_hu_d8e06d9027edde4.png 480w, /zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/image-7_hu_73308f5be221ec19.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;469px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;gateway&#34;&gt;&lt;a href=&#34;#gateway&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Gateway
+&lt;/h3&gt;&lt;p&gt;略&lt;/p&gt;
+&lt;h3 id=&#34;seata&#34;&gt;&lt;a href=&#34;#seata&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Seata
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;分布式事务的解决方案，一个购买操作涉及账户、订单、库存三个服务，每个服务分别部署，其数据库也不同，单个子操作的事务是一致性的，但是要保证三个子操作的事务一致性。&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>

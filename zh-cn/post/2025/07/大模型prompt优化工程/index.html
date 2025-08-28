@@ -11,7 +11,7 @@
 <meta property='og:description' content="提示工程指南介绍了优化Prompt的技巧和关键参数。Temperature控制文本随机性(值越大越随机)，Top_p控制多样性(累积概率阈值)。其他参数包括StopSequences(终止生成)、FrequencyPenalty(降低重复词概率)等。提示词设计要点包括明确指令、上下文和输出格式。技术方面包含零样本提示(直接给任务)、少样本提示(提供范例)、思维链(添加推理过程)以及ReAct(拆分复杂任务)。核心原则是告诉模型要做什么而非不要做什么。">
 <meta property='og:url' content='/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='agent' /><meta property='article:tag' content='prompt' /><meta property='article:published_time' content='2025-07-24T22:25:14&#43;00:00'/><meta property='article:modified_time' content='2025-07-24T22:25:14&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Agent' /><meta property='article:tag' content='Prompt' /><meta property='article:published_time' content='2025-07-24T22:25:14&#43;00:00'/><meta property='article:modified_time' content='2025-07-24T22:25:14&#43;00:00'/>
 <meta name="twitter:title" content="大模型Prompt优化工程">
 <meta name="twitter:description" content="提示工程指南介绍了优化Prompt的技巧和关键参数。Temperature控制文本随机性(值越大越随机)，Top_p控制多样性(累积概率阈值)。其他参数包括StopSequences(终止生成)、FrequencyPenalty(降低重复词概率)等。提示词设计要点包括明确指令、上下文和输出格式。技术方面包含零样本提示(直接给任务)、少样本提示(提供范例)、思维链(添加推理过程)以及ReAct(拆分复杂任务)。核心原则是告诉模型要做什么而非不要做什么。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,25 +336,25 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#为什么要优化prompt">为什么要优化Prompt</a></li>
+    <li><a href="#为什么要优化-prompt">为什么要优化 Prompt</a></li>
     <li><a href="#几个名词">几个名词</a>
       <ol>
-        <li><a href="#temperature"><strong>Temperature</strong></a></li>
-        <li><a href="#top_"><strong>Top_p</strong></a></li>
-        <li><a href="#stop-sequences"><strong>Stop Sequences</strong></a></li>
-        <li><a href="#frequency-penalty"><strong>Frequency Penalty</strong></a></li>
-        <li><a href="#presence-penalty"><strong>Presence Penalty</strong></a></li>
+        <li><a href="#temperature">Temperature</a></li>
+        <li><a href="#top_p">Top_p</a></li>
+        <li><a href="#stop-sequences">Stop Sequences</a></li>
+        <li><a href="#frequency-penalty">Frequency Penalty</a></li>
+        <li><a href="#presence-penalty">Presence Penalty</a></li>
       </ol>
     </li>
     <li><a href="#提示词要素">提示词要素</a></li>
-    <li><a href="#提示词技巧"><strong>提示词技巧</strong></a></li>
-    <li><a href="#提示技术"><strong>提示技术</strong></a>
+    <li><a href="#提示词技巧">提示词技巧</a></li>
+    <li><a href="#提示技术">提示技术</a>
       <ol>
-        <li><a href="#零样本提示"><strong>零样本提示</strong></a></li>
-        <li><a href="#少样本提示"><strong>少样本提示</strong></a></li>
+        <li><a href="#零样本提示">零样本提示</a></li>
+        <li><a href="#少样本提示">少样本提示</a></li>
         <li><a href="#cotchain-of-thought">COT(Chain of Thought)</a>
           <ol>
-            <li><a href="#零样本cot提示">零样本COT提示</a></li>
+            <li><a href="#零样本-cot-提示">零样本 COT 提示</a></li>
           </ol>
         </li>
         <li><a href="#reactreasoning-and-action">ReAct（Reasoning and Action）</a></li>
@@ -423,7 +423,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 3 分钟
+                阅读时长: 2 分钟
             </time>
         </div>
         
@@ -472,15 +472,15 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p><a class="link" href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way"  title="提问的智慧"
      target="_blank" rel="noopener"
     >提问的智慧</a></p></blockquote>
-<h2 id="为什么要优化prompt"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e4%bc%98%e5%8c%96prompt" class="header-anchor"></a>为什么要优化Prompt
+<h2 id="为什么要优化-prompt"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e4%bc%98%e5%8c%96-prompt" class="header-anchor"></a>为什么要优化 Prompt
 </h2><blockquote>
 <p>通过设计<strong>有效的提示词</strong> 来指导模型<strong>执行期望任务</strong>。</p>
 <p>用人话就是给模型一个任务，正确的告诉它怎么做、做什么。</p></blockquote>
 <h2 id="几个名词"><a href="#%e5%87%a0%e4%b8%aa%e5%90%8d%e8%af%8d" class="header-anchor"></a>几个名词
-</h2><h3 id="temperature"><a href="#temperature" class="header-anchor"></a><strong>Temperature</strong>
+</h2><h3 id="temperature"><a href="#temperature" class="header-anchor"></a>Temperature
 </h3><blockquote>
 <p><code>temperature</code> 决定了下一个词的随机程度，的参数值越小，模型就会返回越确定的一个结果。参数值越大，模型会返回更随机的结果，也就是说这可能会带来更多样化或创造性的产出。</p></blockquote>
-<h3 id="top_"><a href="#top_" class="header-anchor"></a><strong>Top_p</strong>
+<h3 id="top_p"><a href="#top_p" class="header-anchor"></a>Top_p
 </h3><blockquote>
 <p>与 <code>temperature</code> 一起称为核采样，用来控制模型返回结果的确定性。如果你需要准确和事实的答案，就把参数值调低，反之调高。</p>
 <p>**Temperature：**控制生成文本的随机性，决定模型选择下一个词时的随机程度。</p>
@@ -491,94 +491,120 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 &ldquo;cherry&rdquo;: 0.05<br>
 &ldquo;date&rdquo;: 0.03<br>
 &ldquo;elderberry&rdquo;: 0.02</p>
-<p>如果top_p=0.9，那么会考虑选择&quot;apple&quot; 和 &ldquo;banana&rdquo;，（累积概率为 0.9），忽略 &ldquo;cherry&rdquo;、&ldquo;date&rdquo; 和 &ldquo;elderberry&rdquo;，所以top_p是增加生成文本的多样性，temperature是控制文本生成的随机性。</p></blockquote>
-<h3 id="stop-sequences"><a href="#stop-sequences" class="header-anchor"></a><strong>Stop Sequences</strong>
+<p>如果 top_p=0.9，那么会考虑选择&quot;apple&quot; 和 &ldquo;banana&rdquo;，（累积概率为 0.9），忽略 &ldquo;cherry&rdquo;、&ldquo;date&rdquo; 和 &ldquo;elderberry&rdquo;，所以 top_p 是增加生成文本的多样性，temperature 是控制文本生成的随机性。</p></blockquote>
+<h3 id="stop-sequences"><a href="#stop-sequences" class="header-anchor"></a>Stop Sequences
 </h3><blockquote>
 <p>终止序列，当模型生成的文本包含终止序列中的字符串时会停止生成。</p></blockquote>
-<h3 id="frequency-penalty"><a href="#frequency-penalty" class="header-anchor"></a><strong>Frequency Penalty</strong>
+<h3 id="frequency-penalty"><a href="#frequency-penalty" class="header-anchor"></a>Frequency Penalty
 </h3><blockquote>
-<p><code>Frequency penalty</code> 是对下一个生成的 token 进行惩罚，某个token出现的次数越多，F<code>requency penalty</code> 越高，那么再次出现的可能性就越小。</p></blockquote>
-<h3 id="presence-penalty"><a href="#presence-penalty" class="header-anchor"></a><strong>Presence Penalty</strong>
+<p><code>Frequency penalty</code> 是对下一个生成的 token 进行惩罚，某个 token 出现的次数越多，F<code>requency penalty</code> 越高，那么再次出现的可能性就越小。</p></blockquote>
+<h3 id="presence-penalty"><a href="#presence-penalty" class="header-anchor"></a>Presence Penalty
 </h3><blockquote>
-<p><code>presence penalty</code> 也是对重复的 token 施加惩罚，但与 <code>frequency penalty</code> 不同的是，<strong>对于所有重复 token 的惩罚都是相同的</strong>。出现2次的 token 和出现 10 次的 token 会受到相同的惩罚。</p></blockquote>
+<p><code>presence penalty</code> 也是对重复的 token 施加惩罚，但与 <code>frequency penalty</code> 不同的是，<strong>对于所有重复 token 的惩罚都是相同的</strong>。出现 2 次的 token 和出现 10 次的 token 会受到相同的惩罚。</p></blockquote>
 <h2 id="提示词要素"><a href="#%e6%8f%90%e7%a4%ba%e8%af%8d%e8%a6%81%e7%b4%a0" class="header-anchor"></a>提示词要素
 </h2><p>明确的指令（任务）、上下文、期望的输出格式或类型，比如让模型写一个函数方法，我们需要提供：方法要实现的功能（任务）、环境变量（上下文）、出入参参数及类型（出入参格式）</p>
-<h2 id="提示词技巧"><a href="#%e6%8f%90%e7%a4%ba%e8%af%8d%e6%8a%80%e5%b7%a7" class="header-anchor"></a><strong>提示词技巧</strong>
+<h2 id="提示词技巧"><a href="#%e6%8f%90%e7%a4%ba%e8%af%8d%e6%8a%80%e5%b7%a7" class="header-anchor"></a>提示词技巧
 </h2><blockquote>
 <p><strong>1.明确的指令，告诉模型要做什么</strong></p>
 <p><strong>2.避免告诉模型不要做什么，而是告诉模型要做什么</strong></p></blockquote>
-<h2 id="提示技术"><a href="#%e6%8f%90%e7%a4%ba%e6%8a%80%e6%9c%af" class="header-anchor"></a><strong>提示技术</strong>
-</h2><h3 id="零样本提示"><a href="#%e9%9b%b6%e6%a0%b7%e6%9c%ac%e6%8f%90%e7%a4%ba" class="header-anchor"></a><strong>零样本提示</strong>
+<h2 id="提示技术"><a href="#%e6%8f%90%e7%a4%ba%e6%8a%80%e6%9c%af" class="header-anchor"></a>提示技术
+</h2><h3 id="零样本提示"><a href="#%e9%9b%b6%e6%a0%b7%e6%9c%ac%e6%8f%90%e7%a4%ba" class="header-anchor"></a>零样本提示
 </h3><blockquote>
 <p>所谓零样本就是不提供范例，直接给任务，如：</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/66e87430e8cc4f2db62278099f530d87.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image.png"
+	width="1323"
+	height="578"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image_hu_cca2b3c882c8bb63.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image_hu_9944280151fa04db.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="549px"
 	
 ></p></blockquote>
-<h3 id="少样本提示"><a href="#%e5%b0%91%e6%a0%b7%e6%9c%ac%e6%8f%90%e7%a4%ba" class="header-anchor"></a><strong>少样本提示</strong>
+<h3 id="少样本提示"><a href="#%e5%b0%91%e6%a0%b7%e6%9c%ac%e6%8f%90%e7%a4%ba" class="header-anchor"></a>少样本提示
 </h3><blockquote>
 <p>提供范例给模型，如：</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/6db1e884493340d99507edf16c973d85.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-1.png"
+	width="1308"
+	height="583"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-1_hu_bc79575c6c41d4c6.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-1_hu_500daef9212bd219.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="538px"
 	
 ></p></blockquote>
 <p>少样本提示的限制：即使增加样本提示数量也不足以获得较为复杂的推理问题的可靠响应。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/3d946770c7e848ac9558969a6a92416a.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-2.png"
+	width="1294"
+	height="877"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-2_hu_8cfa5632eedb52c8.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-2_hu_35c39d20e83e1526.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="147"
+		data-flex-basis="354px"
 	
 ></p>
 <h3 id="cotchain-of-thought"><a href="#cotchain-of-thought" class="header-anchor"></a>COT(Chain of Thought)
-</h3><p>思维链相较于上面的少样本提示，仅添加了推理过程，只需1个样本就获得了正确的推理结果。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/3dfad9c4a3514267a98c02d1917daa41.png"
-	
-	
-	
+</h3><p>思维链相较于上面的少样本提示，仅添加了推理过程，只需 1 个样本就获得了正确的推理结果。</p>
+<p><img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-3.png"
+	width="1315"
+	height="636"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-3_hu_2461a2686fdd8901.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-3_hu_43889a971289c975.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
 	
 ></p>
-<h4 id="零样本cot提示"><a href="#%e9%9b%b6%e6%a0%b7%e6%9c%accot%e6%8f%90%e7%a4%ba" class="header-anchor"></a>零样本COT提示
-</h4><p><img src="https://i-blog.csdnimg.cn/direct/aa579d9fb1844d8da3ceef790a3ea663.png"
-	
-	
-	
+<h4 id="零样本-cot-提示"><a href="#%e9%9b%b6%e6%a0%b7%e6%9c%ac-cot-%e6%8f%90%e7%a4%ba" class="header-anchor"></a>零样本 COT 提示
+</h4><p><img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-4.png"
+	width="1313"
+	height="562"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-4_hu_26729e6fa94ef640.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-4_hu_c4c2be7e779fc01b.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
 	
 ></p>
-<p>不提供样本，让模型逐步思考，最终得出正确结果：</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/4b77b7fd5e5f4d2f826443c283dfca9c.png"
-	
-	
-	
+<p>不提供样本，让模型逐步思考，最终得出正确结果：
+<img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-5.png"
+	width="1272"
+	height="715"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-5_hu_95d4ab1f9b562c47.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-5_hu_c39111a14ceea9c7.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
 	
 ></p>
 <h3 id="reactreasoning-and-action"><a href="#reactreasoning-and-action" class="header-anchor"></a>ReAct（Reasoning and Action）
 </h3><p>推理、行动，像人一样进行推理，拆分复杂任务，调用工具，一步步执行。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/272b77f468674635841fb1b6d72c1cdd.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-6.png"
+	width="1303"
+	height="934"
+	srcset="/zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-6_hu_49daa5e5d10f31ca.png 480w, /zh-cn/post/2025/07/%E5%A4%A7%E6%A8%A1%E5%9E%8Bprompt%E4%BC%98%E5%8C%96%E5%B7%A5%E7%A8%8B/image-6_hu_7f3f1974ac703389.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="139"
+		data-flex-basis="334px"
+	
 ></p>
-<br />
----
 
 </section>
 

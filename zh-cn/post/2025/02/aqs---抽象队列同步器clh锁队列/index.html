@@ -11,7 +11,7 @@
 <meta property='og:description' content="自旋锁、CLH锁队列、AQS的锁队列，以ReentrantLock为例讲解AQS获取锁原理">
 <meta property='og:url' content='/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='java' /><meta property='article:tag' content='AQS' /><meta property='article:tag' content='CLH' /><meta property='article:published_time' content='2025-02-12T11:02:38&#43;00:00'/><meta property='article:modified_time' content='2025-02-12T11:02:38&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='AQS' /><meta property='article:published_time' content='2025-02-12T11:02:38&#43;00:00'/><meta property='article:modified_time' content='2025-02-12T11:02:38&#43;00:00'/>
 <meta name="twitter:title" content="AQS---抽象队列同步器、CLH锁队列">
 <meta name="twitter:description" content="自旋锁、CLH锁队列、AQS的锁队列，以ReentrantLock为例讲解AQS获取锁原理">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,13 +336,18 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li>
+    <li><a href="#什么是-aqs">什么是 AQS</a></li>
+    <li><a href="#aqs-的-clh-锁队列">AQS 的 CLH 锁队列</a></li>
+    <li><a href="#node-节点各个状态含义">Node 节点各个状态含义</a></li>
+    <li><a href="#为什么-state-要用volatile-修饰">为什么 state 要用<strong>volatile 修饰</strong></a></li>
+    <li><a href="#aqs-的独占和共享">AQS 的独占和共享</a></li>
+    <li><a href="#acquire和-release">acquire()和 release()</a>
       <ol>
-        <li><a href="#61-acquire">6.1 acquire()</a></li>
-        <li><a href="#62-release">6.2 release()</a></li>
+        <li><a href="#acquire">acquire()</a></li>
+        <li><a href="#release">release()</a></li>
       </ol>
     </li>
-    <li><a href="#以reentrantlock讲解aqs原理">以ReentrantLock讲解AQS原理</a></li>
+    <li><a href="#以-reentrantlock-讲解-aqs-原理">以 ReentrantLock 讲解 AQS 原理</a></li>
   </ol>
 </nav>
         </div>
@@ -406,7 +411,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 5 分钟
+                阅读时长: 4 分钟
             </time>
         </div>
         
@@ -435,11 +440,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/aqs/">AQS</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/clh/">CLH</a> 
-            
-            
         </div>
         
     </footer>
@@ -453,38 +453,21 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145463543"  title="Java内存模型（Memory Model）-CSDN博客"
-     target="_blank" rel="noopener"
-    >Java内存模型（Memory Model）-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145492618"  title="扫盲，CRM、ERP、OA、MVP ...-CSDN博客"
-     target="_blank" rel="noopener"
-    >扫盲，CRM、ERP、OA、MVP &hellip;-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144943507"  title="ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet-CSDN博客"
-     target="_blank" rel="noopener"
-    >ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet-CSDN博客</a></p></blockquote>
-<p>参考：<a class="link" href="https://mp.weixin.qq.com/s/jEx-4XhNGOFdCo4Nou5tqg"  title="Java AQS 核心数据结构-CLH 锁"
+    <p>参考：<a class="link" href="https://mp.weixin.qq.com/s/jEx-4XhNGOFdCo4Nou5tqg"  title="Java AQS 核心数据结构-CLH 锁"
      target="_blank" rel="noopener"
     >Java AQS 核心数据结构-CLH 锁</a></p>
-<ol>
-<li>什么是AQS</li>
-</ol>
-<hr>
-<blockquote>
-<p>AbstractQueuedSynchronizer，<strong>一个抽象类</strong>，用来构建锁和同步器，定义了资源获取和释放的通用流程，ReentrantLock、Semaphore皆是基于AQS实现的。</p>
+<h2 id="什么是-aqs"><a href="#%e4%bb%80%e4%b9%88%e6%98%af-aqs" class="header-anchor"></a>什么是 AQS
+</h2><blockquote>
+<p>AbstractQueuedSynchronizer，<strong>一个抽象类</strong>，用来构建锁和同步器，定义了资源获取和释放的通用流程，ReentrantLock、Semaphore 皆是基于 AQS 实现的。</p>
 <p><strong>核心思想</strong></p>
-<p>线程请求的共享资源已被占用，那么该请求线程<strong>进入AQS的CLH队列进行等待</strong>，否则把请求线程设置为有效的工作线程，并将共享资源设置为占用状态，即该线程占用了共享资源。</p></blockquote>
-<ol start="2">
-<li>AQS的CLH锁队列</li>
-</ol>
-<hr>
-<blockquote>
-<p>自旋锁即线程不断对一个原子变量CAS来尝试获取锁，若多线程同时竞争同一个原子变量，可能造成某个线程的 <code>CAS</code> 操作长时间失败，从而导致 <strong>&ldquo;饥饿&quot;问题</strong> ，而CLH锁对自旋锁进行了改进，<strong>通过引入一个单向队列来让线程排队确保公平性，避免饥饿。</strong></p>
+<p>线程请求的共享资源已被占用，那么该请求线程<strong>进入 AQS 的 CLH 队列进行等待</strong>，否则把请求线程设置为有效的工作线程，并将共享资源设置为占用状态，即该线程占用了共享资源。</p></blockquote>
+<h2 id="aqs-的-clh-锁队列"><a href="#aqs-%e7%9a%84-clh-%e9%94%81%e9%98%9f%e5%88%97" class="header-anchor"></a>AQS 的 CLH 锁队列
+</h2><blockquote>
+<p>自旋锁即线程不断对一个原子变量 CAS 来尝试获取锁，若多线程同时竞争同一个原子变量，可能造成某个线程的 <code>CAS</code> 操作长时间失败，从而导致 <strong>&ldquo;饥饿&quot;问题</strong> ，而 CLH 锁对自旋锁进行了改进，<strong>通过引入一个单向队列来让线程排队确保公平性，避免饥饿。</strong></p>
 <p><strong>AQS</strong> 在 CLH 锁的基础上进一步优化，形成了其内部的 <strong>CLH 队列变体</strong>，优化点如下：</p>
 <ul>
-<li><strong>自旋+阻塞</strong>：普通的CLH锁使用纯自旋等待锁释放，大量自旋会占用CPU资源，AQS的CLH锁则会短暂自旋，失败后进入阻塞状态，等待被唤醒，减少CPU占用。</li>
-<li><strong>双向队列</strong> ：普通的CLH锁是单向的，节点只知道前驱节点的状态，而当某个节点释放锁时，需要通过队列唤醒后续节点。AQS 将队列改为 <strong>双向队列</strong> ，新增了 <code>next</code> 指针，使得节点不仅知道前驱节点，也可以直接唤醒后继节点，从而简化了队列操作，提高了唤醒效率。</li>
+<li><strong>自旋+阻塞</strong>：普通的 CLH 锁使用纯自旋等待锁释放，大量自旋会占用 CPU 资源，AQS 的 CLH 锁则会短暂自旋，失败后进入阻塞状态，等待被唤醒，减少 CPU 占用。</li>
+<li><strong>双向队列</strong> ：普通的 CLH 锁是单向的，节点只知道前驱节点的状态，而当某个节点释放锁时，需要通过队列唤醒后续节点。AQS 将队列改为 <strong>双向队列</strong> ，新增了 <code>next</code> 指针，使得节点不仅知道前驱节点，也可以直接唤醒后继节点，从而简化了队列操作，提高了唤醒效率。</li>
 </ul></blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -528,56 +511,54 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">volatile</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">state</span><span class="p">;</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="https://i-blog.csdnimg.cn/direct/16ee0faef85c44d08aa470df97c33a59.png"
-	
-	
-	
+</div><p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image.png"
+	width="1550"
+	height="638"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image_hu_835afd6c3ca66f7a.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image_hu_8a62d3b817a1dddd.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="583px"
+	
 ></p>
-<br />
-<p><img src="https://i-blog.csdnimg.cn/direct/473b26e855d745e79e5dd75600d25d72.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-1.png"
+	width="446"
+	height="472"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-1_hu_f58fe10b1831dd03.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-1_hu_4ed40dfb62d41d4c.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="94"
+		data-flex-basis="226px"
+	
 ></p>
-<ol start="3">
-<li>Node节点各个状态含义</li>
-</ol>
-<hr>
-<p><img src="https://i-blog.csdnimg.cn/direct/83b2326718d74161824d09337ea45bac.png"
-	
-	
-	
+<h2 id="node-节点各个状态含义"><a href="#node-%e8%8a%82%e7%82%b9%e5%90%84%e4%b8%aa%e7%8a%b6%e6%80%81%e5%90%ab%e4%b9%89" class="header-anchor"></a>Node 节点各个状态含义
+</h2><p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-2.png"
+	width="1326"
+	height="793"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-2_hu_217c125fcaea76e4.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-2_hu_b4e95aea323c2d1a.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="167"
+		data-flex-basis="401px"
+	
 ></p>
-<ol start="4">
-<li>为什么state要用<strong>volatile修饰</strong></li>
-</ol>
-<hr>
-<blockquote>
-<br />
-<p>使用 volatile 修饰state不是为了利用 volatile 的内存可见性，因为state本来就只会被持有线程写入，只会被队列中该线程的后驱节点对应的线程读，而且后者会轮询读取。因此，<strong>可见性问题不会影响锁的正确性</strong>。</p>
+<h2 id="为什么-state-要用volatile-修饰"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-state-%e8%a6%81%e7%94%a8volatile-%e4%bf%ae%e9%a5%b0" class="header-anchor"></a>为什么 state 要用<strong>volatile 修饰</strong>
+</h2><blockquote>
+<p>使用 volatile 修饰 state 不是为了利用 volatile 的内存可见性，因为 state 本来就只会被持有线程写入，只会被队列中该线程的后驱节点对应的线程读，而且后者会轮询读取。因此，<strong>可见性问题不会影响锁的正确性</strong>。</p>
 <p>但要实现一个可以在多线程程序中正确执行的锁，还需要<strong>解决重排序问题</strong> 。<br>
-在《Java 并发编程实战》一书对于重排序问题是这么描述的：在没有同步的情况下，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整。在缺乏足够同步的多线程程序中，要想对内存操作的执行顺序进行判断，几乎无法得到正确的结论。对于 Java synchronized 关键字提供的<strong>内置锁(又叫监视器)</strong> ，Java内存模型规范中有一条 <strong>Happens-Before（先行发生）规则：&ldquo;一个监视器锁上的解锁应该发生在该监视器锁的后续锁定之前&quot;也就是后面的锁在锁定之前得知道前面的锁有没有解锁</strong>，而自定义互斥锁就需要自己保证这一规则的成立，因此上述代码通过 volatile 的 Happens-Before（先行发生）规则来解决重排序问题。JMM 的 Happens-Before（先行发生）规则有一条针对 volatile 关键字的规则：&ldquo;volatile 变量的写操作发生在该变量的后续读之前&rdquo;。</p></blockquote>
-<ol start="5">
-<li>AQS的独占和共享</li>
-</ol>
-<hr>
-<blockquote>
+在《Java 并发编程实战》一书对于重排序问题是这么描述的：在没有同步的情况下，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整。在缺乏足够同步的多线程程序中，要想对内存操作的执行顺序进行判断，几乎无法得到正确的结论。对于 Java synchronized 关键字提供的<strong>内置锁(又叫监视器)</strong> ，Java 内存模型规范中有一条 <strong>Happens-Before（先行发生）规则：&ldquo;一个监视器锁上的解锁应该发生在该监视器锁的后续锁定之前&quot;也就是后面的锁在锁定之前得知道前面的锁有没有解锁</strong>，而自定义互斥锁就需要自己保证这一规则的成立，因此上述代码通过 volatile 的 Happens-Before（先行发生）规则来解决重排序问题。JMM 的 Happens-Before（先行发生）规则有一条针对 volatile 关键字的规则：&ldquo;volatile 变量的写操作发生在该变量的后续读之前&rdquo;。</p></blockquote>
+<h2 id="aqs-的独占和共享"><a href="#aqs-%e7%9a%84%e7%8b%ac%e5%8d%a0%e5%92%8c%e5%85%b1%e4%ba%ab" class="header-anchor"></a>AQS 的独占和共享
+</h2><blockquote>
 <p><code>Exclusive</code>（独占，如<code>ReentrantLock</code>）和<code>Share</code>（共享，如<code>Semaphore</code>/<code>CountDownLatch</code>）。</p>
 <p>一般来说，自定义同步器的共享方式要么是独占，要么是共享，他们也只需实现<code>tryAcquire-tryRelease</code>、<code>tryAcquireShared-tryReleaseShared</code>中的一种即可。但 AQS 也支持自定义同步器<strong>同时实现独占和共享两种方式，如<code>ReentrantReadWriteLock</code></strong>。</p></blockquote>
-<ol start="6">
-<li>acquire()和release()</li>
-</ol>
-<hr>
-<h3 id="61-acquire"><a href="#61-acquire" class="header-anchor"></a>6.1 acquire()
+<h2 id="acquire和-release"><a href="#acquire%e5%92%8c-release" class="header-anchor"></a>acquire()和 release()
+</h2><h3 id="acquire"><a href="#acquire" class="header-anchor"></a>acquire()
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -604,7 +585,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">addWaiter</span><span class="p">()</span><span class="w"> </span><span class="err">：</span><span class="n">如果获取锁失败</span><span class="err">，</span><span class="n">会将当前线程封装为</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="n">节点加入到</span><span class="w"> </span><span class="n">AQS</span><span class="w"> </span><span class="n">的</span><span class="w"> </span><span class="n">CLH</span><span class="w"> </span><span class="n">变体队列中等待获取锁</span><span class="err">。</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="62-release"><a href="#62-release" class="header-anchor"></a>6.2 release()
+</div><h3 id="release"><a href="#release" class="header-anchor"></a>release()
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -641,50 +622,64 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">如果</span><span class="w"> </span><span class="nf">tryRelease</span><span class="p">()</span><span class="w"> </span><span class="n">返回</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="err">，</span><span class="n">表明线程已经没有重入次数了</span><span class="err">，</span><span class="n">锁已经被完全释放</span><span class="err">，</span><span class="n">因此需要唤醒后继节点</span><span class="err">。</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="以reentrantlock讲解aqs原理"><a href="#%e4%bb%a5reentrantlock%e8%ae%b2%e8%a7%a3aqs%e5%8e%9f%e7%90%86" class="header-anchor"></a>以ReentrantLock讲解AQS原理
+</div><h2 id="以-reentrantlock-讲解-aqs-原理"><a href="#%e4%bb%a5-reentrantlock-%e8%ae%b2%e8%a7%a3-aqs-%e5%8e%9f%e7%90%86" class="header-anchor"></a>以 ReentrantLock 讲解 AQS 原理
 </h2><blockquote>
 <p>假设有 3 个线程尝试<strong>抢占</strong> 获取锁，线程分别为 <code>T1</code> 、 <code>T2</code> 和 <code>T3。</code></p>
-<p>假设线程 <code>T1</code> 先获取到锁，线程 <code>T2</code> 排队等待获取锁。但是在线程 <code>T2</code> 进入队列之前，需要初始化AQS的CLH锁队列。<code>head</code> 节点在初始化后状态为 <code>0</code> 。AQS 内部初始化后的队列如下</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/22b652cad4d94d28aa1f6ae197f5f4dc.png"
-	
-	
-	
+<p>假设线程 <code>T1</code> 先获取到锁，线程 <code>T2</code> 排队等待获取锁。但是在线程 <code>T2</code> 进入队列之前，需要初始化 AQS 的 CLH 锁队列。<code>head</code> 节点在初始化后状态为 <code>0</code> 。AQS 内部初始化后的队列如下</p></blockquote>
+<p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-3.png"
+	width="251"
+	height="521"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-3_hu_93f5ea827a8354fb.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-3_hu_63e9c13294343fd9.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="48"
+		data-flex-basis="115px"
 	
 ></p>
 <blockquote>
 <p>由于线程 <code>T1</code> 持有锁，因此线程 <code>T2</code> 会获取失败并进入队列中等待获取锁。同时会将前继节点（ <code>head</code> 节点）的状态由 <code>0</code> 更新为 <code>SIGNAL</code> ，表示需要对 <code>head</code> 节点的后继节点进行唤醒。此时，AQS 内部队列如下图所示：</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/fde9a18750bf4badade59cb314852a10.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-4.png"
+	width="531"
+	height="561"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-4_hu_deb4fa795ab0f329.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-4_hu_24e1ac1c5fc5a8e9.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="94"
+		data-flex-basis="227px"
 	
 ></p>
 <blockquote>
 <p>由于线程 <code>T1</code> 持有锁，因此线程 <code>T3</code> 也获取锁失败，会进入队列中等待获取锁。同时会将前继节点（线程 <code>T2</code> 节点）的状态由 <code>0</code> 更新为 <code>SIGNAL</code> ，表示线程 <code>T2</code> 节点需要对后继节点进行唤醒。此时，AQS 内部队列如下图所示：</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/659c9424607a4cd18dae5cd9c62cc0aa.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-5.png"
+	width="809"
+	height="561"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-5_hu_713e9bf208d58ed0.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-5_hu_9361c0429e32e8c.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="346px"
 	
 ></p>
 <blockquote>
-<p>此时，假设线程 <code>T1</code> 释放锁，会唤醒后继节点 <code>T2</code> 。线程 <code>T2</code> 被唤醒后获取到锁，并且会<strong>从等待队列中退出（不是移除，因为T2还要当head）</strong>。</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/fd430e5a14ec4beea9f64b9a29d04aa8.png"
-	
-	
-	
+<p>此时，假设线程 <code>T1</code> 释放锁，会唤醒后继节点 <code>T2</code> 。线程 <code>T2</code> 被唤醒后获取到锁，并且会<strong>从等待队列中退出（不是移除，因为 T2 还要当 head）</strong>。</p></blockquote>
+<p><img src="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-6.png"
+	width="529"
+	height="551"
+	srcset="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-6_hu_619866fc806525b6.png 480w, /zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/image-6_hu_8ba2897461427c9f.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="96"
+		data-flex-basis="230px"
+	
 ></p>
-<br />
----
 
 </section>
 

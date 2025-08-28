@@ -11,7 +11,7 @@
 <meta property='og:description' content="jvm结构图、类加载器、双亲委派、垃圾回收、字节码文件">
 <meta property='og:url' content='/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='jvm' /><meta property='article:tag' content='虚拟机' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2025-02-06T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-06T12:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='JVM' /><meta property='article:published_time' content='2025-02-06T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-06T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="JVM图文入门">
 <meta name="twitter:description" content="jvm结构图、类加载器、双亲委派、垃圾回收、字节码文件">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,23 +336,33 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li>
+    <li><a href="#jvm8-结构图">JVM8 结构图</a></li>
+    <li><a href="#java-性能低的主要原因">Java 性能低的主要原因</a></li>
+    <li><a href="#字节码文件">字节码文件</a>
       <ol>
-        <li><a href="#31-字节码文件的组成-e5ad97e88a82e7a081e69687e4bbb6e79a84e7bb84e68890">3.1 字节码文件的组成 {#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90}</a></li>
-        <li><a href="#41-类加载器classloader-e7b1bbe58aa0e8bdbde599a8classloader">4.1 类加载器ClassLoader {#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader}</a></li>
-        <li><a href="#42-运行时数据区-e8bf90e8a18ce697b6e695b0e68daee58cba">4.2 运行时数据区 {#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA}</a>
+        <li><a href="#字节码文件的组成">字节码文件的组成</a></li>
+      </ol>
+    </li>
+    <li><a href="#jvm-架构">JVM 架构</a>
+      <ol>
+        <li><a href="#类加载器-classloader">类加载器 ClassLoader</a></li>
+        <li><a href="#运行时数据区">运行时数据区</a>
           <ol>
-            <li><a href="#程序计数器-e7a88be5ba8fe8aea1e695b0e599a8">程序计数器 {#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8}</a></li>
-            <li><a href="#java虚拟机栈方法栈-javae696b9e6b395e6a088efbc88e8999ae68b9fe69cbae6a088efbc89">Java虚拟机栈（方法栈） {#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89}</a></li>
-            <li><a href="#本地方法栈-e69cace59cb0e696b9e6b395e6a088c2a0">本地方法栈 {#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0}</a></li>
-            <li><a href="#堆-heape5a086">堆 {#Heap%E5%A0%86}</a></li>
+            <li><a href="#程序计数器">程序计数器</a></li>
+            <li><a href="#java-虚拟机栈方法栈">Java 虚拟机栈(方法栈)</a></li>
+            <li><a href="#本地方法栈">本地方法栈</a></li>
+            <li><a href="#堆">堆</a></li>
           </ol>
         </li>
-        <li><a href="#43-执行引擎-e689a7e8a18ce5bc95e6938e">4.3 执行引擎 {#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E}</a></li>
-        <li><a href="#51-破坏双亲委派-e7a0b4e59d8fe58f8ce4bab2e5a794e6b4be">5.1 破坏双亲委派 {#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE}</a>
+        <li><a href="#43-执行引擎">4.3 执行引擎</a></li>
+      </ol>
+    </li>
+    <li><a href="#双亲委派">双亲委派</a>
+      <ol>
+        <li><a href="#破坏双亲委派">破坏双亲委派</a>
           <ol>
-            <li><a href="#tomcat破坏-tomcate7a0b4e59d8f">Tomcat破坏 {#Tomcat%E7%A0%B4%E5%9D%8F}</a></li>
-            <li><a href="#jdbc破坏-jdbce7a0b4e59d8fc2a0">JDBC破坏 {#JDBC%E7%A0%B4%E5%9D%8F%C2%A0}</a></li>
+            <li><a href="#tomcat-破坏">Tomcat 破坏</a></li>
+            <li><a href="#jdbc-破坏">JDBC 破坏</a></li>
           </ol>
         </li>
       </ol>
@@ -420,7 +430,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 10 分钟
+                阅读时长: 6 分钟
             </time>
         </div>
         
@@ -441,17 +451,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/jvm/">Jvm</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">虚拟机</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/jvm/">JVM</a> 
             
             
         </div>
@@ -467,164 +472,143 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong>{#tableOfContents}</p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145339474"  title="【已解决】redisCache注解失效，没写cacheConfig_com.howbuy.cachemanagement.client.redisclient#incr-CSDN博客"
-     target="_blank" rel="noopener"
-    >【已解决】redisCache注解失效，没写cacheConfig_com.howbuy.cachemanagement.client.redisclient#incr-CSDN博客</a>{#tableOfContents}</p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145346364"  title="【已解决】OSS配置问题_keyuewenhua.oss-cn-beijing.aliyuncs-CSDN博客"
-     target="_blank" rel="noopener"
-    >【已解决】OSS配置问题_keyuewenhua.oss-cn-beijing.aliyuncs-CSDN博客</a>{#tableOfContents}</p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145355561"  title="【排坑】云服务器docker部署前后端分离项目&#43;域名解析&#43;OSS-CSDN博客"
-     target="_blank" rel="noopener"
-    >【排坑】云服务器docker部署前后端分离项目+域名解析+OSS-CSDN博客</a>{#tableOfContents}</p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145444729"  title="微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata-CSDN博客"
-     target="_blank" rel="noopener"
-    >微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata-CSDN博客</a>{#tableOfContents}</p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145461986"  title="字符串常量池-CSDN博客"
-     target="_blank" rel="noopener"
-    >字符串常量池-CSDN博客</a>{#tableOfContents}</p></blockquote>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#main-toc" >1. JVM8结构图</a>{#main-toc-toc}</p>
-<p><a class="link" href="#Java%E6%80%A7%E8%83%BD%E4%BD%8E%E7%9A%84%E8%80%8C%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0" >2. Java性能低的主要原因</a>{#Java%E6%80%A7%E8%83%BD%E4%BD%8E%E7%9A%84%E8%80%8C%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0-toc}</p>
-<p><a class="link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6" >3. 字节码文件</a>{#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6-toc}</p>
-<p><a class="link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90" >3.1 字节码文件的组成</a>{#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90-toc}</p>
-<p><a class="link" href="#5.%20JVM%E6%9E%B6%E6%9E%84" >4. JVM架构</a>{#5.%20JVM%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader" >4.1 类加载器ClassLoader</a>{#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader-toc}</p>
-<p><a class="link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA" >4.2 运行时数据区</a>{#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-toc}</p>
-<p><a class="link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8" >程序计数器</a>{#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8-toc}</p>
-<p><a class="link" href="#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89" >Java虚拟机栈（方法栈）</a>{#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89-toc}</p>
-<p><a class="link" href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0" >本地方法栈</a>{#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0-toc}</p>
-<p><a class="link" href="#Heap%E5%A0%86" >堆</a>{#Heap%E5%A0%86-toc}</p>
-<p><a class="link" href="#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E" >4.3 执行引擎</a>{#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-toc}</p>
-<p><a class="link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE" >5. 双亲委派</a>{#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE-toc}</p>
-<p><a class="link" href="#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE" >5.1 破坏双亲委派</a>{#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE-toc}</p>
-<p><a class="link" href="#Tomcat%E7%A0%B4%E5%9D%8F" >Tomcat破坏</a>{#Tomcat%E7%A0%B4%E5%9D%8F-toc}</p>
-<p><a class="link" href="#JDBC%E7%A0%B4%E5%9D%8F%C2%A0" >JDBC破坏</a>{#JDBC%E7%A0%B4%E5%9D%8F%C2%A0-toc}</p>
-<hr>
-<br />
-<ol>
-<li>JVM8结构图 {#main-toc}</li>
-</ol>
-<hr>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/973e296f2ad5024e006d26c79d9f2d27.png"
-	
-	
-	
+    <h2 id="jvm8-结构图"><a href="#jvm8-%e7%bb%93%e6%9e%84%e5%9b%be" class="header-anchor"></a>JVM8 结构图
+</h2><p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image.png"
+	width="1080"
+	height="608"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image_hu_46f6ee758ed7ca7a.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image_hu_131334b1e926ad24.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
 ></p>
-<ol start="2">
-<li>Java性能低的主要原因 {#Java%E6%80%A7%E8%83%BD%E4%BD%8E%E7%9A%84%E8%80%8C%E4%B8%BB%E8%A6%81%E5%8E%9F%E5%9B%A0}</li>
-</ol>
-<hr>
-<p>Java语言如果不做任何的优化，性能其实是不如C和C++语言的。主要原因是：</p>
-<p>在程序运行过程中，Java虚拟机需要将字节码指令<strong>实时</strong> 地解释成计算机能识别的机器码，这个过程在运行时可能会<strong>反复执行</strong>，所以效率较低。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/77956ae94eb35c711fe6ae90215b9e65.png"
-	
-	
-	
+<h2 id="java-性能低的主要原因"><a href="#java-%e6%80%a7%e8%83%bd%e4%bd%8e%e7%9a%84%e4%b8%bb%e8%a6%81%e5%8e%9f%e5%9b%a0" class="header-anchor"></a>Java 性能低的主要原因
+</h2><p>Java 语言如果不做任何的优化，性能其实是不如 C 和 C++语言的。主要原因是：</p>
+<p>在程序运行过程中，Java 虚拟机需要将字节码指令<strong>实时</strong> 地解释成计算机能识别的机器码，这个过程在运行时可能会<strong>反复执行</strong>，所以效率较低。</p>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-1.png"
+	width="1015"
+	height="233"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-1_hu_347f13640686e050.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-1_hu_eaff55ae80c0257b.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="435"
+		data-flex-basis="1045px"
+	
 ></p>
-<p>C和C++语言在执行过程中，只需将源代码编译成可执行文件，就包含了计算机能识别的机器码，无需在运行过程中再实时地解释，所以性能较高。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/4891e09006dbffd15576105091139111.png"
-	
-	
-	
+<p>C 和 C++语言在执行过程中，只需将源代码编译成可执行文件，就包含了计算机能识别的机器码，无需在运行过程中再实时地解释，所以性能较高。</p>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-2.png"
+	width="746"
+	height="212"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-2_hu_361ff32737e75daf.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-2_hu_200d172619a4a38e.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="351"
+		data-flex-basis="844px"
+	
 ></p>
-<p>Java为什么要选择一条执行效率比较低的方式呢？主要是为了实现<strong>跨平台</strong>的特性。Java的字节码指令，如果希望在不同平台（操作系统+硬件架构），比如在windows或者linux上运行。可以使用同一份字节码指令，交给windows和linux上的Java虚拟机进行解释，这样就可以获得不同平台上的机器码了。这样就实现了Write Once，Run Anywhere 编写一次，到处运行。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/26d4cec4bed87ef7639e8cabaee78e9a.png"
-	
-	
-	
+<p>Java 为什么要选择一条执行效率比较低的方式呢？主要是为了实现<strong>跨平台</strong>的特性。Java 的字节码指令，如果希望在不同平台（操作系统+硬件架构），比如在 windows 或者 linux 上运行。可以使用同一份字节码指令，交给 windows 和 linux 上的 Java 虚拟机进行解释，这样就可以获得不同平台上的机器码了。这样就实现了 Write Once，Run Anywhere 编写一次，到处运行。</p>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-3.png"
+	width="1255"
+	height="473"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-3_hu_9816902d7381a6a8.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-3_hu_f6f44c90ff4d8ced.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="265"
+		data-flex-basis="636px"
+	
 ></p>
-<ol start="3">
-<li>字节码文件 {#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6}</li>
-</ol>
-<hr>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/ad540780ab9b2f156f1b85a26cd16701.png"
-	
-	
-	
+<h2 id="字节码文件"><a href="#%e5%ad%97%e8%8a%82%e7%a0%81%e6%96%87%e4%bb%b6" class="header-anchor"></a>字节码文件
+</h2><p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-4.png"
+	width="1480"
+	height="922"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-4_hu_8ed7fe40d5120771.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-4_hu_95f36f6b3f1fae05.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="160"
+		data-flex-basis="385px"
+	
 ></p>
-<p>我们java中说的字节码文件即 java代码编译后的.class文件，class文件可以跨平台运行在不同操作系统的JVM上。</p>
-<h3 id="31-字节码文件的组成-e5ad97e88a82e7a081e69687e4bbb6e79a84e7bb84e68890"><a href="#31-%e5%ad%97%e8%8a%82%e7%a0%81%e6%96%87%e4%bb%b6%e7%9a%84%e7%bb%84%e6%88%90-e5ad97e88a82e7a081e69687e4bbb6e79a84e7bb84e68890" class="header-anchor"></a>3.1 字节码文件的组成 {#%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90}
+<p>我们 java 中说的字节码文件即 java 代码编译后的.class 文件，class 文件可以跨平台运行在不同操作系统的 JVM 上。</p>
+<h3 id="字节码文件的组成"><a href="#%e5%ad%97%e8%8a%82%e7%a0%81%e6%96%87%e4%bb%b6%e7%9a%84%e7%bb%84%e6%88%90" class="header-anchor"></a>字节码文件的组成
 </h3><blockquote>
 <p>字节码文件总共可以分为以下几个部分：</p>
 <ul>
 <li>
-<p><strong>基础信息</strong>：魔数、字节码文件对应的Java版本号、访问标识(public final等等)、父类和接口信息</p>
+<p>基础信息：魔数、字节码文件对应的 Java 版本号、访问标识(public final 等等)、父类和接口信息</p>
 </li>
 <li>
-<p><strong>常量池</strong> **：**保存了字符串常量、类或接口名、字段名，主要在字节码指令中使用</p>
+<p>常量池：保存了字符串常量、类或接口名、字段名，主要在字节码指令中使用</p>
 </li>
 <li>
-<p><strong>字段：</strong> 当前类或接口声明的字段信息</p>
+<p>字段：当前类或接口声明的字段信息</p>
 </li>
 <li>
-<p>**方法：**当前类或接口声明的方法信息，核心内容为方法的字节码指令</p>
+<p>方法：当前类或接口声明的方法信息，核心内容为方法的字节码指令</p>
 </li>
 <li>
-<p>**属性：**类的属性，比如源码的文件名、内部类的列表等</p>
+<p>属性：类的属性，比如源码的文件名、内部类的列表等</p>
 </li>
 </ul></blockquote>
-<ol start="4">
-<li>JVM架构 {#5.%20JVM%E6%9E%B6%E6%9E%84}</li>
-</ol>
-<hr>
-<blockquote>
-<p>根据上面的JVM图，JVM大致可分为三块： 类加载器ClassLoader、运行时数据区 、执行引擎</p></blockquote>
-<h3 id="41-类加载器classloader-e7b1bbe58aa0e8bdbde599a8classloader"><a href="#41-%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%99%a8classloader-e7b1bbe58aa0e8bdbde599a8classloader" class="header-anchor"></a>4.1 类加载器ClassLoader {#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader}
-</h3><p>类加载器会通过二进制流的方式获取到字节码文件并交给Java虚拟机，虚拟机会在方法区和堆上生成对应的对象保存字节码信息。</p>
+<h2 id="jvm-架构"><a href="#jvm-%e6%9e%b6%e6%9e%84" class="header-anchor"></a>JVM 架构
+</h2><blockquote>
+<p>根据上面的 JVM 图，JVM 大致可分为三块： 类加载器 ClassLoader、运行时数据区 、执行引擎</p></blockquote>
+<h3 id="类加载器-classloader"><a href="#%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%99%a8-classloader" class="header-anchor"></a>类加载器 ClassLoader
+</h3><p>类加载器会通过二进制流的方式获取到字节码文件并交给 Java 虚拟机，虚拟机会在方法区和堆上生成对应的对象保存字节码信息。</p>
 <blockquote>
 <p><strong>根加载器（启动类加载器）：</strong></p>
-<p>默认加载Java安装目录/jre/lib下的类文件，比如rt.jar，tools.jar，resources.jar等。</p>
+<p>默认加载 Java 安装目录/jre/lib 下的类文件，比如 rt.jar，tools.jar，resources.jar 等。</p>
 <p><strong>扩展类加载器：</strong></p>
-<p>默认加载Java安装目录/jre/lib/ext下的类文件</p>
+<p>默认加载 Java 安装目录/jre/lib/ext 下的类文件</p>
 <p><strong>应用程序类加载器（系统类加载器）：</strong></p>
-<p>默认加载的是项目中的类以及通过maven引入的第三方jar包中的类。</p>
+<p>默认加载的是项目中的类以及通过 maven 引入的第三方 jar 包中的类。</p>
 <p><strong>用户自定义类加载器</strong></p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/03e97036e8ac7a1f4571a63072af659d.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-5.png"
+	width="1548"
+	height="928"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-5_hu_fcceb1d930b3027d.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-5_hu_20987d3d3435dba.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="400px"
+	
 ></p>
-<p><strong>输出为null是因为根加载器的具体实现是由C或C++编写，不在java范围内。</strong></p>
-<h3 id="42-运行时数据区-e8bf90e8a18ce697b6e695b0e68daee58cba"><a href="#42-%e8%bf%90%e8%a1%8c%e6%97%b6%e6%95%b0%e6%8d%ae%e5%8c%ba-e8bf90e8a18ce697b6e695b0e68daee58cba" class="header-anchor"></a>4.2 运行时数据区 {#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA}
-</h3><p>运行时数据可以划分为以下5块</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/cf125a3e73d0f0285c20eb26d0ed68a0.png"
-	
-	
-	
+<p><strong>输出为 null 是因为根加载器的具体实现是由 C 或 C++编写，不在 java 范围内。</strong></p>
+<h3 id="运行时数据区"><a href="#%e8%bf%90%e8%a1%8c%e6%97%b6%e6%95%b0%e6%8d%ae%e5%8c%ba" class="header-anchor"></a>运行时数据区
+</h3><p>运行时数据可以划分为以下 5 块
+<img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-6.png"
+	width="1280"
+	height="479"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-6_hu_2caeff63a4e09813.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-6_hu_18037f613a968853.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="641px"
+	
 ></p>
-<h4 id="程序计数器-e7a88be5ba8fe8aea1e695b0e599a8"><a href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8-e7a88be5ba8fe8aea1e695b0e599a8" class="header-anchor"></a>程序计数器 {#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8}
+<h4 id="程序计数器"><a href="#%e7%a8%8b%e5%ba%8f%e8%ae%a1%e6%95%b0%e5%99%a8" class="header-anchor"></a>程序计数器
 </h4><blockquote>
 <p>每个线程都有一个私有的程序计数器，也就是一个指针，指向方法区中的方法字节码（用来存储指向指令的地址）。解释器会在工作的时候改变这个计数器的值来选取下一条需要执行的字节码指令。如果线程执行的是非本地方法，则程序计数器中保存的是当前需要执行的指令地址；如果线程执行的是本地方法，则程序计数器中的值是 undefined。</p></blockquote>
-<h4 id="java虚拟机栈方法栈-javae696b9e6b395e6a088efbc88e8999ae68b9fe69cbae6a088efbc89"><a href="#java%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%a0%88%e6%96%b9%e6%b3%95%e6%a0%88-javae696b9e6b395e6a088efbc88e8999ae68b9fe69cbae6a088efbc89" class="header-anchor"></a>Java虚拟机栈（方法栈） {#Java%E6%96%B9%E6%B3%95%E6%A0%88%EF%BC%88%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%EF%BC%89}
+<h4 id="java-虚拟机栈方法栈"><a href="#java-%e8%99%9a%e6%8b%9f%e6%9c%ba%e6%a0%88%e6%96%b9%e6%b3%95%e6%a0%88" class="header-anchor"></a>Java 虚拟机栈(方法栈)
 </h4><blockquote>
 <p>栈中没有垃圾回收的，线程结束后内存会自动释放。栈主管程序运行、生命周期、线程同步。</p>
 <p>Java 虚拟机栈中是一个个栈帧，每个栈帧对应一个被调用的方法，当线程执行一个方法时，会创建一个对应的栈帧，并将栈帧压入栈中。当方法执行完毕后，将栈帧从栈中弹出。</p></blockquote>
-<p><strong>栈帧及组成</strong>{#%E6%A0%88%E5%B8%A7}</p>
+<p><strong>栈帧及组成</strong></p>
 <blockquote>
-<br />
 <ul>
 <li>
 <p>局部变量表，局部变量表的作用是在运行过程中存放所有的局部变量</p>
@@ -633,22 +617,26 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p>操作数栈，操作数栈是栈帧中虚拟机在执行指令过程中用来存放临时数据的一块区域</p>
 </li>
 <li>
-<p>帧数据，帧数据主要包含动态链接、方法出口、异常表的引用</p>
-</li>
-</ul></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/c18bc4bce68bc763c9b8a7118d9dfad7.png"
-	
-	
-	
+<p>帧数据，帧数据主要包含动态链接、方法出口、异常表的引用
+<img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-7.png"
+	width="1367"
+	height="1119"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-7_hu_44501e0b13d385ee.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-7_hu_f6aac7324af3dac2.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<p>stack1的方法结束后要弹出栈，此时需要通过stack1返回下面的stack2的方法。</p>
-<h4 id="本地方法栈-e69cace59cb0e696b9e6b395e6a088c2a0"><a href="#%e6%9c%ac%e5%9c%b0%e6%96%b9%e6%b3%95%e6%a0%88-e69cace59cb0e696b9e6b395e6a088c2a0" class="header-anchor"></a>本地方法栈 {#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88%C2%A0}
+		class="gallery-image" 
+		data-flex-grow="122"
+		data-flex-basis="293px"
+	
+></p>
+</li>
+</ul></blockquote>
+<p>stack1 的方法结束后要弹出栈，此时需要通过 stack1 返回下面的 stack2 的方法。</p>
+<h4 id="本地方法栈"><a href="#%e6%9c%ac%e5%9c%b0%e6%96%b9%e6%b3%95%e6%a0%88" class="header-anchor"></a>本地方法栈
 </h4><blockquote>
-<p><strong>Java虚拟机栈存储了Java方法调用时的栈帧，而本地方法栈存储的是native本地方法的栈帧</strong></p></blockquote>
-<h4 id="堆-heape5a086"><a href="#%e5%a0%86-heape5a086" class="header-anchor"></a>堆 {#Heap%E5%A0%86}
+<p><strong>Java 虚拟机栈存储了 Java 方法调用时的栈帧，而本地方法栈存储的是 native 本地方法的栈帧</strong></p></blockquote>
+<h4 id="堆"><a href="#%e5%a0%86" class="header-anchor"></a>堆
 </h4><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -670,139 +658,167 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Test</span><span class="w"> </span><span class="p">{</span><span class="w">    
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;张三&#34;</span><span class="p">;</span><span class="w">       
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">18</span><span class="p">;</span><span class="w">       
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Test</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;张三&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">18</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">printTotalScore</span><span class="p">();</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">printAverageScore</span><span class="p">();</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span><span class="w">       
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;李四&#34;</span><span class="p">;</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">19</span><span class="p">;</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">id</span><span class="o">=</span><span class="w"> </span><span class="n">2</span><span class="p">;</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">printTotalScore</span><span class="p">();</span><span class="w">        
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">printAverageScore</span><span class="p">();</span><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">printTotalScore</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s1</span><span class="p">.</span><span class="na">printAverageScore</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Student</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Student</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;李四&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">19</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">id</span><span class="o">=</span><span class="w"> </span><span class="n">2</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">printTotalScore</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">s2</span><span class="p">.</span><span class="na">printAverageScore</span><span class="p">();</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>这段代码中通过<code>new</code>关键字创建了两个<code>Student</code>类的对象，这两个对象会被存放在堆上。在栈上通过<code>s1</code>和<code>s2</code>两个局部变量保存堆上两个对象的地址，从而实现了引用关系的建立。</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/16822dbd8227cfa12045c5f5a6197733.png"
-	
-	
-	
+</div><p>这段代码中通过<code>new</code>关键字创建了两个<code>Student</code>类的对象，这两个对象会被存放在堆上。在栈上通过<code>s1</code>和<code>s2</code>两个局部变量保存堆上两个对象的地址，从而实现了引用关系的建立。
+<img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-8.png"
+	width="719"
+	height="377"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-8_hu_d82dcdf42608b78d.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-8_hu_f4a6280f2ceaa9e3.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<p>以前的Java 中&quot;几乎&quot;所有的对象都会在堆中分配，但随着JIT编译器的发展和逃逸技术的逐渐成熟，所有的对象都分配到堆上渐渐变得不那么&quot;绝对&quot;了。从 JDK 7 开始，Java 虚拟机已经默认开启逃逸分析了，意味着如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。<strong>垃圾指JVM中没有任何引用指向它的对象</strong></p>
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="457px"
+	
+></p>
+<p>以前的 Java 中&quot;几乎&quot;所有的对象都会在堆中分配，但随着 JIT 编译器的发展和逃逸技术的逐渐成熟，所有的对象都分配到堆上渐渐变得不那么&quot;绝对&quot;了。从 JDK 7 开始，Java 虚拟机已经默认开启逃逸分析了，意味着如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。<strong>垃圾指 JVM 中没有任何引用指向它的对象</strong></p>
 <blockquote>
 <p><strong>逃逸分析</strong></p>
 <p><strong>逃逸分析</strong>是一种编译器优化技术，用于判断对象的作用域和生命周期。如果编译器确定一个对象不会逃逸出方法或线程的范围，它可以选择在栈上分配这个对象，而不是在堆上。这样做可以减少垃圾回收的压力，并提高性能。</p></blockquote>
-<p><strong>一个JVM实例只有一个堆内存</strong>，堆内存大小可以调节，类加载器读取类文件后要把类、方法、常变量放到堆内存中，保存所有引用类型的真实信息，堆内存在逻辑上分为三部分：</p>
+<p><strong>一个 JVM 实例只有一个堆内存</strong>，堆内存大小可以调节，类加载器读取类文件后要把类、方法、常变量放到堆内存中，保存所有引用类型的真实信息，堆内存在逻辑上分为三部分：</p>
 <blockquote>
 <ul>
-<li>新生代：伊甸区、幸存0区 from、幸存1区 to</li>
+<li>新生代：伊甸区、幸存 0 区 from、幸存 1 区 to</li>
 <li>老年代</li>
 <li>永久代</li>
 </ul>
-<p><img src="https://i-blog.csdnimg.cn/direct/751a0755fcb54d798939dec2078b28b2.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-9.png"
+	width="1537"
+	height="961"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-9_hu_f66a773384698531.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-9_hu_76cd65d480e9f80e.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="159"
+		data-flex-basis="383px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/f931f0f0a561433b9003820a2c3e5343.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-10.png"
+	width="948"
+	height="483"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-10_hu_48b9b69e86cc172b.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-10_hu_b01a40f3889d0644.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="196"
+		data-flex-basis="471px"
 	
 ></p></blockquote>
-<h3 id="43-执行引擎-e689a7e8a18ce5bc95e6938e"><a href="#43-%e6%89%a7%e8%a1%8c%e5%bc%95%e6%93%8e-e689a7e8a18ce5bc95e6938e" class="header-anchor"></a>4.3 执行引擎 {#%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E}
+<h3 id="43-执行引擎"><a href="#43-%e6%89%a7%e8%a1%8c%e5%bc%95%e6%93%8e" class="header-anchor"></a>4.3 执行引擎
 </h3><p>略</p>
-<ol start="5">
-<li>双亲委派 {#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE}</li>
-</ol>
-<hr>
-<blockquote>
-<p>应用程序类加载器（又叫系统类加载器）收到类的加载请求先检查自己是否加载过该类，如果没有，将请求向上委托给自己的父类加载器（extensionLoader），如果父类加载器也没有加载过该类，该父类加载器继续向上委托给自己的父类加载器（bootstrapLoader，又叫根加载器、启动类加载器）若启动类加载器也没有加载过该类，则会根据要加载的类的全限定名尝试加载该类，若加载成功，则返回引用，若加载失败，则抛出异常，并反向委托给扩展类加载器，若仍加载失败，则继续抛出异常，并反向委托给应用程序类加载器，若仍加载失败，则报异常ClassNotFound。</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/cf60d86b5fc6576cb316267637d834d2.png"
-	
-	
-	
+<h2 id="双亲委派"><a href="#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%b4%be" class="header-anchor"></a>双亲委派
+</h2><blockquote>
+<p>应用程序类加载器（又叫系统类加载器）收到类的加载请求先检查自己是否加载过该类，如果没有，将请求向上委托给自己的父类加载器（extensionLoader），如果父类加载器也没有加载过该类，该父类加载器继续向上委托给自己的父类加载器（bootstrapLoader，又叫根加载器、启动类加载器）若启动类加载器也没有加载过该类，则会根据要加载的类的全限定名尝试加载该类，若加载成功，则返回引用，若加载失败，则抛出异常，并反向委托给扩展类加载器，若仍加载失败，则继续抛出异常，并反向委托给应用程序类加载器，若仍加载失败，则报异常 ClassNotFound。</p></blockquote>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-11.png"
+	width="773"
+	height="410"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-11_hu_1e5989d47a93a02c.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-11_hu_9e9b299909408c00.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/e7ed992419dd7bca322104bd6a121d27.png"
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="452px"
 	
-	
-	
+></p>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-12.png"
+	width="1353"
+	height="1043"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-12_hu_6d615e96fabdd3cb.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-12_hu_ceebc7a29d5729b7.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/aafc08916de8c9f5a6e2910c33ddfdd6.png"
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="311px"
 	
-	
-	
+></p>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-13.png"
+	width="1715"
+	height="1083"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-13_hu_4ad54ac5bb2aa1c4.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-13_hu_d6ed6094810b4de4.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
+		class="gallery-image" 
+		data-flex-grow="158"
+		data-flex-basis="380px"
+	
+></p>
 <blockquote>
 <p><strong>安全性和沙箱机制</strong></p>
-<p>由于java核心库和扩展库由根加载器加载，这些库中的类有更高的安全级别，而应用程序类由应用程序类加载器加载，安全级别低，双亲向上委派可以防止核心API被篡改，提高了程序安全性。</p>
+<p>由于 java 核心库和扩展库由根加载器加载，这些库中的类有更高的安全级别，而应用程序类由应用程序类加载器加载，安全级别低，双亲向上委派可以防止核心 API 被篡改，提高了程序安全性。</p>
 <p><strong>什么是沙箱？</strong></p>
-<p>java安全模型的核心就是java沙箱，沙箱是一个限制程序运行的环境，沙箱机制就是把java代码限定在jvm的特定运行范围内，严格限制代码对本地系统资源的访问（CPU、内存、文件系统、网络等），通过这样来保证代码的有效隔离，防止对本地系统造成破坏。</p>
+<p>java 安全模型的核心就是 java 沙箱，沙箱是一个限制程序运行的环境，沙箱机制就是把 java 代码限定在 jvm 的特定运行范围内，严格限制代码对本地系统资源的访问（CPU、内存、文件系统、网络等），通过这样来保证代码的有效隔离，防止对本地系统造成破坏。</p>
 <p><strong>避免类重复加载</strong></p>
 <p>由于父类加载器加载类时会优先尝试加载，若类已经被加载过，就不会再次加载，避免了类重复加载。</p></blockquote>
-<h3 id="51-破坏双亲委派-e7a0b4e59d8fe58f8ce4bab2e5a794e6b4be"><a href="#51-%e7%a0%b4%e5%9d%8f%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%b4%be-e7a0b4e59d8fe58f8ce4bab2e5a794e6b4be" class="header-anchor"></a>5.1 破坏双亲委派 {#%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE}
+<h3 id="破坏双亲委派"><a href="#%e7%a0%b4%e5%9d%8f%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%b4%be" class="header-anchor"></a>破坏双亲委派
 </h3><blockquote>
 <p>打破双亲委派机制历史上有三种方式，但本质上只有<strong>第一种</strong>算是真正的打破了双亲委派机制：</p>
 <ul>
 <li>
-<p>自定义类加载器并且重写loadClass方法。Tomcat通过这种方式实现应用之间类隔离。</p>
+<p>自定义类加载器并且重写 loadClass 方法。Tomcat 通过这种方式实现应用之间类隔离。</p>
 </li>
 <li>
-<p>线程上下文类加载器。利用上下文类加载器加载类，比如JDBC和JNDI等。</p>
+<p>线程上下文类加载器。利用上下文类加载器加载类，比如 JDBC 和 JNDI 等。</p>
 </li>
 <li>
-<p>Osgi框架的类加载器。历史上Osgi框架实现了一套新的类加载器机制，允许同级之间委托进行类的加载，目前很少使用。</p>
+<p>Osgi 框架的类加载器。历史上 Osgi 框架实现了一套新的类加载器机制，允许同级之间委托进行类的加载，目前很少使用。</p>
 </li>
 </ul></blockquote>
-<h4 id="tomcat破坏-tomcate7a0b4e59d8f"><a href="#tomcat%e7%a0%b4%e5%9d%8f-tomcate7a0b4e59d8f" class="header-anchor"></a>Tomcat破坏 {#Tomcat%E7%A0%B4%E5%9D%8F}
-</h4><p><img src="https://i-blog.csdnimg.cn/blog_migrate/e9959398d5270c635d04715341e669a5.png"
-	
-	
-	
+<h4 id="tomcat-破坏"><a href="#tomcat-%e7%a0%b4%e5%9d%8f" class="header-anchor"></a>Tomcat 破坏
+</h4><p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-14.png"
+	width="1515"
+	height="888"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-14_hu_4d457dbd687a5c03.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-14_hu_380b01ab93371d16.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
-<h4 id="jdbc破坏-jdbce7a0b4e59d8fc2a0"><a href="#jdbc%e7%a0%b4%e5%9d%8f-jdbce7a0b4e59d8fc2a0" class="header-anchor"></a>JDBC破坏 {#JDBC%E7%A0%B4%E5%9D%8F%C2%A0}
-</h4><p>JDBC中使用了DriverManager来管理项目中引入的不同数据库的驱动，比如mysql驱动、oracle驱动。DriverManager类位于rt.jar包中，由启动类加载器加载。依赖中的mysql驱动对应的类，由应用程序类加载器来加载。DriverManager属于rt.jar是启动类加载器加载的。而用户jar包中的驱动需要由应用类加载器加载，<em>这就违反了双亲委派机制</em> 。<strong>存疑</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/93679b9db65beff9fd47dac2d92a139d.png"
+		class="gallery-image" 
+		data-flex-grow="170"
+		data-flex-basis="409px"
 	
-	
-	
+></p>
+<h4 id="jdbc-破坏"><a href="#jdbc-%e7%a0%b4%e5%9d%8f" class="header-anchor"></a>JDBC 破坏
+</h4><p>JDBC 中使用了 DriverManager 来管理项目中引入的不同数据库的驱动，比如 mysql 驱动、oracle 驱动。DriverManager 类位于 rt.jar 包中，由启动类加载器加载。依赖中的 mysql 驱动对应的类，由应用程序类加载器来加载。DriverManager 属于 rt.jar 是启动类加载器加载的。而用户 jar 包中的驱动需要由应用类加载器加载，_这就违反了双亲委派机制 。<strong>存疑</strong></p>
+<p><img src="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-15.png"
+	width="999"
+	height="456"
+	srcset="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-15_hu_3ec93d7c7fb45c8.png 480w, /zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/image-15_hu_2631586bb1247648.png 1024w"
 	loading="lazy"
 	
 	
->​</p>
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="525px"
+	
+></p>
 <blockquote>
-<p>JDBC案例中真的打破了双亲委派机制吗？{#JDBC%E6%A1%88%E4%BE%8B%E4%B8%AD%E7%9C%9F%E7%9A%84%E6%89%93%E7%A0%B4%E4%BA%86%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E5%90%97%EF%BC%9F}</p>
-<p>最早这个论点提出是在周志明《深入理解Java虚拟机》中，他认为打破了双亲委派机制，这种由启动类加载器加载的类，委派应用程序类加载器去加载类的方式，所以打破了双亲委派机制。</p>
-<p>但是如果我们分别从DriverManager以及驱动类的加载流程上分析，JDBC只是在DriverManager加载完之后，通过初始化阶段触发了驱动类的加载，类的加载依然遵循双亲委派机制。</p>
+<p>JDBC 案例中真的打破了双亲委派机制吗?</p>
+<p>最早这个论点提出是在周志明《深入理解 Java 虚拟机》中，他认为打破了双亲委派机制，这种由启动类加载器加载的类，委派应用程序类加载器去加载类的方式，所以打破了双亲委派机制。</p>
+<p>但是如果我们分别从 DriverManager 以及驱动类的加载流程上分析，JDBC 只是在 DriverManager 加载完之后，通过初始化阶段触发了驱动类的加载，类的加载依然遵循双亲委派机制。</p>
 <p>所以我认为这里没有打破双亲委派机制，只是用一种巧妙的方法让启动类加载器加载的类，去引发的其他类的加载。</p></blockquote>
-<hr>
 
 </section>
 
@@ -850,6 +866,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2024/12/string.intern/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">String.intern()</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/">
 
         
@@ -863,51 +892,38 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%83%BD%E6%A0%B9%E6%8D%AE%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7%E6%9D%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">如何设计一个能根据任务优先级来执行的线程池</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/java-io%E6%A8%A1%E5%9E%8B----bionioaioio%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java io模型----BIO、NIO、AIO、IO多路复用、零拷贝</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%90%91list%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%83%E7%B4%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">【泛型擦除】通过反射向List中添加不同类型的元素</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
     <a href="/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/">
 
         
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">练习两年半，我的全栈博客出生了</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8docker%E9%83%A8%E7%BD%B2%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE-%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90-oss/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">【排坑】云服务器docker部署前后端分离项目&#43;域名解析&#43;OSS</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3rediscache%E6%B3%A8%E8%A7%A3%E5%A4%B1%E6%95%88%E6%B2%A1%E5%86%99cacheconfig/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">【已解决】redisCache注解失效，没写cacheConfig</h2>
             
         </div>
     </a>

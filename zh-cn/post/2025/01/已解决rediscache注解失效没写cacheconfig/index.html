@@ -11,7 +11,7 @@
 <meta property='og:description' content="网上找了一些案例，有的不需要写cacheConfig，有些需要写，我之前就用过cacheable的注解，当时就是上面的配置，没写配置类也有效果，这次我最开始就没写，然后Cacheable注解就没效果了，最后写了个cacheConfig才解决。">
 <meta property='og:url' content='/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3rediscache%E6%B3%A8%E8%A7%A3%E5%A4%B1%E6%95%88%E6%B2%A1%E5%86%99cacheconfig/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='杂' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='java' /><meta property='article:tag' content='数据库' /><meta property='article:tag' content='开发语言' /><meta property='article:published_time' content='2025-01-25T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-25T12:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='Redis实战' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2025-01-25T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-25T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="【已解决】redisCache注解失效，没写cacheConfig">
 <meta name="twitter:description" content="网上找了一些案例，有的不需要写cacheConfig，有些需要写，我之前就用过cacheable的注解，当时就是上面的配置，没写配置类也有效果，这次我最开始就没写，然后Cacheable注解就没效果了，最后写了个cacheConfig才解决。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -428,11 +428,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/%E6%9D%82/">杂</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/redis%E5%AE%9E%E6%88%98/">Redis实战</a> 
             
             
@@ -444,9 +439,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             , 
             
             <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a> 
-            
-            
-            ... 
             
             
         </div>
@@ -463,41 +455,80 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <h2 id="环境配置"><a href="#%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae" class="header-anchor"></a>环境配置
-</h2><pre><code>jdk11    springboot 2.6.13    
-
-&lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
-      &lt;version&gt;3.2.0&lt;/version&gt;
-&lt;/dependency&gt;
-
-&lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
-      &lt;version&gt;3.2.0&lt;/version&gt;
-&lt;/dependency&gt;
-
-  redis:
-    host: 192.168.2.129
-    port: 6379
-    username: default
-    password: 'linux02'
-    database: 1
-#    默认使用lettuce
-    lettuce:
-      pool:
-#        最大连接数，最大空闲数，最小空闲数
-        max-active: 5
-        max-idle: 2
-        min-idle: 2
-  #    缓存10min，允许缓存null值防止缓存穿透
-  cache:
-    type: redis
-    redis:
-      time-to-live: 600
-      cache-null-values: true
-</code></pre>
-<h2 id="代码"><a href="#%e4%bb%a3%e7%a0%81" class="header-anchor"></a>代码
+</h2><p><strong>jdk11、SpringBoot 2.6.13</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">    <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;version&gt;</span>3.2.0<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependency&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-cache<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;version&gt;</span>3.2.0<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">192.168.2.129</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">6379</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;linux02&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c">#    默认使用lettuce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">lettuce</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">pool</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c">#        最大连接数，最大空闲数，最小空闲数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">max-active</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">max-idle</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">min-idle</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#    缓存10min，允许缓存null值防止缓存穿透</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">cache</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">redis</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">time-to-live</span><span class="p">:</span><span class="w"> </span><span class="m">600</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cache-null-values</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="代码"><a href="#%e4%bb%a3%e7%a0%81" class="header-anchor"></a>代码
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -519,7 +550,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="解决"><a href="#%e8%a7%a3%e5%86%b3" class="header-anchor"></a>解决
-</h2><p>网上找了一些案例，有的不需要写cacheConfig，有些需要写，我之前就用过cacheable的注解，当时就是上面的配置，没写配置类也有效果，这次我最开始就没写，然后Cacheable注解就没效果了，最后写了个cacheConfig才解决。</p>
+</h2><p>网上找了一些案例，有的不需要写 cacheConfig，有些需要写，我之前就用过 cacheable 的注解，当时就是上面的配置，没写配置类也有效果，这次我最开始就没写，然后 Cacheable 注解就没效果了，最后写了个 cacheConfig 才解决。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -548,7 +579,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>然后又发现yml设置的过期时间没有生效，存到redis的是永不过期，又在 cacheConfig配置了过期时间，600s</p>
+</div><p>然后又发现 yml 设置的过期时间没有生效，存到 redis 的是永不过期，又在 cacheConfig 配置了过期时间，600s</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -668,12 +699,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/">
+    <a href="/zh-cn/post/2025/01/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%90%91list%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%83%E7%B4%A0/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">【大坑！已解决】docker容器jar包连不上另一个容器的mysql</h2>
+            <h2 class="article-title">【泛型擦除】通过反射向List中添加不同类型的元素</h2>
             
         </div>
     </a>
@@ -681,12 +712,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/java%E5%8F%8D%E5%B0%84%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
+    <a href="/zh-cn/post/2025/01/mysql%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java反射、静态代理、动态代理</h2>
+            <h2 class="article-title">MySQL三大日志</h2>
             
         </div>
     </a>

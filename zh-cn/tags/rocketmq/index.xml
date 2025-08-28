@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Rocketmq on 青秋博客</title>
+        <title>RocketMQ on 青秋博客</title>
         <link>/zh-cn/tags/rocketmq/</link>
-        <description>Recent content in Rocketmq on 青秋博客</description>
+        <description>Recent content in RocketMQ on 青秋博客</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
@@ -13,64 +13,18 @@
         <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/</guid>
-        <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145463543&#34;  title=&#34;Java内存模型（Memory Model）-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Java内存模型（Memory Model）-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144943507&#34;  title=&#34;ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144995466&#34;  title=&#34;AQS---抽象队列同步器-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;AQS&amp;mdash;抽象队列同步器-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/138463677&#34;  title=&#34;Kafka入门到入土——万字详解，图文并茂_图解kafka-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Kafka入门到入土&amp;mdash;&amp;mdash;万字详解，图文并茂_图解kafka-CSDN博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;amp;mid=2247486269&amp;amp;idx=2&amp;amp;sn=ec00417ad641dd8c3d145d74cafa09ce&amp;amp;chksm=cea244f6f9d5cde0c8eb233fcc4cf82e11acd06446719a7af55230649863a3ddd95f78d111de&amp;amp;token=1633957262&amp;amp;lang=zh_CN#rd&#34;  title=&#34;Kafka系列第三篇！10 分钟学会如何在 Spring Boot 程序中使用 Kafka 作为消息队列?&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Kafka系列第三篇！10 分钟学会如何在 Spring Boot 程序中使用 Kafka 作为消息队列?&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/4V1jI6RylJr7Jr9JsQe73A&#34;  title=&#34;消息队列的使用场景是什么样的？&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;消息队列的使用场景是什么样的？&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BD%9C%E7%94%A8&#34; &gt;消息队列作用&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BD%9C%E7%94%A8-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JMS%E5%92%8CAMQP%E5%8D%8F%E8%AE%AE&#34; &gt;JMS和AMQP协议&lt;/a&gt;{#JMS%E5%92%8CAMQP%E5%8D%8F%E8%AE%AE-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#JMS&#34; &gt;JMS&lt;/a&gt;{#JMS-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BA%94%E7%A7%8D%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B&#34; &gt;五种消息类型&lt;/a&gt;{#%E4%BA%94%E7%A7%8D%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%A4%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B&#34; &gt;两种消息模型&lt;/a&gt;{#%E4%B8%A4%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#AMQP&#34; &gt;AMQP&lt;/a&gt;{#AMQP-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B&#34; &gt;消息类型&lt;/a&gt;{#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%BA%94%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B&#34; &gt;五种消息模型&lt;/a&gt;{#%E4%BA%94%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%87%A0%E7%A7%8D%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97&#34; &gt;几种消息队列&lt;/a&gt;{#%E5%87%A0%E7%A7%8D%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka&#34; &gt;kafka&lt;/a&gt;{#kafka-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka%E7%9A%84%E4%BC%98%E5%8A%BF&#34; &gt;kafka的优势&lt;/a&gt;{#kafka%E7%9A%84%E4%BC%98%E5%8A%BF-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka%20%E4%B8%BA%E4%BB%80%E4%B9%88%E6%80%A7%E8%83%BD%E6%AF%94%20RocketMQ%20%E5%A5%BD&#34; &gt;kafka 为什么性能比 RocketMQ 好&lt;/a&gt;{#kafka%20%E4%B8%BA%E4%BB%80%E4%B9%88%E6%80%A7%E8%83%BD%E6%AF%94%20RocketMQ%20%E5%A5%BD-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%9C%89%E5%BA%8F&#34; &gt;kafka如何保证消息有序&lt;/a&gt;{#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%9C%89%E5%BA%8F-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1&#34; &gt;kafka如何保证消息不丢失&lt;/a&gt;{#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%A2%E5%A4%B1%E6%B6%88%E6%81%AF&#34; &gt;生产者丢失消息&lt;/a&gt;{#%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%A2%E5%A4%B1%E6%B6%88%E6%81%AF-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%B6%88%E8%B4%B9%E8%80%85%E4%B8%A2%E5%A4%B1%E6%B6%88%E6%81%AF%C2%A0&#34; &gt;消费者丢失消息&lt;/a&gt;{#%E6%B6%88%E8%B4%B9%E8%80%85%E4%B8%A2%E5%A4%B1%E6%B6%88%E6%81%AF%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka%E4%B8%A2%E6%B6%88%E6%81%AF&#34; &gt;kafka丢消息&lt;/a&gt;{#kafka%E4%B8%A2%E6%B6%88%E6%81%AF-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9&#34; &gt;kafka如何保证消息不重复消费&lt;/a&gt;{#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#RocketMQ&#34; &gt;RocketMQ&lt;/a&gt;{#RocketMQ-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#RocketMQ%E6%9E%B6%E6%9E%84&#34; &gt;RocketMQ架构&lt;/a&gt;{#RocketMQ%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#RabbitMQ&#34; &gt;RabbitMQ&lt;/a&gt;{#RabbitMQ-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#exchange%E7%B1%BB%E5%9E%8B%C2%A0&#34; &gt;exchange类型&lt;/a&gt;{#exchange%E7%B1%BB%E5%9E%8B%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97%C2%A0&#34; &gt;死信队列&lt;/a&gt;{#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97%C2%A0-toc}&lt;/p&gt;
-&lt;hr&gt;
-&lt;br /&gt;
-&lt;h2 id=&#34;消息队列作用-e6b688e681afe9989fe58897e4bd9ce794a8&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%bd%9c%e7%94%a8-e6b688e681afe9989fe58897e4bd9ce794a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列作用 {#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BD%9C%E7%94%A8}
+        <description>&lt;h2 id=&#34;消息队列作用&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97%e4%bd%9c%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列作用
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;老生常谈，削峰限流、异步解耦、分布式事务、顺序保证、延时定时、数据流处理比如大数据、即时通讯（物联网）&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/java_kider/article/details/109014118&#34;  title=&#34;消息队列（基础篇）-4 如何利用事务消息实现分布式事务？_事务消息可以实现分布式事务-CSDN博客&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;消息队列（基础篇）-4 如何利用事务消息实现分布式事务？_事务消息可以实现分布式事务-CSDN博客&lt;/a&gt;&lt;/p&gt;
+    &gt;消息队列（基础篇）-4 如何利用事务消息实现分布式事务？_事务消息可以实现分布式事务-CSDN 博客&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;当然引入组件带来的副作用往往是数据一致性、系统复杂性、系统可用性稳定性，毕竟越复杂的东西越容易出问题。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;jms和amqp协议-jmse5928camqpe58d8fe8aeae&#34;&gt;&lt;a href=&#34;#jms%e5%92%8camqp%e5%8d%8f%e8%ae%ae-jmse5928camqpe58d8fe8aeae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS和AMQP协议 {#JMS%E5%92%8CAMQP%E5%8D%8F%E8%AE%AE}
-&lt;/h2&gt;&lt;h3 id=&#34;JMS&#34;&gt;&lt;a href=&#34;#JMS&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS
+&lt;h2 id=&#34;jms-和-amqp-协议&#34;&gt;&lt;a href=&#34;#jms-%e5%92%8c-amqp-%e5%8d%8f%e8%ae%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS 和 AMQP 协议
+&lt;/h2&gt;&lt;h3 id=&#34;jms&#34;&gt;&lt;a href=&#34;#jms&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JMS
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;JAVA Message Service，一个java消息服务的规范，类似jdbc，有点对点、发布订阅两种模型：&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;五种消息类型-e4ba94e7a78de6b688e681afe7b1bbe59e8b&#34;&gt;&lt;a href=&#34;#%e4%ba%94%e7%a7%8d%e6%b6%88%e6%81%af%e7%b1%bb%e5%9e%8b-e4ba94e7a78de6b688e681afe7b1bbe59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;五种消息类型&lt;/strong&gt; {#%E4%BA%94%E7%A7%8D%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B}
+&lt;p&gt;JAVA Message Service，一个 java 消息服务的规范，类似 jdbc，有点对点、发布订阅两种模型：&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;五种消息类型&#34;&gt;&lt;a href=&#34;#%e4%ba%94%e7%a7%8d%e6%b6%88%e6%81%af%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;五种消息类型
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;StreamMessage：Java&lt;/code&gt; 原始值的数据流&lt;/li&gt;
@@ -79,22 +33,22 @@
 &lt;li&gt;&lt;code&gt;ObjectMessage&lt;/code&gt;：一个序列化的 Java 对象&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;BytesMessage&lt;/code&gt;：一个字节的数据流&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;两种消息模型-e4b8a4e7a78de6b688e681afe6a8a1e59e8b&#34;&gt;&lt;a href=&#34;#%e4%b8%a4%e7%a7%8d%e6%b6%88%e6%81%af%e6%a8%a1%e5%9e%8b-e4b8a4e7a78de6b688e681afe6a8a1e59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;两种消息模型&lt;/strong&gt; {#%E4%B8%A4%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B}
+&lt;h4 id=&#34;两种消息模型&#34;&gt;&lt;a href=&#34;#%e4%b8%a4%e7%a7%8d%e6%b6%88%e6%81%af%e6%a8%a1%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;两种消息模型
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;点对点&lt;/strong&gt;&lt;br&gt;
-一个消息只有一个消费者，未被消费的消息在queue中保留直到被消费或超时。消费者在成功接收消息之后需向队列应答成功，以便消息队列删除当前接收的消息&lt;/li&gt;
+一个消息只有一个消费者，未被消费的消息在 queue 中保留直到被消费或超时。消费者在成功接收消息之后需向队列应答成功，以便消息队列删除当前接收的消息&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;发布订阅&lt;/strong&gt;&lt;br&gt;
-生产者把消息广播到一个topic，该topic可以有多个消费者消费。&lt;br&gt;
-在kafka中，一个topic可以有多个分区partition，单个分区的消息是有序的，而全局的topic的多个分区的消息是无序的。这就是为什么kafka一条消息只能被同一个消费者组里面的一个消费者消费，这样就某种程度上保证了消息的不重复消费和乱序消费。&lt;/li&gt;
+生产者把消息广播到一个 topic，该 topic 可以有多个消费者消费。
+在 kafka 中，一个 topic 可以有多个分区 partition，单个分区的消息是有序的，而全局的 topic 的多个分区的消息是无序的。这就是为什么 kafka 一条消息只能被同一个消费者组里面的一个消费者消费，这样就某种程度上保证了消息的不重复消费和乱序消费。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;AMQP&#34;&gt;&lt;a href=&#34;#AMQP&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AMQP
+&lt;h3 id=&#34;amqp&#34;&gt;&lt;a href=&#34;#amqp&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AMQP
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;Advanced Message Queuing Protocol，一个提供统一消息服务的应用层标准 &lt;strong&gt;高级消息队列协议&lt;/strong&gt; （二进制应用层协议），是应用层协议的一个开放标准，为面向消息的中间件设计，兼容 JMS。&lt;strong&gt;RabbitMQ 就是基于 AMQP 协议实现的。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;消息类型-e6b688e681afe7b1bbe59e8b&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e7%b1%bb%e5%9e%8b-e6b688e681afe7b1bbe59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息类型 {#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B}
+&lt;h4 id=&#34;消息类型&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息类型
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;二进制字节数组&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;五种消息模型-e4ba94e7a78de6b688e681afe6a8a1e59e8b&#34;&gt;&lt;a href=&#34;#%e4%ba%94%e7%a7%8d%e6%b6%88%e6%81%af%e6%a8%a1%e5%9e%8b-e4ba94e7a78de6b688e681afe6a8a1e59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;五种消息模型&lt;/strong&gt; {#%E4%BA%94%E7%A7%8D%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B}
+&lt;h4 id=&#34;五种消息模型&#34;&gt;&lt;a href=&#34;#%e4%ba%94%e7%a7%8d%e6%b6%88%e6%81%af%e6%a8%a1%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;五种消息模型
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;①direct exchange；&lt;/p&gt;
 &lt;p&gt;②fanout exchange；&lt;/p&gt;
@@ -102,33 +56,32 @@
 &lt;p&gt;④headers exchange；&lt;/p&gt;
 &lt;p&gt;⑤system exchange;&lt;/p&gt;
 &lt;p&gt;本质来讲，后四种和 JMS 的 pub/sub 模型没有太大差别，仅是在路由机制上做了更详细的划分；&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;几种消息队列-e587a0e7a78de6b688e681afe9989fe58897&#34;&gt;&lt;a href=&#34;#%e5%87%a0%e7%a7%8d%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97-e587a0e7a78de6b688e681afe9989fe58897&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;几种消息队列 {#%E5%87%A0%E7%A7%8D%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97}
-&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/wangzhipeng47/article/details/107134024&#34;  title=&#34;消息中间件：Kafka、RabbitMQ、RocketMQ、ActiveMQ 四个分布式消息队列 综合对比_kafuka tcp 与 mq 队列是否类似-CSDN博客&#34;
+&lt;h2 id=&#34;几种消息队列&#34;&gt;&lt;a href=&#34;#%e5%87%a0%e7%a7%8d%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;几种消息队列
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/wangzhipeng47/article/details/107134024&#34;  title=&#34;消息中间件：Kafka、RabbitMQ、RocketMQ、ActiveMQ 四个分布式消息队列 综合对比kafka tcp 与 mq 队列是否类似-CSDN博客&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;消息中间件：Kafka、RabbitMQ、RocketMQ、ActiveMQ 四个分布式消息队列 综合对比_kafuka tcp 与 mq 队列是否类似-CSDN博客&lt;/a&gt;&lt;/p&gt;
+    &gt;消息中间件：Kafka、RabbitMQ、RocketMQ、ActiveMQ 四个分布式消息队列 综合对比_kafuka tcp 与 mq 队列是否类似-CSDN 博客&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;kafka&#34;&gt;&lt;a href=&#34;#kafka&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka
 &lt;/h3&gt;&lt;p&gt;具体看这个：&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/138463677&#34;  title=&#34;Kafka入门到入土——万字详解，图文并茂_图解kafka-CSDN博客&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Kafka入门到入土&amp;mdash;&amp;mdash;万字详解，图文并茂_图解kafka-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;h4 id=&#34;kafka的优势-kafkae79a84e4bc98e58abf&#34;&gt;&lt;a href=&#34;#kafka%e7%9a%84%e4%bc%98%e5%8a%bf-kafkae79a84e4bc98e58abf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;kafka的优势&lt;/strong&gt; {#kafka%E7%9A%84%E4%BC%98%E5%8A%BF}
+    &gt;Kafka 入门到入土&amp;mdash;&amp;mdash;万字详解，图文并茂_图解 kafka-CSDN 博客&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;kafka-的优势&#34;&gt;&lt;a href=&#34;#kafka-%e7%9a%84%e4%bc%98%e5%8a%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 的优势
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;br /&gt;
 &lt;ul&gt;
 &lt;li&gt;极致的性能：&lt;br&gt;
 基于 Scala 和 Java 语言开发，设计中大量使用了批量处理和异步的思想，最高可以每秒处理千万级别的消息。&lt;/li&gt;
 &lt;li&gt;生态系统兼容性：&lt;br&gt;
 Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大数据(数据吞吐量大)和流计算领域。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;kafka-为什么性能比-rocketmq-好-kafka20e4b8bae4bb80e4b988e680a7e883bde6af9420rocketmq20e5a5bd&#34;&gt;&lt;a href=&#34;#kafka-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%80%a7%e8%83%bd%e6%af%94-rocketmq-%e5%a5%bd-kafka20e4b8bae4bb80e4b988e680a7e883bde6af9420rocketmq20e5a5bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 为什么性能比 RocketMQ 好 {#kafka%20%E4%B8%BA%E4%BB%80%E4%B9%88%E6%80%A7%E8%83%BD%E6%AF%94%20RocketMQ%20%E5%A5%BD}
+&lt;h4 id=&#34;kafka-为什么性能比-rocketmq-好&#34;&gt;&lt;a href=&#34;#kafka-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%80%a7%e8%83%bd%e6%af%94-rocketmq-%e5%a5%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 为什么性能比 RocketMQ 好
 &lt;/h4&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&amp;amp;mid=2247535325&amp;amp;idx=2&amp;amp;sn=bcab1f79880ea654c753aebe2c0006a7&amp;amp;chksm=f98d0e77cefa876168f11f59af88ffdd13bacfbd719f805b36de7a7f8aabb458af278db1fda0&amp;amp;scene=178&amp;amp;cur_album_id=3752960238937030659#rd&#34;  title=&#34;面试官：RocketMQ 和 Kafka 有什么区别？&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;面试官：RocketMQ 和 Kafka 有什么区别？&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;这里性能主要指吞吐量，kafka使用了&lt;strong&gt;sendfile&lt;/strong&gt;零拷贝，RocketMQ 使用的是 mmap 零拷贝技术，具体可以看这个&lt;/p&gt;
+&lt;p&gt;这里性能主要指吞吐量，kafka 使用了&lt;strong&gt;sendfile&lt;/strong&gt;零拷贝，RocketMQ 使用的是 mmap 零拷贝技术，具体可以看这个&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/145205434?sharetype=blogdetail&amp;amp;sharerId=145205434&amp;amp;sharerefer=PC&amp;amp;sharesource=qq_73181349&amp;amp;spm=1011.2480.3001.8118&#34;  title=&#34;用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝_进程和线程 用户态和内核态-CSDN博客&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝_进程和线程 用户态和内核态-CSDN博客&lt;/a&gt;&lt;br&gt;
-为什么RocketMQ不使用sendfile呢？&lt;/p&gt;
+    &gt;用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝_进程和线程 用户态和内核态-CSDN 博客&lt;/a&gt;&lt;br&gt;
+为什么 RocketMQ 不使用 sendfile 呢？&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -147,17 +100,17 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// buf = mmap(xxx)
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;sendfile返回的是发送成功了几个&lt;strong&gt;字节数&lt;/strong&gt; ，&lt;strong&gt;具体发了什么内容，应用层根本不知道&lt;/strong&gt; 。&lt;code&gt;mmap&lt;/code&gt; 返回的是数据的&lt;strong&gt;具体内容&lt;/strong&gt;，应用层能获取到消息内容并进行一些逻辑处理。而 RocketMQ 的一些功能，却需要了解具体这个消息内容，方便二次投递等，比如将消费失败的消息重新投递到死信队列中，如果 RocketMQ 使用 sendfile，那根本没机会获取到消息内容长什么样子，也就没办法实现一些好用的功能了。&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;sendfile 返回的是发送成功了几个&lt;strong&gt;字节数&lt;/strong&gt; ，&lt;strong&gt;具体发了什么内容，应用层根本不知道&lt;/strong&gt; 。&lt;code&gt;mmap&lt;/code&gt; 返回的是数据的&lt;strong&gt;具体内容&lt;/strong&gt;，应用层能获取到消息内容并进行一些逻辑处理。而 RocketMQ 的一些功能，却需要了解具体这个消息内容，方便二次投递等，比如将消费失败的消息重新投递到死信队列中，如果 RocketMQ 使用 sendfile，那根本没机会获取到消息内容长什么样子，也就没办法实现一些好用的功能了。&lt;/p&gt;
 &lt;p&gt;一句话总结就是：&lt;strong&gt;和 Kafka 相比，RocketMQ 在架构上做了减法，在功能上做了加法&lt;/strong&gt;&amp;quot;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;kafka如何保证消息有序-kafkae5a682e4bd95e4bf9de8af81e6b688e681afe69c89e5ba8f&#34;&gt;&lt;a href=&#34;#kafka%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%b6%88%e6%81%af%e6%9c%89%e5%ba%8f-kafkae5a682e4bd95e4bf9de8af81e6b688e681afe69c89e5ba8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka如何保证消息有序 {#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E6%9C%89%E5%BA%8F}
+&lt;h4 id=&#34;kafka-如何保证消息有序&#34;&gt;&lt;a href=&#34;#kafka-%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%b6%88%e6%81%af%e6%9c%89%e5%ba%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 如何保证消息有序
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;kafka的消息存储在topic的Partition中，整体来看topic的消息是无序的，但是单个Partition的消息是有序的，每次添加消息到 Partition的时候都会采用尾加法，并为其分配一个特定的offset。因此为保证 Kafka 中消息消费的顺序，有了下面两种方法：&lt;/p&gt;
-&lt;ol&gt;
+&lt;p&gt;kafka 的消息存储在 topic 的 Partition 中，整体来看 topic 的消息是无序的，但是单个 Partition 的消息是有序的，每次添加消息到 Partition 的时候都会采用尾加法，并为其分配一个特定的 offset。因此为保证 Kafka 中消息消费的顺序，有了下面两种方法：&lt;/p&gt;
+&lt;ul&gt;
 &lt;li&gt;1 个 Topic 只对应一个 Partition。&lt;/li&gt;
 &lt;li&gt;（推荐）发送消息的时候指定 key/Partition。&lt;/li&gt;
-&lt;/ol&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;kafka如何保证消息不丢失-kafkae5a682e4bd95e4bf9de8af81e6b688e681afe4b88de4b8a2e5a4b1&#34;&gt;&lt;a href=&#34;#kafka%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%b6%88%e6%81%af%e4%b8%8d%e4%b8%a2%e5%a4%b1-kafkae5a682e4bd95e4bf9de8af81e6b688e681afe4b88de4b8a2e5a4b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka如何保证消息不丢失 {#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1}
-&lt;/h4&gt;&lt;h5 id=&#34;生产者丢失消息-e7949fe4baa7e88085e4b8a2e5a4b1e6b688e681af&#34;&gt;&lt;a href=&#34;#%e7%94%9f%e4%ba%a7%e8%80%85%e4%b8%a2%e5%a4%b1%e6%b6%88%e6%81%af-e7949fe4baa7e88085e4b8a2e5a4b1e6b688e681af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;生产者丢失消息&lt;/strong&gt; {#%E7%94%9F%E4%BA%A7%E8%80%85%E4%B8%A2%E5%A4%B1%E6%B6%88%E6%81%AF}
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;kafka-如何保证消息不丢失&#34;&gt;&lt;a href=&#34;#kafka-%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%b6%88%e6%81%af%e4%b8%8d%e4%b8%a2%e5%a4%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 如何保证消息不丢失
+&lt;/h4&gt;&lt;h5 id=&#34;生产者丢失消息&#34;&gt;&lt;a href=&#34;#%e7%94%9f%e4%ba%a7%e8%80%85%e4%b8%a2%e5%a4%b1%e6%b6%88%e6%81%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;生产者丢失消息
 &lt;/h5&gt;&lt;blockquote&gt;
 &lt;p&gt;生产者(Producer) 调用&lt;code&gt;send&lt;/code&gt;方法发送消息之后，消息可能因为网络问题并没有发送过去。&lt;/p&gt;
 &lt;p&gt;所以，我们不能默认在调用&lt;code&gt;send&lt;/code&gt;方法发送消息之后消息发送成功了。为了确定消息是发送成功，我们要判断消息发送的结果。但是要注意的是 Kafka 生产者(Producer) 使用 &lt;code&gt;send&lt;/code&gt; 方法发送消息实际上是异步的操作，我们可以通过 &lt;code&gt;get()&lt;/code&gt;方法获取调用结果，但是这样也让它变为了同步操作，示例代码如下：&lt;/p&gt;
@@ -190,64 +143,72 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;                &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ex&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;logger&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;error&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;生产者发送消失败，原因：{}&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ex&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getMessage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()));&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;另外可以为producer设置失败的重试次数和重试的时间间隔。&lt;strong&gt;如果多次重试失败，可以把消息加入死信队列&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h5 id=&#34;消费者丢失消息-e6b688e8b4b9e88085e4b8a2e5a4b1e6b688e681afc2a0&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e8%b4%b9%e8%80%85%e4%b8%a2%e5%a4%b1%e6%b6%88%e6%81%af-e6b688e8b4b9e88085e4b8a2e5a4b1e6b688e681afc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消费者丢失消息 {#%E6%B6%88%E8%B4%B9%E8%80%85%E4%B8%A2%E5%A4%B1%E6%B6%88%E6%81%AF%C2%A0}
+&lt;/div&gt;&lt;p&gt;另外可以为 producer 设置失败的重试次数和重试的时间间隔。&lt;strong&gt;如果多次重试失败，可以把消息加入死信队列&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;消费者丢失消息&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e8%b4%b9%e8%80%85%e4%b8%a2%e5%a4%b1%e6%b6%88%e6%81%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消费者丢失消息
 &lt;/h5&gt;&lt;blockquote&gt;
-&lt;p&gt;消息加入分区后会有一个offset，如果消费者拉取到了分区的某个消息之后，消费者会自动提交了 offset，此时如果消费者挂掉，那么消息并没有被消费，offset却自动提交了。一种解决方法是&lt;strong&gt;关闭自动提交，开启手动提交&lt;/strong&gt;，但是如果消费完消息还没手动提交offset，消费者挂掉，那么该消息会被消费第二次甚至更多次，直到offset提交。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h5 id=&#34;kafka丢消息-kafkae4b8a2e6b688e681af&#34;&gt;&lt;a href=&#34;#kafka%e4%b8%a2%e6%b6%88%e6%81%af-kafkae4b8a2e6b688e681af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka丢消息 {#kafka%E4%B8%A2%E6%B6%88%E6%81%AF}
+&lt;p&gt;消息加入分区后会有一个 offset，如果消费者拉取到了分区的某个消息之后，消费者会自动提交了 offset，此时如果消费者挂掉，那么消息并没有被消费，offset 却自动提交了。一种解决方法是&lt;strong&gt;关闭自动提交，开启手动提交&lt;/strong&gt;，但是如果消费完消息还没手动提交 offset，消费者挂掉，那么该消息会被消费第二次甚至更多次，直到 offset 提交。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;kafka-丢消息&#34;&gt;&lt;a href=&#34;#kafka-%e4%b8%a2%e6%b6%88%e6%81%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 丢消息
 &lt;/h5&gt;&lt;blockquote&gt;
-&lt;p&gt;kafka的分区有一个多副本机制，副本之间有一个leader副本，其他副本是follower，如果leader副本突然挂掉，有些数据还未来得及同步到follower中，会消息丢失。&lt;/p&gt;
+&lt;p&gt;kafka 的分区有一个多副本机制，副本之间有一个 leader 副本，其他副本是 follower，如果 leader 副本突然挂掉，有些数据还未来得及同步到 follower 中，会消息丢失。&lt;/p&gt;
 &lt;p&gt;解决方法有以下几种：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;设置acks=all，表示只有所有 ISR 列表（所有的可用副本）的副本全部收到消息时，生产者才会接收到来自服务器的响应。acks 的默认值即为 1，代表我们的消息被 leader 副本接收之后就算被成功发送。&lt;/li&gt;
+&lt;li&gt;设置 acks=all，表示只有所有 ISR 列表（所有的可用副本）的副本全部收到消息时，生产者才会接收到来自服务器的响应。acks 的默认值即为 1，代表我们的消息被 leader 副本接收之后就算被成功发送。&lt;/li&gt;
 &lt;li&gt;设置&lt;strong&gt;min.insync.replicas &amp;gt; 1，&lt;/strong&gt; 代表消息至少要被写入到 2 个副本才算是被成功发送。&lt;strong&gt;min.insync.replicas&lt;/strong&gt; 的默认值为 1 ，在实际生产中应尽量避免默认值 1。&lt;/li&gt;
-&lt;li&gt;**设置 unclean.leader.election.enable = false，**各个follower的同步情况不一样，当 leader 副本发生故障时就不会从 follower 副本中和 leader 同步程度达不到要求的副本中选择出 leader ，这样降低了消息丢失的可能性。&lt;/li&gt;
+&lt;li&gt;设置 unclean.leader.election.enable = false ,各个 follower 的同步情况不一样，当 leader 副本发生故障时就不会从 follower 副本中和 leader 同步程度达不到要求的副本中选择出 leader ，这样降低了消息丢失的可能性。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;kafka如何保证消息不重复消费-kafkae5a682e4bd95e4bf9de8af81e6b688e681afe4b88de9878de5a48de6b688e8b4b9&#34;&gt;&lt;a href=&#34;#kafka%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%b6%88%e6%81%af%e4%b8%8d%e9%87%8d%e5%a4%8d%e6%b6%88%e8%b4%b9-kafkae5a682e4bd95e4bf9de8af81e6b688e681afe4b88de9878de5a48de6b688e8b4b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka如何保证消息不重复消费 {#kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9}
+&lt;h4 id=&#34;kafka-如何保证消息不重复消费&#34;&gt;&lt;a href=&#34;#kafka-%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e6%b6%88%e6%81%af%e4%b8%8d%e9%87%8d%e5%a4%8d%e6%b6%88%e8%b4%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kafka 如何保证消息不重复消费
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;消息重复消费的根本原因是已消费的数据没有成功提交offset，在上面消费者丢失消息中已讲到。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;RocketMQ&#34;&gt;&lt;a href=&#34;#RocketMQ&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RocketMQ
+&lt;p&gt;消息重复消费的根本原因是已消费的数据没有成功提交 offset，在上面消费者丢失消息中已讲到。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;rocketmq&#34;&gt;&lt;a href=&#34;#rocketmq&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RocketMQ
 &lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://javaguide.cn/high-performance/message-queue/rocketmq-questions.html#rocketmq-%E7%9A%84%E5%88%B7%E7%9B%98%E6%9C%BA%E5%88%B6&#34;  title=&#34;RocketMQ常见问题总结 | JavaGuide&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;RocketMQ常见问题总结 | JavaGuide&lt;/a&gt;&lt;/p&gt;
+    &gt;RocketMQ 常见问题总结 | JavaGuide&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;rocketMQ是阿里开源的消息队列，由java开发，和kafka的topic中是partition，rocketMQ的topic中是queue，queue可以分布在不同的borker中来容灾。和kafka相同，对于一个topic的一个queue，同个消费者组有一个消费者消费&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;rocketmq架构-rocketmqe69eb6e69e84&#34;&gt;&lt;a href=&#34;#rocketmq%e6%9e%b6%e6%9e%84-rocketmqe69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RocketMQ架构 {#RocketMQ%E6%9E%B6%E6%9E%84}
+&lt;p&gt;rocketMQ 是阿里开源的消息队列，由 java 开发，和 kafka 的 topic 中是 partition，rocketMQ 的 topic 中是 queue，queue 可以分布在不同的 borker 中来容灾。和 kafka 相同，对于一个 topic 的一个 queue，同个消费者组有一个消费者消费&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;rocketmq-架构&#34;&gt;&lt;a href=&#34;#rocketmq-%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RocketMQ 架构
 &lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;NameServer&lt;/code&gt;、&lt;code&gt;Broker&lt;/code&gt;、&lt;code&gt;Producer&lt;/code&gt;、&lt;code&gt;Consumer&lt;/code&gt; ，&lt;code&gt;NameServer作用和kafka的zk相同，用来维护rocketmq的元信息，注册发现borker和路由信息管理，但是相对zk来说更为轻量&lt;/code&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;RabbitMQ&#34;&gt;&lt;a href=&#34;#RabbitMQ&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RabbitMQ
+&lt;p&gt;&lt;code&gt;NameServer&lt;/code&gt;、&lt;code&gt;Broker&lt;/code&gt;、&lt;code&gt;Producer&lt;/code&gt;、&lt;code&gt;Consumer&lt;/code&gt; ，NameServer 作用和 kafka 的 zk 相同，用来维护 rocketmq 的元信息，注册发现 borker 和路由信息管理，但是相对 zk 来说更为轻量&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;rabbitmq&#34;&gt;&lt;a href=&#34;#rabbitmq&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RabbitMQ
 &lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://javaguide.cn/high-performance/message-queue/rabbitmq-questions.html&#34;  title=&#34;RabbitMQ常见问题总结 | JavaGuide&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;RabbitMQ常见问题总结 | JavaGuide&lt;/a&gt;&lt;/p&gt;
+    &gt;RabbitMQ 常见问题总结 | JavaGuide&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;基于AMQP实现，由erlang编写，在 RabbitMQ 中，消息并不是直接被投递到queue中，中间还必须经过 &lt;strong&gt;Exchange(交换器)&lt;/strong&gt; 这一层，&lt;strong&gt;Exchange&lt;/strong&gt;会把消息分配到对应的queue。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/92879420db15467aa24d1b984dac6055.png&#34;
-	
-	
-	
+&lt;p&gt;基于 AMQP 实现，由 erlang 编写，在 RabbitMQ 中，消息并不是直接被投递到 queue 中，中间还必须经过 &lt;strong&gt;Exchange(交换器)&lt;/strong&gt; 这一层，&lt;strong&gt;Exchange&lt;/strong&gt;会把消息分配到对应的 queue。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/image.png&#34;
+	width=&#34;586&#34;
+	height=&#34;189&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/image_hu_acd024593fb42031.png 480w, /zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/image_hu_bb56cd1dcb4e0d91.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;310&#34;
+		data-flex-basis=&#34;744px&#34;
+	
 &gt;&lt;/p&gt;
 &lt;p&gt;生产者将消息发送给交换器时，需要一个 RoutingKey，当 BindingKey 和 RoutingKey 相匹配时，消息会被路由到对应的队列中。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;exchange类型-exchangee7b1bbe59e8bc2a0&#34;&gt;&lt;a href=&#34;#exchange%e7%b1%bb%e5%9e%8b-exchangee7b1bbe59e8bc2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;exchange类型 {#exchange%E7%B1%BB%E5%9E%8B%C2%A0}
+&lt;h4 id=&#34;exchange-类型&#34;&gt;&lt;a href=&#34;#exchange-%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;exchange 类型
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;RabbitMQ 的 Exchange 有 4 种类型，不同的类型对应着不同的路由策略：direct(默认)，fanout, topic, 和 headers。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;fanout&lt;/strong&gt; 把所有发送到该 Exchange 的消息路由到所有与它绑定的 Queue 中，不需要做任何判断操作，所以 fanout 类型是所有的交换机类型里面&lt;strong&gt;速度最快&lt;/strong&gt; 的。fanout 类型常用来&lt;strong&gt;广播消息。&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;direct&lt;/strong&gt; 把消息路由到那些 Bindingkey 与 RoutingKey 完全匹配的 Queue 中，常用在处理有优先级的任务，根据任务的优先级把消息发送到对应的队列，这样可以指派更多的资源去处理高优先级的队列。&lt;br&gt;
-&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/262a93b0df1a40c89d5ef0a4aeef00d5.png&#34;
-	
-	
-	
+&lt;img src=&#34;/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/image-1.png&#34;
+	width=&#34;739&#34;
+	height=&#34;252&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/image-1_hu_a74701cc66949665.png 480w, /zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/image-1_hu_a2c5fffb87f8524.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;293&#34;
+		data-flex-basis=&#34;703px&#34;
+	
 &gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;topic&lt;/strong&gt;把可以把一条消息发送到匹配的多个queue中，BindingKey和RoutingKey 为一个点号&amp;quot;．&amp;ldquo;分隔的字符串，如a.b.c，BindingKey 中还可以存在&amp;rdquo;*&amp;ldquo;和&amp;rdquo;#&amp;ldquo;做模糊匹配，&amp;rdquo;*&amp;ldquo;用于匹配1个单词，&amp;rdquo;#&amp;ldquo;匹配0或多个单词。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;topic&lt;/strong&gt;把可以把一条消息发送到匹配的多个 queue 中，BindingKey 和 RoutingKey 为一个点号&amp;quot;．&amp;ldquo;分隔的字符串，如 a.b.c，BindingKey 中还可以存在&amp;rdquo;*&amp;ldquo;和&amp;rdquo;#&amp;ldquo;做模糊匹配，&amp;rdquo;*&amp;ldquo;用于匹配 1 个单词，&amp;rdquo;#&amp;ldquo;匹配 0 或多个单词。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;headers&lt;/strong&gt; 类型的交换器&lt;strong&gt;不依赖路由键的匹配规则来路由消息&lt;/strong&gt; ，而是&lt;strong&gt;根据发送的消息内容中的 headers 属性进行完全匹配。&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h4 id=&#34;死信队列-e6adbbe4bfa1e9989fe58897c2a0&#34;&gt;&lt;a href=&#34;#%e6%ad%bb%e4%bf%a1%e9%98%9f%e5%88%97-e6adbbe4bfa1e9989fe58897c2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;死信队列 {#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97%C2%A0}
+&lt;h4 id=&#34;死信队列&#34;&gt;&lt;a href=&#34;#%e6%ad%bb%e4%bf%a1%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;死信队列
 &lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;当消息在一个队列中变成死信之后，它能被重新发送到另一个交换器中，这个交换器就是 DLX，绑定 DLX 的队列就称之为死信队列。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;导致的死信的几种原因&lt;/strong&gt;：&lt;/p&gt;
@@ -256,7 +217,6 @@ Kafka 与 周边生态系统的兼容性是最好的没有之一，尤其在大�
 &lt;li&gt;消息 TTL 过期。&lt;/li&gt;
 &lt;li&gt;队列满了，无法再添加。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
 </description>
         </item>
         

@@ -11,7 +11,7 @@
 <meta property='og:description' content="有一定借鉴意义但是没解决问题，idea的classpath中已经包含了nashorn，且可以运行项目，但是maven就是打不成jar包，试来试去都没怀疑maven问题🤓，没想到还真是maven的问题。今天项目打包的时候报这样的错误，jdk8，在idea项目中明明可以找到该文件路径和代码，但是打包打不进去，maven的runner配置，jre原来是jdk17，改成1.8就ok了。参考了一些博客文章，">
 <meta property='og:url' content='/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='java' /><meta property='article:tag' content='开发语言' /><meta property='article:published_time' content='2025-01-22T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-22T12:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2025-01-22T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-01-22T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="【排坑】程序包jdk.nashorn.internal.ir.debug不存在">
 <meta name="twitter:description" content="有一定借鉴意义但是没解决问题，idea的classpath中已经包含了nashorn，且可以运行项目，但是maven就是打不成jar包，试来试去都没怀疑maven问题🤓，没想到还真是maven的问题。今天项目打包的时候报这样的错误，jdk8，在idea项目中明明可以找到该文件路径和代码，但是打包打不进去，maven的runner配置，jre原来是jdk17，改成1.8就ok了。参考了一些博客文章，">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -314,38 +314,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </li>
     </ol>
 </aside>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/0b0eb25debc146b88d6b6d93f22c3549.png" alt=""></a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
+    
 
             <main class="main full-width">
     <article class="main-article">
@@ -429,11 +398,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/java/">Java</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/">开发语言</a> 
-            
-            
         </div>
         
     </footer>
@@ -447,41 +411,53 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p>今天项目打包的时候报这样的错误，jdk8，在idea项目中明明可以找到该文件路径和代码，但是打包打不进去，</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/a8fa3108865b46899702ecdbe451d66c.png"
-	
-	
-	
+    <p>今天项目打包的时候报这样的错误，jdk8，在 idea 项目中明明可以找到该文件路径和代码，但是打包打不进去，
+<img src="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image.png"
+	width="817"
+	height="240"
+	srcset="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image_hu_8d8c7fd0498ac4d0.png 480w, /zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image_hu_dc8ad51c5da0b02c.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="340"
+		data-flex-basis="817px"
 	
 ></p>
 <p>参考了一些博客文章，</p>
 <p><a class="link" href="https://www.jianshu.com/p/5ce832ede830"  title="【Maven问题】 错误: 程序包xxx 不存在 - 简书"
      target="_blank" rel="noopener"
-    >【Maven问题】 错误: 程序包xxx 不存在 - 简书</a></p>
+    >【Maven 问题】 错误: 程序包 xxx 不存在 - 简书</a></p>
 <p><a class="link" href="https://blog.csdn.net/wlopper/article/details/119676442"  title="Maven错误：程序包java.nashorn.XXX不存在_程序包jdk.nashorn.api.scripting不存在-CSDN博客"
      target="_blank" rel="noopener"
-    >Maven错误：程序包java.nashorn.XXX不存在_程序包jdk.nashorn.api.scripting不存在-CSDN博客</a></p>
-<p>有一定借鉴意义但是没解决问题，idea的classpath中已经包含了nashorn，且可以运行项目，但是maven就是打不成jar包，试来试去都没怀疑maven问题🤓，没想到还真是maven的问题。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/2adcb1ecdfdc4aa1a3579a3989b2f754.png"
-	
-	
-	
+    >Maven 错误：程序包 java.nashorn.XXX 不存在_程序包 jdk.nashorn.api.scripting 不存在-CSDN 博客</a></p>
+<p>有一定借鉴意义但是没解决问题，idea 的 classpath 中已经包含了 nashorn，且可以运行项目，但是 maven 就是打不成 jar 包，试来试去都没怀疑 maven 问题 🤓，没想到是 JDK 版本的问题。
+<img src="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-1.png"
+	width="2409"
+	height="1068"
+	srcset="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-1_hu_72e1f655f9ac5b7e.png 480w, /zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-1_hu_ed9c41b420d767f5.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="541px"
 	
 ></p>
-<p>maven的runner配置，jre原来是jdk17，改成1.8就ok了</p>
-<h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/0b0eb25debc146b88d6b6d93f22c3549.png"
-	
-	
-	
+<p>maven 的 runner 配置，jre 原来是 jdk17，改成 1.8 就 ok 了</p>
+<p><img src="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-2.png"
+	width="2113"
+	height="578"
+	srcset="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-2_hu_cbfa760f8df6a020.png 480w, /zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-2_hu_226f1277eded7a24.png 1024w"
 	loading="lazy"
 	
 	
->
-</h2>
+		class="gallery-image" 
+		data-flex-grow="365"
+		data-flex-basis="877px"
+	
+></p>
+
 </section>
 
 
@@ -528,45 +504,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/java%E5%8F%8D%E5%B0%84%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java反射、静态代理、动态代理</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%83%BD%E6%A0%B9%E6%8D%AE%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7%E6%9D%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">如何设计一个能根据任务优先级来执行的线程池</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/java-io%E6%A8%A1%E5%9E%8B----bionioaioio%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java io模型----BIO、NIO、AIO、IO多路复用、零拷贝</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
     <a href="/zh-cn/post/2025/01/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%90%91list%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%83%E7%B4%A0/">
 
         
@@ -586,6 +523,45 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">【大坑！已解决】docker容器jar包连不上另一个容器的mysql</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/synchronized%E9%94%81%E5%8D%87%E7%BA%A7/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">synchronized锁升级</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/java%E5%8F%8D%E5%B0%84%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Java反射、静态代理、动态代理</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Web实时消息推送的几种方案</h2>
             
         </div>
     </a>

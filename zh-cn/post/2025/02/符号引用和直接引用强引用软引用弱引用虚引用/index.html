@@ -11,7 +11,7 @@
 <meta property='og:description' content="符号引用和直接引用、强引用、软引用、弱引用、虚引用">
 <meta property='og:url' content='/zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='java' /><meta property='article:tag' content='jvm' /><meta property='article:tag' content='符号引用' /><meta property='article:tag' content='直接引用' /><meta property='article:tag' content='强弱引用' /><meta property='article:published_time' content='2025-02-13T14:03:21&#43;00:00'/><meta property='article:modified_time' content='2025-02-13T14:03:21&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='JVM' /><meta property='article:published_time' content='2025-02-13T14:03:21&#43;00:00'/><meta property='article:modified_time' content='2025-02-13T14:03:21&#43;00:00'/>
 <meta name="twitter:title" content="符号引用和直接引用、强引用、软引用、弱引用、虚引用">
 <meta name="twitter:description" content="符号引用和直接引用、强引用、软引用、弱引用、虚引用">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -405,7 +405,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 3 分钟
+                阅读时长: 2 分钟
             </time>
         </div>
         
@@ -431,25 +431,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             , 
             
-            <a href="/zh-cn/tags/jvm/">Jvm</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8/">符号引用</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8/">直接引用</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E5%BC%BA%E5%BC%B1%E5%BC%95%E7%94%A8/">强弱引用</a> 
-            
-            
-            
+            <a href="/zh-cn/tags/jvm/">JVM</a> 
             
             
         </div>
@@ -465,31 +447,14 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/138463677"  title="Kafka入门到入土——万字详解，图文并茂_图解kafka-CSDN博客"
-     target="_blank" rel="noopener"
-    >Kafka入门到入土&mdash;&mdash;万字详解，图文并茂_图解kafka-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145463543"  title="Java内存模型（Memory Model）-CSDN博客"
-     target="_blank" rel="noopener"
-    >Java内存模型（Memory Model）-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144943507"  title="ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet-CSDN博客"
-     target="_blank" rel="noopener"
-    >ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144995466"  title="AQS---抽象队列同步器、CLH锁队列-CSDN博客"
-     target="_blank" rel="noopener"
-    >AQS&mdash;抽象队列同步器、CLH锁队列-CSDN博客</a></p></blockquote>
-<p>参考：<a class="link" href="https://segmentfault.com/a/1190000042313862"  title="https://segmentfault.com/a/1190000042313862"
-     target="_blank" rel="noopener"
-    >https://segmentfault.com/a/1190000042313862</a></p>
-<h2 id="符号引用"><a href="#%e7%ac%a6%e5%8f%b7%e5%bc%95%e7%94%a8" class="header-anchor"></a>符号引用
+    <h2 id="符号引用"><a href="#%e7%ac%a6%e5%8f%b7%e5%bc%95%e7%94%a8" class="header-anchor"></a>符号引用
 </h2><blockquote>
 <ul>
 <li>以一组符号来描述所引用的目标。</li>
 <li>符号引用可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可，符号引用和虚拟机的布局无关。</li>
 <li>为什么要有符号引用？</li>
 </ul>
-<p>java类被编译成class文件时，<strong>虚拟机并不知道所引用类的地址，所以就用符号引用来代替</strong> ，而在<strong>链接的解析阶段</strong> 就是为了把这个符号引用转化成为<strong>真正的地址即直接引用</strong>。</p></blockquote>
+<p>java 类被编译成 class 文件时，<strong>虚拟机并不知道所引用类的地址，所以就用符号引用来代替</strong> ，而在<strong>链接的解析阶段</strong> 就是为了把这个符号引用转化成为<strong>真正的地址即直接引用</strong>。</p></blockquote>
 <h2 id="直接引用"><a href="#%e7%9b%b4%e6%8e%a5%e5%bc%95%e7%94%a8" class="header-anchor"></a>直接引用
 </h2><blockquote>
 <ul>
@@ -499,16 +464,20 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <h2 id="强引用"><a href="#%e5%bc%ba%e5%bc%95%e7%94%a8" class="header-anchor"></a>强引用
 </h2><blockquote>
 <p>把一个对象赋给一个引用变量，如 MikeChen mikechen=new MikeChen();</p>
-<p>在一个方法的内部有一个强引用，这个引用保存在Java栈中，而真正的引用内容(MikeChen)保存在Java堆中。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/c9db6ad6662f4908998e5bb8593c072b.png"
-	
-	
-	
+<p>在一个方法的内部有一个强引用，这个引用保存在 Java 栈中，而真正的引用内容(MikeChen)保存在 Java 堆中。
+<img src="/zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/image.png"
+	width="459"
+	height="227"
+	srcset="/zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/image_hu_7d26d6f45ca54fb9.png 480w, /zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/image_hu_b86061009e21df65.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
 ></p>
-<p>如果一个对象具有强引用，即使OOM垃圾回收器不会回收该对象，如果强引用对象不使用时，需要弱化从而使GC能够回收，如 mikechen=null;</p></blockquote>
+<p>如果一个对象具有强引用，即使 OOM 垃圾回收器不会回收该对象，如果强引用对象不使用时，需要弱化从而使 GC 能够回收，如 mikechen=null;</p></blockquote>
 <h2 id="软引用soft"><a href="#%e8%bd%af%e5%bc%95%e7%94%a8soft" class="header-anchor"></a>软引用（Soft）
 </h2><blockquote>
 <div class="highlight"><div class="chroma">
@@ -523,17 +492,15 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span><span class="line"><span class="cl">SoftReference&lt;String&gt; softRef=new SoftReference&lt;String&gt;(str);
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><strong>内存不足时就会回收该对象内存，gc不一定回收</strong>。</p></blockquote>
+</div><p><strong>内存不足时就会回收该对象内存，gc 不一定回收</strong>。</p></blockquote>
 <h2 id="弱引用weak"><a href="#%e5%bc%b1%e5%bc%95%e7%94%a8weak" class="header-anchor"></a>弱引用（Weak）
 </h2><blockquote>
 <p><strong>不管内存是否足够，只要发生 GC，都会被回收。</strong></p>
-<p><strong>调用System.gc()方法只是起通知作用，不一定立刻gc</strong>，JVM的gc时机由JVM自己的状态决定。</p>
-<p>比如ThreadLocal的静态内部类Entry就继承了弱引用，ThreadLocalMap使用ThreadLocal的弱引用作为key，GC时这个ThreadLocal势必会被回收，这样一来，ThreadLocalMap中就会出现key为null的Entry，就没有办法访问这些key为null的Entry的value，也就造成内存泄漏。</p></blockquote>
+<p><strong>调用 System.gc()方法只是起通知作用，不一定立刻 gc</strong>，JVM 的 gc 时机由 JVM 自己的状态决定。</p>
+<p>比如 ThreadLocal 的静态内部类 Entry 就继承了弱引用，ThreadLocalMap 使用 ThreadLocal 的弱引用作为 key，GC 时这个 ThreadLocal 势必会被回收，这样一来，ThreadLocalMap 中就会出现 key 为 null 的 Entry，就没有办法访问这些 key 为 null 的 Entry 的 value，也就造成内存泄漏。</p></blockquote>
 <h2 id="虚引用phantom"><a href="#%e8%99%9a%e5%bc%95%e7%94%a8phantom" class="header-anchor"></a>虚引用（Phantom）
 </h2><blockquote>
-<p>虚引用（Phantom Reference）是Java中最弱的引用类型，<strong>无法通过引用直接获取到对象实例</strong> 。虚引用主要用于<strong>跟踪对象被垃圾回收的状态</strong>。当一个对象只被虚引用关联时，其实际上并不影响对象的生命周期，也就是说，垃圾回收器随时可能回收被虚引用关联的对象。</p></blockquote>
-<br />
----
+<p>虚引用（Phantom Reference）是 Java 中最弱的引用类型，<strong>无法通过引用直接获取到对象实例</strong> 。虚引用主要用于<strong>跟踪对象被垃圾回收的状态</strong>。当一个对象只被虚引用关联时，其实际上并不影响对象的生命周期，也就是说，垃圾回收器随时可能回收被虚引用关联的对象。</p></blockquote>
 
 </section>
 
@@ -581,12 +548,38 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2025/02/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">字符串常量池</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/">
 
         
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">JVM图文入门</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/12/string.intern/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">String.intern()</h2>
             
         </div>
     </a>
@@ -613,32 +606,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java内存模型（Memory Model）</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/02/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">字符串常量池</h2>
             
         </div>
     </a>

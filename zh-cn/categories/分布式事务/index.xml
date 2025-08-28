@@ -13,15 +13,9 @@
         <pubDate>Fri, 14 Mar 2025 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</guid>
-        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/XknegP66mnYboiBx556Kzw&#34;  title=&#34;分布式事务&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;分布式事务&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/ujRRtdLOeKEHsHrtDRNXGA&#34;  title=&#34;1.4 w字，25 张图让你彻底掌握分布式事务原理&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;1.4 w字，25 张图让你彻底掌握分布式事务原理&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
+        <description>&lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;单数据源事务&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;单数据源事务也可以叫做单机事务或本地事务。可利用数据库提供的事务机制ACID即可保证事务一致性。
+&lt;p&gt;单数据源事务也可以叫做单机事务或本地事务。可利用数据库提供的事务机制 ACID 即可保证事务一致性。
 在分布式场景下，一个系统有多个子系统构成， 每个子系统有自己的数据源，此时仅靠本地事务机制就无法保证全局的事务一致性，也就无法保证数据一致性。
 &lt;strong&gt;分布式事务模型&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -33,26 +27,30 @@
 &lt;p&gt;在分布式事务模型中，一个 TM 管理多个 RM，即一个服务程序访问多个数据源；TM 是一个全局事务管理器，协调多方本地事务的进度，使其共同提交或回滚，最终达成一种全局的 ACID 特性。
 &lt;strong&gt;二将军问题&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;B军队被两支A军队围在山谷，A1军队将军要通知另一支A2军队，约定时间攻击B军队，因此A1军队要派信使去传递消息，但是信使要经过山谷，可能被B军队俘虏。那么如果信使没有返回A1，如下两种情况：1.信使还没到A2，被俘虏，此时A2不知道进攻时间，A1也不知道A2有没有收到通知。2.信使已告知A2，但是返回途中被俘虏，A1还是不知道A2有没有收到通知。&lt;/li&gt;
+&lt;li&gt;B 军队被两支 A 军队围在山谷，A1 军队将军要通知另一支 A2 军队，约定时间攻击 B 军队，因此 A1 军队要派信使去传递消息，但是信使要经过山谷，可能被 B 军队俘虏。那么如果信使没有返回 A1，如下两种情况：1.信使还没到 A2，被俘虏，此时 A2 不知道进攻时间，A1 也不知道 A2 有没有收到通知。2.信使已告知 A2，但是返回途中被俘虏，A1 还是不知道 A2 有没有收到通知。&lt;/li&gt;
 &lt;li&gt;类似的问题在计算机网络中普遍存在，例如发送者给接受者发送一个 HTTP 请求，或者 MySQL 客户端向 MySQL 服务器发送一条插入语句，然后超时了没有得到响应。请问服务器是写入成功了还是失败了？消息发送者不知道，因此往往要&lt;strong&gt;重复发送消息&lt;/strong&gt;直到收到响应。例如电商系统中订单模块调用支付模块扣款的时候，如果网络故障导致二将军问题出现，扣款请求重复发送，产生的重复扣款结果显然是不能被接受的。因此要保证一次事务中的扣款请求无论被发送多少次，接收方有且只执行一次扣款动作，这种保证机制叫做接收方的幂等性。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;分布式事务解决方案&#34;&gt;&lt;a href=&#34;#%e5%88%86%e5%b8%83%e5%bc%8f%e4%ba%8b%e5%8a%a1%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分布式事务解决方案
 &lt;/h2&gt;&lt;h3 id=&#34;2pc&#34;&gt;&lt;a href=&#34;#2pc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2PC
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;2pc是解决分布式事务的最简单的模型，分为2个阶段：&lt;/p&gt;
+&lt;p&gt;2pc 是解决分布式事务的最简单的模型，分为 2 个阶段：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;准备阶段：事务协调者向各个事务参与者发询问请求，通知即将执行全局事务，各自做好资源准备，即各自&lt;strong&gt;执行本地事务到待提交阶段&lt;/strong&gt;。各个事务参与者准备好后响应ACK或no或协调者等待超时。&lt;/li&gt;
-&lt;li&gt;提交/回滚阶段：如果所有事务参与者响应ACK，则由事务协调者通知进行全局事务最终的提交阶段。如果有一个参与者no或协调者等待超时，则要回滚阶段。&lt;/li&gt;
+&lt;li&gt;准备阶段：事务协调者向各个事务参与者发询问请求，通知即将执行全局事务，各自做好资源准备，即各自&lt;strong&gt;执行本地事务到待提交阶段&lt;/strong&gt;。各个事务参与者准备好后响应 ACK 或 no 或协调者等待超时。&lt;/li&gt;
+&lt;li&gt;提交/回滚阶段：如果所有事务参与者响应 ACK，则由事务协调者通知进行全局事务最终的提交阶段。如果有一个参与者 no 或协调者等待超时，则要回滚阶段。&lt;/li&gt;
 &lt;/ol&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/42d6675edf43424090cca7128e528e4e.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image.png&#34;
+	width=&#34;746&#34;
+	height=&#34;660&#34;
+	srcset=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image_hu_8403c6e8ad029f71.png 480w, /zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image_hu_c833a95243bd5eda.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;
-&lt;/h3&gt;&lt;blockquote&gt;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;113&#34;
+		data-flex-basis=&#34;271px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
 &lt;p&gt;要实现 2PC，所有的参与者都要实现三个接口：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -66,58 +64,93 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;可以将这三个接口简单地（但不严谨地）理解成 XA 协议。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;XA 协议是 X/Open 提出的分布式事务处理标准。MySQL、Oracle、DB2 这些主流数据库都实现了 XA 协议，因此都能被用于实现 2PC 事务模型。&lt;/strong&gt;
-&lt;strong&gt;2PC存在问题&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;XA 协议是 X/Open 提出的分布式事务处理标准。MySQL、Oracle、DB2 这些主流数据库都实现了 XA 协议，因此都能被用于实现 2PC 事务模型。&lt;/strong&gt; &amp;gt; &lt;strong&gt;2PC 存在问题&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;性能差：准备阶段要等所有事务参与者响应才能进入提交回滚阶段，这期间参与者的相关资源会被锁住，影响各个参与者的本地事务并发度；&lt;/li&gt;
 &lt;li&gt;如果准备阶段完成，协调者挂了，那么所有参与者都收不到提交或回滚指令，导致所有参与者会一直阻塞直到协调者恢复，&lt;strong&gt;参与者没有超时机制&lt;/strong&gt;，导致长时间资源锁定。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;3pc&#34;&gt;&lt;a href=&#34;#3pc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3PC
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;3PC 的出现是为了解决 2PC 的一些问题，相比于 2PC 它在&lt;strong&gt;参与者中也引入了超时机制&lt;/strong&gt; ，并且&lt;strong&gt;新增了一个阶段&lt;/strong&gt;使得参与者可以利用这一个阶段统一各自的状态。3pc分为三个阶段：&lt;/p&gt;
+&lt;p&gt;3PC 的出现是为了解决 2PC 的一些问题，相比于 2PC 它在&lt;strong&gt;参与者中也引入了超时机制&lt;/strong&gt; ，并且&lt;strong&gt;新增了一个阶段&lt;/strong&gt;使得参与者可以利用这一个阶段统一各自的状态。3pc 分为三个阶段：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;准备阶段：协调者只是询问参与者的自身状况。&lt;/li&gt;
-&lt;li&gt;预提交阶段：和2pc的准备阶段一样。&lt;/li&gt;
+&lt;li&gt;预提交阶段：和 2pc 的准备阶段一样。&lt;/li&gt;
 &lt;li&gt;提交阶段：提交阶段和 2PC 的一样。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/f21f41f463ed410ca90622a6fc2392ed.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-1.png&#34;
+	width=&#34;1024&#34;
+	height=&#34;738&#34;
+	srcset=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-1_hu_95c4bc75f3343cfb.png 480w, /zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-1_hu_e65c603b22aa2e1b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;138&#34;
+		data-flex-basis=&#34;333px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;tcc&#34;&gt;&lt;a href=&#34;#tcc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;TCC
+&lt;h3 id=&#34;3pc-缺点&#34;&gt;&lt;a href=&#34;#3pc-%e7%bc%ba%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3PC 缺点
 &lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;3PC 相对于 2PC 做了一定的改进：引入了参与者超时机制，并且增加了预提交阶段使得故障恢复之后协调者的决策复杂度降低，但只能让协调者知道该如何做，但不能保证这样做一定对，但整体的交互过程更长了，性能有所下降，并且还是会存在数据不一致问题。一般都需要有定时扫描补偿机制。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;协调者故障问题及解决&#34;&gt;&lt;a href=&#34;#%e5%8d%8f%e8%b0%83%e8%80%85%e6%95%85%e9%9a%9c%e9%97%ae%e9%a2%98%e5%8f%8a%e8%a7%a3%e5%86%b3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;协调者故障问题及解决
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;h4 id=&#34;故障时机&#34;&gt;&lt;a href=&#34;#%e6%95%85%e9%9a%9c%e6%97%b6%e6%9c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;故障时机
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;假设协调者在&lt;strong&gt;发送准备命令之前&lt;/strong&gt;挂了，还行等于事务还没开始。&lt;/li&gt;
+&lt;li&gt;假设协调者在&lt;strong&gt;发送准备命令之后&lt;/strong&gt;挂了，此时参与者都执行了处于事务资源锁定的状态。事务执行不下去，还会因为锁定了一些公共资源而阻塞系统其它操作。&lt;/li&gt;
+&lt;li&gt;假设协调者在&lt;strong&gt;发送回滚事务命令之前&lt;/strong&gt;挂了，那么事务也是执行不下去，且在第一阶段那些准备成功参与者都阻塞着。&lt;/li&gt;
+&lt;li&gt;假设协调者在&lt;strong&gt;发送回滚事务命令之后&lt;/strong&gt;挂了，这个还行，至少命令发出去了，很大的概率都会回滚成功，资源都会释放。但是如果出现网络分区问题，某些参与者将因为收不到命令而阻塞着。&lt;/li&gt;
+&lt;li&gt;假设协调者在&lt;strong&gt;发送提交事务命令之前&lt;/strong&gt;挂了，这个不行，傻了！这下是所有资源都阻塞着。&lt;/li&gt;
+&lt;li&gt;假设协调者在&lt;strong&gt;发送提交事务命令之后&lt;/strong&gt;挂了，这个还行，也是至少命令发出去了，很大概率都会提交成功，然后释放资源，但是如果出现网络分区问题某些参与者将因为收不到命令而阻塞着。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;解决&#34;&gt;&lt;a href=&#34;#%e8%a7%a3%e5%86%b3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;解决
+&lt;/h4&gt;&lt;p&gt;因为协调者单点问题，因此通过选举等操作选出一个新协调者来顶替。然而每个参与者的情况只有协调者和参与者本身知道，协调者发送了回滚命令，此时第一个参与者收到了并执行，然后协调者和第一个参与者都挂了。那么新上任的协调者是不知道挂了的参与者是否还活着，那么此时就可以通过让协调者记录日志，但就算协调者知道自己该发提交请求，那么在参与者也一起挂了的情况下没用，因为协调者不知道参与者在挂之前有没有提交事务。所以说极端情况下还是&lt;strong&gt;无法避免数据不一致问题&lt;/strong&gt;。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;pc-缺点&#34;&gt;&lt;a href=&#34;#pc-%e7%bc%ba%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PC 缺点
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;尽量保证强一致性的分布式事务&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;又因为同步阻塞，所以效率低&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;存在单点故障问题，导致数据不一致&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;tcc&#34;&gt;&lt;a href=&#34;#tcc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;TCC
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;2PC 和 3PC 都是数据库层面的，而 TCC 是业务层面的分布式事务&lt;/strong&gt;，分布式事务不仅仅包括数据库的操作，还包括发送短信等。此时 TCC 就有用了。&lt;/p&gt;
+&lt;blockquote&gt;
 &lt;p&gt;TCC 就是一种解决多个微服务之间的分布式事务问题的方案。TCC 是 Try、Confirm、Cancel 三个词的缩写，其本质是一个应用层面上的 2PC，分为两个阶段：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;准备阶段：协调者调用所有的每个微服务提供的 try 接口，将整个全局事务涉及到的资源锁定住，若锁定成功 try 接口向协调者返回 yes。&lt;/li&gt;
+&lt;li&gt;准备阶段：协调者调用&lt;strong&gt;所有微服务提供的 try 接口&lt;/strong&gt;，将整个全局事务涉及到的资源锁定住，若锁定成功 try 接口向协调者返回 yes。&lt;/li&gt;
 &lt;li&gt;提交阶段：若所有的服务的 try 接口在阶段一都返回 yes，则进入提交阶段，协调者调用所有服务的 confirm 接口，各个服务进行事务提交。如果有任何一个服务的 try 接口在阶段一返回 no 或者超时，则协调者调用所有服务的 cancel 接口。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/bbcc3d97add04f5ca31a562da4b78e28.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-2.png&#34;
+	width=&#34;761&#34;
+	height=&#34;663&#34;
+	srcset=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-2_hu_192d76c9138b8618.png 480w, /zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-2_hu_152fbff28c22dca4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;114&#34;
+		data-flex-basis=&#34;275px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;TCC有两个问题：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TCC 有两个问题：&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;既然 TCC 是一种服务层面上的 2PC，它是如何解决 2PC 无法应对&lt;strong&gt;宕机&lt;/strong&gt; 问题的缺陷的呢？答案是&lt;strong&gt;不断重试&lt;/strong&gt;。由于 try 操作锁住了全局事务涉及的所有资源，保证了业务操作的所有前置条件得到满足，因此无论是 confirm 阶段失败还是 cancel 阶段失败都能通过不断重试直至 confirm 或 cancel 成功（所谓成功就是所有的服务都对 confirm 或者 cancel 返回了 ACK）。&lt;/li&gt;
 &lt;li&gt;在不断重试 confirm 和 cancel 的过程中（二将军问题）有可能重复进行了 confirm 或 cancel，因此还要再保证 confirm 和 cancel 操作具有幂等性，也就是整个全局事务中，每个参与者只进行一次 confirm 或者 cancel。实现 confirm 和 cancel 操作的幂等性，有很多解决方案，例如每个参与者可以维护一个去重表（可以利用数据库表实现也可以使用内存型 KV 组件实现），记录每个全局事务（以全局事务标记 XID 区分）是否进行过 confirm 或 cancel 操作，若已经进行过，则不再重复执行。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;事务状态表&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1%e7%8a%b6%e6%80%81%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务状态表
+&lt;h3 id=&#34;事务状态表本地消息表&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1%e7%8a%b6%e6%80%81%e8%a1%a8%e6%9c%ac%e5%9c%b0%e6%b6%88%e6%81%af%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务状态表/本地消息表
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;类似 TCC 的事务解决方案，借助事务状态表来实现。假设要在一个分布式事务中实现调用 repo-service 扣减库存、调用 order-service 生成订单两个过程。在这种方案中，协调者 shopping-service 维护一张如下的事务状态表，初始状态为 1，每成功调用一个服务则更新一次状态，最后所有的服务调用成功，状态更新到 3&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/689e1efa6a684c34acdcc025d1736eeb.png&#34;
-	
-	
-	
+&lt;p&gt;类似 TCC 的事务解决方案，借助事务状态表来实现。假设要在一个分布式事务中实现调用 repo-service 扣减库存、调用 order-service 生成订单两个过程。在这种方案中，协调者 shopping-service 维护一张如下的事务状态表，初始状态为 1，每成功调用一个服务则更新一次状态，最后所有的服务调用成功，状态更新到 3
+&lt;img src=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-3.png&#34;
+	width=&#34;1105&#34;
+	height=&#34;394&#34;
+	srcset=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-3_hu_2e29200a38267345.png 480w, /zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-3_hu_b3ed794bc5c7075d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;280&#34;
+		data-flex-basis=&#34;673px&#34;
 	
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;基于消息中间件的解决方案&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e4%ba%8e%e6%b6%88%e6%81%af%e4%b8%ad%e9%97%b4%e4%bb%b6%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基于消息中间件的解决方案
@@ -125,18 +158,48 @@
 &lt;p&gt;无论是 2PC &amp;amp; 3PC 还是 TCC、事务状态表，基本都遵守 XA 协议的思想，即这些方案&lt;strong&gt;本质上都是事务协调者协调各个事务参与者的本地事务的进度&lt;/strong&gt;，使所有本地事务共同提交或回滚，最终达成一种全局的 ACID 特性。在协调的过程中，协调者需要收集各个本地事务的当前状态，并根据这些状态发出下一阶段的操作指令。&lt;/p&gt;
 &lt;p&gt;但是这些全局事务方案由于操作繁琐、时间跨度大，或者在全局事务期间会排他地锁住相关资源，使得整个分布式系统的全局事务的并发度不会太高。这很难满足电商等高并发场景对事务吞吐量的要求。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h4 id=&#34;消息队列&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息队列
-&lt;/h4&gt;&lt;p&gt;RocketMQ 就支持消息事务，RocketMQ 的发送方会提供一个&lt;strong&gt;反查事务状态接口&lt;/strong&gt;，如果一段时间内半消息没有收到任何操作请求，那么 Broker 会通过反查接口得知发送方事务是否执行成功，然后执行 Commit 或者 RollBack 命令。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/8ca8fa8c4cd945b2a0bdad00b3e4931c.png&#34;
-	
-	
-	
+&lt;/h4&gt;&lt;p&gt;RocketMQ 就支持消息事务，RocketMQ 的发送方会提供一个&lt;strong&gt;反查事务状态接口&lt;/strong&gt;，如果一段时间内半消息没有收到任何操作请求，那么 Broker 会通过反查接口得知发送方事务是否执行成功，然后执行 Commit 或者 RollBack 命令。
+&lt;img src=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-4.png&#34;
+	width=&#34;817&#34;
+	height=&#34;397&#34;
+	srcset=&#34;/zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-4_hu_220b524663bb9ad8.png 480w, /zh-cn/post/2025/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/image-4_hu_8250f10a606bec1e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;205&#34;
+		data-flex-basis=&#34;493px&#34;
+	
 &gt;&lt;/p&gt;
 &lt;h4 id=&#34;seata&#34;&gt;&lt;a href=&#34;#seata&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Seata
-&lt;/h4&gt;&lt;br /&gt;
----
+&lt;/h4&gt;&lt;p&gt;由阿里巴巴集团开发并开源，致力于在微服务架构下提供高性能和简单易用的分布式事务服务。&lt;/p&gt;
+&lt;h5 id=&#34;核心组件&#34;&gt;&lt;a href=&#34;#%e6%a0%b8%e5%bf%83%e7%bb%84%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;核心组件
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Transaction Coordinator (TC)&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;事务协调器，负责维护全局事务的状态，驱动全局事务的提交或回滚。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Transaction Manager (TM)&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;事务管理器，负责定义全局事务的范围，开始、提交或回滚全局事务。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Resource Manager (RM)&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;资源管理器，负责管理分支事务处理的资源，与 TC 交互以注册分支事务和报告分支事务的状态，并驱动分支事务的提交或回滚。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;事务模式&#34;&gt;&lt;a href=&#34;#%e4%ba%8b%e5%8a%a1%e6%a8%a1%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;事务模式
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;AT 模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;无侵入的分布式事务解决方案，通过拦截业务 SQL，解析 SQL 语义，生成前后镜像数据，生成回滚日志，并在本地事务中提交业务 SQL 和回滚日志。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TCC 模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;支持 TCC 模式并可与 AT 模式混用，提供更高的灵活度。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SAGA 模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;为长事务提供有效的解决方案，支持编排式与注解式开发模式。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;XA 模式&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;基于 X/Open 组织定义的分布式事务处理标准，利用事务资源对 XA 协议的支持来管理分支事务。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h5 id=&#34;工作流程&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工作流程
+&lt;/h5&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;TM 向 TC 申请开启一个全局事务，TC 生成一个全局唯一的 XID。&lt;/li&gt;
+&lt;li&gt;XID 通过微服务的调用链传播到其他微服务。&lt;/li&gt;
+&lt;li&gt;RM 向 TC 注册分支事务，并将其纳入 XID 对应的全局事务中。&lt;/li&gt;
+&lt;li&gt;TM 根据所有分支事务的执行结果，向 TC 发起全局提交或回滚请求。&lt;/li&gt;
+&lt;li&gt;TC 调度所有分支事务完成提交或回滚。&lt;/li&gt;
+&lt;/ol&gt;&lt;/blockquote&gt;
 </description>
         </item>
         

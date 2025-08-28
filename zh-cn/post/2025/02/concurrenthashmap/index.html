@@ -11,7 +11,7 @@
 <meta property='og:description' content="在JDK1.7中用的是Segment数组+链表实现的。Segment是一种可重入锁(ReentrantLock)，链表则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment，一个Segment里包含一个链表。JDK1.7 的ConcurrentHashMap给每一段数据配一把锁，当一个线程访问其中该段数据的时候，会，那么其他段的数据也能被其他线程访问，能够实现真正的并发访问。Segment默认个数是 16，一旦。">
 <meta property='og:url' content='/zh-cn/post/2025/02/concurrenthashmap/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2025-02-18T08:54:49&#43;00:00'/><meta property='article:modified_time' content='2025-02-18T08:54:49&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2025-02-18T08:54:49&#43;00:00'/><meta property='article:modified_time' content='2025-02-18T08:54:49&#43;00:00'/>
 <meta name="twitter:title" content="ConcurrentHashMap">
 <meta name="twitter:description" content="在JDK1.7中用的是Segment数组+链表实现的。Segment是一种可重入锁(ReentrantLock)，链表则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment，一个Segment里包含一个链表。JDK1.7 的ConcurrentHashMap给每一段数据配一把锁，当一个线程访问其中该段数据的时候，会，那么其他段的数据也能被其他线程访问，能够实现真正的并发访问。Segment默认个数是 16，一旦。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,14 +336,14 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#jdk7的concurrenthashmap">jdk7的ConcurrentHashMap</a>
+    <li><a href="#jdk7-的-concurrenthashmap">jdk7 的 ConcurrentHashMap</a>
       <ol>
         <li><a href="#rehash">rehash</a></li>
       </ol>
     </li>
-    <li><a href="#jdk8的concurrenthashmap">jdk8的ConcurrentHashMap</a></li>
-    <li><a href="#为什么concurrenthashmap的key和value不能为null">为什么ConcurrentHashMap的key和value不能为null</a></li>
-    <li><a href="#concurrenthashmap如何保证复合操作的原子性">ConcurrentHashMap如何保证复合操作的原子性</a></li>
+    <li><a href="#jdk8-的-concurrenthashmap">jdk8 的 ConcurrentHashMap</a></li>
+    <li><a href="#为什么-concurrenthashmap-的-key-和-value-不能为-null">为什么 ConcurrentHashMap 的 key 和 value 不能为 null</a></li>
+    <li><a href="#concurrenthashmap-如何保证复合操作的原子性">ConcurrentHashMap 如何保证复合操作的原子性</a></li>
   </ol>
 </nav>
         </div>
@@ -444,59 +444,62 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h2 id="jdk7的concurrenthashmap"><a href="#jdk7%e7%9a%84concurrenthashmap" class="header-anchor"></a>jdk7的ConcurrentHashMap
+    <h2 id="jdk7-的-concurrenthashmap"><a href="#jdk7-%e7%9a%84-concurrenthashmap" class="header-anchor"></a>jdk7 的 ConcurrentHashMap
 </h2><blockquote>
-<p>在JDK1.7中用的是Segment数组+链表实现的。Segment是一种可重入锁(ReentrantLock)，链表则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment<strong>数组</strong>，一个Segment里包含一个链表。</p>
-<p>JDK1.7 的ConcurrentHashMap给每一段数据配一把锁，当一个线程访问其中该段数据的时候，会<strong>锁住该链表头节点</strong>，那么其他段的数据也能被其他线程访问，能够实现真正的并发访问。</p>
-<p><code>Segment</code> 默认个数是 16，一旦<strong>初始化就不能改变。每个链表默认长度也是16。</strong></p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/a2968ea1811a48cf8806d0cf02b0dfb6.png"
-	
-	
-	
+<p>在 JDK1.7 中用的是 Segment 数组+链表实现的。Segment 是一种可重入锁(ReentrantLock)，链表则用于存储键值对数据。一个 ConcurrentHashMap 里包含一个 Segment<strong>数组</strong>，一个 Segment 里包含一个链表。</p>
+<p>JDK1.7 的 ConcurrentHashMap 给每一段数据配一把锁，当一个线程访问其中该段数据的时候，会<strong>锁住该链表头节点</strong>，那么其他段的数据也能被其他线程访问，能够实现真正的并发访问。</p>
+<p><code>Segment</code> 默认个数是 16，一旦<strong>初始化就不能改变。每个链表默认长度也是 16。</strong> &gt; <img src="/zh-cn/post/2025/02/concurrenthashmap/image.png"
+	width="736"
+	height="351"
+	srcset="/zh-cn/post/2025/02/concurrenthashmap/image_hu_ac9cef35a370f194.png 480w, /zh-cn/post/2025/02/concurrenthashmap/image_hu_8d11af8e7494e30.png 1024w"
 	loading="lazy"
 	
 	
-></p>
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p></blockquote>
 <h3 id="rehash"><a href="#rehash" class="header-anchor"></a>rehash
 </h3><p><code>ConcurrentHashMap</code> 的扩容只会扩容到原来的两倍。老数组里的数据移动到新的数组时，位置要么不变，要么变为 <code>index+ oldSize</code></p>
-<h2 id="jdk8的concurrenthashmap"><a href="#jdk8%e7%9a%84concurrenthashmap" class="header-anchor"></a>jdk8的ConcurrentHashMap
+<h2 id="jdk8-的-concurrenthashmap"><a href="#jdk8-%e7%9a%84-concurrenthashmap" class="header-anchor"></a>jdk8 的 ConcurrentHashMap
 </h2><blockquote>
-<p>JDK1.7的ConcurrentHashMap底层实现是Segment数组+链表的形式，在数据量大时要遍历链表，效率低。而JDK1.8则使用了Node数组+链表/红黑树的形式。</p>
+<p>JDK1.7 的 ConcurrentHashMap 底层实现是 Segment 数组+链表的形式，在数据量大时要遍历链表，效率低。而 JDK1.8 则使用了 Node 数组+链表/红黑树的形式。</p>
 <p>Node 是类似于一个 HashEntry 的结构。它的冲突再达到一定大小时会转化成红黑树，在冲突小于一定数量时又退回链表。</p>
-<p>ConcurrentHashMap的实现(<strong>和HashMap结构一样</strong>)</p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144943507"  title="https://blog.csdn.net/qq_73181349/article/details/144943507"
-     target="_blank" rel="noopener"
-    >https://blog.csdn.net/qq_73181349/article/details/144943507</a></p>
+<p>ConcurrentHashMap 的实现(<strong>和 HashMap 结构一样</strong>)</p>
+<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144943507"  target="_blank" rel="noopener"
+    >参考此文章</a></p>
 <p>具体实现结构如下：</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/cd013f8a9b5e415790e1c1e7de8cf960.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/concurrenthashmap/image-1.png"
+	width="663"
+	height="371"
+	srcset="/zh-cn/post/2025/02/concurrenthashmap/image-1_hu_12e3d33b6a8032e1.png 480w, /zh-cn/post/2025/02/concurrenthashmap/image-1_hu_e073a0b10923f24b.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
 ></p>
-<br />
 <blockquote>
-<p>JDK1.8 ConcurrentHashMap JDK1.8 ConcurrentHashMap主要通过volatile+CAS或者<br>
-synchronized来实现的线程安全的。put元素时先根据key的hashcode判断对应Node容器是否为空：</p>
+<p>JDK1.8 ConcurrentHashMap JDK1.8 ConcurrentHashMap 主要通过 volatile+CAS 或者<br>
+synchronized 来实现的线程安全的。put 元素时先根据 key 的 hashcode 判断对应 Node 容器是否为空：</p>
 <ol>
-<li>如果为空则使用volatile+CAS来初始化</li>
+<li>如果为空则使用 volatile+CAS 来初始化</li>
 <li>如果容器不为空，则根据存储的元素计算该位置是否为空。</li>
 <li>如果根据存储的元素计算<strong>结果为空</strong> ，则利用<strong>CAS</strong>设置该节点；</li>
 <li>如果根据存储的元素计算<strong>结果不为空</strong> ，则使用<strong>synchronized</strong> ，然后，遍历桶中的数据，并<strong>替换或新增节点</strong> 到桶中，<strong>最后再判断是否需要转为红黑树</strong>，这样就能保证并发访问时的线程安全了。</li>
 </ol>
-<p>也就是访问Node数组时用CAS+volatile，访问HashEntry时用CAS或<strong>synchronized。</strong></p></blockquote>
-<h2 id="为什么concurrenthashmap的key和value不能为null"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88concurrenthashmap%e7%9a%84key%e5%92%8cvalue%e4%b8%8d%e8%83%bd%e4%b8%banull" class="header-anchor"></a>为什么ConcurrentHashMap的key和value不能为null
+<p>也就是访问 Node 数组时用 CAS+volatile，访问 HashEntry 时用 CAS 或<strong>synchronized。</strong></p></blockquote>
+<h2 id="为什么-concurrenthashmap-的-key-和-value-不能为-null"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-concurrenthashmap-%e7%9a%84-key-%e5%92%8c-value-%e4%b8%8d%e8%83%bd%e4%b8%ba-null" class="header-anchor"></a>为什么 ConcurrentHashMap 的 key 和 value 不能为 null
 </h2><blockquote>
-<p><code>ConcurrentHashMap</code> 的 key 和 value 不能为 null 主要是为了<strong>避免二义性</strong>。<strong>null 是一个特殊的值，表示没有对象或没有引用</strong> 。如果用 null 作为键，就无法通过containsKey(key)区分这个键是否存在于 <code>ConcurrentHashMap</code> 中，还是根本没有这个键。同样，如果用 null 作为值，就无法区分这个值是否是真正存储在 <code>ConcurrentHashMap</code> 中的，还是因为找不到对应的键而返回的。</p>
+<p><code>ConcurrentHashMap</code> 的 key 和 value 不能为 null 主要是为了<strong>避免二义性</strong>。<strong>null 是一个特殊的值，表示没有对象或没有引用</strong> 。如果用 null 作为键，就无法通过 containsKey(key)区分这个键是否存在于 <code>ConcurrentHashMap</code> 中，还是根本没有这个键。同样，如果用 null 作为值，就无法区分这个值是否是真正存储在 <code>ConcurrentHashMap</code> 中的，还是因为找不到对应的键而返回的。</p>
 <p>与此形成对比的是，<code>HashMap</code> 可以存储 null 的 key 和 value，但 null 作为键只能有一个，null 作为值可以有多个。<strong>如果传入 null 作为参数，就会返回 hash 值为 0 的位置的值</strong> 。单线程环境下，不存在一个线程操作该 HashMap 时，其他的线程将该 <code>HashMap</code> 修改的情况，所以可以通过 <code>contains(key)</code>来做判断是否存在这个键值对，也就不存在二义性问题。</p></blockquote>
-<h2 id="concurrenthashmap如何保证复合操作的原子性"><a href="#concurrenthashmap%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e5%a4%8d%e5%90%88%e6%93%8d%e4%bd%9c%e7%9a%84%e5%8e%9f%e5%ad%90%e6%80%a7" class="header-anchor"></a>ConcurrentHashMap如何保证复合操作的原子性
+<h2 id="concurrenthashmap-如何保证复合操作的原子性"><a href="#concurrenthashmap-%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e5%a4%8d%e5%90%88%e6%93%8d%e4%bd%9c%e7%9a%84%e5%8e%9f%e5%ad%90%e6%80%a7" class="header-anchor"></a>ConcurrentHashMap 如何保证复合操作的原子性
 </h2><blockquote>
 <p>复合操作是指由多个基本操作(如<code>put</code>、<code>get</code>、<code>remove</code>、<code>containsKey</code>等)<strong>组成</strong> 的操作，例如先判断某个键是否存在<code>containsKey(key)</code>，然后根据结果进行插入或更新<code>put(key, value)</code>。这种操作在执行过程中可能会被其他线程打断，导致结果不符合预期。</p>
 <p><code>ConcurrentHashMap</code> 提供了一些原子性的复合操作，如 <code>putIfAbsent</code>、<code>compute</code>、<code>computeIfAbsent</code> 、<code>computeIfPresent</code>、<code>merge</code>等。这些方法都可以接受一个函数作为参数，根据给定的 key 和 value 来计算一个新的 value，并且将其更新到 map 中 。</p></blockquote>
-<br />
----
 
 </section>
 
@@ -557,6 +560,32 @@ synchronized来实现的线程安全的。put元素时先根据key的hashcode判
             
                 
 <article class="">
+    <a href="/zh-cn/post/2025/02/synchronized%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%87%8D%E5%85%A5%E5%92%8Clock%E5%8C%BA%E5%88%AB/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">synchronized如何实现可重入，和Lock区别</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">符号引用和直接引用、强引用、软引用、弱引用、虚引用</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2025/02/aqs---%E6%8A%BD%E8%B1%A1%E9%98%9F%E5%88%97%E5%90%8C%E6%AD%A5%E5%99%A8clh%E9%94%81%E9%98%9F%E5%88%97/">
 
         
@@ -576,32 +605,6 @@ synchronized来实现的线程安全的。put元素时先根据key的hashcode判
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">ArrayList、LinkedList、HashMap、HashTable、HashSet、TreeSet</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java内存模型（Memory Model）</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/02/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">字符串常量池</h2>
             
         </div>
     </a>

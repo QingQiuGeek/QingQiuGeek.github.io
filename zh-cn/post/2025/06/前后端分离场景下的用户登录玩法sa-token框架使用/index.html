@@ -11,7 +11,7 @@
 <meta property='og:description' content="本文对比了两种基于Redis的Token认证方案。方案一采用传统双拦截器设计，前端需自行检查Token有效期并加密存储于localStorage，后端通过LoginInterceptor和RefreshTokenInterceptor分别处理登录校验和Token刷新，存在前后端有效期同步问题。方案二使用Sa-Token框架，实现多端登录隔离和自动续期，通过单一SaTokenInterceptor即可完成认证，内置Account-Session和Token-Session机制支持多终端独立管理，简化了开发流程">
 <meta property='og:url' content='/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2025-06-29T17:48:00&#43;00:00'/><meta property='article:modified_time' content='2025-06-29T17:48:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2025-06-29T17:48:00&#43;00:00'/><meta property='article:modified_time' content='2025-06-29T17:48:00&#43;00:00'/>
 <meta name="twitter:title" content="前后端分离场景下的用户登录玩法&Sa-token框架使用">
 <meta name="twitter:description" content="本文对比了两种基于Redis的Token认证方案。方案一采用传统双拦截器设计，前端需自行检查Token有效期并加密存储于localStorage，后端通过LoginInterceptor和RefreshTokenInterceptor分别处理登录校验和Token刷新，存在前后端有效期同步问题。方案二使用Sa-Token框架，实现多端登录隔离和自动续期，通过单一SaTokenInterceptor即可完成认证，内置Account-Session和Token-Session机制支持多终端独立管理，简化了开发流程">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -338,23 +338,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <ol>
     <li><a href="#方案一">方案一</a>
       <ol>
-        <li><a href="#后端"><strong>后端</strong></a></li>
-        <li><a href="#前端"><strong>前端</strong></a></li>
+        <li><a href="#后端">后端</a></li>
+        <li><a href="#前端">前端</a></li>
       </ol>
     </li>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/6ebcc8c7213a4ad585aa9f52c1316459.png" alt=""></a></li>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/00d01e5826a0442f8bb5074eee7f0bf3.png" alt=""></a></li>
     <li><a href="#方案二">方案二</a>
       <ol>
-        <li><a href="#sa-token框架">Sa-token框架</a></li>
-        <li><a href="#sa-token设置有效期">sa-token设置有效期</a></li>
-        <li><a href="#sa-token自动续期">sa-token自动续期</a></li>
-        <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/4357978214414ecc8c18c00d2899fc53.png" alt=""></a></li>
+        <li><a href="#sa-token-框架">Sa-token 框架</a></li>
+        <li><a href="#sa-token-设置有效期">sa-token 设置有效期</a></li>
+        <li><a href="#sa-token-自动续期">sa-token 自动续期</a></li>
         <li><a href="#后端-1">后端</a></li>
         <li><a href="#前端-1">前端</a></li>
       </ol>
     </li>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/4ef40d563baa497f8d5d2b4e927b6e95.png" alt=""></a></li>
   </ol>
 </nav>
         </div>
@@ -418,7 +414,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 8 分钟
+                阅读时长: 7 分钟
             </time>
         </div>
         
@@ -456,11 +452,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <blockquote>
-<p><strong>两种方案的token、用户登录信息都存储在redis中！！</strong></p></blockquote>
+<p><strong>两种方案的 token、用户登录信息都存储在 redis 中！！</strong></p></blockquote>
 <h2 id="方案一"><a href="#%e6%96%b9%e6%a1%88%e4%b8%80" class="header-anchor"></a>方案一
 </h2><blockquote>
-<p>该方案是前端把token和token有效期一起加密存储到浏览器的localStorage中，每次请求时调用前端的getTokenIsExpiry()获取token并检查token是否过期，过期则remove并跳转登录页，这样前端有个问题就是前端也要知道token的有效期，需要和后端的token有效期保持一致，而后端则提供两个拦截器，分别用来刷新token、判断是否是登录用户，这个参考了黑马外卖。</p></blockquote>
-<h3 id="后端"><a href="#%e5%90%8e%e7%ab%af" class="header-anchor"></a><strong>后端</strong>
+<p>该方案是前端把 token 和 token 有效期一起加密存储到浏览器的 localStorage 中，每次请求时调用前端的 getTokenIsExpiry()获取 token 并检查 token 是否过期，过期则 remove 并跳转登录页，这样前端有个问题就是前端也要知道 token 的有效期，需要和后端的 token 有效期保持一致，而后端则提供两个拦截器，分别用来刷新 token、判断是否是登录用户，这个参考了黑马外卖。</p></blockquote>
+<h3 id="后端"><a href="#%e5%90%8e%e7%ab%af" class="header-anchor"></a>后端
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
@@ -670,7 +666,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c1">//未登录，直接放行，由登录拦截器拦截</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">//从redis获取token</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="n">tokenKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Common</span><span class="p">.</span><span class="na">LOGIN_TOKEN_KEY</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">token</span><span class="p">;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Object</span><span class="p">,</span><span class="w"> </span><span class="n">Object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stringRedisTemplate</span><span class="p">.</span><span class="na">opsForHash</span><span class="p">().</span><span class="na">entries</span><span class="p">(</span><span class="n">tokenKey</span><span class="p">);</span><span class="w">
@@ -747,7 +743,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="前端"><a href="#%e5%89%8d%e7%ab%af" class="header-anchor"></a><strong>前端</strong>
+</div><h3 id="前端"><a href="#%e5%89%8d%e7%ab%af" class="header-anchor"></a>前端
 </h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -848,41 +844,53 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/6ebcc8c7213a4ad585aa9f52c1316459.png"
-	
-	
-	
+</div><p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image.png"
+	width="1084"
+	height="227"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image_hu_33cc899a5e0f0459.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image_hu_7b70df8bd9ffa36f.png 1024w"
 	loading="lazy"
 	
 	
->
-</h2><h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/00d01e5826a0442f8bb5074eee7f0bf3.png"
+		class="gallery-image" 
+		data-flex-grow="477"
+		data-flex-basis="1146px"
 	
-	
-	
+></p>
+<p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-1.png"
+	width="2872"
+	height="404"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-1_hu_113f4357a823d672.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-1_hu_e30b68f3e71ab0c6.png 1024w"
 	loading="lazy"
 	
 	
->
-</h2><h2 id="方案二"><a href="#%e6%96%b9%e6%a1%88%e4%ba%8c" class="header-anchor"></a>方案二
+		class="gallery-image" 
+		data-flex-grow="710"
+		data-flex-basis="1706px"
+	
+></p>
+<h2 id="方案二"><a href="#%e6%96%b9%e6%a1%88%e4%ba%8c" class="header-anchor"></a>方案二
 </h2><blockquote>
-<p>后端使用sa-token框架<a class="link" href="https://sa-token.cc/doc.html#/"  title="Sa-Token"
+<p>后端使用 sa-token 框架<a class="link" href="https://sa-token.cc/doc.html#/"  title="Sa-Token"
      target="_blank" rel="noopener"
-    >Sa-Token</a>实现用户登录注销、鉴权等操作，可以方便的集成redis</p></blockquote>
-<h3 id="sa-token框架"><a href="#sa-token%e6%a1%86%e6%9e%b6" class="header-anchor"></a>Sa-token框架
+    >Sa-Token</a>实现用户登录注销、鉴权等操作，可以方便的集成 redis</p></blockquote>
+<h3 id="sa-token-框架"><a href="#sa-token-%e6%a1%86%e6%9e%b6" class="header-anchor"></a>Sa-token 框架
 </h3><blockquote>
-<p>如图是3343@qq.com账号连续登录三次，redis中生成的3个token及一个account-session，此时仅作登陆操作</p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/1bd4e3a49f924d56a3967f112b48d77e.png"
-	
-	
-	
+<p>如图是3343@qq.com账号连续登录三次，redis 中生成的 3 个 token 及一个 account-session，此时仅作登陆操作</p></blockquote>
+<p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-2.png"
+	width="1888"
+	height="487"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-2_hu_ef778e6bab94ebc5.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-2_hu_de6d2d44d02bc396.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="387"
+		data-flex-basis="930px"
 	
 ></p>
 <blockquote>
 <p><strong>&ldquo;authorization:login:session:3343@qq.com&quot;内容如下：</strong></p>
-<p>可以看到&quot;terminalList&quot;中记录了3次登录产生的详细的token信息</p></blockquote>
+<p>可以看到&quot;terminalList&quot;中记录了 3 次登录产生的详细的 token 信息</p></blockquote>
 <pre><code>{
     &quot;@class&quot;: &quot;cn.dev33.satoken.session.SaSession&quot;,
     &quot;id&quot;: &quot;authorization:login:session:3343@qq.com&quot;,
@@ -931,21 +939,28 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </code></pre>
 <blockquote>
 <p><strong>&ldquo;authorization:login:token:4a740c99-071c-4512-af02-a9519e058b4d&quot;内容如下：</strong></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/4707407a96bc4bf9aa6462c6934080dc.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-3.png"
+	width="1433"
+	height="145"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-3_hu_661e866d4c6308c4.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-3_hu_1bb057ddabd2426c.png 1024w"
 	loading="lazy"
 	
 	
->
-<strong>然后调用StpUtil.getTokenSession()，此时就会生成一个token-session</strong></p></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/2dbc606142394218ac3ec320c5884b4a.png"
+		class="gallery-image" 
+		data-flex-grow="988"
+		data-flex-basis="2371px"
 	
-	
-	
+> &gt; <strong>然后调用 StpUtil.getTokenSession()，此时就会生成一个 token-session</strong></p></blockquote>
+<p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-4.png"
+	width="2225"
+	height="396"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-4_hu_a6fd80a91ad48a1e.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-4_hu_e5a16fb5127a47cf.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="561"
+		data-flex-basis="1348px"
 	
 ></p>
 <pre><code>{
@@ -968,38 +983,50 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     ]
 }
 </code></pre>
-<p>发现token-session和account-session结构相同，因为它们都出自同一个SaSession类</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/15e43125a19a4c039c4d1b5fbc8cfc74.png"
-	
-	
-	
+<p>发现 token-session 和 account-session 结构相同，因为它们都出自同一个 SaSession 类
+<img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-5.png"
+	width="1367"
+	height="700"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-5_hu_fc896b281620e53b.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-5_hu_30fede985fc7cccb.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
 	
 ></p>
 <blockquote>
-<p>可知在Sa-Token框架中，session分别三种，我这里只关注account和token的session，前面提到在使用同一个账号连续登陆3次时只生成了account-session，其中记录了三次的登录的token，那么这就可以实现了<strong>同一账号多端登录</strong> ，每个端的<strong>token隔离</strong>，比如同时在PC和IOS端登录，如果token不隔离（token共享），当在其中一端注销登录时，另一端也会被迫注销登录，显然不合常理，而如果实现的token隔离，每个端都有不同的token，那么这就不会出现另一端被迫注销的情况。所以说account-session记录了同一账号多端登录的token信息，而token-session则记录了该账号在某一端的token信息，更为详细。</p></blockquote>
-<h3 id="sa-token设置有效期"><a href="#sa-token%e8%ae%be%e7%bd%ae%e6%9c%89%e6%95%88%e6%9c%9f" class="header-anchor"></a>sa-token设置有效期
-</h3><p>在yml配置timeout，单位是s，同一账号先后多端登录，token过期后先删除token-session，待该账号下所有token全部过期后才删除account-session。</p>
-<h3 id="sa-token自动续期"><a href="#sa-token%e8%87%aa%e5%8a%a8%e7%bb%ad%e6%9c%9f" class="header-anchor"></a>sa-token自动续期
-</h3><p>SaTokenConfig.java，在yml配置autoRenew即可开启自动续期，每次要续期时直接或间接调用getLoginId()即可。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/b76ce6336c0f4d24af319f916d5c67a7.png"
-	
-	
-	
+<p>可知在 Sa-Token 框架中，session 分别三种，我这里只关注 account 和 token 的 session，前面提到在使用同一个账号连续登陆 3 次时只生成了 account-session，其中记录了三次的登录的 token，那么这就可以实现了<strong>同一账号多端登录</strong> ，每个端的<strong>token 隔离</strong>，比如同时在 PC 和 IOS 端登录，如果 token 不隔离（token 共享），当在其中一端注销登录时，另一端也会被迫注销登录，显然不合常理，而如果实现的 token 隔离，每个端都有不同的 token，那么这就不会出现另一端被迫注销的情况。所以说 account-session 记录了同一账号多端登录的 token 信息，而 token-session 则记录了该账号在某一端的 token 信息，更为详细。</p></blockquote>
+<h3 id="sa-token-设置有效期"><a href="#sa-token-%e8%ae%be%e7%bd%ae%e6%9c%89%e6%95%88%e6%9c%9f" class="header-anchor"></a>sa-token 设置有效期
+</h3><p>在 yml 配置 timeout，单位是 s，同一账号先后多端登录，token 过期后先删除 token-session，待该账号下所有 token 全部过期后才删除 account-session。</p>
+<h3 id="sa-token-自动续期"><a href="#sa-token-%e8%87%aa%e5%8a%a8%e7%bb%ad%e6%9c%9f" class="header-anchor"></a>sa-token 自动续期
+</h3><p>SaTokenConfig.java，在 yml 配置 autoRenew 即可开启自动续期，每次要续期时直接或间接调用 getLoginId()即可。
+<img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-6.png"
+	width="1352"
+	height="227"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-6_hu_8accca2029e6989.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-6_hu_b79a683443df28ea.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="595"
+		data-flex-basis="1429px"
 	
 ></p>
-<h3 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/4357978214414ecc8c18c00d2899fc53.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-7.png"
+	width="765"
+	height="458"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-7_hu_9022536e60276eb8.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-7_hu_db2654b6c29cc28e.png 1024w"
 	loading="lazy"
 	
 	
->
-</h3><h3 id="后端-1"><a href="#%e5%90%8e%e7%ab%af-1" class="header-anchor"></a>后端
+		class="gallery-image" 
+		data-flex-grow="167"
+		data-flex-basis="400px"
+	
+></p>
+<h3 id="后端-1"><a href="#%e5%90%8e%e7%ab%af-1" class="header-anchor"></a>后端
 </h3><p>仅需一个拦截器即可，不再需要方案一的两个拦截器。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1347,23 +1374,31 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="前端-1"><a href="#%e5%89%8d%e7%ab%af-1" class="header-anchor"></a>前端
-</h3><p><img src="https://i-blog.csdnimg.cn/direct/bf085561ff1f46f090db464bdd67f674.png"
-	
-	
-	
+</h3><p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-8.png"
+	width="1972"
+	height="389"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-8_hu_ff43b9ef2e45345a.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-8_hu_477a518dd56eab81.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="506"
+		data-flex-basis="1216px"
 	
 ></p>
-<h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/4ef40d563baa497f8d5d2b4e927b6e95.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-9.png"
+	width="2865"
+	height="385"
+	srcset="/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-9_hu_571380fcdf548340.png 480w, /zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/image-9_hu_ebd8e994524c4e18.png 1024w"
 	loading="lazy"
 	
 	
->
-</h2>
+		class="gallery-image" 
+		data-flex-grow="744"
+		data-flex-basis="1785px"
+	
+></p>
+
 </section>
 
 

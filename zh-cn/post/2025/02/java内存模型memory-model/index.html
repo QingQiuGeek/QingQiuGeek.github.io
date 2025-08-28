@@ -11,7 +11,7 @@
 <meta property='og:description' content="java内存模型、指令重排、JMM、happens-before">
 <meta property='og:url' content='/zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='java' /><meta property='article:tag' content='开发语言' /><meta property='article:published_time' content='2025-02-10T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-10T12:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2025-02-10T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-10T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Java内存模型（Memory Model）">
 <meta name="twitter:description" content="java内存模型、指令重排、JMM、happens-before">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,12 +336,16 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#总结">总结</a>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#cpu-缓存">CPU 缓存</a></li>
+    <li><a href="#指令重排">指令重排</a></li>
+    <li><a href="#jmm">JMM</a>
       <ol>
-        <li><a href="#31-jmm如何抽象线程和主内存的关系">3.1 JMM如何抽象线程和主内存的关系</a></li>
+        <li><a href="#jmm-如何抽象线程和主内存的关系">JMM 如何抽象线程和主内存的关系</a></li>
       </ol>
     </li>
-    <li><a href="#32-happens-before-原则">3.2 happens-before 原则</a></li>
+    <li><a href="#happens-before-原则">happens-before 原则</a></li>
+    <li><a href="#并发编程的三个重要特性">并发编程的三个重要特性</a></li>
   </ol>
 </nav>
         </div>
@@ -405,7 +409,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 6 分钟
+                阅读时长: 5 分钟
             </time>
         </div>
         
@@ -429,11 +433,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/java/">Java</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/">开发语言</a> 
-            
-            
         </div>
         
     </footer>
@@ -447,31 +446,15 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145166085"  title="synchronized锁升级-CSDN博客"
-     target="_blank" rel="noopener"
-    >synchronized锁升级-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145461986"  title="字符串常量池-CSDN博客"
-     target="_blank" rel="noopener"
-    >字符串常量池-CSDN博客</a></p>
-<p><a class="link" href="https://segmentfault.com/a/1190000045398760"  title="https://segmentfault.com/a/1190000045398760"
-     target="_blank" rel="noopener"
-    >https://segmentfault.com/a/1190000045398760</a></p>
-<h2 id="总结"><a href="#%e6%80%bb%e7%bb%93" class="header-anchor"></a>总结
-</h2><p>JMM是jvm定义的一套规范，用来规范多线程并发时对共享资源的访问规则，如何保证多线程的可见性、原子性、有序性。JMM把内存分为线程的工作内存和主内存。</p></blockquote>
-<ol>
-<li>CPU缓存</li>
-</ol>
-<hr>
-<blockquote>
-<p>我们知道CPU是有缓存的，CPU缓存是为了解决主内存和CPU处理速度不对等的问题。其工作方式是先复制一份数据到 CPU 缓存中，当 CPU 需要用到的时候就可以直接从 CPU 缓存中读取数据，当运算完成后，再将运算得到的数据写回主内存中。但是，这样存在 <strong>内存缓存不一致性的问题</strong> ！比如执行一个 i++ 操作的话，如果两个线程同时执行的话，假设两个线程从 CPU 缓存中读取的 i=1，两个线程做了 i++ 运算完之后再写回 Main Memory 之后 i=2，而正确结果应该是 i=3。</p>
-<p><strong>那么CPU 为了解决内存缓存不一致性问题就需要定制协议规范，即内存模型，无论是 Windows 系统，还是 Linux 系统，它们都有特定的内存模型。</strong></p></blockquote>
-<ol start="2">
-<li>指令重排</li>
-</ol>
-<hr>
-<blockquote>
+    <h2 id="总结"><a href="#%e6%80%bb%e7%bb%93" class="header-anchor"></a>总结
+</h2><blockquote>
+<p>JMM 是 jvm 定义的一套规范，用来规范多线程并发时对共享资源的访问规则，如何保证多线程的可见性、原子性、有序性。JMM 把内存分为线程的工作内存和主内存。</p></blockquote>
+<h2 id="cpu-缓存"><a href="#cpu-%e7%bc%93%e5%ad%98" class="header-anchor"></a>CPU 缓存
+</h2><blockquote>
+<p>我们知道 CPU 是有缓存的，CPU 缓存是为了解决主内存和 CPU 处理速度不对等的问题。其工作方式是先复制一份数据到 CPU 缓存中，当 CPU 需要用到的时候就可以直接从 CPU 缓存中读取数据，当运算完成后，再将运算得到的数据写回主内存中。但是，这样存在 <strong>内存缓存不一致性的问题</strong> ！比如执行一个 i++ 操作的话，如果两个线程同时执行的话，假设两个线程从 CPU 缓存中读取的 i=1，两个线程做了 i++ 运算完之后再写回 Main Memory 之后 i=2，而正确结果应该是 i=3。</p>
+<p><strong>那么 CPU 为了解决内存缓存不一致性问题就需要定制协议规范，即内存模型，无论是 Windows 系统，还是 Linux 系统，它们都有特定的内存模型。</strong></p></blockquote>
+<h2 id="指令重排"><a href="#%e6%8c%87%e4%bb%a4%e9%87%8d%e6%8e%92" class="header-anchor"></a>指令重排
+</h2><blockquote>
 <p>为了提升执行速度/性能，计算机在执行程序代码的时候，会对指令进行重排序，即执行代码的顺序和实际代码编写顺序不一定相同。常见的指令重排序有下面 2 种情况：</p>
 <ul>
 <li><strong>编译器优化重排</strong>：编译器（包括 JVM、JIT 编译器等）在不改变单线程程序语义的前提下，重新安排语句的执行顺序。</li>
@@ -479,7 +462,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </ul>
 <p>例：a = b + c; d = e - f ; 先加载 b、c（<strong>注意，有可能先加载 b，也有可能先加载 c</strong> ），但是在执行 <code>add(b,c)</code> 的时候，需要等待 b、c 装载结束才能继续执行，也就是需要增加停顿，那么后面的指令（加载 e 和 f）也会有停顿，这就降低了计算机的执行效率。为了减少停顿，我们可以在加载完 b 和 c 后把 e 和 f 也加载了，然后再去执行 <code>add(b,c)</code>，这样做对程序（串行）是没有影响的，但却减少了停顿。提高了效率！</p>
 <p><strong>然而指令重排序可以保证串行语义一致，但无法保证多线程间的语义也一致 ，在多线程下指令重排序可能会导致一些问题。</strong></p>
-<br />
 <p>对于编译器优化重排和处理器的指令重排序（指令并行重排和内存系统重排都属于是处理器级别的指令重排序），处理该问题的方式不一样。</p>
 <ul>
 <li>
@@ -489,54 +471,52 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p>对于处理器，通过插入内存屏障或内存栅栏的方式来禁止特定类型的处理器重排序。</p>
 </li>
 </ul></blockquote>
-<ol start="3">
-<li>JMM</li>
-</ol>
-<hr>
-<blockquote>
+<h2 id="jmm"><a href="#jmm" class="header-anchor"></a>JMM
+</h2><blockquote>
 <p>一般来说，编程语言也可以直接复用操作系统层面的内存模型。不过，不同的操作系统内存模型不同。如果直接复用操作系统层面的内存模型，就可能会导致同样一套代码换了一个操作系统就无法执行了。Java 语言是跨平台的，它需要自己提供一套内存模型以屏蔽系统差异。</p>
-<p>所以Java 线程之间的通信由 Java 内存模型控制，同时<strong>保证了java的跨平台，定义了并发编程的规范，抽象了线程和主内存的关系，避免出现像CPU指令重排导致的多线程问题。</strong></p>
-<p><strong>JMM核心概念：</strong></p>
-<ol>
-<li>**内存分区：**JMM 将内存分为 <strong>主内存</strong> 和 <strong>线程工作内存，</strong> <strong>主内存就是</strong> 所有线程共享的内存区域，包括堆内存和方法区。<strong>线程工作内存就是</strong>每个线程独有的内存区域，包括局部变量、操作栈、寄存器等。</li>
-<li>**可见性：**一个线程对共享变量的修改，其他线程能够立即看到。</li>
-<li>**原子性：**一个操作要么全部完成，要么全部不完成，不会出现中间状态。</li>
-<li><strong>顺序性</strong>：程序中代码的执行顺序与代码的书写顺序一致。</li>
-</ol></blockquote>
-<h3 id="31-jmm如何抽象线程和主内存的关系"><a href="#31-jmm%e5%a6%82%e4%bd%95%e6%8a%bd%e8%b1%a1%e7%ba%bf%e7%a8%8b%e5%92%8c%e4%b8%bb%e5%86%85%e5%ad%98%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-anchor"></a>3.1 JMM如何抽象线程和主内存的关系
+<p>所以 Java 线程之间的通信由 Java 内存模型控制，同时<strong>保证了 java 的跨平台，定义了并发编程的规范，抽象了线程和主内存的关系，避免出现像 CPU 指令重排导致的多线程问题。</strong></p>
+<p><strong>JMM 核心概念：</strong></p>
+<ul>
+<li>内存分区：JMM 将内存分为 <strong>主内存</strong> 和 <strong>线程工作内存，</strong> <strong>主内存就是</strong> 所有线程共享的内存区域，包括堆内存和方法区。<strong>线程工作内存就是</strong>每个线程独有的内存区域，包括局部变量、操作栈、寄存器等。</li>
+<li>可见性：一个线程对共享变量的修改，其他线程能够立即看到。</li>
+<li>原子性：一个操作要么全部完成，要么全部不完成，不会出现中间状态。</li>
+<li>顺序性：程序中代码的执行顺序与代码的书写顺序一致。</li>
+</ul></blockquote>
+<h3 id="jmm-如何抽象线程和主内存的关系"><a href="#jmm-%e5%a6%82%e4%bd%95%e6%8a%bd%e8%b1%a1%e7%ba%bf%e7%a8%8b%e5%92%8c%e4%b8%bb%e5%86%85%e5%ad%98%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-anchor"></a>JMM 如何抽象线程和主内存的关系
 </h3><blockquote>
 <p><strong>Java 内存模型（JMM）</strong> 抽象了线程和主内存之间的关系，就比如说线程之间的共享变量必须存储在主内存中。</p>
-<p>在 JDK 2之前，Java 的内存模型实现是从 <strong>主存</strong> （即共享内存）读取变量，而在当前的 Java 内存模型下，线程可以把变量保存 <strong>本地内存</strong> （比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成数据的不一致。
+<p>在 JDK 2 之前，Java 的内存模型实现是从 <strong>主存</strong> （即共享内存）读取变量，而在当前的 Java 内存模型下，线程可以把变量保存 <strong>本地内存</strong> （比如机器的寄存器）中，而不是直接在主存中进行读写。这就可能造成一个线程在主存中修改了一个变量的值，而另外一个线程还继续使用它在寄存器中的变量值的拷贝，造成数据的不一致。
 <strong>什么是主内存、本地内存</strong></p>
 <ul>
 <li><strong>主内存</strong>：所有线程创建的实例对象都存放在主内存中，不管该实例对象是成员变量，还是局部变量，类信息、常量、静态变量都是放在主内存中。为了获取更好的运行速度，虚拟机及硬件系统可能会让工作内存优先存储于寄存器和高速缓存中。</li>
 <li><strong>本地内存</strong> ：每个线程都有一个私有的本地内存，本地内存存储了该线程以读 / 写共享变量的副本。每个线程只能操作自己本地内存中的变量，无法直接访问其他线程的本地内存。<strong>如果线程间需要通信，必须通过主内存来进行。本地内存是 JMM 抽象出来的一个概念，并不真实存在</strong>，它涵盖了缓存、写缓冲区、寄存器以及其他的硬件和编译器优化。</li>
 </ul></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/4a15c94a137644528f1d51d40938fd55.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/image.png"
+	width="551"
+	height="541"
+	srcset="/zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/image_hu_6372b57e18a48520.png 480w, /zh-cn/post/2025/02/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8Bmemory-model/image_hu_c697fd57219aabbf.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="101"
+		data-flex-basis="244px"
 	
 ></p>
 <blockquote>
 <p>从上图来看，线程 1 与线程 2 之间如果要进行通信的话，必须要经历下面 2 个步骤：</p>
-<ol>
+<ul>
 <li>线程 1 把本地内存中修改过的共享变量副本的值同步到主内存中去。</li>
 <li>线程 2 到主存中读取对应的共享变量的值。</li>
-</ol>
+</ul>
 <p>也就是说，JMM 为共享变量提供了可见性的保障。不过多线程操作主内存的共享变量也是有线程安全问题的</p></blockquote>
-<h2 id="32-happens-before-原则"><a href="#32-happens-before-%e5%8e%9f%e5%88%99" class="header-anchor"></a>3.2 happens-before 原则
+<h2 id="happens-before-原则"><a href="#happens-before-%e5%8e%9f%e5%88%99" class="header-anchor"></a>happens-before 原则
 </h2><blockquote>
-<p>前面提到了指令重排可能会引发多线程的执行问题，为此JMM 抽象了 happens-before 原则来解决这个指令重排序问题。</p>
+<p>前面提到了指令重排可能会引发多线程的执行问题，为此 JMM 抽象了 happens-before 原则来解决这个指令重排序问题。</p>
 <p><strong>happens-before 原则表达的意义其实并不是一个操作发生在另外一个操作的前面，它更想表达的意义是前一个操作的结果对于后一个操作是可见的，无论这两个操作是否在同一个线程里。</strong></p>
 <p>举个例子：操作 1 happens-before 操作 2，即使操作 1 和操作 2 不在同一个线程内，JMM 也会保证操作 1 的结果对操作 2 是可见的。</p></blockquote>
-<ol start="4">
-<li>并发编程的三个重要特性</li>
-</ol>
-<hr>
-<p><strong>原子性</strong></p>
+<h2 id="并发编程的三个重要特性"><a href="#%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b%e7%9a%84%e4%b8%89%e4%b8%aa%e9%87%8d%e8%a6%81%e7%89%b9%e6%80%a7" class="header-anchor"></a>并发编程的三个重要特性
+</h2><p><strong>原子性</strong></p>
 <blockquote>
 <p>一次操作或者多次操作，要么所有的操作全部都得到执行并且不会受到任何因素的干扰而中断，要么都不执行。</p>
 <p>在 Java 中，可以借助<code>synchronized</code>、各种 <code>Lock</code> 以及各种原子类实现原子性。</p>
@@ -551,8 +531,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <p>由于指令重排序问题，代码的执行顺序未必就是编写代码时候的顺序。</p>
 <p>我们上面讲重排序的时候也提到过，<strong>指令重排序可以保证串行语义一致，但是没有义务保证多线程间的语义也一致</strong> ，所以在多线程下，指令重排序可能会导致一些问题。</p>
 <p>在 Java 中，<code>volatile</code> 关键字可以禁止指令进行重排序优化</p></blockquote>
-<br />
----
 
 </section>
 
@@ -613,32 +591,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/01/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%83%BD%E6%A0%B9%E6%8D%AE%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7%E6%9D%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">如何设计一个能根据任务优先级来执行的线程池</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/java-io%E6%A8%A1%E5%9E%8B----bionioaioio%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java io模型----BIO、NIO、AIO、IO多路复用、零拷贝</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
     <a href="/zh-cn/post/2025/02/jvm%E5%9B%BE%E6%96%87%E5%85%A5%E9%97%A8/">
 
         
@@ -658,6 +610,32 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">练习两年半，我的全栈博客出生了</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8docker%E9%83%A8%E7%BD%B2%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE-%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90-oss/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">【排坑】云服务器docker部署前后端分离项目&#43;域名解析&#43;OSS</h2>
             
         </div>
     </a>

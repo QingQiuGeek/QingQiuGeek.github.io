@@ -13,11 +13,10 @@
         <pubDate>Sat, 25 Jan 2025 16:12:01 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/</guid>
-        <description>&lt;br /&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://help.aliyun.com/zh/oss/getting-started/oss-sdk-quick-start?spm=a2c4g.11186623.help-menu-31815.d_1_5.3f7054b5xQPHdT&amp;amp;scm=20140722.H_2571394._.OR_help-T_cn~zh-V_1#887997b287kuz&#34;  title=&#34;OSS SDK快速入门_对象存储(OSS)-阿里云帮助中心&#34;
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://help.aliyun.com/zh/oss/getting-started/oss-sdk-quick-start?spm=a2c4g.11186623.help-menu-31815.d_1_5.3f7054b5xQPHdT&amp;amp;scm=20140722.H_2571394._.OR_help-T_cn~zh-V_1#887997b287kuz&#34;  title=&#34;OSS SDK快速入门_对象存储(OSS)-阿里云帮助中心&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;OSS SDK快速入门_对象存储(OSS)-阿里云帮助中心&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;阿里官方的SDK使用方法还得配置环境变量access Key、access Secret ，我没有配置，仅把access Key和access Secret写到了yml文件读取，结果上传图片时还是出现下面的问题。&lt;/p&gt;
+    &gt;OSS SDK 快速入门_对象存储(OSS)-阿里云帮助中心&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;阿里官方的 SDK 使用方法还得配置环境变量 access Key、access Secret ，我没有配置，仅把 access Key 和 access Secret 写到了 yml 文件读取，结果上传图片时还是出现下面的问题。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[ ERROR ] [ com.serein.exception.GlobalExceptionHandler : 31 ] - RuntimeException
 com.aliyun.oss.common.auth.InvalidCredentialsException: Access key id should not be null or empty.
 	at com.aliyun.oss.common.auth.DefaultCredentialProvider.checkCredentials(DefaultCredentialProvider.java:63)
@@ -26,7 +25,7 @@ com.aliyun.oss.common.auth.InvalidCredentialsException: Access key id should not
 	at com.aliyun.oss.OSSClientBuilder.getDefaultCredentialProvider(OSSClientBuilder.java:83)
 	at com.aliyun.oss.OSSClientBuilder.build(OSSClientBuilder.java:38
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;解决方法是把BUCKET_NAME、END_POINT 、ACCESS_KEY_ID 、ACCESS_KEY_SECRET直接写死到代码中，如下：&lt;/p&gt;
+&lt;p&gt;解决方法是把 BUCKET_NAME、END_POINT 、ACCESS_KEY_ID 、ACCESS_KEY_SECRET 直接写死到代码中，如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -71,14 +70,14 @@ com.aliyun.oss.common.auth.InvalidCredentialsException: Access key id should not
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;然后再次上传图片就出现了下面的问题，因为前面填的是OSS内网oss-cn-beijing-internal.aliyuncs.com ，换成oss-cn-beijing.aliyuncs.com外网就ok了&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[ WARN  ] [ com.aliyun.oss : 70 ] - [Client]Unable to execute HTTP request: 
-Connect to xxxx.oss-cn-beijing-internal.aliyuncs.com:80 
+&lt;/div&gt;&lt;p&gt;然后再次上传图片就出现了下面的问题，因为前面填的是 OSS 内网 oss-cn-beijing-internal.aliyuncs.com ，换成 oss-cn-beijing.aliyuncs.com 外网就 ok 了&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[ WARN  ] [ com.aliyun.oss : 70 ] - [Client]Unable to execute HTTP request:
+Connect to xxxx.oss-cn-beijing-internal.aliyuncs.com:80
 failed: Connection timed out: connect
 [ErrorCode]: SocketException
 [RequestId]: Unknown
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然后图片成功上传到OSS了，但是外部并不能访问，如果拿着url在浏览器查看，会这样&lt;/p&gt;
+&lt;p&gt;然后图片成功上传到 OSS 了，但是外部并不能访问，如果拿着 url 在浏览器查看，会这样&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;lt;Error&amp;gt;
 &amp;lt;Code&amp;gt;AccessDenied&amp;lt;/Code&amp;gt;
 &amp;lt;Message&amp;gt;You have no right to access this object because of bucket acl.&amp;lt;/Message&amp;gt;
@@ -88,33 +87,45 @@ failed: Connection timed out: connect
 &amp;lt;RecommendDoc&amp;gt;https://api.aliyun.com/troubleshoot?q=0003-00000001&amp;lt;/RecommendDoc&amp;gt;
 &amp;lt;/Error&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;解决方法就是关闭公共访问，并且设置读写权限为公共读，这样编辑器就可以根据url显示出图片了&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/977c42fa0663494bb71313864e682bad.png&#34;
-	
-	
-	
+&lt;p&gt;解决方法就是关闭公共访问，并且设置读写权限为公共读，这样编辑器就可以根据 url 显示出图片了
+&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image.png&#34;
+	width=&#34;1934&#34;
+	height=&#34;969&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image_hu_2edeeee96c358d36.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image_hu_e9a0aaca70380e48.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/ee5c2457acee45e093edd9ba295a8ced.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;成功渲染出图片！&lt;/p&gt;
-&lt;h2 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/855784c0c1104ee1acf8eb6ed2f135bb.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;479px&#34;
 	
 &gt;
-&lt;/h2&gt;</description>
+&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image-1.png&#34;
+	width=&#34;1342&#34;
+	height=&#34;1029&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image-1_hu_e01227ed4599594.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image-1_hu_9a5d42142b57e272.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;130&#34;
+		data-flex-basis=&#34;313px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;成功渲染出图片！
+&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image-2.png&#34;
+	width=&#34;2666&#34;
+	height=&#34;1148&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image-2_hu_2a67f0ab363a4cc4.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/image-2_hu_292097222bfaab93.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;232&#34;
+		data-flex-basis=&#34;557px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>【已解决】redisCache注解失效，没写cacheConfig</title>
@@ -123,41 +134,80 @@ failed: Connection timed out: connect
         
         <guid>/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3rediscache%E6%B3%A8%E8%A7%A3%E5%A4%B1%E6%95%88%E6%B2%A1%E5%86%99cacheconfig/</guid>
         <description>&lt;h2 id=&#34;环境配置&#34;&gt;&lt;a href=&#34;#%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;环境配置
-&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;jdk11    springboot 2.6.13    
-
-&amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;spring-boot-starter-data-redis&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;3.2.0&amp;lt;/version&amp;gt;
-&amp;lt;/dependency&amp;gt;
-
-&amp;lt;dependency&amp;gt;
-      &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-      &amp;lt;artifactId&amp;gt;spring-boot-starter-cache&amp;lt;/artifactId&amp;gt;
-      &amp;lt;version&amp;gt;3.2.0&amp;lt;/version&amp;gt;
-&amp;lt;/dependency&amp;gt;
-
-  redis:
-    host: 192.168.2.129
-    port: 6379
-    username: default
-    password: &#39;linux02&#39;
-    database: 1
-#    默认使用lettuce
-    lettuce:
-      pool:
-#        最大连接数，最大空闲数，最小空闲数
-        max-active: 5
-        max-idle: 2
-        min-idle: 2
-  #    缓存10min，允许缓存null值防止缓存穿透
-  cache:
-    type: redis
-    redis:
-      time-to-live: 600
-      cache-null-values: true
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;代码&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e7%a0%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代码
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;jdk11、SpringBoot 2.6.13&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;nt&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&#34;nt&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;nt&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-data-redis&lt;span class=&#34;nt&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;nt&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;3.2.0&lt;span class=&#34;nt&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;nt&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&#34;nt&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;nt&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-cache&lt;span class=&#34;nt&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;nt&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;3.2.0&lt;span class=&#34;nt&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;host&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;192.168.2.129&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;port&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;6379&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;username&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;default&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;password&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;linux02&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;database&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#    默认使用lettuce&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;lettuce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;pool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#        最大连接数，最大空闲数，最小空闲数&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;max-active&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;max-idle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;min-idle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#    缓存10min，允许缓存null值防止缓存穿透&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;cache&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;time-to-live&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;600&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;cache-null-values&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;代码&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e7%a0%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代码
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -179,7 +229,7 @@ failed: Connection timed out: connect
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;解决&#34;&gt;&lt;a href=&#34;#%e8%a7%a3%e5%86%b3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;解决
-&lt;/h2&gt;&lt;p&gt;网上找了一些案例，有的不需要写cacheConfig，有些需要写，我之前就用过cacheable的注解，当时就是上面的配置，没写配置类也有效果，这次我最开始就没写，然后Cacheable注解就没效果了，最后写了个cacheConfig才解决。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;网上找了一些案例，有的不需要写 cacheConfig，有些需要写，我之前就用过 cacheable 的注解，当时就是上面的配置，没写配置类也有效果，这次我最开始就没写，然后 Cacheable 注解就没效果了，最后写了个 cacheConfig 才解决。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -208,7 +258,7 @@ failed: Connection timed out: connect
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;然后又发现yml设置的过期时间没有生效，存到redis的是永不过期，又在 cacheConfig配置了过期时间，600s&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;然后又发现 yml 设置的过期时间没有生效，存到 redis 的是永不过期，又在 cacheConfig 配置了过期时间，600s&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -250,8 +300,7 @@ failed: Connection timed out: connect
         <pubDate>Fri, 24 Jan 2025 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/01/mybatisplus-mapper%E5%B1%82%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E9%94%99%E8%AF%AF/</guid>
-        <description>&lt;br /&gt;
-&lt;blockquote&gt;
+        <description>&lt;blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -262,8 +311,7 @@ failed: Connection timed out: connect
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;updateEncrypt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mail&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Long&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;userId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter &amp;lsquo;mail&amp;rsquo; not found. Available parameters are &lt;/p&gt;
-\[arg1, arg0, param1, param2\]&lt;p&gt;。&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter &amp;lsquo;mail&amp;rsquo; not found. Available parameters are [arg1, arg0, param1, param2]。&lt;/p&gt;
 &lt;p&gt;MyBatis 没有找到 &lt;code&gt;mail&lt;/code&gt; 参数的映射，无法正确绑定参数。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;MyBatis 默认的行为是&lt;strong&gt;通过位置来传递参数&lt;/strong&gt; （例如 &lt;code&gt;arg0&lt;/code&gt;, &lt;code&gt;arg1&lt;/code&gt;）。如果使用了具名参数（如 &lt;code&gt;mail&lt;/code&gt; 和 &lt;code&gt;userId&lt;/code&gt;），需要确保方法参数名与注解中的名称一致。有如下两种解决方法：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -290,9 +338,7 @@ failed: Connection timed out: connect
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;updateEncrypt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;UserUpdateRequest&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;request&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;br /&gt;
----
-</description>
+&lt;/div&gt;</description>
         </item>
         <item>
         <title>【已解决】 [ org.apache.catalina.core.StandardService : 173 ] - Stopping service [Tomcat]</title>
@@ -303,51 +349,64 @@ failed: Connection timed out: connect
         <description>&lt;h2 id=&#34;问题&#34;&gt;&lt;a href=&#34;#%e9%97%ae%e9%a2%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;问题
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;环境：jdk11，springboot 2.6.13&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;本地打好的jar包传到云服务器上，用docker build打成镜像后，docker run运行不起来，用docker logs查看日志如下，最后一行stopping service &lt;/p&gt;
-\[Tomcat\]&lt;p&gt;，因为我run的时候还加上了restart=always参数，所以导致这个jar包一直失败又重启，cpu都干到100%🤣&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/5c8db4ecb5cb4c4da0af2c0d15ba153f.png&#34;
-	
-	
-	
+&lt;p&gt;本地打好的 jar 包传到云服务器上，用 docker build 打成镜像后，docker run 运行不起来，用 docker logs 查看日志如下，最后一行 stopping service [Tomcat]，因为我 run 的时候还加上了 restart=always 参数，所以导致这个 jar 包一直失败又重启，cpu 都干到 100%🤣&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image.png&#34;
+	width=&#34;2733&#34;
+	height=&#34;514&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image_hu_bf4136134c7d775a.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image_hu_431bf04ad1aee0da.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;531&#34;
+		data-flex-basis=&#34;1276px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;原因分析&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e5%9b%a0%e5%88%86%e6%9e%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原因分析
 &lt;/h2&gt;&lt;blockquote&gt;
-\[ org.apache.catalina.core.StandardService : 173 \]&lt;p&gt; - Stopping service &lt;/p&gt;
-\[Tomcat\]&lt;p&gt;当时就去网上查了一些解决方法，包括但不限于pom文件引入日志依赖、修改日志级别为debug以得到更多报错信息都没法解决，最后打算排除内嵌tomcat换成war包试试，偶然看到idea打jar包时输出的这样的警告（之前一直没注意过🤣🤣）：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/6deb87e6a5d443659f03cf8d220a2c8c.png&#34;
-	
-	
-	
+&lt;p&gt;[ org.apache.catalina.core.StandardService : 173 ] - Stopping service [Tomcat]&lt;/p&gt;
+&lt;p&gt;当时就去网上查了一些解决方法，包括但不限于 pom 文件引入日志依赖、修改日志级别为 debug 以得到更多报错信息都没法解决，最后打算排除内嵌 tomcat 换成 war 包试试，偶然看到 idea 打 jar 包时输出的这样的警告（之前一直没注意过 🤣🤣）：
+&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-1.png&#34;
+	width=&#34;2063&#34;
+	height=&#34;569&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-1_hu_18048f327e1ecab2.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-1_hu_9f547f41c5421607.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;362&#34;
+		data-flex-basis=&#34;870px&#34;
 	
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;br /&gt;
 &lt;blockquote&gt;
-&lt;p&gt;因为我有hotkey-client的jar包是自己打的然后在pom中引进来的，并且用了**&lt;code&gt;systemPath引入&lt;/code&gt;**，这样写在本地idea是可以运行起来，但是项目打成jar包就会stopping service。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/bebe19510c9640c6bd776f62624ba2b7.png&#34;
-	
-	
-	
+&lt;p&gt;因为我有 hotkey-client 的 jar 包是自己打的然后在 pom 中引进来的，并且用了**&lt;code&gt;systemPath引入&lt;/code&gt;**，这样写在本地 idea 是可以运行起来，但是项目打成 jar 包就会 stopping service。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-2.png&#34;
+	width=&#34;1835&#34;
+	height=&#34;409&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-2_hu_1491c2212e1b4a67.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-2_hu_9f47fea2dd364b9e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;448&#34;
+		data-flex-basis=&#34;1076px&#34;
 	
 &gt;
-解决方法也简单，上面的黄色警告已经说了&lt;strong&gt;依赖的 &lt;code&gt;systemPath&lt;/code&gt; 不应指向项目目录内的文件，那么就把hotkey-client jar&lt;/strong&gt; 包install到本地仓库，不用 &lt;strong&gt;&lt;code&gt;systemPath.，这样项目打出来的jar包就可以正常运行，效果如下：&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2c7bd8e0fb2c48c0b9351e5186ba6b83.png&#34;
-	
-	
-	
+解决方法也简单，上面的黄色警告已经说了&lt;strong&gt;依赖的 &lt;code&gt;systemPath&lt;/code&gt; 不应指向项目目录内的文件，那么就把 hotkey-client jar&lt;/strong&gt; 包 install 到本地仓库，不用 &lt;strong&gt;&lt;code&gt;systemPath.，这样项目打出来的jar包就可以正常运行，效果如下：&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-3.png&#34;
+	width=&#34;2582&#34;
+	height=&#34;1317&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-3_hu_ac1bb424d986704.png 480w, /zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/image-3_hu_cf41f5aab1536ceb.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;196&#34;
+		data-flex-basis=&#34;470px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;另外本地打好的jar包最好先在本地环境先跑一下，本地跑不起来云服务器大概率也不行&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;另外本地打好的 jar 包最好先在本地环境先跑一下，本地跑不起来云服务器大概率也不行&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
@@ -356,41 +415,53 @@ failed: Connection timed out: connect
         <pubDate>Wed, 22 Jan 2025 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/</guid>
-        <description>&lt;p&gt;今天项目打包的时候报这样的错误，jdk8，在idea项目中明明可以找到该文件路径和代码，但是打包打不进去，&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/a8fa3108865b46899702ecdbe451d66c.png&#34;
-	
-	
-	
+        <description>&lt;p&gt;今天项目打包的时候报这样的错误，jdk8，在 idea 项目中明明可以找到该文件路径和代码，但是打包打不进去，
+&lt;img src=&#34;/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image.png&#34;
+	width=&#34;817&#34;
+	height=&#34;240&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image_hu_8d8c7fd0498ac4d0.png 480w, /zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image_hu_dc8ad51c5da0b02c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;340&#34;
+		data-flex-basis=&#34;817px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;参考了一些博客文章，&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.jianshu.com/p/5ce832ede830&#34;  title=&#34;【Maven问题】 错误: 程序包xxx 不存在 - 简书&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;【Maven问题】 错误: 程序包xxx 不存在 - 简书&lt;/a&gt;&lt;/p&gt;
+    &gt;【Maven 问题】 错误: 程序包 xxx 不存在 - 简书&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/wlopper/article/details/119676442&#34;  title=&#34;Maven错误：程序包java.nashorn.XXX不存在_程序包jdk.nashorn.api.scripting不存在-CSDN博客&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Maven错误：程序包java.nashorn.XXX不存在_程序包jdk.nashorn.api.scripting不存在-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;有一定借鉴意义但是没解决问题，idea的classpath中已经包含了nashorn，且可以运行项目，但是maven就是打不成jar包，试来试去都没怀疑maven问题🤓，没想到还真是maven的问题。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/2adcb1ecdfdc4aa1a3579a3989b2f754.png&#34;
-	
-	
-	
+    &gt;Maven 错误：程序包 java.nashorn.XXX 不存在_程序包 jdk.nashorn.api.scripting 不存在-CSDN 博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;有一定借鉴意义但是没解决问题，idea 的 classpath 中已经包含了 nashorn，且可以运行项目，但是 maven 就是打不成 jar 包，试来试去都没怀疑 maven 问题 🤓，没想到是 JDK 版本的问题。
+&lt;img src=&#34;/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-1.png&#34;
+	width=&#34;2409&#34;
+	height=&#34;1068&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-1_hu_72e1f655f9ac5b7e.png 480w, /zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-1_hu_ed9c41b420d767f5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;225&#34;
+		data-flex-basis=&#34;541px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;maven的runner配置，jre原来是jdk17，改成1.8就ok了&lt;/p&gt;
-&lt;h2 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/0b0eb25debc146b88d6b6d93f22c3549.png&#34;
-	
-	
-	
+&lt;p&gt;maven 的 runner 配置，jre 原来是 jdk17，改成 1.8 就 ok 了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-2.png&#34;
+	width=&#34;2113&#34;
+	height=&#34;578&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-2_hu_cbfa760f8df6a020.png 480w, /zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/image-2_hu_226f1277eded7a24.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;
-&lt;/h2&gt;</description>
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;365&#34;
+		data-flex-basis=&#34;877px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
         </item>
         <item>
         <title>【大坑！已解决】docker容器jar包连不上另一个容器的mysql</title>
@@ -400,46 +471,57 @@ failed: Connection timed out: connect
         <guid>/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/</guid>
         <description>&lt;h2 id=&#34;最终解决方案&#34;&gt;&lt;a href=&#34;#%e6%9c%80%e7%bb%88%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;最终解决方案
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;mysq版本l8.0.35，驱动是8.0.26，com.mysql.cj.jdbc.Driver&lt;/p&gt;
-&lt;p&gt;jdbc的url：&lt;/p&gt;
-&lt;p&gt;jdbc:mysql://&lt;strong&gt;云服务器的主机地址（127.0.0.1和localhost都不行）&lt;/strong&gt;:3306/hotkey_db?useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=true&amp;amp;autoReconnect=true&amp;amp;failOverReadOnly=false&amp;amp;serverTimezone=GMT&amp;amp;useTimezone=true&lt;/p&gt;
+&lt;p&gt;mysq 版本 l8.0.35，驱动是 8.0.26，com.mysql.cj.jdbc.Driver&lt;/p&gt;
+&lt;p&gt;jdbc 的 url：&lt;/p&gt;
+&lt;p&gt;jdbc:mysql://&lt;strong&gt;云服务器的主机地址（127.0.0.1 和 localhost 都不行）&lt;/strong&gt;:3306/hotkey_db?useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;useSSL=true&amp;amp;autoReconnect=true&amp;amp;failOverReadOnly=false&amp;amp;serverTimezone=GMT&amp;amp;useTimezone=true&lt;/p&gt;
 &lt;p&gt;（有些参数应该是没用的，但是懒得改了，能跑就行）&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;问题场景&#34;&gt;&lt;a href=&#34;#%e9%97%ae%e9%a2%98%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;问题场景
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;这两天在云服务器的docker上部署了jar包，jar包要连另一个容器的mysql，在本地测试过本地运行的jar包可以连接云服务器的mysql，但是云服务器的docker的jar包连不上。具体展示如下：jar包成功运行后登录时就会报这样的错误，执行sql查询失败，说是连不上mysql ，以下是jar包的部分日志。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这两天在云服务器的 docker 上部署了 jar 包，jar 包要连另一个容器的 mysql，在本地测试过本地运行的 jar 包可以连接云服务器的 mysql，但是云服务器的 docker 的 jar 包连不上。具体展示如下：jar 包成功运行后登录时就会报这样的错误，执行 sql 查询失败，说是连不上 mysql ，以下是 jar 包的部分日志。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;报错日志&#34;&gt;&lt;a href=&#34;#%e6%8a%a5%e9%94%99%e6%97%a5%e5%bf%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;报错日志
-&lt;/h2&gt;&lt;p&gt;登录时执行mysql查询失败，因为连不上mysql，用docker network 查看了网络信息，这些个容器启动时候已经在&lt;strong&gt;同一个docker网络&lt;/strong&gt;了，并且在jar包的容器中可以ping通mysql的网关&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/047786739af94057b2ea5f10e1929958.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;登录时执行 mysql 查询失败，因为连不上 mysql，用 docker network 查看了网络信息，这些个容器启动时候已经在&lt;strong&gt;同一个 docker 网络&lt;/strong&gt;了，并且在 jar 包的容器中可以 ping 通 mysql 的网关
+&lt;img src=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image.png&#34;
+	width=&#34;2718&#34;
+	height=&#34;311&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image_hu_adf52b79e88e85be.png 480w, /zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image_hu_e53b2a8081fe9de7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;873&#34;
+		data-flex-basis=&#34;2097px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;p&gt;mysql连接报错&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/b95a179f34834ec0a7dd8ff9cab8066f.png&#34;
-	
-	
-	
+&lt;p&gt;mysql 连接报错
+&lt;img src=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image-1.png&#34;
+	width=&#34;2747&#34;
+	height=&#34;100&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image-1_hu_e9d39a0aaded1d66.png 480w, /zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image-1_hu_d5478756689e3706.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;2747&#34;
+		data-flex-basis=&#34;6592px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/dcfd2e7381024b9e940a6658cf96c2b6.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image-2.png&#34;
+	width=&#34;2183&#34;
+	height=&#34;120&#34;
+	srcset=&#34;/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image-2_hu_334576db431398e5.png 480w, /zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/image-2_hu_724ded184e98d790.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1819&#34;
+		data-flex-basis=&#34;4366px&#34;
+	
 &gt;&lt;/p&gt;
-&lt;p&gt;communications link failure，很经典的错误，去网上查了很多解决办法，包括但不限于修改jar包的jdbc的url连接参数，比如useSSL=false、时区serverTimeZone、localhost和127.0.0.1，甚至是mysql的配置文件my.cnf，说是因为连接池连接过期的，要修改wait_timeout。结果没一个能解决问题的，后来问了一个朋友，他正好遇见过同样的问题，之前还给我说过但是我没记住🤣，他的解决方案就是&lt;strong&gt;把jdbc的url换成云服务器的主机地址，而非127.0.0.4或localhost。至此问题解决。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;communications link failure，很经典的错误，去网上查了很多解决办法，包括但不限于修改 jar 包的 jdbc 的 url 连接参数，比如 useSSL=false、时区 serverTimeZone、localhost 和 127.0.0.1，甚至是 mysql 的配置文件 my.cnf，说是因为连接池连接过期的，要修改 wait_timeout。结果没一个能解决问题的，后来问了一个朋友，他正好遇见过同样的问题，之前还给我说过但是我没记住 🤣，他的解决方案就是&lt;strong&gt;把 jdbc 的 url 换成云服务器的主机地址，而非 127.0.0.4 或 localhost。至此问题解决。&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&#34;分析&#34;&gt;&lt;a href=&#34;#%e5%88%86%e6%9e%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分析
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;docker的每个容器之间是进程隔离的，每个容器都相当于一个独立的主机，我的jar和mysql不在同一个容器，相当于mysql和jar包不在一个主机上，那么jar包里的127.0.0.1:3306显然是连不到mysql的。&lt;/p&gt;
-&lt;p&gt;最后又试了试，&lt;strong&gt;如果jar包和mysql不在同一个docker网络，也是可以正常运行的，因为jar已经通过主机地址访问到mysql了&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
+&lt;p&gt;docker 的每个容器之间是进程隔离的，每个容器都相当于一个独立的主机，我的 jar 和 mysql 不在同一个容器，相当于 mysql 和 jar 包不在一个主机上，那么 jar 包里的 127.0.0.1:3306 显然是连不到 mysql 的。&lt;/p&gt;
+&lt;p&gt;最后又试了试，&lt;strong&gt;如果 jar 包和 mysql 不在同一个 docker 网络，也是可以正常运行的，因为 jar 已经通过主机地址访问到 mysql 了&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
@@ -448,8 +530,7 @@ failed: Connection timed out: connect
         <pubDate>Sat, 04 Jan 2025 19:31:55 +0000</pubDate>
         
         <guid>/zh-cn/post/2025/01/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%90%91list%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%83%E7%B4%A0/</guid>
-        <description>&lt;br /&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+        <description>&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
@@ -468,10 +549,10 @@ failed: Connection timed out: connect
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ArrayList&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ArrayList&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;       
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//泛型擦除,输出true&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;strings&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getClass&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;equals&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;integers&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getClass&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()));&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;xxx&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//编译时错误，无法通过编译&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//strings.add(18);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
@@ -483,9 +564,7 @@ failed: Connection timed out: connect
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;strings&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;toString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;());&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;br /&gt;
----
-</description>
+&lt;/div&gt;</description>
         </item>
         <item>
         <title>前端OpenAPI根据后端Swagger自动生成前端接口报错</title>

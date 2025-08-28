@@ -48,12 +48,16 @@
 &lt;li&gt;cnpm：淘宝镜像，解决国内访问的问题&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;模块化&#34;&gt;&lt;a href=&#34;#%e6%a8%a1%e5%9d%97%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;模块化
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/f9f63261dd674bc7a46f1aec19a1a023.png&#34;
-	
-	
-	
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/07/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE/image.png&#34;
+	width=&#34;1453&#34;
+	height=&#34;744&#34;
+	srcset=&#34;/zh-cn/post/2025/07/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE/image_hu_5a6d9116ba03efe5.png 480w, /zh-cn/post/2025/07/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE/image_hu_25257b8003b657a6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;468px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;代码规范&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e7%a0%81%e8%a7%84%e8%8c%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代码规范
@@ -65,8 +69,8 @@
 &lt;h3 id=&#34;版本管理&#34;&gt;&lt;a href=&#34;#%e7%89%88%e6%9c%ac%e7%ae%a1%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;版本管理
 &lt;/h3&gt;&lt;p&gt;集成 Git Hooks 工具如 Husky 和 Lint-Staged&lt;/p&gt;
 &lt;h3 id=&#34;cicd&#34;&gt;&lt;a href=&#34;#cicd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CI/CD
-&lt;/h3&gt;&lt;h2 id=&#34;github-action&#34;&gt;&lt;a href=&#34;#github-action&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;github Action
-&lt;/h2&gt;</description>
+&lt;/h3&gt;&lt;h3 id=&#34;github-action&#34;&gt;&lt;a href=&#34;#github-action&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;github Action
+&lt;/h3&gt;</description>
         </item>
         <item>
         <title>练习两年半，我的全栈博客出生了</title>
@@ -75,145 +79,269 @@
         
         <guid>/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/</guid>
         <description>&lt;h2 id=&#34;登陆注册页&#34;&gt;&lt;a href=&#34;#%e7%99%bb%e9%99%86%e6%b3%a8%e5%86%8c%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;登陆注册页
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/353dee420a4a4020a1918149aa54f93b.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image.png&#34;
+	width=&#34;968&#34;
+	height=&#34;1372&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image_hu_879721cd73e448a8.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image_hu_ae20404c2001c64e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;70&#34;
+		data-flex-basis=&#34;169px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;首页&#34;&gt;&lt;a href=&#34;#%e9%a6%96%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;首页
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e47d1285726e453f89a10c569ec78454.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-1.png&#34;
+	width=&#34;1727&#34;
+	height=&#34;1250&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-1_hu_84d08eed3ff0ab37.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-1_hu_653823db492bae9e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;138&#34;
+		data-flex-basis=&#34;331px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;文章详情页&#34;&gt;&lt;a href=&#34;#%e6%96%87%e7%ab%a0%e8%af%a6%e6%83%85%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;文章详情页
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9ed253e53e8d434dbbcd39e428b6b30a.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-2.png&#34;
+	width=&#34;2844&#34;
+	height=&#34;1378&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-2_hu_5455d84e03d16fb4.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-2_hu_a3aa2fb28431ae2e.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;206&#34;
+		data-flex-basis=&#34;495px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;分类专栏&#34;&gt;&lt;a href=&#34;#%e5%88%86%e7%b1%bb%e4%b8%93%e6%a0%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分类专栏
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/5b5ecc70758340b4891e77240654b513.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-3.png&#34;
+	width=&#34;1715&#34;
+	height=&#34;1038&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-3_hu_bdbde8fd639e6955.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-3_hu_de30bb956bd30aea.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;165&#34;
+		data-flex-basis=&#34;396px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;搜索结果页&#34;&gt;&lt;a href=&#34;#%e6%90%9c%e7%b4%a2%e7%bb%93%e6%9e%9c%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;搜索结果页
-&lt;/h2&gt;&lt;p&gt;可以根据类别、标签或者搜索框文本搜索&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/99b6b6b8bda64966ac3d358dc44de673.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;可以根据类别、标签或者搜索框文本搜索
+&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-4.png&#34;
+	width=&#34;1714&#34;
+	height=&#34;892&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-4_hu_7e01fe946bb069a5.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-4_hu_ddbc54505f1293e9.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;192&#34;
+		data-flex-basis=&#34;461px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;创作页&#34;&gt;&lt;a href=&#34;#%e5%88%9b%e4%bd%9c%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;创作页
-&lt;/h2&gt;&lt;p&gt;这里参考了csdn的创作页&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/be3ac8d869f849f8b5d74e8d0ec16a93.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;这里参考了 csdn 的创作页
+&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-5.png&#34;
+	width=&#34;1719&#34;
+	height=&#34;1069&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-5_hu_4e467e72a12d6eed.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-5_hu_badfd6bc06359e58.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;160&#34;
+		data-flex-basis=&#34;385px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;支持多种皮肤，可以上传粘贴图片 &lt;img src=&#34;https://i-blog.csdnimg.cn/direct/d5a5dd103135483e80f98f4cbb6a3277.png&#34;
-	
-	
-	
+&lt;p&gt;支持多种皮肤，可以上传粘贴图片
+&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-6.png&#34;
+	width=&#34;2784&#34;
+	height=&#34;1178&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-6_hu_75f3ad63b913307c.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-6_hu_6c71cf0940e86f33.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;236&#34;
+		data-flex-basis=&#34;567px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;ai页&#34;&gt;&lt;a href=&#34;#ai%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AI页
-&lt;/h2&gt;&lt;p&gt;引入了讯飞星火大模型lite版本，token不限量&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/73e57beb676645f5936dfdd2dbcea6bd.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;ai-页&#34;&gt;&lt;a href=&#34;#ai-%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AI 页
+&lt;/h2&gt;&lt;p&gt;引入了讯飞星火大模型 lite 版本，token 不限量&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-7.png&#34;
+	width=&#34;1710&#34;
+	height=&#34;1163&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-7_hu_138abfb41f02510e.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-7_hu_b261b35b25450ebc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;147&#34;
+		data-flex-basis=&#34;352px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;个人主页&#34;&gt;&lt;a href=&#34;#%e4%b8%aa%e4%ba%ba%e4%b8%bb%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;个人主页
-&lt;/h2&gt;&lt;p&gt;主页也参考了csdn&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/1c2e892911a947008a0df2db0b650e13.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;主页也参考了 csdn
+&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-8.png&#34;
+	width=&#34;1714&#34;
+	height=&#34;1123&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-8_hu_360b4ba01ec8893a.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-8_hu_d5d73ecc1a32a767.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/3031a05daf1a4867a1f31d469298378a.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;366px&#34;
 	
-	
-	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-9.png&#34;
+	width=&#34;1730&#34;
+	height=&#34;915&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-9_hu_b08093f497d537e0.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-9_hu_53376bd7e92d1942.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt; &lt;img src=&#34;https://i-blog.csdnimg.cn/direct/b320c8075d26461fb9584abe473bd2c3.png&#34;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;189&#34;
+		data-flex-basis=&#34;453px&#34;
 	
-	
-	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-10.png&#34;
+	width=&#34;1717&#34;
+	height=&#34;933&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-10_hu_332d1fa7dce41527.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-10_hu_79fc0b23d225263d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;184&#34;
+		data-flex-basis=&#34;441px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;管理页&#34;&gt;&lt;a href=&#34;#%e7%ae%a1%e7%90%86%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;管理页
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/bb6dd08e64244906b01e3f4fc1e99bc4.png&#34;
-	
-	
-	
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-11.png&#34;
+	width=&#34;1717&#34;
+	height=&#34;1097&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-11_hu_9fd17c77e784175c.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-11_hu_bfd36697887caba8.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;156&#34;
+		data-flex-basis=&#34;375px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/0710e9de1b4c4f59b96f143189ddf60e.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-12.png&#34;
+	width=&#34;1739&#34;
+	height=&#34;1180&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-12_hu_5f3cd29cb0af9918.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-12_hu_29945b9c8bf57d02.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;147&#34;
+		data-flex-basis=&#34;353px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/27343ccb37144a7ea8e284ab8e7fb8c8.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-13.png&#34;
+	width=&#34;1714&#34;
+	height=&#34;1181&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-13_hu_5cb075672e1eccc3.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-13_hu_262ef4b5e270b3b2.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;145&#34;
+		data-flex-basis=&#34;348px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9d184610bf064ff19ee5a7157e5fb1eb.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-14.png&#34;
+	width=&#34;1716&#34;
+	height=&#34;1073&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-14_hu_17dcc158411ab752.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-14_hu_2b1e570b78c9f88b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;159&#34;
+		data-flex-basis=&#34;383px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/10da5e7d27194520a2c3883c903e10d4.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-15.png&#34;
+	width=&#34;1718&#34;
+	height=&#34;1125&#34;
+	srcset=&#34;/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-15_hu_fe99a94def44dc6b.png 480w, /zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/image-15_hu_d8d3db735568bebe.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;
-&lt;/h2&gt;</description>
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;152&#34;
+		data-flex-basis=&#34;366px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>yum、dnf、apt包管理工具</title>
+        <link>/zh-cn/post/2025/01/yumdnfapt%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Mon, 13 Jan 2025 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/01/yumdnfapt%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</guid>
+        <description>&lt;h3 id=&#34;red-hat-系列&#34;&gt;&lt;a href=&#34;#red-hat-%e7%b3%bb%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Red Hat 系列
+&lt;/h3&gt;&lt;h4 id=&#34;rpm-red-hat-package-manager&#34;&gt;&lt;a href=&#34;#rpm-red-hat-package-manager&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;rpm (Red Hat Package Manager)
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Red Hat 系列&lt;/strong&gt; Linux 发行版（如 CentOS、RHEL、Fedora）上的软件包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Red Hat 系列 Linux（RHEL、CentOS、Fedora）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt; ：不自动处理依赖关系，需要用户手动管理或借助其他工具（如 &lt;code&gt;yum&lt;/code&gt; 或 &lt;code&gt;dnf&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt; ：&lt;code&gt;rpm&lt;/code&gt; 是一个&lt;strong&gt;低级&lt;/strong&gt; 包管理工具，主要用于安装、查询、卸载和管理 &lt;code&gt;.rpm&lt;/code&gt; 包。它本身不处理依赖关系，通常由其他工具（如 &lt;code&gt;yum&lt;/code&gt; 或 &lt;code&gt;dnf&lt;/code&gt;）解决&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;yum-yellowdog-updater-modified&#34;&gt;&lt;a href=&#34;#yum-yellowdog-updater-modified&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;yum (Yellowdog Updater, Modified)
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Red Hat 系列&lt;/strong&gt; Linux 发行版（如 CentOS、RHEL、Fedora）的软件包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Red Hat 系列 Linux（RHEL、CentOS、Fedora）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：自动处理软件包依赖。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt; ：&lt;code&gt;yum&lt;/code&gt; 是一个&lt;strong&gt;高级&lt;/strong&gt;的包管理工具，可以从软件仓库中自动下载和安装软件包，自动处理依赖关系和升级。它是基于 RPM 包的管理工&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;dnf-dandified-yum&#34;&gt;&lt;a href=&#34;#dnf-dandified-yum&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;dnf (Dandified YUM)
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Red Hat 系列&lt;/strong&gt; Linux 发行版（如 Fedora、RHEL 8+、CentOS 8+ 的包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Fedora、RHEL 8 及更高版本、CentOS 8+。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：自动处理软件包依赖。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt;：&lt;code&gt;dnf&lt;/code&gt;  是  &lt;code&gt;yum&lt;/code&gt;  的&lt;strong&gt;升级版&lt;/strong&gt;，改进了性能、依赖关系处理和用户体验。它使用 RPM 包格式，但具有更先进的功能，尤其在处理依赖关系和软件包更新时比  &lt;code&gt;yum&lt;/code&gt;  更加高效。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;debian-系列&#34;&gt;&lt;a href=&#34;#debian-%e7%b3%bb%e5%88%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Debian 系列
+&lt;/h3&gt;&lt;h4 id=&#34;dpkg-debian-package&#34;&gt;&lt;a href=&#34;#dpkg-debian-package&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;dpkg (Debian Package)
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Debian 系列&lt;/strong&gt; Linux 发行版（如 Ubuntu、Debian）上的软件包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Debian 系列 Linux（Debian、Ubuntu 等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：不自动处理依赖关系，需要用户手动管理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt;：&lt;code&gt;dpkg&lt;/code&gt;  是一个&lt;strong&gt;低级&lt;/strong&gt;包管理工具，用于直接管理  &lt;code&gt;.deb&lt;/code&gt;  包。它只能安装、查询和卸载  &lt;code&gt;.deb&lt;/code&gt;  包，不会自动解决依赖问题，通常由  &lt;code&gt;apt&lt;/code&gt;  来处理。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;apt-get&#34;&gt;&lt;a href=&#34;#apt-get&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;apt-get
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Debian 系列&lt;/strong&gt; Linux 发行版（如 &lt;strong&gt;Ubuntu&lt;/strong&gt;）的命令行包管理工具。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;apt-get&lt;/strong&gt;是&lt;strong&gt;apt&lt;/strong&gt;  系列工具的&lt;strong&gt;子集&lt;/strong&gt;。&lt;code&gt;apt-get&lt;/code&gt; 提供了&lt;strong&gt;更基础&lt;/strong&gt;的命令行接口，用于处理软件包的安装、升级、删除等操作。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;apt-get&lt;/code&gt; 是较早的工具，&lt;code&gt;apt&lt;/code&gt; 则是一个在用户体验上做了简化和改进的工具，常用于终端用户的日常操作。&lt;code&gt;apt&lt;/code&gt; 将 &lt;code&gt;apt-get&lt;/code&gt;、&lt;code&gt;apt-cache&lt;/code&gt; 等工具的功能进行了合并，并提供了更简洁的命令语法。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;apt-advanced-package-tool&#34;&gt;&lt;a href=&#34;#apt-advanced-package-tool&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;apt (Advanced Package Tool)
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Debian 系列&lt;/strong&gt; Linux 发行版（如 Ubuntu、Debian）的软件包管理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;支持平台&lt;/strong&gt;：Debian 系列 Linux（Ubuntu、Debian 等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;依赖关系&lt;/strong&gt;：自动处理软件包依赖。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt;：&lt;code&gt;apt&lt;/code&gt;  是&lt;strong&gt;基于  &lt;code&gt;dpkg&lt;/code&gt;  的高级工具&lt;/strong&gt;，对 &lt;code&gt;apt-get&lt;/code&gt; 的升级与封装，提供了从软件仓库自动下载、安装、升级和卸载软件包的功能。它还可以自动解决软件包的依赖关系。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
         </item>
         <item>
         <title>Web实时消息推送的几种方案</title>
@@ -222,28 +350,15 @@
         
         <guid>/zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/</guid>
         <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;往期推荐&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144992720&#34;  title=&#34;如何设计一个能根据任务优先级来执行的线程池-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;如何设计一个能根据任务优先级来执行的线程池-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144933957&#34;  title=&#34;【泛型擦除】通过反射向List中添加不同类型的元素-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;【泛型擦除】通过反射向List中添加不同类型的元素-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144983050&#34;  title=&#34;Java io模型-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Java io模型-CSDN博客&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/144807870&#34;  title=&#34;Java异常族谱-CSDN博客&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Java异常族谱-CSDN博客&lt;/a&gt;
-消息推送一般分为 Web 端消息推送和移动端消息推送。，分为推和拉两种形式。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;消息推送一般分为 Web 端消息推送和移动端消息推送，分为推和拉两种形式。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;短轮询&#34;&gt;&lt;a href=&#34;#%e7%9f%ad%e8%bd%ae%e8%af%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;短轮询
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;拉的方式，最简单的实现方式就是前端写个定时器，每隔一段时间向后台请求未读消息。然而如果推送数据不会频繁变更，无论后端此时是否有新的消息产生，客户端都会进行请求，势必会对服务端造成很大压力，浪费带宽和服务器资源。而如果数据频繁变更，比如：每10s请求一次配置，如果在第11s时配置更新了，那么推送将会延迟9s，等待下一次请求，又造成数据延迟。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;拉的方式，最简单的实现方式就是前端写个定时器，每隔一段时间向后台请求未读消息。然而如果推送数据不会频繁变更，无论后端此时是否有新的消息产生，客户端都会进行请求，势必会对服务端造成很大压力，浪费带宽和服务器资源。而如果数据频繁变更，比如：每 10s 请求一次配置，如果在第 11s 时配置更新了，那么推送将会延迟 9s，等待下一次请求，又造成数据延迟。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;长轮询&#34;&gt;&lt;a href=&#34;#%e9%95%bf%e8%bd%ae%e8%af%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;长轮询
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;长轮询是对上边短轮询的一种改进版本，在尽可能减少对服务器资源浪费的同时，保证消息的相对实时性。长轮询在中间件中应用的很广泛，比如 Nacos 和 Apollo 配置中心，消息队列 Kafka、RocketMQ 中都有用到长轮询。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;原理：&lt;strong&gt;客户端发起请求后，服务端不会立即返回请求结果，而是将&lt;/strong&gt;请求挂起等待一段时间&lt;/strong&gt;，如果此段时间内服务端数据变更，立即响应客户端请求，若是一直无变化则等到指定的超时时间后响应请求，客户端重新发起长链接。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;iframe流&#34;&gt;&lt;a href=&#34;#iframe%e6%b5%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;iframe流
+&lt;h2 id=&#34;iframe-流&#34;&gt;&lt;a href=&#34;#iframe-%e6%b5%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;iframe 流
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;在页面中插入一个隐藏的&lt;code&gt;&amp;lt;iframe&amp;gt;&lt;/code&gt;标签，通过在&lt;code&gt;src&lt;/code&gt;中请求消息数量 API 接口，由此在服务端和客户端之间创建一条长连接，服务端持续向&lt;code&gt;iframe&lt;/code&gt;传输数据。&lt;br&gt;
 缺点：rame 流的&lt;strong&gt;服务器开销很大，还不如短轮询&lt;/strong&gt;，而且 IE、Chrome 等浏览器一直会处于 loading 状态，很不推荐！！！&lt;/p&gt;&lt;/blockquote&gt;
@@ -251,12 +366,20 @@
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;iframe&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/iframe/message&amp;#34;&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;style&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;display:none&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;iframe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;iframe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;na&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/iframe/message&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;na&#34;&gt;style&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;display:none&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;iframe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;后端直接组装HTML、JS返回即可&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;后端直接组装 HTML、JS 返回即可&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -301,16 +424,21 @@
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;服务端向客户端推送消息，其实除了可以用&lt;code&gt;WebSocket（长连接、双向）&lt;/code&gt;这种耳熟能详的机制外，还有一种服务器发送事件(Server-Sent Events)，简称 SSE。这是一种服务器端到客户端(浏览器)的&lt;strong&gt;单向&lt;/strong&gt;消息推送。&lt;/li&gt;
-&lt;li&gt;ChatGPT 就是采用的 SSE。对于需要长时间等待响应的对话场景，ChatGPT 采用了一种巧妙的策略：它会将已经计算出的数据&amp;quot;推送&amp;quot;给用户，并利用 SSE 技术在计算过程中持续返回数据。这样做的好处是可以避免用户因等待时间过长而选择关闭页面。 &lt;img src=&#34;https://i-blog.csdnimg.cn/direct/6b0660c4f12c4f01adcf84dd6f881173.png&#34;
-	
-	
-	
+&lt;li&gt;ChatGPT 就是采用的 SSE。对于需要长时间等待响应的对话场景，ChatGPT 采用了一种巧妙的策略：它会将已经计算出的数据&amp;quot;推送&amp;quot;给用户，并利用 SSE 技术在计算过程中持续返回数据。这样做的好处是可以避免用户因等待时间过长而选择关闭页面。
+&lt;img src=&#34;/zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/image.png&#34;
+	width=&#34;943&#34;
+	height=&#34;265&#34;
+	srcset=&#34;/zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/image_hu_d1c5343d1f106151.png 480w, /zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/image_hu_7fe0e43550fd221d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;355&#34;
+		data-flex-basis=&#34;854px&#34;
+	
 &gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;**SSE基于HTTP协议，**在服务器和客户端之间打开一个单向通道，服务端响应的不再是一次性的数据包而是&lt;code&gt;text/event-stream&lt;/code&gt;类型的数据流信息，在有数据变更时从服务器流式传输到客户端，有点类似于在线视频播放，视频流会连续不断的推送到浏览器&lt;/p&gt;
+&lt;p&gt;**SSE 基于 HTTP 协议，**在服务器和客户端之间打开一个单向通道，服务端响应的不再是一次性的数据包而是&lt;code&gt;text/event-stream&lt;/code&gt;类型的数据流信息，在有数据变更时从服务器流式传输到客户端，有点类似于在线视频播放，视频流会连续不断的推送到浏览器&lt;/p&gt;
 &lt;h3 id=&#34;前端实现&#34;&gt;&lt;a href=&#34;#%e5%89%8d%e7%ab%af%e5%ae%9e%e7%8e%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;前端实现
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -339,32 +467,40 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;script&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;userId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7777&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;EventSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// 建立连接
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;EventSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;http://localhost:7777/sse/sub/&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;userId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;连接用户=&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;userId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;cm&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;         * 连接一旦建立，就会触发open事件
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;         * 另一种写法：source.onopen = function (event) {}
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;         */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addEventListener&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;open&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;建立连接。。。&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;cm&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;         * 客户端收到服务器发来的数据
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;         * 另一种写法：source.onmessage = function (event) {}
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;         */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addEventListener&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;message&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;你的浏览器不支持SSE&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;userId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7777&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;window&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;EventSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;c1&#34;&gt;// 建立连接
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;EventSource&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;http://localhost:7777/sse/sub/&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;userId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;连接用户=&amp;#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;userId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;cm&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;		 * 连接一旦建立，就会触发open事件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;		 * 另一种写法：source.onopen = function (event) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;		 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addEventListener&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;s1&#34;&gt;&amp;#39;open&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;				&lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;建立连接。。。&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;cm&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;		 * 客户端收到服务器发来的数据
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;		 * 另一种写法：source.onmessage = function (event) {}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;		 */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nx&#34;&gt;source&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;addEventListener&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;message&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nx&#34;&gt;setMessageInnerHTML&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;你的浏览器不支持SSE&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;script&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -449,12 +585,12 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;websocket&#34;&gt;&lt;a href=&#34;#websocket&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;WebSocket
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;基于TCP连接的双全工协议，工作流程如下：&lt;/p&gt;
+&lt;p&gt;基于 TCP 连接的双全工协议，工作流程如下：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;客户端向服务器发送一个 HTTP 请求，请求头中包含 &lt;code&gt;Upgrade: websocket&lt;/code&gt; 和 &lt;code&gt;Sec-WebSocket-Key&lt;/code&gt; 等字段，表示&lt;strong&gt;要求升级协议为 WebSocket；&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;服务器收到这个请求后，会进行升级协议的操作，如果支持 WebSocket，它将回复一个 HTTP 101 状态码，响应头中包含 ，&lt;code&gt;Connection: Upgrade&lt;/code&gt;和 &lt;code&gt;Sec-WebSocket-Accept: xxx&lt;/code&gt; 等字段、表示&lt;strong&gt;成功升级到 WebSocket 协议。&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;客户端和服务器之间&lt;strong&gt;建立了一个 WebSocket 连接&lt;/strong&gt; ，可以进行双向的数据传输，通过&lt;strong&gt;心跳机制&lt;/strong&gt; 来保持 WebSocket 连接的稳定性和活跃性。&lt;strong&gt;数据以帧（frames）的形式进行传送&lt;/strong&gt;，而不是传统的 HTTP 请求和响应。WebSocket 的每条消息可能会被切分成多个数据帧（最小单位）。发送端会将消息切割成多个帧发送给接收端，接收端接收消息帧，并将关联的帧重新组装成完整的消息。&lt;/li&gt;
-&lt;li&gt;**客户端或服务器可以主动发送一个关闭帧，表示要断开连接。**另一方收到后，也会回复一个关闭帧，然后双方关闭 TCP 连接。&lt;/li&gt;
+&lt;li&gt;客户端或服务器可以主动发送一个关闭帧，表示要断开连接。另一方收到后，也会回复一个关闭帧，然后双方关闭 TCP 连接。&lt;/li&gt;
 &lt;/ol&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;mqtt&#34;&gt;&lt;a href=&#34;#mqtt&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MQTT
 &lt;/h2&gt;&lt;blockquote&gt;
@@ -462,7 +598,6 @@
 &lt;li&gt;基于发布/订阅模式的轻量级通讯协议，通过订阅相应的主题来获取消息，是物联网中的一个标准传输协议。&lt;/li&gt;
 &lt;li&gt;TCP 协议位于传输层，MQTT 协议位于应用层，MQTT 协议构建于 TCP/IP 协议上，也就是说只要支持 TCP/IP 协议栈的地方，都可以使用 MQTT 协议。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
 </description>
         </item>
         <item>

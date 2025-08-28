@@ -11,7 +11,7 @@
 <meta property='og:description' content="美化个人github主页，部署github-readme-stats">
 <meta property='og:url' content='/zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='杂' /><meta property='article:tag' content='github' /><meta property='article:published_time' content='2025-02-17T10:02:16&#43;00:00'/><meta property='article:modified_time' content='2025-02-17T10:02:16&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GitHub' /><meta property='article:published_time' content='2025-02-17T10:02:16&#43;00:00'/><meta property='article:modified_time' content='2025-02-17T10:02:16&#43;00:00'/>
 <meta name="twitter:title" content="美化个人github主页，部署github-readme-stats">
 <meta name="twitter:description" content="美化个人github主页，部署github-readme-stats">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,7 +336,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#readmemd中还可以使用imgp等基础标签参考">readme.md中还可以使用&lt;img&gt;、&lt;p&gt;等基础标签，参考：​​​​​​​​​​</a></li>
+    <li><a href="#建仓库">建仓库</a></li>
+    <li><a href="#编辑-readmemd-文件">编辑 readme.md 文件</a></li>
+    <li><a href="#fork-github-readme-stats-仓库">fork GitHub Readme Stats 仓库</a></li>
+    <li><a href="#登录-vercel">登录 vercel</a></li>
+    <li><a href="#修改-fork-的-github-readme-stats-仓库的-verceljson-文件">修改 fork 的 GitHub Readme Stats 仓库的 vercel.json 文件</a></li>
   </ol>
 </nav>
         </div>
@@ -400,7 +404,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 4 分钟
             </time>
         </div>
         
@@ -421,12 +425,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/%E6%9D%82/">杂</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/github/">Github</a> 
+            <a href="/zh-cn/tags/github/">GitHub</a> 
             
             
         </div>
@@ -442,26 +441,29 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><img src="https://i-blog.csdnimg.cn/direct/b307587a41fb444cad94d8ef6346ed60.png"
-	
-	
-	
+    <p><img src="/zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/image.png"
+	width="1225"
+	height="1258"
+	srcset="/zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/image_hu_2a49df0376cead36.png 480w, /zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/image_hu_c38850564048c3ca.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="97"
+		data-flex-basis="233px"
+	
 ></p>
-<br />
 <blockquote>
 <p>官方教程：<a class="link" href="https://github.com/anuraghazra/github-readme-stats/blob/master/docs/readme_cn.md"  title="https://github.com/anuraghazra/github-readme-stats/blob/master/docs/readme_cn.md"
      target="_blank" rel="noopener"
     >https://github.com/anuraghazra/github-readme-stats/blob/master/docs/readme_cn.md</a></p></blockquote>
 <p>根据官方教程，有两种玩法，第一种最简单的，不用部署项目，步骤如下：</p>
-<p><strong>1.建仓库</strong></p>
-<blockquote>
-<p>创建一个仓库，仓库名和自己的github账户名相同，仓库里添加一个readme.md文件，这个文件就是用来美化个人主页的，效果如上图所示。</p></blockquote>
-<p><strong>2.编辑readme.md文件</strong></p>
-<blockquote>
-<p>readme.md文件添加如下内容，把username=xxxxx换成github的账户名即可，然后预览md文件，应该就有效果了，具体主题等配置项可以看官方教程。</p>
+<h2 id="建仓库"><a href="#%e5%bb%ba%e4%bb%93%e5%ba%93" class="header-anchor"></a>建仓库
+</h2><blockquote>
+<p>创建一个仓库，仓库名和自己的 github 账户名相同，仓库里添加一个 readme.md 文件，这个文件就是用来美化个人主页的，效果如上图所示。</p></blockquote>
+<h2 id="编辑-readmemd-文件"><a href="#%e7%bc%96%e8%be%91-readmemd-%e6%96%87%e4%bb%b6" class="header-anchor"></a>编辑 readme.md 文件
+</h2><blockquote>
+<p>readme.md 文件添加如下内容，把 username=xxxxx 换成 github 的账户名即可，然后预览 md 文件，应该就有效果了，具体主题等配置项可以看官方教程。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -471,8 +473,144 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div></blockquote>
-<h2 id="readmemd中还可以使用imgp等基础标签参考"><a href="#readmemd%e4%b8%ad%e8%bf%98%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8imgp%e7%ad%89%e5%9f%ba%e7%a1%80%e6%a0%87%e7%ad%be%e5%8f%82%e8%80%83" class="header-anchor"></a>readme.md中还可以使用&lt;img&gt;、&lt;p&gt;等基础标签，参考：​​​​​​​​​​
-</h2>
+<p>readme.md 中还可以使用&lt;img&gt;、&lt;p&gt;等基础标签，参考：
+<a class="link" href="https://juejin.cn/post/7385935890931482643"  target="_blank" rel="noopener"
+    >该文章</a>
+​​​​​​​​​​</p>
+<p><strong>以下开始是要部署项目的玩法，官方教程中有，不花钱。</strong></p>
+<h2 id="fork-github-readme-stats-仓库"><a href="#fork-github-readme-stats-%e4%bb%93%e5%ba%93" class="header-anchor"></a>fork GitHub Readme Stats 仓库
+</h2><h2 id="登录-vercel"><a href="#%e7%99%bb%e5%bd%95-vercel" class="header-anchor"></a>登录 vercel
+</h2><p>点击 add new project</p>
+<p><img src="/zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/image-1.png"
+	width="2801"
+	height="265"
+	srcset="/zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/image-1_hu_d9f7d0943f28129d.png 480w, /zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/image-1_hu_daaecc0a3d872513.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1056"
+		data-flex-basis="2536px"
+	
+></p>
+<p>然后 import 我们 fork 的 GitHub Readme Stats，project name 任意，environment variables 中添加名为 PAT_1 的环境变量，token 值从这里获取，其他选项默认不动即可。</p>
+<h2 id="修改-fork-的-github-readme-stats-仓库的-verceljson-文件"><a href="#%e4%bf%ae%e6%94%b9-fork-%e7%9a%84-github-readme-stats-%e4%bb%93%e5%ba%93%e7%9a%84-verceljson-%e6%96%87%e4%bb%b6" class="header-anchor"></a>修改 fork 的 GitHub Readme Stats 仓库的 vercel.json 文件
+</h2><p>原仓库的配置，memory 值是 1200，部署时会报错：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">Serverless Functions are limited to 1024 mb of memory for personal accounts (Hobby plan). To increase, create a team (Pro plan).
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这点在官方教程中没有提及，导致踩了坑。改成如下即可，我改成了 128。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="s">&#34;functions&#34;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s">&#34;api/*.js&#34;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s">&#34;memory&#34;</span><span class="p">:</span><span class="w"> </span><span class="n">128</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s">&#34;maxDuration&#34;</span><span class="p">:</span><span class="w"> </span><span class="n">10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="s">&#34;redirects&#34;</span><span class="p">:</span><span class="w"> </span><span class="o">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s">&#34;source&#34;</span><span class="p">:</span><span class="w"> </span><span class="s">&#34;/&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="s">&#34;destination&#34;</span><span class="p">:</span><span class="w"> </span><span class="s">&#34;https://github.com/anuraghazra/github-readme-stats&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后部署即可。部署完进入这个项目，找到 domains，替换我们的 readme.md 中的 domains，然后预览应该就看到效果了。</p>
+<p>不得不说 vercel 部署真的方便，比 docker 还好用 🤓。</p>
+<p>我的 readme.md 配置如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">    ## Hi I&#39;m QingQiu（青秋） 👋
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> 🤓 一名 26 届本科生，软件工程专业。
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> 📖 主修 JavaWeb，略懂大数据，有全栈开发经验。
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> 🔖 [<span class="nt">我的博客</span>](<span class="na">https://blog.csdn.net/qq_73181349</span>)
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> 🎊 [<span class="nt">全栈项目</span>](<span class="na">https://xxxxx</span>)
+</span></span><span class="line"><span class="cl">    <span class="k">-</span> 🤖 [<span class="nt">QQ 音乐</span>](<span class="na">https://xxxx</span>)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ## ✨ 感兴趣的
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/AIGC-FFFFFF?style=for-the-badge)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/移动端开发-FFFFFF?style=for-the-badge)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/应用出海-FFFFFF?style=for-the-badge)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/跨境电商-FFFFFF?style=for-the-badge)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/创业-FFFFFF?style=for-the-badge)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/自媒体-FFFFFF?style=for-the-badge)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ## ✨ 技术栈
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/Java-000000?style=plastic<span class="err">&amp;</span>logo=java<span class="err">&amp;</span>logoColor=FE5F50)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/spring-000000?style=plastic<span class="err">&amp;</span>logo=spring<span class="err">&amp;</span>logoColor=2AF598)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/nextjs-000000?style=plastic<span class="err">&amp;</span>logo=nextdotjs<span class="err">&amp;</span>logoColor=white)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/typescript-000000?style=plastic<span class="err">&amp;</span>logo=typescript<span class="err">&amp;</span>logoColor=0093E9)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/antdesign-000000?style=plastic<span class="err">&amp;</span>logo=antdesign<span class="err">&amp;</span>logoColor=52ACFF)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/React-000000?style=plastic<span class="err">&amp;</span>logo=React<span class="err">&amp;</span>logoColor=green)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/umi-000000?style=plastic<span class="err">&amp;</span>logo=umami<span class="err">&amp;</span>logoColor=08AEEA)
+</span></span><span class="line"><span class="cl">    ![](https://img.shields.io/badge/hadoop-000000?style=plastic<span class="err">&amp;</span>logo=apachehadoop<span class="err">&amp;</span>logoColor=yellow)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ## ✨Github Stats
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">align</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;180px&#34;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://替换你的domains/api?username=你的账户名&amp;show_icons=true&amp;count_private=true&amp;include_all_commits=true&amp;hide_title=true&amp;line_height=21&amp;bg_color=0,EC6C6C,FFD479,FFFC79,73FA79&amp;theme=graywhite&amp;locale=cn&#34;</span><span class="p">/&gt;&lt;</span><span class="nt">img</span> <span class="na">align</span><span class="o">=</span><span class="s">&#34;&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;180px&#34;</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://替换你的domains/api/top-langs/?username=你的账户名&amp;hide_title=true&amp;hide_border=true&amp;layout=compact&amp;bg_color=0,73FA79,73FDFF,D783FF&amp;theme=graywhite&amp;locale=cn&#34;</span><span class="p">/&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
@@ -511,80 +649,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
 
     
-
-<aside class="related-content--wrapper">
-    <h2 class="section-title">相关文章</h2>
-    <div class="related-content">
-        <div class="flex article-list--tile">
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/02/%E7%BB%83%E4%B9%A0%E4%B8%A4%E5%B9%B4%E5%8D%8A%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%8D%9A%E5%AE%A2%E5%87%BA%E7%94%9F%E4%BA%86/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">练习两年半，我的全栈博客出生了</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8docker%E9%83%A8%E7%BD%B2%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE-%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90-oss/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">【排坑】云服务器docker部署前后端分离项目&#43;域名解析&#43;OSS</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">【已解决】OSS配置问题</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3rediscache%E6%B3%A8%E8%A7%A3%E5%A4%B1%E6%95%88%E6%B2%A1%E5%86%99cacheconfig/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">【已解决】redisCache注解失效，没写cacheConfig</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/01/mybatisplus-mapper%E5%B1%82%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E9%94%99%E8%AF%AF/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">mybatisplus Mapper层绑定参数错误</h2>
-            
-        </div>
-    </a>
-</article>
-            
-        </div>
-    </div>
-</aside>
 
      
     

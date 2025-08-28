@@ -11,7 +11,7 @@
 <meta property='og:description' content="java反射机制、静态代理、jdk、cglib动态代理">
 <meta property='og:url' content='/zh-cn/post/2025/01/java%E5%8F%8D%E5%B0%84%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='java' /><meta property='article:tag' content='开发语言' /><meta property='article:published_time' content='2025-01-15T15:55:11&#43;00:00'/><meta property='article:modified_time' content='2025-01-15T15:55:11&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2025-01-15T15:55:11&#43;00:00'/><meta property='article:modified_time' content='2025-01-15T15:55:11&#43;00:00'/>
 <meta name="twitter:title" content="Java反射、静态代理、动态代理">
 <meta name="twitter:description" content="java反射机制、静态代理、jdk、cglib动态代理">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -337,21 +337,21 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <nav id="TableOfContents">
   <ol>
     <li><a href="#概述">概述</a></li>
-    <li><a href="#获取class对象的4种方式">获取Class对象的4种方式</a></li>
+    <li><a href="#获取-class-对象的-4-种方式">获取 Class 对象的 4 种方式</a></li>
     <li><a href="#常见的反射应用场景">常见的反射应用场景</a></li>
     <li><a href="#代理">代理</a>
       <ol>
-        <li><a href="#静态代理"><strong>静态代理</strong></a>
+        <li><a href="#静态代理">静态代理</a>
           <ol>
-            <li><a href="#静态代理实现步骤"><strong>静态代理实现步骤</strong></a></li>
+            <li><a href="#静态代理实现步骤">静态代理实现步骤</a></li>
           </ol>
         </li>
-        <li><a href="#动态代理"><strong>动态代理</strong></a>
+        <li><a href="#动态代理">动态代理</a>
           <ol>
-            <li><a href="#jdk动态代理"><strong>JDK动态代理</strong></a></li>
+            <li><a href="#jdk-动态代理">JDK 动态代理</a></li>
           </ol>
         </li>
-        <li><a href="#cglib动态代理"><strong>cglib动态代理</strong></a>
+        <li><a href="#cglib-动态代理">cglib 动态代理</a>
           <ol>
             <li></li>
           </ol>
@@ -359,7 +359,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
       </ol>
     </li>
     <li><a href="#静态代理和动态代理对比">静态代理和动态代理对比</a></li>
-    <li><a href="#jdk代理和cglib代理对比">JDK代理和CGLIB代理对比</a></li>
+    <li><a href="#jdk-代理和-cglib-代理对比">JDK 代理和 CGLIB 代理对比</a></li>
   </ol>
 </nav>
         </div>
@@ -423,7 +423,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 8 分钟
+                阅读时长: 7 分钟
             </time>
         </div>
         
@@ -447,11 +447,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/java/">Java</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80/">开发语言</a> 
-            
-            
         </div>
         
     </footer>
@@ -465,27 +460,13 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144983050"  title="Java io模型-CSDN博客"
-     target="_blank" rel="noopener"
-    >Java io模型-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144992720"  title="如何设计一个能根据任务优先级来执行的线程池-CSDN博客"
-     target="_blank" rel="noopener"
-    >如何设计一个能根据任务优先级来执行的线程池-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144995716"  title="Web实时消息推送的几种方案_setmessageinnerhtml is not defined-CSDN博客"
-     target="_blank" rel="noopener"
-    >Web实时消息推送的几种方案_setmessageinnerhtml is not defined-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/145097445"  title="yum、dnf、apt包管理工具-CSDN博客"
-     target="_blank" rel="noopener"
-    >yum、dnf、apt包管理工具-CSDN博客</a></p></blockquote>
-<h2 id="概述"><a href="#%e6%a6%82%e8%bf%b0" class="header-anchor"></a>概述
+    <h2 id="概述"><a href="#%e6%a6%82%e8%bf%b0" class="header-anchor"></a>概述
 </h2><blockquote>
-<p>反射机制是在运行状态中，对于任意一个类，都能够知道这个类中的所有属性和方法，对于任意一个对象，都能够调用它的任意一个方法和属性，这种动态获取的信息以及动态调用对象的方法的功能称为Java语言的反射机制。</p>
+<p>反射机制是在运行状态中，对于任意一个类，都能够知道这个类中的所有属性和方法，对于任意一个对象，都能够调用它的任意一个方法和属性，这种动态获取的信息以及动态调用对象的方法的功能称为 Java 语言的反射机制。</p>
 <p>Spring、mybatis、动态代理、注解都是使用了反射。
 <strong>优点</strong>：可以让咱们的代码更加灵活、为各种框架提供开箱即用的功能提供了便利。</p>
 <p><strong>缺点</strong>：让我们在运行时有了分析操作类的能力，这同样也增加了安全问题。比如可以无视泛型参数的安全检查（泛型参数的安全检查发生在编译时）。另外，反射的性能也要稍差点，不过，对于框架来说实际是影响不大的。</p></blockquote>
-<h2 id="获取class对象的4种方式"><a href="#%e8%8e%b7%e5%8f%96class%e5%af%b9%e8%b1%a1%e7%9a%844%e7%a7%8d%e6%96%b9%e5%bc%8f" class="header-anchor"></a>获取Class对象的4种方式
+<h2 id="获取-class-对象的-4-种方式"><a href="#%e8%8e%b7%e5%8f%96-class-%e5%af%b9%e8%b1%a1%e7%9a%84-4-%e7%a7%8d%e6%96%b9%e5%bc%8f" class="header-anchor"></a>获取 Class 对象的 4 种方式
 </h2><p>如果我们动态获取到这些信息，我们需要依靠 Class 对象。Class 类对象将一个类的方法、变量等信息告诉运行的程序。</p>
 <blockquote>
 <ul>
@@ -622,21 +603,21 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </h2><blockquote>
 <ul>
 <li>加载数据库驱动 ，Class.forName(com.mysql.cj.jdbc.Driver)</li>
-<li>加载配置文件，Spring通过xml装载Bean的过程：
+<li>加载配置文件，Spring 通过 xml 装载 Bean 的过程：
 <ul>
-<li>将xml配置文件加载入内存</li>
-<li>java类里面解析xml的内容，得到对应实体类的字节码字符串以及相关的属性信息</li>
-<li>使用反射机制，根据这个字符串获得某个类的Class实例动态配置实例的属性</li>
+<li>将 xml 配置文件加载入内存</li>
+<li>java 类里面解析 xml 的内容，得到对应实体类的字节码字符串以及相关的属性信息</li>
+<li>使用反射机制，根据这个字符串获得某个类的 Class 实例动态配置实例的属性</li>
 </ul>
 </li>
 </ul></blockquote>
 <h2 id="代理"><a href="#%e4%bb%a3%e7%90%86" class="header-anchor"></a>代理
 </h2><blockquote>
 <p>通过代理对象来代替对真实对象的访问，这样就可以在不修改原目标对象的前提下，提供额外的功能操作，<strong>扩展</strong>目标对象的功能。比喻：活动方要请明星出席，不会直接去找明星（真实对象），而是去找其经纪人（代理对象）</p></blockquote>
-<h3 id="静态代理"><a href="#%e9%9d%99%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a><strong>静态代理</strong>
-</h3><blockquote>
-<h4 id="静态代理实现步骤"><a href="#%e9%9d%99%e6%80%81%e4%bb%a3%e7%90%86%e5%ae%9e%e7%8e%b0%e6%ad%a5%e9%aa%a4" class="header-anchor"></a><strong>静态代理实现步骤</strong>
-</h4><ol>
+<h3 id="静态代理"><a href="#%e9%9d%99%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a>静态代理
+</h3><h4 id="静态代理实现步骤"><a href="#%e9%9d%99%e6%80%81%e4%bb%a3%e7%90%86%e5%ae%9e%e7%8e%b0%e6%ad%a5%e9%aa%a4" class="header-anchor"></a>静态代理实现步骤
+</h4><blockquote>
+<ol>
 <li>定义一个接口及其实现类</li>
 <li>创建一个代理类同样实现这个接口</li>
 <li>将目标对象注入进代理类，然后在代理类的对应方法调用目标类中的对应方法。这样的话，我们就可以通过代理类屏蔽对目标对象的访问，并且可以在目标方法执行前后做一些自己想做的事情。</li>
@@ -736,8 +717,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="动态代理"><a href="#%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a><strong>动态代理</strong>
-</h3><h4 id="jdk动态代理"><a href="#jdk%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a><strong>JDK动态代理</strong>
+</div><h3 id="动态代理"><a href="#%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a>动态代理
+</h3><h4 id="jdk-动态代理"><a href="#jdk-%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a>JDK 动态代理
 </h4><blockquote>
 <p><strong>在 Java 动态代理机制中 <code>InvocationHandler</code> 接口和 <code>Proxy</code> 类是核心。</strong></p>
 <p><code>Proxy</code> 类中使用频率最高的方法是：<code>newProxyInstance()</code> ，这个方法主要用来生成一个代理对象。</p></blockquote>
@@ -764,7 +745,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// interfaces : 被代理类实现的一些接口；</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// h : 实现了 InvocationHandler 接口的对象；</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">newProxyInstance</span><span class="w"> </span><span class="p">(</span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">loader</span><span class="p">,</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="nf">newProxyInstance</span><span class="w"> </span><span class="p">(</span><span class="n">ClassLoader</span><span class="w"> </span><span class="n">loader</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Class</span><span class="o">&lt;?&gt;[]</span><span class="w"> </span><span class="n">interfaces</span><span class="p">,</span><span class="w"> </span><span class="n">InvocationHandler</span><span class="w"> </span><span class="n">h</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
@@ -807,9 +788,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><blockquote>
-<h5 id="jdk动态代理实现步骤"><a href="#jdk%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e5%ae%9e%e7%8e%b0%e6%ad%a5%e9%aa%a4" class="header-anchor"></a><strong>JDK动态代理实现步骤</strong>
-</h5><ul>
+</div><h5 id="jdk-动态代理实现步骤"><a href="#jdk-%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e5%ae%9e%e7%8e%b0%e6%ad%a5%e9%aa%a4" class="header-anchor"></a>JDK 动态代理实现步骤
+</h5><blockquote>
+<ul>
 <li>定义一个接口及其实现类；</li>
 <li>自定义 <code>InvocationHandler</code> 并重写<code>invoke</code>方法，在 <code>invoke</code> 方法中我们会调用原生方法（目标类的方法）并自定义一些处理逻辑；</li>
 <li>通过 <code>Proxy.newProxyInstance(ClassLoader loader,Class&lt;?&gt;[] interfaces,InvocationHandler h)</code> 方法创建代理对象；</li>
@@ -927,9 +908,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">smsService</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="s">&#34;java&#34;</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="cglib动态代理"><a href="#cglib%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a><strong>cglib动态代理</strong>
+</div><h3 id="cglib-动态代理"><a href="#cglib-%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86" class="header-anchor"></a>cglib 动态代理
 </h3><blockquote>
-<p>JDK动态代理通过实现接口实现代理，而CGLIB 通过<strong>继承方式</strong>实现代理。很多知名的开源框架都使用到了CGLIB， 例如 Spring 中的 AOP 模块中：如果目标对象实现了接口，则默认采用 JDK 动态代理，否则采用 CGLIB 动态代理。
+<p>JDK 动态代理通过实现接口实现代理，而 CGLIB 通过<strong>继承方式</strong>实现代理。很多知名的开源框架都使用到了 CGLIB， 例如 Spring 中的 AOP 模块中：如果目标对象实现了接口，则默认采用 JDK 动态代理，否则采用 CGLIB 动态代理。
 <strong>在 CGLIB 动态代理机制中 <code>MethodInterceptor</code> 接口和 <code>Enhancer</code> 类是核心。</strong></p>
 <p>自定义 <code>MethodInterceptor</code> 并重写 <code>intercept</code> 方法，<code>intercept</code> 用于拦截增强被代理类的方法。<code>Enhancer</code>类来动态获取被代理类，当代理类调用方法的时候，实际调用的是 <code>MethodInterceptor</code> 中的 <code>intercept</code> 方法。</p></blockquote>
 <div class="highlight"><div class="chroma">
@@ -958,9 +939,9 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><blockquote>
-<h5 id="cglib动态代理类使用步骤"><a href="#cglib%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e7%b1%bb%e4%bd%bf%e7%94%a8%e6%ad%a5%e9%aa%a4" class="header-anchor"></a>CGLIB动态代理类使用步骤
-</h5><ol>
+</div><h5 id="cglib-动态代理类使用步骤"><a href="#cglib-%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e7%b1%bb%e4%bd%bf%e7%94%a8%e6%ad%a5%e9%aa%a4" class="header-anchor"></a>CGLIB 动态代理类使用步骤
+</h5><blockquote>
+<ol>
 <li>定义一个类；</li>
 <li>自定义 <code>MethodInterceptor</code> 并重写 <code>intercept</code> 方法，<code>intercept</code> 用于拦截增强被代理类的方法，和 JDK 动态代理中的 <code>invoke</code> 方法类似；</li>
 <li>通过 <code>Enhancer</code> 类的 <code>create()</code>创建代理类；</li>
@@ -1093,20 +1074,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p>看到这里似乎发现cglib也是实现了一个接口重写intercept()来增强的，那么<strong>继承</strong> 体现在哪里呢？其实在使用 CGLIB 进行代理时，CGLIB 会通过继承目标类，生成一个新的子类 <code>Target$Proxy，</code>并重写目标类的非 <code>final</code> 方法。CGLIB 会在这些重写的方法中加入代理逻辑。</p></blockquote>
+<p>看到这里似乎发现 cglib 也是实现了一个接口重写 intercept()来增强的，那么<strong>继承</strong> 体现在哪里呢？其实在使用 CGLIB 进行代理时，CGLIB 会通过继承目标类，生成一个新的子类 <code>Target$Proxy，</code>并重写目标类的非 <code>final</code> 方法。CGLIB 会在这些重写的方法中加入代理逻辑。</p></blockquote>
 <h2 id="静态代理和动态代理对比"><a href="#%e9%9d%99%e6%80%81%e4%bb%a3%e7%90%86%e5%92%8c%e5%8a%a8%e6%80%81%e4%bb%a3%e7%90%86%e5%af%b9%e6%af%94" class="header-anchor"></a>静态代理和动态代理对比
 </h2><blockquote>
 <ul>
 <li><strong>灵活性</strong>：动态代理更加灵活，不需要必须实现接口，可以直接代理实现类（cglib），并且可以不需要针对每个目标类都创建一个代理类。另外，静态代理中，接口一旦新增加方法，目标对象和代理对象都要进行修改，这是非常麻烦的！</li>
 <li><strong>JVM 层面</strong>：静态代理在编译时就将接口、实现类、代理类这些都变成了一个个实际的 class 文件。而动态代理是在运行时动态生成类字节码，并加载到 JVM 中的。</li>
 </ul></blockquote>
-<h2 id="jdk代理和cglib代理对比"><a href="#jdk%e4%bb%a3%e7%90%86%e5%92%8ccglib%e4%bb%a3%e7%90%86%e5%af%b9%e6%af%94" class="header-anchor"></a>JDK代理和CGLIB代理对比
+<h2 id="jdk-代理和-cglib-代理对比"><a href="#jdk-%e4%bb%a3%e7%90%86%e5%92%8c-cglib-%e4%bb%a3%e7%90%86%e5%af%b9%e6%af%94" class="header-anchor"></a>JDK 代理和 CGLIB 代理对比
 </h2><blockquote>
 <ul>
 <li><strong>JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。</strong> 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。</li>
 <li>就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显</li>
 </ul></blockquote>
-<hr>
 
 </section>
 
@@ -1154,6 +1134,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
+    <a href="/zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Web实时消息推送的几种方案</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
     <a href="/zh-cn/post/2025/01/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E8%83%BD%E6%A0%B9%E6%8D%AE%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%85%88%E7%BA%A7%E6%9D%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
 
         
@@ -1186,6 +1179,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">【泛型擦除】通过反射向List中添加不同类型的元素</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/12/java%E5%BC%82%E5%B8%B8%E6%97%8F%E8%B0%B1%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BC%82%E5%B8%B8%E9%9D%9E%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BC%82%E5%B8%B8error/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Java异常族谱、运行时异常、非运行时异常、ERROR</h2>
             
         </div>
     </a>
