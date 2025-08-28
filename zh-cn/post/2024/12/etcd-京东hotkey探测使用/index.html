@@ -11,7 +11,7 @@
 <meta property='og:description' content="京东hotkey把热点数据默认缓存在了本地缓存caffeine中，也可以存到redis中，但是京东hotkey的SDK没有redis的实现方法，因此需要自己实现。官方目录结构下：分别是client客户端（要打包引入到自己的项目）、common工具包（也打包引入到自己项目），dashboard（hotkey可视化面板，自己设置端口启动即可）、sample（实现demo）、worker（也要自己设置端口并且启动，用来和etcd交流信息）。">
 <meta property='og:url' content='/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='杂' /><meta property='article:tag' content='etcd' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2024-12-21T11:58:09&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T11:58:09&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='杂' /><meta property='article:tag' content='etcd' /><meta property='article:published_time' content='2024-12-21T11:58:09&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T11:58:09&#43;00:00'/>
 <meta name="twitter:title" content="etcd+京东hotkey探测使用">
 <meta name="twitter:description" content="京东hotkey把热点数据默认缓存在了本地缓存caffeine中，也可以存到redis中，但是京东hotkey的SDK没有redis的实现方法，因此需要自己实现。官方目录结构下：分别是client客户端（要打包引入到自己的项目）、common工具包（也打包引入到自己项目），dashboard（hotkey可视化面板，自己设置端口启动即可）、sample（实现demo）、worker（也要自己设置端口并且启动，用来和etcd交流信息）。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,7 +336,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#另外client的pom文件会加载不到一个plugin这个时候需要设置一下groupid去中央仓库看一下就知道了">另外client的pom文件会加载不到一个plugin，这个时候需要设置一下groupId，去中央仓库看一下就知道了：</a></li>
+    <li><a href="#项目成功接入-hotkey-监控">项目成功接入 hotKey 监控</a></li>
   </ol>
 </nav>
         </div>
@@ -434,11 +434,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/etcd/">Etcd</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a> 
-            
-            
         </div>
         
     </footer>
@@ -452,32 +447,137 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><a class="link" href="https://gitee.com/jd-platform-opensource/hotkey"  title="q​​​​​​​hotKey链接"
-     target="_blank" rel="noopener"
-    >qhotKey链接</a></p>
-<p>京东hotkey把热点数据默认缓存在了本地缓存caffeine中，也可以存到redis中，但是京东hotkey的SDK没有redis的实现方法，因此需要自己实现。<br>
-官方目录结构下：分别是client客户端（要打包引入到自己的项目）、common工具包（也打包引入到自己项目），dashboard（hotkey可视化面板，自己设置端口启动即可）、sample（实现demo）、worker（也要自己设置端口并且启动，用来和etcd交流信息）<br>
-<img src="https://i-blog.csdnimg.cn/direct/84fa3061c9784cb2a82f085b6580b4cf.png"
-	
-	
-	
+    <p><a class="link" href="https://gitee.com/jd-platform-opensource/hotkey"  target="_blank" rel="noopener"
+    >JD hotKey 链接</a></p>
+<p>京东 hotkey 把热点数据默认缓存在了本地缓存 caffeine 中，也可以存到 redis 中，但是京东 hotkey 的 SDK 没有 redis 的实现方法，因此需要自己实现。</p>
+<p>官方目录结构下：分别是 client 客户端（要打包引入到自己的项目）、common 工具包（也打包引入到自己项目），dashboard（hotkey 可视化面板，自己设置端口启动即可）、sample（实现 demo）、worker（也要自己设置端口并且启动，用来和 etcd 交流信息）
+<img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image.png"
+	width="686"
+	height="943"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image_hu_7e4e8dfc40e8cd0d.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image_hu_157f83dfa7925c6d.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="72"
+		data-flex-basis="174px"
 	
 ></p>
 <p>​</p>
-<p>client是hotKey客户端，需要打包引入到我们自己的项目中（在自己项目中建个lib目录），刚开始打包报错，说是找不到某些模块，把父模块clean然后install一下，再打包client模块就好了。</p>
-<p>client打成jar包后，要用的是with-dependencies包，并且要改名成hotkey-client-0.0.4-SNAPSHOT.jar，因为我们自己项目的依赖名字就是hotkey-client-0.0.4-SNAPSHOT.jar</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/9294451d100a43f89647228cc4194a72.png"
-	
-	
-	
+<p>client 是 hotKey 客户端，需要打包引入到我们自己的项目中（在自己项目中建个 lib 目录），刚开始打包报错，说是找不到某些模块，把父模块 clean 然后 install 一下，再打包 client 模块就好了。</p>
+<p>client 打成 jar 包后，要用的是 with-dependencies 包，并且要改名成 hotkey-client-0.0.4-SNAPSHOT.jar，因为我们自己项目的依赖名字就是 hotkey-client-0.0.4-SNAPSHOT.jar</p>
+<p><img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-1.png"
+	width="939"
+	height="736"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-1_hu_ad1c0f651d786f81.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-1_hu_e06c9acd144298c2.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="127"
+		data-flex-basis="306px"
+	
 ></p>
-<h2 id="另外client的pom文件会加载不到一个plugin这个时候需要设置一下groupid去中央仓库看一下就知道了"><a href="#%e5%8f%a6%e5%a4%96client%e7%9a%84pom%e6%96%87%e4%bb%b6%e4%bc%9a%e5%8a%a0%e8%bd%bd%e4%b8%8d%e5%88%b0%e4%b8%80%e4%b8%aaplugin%e8%bf%99%e4%b8%aa%e6%97%b6%e5%80%99%e9%9c%80%e8%a6%81%e8%ae%be%e7%bd%ae%e4%b8%80%e4%b8%8bgroupid%e5%8e%bb%e4%b8%ad%e5%a4%ae%e4%bb%93%e5%ba%93%e7%9c%8b%e4%b8%80%e4%b8%8b%e5%b0%b1%e7%9f%a5%e9%81%93%e4%ba%86" class="header-anchor"></a>另外client的pom文件会加载不到一个plugin，这个时候需要设置一下groupId，去中央仓库看一下就知道了：
-</h2>
+<p>另外 client 的 pom 文件会加载不到一个 plugin，这个时候需要设置一下 groupId，去中央仓库看一下就知道了：</p>
+<p><img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-2.png"
+	width="1121"
+	height="564"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-2_hu_cc7328cf257c5117.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-2_hu_b74ab9afd89cce5f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="198"
+		data-flex-basis="477px"
+	
+></p>
+<p>自己的项目引入依赖：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"> <span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;artifactId&gt;</span>hotkey-client<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;groupId&gt;</span>com.jd.platform.hotkey<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;version&gt;</span>0.0.4-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;scope&gt;</span>system<span class="nt">&lt;/scope&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;systemPath&gt;</span>${project.basedir}/lib/hotkey-client-0.0.4-SNAPSHOT.jar<span class="nt">&lt;/systemPath&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>dashboard 模块，配置启动端口和 etcd 的地址，默认是http://127.0.0.1:2379，另外resources目录下还有db.sql需要建表，是dashboard运行所必须的。</p>
+<p>配置用户：appName 和后端 yml 配置要相同
+<img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-3.png"
+	width="2728"
+	height="959"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-3_hu_826c52c262466547.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-3_hu_ecbc0c99a940b807.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="284"
+		data-flex-basis="682px"
+	
+>
+配置 dashboard 的热 key 规则：
+<img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-4.png"
+	width="2756"
+	height="1081"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-4_hu_c7750594a563366b.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-4_hu_b57c2e1ac46538d0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="254"
+		data-flex-basis="611px"
+	
+>
+worker 模块配置端口直接启动即可。</p>
+<h2 id="项目成功接入-hotkey-监控"><a href="#%e9%a1%b9%e7%9b%ae%e6%88%90%e5%8a%9f%e6%8e%a5%e5%85%a5-hotkey-%e7%9b%91%e6%8e%a7" class="header-anchor"></a>项目成功接入 hotKey 监控
+</h2><p><img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-5.png"
+	width="2710"
+	height="609"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-5_hu_ed9374e6741ed4b7.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-5_hu_ea70be7694e05696.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="444"
+		data-flex-basis="1067px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-6.png"
+	width="2457"
+	height="1116"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-6_hu_efdaea40a872cc79.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-6_hu_fe09f4a8243d0d32.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="528px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-7.png"
+	width="2734"
+	height="1138"
+	srcset="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-7_hu_b59e7886ce0e1782.png 480w, /zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/image-7_hu_e92aaab3a73da099.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="240"
+		data-flex-basis="576px"
+	
+></p>
+
 </section>
 
 

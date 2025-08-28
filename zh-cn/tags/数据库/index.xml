@@ -501,10 +501,8 @@ InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二�
         <pubDate>Fri, 27 Dec 2024 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/</guid>
-        <description>&lt;br /&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;何为事务？&lt;/strong&gt; 一言蔽之，&lt;strong&gt;事务是逻辑上的一组操作，要么都执行，要么都不执行。&lt;/strong&gt;
-&lt;br /&gt;&lt;/p&gt;
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;何为事务？&lt;/strong&gt; 一言蔽之，&lt;strong&gt;事务是逻辑上的一组操作，要么都执行，要么都不执行。&lt;/strong&gt; &amp;gt; &lt;br /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;原子性&lt;/strong&gt; （&lt;code&gt;Atomicity&lt;/code&gt;）：事务是最小的执行单位，不允许分割。事务的原子性确保动作要么全部完成，要么完全不起作用；&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;一致性&lt;/strong&gt; （&lt;code&gt;Consistency&lt;/code&gt;）：执行事务前后，数据保持一致，例如转账业务中，无论事务是否成功，转账者和收款人的总额应该是不变的；&lt;/li&gt;
@@ -514,16 +512,20 @@ InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二�
 &lt;p&gt;&lt;strong&gt;只有保证了事务的持久性、原子性、隔离性之后，一致性才能得到保障。也就是说 A、I、D 是手段，C 是目的！&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://time.geekbang.org/opencourse/intro/100064201&#34;  title=&#34;周志明的软件架构课_软件架构_分布式系统_基础设施_架构演进_单体架构_SOA架构_微服务_云原生-极客时间&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;周志明的软件架构课_软件架构_分布式系统_基础设施_架构演进_单体架构_SOA架构_微服务_云原生-极客时间&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/91d45c694a7741ff9fed8031d0ab0936.png&#34;
-	
-	
-	
+    &gt;周志明的软件架构课&lt;em&gt;软件架构&lt;/em&gt;分布式系统&lt;em&gt;基础设施&lt;/em&gt;架构演进&lt;em&gt;单体架构_SOA 架构&lt;/em&gt;微服务_云原生-极客时间&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/image.png&#34;
+	width=&#34;768&#34;
+	height=&#34;802&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/image_hu_d5e27402bc12d27a.png 480w, /zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/image_hu_1d47680f91659ae3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;95&#34;
+		data-flex-basis=&#34;229px&#34;
+	
 &gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;1并发事务的问题-11e5b9b6e58f91e4ba8be58aa1e79a84e997aee9a298&#34;&gt;&lt;a href=&#34;#1%e5%b9%b6%e5%8f%91%e4%ba%8b%e5%8a%a1%e7%9a%84%e9%97%ae%e9%a2%98-11e5b9b6e58f91e4ba8be58aa1e79a84e997aee9a298&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.并发事务的问题 {#1.1%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98}
+&lt;h2 id=&#34;并发事务的问题&#34;&gt;&lt;a href=&#34;#%e5%b9%b6%e5%8f%91%e4%ba%8b%e5%8a%a1%e7%9a%84%e9%97%ae%e9%a2%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;并发事务的问题
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;丢失修改：&lt;/strong&gt; 在事务 1 读取一个数据时，另外事务 2 也访问了该数据，那么在事务 1 中修改了这个数据后，事务 2 也修改了这个数据。这样事务 1 的修改结果就被丢失，因此称为丢失修改。
@@ -531,9 +533,9 @@ InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二�
 &lt;li&gt;**例：**事务 1 读取某表中的数据 A=20，事务 2 也读取 A=20。事务 1 先修改 A=A-1，事务 2 后来也修改 A=A-1，最终结果 A=19，事务 1 的修改被丢失&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;脏读：&lt;/strong&gt; 事务2读取了事务1未提交的数据
+&lt;li&gt;&lt;strong&gt;脏读：&lt;/strong&gt; 事务 2 读取了事务 1 未提交的数据
 &lt;ul&gt;
-&lt;li&gt;**例：**事务 1 读取某表中的数据 A=20并修改 A=A-1，事务 2 读取到 A = 19,事务 1 回滚导致对 A 的修改并未提交到数据库， A 的值还是 20&lt;/li&gt;
+&lt;li&gt;**例：**事务 1 读取某表中的数据 A=20 并修改 A=A-1，事务 2 读取到 A = 19,事务 1 回滚导致对 A 的修改并未提交到数据库， A 的值还是 20&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;不可重复读：&lt;/strong&gt; 事务 1 多次读同一数据。在事务 1 还没有结束时，事务 2 也访问该数据。那么，在事务 1 中的两次读数据之间，由于事务 2 的修改导致第一个事务两次读取的数据可能不太一样。这就发生了在一个事务内两次读到的数据是不一样的情况，因此称为不可重复读。
@@ -547,11 +549,11 @@ InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二�
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;2并发事务控制方式-12e5b9b6e58f91e4ba8be58aa1e68ea7e588b6e696b9e5bc8f&#34;&gt;&lt;a href=&#34;#2%e5%b9%b6%e5%8f%91%e4%ba%8b%e5%8a%a1%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f-12e5b9b6e58f91e4ba8be58aa1e68ea7e588b6e696b9e5bc8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.并发事务控制方式 {#1.2%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1%E6%8E%A7%E5%88%B6%E6%96%B9%E5%BC%8F}
+&lt;h2 id=&#34;并发事务控制方式&#34;&gt;&lt;a href=&#34;#%e5%b9%b6%e5%8f%91%e4%ba%8b%e5%8a%a1%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;并发事务控制方式
 &lt;/h2&gt;&lt;p&gt;MySQL 中并发事务的控制方式无非就两种：&lt;strong&gt;锁&lt;/strong&gt; 和 &lt;strong&gt;MVCC&lt;/strong&gt;。锁可以看作是悲观控制的模式，多版本并发控制可以看作是乐观控制的模式。&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://javaguide.cn/database/mysql/innodb-implementation-of-mvcc.html&#34;  title=&#34;InnoDB存储引擎对MVCC的实现 | JavaGuide&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;InnoDB存储引擎对MVCC的实现 | JavaGuide&lt;/a&gt;&lt;/p&gt;
+    &gt;InnoDB 存储引擎对 MVCC 的实现 | JavaGuide&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;锁&lt;/strong&gt; 控制方式下会通过锁来显式控制共享资源而不是通过调度手段，MySQL 中主要是通过 &lt;strong&gt;读写锁&lt;/strong&gt; 来实现并发控制。&lt;/p&gt;
 &lt;ul&gt;
@@ -560,78 +562,82 @@ InnoDB存储引擎根据索引类型不同，分为聚簇索引（图1）和二�
 &lt;strong&gt;MVCC&lt;/strong&gt; 是多版本并发控制方法，即对一份数据会存储多个版本，通过事务的可见性来保证事务能看到自己应该看到的版本。通常会有一个全局的版本分配器来为每一行数据设置版本号，版本号是唯一的。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;MVCC 在 MySQL 中实现所依赖的手段主要是: &lt;strong&gt;隐藏字段、read view、undo log&lt;/strong&gt;。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;3四个事务隔离级别-13e4ba8be58aa1e99a94e7a6bbe7baa7e588ab&#34;&gt;&lt;a href=&#34;#3%e5%9b%9b%e4%b8%aa%e4%ba%8b%e5%8a%a1%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab-13e4ba8be58aa1e99a94e7a6bbe7baa7e588ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3.四个事务隔离级别 {#1.3%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB}
+&lt;h2 id=&#34;四个事务隔离级别&#34;&gt;&lt;a href=&#34;#%e5%9b%9b%e4%b8%aa%e4%ba%8b%e5%8a%a1%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;四个事务隔离级别
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://tech.meituan.com/2014/08/20/innodb-lock.html&#34;  title=&#34;Innodb中的事务隔离级别和锁的关系 - 美团技术团队&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Innodb中的事务隔离级别和锁的关系 - 美团技术团队&lt;/a&gt;&lt;/p&gt;
+    &gt;Innodb 中的事务隔离级别和锁的关系 - 美团技术团队&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;MySQL 的隔离级别基于锁和 MVCC 机制共同实现的。&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;读已提交和 可重复读 隔离级别是基于 MVCC 实现的，可串行化 隔离级别是通过锁来实现的。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;读未提交-read-uncommitted&#34;&gt;&lt;a href=&#34;#%e8%af%bb%e6%9c%aa%e6%8f%90%e4%ba%a4-read-uncommitted&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;读未提交 (Read Uncommitted)&lt;/strong&gt;
+&lt;h3 id=&#34;读未提交-read-uncommitted&#34;&gt;&lt;a href=&#34;#%e8%af%bb%e6%9c%aa%e6%8f%90%e4%ba%a4-read-uncommitted&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;读未提交 (Read Uncommitted)
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;特点：在该隔离级别下，一个事务可以读取另一个事务尚未提交的数据。这就会导致脏读，即一个事务读取到的可能是另一个事务未提交的修改，这些修改可能会被回滚。&lt;/li&gt;
-&lt;li&gt;问题：事务B读取到事务A修改的值，但事务A回滚后，数据实际上没有变化。发生了&lt;strong&gt;脏读。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;问题：事务 B 读取到事务 A 修改的值，但事务 A 回滚后，数据实际上没有变化。发生了&lt;strong&gt;脏读。&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;读已提交-read-committed&#34;&gt;&lt;a href=&#34;#%e8%af%bb%e5%b7%b2%e6%8f%90%e4%ba%a4-read-committed&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;读已提交 (Read Committed)&lt;/strong&gt;
+&lt;h3 id=&#34;读已提交-read-committed&#34;&gt;&lt;a href=&#34;#%e8%af%bb%e5%b7%b2%e6%8f%90%e4%ba%a4-read-committed&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;读已提交 (Read Committed)
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;特点：在该隔离级别下，一个事务只能读取到已提交事务的数据，因此脏读不会发生。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;问题：事务A在读取两次同一数据时，第二次读取的数据可能会&lt;strong&gt;因其他事务的提交而发生变化&lt;/strong&gt; ，这就是&lt;strong&gt;不可重复读&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;问题：事务 A 在读取两次同一数据时，第二次读取的数据可能会&lt;strong&gt;因其他事务的提交而发生变化&lt;/strong&gt; ，这就是&lt;strong&gt;不可重复读&lt;/strong&gt; 。&lt;/p&gt;
 &lt;p&gt;「读已提交」事务期间的多次读取同一条数据，&lt;strong&gt;前后两次读的数据可能会出现不一致&lt;/strong&gt; ，因为可能这期间另外一个事务修改了该记录，并提交了事务。&lt;strong&gt;这就是不可重复读的问题&lt;/strong&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;可重复读-repeatable-read&#34;&gt;&lt;a href=&#34;#%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb-repeatable-read&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;可重复读 (Repeatable Read)&lt;/strong&gt;
+&lt;h3 id=&#34;可重复读-repeatable-read&#34;&gt;&lt;a href=&#34;#%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb-repeatable-read&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;可重复读 (Repeatable Read)
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;特点：在该隔离级别下，事务会看到在事务开始时一致的&lt;strong&gt;数据快照&lt;/strong&gt;，不可重复读的问题被解决。&lt;/li&gt;
-&lt;li&gt;问题：如果事务A查询范围的数据（例如某一时间段内的所有交易记录），事务B&lt;strong&gt;插入&lt;/strong&gt; 的新数据可能会被事务A在第二次查询中看到，导致事务A两次查询到的数据量不一致，这就是&lt;strong&gt;幻读，可重复读仅解决部分幻读&lt;/strong&gt;。&lt;/li&gt;
-&lt;li&gt;用 Read View 只能保证&amp;quot;快照读&amp;quot;不幻读；一旦事务里出现&amp;quot;当前读&amp;quot;（UPDATE/DELETE/SELECT &amp;hellip; FOR UPDATE 等），就会重新加 Next-Key Lock，这时若别的事务新插入的记录落在这个锁范围里，就可能被本事务再次看到，于是出现&amp;quot;部分幻读&amp;quot;。&lt;br&gt;
-「可重复读」隔离级别是&lt;strong&gt;启动事务时生成一个Read View，然后整个事务期间都在用
-这个Read View&lt;/strong&gt; ，这样就保证了在事务期间读到的数据都是事务启动前的记录。&lt;strong&gt;解决了不可重复读和部分幻读。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;问题：如果事务 A 查询范围的数据（例如某一时间段内的所有交易记录），事务 B&lt;strong&gt;插入&lt;/strong&gt; 的新数据可能会被事务 A 在第二次查询中看到，导致事务 A 两次查询到的数据量不一致，这就是&lt;strong&gt;幻读，可重复读仅解决部分幻读&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;用 Read View 只能保证&amp;quot;快照读&amp;quot;不幻读；一旦事务里出现&amp;quot;当前读&amp;quot;（UPDATE/DELETE/SELECT &amp;hellip; FOR UPDATE 等），就会重新加 Next-Key Lock，这时若别的事务新插入的记录落在这个锁范围里，就可能被本事务再次看到，于是出现&amp;quot;部分幻读&amp;quot;。
+「可重复读」隔离级别是&lt;strong&gt;启动事务时生成一个 Read View，然后整个事务期间都在用
+这个 Read View&lt;/strong&gt; ，这样就保证了在事务期间读到的数据都是事务启动前的记录。&lt;strong&gt;解决了不可重复读和部分幻读。&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;串行化-serializable&#34;&gt;&lt;a href=&#34;#%e4%b8%b2%e8%a1%8c%e5%8c%96-serializable&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;串行化 (Serializable)&lt;/strong&gt;
+&lt;h3 id=&#34;串行化-serializable&#34;&gt;&lt;a href=&#34;#%e4%b8%b2%e8%a1%8c%e5%8c%96-serializable&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;串行化 (Serializable)
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;特点：在该隔离级别下，&lt;strong&gt;事务是完全隔离、串行执行&lt;/strong&gt;。其他事务必须等当前事务完成才能开始执行，这避免了所有并发问题（脏读、不可重复读和幻读），但也大大降低了性能。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/014548cec43741ff8df707ad14040006.png&#34;
-	
-	
-	
+&lt;li&gt;特点：在该隔离级别下，&lt;strong&gt;事务是完全隔离、串行执行&lt;/strong&gt;。其他事务必须等当前事务完成才能开始执行，这避免了所有并发问题（脏读、不可重复读和幻读），但也大大降低了性能。
+&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/image-1.png&#34;
+	width=&#34;1080&#34;
+	height=&#34;464&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/image-1_hu_f56d88340cfa1784.png 480w, /zh-cn/post/2024/12/mysql%E5%9B%9B%E7%A7%8D%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E6%9C%BA%E5%88%B6/image-1_hu_fdbd2950bc1baf4f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;4幻读&#34;&gt;&lt;a href=&#34;#4%e5%b9%bb%e8%af%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;4.幻读&lt;/strong&gt;
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;232&#34;
+		data-flex-basis=&#34;558px&#34;
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;幻读&#34;&gt;&lt;a href=&#34;#%e5%b9%bb%e8%af%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;幻读
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;幻读 VS 不可重复读&lt;/strong&gt;&lt;br&gt;
-幻读重点在于&lt;strong&gt;数据是否存在&lt;/strong&gt;。原本不存在的数据却真实的存在了，这便是幻读。引起幻读的原因在于另一个事务进行了INSERT操作。&lt;/li&gt;
-&lt;li&gt;不可重复读重点在于&lt;strong&gt;数据值是否被改变&lt;/strong&gt;。在一个事务中对同一条记录进行查询，第一次读取到的数据和第二次读取到的数据不一致，这便是可重复读。引起不可重复读的原因在于另一个事务进行了UPDATE或者是DELETE操作。&lt;/li&gt;
+幻读重点在于&lt;strong&gt;数据是否存在&lt;/strong&gt;。原本不存在的数据却真实的存在了，这便是幻读。引起幻读的原因在于另一个事务进行了 INSERT 操作。&lt;/li&gt;
+&lt;li&gt;不可重复读重点在于&lt;strong&gt;数据值是否被改变&lt;/strong&gt;。在一个事务中对同一条记录进行查询，第一次读取到的数据和第二次读取到的数据不一致，这便是可重复读。引起不可重复读的原因在于另一个事务进行了 UPDATE 或者是 DELETE 操作。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;简单来说：幻读是说数据的条数发生了变化，原本不存在的数据存在了。不可重复读是说数据的内容发生了变化，原本存在的数据的内容发生了改变。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;可重复读隔离下为什么会产生幻读&lt;/strong&gt;&lt;br&gt;
 在可重复读隔离级别下，普通的查询是&lt;strong&gt;快照读&lt;/strong&gt; ，是不会看到别的事务插入的数据的，&lt;strong&gt;就没有幻读&lt;/strong&gt; 。因此，幻读在 &lt;strong&gt;当前读（&lt;/strong&gt; select &amp;hellip; for update 等语句，使用临键锁**）** 下才会出现。&lt;br&gt;
-MySQL里除了普通查询是快照读，其他都是当前读，比如update、insert、delete,这些语句执行前都会查询最新版本的数据，然后再做进一步的操作。&lt;/p&gt;
+MySQL 里除了普通查询是快照读，其他都是当前读，比如 update、insert、delete,这些语句执行前都会查询最新版本的数据，然后再做进一步的操作。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;MySQL中如何实现可重复读&lt;/strong&gt;&lt;br&gt;
-当隔离级别为可重复读的时候，事务只在第一次 SELECT 的时候会获取一次 Read View，而后面所有的 SELECT 都会复用这个 Read View。也就是说：不管其他事务怎么修改数据，，对于A事务而言，它能看到的数据永远都是第一次SELECT时看到的数据。这显然不合理，如果其它事务插入了数据，A事务却只能看到过去的数据，读取不了当前的数据。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MySQL 中如何实现可重复读&lt;/strong&gt;&lt;br&gt;
+当隔离级别为可重复读的时候，事务只在第一次 SELECT 的时候会获取一次 Read View，而后面所有的 SELECT 都会复用这个 Read View。也就是说：不管其他事务怎么修改数据，，对于 A 事务而言，它能看到的数据永远都是第一次 SELECT 时看到的数据。这显然不合理，如果其它事务插入了数据，A 事务却只能看到过去的数据，读取不了当前的数据。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;解决幻读的办法&lt;/strong&gt;&lt;br&gt;
 &lt;a class=&#34;link&#34; href=&#34;https://xiaolincoding.com/mysql/transaction/phantom.html&#34;  title=&#34;MySQL 可重复读隔离级别，完全解决幻读了吗？ | 小林coding&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;MySQL 可重复读隔离级别，完全解决幻读了吗？ | 小林coding&lt;/a&gt;{#解决幻读的方法}&lt;/p&gt;
-&lt;p&gt;**解决幻读的核心思想就是事务A在操作某张表数据的时候，另外事务B不允许新增或者删除这张表中的数据。**解决幻读的方式主要有以下几种：&lt;/p&gt;
+    &gt;MySQL 可重复读隔离级别，完全解决幻读了吗？ | 小林 coding&lt;/a&gt;{#解决幻读的方法}&lt;/p&gt;
+&lt;p&gt;**解决幻读的核心思想就是事务 A 在操作某张表数据的时候，另外事务 B 不允许新增或者删除这张表中的数据。**解决幻读的方式主要有以下几种：&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;将事务隔离级别调整为 &lt;code&gt;SERIALIZABLE&lt;/code&gt; 。&lt;/p&gt;
@@ -646,15 +652,13 @@ MySQL里除了普通查询是快照读，其他都是当前读，比如update、
 &lt;p&gt;&lt;strong&gt;其他情况下的幻读&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;在可重复读隔离级别下，事务A第一次执行普通的select语句时生成一个数据快照，之后事务B向表中新插入了一条id=5的记录并提交（此时是当前读）。接着，事务A对id=5这条记录进行了更新操作（看不见但是能更新），在这个时刻这条新记录的trx id隐藏列的值就变成了事务A的事务id，之后事务A再使用普通select语句去查询这条记录时就可以看到这条记录了，于是就发生了幻读。&lt;/p&gt;
+&lt;p&gt;在可重复读隔离级别下，事务 A 第一次执行普通的 select 语句时生成一个数据快照，之后事务 B 向表中新插入了一条 id=5 的记录并提交（此时是当前读）。接着，事务 A 对 id=5 这条记录进行了更新操作（看不见但是能更新），在这个时刻这条新记录的 trx id 隐藏列的值就变成了事务 A 的事务 id，之后事务 A 再使用普通 select 语句去查询这条记录时就可以看到这条记录了，于是就发生了幻读。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;事务A先快照读，得到数据量为3，然后事务B插入一条数据并提交事务，事务A使用当前读得到的数量就是4了，前后数据量不对。&lt;/p&gt;
+&lt;p&gt;事务 A 先快照读，得到数据量为 3，然后事务 B 插入一条数据并提交事务，事务 A 使用当前读得到的数量就是 4 了，前后数据量不对。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;br /&gt;
-&lt;p&gt;要避免这类特殊场景下发生幻读的现象的话，就是尽量在开启事务之后，马上执行select for update这类当前读的语句，因为它会对记录加next-key lock，从而避免其他事务插入一条新记录。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
+&lt;p&gt;要避免这类特殊场景下发生幻读的现象的话，就是尽量在开启事务之后，马上执行 select for update 这类当前读的语句，因为它会对记录加 next-key lock，从而避免其他事务插入一条新记录。&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
@@ -663,110 +667,115 @@ MySQL里除了普通查询是快照读，其他都是当前读，比如update、
         <pubDate>Thu, 26 Dec 2024 14:43:23 +0000</pubDate>
         
         <guid>/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/</guid>
-        <description>&lt;p&gt;&lt;strong&gt;目录&lt;/strong&gt;{#main-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B&#34; &gt;1.字段类型&lt;/a&gt;{#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#VARCHAR%28100%29%E5%92%8C%20VARCHAR%2810%29%E5%8C%BA%E5%88%AB&#34; &gt;1.2VARCHAR(100)和 VARCHAR(10)区别&lt;/a&gt;{#VARCHAR(100)%E5%92%8C%20VARCHAR(10)%E5%8C%BA%E5%88%AB-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB&#34; &gt;1.3DECIMAL 和 FLOAT/DOUBLE 区别&lt;/a&gt;{#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#TEXT%E5%92%8CBLOB&#34; &gt;1.4TEXT和BLOB&lt;/a&gt;{#TEXT%E5%92%8CBLOB-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP&#34; &gt;1.5DATETIME 和 TIMESTAMP&lt;/a&gt;{#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB&#34; &gt;1.6NULL和&amp;quot;&amp;ldquo;的区别&lt;/a&gt;{#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F&#34; &gt;1.7为什么 MySQL 不建议使用 NULL 作为列默认值？&lt;/a&gt;{#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA&#34; &gt;1.8Boolean类型如何表示&lt;/a&gt;{#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84&#34; &gt;2.MySQL基础架构&lt;/a&gt;{#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0&#34; &gt;3.MySQL存储引擎&lt;/a&gt;{#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0-toc}&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB&#34; &gt;3.1MyISAM和InnoDB区别&lt;/a&gt;{#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB-toc}&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;MySQL是建立在关系模型基础上的关系型数据库，关系模型表明了数据库中所存储的数据之间的联系（一对一、一对多、多对多）。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;1字段类型-e5ad97e6aeb5e7b1bbe59e8b&#34;&gt;&lt;a href=&#34;#1%e5%ad%97%e6%ae%b5%e7%b1%bb%e5%9e%8b-e5ad97e6aeb5e7b1bbe59e8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.字段类型 {#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B}
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/d295b20e0f0941e381a4dda058c4c05c.png&#34;
-	
-	
-	
+        <description>&lt;blockquote&gt;
+&lt;p&gt;MySQL 是建立在关系模型基础上的关系型数据库，关系模型表明了数据库中所存储的数据之间的联系（一对一、一对多、多对多）。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;字段类型&#34;&gt;&lt;a href=&#34;#%e5%ad%97%e6%ae%b5%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;字段类型
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image.png&#34;
+	width=&#34;1654&#34;
+	height=&#34;1426&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image_hu_8d67505423ab9cf5.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image_hu_fe9bc902be500416.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;115&#34;
+		data-flex-basis=&#34;278px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;TINYINT占1字节，INT占4字节，BIGINT占8字节。&lt;/li&gt;
-&lt;li&gt;CHAR是定长字符串，VARCHAR是变长字符串。CHAR 在存储时会在右边填充空格以达到指定的长度，检索时会去掉空格；VARCHAR 在存储时需要使用 1 或 2 个额外&lt;strong&gt;字节&lt;/strong&gt; 记录字符串的长度，检索时不需要处理。&lt;strong&gt;CHAR（100）指的是100个字符而非字节&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;MySQL中字符的存储是与字符集（&lt;code&gt;CHARSET&lt;/code&gt;）相关的，具体的字节数取决于你使用的字符集和编码。 &lt;strong&gt;&lt;code&gt;latin1&lt;/code&gt;&lt;/strong&gt; 编码（单字节编码），每个字符占用 &lt;strong&gt;1 字节&lt;/strong&gt; 。&lt;strong&gt;&lt;code&gt;utf8mb4&lt;/code&gt;&lt;/strong&gt; 编码（变长编码），每个字符可能占用 &lt;strong&gt;1 到 4 字节&lt;/strong&gt;，具体取决于字符的内容。&lt;/li&gt;
+&lt;li&gt;TINYINT 占 1 字节，INT 占 4 字节，BIGINT 占 8 字节。&lt;/li&gt;
+&lt;li&gt;CHAR 是定长字符串，VARCHAR 是变长字符串。CHAR 在存储时会在右边填充空格以达到指定的长度，检索时会去掉空格；VARCHAR 在存储时需要使用 1 或 2 个额外&lt;strong&gt;字节&lt;/strong&gt; 记录字符串的长度，检索时不需要处理。&lt;strong&gt;CHAR（100）指的是 100 个字符而非字节&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;MySQL 中字符的存储是与字符集（&lt;code&gt;CHARSET&lt;/code&gt;）相关的，具体的字节数取决于你使用的字符集和编码。 &lt;strong&gt;&lt;code&gt;latin1&lt;/code&gt;&lt;/strong&gt; 编码（单字节编码），每个字符占用 &lt;strong&gt;1 字节&lt;/strong&gt; 。&lt;strong&gt;&lt;code&gt;utf8mb4&lt;/code&gt;&lt;/strong&gt; 编码（变长编码），每个字符可能占用 &lt;strong&gt;1 到 4 字节&lt;/strong&gt;，具体取决于字符的内容。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;12varchar100和-varchar10区别-varchar100e5928c20varchar10e58cbae588ab&#34;&gt;&lt;a href=&#34;#12varchar100%e5%92%8c-varchar10%e5%8c%ba%e5%88%ab-varchar100e5928c20varchar10e58cbae588ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.2VARCHAR(100)和 VARCHAR(10)区别 {#VARCHAR(100)%E5%92%8C%20VARCHAR(10)%E5%8C%BA%E5%88%AB}
+&lt;h3 id=&#34;varchar100和-varchar10区别&#34;&gt;&lt;a href=&#34;#varchar100%e5%92%8c-varchar10%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;VARCHAR(100)和 VARCHAR(10)区别
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;VARCHAR(100)和 VARCHAR(10)都是变长类型，表示能存储最多 100 个字符和 10 个字符。但二者存储相同的字符串，所占用磁盘的存储空间其实是一样的，其所占用的磁盘空间是基于&lt;strong&gt;实际存储的字符长度&lt;/strong&gt;，而不是字段的最大长度。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;13decimal-和-floatdouble-区别-decimal20e5928c20float2fdouble20e58cbae588ab&#34;&gt;&lt;a href=&#34;#13decimal-%e5%92%8c-floatdouble-%e5%8c%ba%e5%88%ab-decimal20e5928c20float2fdouble20e58cbae588ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;1.3DECIMAL 和 FLOAT/DOUBLE 区别&lt;/strong&gt; {#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB}
+&lt;h3 id=&#34;decimal-和-floatdouble-区别&#34;&gt;&lt;a href=&#34;#decimal-%e5%92%8c-floatdouble-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DECIMAL 和 FLOAT/DOUBLE 区别
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;br /&gt;
 &lt;p&gt;&lt;strong&gt;DECIMAL 是定点数，可以存储精确的小数值。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;FLOAT（4字节），DOUBLE（8字节） 是浮点数，只能存储近似的小数值。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FLOAT（4 字节），DOUBLE（8 字节） 是浮点数，只能存储近似的小数值。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;DECIMAL 用于存储具有精度要求的小数，例如与货币相关的数据，可以避免浮点数带来的精度损失。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;14text和blob-texte5928cblob&#34;&gt;&lt;a href=&#34;#14text%e5%92%8cblob-texte5928cblob&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.4TEXT和BLOB {#TEXT%E5%92%8CBLOB}
+&lt;h3 id=&#34;text-和-blob&#34;&gt;&lt;a href=&#34;#text-%e5%92%8c-blob&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;TEXT 和 BLOB
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;TEXT可以存储更长的字符串，即长文本数据，例如博客内容。&lt;/li&gt;
+&lt;li&gt;TEXT 可以存储更长的字符串，即长文本数据，例如博客内容。&lt;/li&gt;
 &lt;li&gt;BLOB 类型主要用于存储二进制大对象，例如图片、音视频等文件。&lt;/li&gt;
-&lt;li&gt;TEXT和BLOB缺点：
+&lt;li&gt;TEXT 和 BLOB 缺点：
 &lt;ul&gt;
 &lt;li&gt;不能有默认值。&lt;/li&gt;
 &lt;li&gt;检索效率较低。&lt;/li&gt;
 &lt;li&gt;在使用临时表时无法使用内存临时表，只能在磁盘上创建临时表。&lt;/li&gt;
-&lt;li&gt;不能直接创建索引，需要指定前缀长度。&lt;/li&gt;
+&lt;li&gt;不能直接创建索引，需要指定前缀长度。
+&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-1.png&#34;
+	width=&#34;990&#34;
+	height=&#34;449&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-1_hu_dada62f7d2c52a32.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-1_hu_423eb2c7607370a0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;529px&#34;
+	
+&gt; &amp;gt; &lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-2.png&#34;
+	width=&#34;999&#34;
+	height=&#34;457&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-2_hu_8d460f34bb7ae061.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-2_hu_5cff2a90b8be2234.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;218&#34;
+		data-flex-basis=&#34;524px&#34;
+	
+&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/5622941b4e654b0792f5e5178e70545f.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/e973f869c42e4bdf9d2299624c8cb578.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h3 id=&#34;15datetime-和-timestamp-c2a0datetime20e5928c20timestamp&#34;&gt;&lt;a href=&#34;#15datetime-%e5%92%8c-timestamp-c2a0datetime20e5928c20timestamp&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.5DATETIME 和 TIMESTAMP {#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP}
+&lt;h3 id=&#34;datetime-和-timestamp&#34;&gt;&lt;a href=&#34;#datetime-%e5%92%8c-timestamp&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DATETIME 和 TIMESTAMP
 &lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://javaguide.cn/database/mysql/some-thoughts-on-database-storage-time.html#%E6%97%B6%E5%8C%BA%E4%BF%A1%E6%81%AF&#34;  title=&#34;MySQL日期类型选择建议 | JavaGuide&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;MySQL日期类型选择建议 | JavaGuide&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;DATETIME 类型没有时区信息，TIMESTAMP 和时区有关。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/26cdf6211f97459bb85803678f971882.png&#34;
-	
-	
-	
+    &gt;MySQL 日期类型选择建议 | JavaGuide&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;DATETIME 类型没有时区信息，TIMESTAMP 和时区有关。
+&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-3.png&#34;
+	width=&#34;1594&#34;
+	height=&#34;614&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-3_hu_38c6b5a7aa80305.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-3_hu_618882815bdb491b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;259&#34;
+		data-flex-basis=&#34;623px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;16null和的区别-nulle5928c2222e79a84e58cbae588ab&#34;&gt;&lt;a href=&#34;#16null%e5%92%8c%e7%9a%84%e5%8c%ba%e5%88%ab-nulle5928c2222e79a84e58cbae588ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.6NULL和&amp;quot;&amp;ldquo;的区别 {#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB}
+&lt;h3 id=&#34;null-和的区别&#34;&gt;&lt;a href=&#34;#null-%e5%92%8c%e7%9a%84%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;NULL 和&amp;quot;&amp;ldquo;的区别
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;NULL&lt;/code&gt; 代表一个不确定的值,就算是两个 &lt;code&gt;NULL&lt;/code&gt;,它俩也不一定相等。例如，&lt;code&gt;SELECT NULL=NULL&lt;/code&gt;的结果为NULL&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NULL&lt;/code&gt; 代表一个不确定的值,就算是两个 &lt;code&gt;NULL&lt;/code&gt;,它俩也不一定相等。例如，&lt;code&gt;SELECT NULL=NULL&lt;/code&gt;的结果为 NULL&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;&#39;&#39;&lt;/code&gt;的长度是 0，是不占用空间的，而&lt;code&gt;NULL&lt;/code&gt; 是需要占用空间&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;17为什么-mysql-不建议使用-null-作为列默认值-e4b8bae4bb80e4b98820mysql20e4b88de5bbbae8aeaee4bdbfe794a8c2a0nullc2a0e4bd9ce4b8bae58897e9bb98e8aea4e580bcefbc9f&#34;&gt;&lt;a href=&#34;#17%e4%b8%ba%e4%bb%80%e4%b9%88-mysql-%e4%b8%8d%e5%bb%ba%e8%ae%ae%e4%bd%bf%e7%94%a8-null-%e4%bd%9c%e4%b8%ba%e5%88%97%e9%bb%98%e8%ae%a4%e5%80%bc-e4b8bae4bb80e4b98820mysql20e4b88de5bbbae8aeaee4bdbfe794a8c2a0nullc2a0e4bd9ce4b8bae58897e9bb98e8aea4e580bcefbc9f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.7为什么 MySQL 不建议使用 &lt;code&gt;NULL&lt;/code&gt; 作为列默认值？ {#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F}
+&lt;h3 id=&#34;为什么-mysql-不建议使用-null-作为列默认值&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88-mysql-%e4%b8%8d%e5%bb%ba%e8%ae%ae%e4%bd%bf%e7%94%a8-null-%e4%bd%9c%e4%b8%ba%e5%88%97%e9%bb%98%e8%ae%a4%e5%80%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么 MySQL 不建议使用 &lt;code&gt;NULL&lt;/code&gt; 作为列默认值?
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;code&gt;NULL&lt;/code&gt; 会影响聚合函数的结果。例如，&lt;code&gt;SUM&lt;/code&gt;、&lt;code&gt;AVG&lt;/code&gt;、&lt;code&gt;MIN&lt;/code&gt;、&lt;code&gt;MAX&lt;/code&gt; 等聚合函数会忽略 &lt;code&gt;NULL&lt;/code&gt; 值，如果参数是某个字段名(&lt;code&gt;COUNT(列名)&lt;/code&gt;)，则会忽略 &lt;code&gt;NULL&lt;/code&gt; 值，只统计非空值的个数。查询 &lt;code&gt;NULL&lt;/code&gt; 值时，必须使用 &lt;code&gt;IS NULL&lt;/code&gt; 或 &lt;code&gt;IS NOT NULLl&lt;/code&gt; 来判断，而不能使用 =、!=、 &amp;lt;、&amp;gt; 之类的比较运算符。而&lt;code&gt;&#39;&#39;&lt;/code&gt;是可以使用这些比较运算符的。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;18boolean类型如何表示-booleane7b1bbe59e8be5a682e4bd95e8a1a8e7a4ba&#34;&gt;&lt;a href=&#34;#18boolean%e7%b1%bb%e5%9e%8b%e5%a6%82%e4%bd%95%e8%a1%a8%e7%a4%ba-booleane7b1bbe59e8be5a682e4bd95e8a1a8e7a4ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1.8Boolean类型如何表示 {#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA}
+&lt;h3 id=&#34;boolean-类型如何表示&#34;&gt;&lt;a href=&#34;#boolean-%e7%b1%bb%e5%9e%8b%e5%a6%82%e4%bd%95%e8%a1%a8%e7%a4%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Boolean 类型如何表示
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;MySQL 中没有专门的布尔类型，而是用 TINYINT(1) 类型来表示布尔值。TINYINT(1) 类型可以存储 0 或 1，分别对应 false 或 true。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;2mysql基础架构-mysqle59fbae7a180e69eb6e69e84&#34;&gt;&lt;a href=&#34;#2mysql%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84-mysqle59fbae7a180e69eb6e69e84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2.MySQL基础架构 {#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/52e81da0b61c4abdba463a7d2d497216.png&#34;
-	
-	
-	
+&lt;h2 id=&#34;mysql-基础架构&#34;&gt;&lt;a href=&#34;#mysql-%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MySQL 基础架构
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-4.png&#34;
+	width=&#34;1437&#34;
+	height=&#34;1088&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-4_hu_703d27ddae52e213.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-4_hu_a495e2d79e84f504.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;132&#34;
+		data-flex-basis=&#34;316px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;br /&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;连接器：&lt;/strong&gt; 身份认证和权限相关(登录 MySQL 的时候)。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;查询缓存：&lt;/strong&gt; 执行查询语句的时候，会先查询缓存（MySQL 8.0 版本后移除，因为这个功能不太实用）。&lt;/li&gt;
@@ -775,108 +784,82 @@ MySQL里除了普通查询是快照读，其他都是当前读，比如update、
 &lt;li&gt;&lt;strong&gt;执行器：&lt;/strong&gt; 执行语句，然后从存储引擎返回数据。 执行语句之前会先判断是否有权限，如果没有权限的话，就会报错。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;插件式存储引擎&lt;/strong&gt; ：主要负责数据的存储和读取，采用的是&lt;strong&gt;插件式架构&lt;/strong&gt;，支持 InnoDB、MyISAM、Memory 等多种存储引擎。InnoDB 是 MySQL 的默认存储引擎，绝大部分场景使用 InnoDB 就是最好的选择。&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;3mysql存储引擎-mysqle5ad98e582a8e5bc95e6938ec2a0&#34;&gt;&lt;a href=&#34;#3mysql%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e-mysqle5ad98e582a8e5bc95e6938ec2a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3.MySQL存储引擎 {#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0}
+&lt;h2 id=&#34;mysql-存储引擎&#34;&gt;&lt;a href=&#34;#mysql-%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MySQL 存储引擎
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html&#34;  title=&#34;MySQL :: MySQL 8.0 Reference Manual :: 17 The InnoDB Storage Engine&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;MySQL :: MySQL 8.0 Reference Manual :: 17 The InnoDB Storage Engine&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html&#34;  title=&#34;MySQL :: MySQL 8.0 Reference Manual :: 18 Alternative Storage Engines&#34;
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;MySQL :: MySQL 8.0 Reference Manual :: 18 Alternative Storage Engines&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/3ff542af8a1645058a19cb364fd8d289.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-5.png&#34;
+	width=&#34;2152&#34;
+	height=&#34;538&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-5_hu_2c6352c126711b07.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-5_hu_58ed7189f3e90260.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;400&#34;
+		data-flex-basis=&#34;960px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;MySQL 5.5.5 之前，MyISAM 是 MySQL 的默认存储引擎。5.5.5 版本之后，InnoDB 是 MySQL 的默认存储引擎。 在上述所有引擎中，&lt;strong&gt;只有InnoDB引擎支持事务。&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;上面还提到过MySQL 存储引擎采用的是 &lt;strong&gt;插件式架构&lt;/strong&gt; ，支持多种存储引擎。&lt;strong&gt;存储引擎是基于表的，而不是数据库。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;MySQL 5.5.5 之前，MyISAM 是 MySQL 的默认存储引擎。5.5.5 版本之后，InnoDB 是 MySQL 的默认存储引擎。 在上述所有引擎中，&lt;strong&gt;只有 InnoDB 引擎支持事务。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;上面还提到过 MySQL 存储引擎采用的是 &lt;strong&gt;插件式架构&lt;/strong&gt; ，支持多种存储引擎。&lt;strong&gt;存储引擎是基于表的，而不是数据库。&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h3 id=&#34;31myisam和innodb区别-myisame5928cinnodbe58cbae588ab&#34;&gt;&lt;a href=&#34;#31myisam%e5%92%8cinnodb%e5%8c%ba%e5%88%ab-myisame5928cinnodbe58cbae588ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3.1MyISAM和InnoDB区别 {#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB}
+&lt;h3 id=&#34;myisam-和-innodb-区别&#34;&gt;&lt;a href=&#34;#myisam-%e5%92%8c-innodb-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MyISAM 和 InnoDB 区别
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;**锁：**MyISAM 只有表级锁，而 InnoDB 支持行级锁和表级锁，默认为行级锁。对于并发操作，细粒度的行级锁性能肯定更好！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;锁：&lt;/strong&gt; MyISAM 只有表级锁，而 InnoDB 支持行级锁和表级锁，默认为行级锁。对于并发操作，细粒度的行级锁性能肯定更好！&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;事务：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;MyISAM 不提供事务支持。InnoDB 提供事务支持，实现了四个隔离级别，分别是：&lt;strong&gt;读未提交、读已提交、可重复读、可串行化&lt;/strong&gt;。InnoDB 默认是可重读，隔离级别是可以解决幻读问题发生的（基于 MVCC 和 Next-Key Lock）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;事务：&lt;/strong&gt;
+MyISAM 不提供事务支持。InnoDB 提供事务支持，实现了四个隔离级别，分别是：&lt;strong&gt;读未提交、读已提交、可重复读、可串行化&lt;/strong&gt;。InnoDB 默认是可重读，隔离级别是可以解决幻读问题发生的（基于 MVCC 和 Next-Key Lock）。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;**外键：**MyISAM 不支持物理外键，而 InnoDB 支持物理外键。然而外键的维护对数据库性能也有一定影响，特别是分布式、高并发项目，一个字段的更新往往会引起其他字段的更新，极大拉低数据库性能，因此是不建议使用物理外键，而是逻辑外键（在代码中进行约束）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;外键：&lt;/strong&gt; MyISAM 不支持物理外键，而 InnoDB 支持物理外键。然而外键的维护对数据库性能也有一定影响，特别是分布式、高并发项目，一个字段的更新往往会引起其他字段的更新，极大拉低数据库性能，因此是不建议使用物理外键，而是逻辑外键（在代码中进行约束）&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;数据恢复&lt;/strong&gt; ：MyISAM 不支持，而 InnoDB 支持。使用 InnoDB 的数据库在异常崩溃后，数据库重新启动的时候依赖&lt;strong&gt;redo.log&lt;/strong&gt;使数据库恢复到崩溃前的状态。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;**MVCC：**MVCC 可以看作是行级锁的一个升级，可以有效减少加锁操作，提高性能。MyISAM显然是不支持MVCC的，毕竟连行级锁都没有。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MVCC：&lt;/strong&gt; MVCC 可以看作是行级锁的一个升级，可以有效减少加锁操作，提高性能。MyISAM 显然是不支持 MVCC 的，毕竟连行级锁都没有。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;**索引：**都使用 B+Tree 作为索引结构，但是两者的实现方式不太一样。InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;索引：&lt;/strong&gt; 都使用 B+Tree 作为索引结构，但是两者的实现方式不太一样。InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;数据缓存策略和机制：&lt;strong&gt;InnoDB 使用缓冲池（Buffer Pool）缓存数据页和索引页，MyISAM 使用键缓存（Key Cache）仅缓存索引页而不缓存数据页。当数据库对数据做修改的时候，需要把数据页从磁盘读到buffer pool中，&lt;strong&gt;然后在buffer pool中进行修改&lt;/strong&gt; ，此时buffer pool中的数据页就与磁盘上的数据页&lt;/strong&gt;内容不一致&lt;/strong&gt;，如果这个时候发生DB服务重启，那么这些数据并没有同步到磁盘文件中（同步到磁盘文件是个随机IO），就会发生数据丢失，如果这个时候，能够在有一个文件，当buffer pool 中的数据页变更结束后，把相应修改记录记录到这个文件（记录日志是顺序IO），那么当DB服务进行恢复DB的时候，可以根据这个文件的记录内容，重新持久化刷新到磁盘文件，保持数据的一致性。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数据缓存策略和机制：&lt;/strong&gt; InnoDB 使用缓冲池（Buffer Pool）缓存数据页和索引页，MyISAM 使用键缓存（Key Cache）仅缓存索引页而不缓存数据页。当数据库对数据做修改的时候，需要把数据页从磁盘读到 buffer pool 中，&lt;strong&gt;然后在 buffer pool 中进行修改&lt;/strong&gt; ，此时 buffer pool 中的数据页就与磁盘上的数据页&lt;strong&gt;内容不一致&lt;/strong&gt;，如果这个时候发生 DB 服务重启，那么这些数据并没有同步到磁盘文件中（同步到磁盘文件是个随机 IO），就会发生数据丢失，如果这个时候，能够在有一个文件，当 buffer pool 中的数据页变更结束后，把相应修改记录记录到这个文件（记录日志是顺序 IO），那么当 DB 服务进行恢复 DB 的时候，可以根据这个文件的记录内容，重新持久化刷新到磁盘文件，保持数据的一致性。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;性能：&lt;/strong&gt; InnoDB 的性能比 MyISAM 更强大，不管是在读写混合模式下还是只读模式下，随着 CPU 核数的增加，InnoDB 的&lt;strong&gt;读写能力呈线性增长&lt;/strong&gt;。MyISAM 因为读写不能并发，它的处理能力跟核数没关系。&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/0bd3f48d9efb46e2a6f41997a80ec06a.png&#34;
-	
-	
-	
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-6.png&#34;
+	width=&#34;1606&#34;
+	height=&#34;549&#34;
+	srcset=&#34;/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-6_hu_66e9c13c13f7c56c.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-6_hu_41924396b50195ff.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
-&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;4mysql如何存储ip地址&#34;&gt;&lt;a href=&#34;#4mysql%e5%a6%82%e4%bd%95%e5%ad%98%e5%82%a8ip%e5%9c%b0%e5%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;4.MySQL如何存储IP地址
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;292&#34;
+		data-flex-basis=&#34;702px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;mysql-如何存储-ip-地址&#34;&gt;&lt;a href=&#34;#mysql-%e5%a6%82%e4%bd%95%e5%ad%98%e5%82%a8-ip-%e5%9c%b0%e5%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MySQL 如何存储 IP 地址
 &lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;可以使用字符串存储，但是存储空间相对较大（每个字符占用1字节），每个IP占用空间为7-15个字节（1.1.1.1占用7字节，100.100.100.100占用15字节）。&lt;/p&gt;
-&lt;p&gt;对于ipv4，其实是4字节32位的数字，可以将 IP 地址转换成整形数据存储，性能更好，占用空间也更小。&lt;/p&gt;
+&lt;p&gt;可以使用字符串存储，但是存储空间相对较大（每个字符占用 1 字节），每个 IP 占用空间为 7-15 个字节（1.1.1.1 占用 7 字节，100.100.100.100 占用 15 字节）。&lt;/p&gt;
+&lt;p&gt;对于 ipv4，其实是 4 字节 32 位的数字，可以将 IP 地址转换成整形数据存储，性能更好，占用空间也更小。&lt;/p&gt;
 &lt;p&gt;MySQL 提供了两个方法来处理 ip 地址&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;INET_ATON()&lt;/code&gt;：把 ip 转为无符号整型 (4-8 位)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;INET_NTOA()&lt;/code&gt; :把整型的 ip 转为地址&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;插入数据前，先用 &lt;code&gt;INET_ATON()&lt;/code&gt; 把 ip 地址转为整型，显示数据时，使用 &lt;code&gt;INET_NTOA()&lt;/code&gt; 把整型的 ip 地址转为地址显示即可。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;hr&gt;
 </description>
-        </item>
-        <item>
-        <title>etcd&#43;京东hotkey探测使用</title>
-        <link>/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/</link>
-        <pubDate>Sat, 21 Dec 2024 11:58:09 +0000</pubDate>
-        
-        <guid>/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/</guid>
-        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gitee.com/jd-platform-opensource/hotkey&#34;  title=&#34;q​​​​​​​hotKey链接&#34;
-     target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;qhotKey链接&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;京东hotkey把热点数据默认缓存在了本地缓存caffeine中，也可以存到redis中，但是京东hotkey的SDK没有redis的实现方法，因此需要自己实现。&lt;br&gt;
-官方目录结构下：分别是client客户端（要打包引入到自己的项目）、common工具包（也打包引入到自己项目），dashboard（hotkey可视化面板，自己设置端口启动即可）、sample（实现demo）、worker（也要自己设置端口并且启动，用来和etcd交流信息）&lt;br&gt;
-&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/84fa3061c9784cb2a82f085b6580b4cf.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;​&lt;/p&gt;
-&lt;p&gt;client是hotKey客户端，需要打包引入到我们自己的项目中（在自己项目中建个lib目录），刚开始打包报错，说是找不到某些模块，把父模块clean然后install一下，再打包client模块就好了。&lt;/p&gt;
-&lt;p&gt;client打成jar包后，要用的是with-dependencies包，并且要改名成hotkey-client-0.0.4-SNAPSHOT.jar，因为我们自己项目的依赖名字就是hotkey-client-0.0.4-SNAPSHOT.jar&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i-blog.csdnimg.cn/direct/9294451d100a43f89647228cc4194a72.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h2 id=&#34;另外client的pom文件会加载不到一个plugin这个时候需要设置一下groupid去中央仓库看一下就知道了&#34;&gt;&lt;a href=&#34;#%e5%8f%a6%e5%a4%96client%e7%9a%84pom%e6%96%87%e4%bb%b6%e4%bc%9a%e5%8a%a0%e8%bd%bd%e4%b8%8d%e5%88%b0%e4%b8%80%e4%b8%aaplugin%e8%bf%99%e4%b8%aa%e6%97%b6%e5%80%99%e9%9c%80%e8%a6%81%e8%ae%be%e7%bd%ae%e4%b8%80%e4%b8%8bgroupid%e5%8e%bb%e4%b8%ad%e5%a4%ae%e4%bb%93%e5%ba%93%e7%9c%8b%e4%b8%80%e4%b8%8b%e5%b0%b1%e7%9f%a5%e9%81%93%e4%ba%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;另外client的pom文件会加载不到一个plugin，这个时候需要设置一下groupId，去中央仓库看一下就知道了：
-&lt;/h2&gt;</description>
         </item>
         
     </channel>

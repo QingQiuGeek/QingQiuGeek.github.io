@@ -11,7 +11,7 @@
 <meta property='og:description' content="String运算符重载、String不可变原因">
 <meta property='og:url' content='/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2024-12-29T14:38:34&#43;00:00'/><meta property='article:modified_time' content='2024-12-29T14:38:34&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2024-12-29T14:38:34&#43;00:00'/><meta property='article:modified_time' content='2024-12-29T14:38:34&#43;00:00'/>
 <meta name="twitter:title" content="为何String不可变，String的运算符重载">
 <meta name="twitter:description" content="String运算符重载、String不可变原因">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,8 +336,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1为何string不可变">1.为何String不可变</a></li>
-    <li><a href="#2string的运算符重载">2.String的运算符重载</a></li>
+    <li><a href="#为何-string-不可变">为何 String 不可变</a></li>
+    <li><a href="#string-的运算符重载">String 的运算符重载</a></li>
   </ol>
 </nav>
         </div>
@@ -438,30 +438,38 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h2 id="1为何string不可变"><a href="#1%e4%b8%ba%e4%bd%95string%e4%b8%8d%e5%8f%af%e5%8f%98" class="header-anchor"></a>1.为何String不可变
+    <h2 id="为何-string-不可变"><a href="#%e4%b8%ba%e4%bd%95-string-%e4%b8%8d%e5%8f%af%e5%8f%98" class="header-anchor"></a>为何 String 不可变
 </h2><blockquote>
 <ul>
-<li>java8之前，String的源码中是用<strong>字符数组实现</strong>的，同时使用了final和private修饰，被final修饰的结果就是变量不可修改、类不可继承、方法不可重写，被private修饰就无法对外暴露，这就是为何String不可变。</li>
-<li>java8之后，String改成了用<strong>字节数组实现</strong>。</li>
+<li>java8 之前，String 的源码中是用<strong>字符数组实现</strong>的，同时使用了 final 和 private 修饰，被 final 修饰的结果就是变量不可修改、类不可继承、方法不可重写，被 private 修饰就无法对外暴露，这就是为何 String 不可变。</li>
+<li>java8 之后，String 改成了用<strong>字节数组实现</strong>。</li>
 <li>新版的 String 其实支持两个编码方案：Latin-1 和 UTF-16。如果字符串中包含的汉字没有超过 Latin-1 可表示范围内的字符，那就会使用 Latin-1 作为编码方案。Latin-1 编码方案下，<code>byte</code> 占一个字节(8 位)，<code>char</code> 占用 2 个字节（16），<strong><code>byte</code> 相较 <code>char</code> 节省一半的内存空间</strong>。JDK 官方就说了绝大部分字符串对象只包含 Latin-1 可表示的字符。</li>
 </ul></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/74056491697e4e5a85b52cdfac8b9c98.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image.png"
+	width="1295"
+	height="248"
+	srcset="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image_hu_b34ab65f63c9129.png 480w, /zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image_hu_51697f2058bd25f0.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="522"
+		data-flex-basis="1253px"
+	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/89b382576d5c4b70ba3ae0a8a6e58d30.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image-1.png"
+	width="1290"
+	height="542"
+	srcset="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image-1_hu_ad570a3166969f8d.png 480w, /zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image-1_hu_38b0afdf9b9c38f4.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="238"
+		data-flex-basis="571px"
+	
 ></p>
-<h2 id="2string的运算符重载"><a href="#2string%e7%9a%84%e8%bf%90%e7%ae%97%e7%ac%a6%e9%87%8d%e8%bd%bd" class="header-anchor"></a>2.String的运算符重载
+<h2 id="string-的运算符重载"><a href="#string-%e7%9a%84%e8%bf%90%e7%ae%97%e7%ac%a6%e9%87%8d%e8%bd%bd" class="header-anchor"></a>String 的运算符重载
 </h2><blockquote>
 <p>Java 语言本身并不支持运算符重载，&quot;+&ldquo;和&rdquo;+=&ldquo;是专门为 String 类重载过的运算符，也是 Java 中仅有的两个重载过的运算符。</p></blockquote>
 <div class="highlight"><div class="chroma">
@@ -478,12 +486,16 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">String</span><span class="w"> </span><span class="n">str4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">str1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">str2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">str3</span><span class="p">;</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="https://i-blog.csdnimg.cn/direct/3a8e9073a28743e3a5e2305472d1f877.png"
-	
-	
-	
+</div><p><img src="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image-2.png"
+	width="1143"
+	height="461"
+	srcset="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image-2_hu_d64595da95e1b823.png 480w, /zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/image-2_hu_f59c4169dc52c7bd.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="247"
+		data-flex-basis="595px"
 	
 ></p>
 <blockquote>
@@ -506,8 +518,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">13
 </span><span class="lnt">14
 </span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">//在循环内使用+号每次都会创建新的StringBuilder</span><span class="w">
@@ -518,8 +528,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">//避免了上述问题</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#34;he&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;llo&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;world&#34;</span><span class="p">};</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">StringBuilder</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">StringBuilder</span><span class="p">();</span><span class="w">
@@ -529,9 +537,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><br />
----
-
+</div>
 </section>
 
 
@@ -584,6 +590,58 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
         <div class="article-details tags-grid-item">
             <h2 class="article-title">Java包装类型的缓存</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">etcd&#43;京东hotkey探测使用</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">一文入门SpringSecurity 5</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">Redis实现消息队列：list、PubSub、Stream，基于Stream的异步秒杀</h2>
+            
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E5%92%8C%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%9A%E5%8A%A1/">
+
+        
+
+        <div class="article-details tags-grid-item">
+            <h2 class="article-title">基于Redis和阻塞队列的 异步秒杀业务</h2>
             
         </div>
     </a>

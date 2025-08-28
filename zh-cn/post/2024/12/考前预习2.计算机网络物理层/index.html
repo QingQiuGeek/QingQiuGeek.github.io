@@ -11,7 +11,7 @@
 <meta property='og:description' content="物理层基本概念、数据通信基本知识、信道及极限容量、信道复用">
 <meta property='og:url' content='/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='网络' /><meta property='article:published_time' content='2024-12-10T15:09:53&#43;00:00'/><meta property='article:modified_time' content='2024-12-10T15:09:53&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2024-12-10T15:09:53&#43;00:00'/><meta property='article:modified_time' content='2024-12-10T15:09:53&#43;00:00'/>
 <meta name="twitter:title" content="【考前预习】2.计算机网络—物理层">
 <meta name="twitter:description" content="物理层基本概念、数据通信基本知识、信道及极限容量、信道复用">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,9 +336,29 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1物理层基本概念">1.物理层基本概念</a></li>
-    <li><a href="#2数据通信基础知识-2e695b0e68daee9809ae4bfa1e59fbae7a180e79fa5e8af86">2.数据通信基础知识 {#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86}</a></li>
-    <li><a href="#数据通信系统可划分为源系统传输系统目的系统通信的目的是传送消息而数据就是运送消息的实体使用特定的方式表示消息信号则是数据的电">数据通信系统可划分为<strong>源系统、传输系统、目的系统</strong>。通信的目的是传送消息，而数据就是运送消息的实体（使用特定的方式表示消息），信号则是数据的电</a></li>
+    <li><a href="#物理层基本概念">物理层基本概念</a></li>
+    <li><a href="#数据通信基础知识">数据通信基础知识</a>
+      <ol>
+        <li><a href="#信道">信道</a></li>
+        <li><a href="#信道极限容量">信道极限容量</a></li>
+        <li><a href="#物理层的传输媒体">物理层的传输媒体</a>
+          <ol>
+            <li><a href="#导引型传输媒体">导引型传输媒体</a></li>
+            <li><a href="#非导引型传输媒体">非导引型传输媒体</a></li>
+          </ol>
+        </li>
+        <li><a href="#信道复用">信道复用</a>
+          <ol>
+            <li><a href="#频分复用-fdm频分多址">频分复用 FDM（频分多址）</a></li>
+            <li><a href="#时分复用-tdm时分多址">时分复用 TDM（时分多址）</a></li>
+            <li><a href="#统计时分复用">统计时分复用</a></li>
+            <li><a href="#244-波分复用-wdm">2.4.4 波分复用 WDM</a></li>
+            <li><a href="#245-码分复用-cdm码分多址">2.4.5 码分复用 CDM（码分多址）</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#宽带接入技术">宽带接入技术</a></li>
   </ol>
 </nav>
         </div>
@@ -426,11 +446,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/%E7%BD%91%E7%BB%9C/">网络</a> 
-            
-            
         </div>
         
     </footer>
@@ -444,40 +459,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144357304?sharetype=blogdetail&amp;sharerId=144357304&amp;sharerefer=PC&amp;sharesource=qq_73181349&amp;spm=1011.2480.3001.8118"  title="【考前预习】1.计算机网络概述-CSDN博客"
-     target="_blank" rel="noopener"
-    >【考前预习】1.计算机网络概述-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/142883278"  title="子网掩码、网络地址、广播地址、子网划分及计算-CSDN博客"
-     target="_blank" rel="noopener"
-    >子网掩码、网络地址、广播地址、子网划分及计算-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/142787997"  title="浅谈云原生--微服务、CICD、Serverless、服务网格_云原生 serverless-CSDN博客"
-     target="_blank" rel="noopener"
-    >浅谈云原生&ndash;微服务、CICD、Serverless、服务网格_云原生 serverless-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/141899842"  title="一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客"
-     target="_blank" rel="noopener"
-    >一文搞懂大数据流式计算引擎Flink【万字详解，史上最全】-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/140787541"  title="浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客"
-     target="_blank" rel="noopener"
-    >浅谈维度建模、数据分析模型，何为数据仓库，与数据库的区别_统一数仓 数据库用户名-CSDN博客</a></p></blockquote>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#1.%E7%89%A9%E7%90%86%E5%B1%82%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5" >1.物理层基本概念</a>{#1.%E7%89%A9%E7%90%86%E5%B1%82%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-toc}</p>
-<p><a class="link" href="#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" >2.数据通信基础知识</a>{#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-toc}</p>
-<p><a class="link" href="#2.1%E4%BF%A1%E9%81%93" >2.1信道</a>{#2.1%E4%BF%A1%E9%81%93-toc}</p>
-<p><a class="link" href="#2.2%E4%BF%A1%E9%81%93%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F" >2.2信道极限容量</a>{#2.2%E4%BF%A1%E9%81%93%E6%9E%81%E9%99%90%E5%AE%B9%E9%87%8F-toc}</p>
-<p><a class="link" href="#2.3%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93" >2.3物理层的传输媒体</a>{#2.3%E7%89%A9%E7%90%86%E5%B1%82%E7%9A%84%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93-toc}</p>
-<p><a class="link" href="#2.3.1%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93" >2.3.1导引型传输媒体</a>{#2.3.1%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93-toc}</p>
-<p><a class="link" href="#2.3.2%E9%9D%9E%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93" >2.3.2非导引型传输媒体</a>{#2.3.2%E9%9D%9E%E5%AF%BC%E5%BC%95%E5%9E%8B%E4%BC%A0%E8%BE%93%E5%AA%92%E4%BD%93-toc}</p>
-<p><a class="link" href="#2.4%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8" >2.4信道复用</a>{#2.4%E4%BF%A1%E9%81%93%E5%A4%8D%E7%94%A8-toc}</p>
-<p><a class="link" href="#2.4.1%E9%A2%91%E5%88%86%E5%A4%8D%E7%94%A8FDM%EF%BC%88%E9%A2%91%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89" >2.4.1频分复用FDM（频分多址）</a>{#2.4.1%E9%A2%91%E5%88%86%E5%A4%8D%E7%94%A8FDM%EF%BC%88%E9%A2%91%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89-toc}</p>
-<p><a class="link" href="#2.4.2%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8TDM%EF%BC%88%E6%97%B6%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89" >2.4.2时分复用TDM（时分多址）</a>{#2.4.2%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8TDM%EF%BC%88%E6%97%B6%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89-toc}</p>
-<p><a class="link" href="#2.4.3%E7%BB%9F%E8%AE%A1%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8" >2.4.3统计时分复用</a>{#2.4.3%E7%BB%9F%E8%AE%A1%E6%97%B6%E5%88%86%E5%A4%8D%E7%94%A8-toc}</p>
-<p><a class="link" href="#2.4.4%E6%B3%A2%E5%88%86%E5%A4%8D%E7%94%A8WDM" >2.4.4波分复用WDM</a>{#2.4.4%E6%B3%A2%E5%88%86%E5%A4%8D%E7%94%A8WDM-toc}</p>
-<p><a class="link" href="#2.4.5%E7%A0%81%E5%88%86%E5%A4%8D%E7%94%A8CDM%EF%BC%88%E7%A0%81%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89" >2.4.5码分复用CDM（码分多址）</a>{#2.4.5%E7%A0%81%E5%88%86%E5%A4%8D%E7%94%A8CDM%EF%BC%88%E7%A0%81%E5%88%86%E5%A4%9A%E5%9D%80%EF%BC%89-toc}</p>
-<p><a class="link" href="#3.%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF" >3.宽带接入技术</a>{#3.%E5%AE%BD%E5%B8%A6%E6%8E%A5%E5%85%A5%E6%8A%80%E6%9C%AF-toc}</p>
-<hr>
-<h2 id="1物理层基本概念"><a href="#1%e7%89%a9%e7%90%86%e5%b1%82%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" class="header-anchor"></a>1.物理层基本概念
+    <h2 id="物理层基本概念"><a href="#%e7%89%a9%e7%90%86%e5%b1%82%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" class="header-anchor"></a>物理层基本概念
 </h2><blockquote>
 <p>物理层考虑的是<strong>如何在连接各种计算机的传输媒体上传输数据比特流</strong> ，而不是指具体的传输媒体。计算机网络中的硬件设备和传输媒体的种类和通信手段繁多，物理层的<strong>作用正是要尽可能地屏蔽掉这些传输媒体和通信手段的差异，使物理层上面的数据链路层感觉不到这些差异</strong>，这样就可<strong>使数据链路层只需要考虑如何完成本层的协议和服务，而不必考虑网络具体的传输媒体和通信手段是什么</strong> 。用于物理层的协议也常称为<strong>物理层规程</strong> (procedure)。其实物理层规程就是<strong>物理层协议</strong>。只是在&quot;协议&quot;这个名词出现之前人们就先使用了&quot;规程&quot;这一名词。</p></blockquote>
 <p>因此物理层的主要任务可以描述为确定与传输媒体的接口有关的特性：</p>
@@ -494,9 +476,246 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </ul></blockquote>
 <p>数据在计算机内部一般是并行传输，但是在通信线路上一般是串行传输。</p>
 <p>物理连接的方式很多（例如，可以是点对点的，也可以采用多点连接或广播连接)，而传输媒体的种类也非常之多（如架空明线、双绞线、对称电缆、同轴电缆、光缆，以及各种波段的无线信道等)。因此在学习物理层时，应将重点放在掌握基本概念上。</p>
-<h2 id="2数据通信基础知识-2e695b0e68daee9809ae4bfa1e59fbae7a180e79fa5e8af86"><a href="#2%e6%95%b0%e6%8d%ae%e9%80%9a%e4%bf%a1%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86-2e695b0e68daee9809ae4bfa1e59fbae7a180e79fa5e8af86" class="header-anchor"></a>2.数据通信基础知识 {#2.%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86}
-</h2><h2 id="数据通信系统可划分为源系统传输系统目的系统通信的目的是传送消息而数据就是运送消息的实体使用特定的方式表示消息信号则是数据的电"><a href="#%e6%95%b0%e6%8d%ae%e9%80%9a%e4%bf%a1%e7%b3%bb%e7%bb%9f%e5%8f%af%e5%88%92%e5%88%86%e4%b8%ba%e6%ba%90%e7%b3%bb%e7%bb%9f%e4%bc%a0%e8%be%93%e7%b3%bb%e7%bb%9f%e7%9b%ae%e7%9a%84%e7%b3%bb%e7%bb%9f%e9%80%9a%e4%bf%a1%e7%9a%84%e7%9b%ae%e7%9a%84%e6%98%af%e4%bc%a0%e9%80%81%e6%b6%88%e6%81%af%e8%80%8c%e6%95%b0%e6%8d%ae%e5%b0%b1%e6%98%af%e8%bf%90%e9%80%81%e6%b6%88%e6%81%af%e7%9a%84%e5%ae%9e%e4%bd%93%e4%bd%bf%e7%94%a8%e7%89%b9%e5%ae%9a%e7%9a%84%e6%96%b9%e5%bc%8f%e8%a1%a8%e7%a4%ba%e6%b6%88%e6%81%af%e4%bf%a1%e5%8f%b7%e5%88%99%e6%98%af%e6%95%b0%e6%8d%ae%e7%9a%84%e7%94%b5" class="header-anchor"></a>数据通信系统可划分为<strong>源系统、传输系统、目的系统</strong>。通信的目的是传送消息，而数据就是运送消息的实体（使用特定的方式表示消息），信号则是数据的电
-</h2>
+<h2 id="数据通信基础知识"><a href="#%e6%95%b0%e6%8d%ae%e9%80%9a%e4%bf%a1%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86" class="header-anchor"></a>数据通信基础知识
+</h2><p>数据通信系统可划分为<strong>源系统、传输系统、目的系统</strong>。通信的目的是传送消息，而数据就是运送消息的实体（使用特定的方式表示消息），信号则是数据的电气或电磁的表现。根据信号中代表消息的参数取值不同，信号可划分为两类：</p>
+<blockquote>
+<ul>
+<li>模拟信号（连续信号）</li>
+<li>数字信号（离散信号）
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image.png"
+	width="1128"
+	height="492"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image_hu_d2c9c5cbf2ad4017.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image_hu_5e117e07d52661fc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="550px"
+	
+></li>
+</ul></blockquote>
+<h3 id="信道"><a href="#%e4%bf%a1%e9%81%93" class="header-anchor"></a>信道
+</h3><p>信道用来表示向某方向传送信息的媒体。从通信双方的信息交互来看，分为：</p>
+<blockquote>
+<ul>
+<li>单向通信（单工）</li>
+<li>双向交替通信（半双工）</li>
+<li>双向同时通信（全双工）</li>
+</ul></blockquote>
+<blockquote>
+<p>来自源系统的信号称为基带信号，基带信号包含较多低频分量、直流分量，信道不能直接传输，因此要对基带信号调制，调制分为：</p>
+<ul>
+<li><strong>基带调制</strong>：仅仅对基带信号的波形进行变换，使它能够与信道特性相适应。变换后的信号仍然是基带信号。由于这种基带调制是把数字信号转换为另一种形式的数字信号，因此大家更愿意把这种过程称为编码。</li>
+<li><strong>带通调制</strong>：使用载波(carrier)进行调制，把基带信号的频率范围搬移到较高的频段，并转换为模拟信号，这样就能够更好地在模拟信道中传输。
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-1.png"
+	width="1110"
+	height="735"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-1_hu_87e337cfd1a0ea93.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-1_hu_9472e882d7c9f25a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="362px"
+	
+></li>
+</ul></blockquote>
+<h3 id="信道极限容量"><a href="#%e4%bf%a1%e9%81%93%e6%9e%81%e9%99%90%e5%ae%b9%e9%87%8f" class="header-anchor"></a>信道极限容量
+</h3><p><strong>一个码元携带的信息量不固定，由调制方式和编码方式决定。</strong></p>
+<p><strong>码元传输速率越高、信号传输距离越远、噪声干扰越大或媒体传输质量越差，接收端的波形失真越严重。</strong>
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-2.png"
+	width="993"
+	height="418"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-2_hu_15e65af925e9676e.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-2_hu_67b77bcf493210bb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="570px"
+	
+></p>
+<p>限制码元传输速率的因素主要有两个：</p>
+<blockquote>
+<ul>
+<li><strong>信道能通过的频率范围</strong><br>
+<strong>奈氏准则</strong>：在带宽为 W(Hz)的低通信道中，若不考虑噪声影响，则码元传输的最高速率是 2W(码元/秒)。传输速率超过此上限，就会出现严重的码间串扰的问题，使接收端对码元的判决（即识别）成为不可能。例如，信道的带宽为 4000Hz,那么最高码元传输速率就是每秒 8000 个码元。</li>
+<li><strong>信噪比</strong><br>
+<strong>噪声随机产生在所有的电子设备和通信信道中，<strong>它的瞬时值有时会很大，因此噪声会使接收端对码元的判决产生错误(1 误判为 0 或 0 误判为 1)。但</strong>噪声的影响是相对的</strong>。如果信号相对较强，那么噪声的影响就相对较小。因此，信噪比就很重要。所谓<strong>信噪比就是信号的平均功率和噪声的平均功率之比，常记为 S/N。使用分贝 dB 作为单位</strong>。<br>
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-3.png"
+	width="1122"
+	height="120"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-3_hu_4304578861073297.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-3_hu_b50b60fb92d3f233.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="935"
+		data-flex-basis="2244px"
+	
+> &gt; <strong>香农公式</strong><br>
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-4.png"
+	width="1153"
+	height="175"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-4_hu_106ae7f382903632.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-4_hu_f77aaef283b022b0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="658"
+		data-flex-basis="1581px"
+	
+></li>
+</ul></blockquote>
+<p>对于频带宽度确定的信道，信噪比如果不能再提高，码元传输速率也到达上限，此时想要提高信息传输速率，可以使用编码让每个码元携带更多比特信息量。</p>
+<h3 id="物理层的传输媒体"><a href="#%e7%89%a9%e7%90%86%e5%b1%82%e7%9a%84%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93" class="header-anchor"></a>物理层的传输媒体
+</h3><p>传输媒体也称为传输介质或传输媒介，传输媒体可分为两大类，即导引型传输媒体和非导引型传输媒体。在<strong>导引型传输媒体</strong>中，电磁波被导引沿着固体媒体（铜线或光纤）传播，而非导引型传输媒体就是指自由空间，在<strong>非导引型传输媒体</strong>中电磁波的传输常称为<strong>无线传输</strong>。</p>
+<h4 id="导引型传输媒体"><a href="#%e5%af%bc%e5%bc%95%e5%9e%8b%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93" class="header-anchor"></a>导引型传输媒体
+</h4><p>双绞线：两个相互绝缘的铜导线绞合在一起，绞合可以减少一定的电磁干扰。
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-5.png"
+	width="888"
+	height="443"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-5_hu_9884387965eba607.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-5_hu_16c54bc545ea10af.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
+	
+></p>
+<p>同轴电缆：由内导体铜质芯线、绝缘层、网状编制的外导体屏蔽层、绝缘保护套组成。
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-6.png"
+	width="598"
+	height="192"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-6_hu_f5a5e51d0bca6205.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-6_hu_d3a698540454f898.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="747px"
+	
+></p>
+<p>光缆：光纤通信就是利用光导纤维传递光脉冲。一条光纤中可以存在多条不同角度入射的光线，这种光纤就是<strong>多模光纤</strong>。</p>
+<blockquote>
+<p><strong>光纤特点</strong></p>
+<ul>
+<li>通信容量非常大的优点。</li>
+<li>传输损耗小，中继距离长，对远距离传输特别经济。</li>
+<li>抗雷电和电磁干扰性能好。这在有大电流脉冲干扰的环境下尤为重要。</li>
+<li>无串音干扰，保密性好，也不易被窃听或截取数据。</li>
+<li>体积小，重量轻。这在现有电缆管道己拥塞不堪的情况下特别有利。
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-7.png"
+	width="514"
+	height="328"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-7_hu_7d77cc6cd2b4d95f.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-7_hu_c06586f0c6c7f1d4.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="376px"
+	
+> &gt; <img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-8.png"
+	width="797"
+	height="293"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-8_hu_4f6ce859ec09ae7a.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-8_hu_6d023381dabc0fbe.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="272"
+		data-flex-basis="652px"
+	
+></li>
+</ul></blockquote>
+<h4 id="非导引型传输媒体"><a href="#%e9%9d%9e%e5%af%bc%e5%bc%95%e5%9e%8b%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93" class="header-anchor"></a>非导引型传输媒体
+</h4><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-9.png"
+	width="1078"
+	height="480"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-9_hu_587b147253b548c2.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-9_hu_b3b150033fe0b42f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="539px"
+	
+></p>
+<p>紫外线和更高波段目前还不能用于通信。</p>
+<h3 id="信道复用"><a href="#%e4%bf%a1%e9%81%93%e5%a4%8d%e7%94%a8" class="header-anchor"></a>信道复用
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-10.png"
+	width="819"
+	height="453"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-10_hu_b293c205d85830e0.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-10_hu_ddb7a04c51ba91a0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+></p>
+<h4 id="频分复用-fdm频分多址"><a href="#%e9%a2%91%e5%88%86%e5%a4%8d%e7%94%a8-fdm%e9%a2%91%e5%88%86%e5%a4%9a%e5%9d%80" class="header-anchor"></a>频分复用 FDM（频分多址）
+</h4><p>N 路信号在一个信道中传送，使用调制把各路信号分别搬移到合适的频率位置，使彼此不干扰。
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-11.png"
+	width="792"
+	height="243"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-11_hu_8563af2ded3fe8ac.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-11_hu_efcb7395d2bed969.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="325"
+		data-flex-basis="782px"
+	
+></p>
+<h4 id="时分复用-tdm时分多址"><a href="#%e6%97%b6%e5%88%86%e5%a4%8d%e7%94%a8-tdm%e6%97%b6%e5%88%86%e5%a4%9a%e5%9d%80" class="header-anchor"></a>时分复用 TDM（时分多址）
+</h4><p>把时间划分成一段段等长的时分复用帧，每路信号在每个 TDM 帧中占用固定序号的时隙，使得所有用户在不同时间占用同样的频带宽度。时分复用比频分复用更利于数字信号传输。但是可能造成线路资源浪费
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-12.png"
+	width="743"
+	height="318"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-12_hu_6a868aa80ade64b.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-12_hu_e15ba6b4859eeae1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="233"
+		data-flex-basis="560px"
+	
+></p>
+<h4 id="统计时分复用"><a href="#%e7%bb%9f%e8%ae%a1%e6%97%b6%e5%88%86%e5%a4%8d%e7%94%a8" class="header-anchor"></a>统计时分复用
+</h4><p>统计时分复用是时分复用的升级版，能明显提高信道利用率。
+<img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-13.png"
+	width="965"
+	height="348"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-13_hu_2b6408ecc1046fe4.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/image-13_hu_973b1f9f9e559fbe.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="277"
+		data-flex-basis="665px"
+	
+></p>
+<h4 id="244-波分复用-wdm"><a href="#244-%e6%b3%a2%e5%88%86%e5%a4%8d%e7%94%a8-wdm" class="header-anchor"></a>2.4.4 波分复用 WDM
+</h4><p>光的频分复用。由于光载波的频率很高，因此习惯上用波长而不用频率来表示所使用的光载波。这样就产生了波分复用这一名词。</p>
+<h4 id="245-码分复用-cdm码分多址"><a href="#245-%e7%a0%81%e5%88%86%e5%a4%8d%e7%94%a8-cdm%e7%a0%81%e5%88%86%e5%a4%9a%e5%9d%80" class="header-anchor"></a>2.4.5 码分复用 CDM（码分多址）
+</h4><p>另一种共享信道的方法。当码分复用信道为多个不同地址的用户所共享时，就称为码分多址 CDMA<br>
+。每一个用户可以<strong>在同样的时间使用同样的频带</strong>进行通信。由于各用户使用经过特殊挑选的不同码型，因此各用户之间不会造成干扰。码分复用最初用于军事通信，因为这种系统发送的信号有很强的抗干扰能力，其频谱类似于白噪声，不易被敌人发现。</p>
+<h2 id="宽带接入技术"><a href="#%e5%ae%bd%e5%b8%a6%e6%8e%a5%e5%85%a5%e6%8a%80%e6%9c%af" class="header-anchor"></a>宽带接入技术
+</h2><p>在<a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144357304?sharetype=blogdetail&amp;sharerId=144357304&amp;sharerefer=PC&amp;sharesource=qq_73181349&amp;spm=1011.2480.3001.8118"  title="计算机网络概述"
+     target="_blank" rel="noopener"
+    >计算机网络概述</a>中我们提到了 ISP 和宽带接入技术，这里我们只讨论<strong>有线宽带接入</strong></p>
+<blockquote>
+<ul>
+<li>非对称数字用户线 ADSL 技术</li>
+<li>光纤同轴混合网（HFC 网）</li>
+<li>FTTx 技术</li>
+</ul></blockquote>
+
 </section>
 
 

@@ -96,8 +96,6 @@
 	srcset=&#34;/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image_hu_838d7f7d0202469.png 480w, /zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image_hu_e5572f8d0fa7b037.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;alt text&#34;
-	
 	
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;388&#34;
@@ -246,8 +244,6 @@
 	height=&#34;162&#34;
 	srcset=&#34;/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-1_hu_5a8e1972aac8e2a4.png 480w, /zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-1_hu_5f9471178f9af23e.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1446,8 +1442,6 @@ HashRouter 的路径包含#,例如：localhost:3000/#/demo/test&lt;br&gt;
 	height=&#34;811&#34;
 	srcset=&#34;/zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-2_hu_1118d8b204701de8.png 480w, /zh-cn/post/2024/10/%E6%B5%85%E5%AD%A6react%E5%92%8Cjsx/image-2_hu_5baa7d64995f99d8.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

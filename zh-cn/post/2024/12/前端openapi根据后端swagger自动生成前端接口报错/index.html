@@ -11,7 +11,7 @@
 <meta property='og:description' content="【代码】前端OpenAPI根据后端Swagger自动生成前端接口报错。">
 <meta property='og:url' content='/zh-cn/post/2024/12/%E5%89%8D%E7%AB%AFopenapi%E6%A0%B9%E6%8D%AE%E5%90%8E%E7%AB%AFswagger%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%8A%A5%E9%94%99/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='openapi' /><meta property='article:published_time' content='2024-12-16T22:39:23&#43;00:00'/><meta property='article:modified_time' content='2024-12-16T22:39:23&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='疑难杂症录' /><meta property='article:tag' content='前端' /><meta property='article:published_time' content='2024-12-16T22:39:23&#43;00:00'/><meta property='article:modified_time' content='2024-12-16T22:39:23&#43;00:00'/>
 <meta name="twitter:title" content="前端OpenAPI根据后端Swagger自动生成前端接口报错">
 <meta name="twitter:description" content="【代码】前端OpenAPI根据后端Swagger自动生成前端接口报错。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -398,11 +398,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/">前端</a> 
             
             
-            , 
-            
-            <a href="/zh-cn/tags/openapi/">Openapi</a> 
-            
-            
         </div>
         
     </footer>
@@ -416,16 +411,20 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><img src="https://i-blog.csdnimg.cn/direct/01c32fab34ae4d109c2a177c70267510.png"
-	
-	
-	
+    <p><img src="/zh-cn/post/2024/12/%E5%89%8D%E7%AB%AFopenapi%E6%A0%B9%E6%8D%AE%E5%90%8E%E7%AB%AFswagger%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%8A%A5%E9%94%99/image.png"
+	width="651"
+	height="114"
+	srcset="/zh-cn/post/2024/12/%E5%89%8D%E7%AB%AFopenapi%E6%A0%B9%E6%8D%AE%E5%90%8E%E7%AB%AFswagger%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%8A%A5%E9%94%99/image_hu_bfcb026578ef3452.png 480w, /zh-cn/post/2024/12/%E5%89%8D%E7%AB%AFopenapi%E6%A0%B9%E6%8D%AE%E5%90%8E%E7%AB%AFswagger%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%89%8D%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%8A%A5%E9%94%99/image_hu_97a9446905f5e2e6.png 1024w"
 	loading="lazy"
 	
 	
+		class="gallery-image" 
+		data-flex-grow="571"
+		data-flex-basis="1370px"
+	
 ></p>
-<p><strong>测试之后发现是因为Map&lt;Long,List&lt;CommentVO&gt;&gt;的返回值类型的锅，改成Page&lt;List&lt;CommentVO&gt;&gt;即可解决。</strong></p>
-<p>前端使用的umiMAX的openapi，报错如下：</p>
+<p><strong>测试之后发现是因为 Map&lt;Long,List&lt;CommentVO&gt;&gt;的返回值类型的锅，改成 Page&lt;List&lt;CommentVO&gt;&gt;即可解决。</strong></p>
+<p>前端使用的 umiMAX 的 openapi，报错如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -493,69 +492,69 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </span><span class="lnt">63
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">      &#39;            originalRef: BaseResponse&lt;&lt;boolean&gt;&gt;\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;        &#34;401&#34;:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;          description: Unauthorized\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;        &#34;403&#34;:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;          description: Forbidden\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;        &#34;404&#34;:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;          description: Not Found\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      deprecated: false\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      x-order: &#34;2147483647&#34;\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;  &#34;/api/admin/passage/reject/{passageId}&#34;:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;    get:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      tags:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;        - admin-passage-controller\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      summary: rejectPassage\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      operationId: rejectPassageUsingGET\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      produces:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;        - &#34;*/*&#34;\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;      parameters:\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;        - name: passageId\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;          in: path\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;          description: passageId\n&#39; +
-</span></span><span class="line"><span class="cl">      &#39;    &#39;... 78804 more characters,
-</span></span><span class="line"><span class="cl">    externals: [],
-</span></span><span class="line"><span class="cl">    externalRefs: {},
-</span></span><span class="line"><span class="cl">    rewriteRefs: true,
-</span></span><span class="line"><span class="cl">    preserveMiro: true,
-</span></span><span class="line"><span class="cl">    promise: { resolve: [Function (anonymous)], reject: [Function (anonymous)] },
-</span></span><span class="line"><span class="cl">    patches: 0,
-</span></span><span class="line"><span class="cl">    cache: {},
-</span></span><span class="line"><span class="cl">    openapi: {
-</span></span><span class="line"><span class="cl">      openapi: &#39;3.0.0&#39;,
-</span></span><span class="line"><span class="cl">      info: {
-</span></span><span class="line"><span class="cl">        description: &#39;无问青秋博客&#39;,
-</span></span><span class="line"><span class="cl">        version: &#39;v1.0&#39;,
-</span></span><span class="line"><span class="cl">        title: &#39;Serein博客API接口测试&#39;,
-</span></span><span class="line"><span class="cl">        contact: {}
-</span></span><span class="line"><span class="cl">      },
-</span></span><span class="line"><span class="cl">      tags: [
-</span></span><span class="line"><span class="cl">        { name: &#39;admin-category-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;admin-comment-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;admin-passage-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;admin-tag-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;admin-user-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;category-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;comment-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;passage-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;tag-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; },
-</span></span><span class="line"><span class="cl">        { name: &#39;user-controller&#39;, &#39;x-order&#39;: &#39;2147483647&#39; }
-</span></span><span class="line"><span class="cl">      ],
-</span></span><span class="line"><span class="cl">      paths: {
-</span></span><span class="line"><span class="cl">        &#39;/api/admin/category/addCategory&#39;: {
-</span></span><span class="line"><span class="cl">          post: {
-</span></span><span class="line"><span class="cl">            tags: [Array],
-</span></span><span class="line"><span class="cl">            summary: &#39;addCategory&#39;,
-</span></span><span class="line"><span class="cl">            operationId: &#39;addCategoryUsingPOST&#39;,
-</span></span><span class="line"><span class="cl">            requestBody: [Object],
-</span></span><span class="line"><span class="cl">            responses: [Object],
-</span></span><span class="line"><span class="cl">            responsesObject: [Object],
-</span></span><span class="line"><span class="cl">            deprecated: false,
-</span></span><span class="line"><span class="cl">            &#39;x-order&#39;: &#39;2147483647&#39;
-</span></span><span class="line"><span class="cl">          }
-</span></span><span class="line"><span class="cl">        },
-</span></span><span class="line"><span class="cl">前端openapi生成接口报错
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl">      <span class="s1">&#39;            originalRef: BaseResponse&lt;&lt;boolean&gt;&gt;\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;        &#34;401&#34;:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;          description: Unauthorized\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;        &#34;403&#34;:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;          description: Forbidden\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;        &#34;404&#34;:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;          description: Not Found\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      deprecated: false\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      x-order: &#34;2147483647&#34;\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;  &#34;/api/admin/passage/reject/{passageId}&#34;:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;    get:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      tags:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;        - admin-passage-controller\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      summary: rejectPassage\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      operationId: rejectPassageUsingGET\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      produces:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;        - &#34;*/*&#34;\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;      parameters:\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;        - name: passageId\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;          in: path\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;          description: passageId\n&#39;</span> <span class="o">+</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;    &#39;</span><span class="p">...</span> <span class="mi">78804</span> <span class="nx">more</span> <span class="nx">characters</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">externals</span><span class="o">:</span> <span class="p">[],</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">externalRefs</span><span class="o">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rewriteRefs</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">preserveMiro</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">promise</span><span class="o">:</span> <span class="p">{</span> <span class="nx">resolve</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span> <span class="p">(</span><span class="nx">anonymous</span><span class="p">)],</span> <span class="nx">reject</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span> <span class="p">(</span><span class="nx">anonymous</span><span class="p">)]</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">patches</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">cache</span><span class="o">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">openapi</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">openapi</span><span class="o">:</span> <span class="s1">&#39;3.0.0&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">info</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;无问青秋博客&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;v1.0&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Serein博客API接口测试&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">contact</span><span class="o">:</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">tags</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;admin-category-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;admin-comment-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;admin-passage-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;admin-tag-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;admin-user-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;category-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;comment-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;passage-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;tag-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;user-controller&#39;</span><span class="p">,</span> <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">],</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;/api/admin/category/addCategory&#39;</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">post</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="o">:</span> <span class="p">[</span><span class="nb">Array</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">summary</span><span class="o">:</span> <span class="s1">&#39;addCategory&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">operationId</span><span class="o">:</span> <span class="s1">&#39;addCategoryUsingPOST&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">requestBody</span><span class="o">:</span> <span class="p">[</span><span class="nb">Object</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">responses</span><span class="o">:</span> <span class="p">[</span><span class="nb">Object</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">responsesObject</span><span class="o">:</span> <span class="p">[</span><span class="nb">Object</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">deprecated</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;x-order&#39;</span><span class="o">:</span> <span class="s1">&#39;2147483647&#39;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="nx">前端openapi生成接口报错</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><pre><code> preserveMiro: true,
@@ -618,7 +617,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             deprecated: false,
             'x-order': '2147483647'
           }
-        },       
+        },
         '/api/user/userInfoData': {
           get: {
             tags: [Array],
@@ -673,7 +672,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             properties: [Object],
             title: 'AddPassageDTO'
           },
-   
+
           GetUserByIdListRequest: {
             type: 'object',
             properties: [Object],
@@ -689,8 +688,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             properties: [Object],
             title: 'LoginUserVO'
           },
-        
-         
+
+
           Page_List_UserVO_: {
             type: 'object',
             properties: [Object],
@@ -715,9 +714,8 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 Node.js v20.10.0
 </code></pre>
-<br />
----
-
+<h2 id=""><a href="#" class="header-anchor"></a><br />
+</h2>
 </section>
 
 

@@ -11,7 +11,7 @@
 <meta property='og:description' content="分类编址的IPV4和无分类编址的IPV4、MAC地址、地址解析协议ARP、静态路由协议、默认路由、路由信息协议RIP、开放路径最短优先OSPF、路由选择协议BGP、IPV6">
 <meta property='og:url' content='/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='网络' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2024-12-16T12:24:02&#43;00:00'/><meta property='article:modified_time' content='2024-12-16T12:24:02&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2024-12-16T12:24:02&#43;00:00'/><meta property='article:modified_time' content='2024-12-16T12:24:02&#43;00:00'/>
 <meta name="twitter:title" content="【考前预习】4.计算机网络—网络层">
 <meta name="twitter:description" content="分类编址的IPV4和无分类编址的IPV4、MAC地址、地址解析协议ARP、静态路由协议、默认路由、路由信息协议RIP、开放路径最短优先OSPF、路由选择协议BGP、IPV6">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,11 +336,35 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1网络层概述">1.网络层概述</a></li>
-    <li><a href="#2网络层提供的两种服务-2e7bd91e7bb9ce5b182e68f90e4be9be79a84e4b8a4e7a78de69c8de58aa1">2.网络层提供的两种服务 {#2.%E7%BD%91%E7%BB%9C%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%9C%8D%E5%8A%A1}</a></li>
-    <li><a href="#3分类编址的ipv4-3e58886e7b1bbe7bc96e59d80e79a84ipv4">3.分类编址的IPV4 {#3.%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4}</a></li>
-    <li><a href="#4无分类编址的ipv4cidr-4e697a0e58886e7b1bbe7bc96e59d80e79a84ipv4e28094cidr">4.无分类编址的IPV4&mdash;CIDR {#4.%E6%97%A0%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4%E2%80%94CIDR}</a></li>
-    <li><a href="#"><img src="https://i-blog.csdnimg.cn/direct/497dffdd5c884dff8cd7139596b32aac.png" alt=""></a></li>
+    <li><a href="#网络层概述">网络层概述</a></li>
+    <li><a href="#网络层提供的两种服务">网络层提供的两种服务</a></li>
+    <li><a href="#分类编址的-ipv4">分类编址的 IPV4</a></li>
+    <li><a href="#无分类编址的-ipv4cidr">无分类编址的 IPV4&mdash;CIDR</a></li>
+    <li><a href="#ipv4-地址应用规划">IPV4 地址应用规划</a>
+      <ol>
+        <li><a href="#使用定长子网掩码划分子网">使用定长子网掩码划分子网</a></li>
+        <li><a href="#使用变长子网掩码划分子网">使用变长子网掩码划分子网</a></li>
+      </ol>
+    </li>
+    <li><a href="#ipv4-和-mac-地址">IPV4 和 MAC 地址</a></li>
+    <li><a href="#地址解析协议-arp">地址解析协议 ARP</a></li>
+    <li><a href="#ip-数据报发送转发流程">IP 数据报发送转发流程</a></li>
+    <li><a href="#静态路由配置">静态路由配置</a>
+      <ol>
+        <li><a href="#默认路由">默认路由</a></li>
+        <li><a href="#特定主机路由">特定主机路由</a></li>
+      </ol>
+    </li>
+    <li><a href="#路由选择分类">路由选择分类</a>
+      <ol>
+        <li><a href="#路由信息协议-rip">路由信息协议 RIP</a></li>
+        <li><a href="#开放最短路径优先-ospf">开放最短路径优先 OSPF</a></li>
+        <li><a href="#路由信息协议-bgp">路由信息协议 BGP</a></li>
+      </ol>
+    </li>
+    <li><a href="#路由器工作原理">路由器工作原理</a></li>
+    <li><a href="#ip-多播地址和多播组">IP 多播地址和多播组</a></li>
+    <li><a href="#ipv6">IPV6</a></li>
   </ol>
 </nav>
         </div>
@@ -404,7 +428,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 4 分钟
+                阅读时长: 1 分钟
             </time>
         </div>
         
@@ -425,11 +449,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/%E7%BD%91%E7%BB%9C/">网络</a> 
-            
-            
-            , 
-            
             <a href="/zh-cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a> 
             
             
@@ -446,178 +465,892 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p><strong>往期推荐</strong></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144436039"  title="【考前预习】3.计算机网络—数据链路层-CSDN博客"
-     target="_blank" rel="noopener"
-    >【考前预习】3.计算机网络&mdash;数据链路层-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144371720"  title="【考前预习】2.计算机网络—物理层-CSDN博客"
-     target="_blank" rel="noopener"
-    >【考前预习】2.计算机网络&mdash;物理层-CSDN博客</a></p>
-<p><a class="link" href="https://blog.csdn.net/qq_73181349/article/details/144357304"  title="【考前预习】1.计算机网络概述-CSDN博客"
-     target="_blank" rel="noopener"
-    >【考前预习】1.计算机网络概述-CSDN博客</a></p></blockquote>
-<p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#1.%E7%BD%91%E7%BB%9C%E5%B1%82%E6%A6%82%E8%BF%B0" >1.网络层概述</a>{#1.%E7%BD%91%E7%BB%9C%E5%B1%82%E6%A6%82%E8%BF%B0-toc}</p>
-<p><a class="link" href="#2.%E7%BD%91%E7%BB%9C%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%9C%8D%E5%8A%A1" >2.网络层提供的两种服务</a>{#2.%E7%BD%91%E7%BB%9C%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%9C%8D%E5%8A%A1-toc}</p>
-<p><a class="link" href="#3.%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4" >3.分类编址的IPV4</a>{#3.%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4-toc}</p>
-<p><a class="link" href="#4.%E6%97%A0%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4%E2%80%94CIDR" >4.无分类编址的IPV4&mdash;CIDR</a>{#4.%E6%97%A0%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4%E2%80%94CIDR-toc}</p>
-<p><a class="link" href="#5.IPV4%E5%9C%B0%E5%9D%80%E5%BA%94%E7%94%A8%E8%A7%84%E5%88%92" >5.IPV4地址应用规划</a>{#5.IPV4%E5%9C%B0%E5%9D%80%E5%BA%94%E7%94%A8%E8%A7%84%E5%88%92-toc}</p>
-<p><a class="link" href="#5.1%E4%BD%BF%E7%94%A8%E5%AE%9A%E9%95%BF%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E5%88%92%E5%88%86%E5%AD%90%E7%BD%91" >5.1使用定长子网掩码划分子网</a>{#5.1%E4%BD%BF%E7%94%A8%E5%AE%9A%E9%95%BF%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E5%88%92%E5%88%86%E5%AD%90%E7%BD%91-toc}</p>
-<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%915.2%E4%BD%BF%E7%94%A8%E5%8F%98%E9%95%BF%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E5%88%92%E5%88%86%E5%AD%90%E7%BD%91" >​编辑5.2使用变长子网掩码划分子网</a>{#%E2%80%8B%E7%BC%96%E8%BE%915.2%E4%BD%BF%E7%94%A8%E5%8F%98%E9%95%BF%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81%E5%88%92%E5%88%86%E5%AD%90%E7%BD%91-toc}</p>
-<p><a class="link" href="#6.IPV4%E5%92%8CMAC%E5%9C%B0%E5%9D%80" >6.IPV4和MAC地址</a>{#6.IPV4%E5%92%8CMAC%E5%9C%B0%E5%9D%80-toc}</p>
-<p><a class="link" href="#%E2%80%8B%E7%BC%96%E8%BE%917.%E5%9C%B0%E5%9D%80%E8%A7%A3%E6%9E%90%E5%8D%8F%E8%AE%AEARP" >​编辑7.地址解析协议ARP</a>{#%E2%80%8B%E7%BC%96%E8%BE%917.%E5%9C%B0%E5%9D%80%E8%A7%A3%E6%9E%90%E5%8D%8F%E8%AE%AEARP-toc}</p>
-<p><a class="link" href="#8.IP%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%8F%91%E9%80%81%E8%BD%AC%E5%8F%91%E6%B5%81%E7%A8%8B" >8.IP数据报发送转发流程</a>{#8.IP%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%8F%91%E9%80%81%E8%BD%AC%E5%8F%91%E6%B5%81%E7%A8%8B-toc}</p>
-<p><a class="link" href="#9.%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE" >9.静态路由配置</a>{#9.%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE-toc}</p>
-<p><a class="link" href="#9.1%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1" >9.1默认路由</a>{#9.1%E9%BB%98%E8%AE%A4%E8%B7%AF%E7%94%B1-toc}</p>
-<p><a class="link" href="#9.2%E7%89%B9%E5%AE%9A%E4%B8%BB%E6%9C%BA%E8%B7%AF%E7%94%B1" >9.2特定主机路由</a>{#9.2%E7%89%B9%E5%AE%9A%E4%B8%BB%E6%9C%BA%E8%B7%AF%E7%94%B1-toc}</p>
-<p><a class="link" href="#10.%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%88%86%E7%B1%BB" >10.路由选择分类</a>{#10.%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E5%88%86%E7%B1%BB-toc}</p>
-<p><a class="link" href="#10.1%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF%E5%8D%8F%E8%AE%AERIP" >10.1路由信息协议RIP</a>{#10.1%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF%E5%8D%8F%E8%AE%AERIP-toc}</p>
-<p><a class="link" href="#10.2%E5%BC%80%E6%94%BE%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E4%BC%98%E5%85%88OSPF" >10.2开放最短路径优先OSPF</a>{#10.2%E5%BC%80%E6%94%BE%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E4%BC%98%E5%85%88OSPF-toc}</p>
-<p><a class="link" href="#10.3%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF%E5%8D%8F%E8%AE%AEBGP" >10.3路由信息协议BGP</a>{#10.3%E8%B7%AF%E7%94%B1%E4%BF%A1%E6%81%AF%E5%8D%8F%E8%AE%AEBGP-toc}</p>
-<p><a class="link" href="#11.%E8%B7%AF%E7%94%B1%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86" >11.路由器工作原理</a>{#11.%E8%B7%AF%E7%94%B1%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-toc}</p>
-<p><a class="link" href="#12.IP%E5%A4%9A%E6%92%AD%E5%9C%B0%E5%9D%80%E5%92%8C%E5%A4%9A%E6%92%AD%E7%BB%84" >12.IP多播地址和多播组</a>{#12.IP%E5%A4%9A%E6%92%AD%E5%9C%B0%E5%9D%80%E5%92%8C%E5%A4%9A%E6%92%AD%E7%BB%84-toc}</p>
-<p><a class="link" href="#13.IPV6" >13.IPV6</a>{#13.IPV6-toc}</p>
-<hr>
-<h2 id="1网络层概述"><a href="#1%e7%bd%91%e7%bb%9c%e5%b1%82%e6%a6%82%e8%bf%b0" class="header-anchor"></a>1.网络层概述
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/0309e88b0a3d49d3b8bb556ca633a517.png"
-	
-	
-	
+    <h2 id="网络层概述"><a href="#%e7%bd%91%e7%bb%9c%e5%b1%82%e6%a6%82%e8%bf%b0" class="header-anchor"></a>网络层概述
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image.png"
+	width="2223"
+	height="1172"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image_hu_c47224fad2868fda.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image_hu_f939859aea352924.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="455px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/a81967789a184271846f89912f51406b.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-1.png"
+	width="2469"
+	height="1169"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-1_hu_d46ccca04402136d.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-1_hu_f7d7be336c09298d.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="506px"
 	
 ></p>
-<h2 id="2网络层提供的两种服务-2e7bd91e7bb9ce5b182e68f90e4be9be79a84e4b8a4e7a78de69c8de58aa1"><a href="#2%e7%bd%91%e7%bb%9c%e5%b1%82%e6%8f%90%e4%be%9b%e7%9a%84%e4%b8%a4%e7%a7%8d%e6%9c%8d%e5%8a%a1-2e7bd91e7bb9ce5b182e68f90e4be9be79a84e4b8a4e7a78de69c8de58aa1" class="header-anchor"></a>2.网络层提供的两种服务 {#2.%E7%BD%91%E7%BB%9C%E5%B1%82%E6%8F%90%E4%BE%9B%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%9C%8D%E5%8A%A1}
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/ccd48b4a5a4344d282efe006af86721f.png"
-	
-	
-	
+<h2 id="网络层提供的两种服务"><a href="#%e7%bd%91%e7%bb%9c%e5%b1%82%e6%8f%90%e4%be%9b%e7%9a%84%e4%b8%a4%e7%a7%8d%e6%9c%8d%e5%8a%a1" class="header-anchor"></a>网络层提供的两种服务
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-2.png"
+	width="2643"
+	height="1312"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-2_hu_942ae97df81d8dae.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-2_hu_ba0ec8b347f27f4a.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/ac27c90c86f34b21b466abac902926cd.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-3.png"
+	width="2637"
+	height="1170"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-3_hu_77652d6393751a47.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-3_hu_16ed2d2a65621680.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="540px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/d4a5573f49094472b0673d9ac6eadd9d.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-4.png"
+	width="2475"
+	height="873"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-4_hu_e26d4f93aad69bbc.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-4_hu_10f0c63394b88b61.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="283"
+		data-flex-basis="680px"
 	
 ></p>
-<h2 id="3分类编址的ipv4-3e58886e7b1bbe7bc96e59d80e79a84ipv4"><a href="#3%e5%88%86%e7%b1%bb%e7%bc%96%e5%9d%80%e7%9a%84ipv4-3e58886e7b1bbe7bc96e59d80e79a84ipv4" class="header-anchor"></a>3.分类编址的IPV4 {#3.%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4}
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/3d88729945004b069dd340019212c7c1.png"
-	
-	
-	
+<h2 id="分类编址的-ipv4"><a href="#%e5%88%86%e7%b1%bb%e7%bc%96%e5%9d%80%e7%9a%84-ipv4" class="header-anchor"></a>分类编址的 IPV4
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-5.png"
+	width="2621"
+	height="1184"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-5_hu_5a5f7c4bb1506352.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-5_hu_89f08525c1fe3cec.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="531px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/6be47c0564084063a9c0d73a66721dfc.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-6.png"
+	width="2667"
+	height="1267"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-6_hu_b9cb6a1766716087.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-6_hu_d964e4cda71569eb.png 1024w"
 	loading="lazy"
 	
 	
-><img src="https://i-blog.csdnimg.cn/direct/e3195425a1ae4a238beea4cc31a04f4a.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-> <img src="https://i-blog.csdnimg.cn/direct/eeaddfac1b5f4afa87d1e491652fe814.png"
-	
-	
-	
-	loading="lazy"
-	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="505px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/13d0ec9826c2478182a2c600b15941db.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-7.png"
+	width="2619"
+	height="1038"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-7_hu_a1b08c3b56444999.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-7_hu_b2c4b36c66ba9545.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="252"
+		data-flex-basis="605px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/db30380c004842e2bb15ca923a3b2509.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-8.png"
+	width="2604"
+	height="1044"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-8_hu_212267da75b7d147.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-8_hu_9af2abfe5376d2cf.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="249"
+		data-flex-basis="598px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/76f790ab2d57467090fee7827da8510b.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-9.png"
+	width="2484"
+	height="1273"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-9_hu_13188f2d8d79270a.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-9_hu_d242930d8d06de25.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/bad660aa47fc4332901f3a19d3d30575.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-10.png"
+	width="2602"
+	height="1157"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-10_hu_fea8115ca436eacd.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-10_hu_bc4a3236ec129cf7.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="539px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/e26d8c251f084dc1982e9220c71632b6.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-11.png"
+	width="2602"
+	height="1149"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-11_hu_8b976e4e47dd6604.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-11_hu_fe4820d202f4cea5.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="226"
+		data-flex-basis="543px"
 	
 ></p>
-<h2 id="4无分类编址的ipv4cidr-4e697a0e58886e7b1bbe7bc96e59d80e79a84ipv4e28094cidr"><a href="#4%e6%97%a0%e5%88%86%e7%b1%bb%e7%bc%96%e5%9d%80%e7%9a%84ipv4cidr-4e697a0e58886e7b1bbe7bc96e59d80e79a84ipv4e28094cidr" class="header-anchor"></a>4.无分类编址的IPV4&mdash;CIDR {#4.%E6%97%A0%E5%88%86%E7%B1%BB%E7%BC%96%E5%9D%80%E7%9A%84IPV4%E2%80%94CIDR}
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/936dee04358844bd912fe8325d6046c5.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-12.png"
+	width="2562"
+	height="1178"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-12_hu_10a92a3535fb28cf.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-12_hu_fc011daf4a578c4f.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="217"
+		data-flex-basis="521px"
 	
 ></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/e05aaa34d736435e862b9debb305ee9f.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-13.png"
+	width="2496"
+	height="1095"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-13_hu_5f9636285418646b.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-13_hu_19f3e43cab36634a.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="547px"
 	
 ></p>
-<h2 id=""><a href="#" class="header-anchor"></a><img src="https://i-blog.csdnimg.cn/direct/497dffdd5c884dff8cd7139596b32aac.png"
-	
-	
-	
+<h2 id="无分类编址的-ipv4cidr"><a href="#%e6%97%a0%e5%88%86%e7%b1%bb%e7%bc%96%e5%9d%80%e7%9a%84-ipv4cidr" class="header-anchor"></a>无分类编址的 IPV4&mdash;CIDR
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-14.png"
+	width="2435"
+	height="1054"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-14_hu_232451432b82fbbb.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-14_hu_2372b59eddbf15d2.png 1024w"
 	loading="lazy"
 	
 	
->
-</h2>
+		class="gallery-image" 
+		data-flex-grow="231"
+		data-flex-basis="554px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-15.png"
+	width="2409"
+	height="1091"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-15_hu_fa56c7e215c37b53.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-15_hu_8594a2021b8f4b62.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-16.png"
+	width="2408"
+	height="1176"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-16_hu_9790e95c39aecc6.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-16_hu_2557203caca79fa6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="204"
+		data-flex-basis="491px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-17.png"
+	width="2483"
+	height="1190"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-17_hu_79139cb1ba8d6a4e.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-17_hu_eb6d7f1e1039e808.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="500px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-18.png"
+	width="2459"
+	height="1177"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-18_hu_2340926d88177081.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-18_hu_579d873905472ca5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-19.png"
+	width="2459"
+	height="1177"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-19_hu_2340926d88177081.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-19_hu_579d873905472ca5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-20.png"
+	width="2571"
+	height="1168"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-20_hu_a7d2e97f143a40ef.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-20_hu_d33d22f5010ded0c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="528px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-21.png"
+	width="2670"
+	height="1374"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-21_hu_cd1790aa3bfcbec3.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-21_hu_f2736c6597c9c50a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="194"
+		data-flex-basis="466px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-22.png"
+	width="2591"
+	height="1173"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-22_hu_aa40d7507be56b84.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-22_hu_b9e42ec51b3b2e0b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="530px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-23.png"
+	width="2524"
+	height="1251"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-23_hu_39f5b0df844c71e1.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-23_hu_45fcd4cf4bbf9e33.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="484px"
+	
+></p>
+<h2 id="ipv4-地址应用规划"><a href="#ipv4-%e5%9c%b0%e5%9d%80%e5%ba%94%e7%94%a8%e8%a7%84%e5%88%92" class="header-anchor"></a>IPV4 地址应用规划
+</h2><h3 id="使用定长子网掩码划分子网"><a href="#%e4%bd%bf%e7%94%a8%e5%ae%9a%e9%95%bf%e5%ad%90%e7%bd%91%e6%8e%a9%e7%a0%81%e5%88%92%e5%88%86%e5%ad%90%e7%bd%91" class="header-anchor"></a>使用定长子网掩码划分子网
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-24.png"
+	width="2633"
+	height="1277"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-24_hu_39bcdfb4b930c265.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-24_hu_f5636e7098ef55bd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="494px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-25.png"
+	width="2445"
+	height="1226"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-25_hu_2fa3ccc080c192a5.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-25_hu_731acf6222e3ee24.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="478px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-26.png"
+	width="2618"
+	height="1270"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-26_hu_d87d6c535dea6cdd.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-26_hu_f53f569a3290a74b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="494px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-27.png"
+	width="2633"
+	height="1247"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-27_hu_bd21d5e3b40b2e27.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-27_hu_cbd4e7cd39b14c38.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="506px"
+	
+></p>
+<h3 id="使用变长子网掩码划分子网"><a href="#%e4%bd%bf%e7%94%a8%e5%8f%98%e9%95%bf%e5%ad%90%e7%bd%91%e6%8e%a9%e7%a0%81%e5%88%92%e5%88%86%e5%ad%90%e7%bd%91" class="header-anchor"></a>使用变长子网掩码划分子网
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-28.png"
+	width="2653"
+	height="1284"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-28_hu_78cbe51d4baa15f5.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-28_hu_d40b88366e6bf809.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="495px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-29.png"
+	width="2598"
+	height="1295"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-29_hu_344948af8dc09b9a.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-29_hu_ab1058bccb9ea570.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="481px"
+	
+></p>
+<h2 id="ipv4-和-mac-地址"><a href="#ipv4-%e5%92%8c-mac-%e5%9c%b0%e5%9d%80" class="header-anchor"></a>IPV4 和 MAC 地址
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-30.png"
+	width="1813"
+	height="1007"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-30_hu_a348639d61e9558f.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-30_hu_6c52ad29d4c18909.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="432px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-31.png"
+	width="2053"
+	height="866"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-31_hu_1e72f6862af992f2.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-31_hu_8fe454175745eadc.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="568px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-32.png"
+	width="2026"
+	height="1011"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-32_hu_d2f4ba0b850bfabc.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-32_hu_67cad9d785d40121.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="200"
+		data-flex-basis="480px"
+	
+></p>
+<h2 id="地址解析协议-arp"><a href="#%e5%9c%b0%e5%9d%80%e8%a7%a3%e6%9e%90%e5%8d%8f%e8%ae%ae-arp" class="header-anchor"></a>地址解析协议 ARP
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-33.png"
+	width="2033"
+	height="932"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-33_hu_83cb36128415b71a.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-33_hu_85a36afa4012f78d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="523px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-34.png"
+	width="2005"
+	height="944"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-34_hu_4cb80ffcdec1be12.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-34_hu_2f79bcf7e60bf19c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="212"
+		data-flex-basis="509px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-35.png"
+	width="2030"
+	height="906"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-35_hu_1b58abac5d6f605.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-35_hu_62fcd1c635e65b2c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="537px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-36.png"
+	width="1960"
+	height="652"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-36_hu_36edc8bc39bc33e8.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-36_hu_a071fa606bee4f83.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="300"
+		data-flex-basis="721px"
+	
+></p>
+<h2 id="ip-数据报发送转发流程"><a href="#ip-%e6%95%b0%e6%8d%ae%e6%8a%a5%e5%8f%91%e9%80%81%e8%bd%ac%e5%8f%91%e6%b5%81%e7%a8%8b" class="header-anchor"></a>IP 数据报发送转发流程
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-37.png"
+	width="2020"
+	height="975"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-37_hu_a1c6c6c396c3251f.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-37_hu_6fb882c457f0f397.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="497px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-38.png"
+	width="2045"
+	height="895"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-38_hu_d38891ecad704216.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-38_hu_21e5a32753e366fb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="548px"
+	
+></p>
+<h2 id="静态路由配置"><a href="#%e9%9d%99%e6%80%81%e8%b7%af%e7%94%b1%e9%85%8d%e7%bd%ae" class="header-anchor"></a>静态路由配置
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-39.png"
+	width="2110"
+	height="766"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-39_hu_ffc4c9a1e71d7334.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-39_hu_8e8df665059c1566.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="275"
+		data-flex-basis="661px"
+	
+></p>
+<h3 id="默认路由"><a href="#%e9%bb%98%e8%ae%a4%e8%b7%af%e7%94%b1" class="header-anchor"></a>默认路由
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-40.png"
+	width="2075"
+	height="1028"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-40_hu_61c0a01efa56846.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-40_hu_b9ae69b093afcfb8.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="484px"
+	
+></p>
+<h3 id="特定主机路由"><a href="#%e7%89%b9%e5%ae%9a%e4%b8%bb%e6%9c%ba%e8%b7%af%e7%94%b1" class="header-anchor"></a>特定主机路由
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-41.png"
+	width="2096"
+	height="930"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-41_hu_901c991e371ad5e2.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-41_hu_54d68435c47306f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="225"
+		data-flex-basis="540px"
+	
+></p>
+<h2 id="路由选择分类"><a href="#%e8%b7%af%e7%94%b1%e9%80%89%e6%8b%a9%e5%88%86%e7%b1%bb" class="header-anchor"></a>路由选择分类
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-42.png"
+	width="1959"
+	height="669"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-42_hu_6456d87c585e25b4.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-42_hu_ecf3a117b6387046.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="292"
+		data-flex-basis="702px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-43.png"
+	width="2087"
+	height="943"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-43_hu_37051ead6d1a350d.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-43_hu_bbe787d29326bb11.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="531px"
+	
+></p>
+<p><strong>注意这里的内部网关协议 IGP、外部网关协议 EGP 是一个大类别，还分为不同的具体协议</strong></p>
+<h3 id="路由信息协议-rip"><a href="#%e8%b7%af%e7%94%b1%e4%bf%a1%e6%81%af%e5%8d%8f%e8%ae%ae-rip" class="header-anchor"></a>路由信息协议 RIP
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-44.png"
+	width="1965"
+	height="806"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-44_hu_c7c7fa12ceda7910.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-44_hu_27948e3f85d58adf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="243"
+		data-flex-basis="585px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-45.png"
+	width="1545"
+	height="776"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-45_hu_9491e73f42d24c80.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-45_hu_2cd4cf8a5dfce50c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="477px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-46.png"
+	width="1938"
+	height="874"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-46_hu_7f5a390ad95ae7d8.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-46_hu_5647d8214cfe068c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="532px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-47.png"
+	width="2041"
+	height="1032"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-47_hu_542b186ef82a6492.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-47_hu_b804e7ba1d8b2b41.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="197"
+		data-flex-basis="474px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-48.png"
+	width="2105"
+	height="1037"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-48_hu_a1a12118b57fa05a.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-48_hu_5647ff3fa330d2cb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="487px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-49.png"
+	width="1937"
+	height="418"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-49_hu_f80712336687b295.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-49_hu_cf6593619cadf367.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="463"
+		data-flex-basis="1112px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-50.png"
+	width="2076"
+	height="906"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-50_hu_4f1a4f1441d859b4.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-50_hu_142e3123820c5823.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="229"
+		data-flex-basis="549px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-51.png"
+	width="2095"
+	height="1032"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-51_hu_b1fcaf2ae915dbf7.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-51_hu_591f20fe2e0031b3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="487px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-52.png"
+	width="2058"
+	height="770"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-52_hu_1916eb5e828a2a5.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-52_hu_4879370362692b25.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="267"
+		data-flex-basis="641px"
+	
+></p>
+<h3 id="开放最短路径优先-ospf"><a href="#%e5%bc%80%e6%94%be%e6%9c%80%e7%9f%ad%e8%b7%af%e5%be%84%e4%bc%98%e5%85%88-ospf" class="header-anchor"></a>开放最短路径优先 OSPF
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-53.png"
+	width="1966"
+	height="749"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-53_hu_ff81da7120aefb58.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-53_hu_ce9b77e9f54edc0c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="262"
+		data-flex-basis="629px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-54.png"
+	width="1677"
+	height="1034"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-54_hu_52e56d972f22284d.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-54_hu_be0e29a1bf566799.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="162"
+		data-flex-basis="389px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-55.png"
+	width="1949"
+	height="998"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-55_hu_1423fb8d104d9c7d.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-55_hu_91852f05bb4efbf0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-56.png"
+	width="1971"
+	height="1026"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-56_hu_6a7e819efd74437a.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-56_hu_d8bdadfbd0e2af61.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-57.png"
+	width="1990"
+	height="1030"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-57_hu_7a09820969923d84.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-57_hu_bdb3a96e22a2a183.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="463px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-58.png"
+	width="1907"
+	height="1024"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-58_hu_c42b57def3255b41.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-58_hu_2f1c5aab15d381dd.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="446px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-59.png"
+	width="1969"
+	height="1021"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-59_hu_37eb36552b9eda18.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-59_hu_a6eb762552fab51d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-60.png"
+	width="1841"
+	height="1025"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-60_hu_5f569b080d104fb4.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-60_hu_9ded97a375e5617b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="431px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-61.png"
+	width="2079"
+	height="1027"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-61_hu_dd4563466161509f.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-61_hu_cc8849e33b8dff29.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="485px"
+	
+></p>
+<h3 id="路由信息协议-bgp"><a href="#%e8%b7%af%e7%94%b1%e4%bf%a1%e6%81%af%e5%8d%8f%e8%ae%ae-bgp" class="header-anchor"></a>路由信息协议 BGP
+</h3><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-62.png"
+	width="1795"
+	height="1006"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-62_hu_1e0260c06ec39879.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-62_hu_cb83069d61a6f7a5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-63.png"
+	width="2105"
+	height="1032"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-63_hu_f813018288afadff.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-63_hu_9953c5f888f24c59.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="203"
+		data-flex-basis="489px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-64.png"
+	width="1958"
+	height="1031"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-64_hu_c36c832759ee5079.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-64_hu_ab441832fdf7b86f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="455px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-65.png"
+	width="1565"
+	height="901"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-65_hu_c3e5791c2a2273a7.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-65_hu_c2456da8f87796e1.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="416px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-66.png"
+	width="2091"
+	height="956"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-66_hu_7b42d6af5bc28d17.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-66_hu_492655fcb2a36f6f.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-67.png"
+	width="2055"
+	height="903"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-67_hu_4da592752187f8a5.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-67_hu_888af49d951b85cb.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="546px"
+	
+></p>
+<h2 id="路由器工作原理"><a href="#%e8%b7%af%e7%94%b1%e5%99%a8%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="header-anchor"></a>路由器工作原理
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-68.png"
+	width="1989"
+	height="1034"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-68_hu_a5c37a3c9df91da9.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-68_hu_7377b1103ccee26b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="461px"
+	
+></p>
+<h2 id="ip-多播地址和多播组"><a href="#ip-%e5%a4%9a%e6%92%ad%e5%9c%b0%e5%9d%80%e5%92%8c%e5%a4%9a%e6%92%ad%e7%bb%84" class="header-anchor"></a>IP 多播地址和多播组
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-69.png"
+	width="1976"
+	height="1023"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-69_hu_92dcaba2fd8633d8.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-69_hu_fb607bdb47375b7e.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="463px"
+	
+></p>
+<h2 id="ipv6"><a href="#ipv6" class="header-anchor"></a>IPV6
+</h2><p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-70.png"
+	width="1992"
+	height="810"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-70_hu_a62a5aae675b101d.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-70_hu_9f6253eb08290c31.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="245"
+		data-flex-basis="590px"
+	
+></p>
+<p><img src="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-71.png"
+	width="1972"
+	height="1024"
+	srcset="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-71_hu_e7cf39d9d24d782c.png 480w, /zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/image-71_hu_67b020b5f2ab09bf.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="192"
+		data-flex-basis="462px"
+	
+></p>
+
 </section>
 
 
@@ -677,12 +1410,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A01.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/">
+    <a href="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">【考前预习】1.计算机网络概述</h2>
+            <h2 class="article-title">【考前预习】2.计算机网络—物理层</h2>
             
         </div>
     </a>
@@ -690,12 +1423,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A02.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%89%A9%E7%90%86%E5%B1%82/">
+    <a href="/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A01.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">【考前预习】2.计算机网络—物理层</h2>
+            <h2 class="article-title">【考前预习】1.计算机网络概述</h2>
             
         </div>
     </a>

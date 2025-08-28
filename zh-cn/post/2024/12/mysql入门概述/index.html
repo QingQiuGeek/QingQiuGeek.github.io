@@ -11,7 +11,7 @@
 <meta property='og:description' content="mysql概述、存储引擎innodb、myisam、数据类型">
 <meta property='og:url' content='/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='数据库' /><meta property='article:tag' content='mysql' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2024-12-26T14:43:23&#43;00:00'/><meta property='article:modified_time' content='2024-12-26T14:43:23&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='MySQL' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2024-12-26T14:43:23&#43;00:00'/><meta property='article:modified_time' content='2024-12-26T14:43:23&#43;00:00'/>
 <meta name="twitter:title" content="MySQL入门概述">
 <meta name="twitter:description" content="mysql概述、存储引擎innodb、myisam、数据类型">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,24 +336,24 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1字段类型-e5ad97e6aeb5e7b1bbe59e8b">1.字段类型 {#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B}</a>
+    <li><a href="#字段类型">字段类型</a>
       <ol>
-        <li><a href="#12varchar100和-varchar10区别-varchar100e5928c20varchar10e58cbae588ab">1.2VARCHAR(100)和 VARCHAR(10)区别 {#VARCHAR(100)%E5%92%8C%20VARCHAR(10)%E5%8C%BA%E5%88%AB}</a></li>
-        <li><a href="#13decimal-和-floatdouble-区别-decimal20e5928c20float2fdouble20e58cbae588ab"><strong>1.3DECIMAL 和 FLOAT/DOUBLE 区别</strong> {#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB}</a></li>
-        <li><a href="#14text和blob-texte5928cblob">1.4TEXT和BLOB {#TEXT%E5%92%8CBLOB}</a></li>
-        <li><a href="#15datetime-和-timestamp-c2a0datetime20e5928c20timestamp">1.5DATETIME 和 TIMESTAMP {#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP}</a></li>
-        <li><a href="#16null和的区别-nulle5928c2222e79a84e58cbae588ab">1.6NULL和&quot;&ldquo;的区别 {#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB}</a></li>
-        <li><a href="#17为什么-mysql-不建议使用-null-作为列默认值-e4b8bae4bb80e4b98820mysql20e4b88de5bbbae8aeaee4bdbfe794a8c2a0nullc2a0e4bd9ce4b8bae58897e9bb98e8aea4e580bcefbc9f">1.7为什么 MySQL 不建议使用 <code>NULL</code> 作为列默认值？ {#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F}</a></li>
-        <li><a href="#18boolean类型如何表示-booleane7b1bbe59e8be5a682e4bd95e8a1a8e7a4ba">1.8Boolean类型如何表示 {#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA}</a></li>
+        <li><a href="#varchar100和-varchar10区别">VARCHAR(100)和 VARCHAR(10)区别</a></li>
+        <li><a href="#decimal-和-floatdouble-区别">DECIMAL 和 FLOAT/DOUBLE 区别</a></li>
+        <li><a href="#text-和-blob">TEXT 和 BLOB</a></li>
+        <li><a href="#datetime-和-timestamp">DATETIME 和 TIMESTAMP</a></li>
+        <li><a href="#null-和的区别">NULL 和&quot;&ldquo;的区别</a></li>
+        <li><a href="#为什么-mysql-不建议使用-null-作为列默认值">为什么 MySQL 不建议使用 <code>NULL</code> 作为列默认值?</a></li>
+        <li><a href="#boolean-类型如何表示">Boolean 类型如何表示</a></li>
       </ol>
     </li>
-    <li><a href="#2mysql基础架构-mysqle59fbae7a180e69eb6e69e84">2.MySQL基础架构 {#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}</a></li>
-    <li><a href="#3mysql存储引擎-mysqle5ad98e582a8e5bc95e6938ec2a0">3.MySQL存储引擎 {#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0}</a>
+    <li><a href="#mysql-基础架构">MySQL 基础架构</a></li>
+    <li><a href="#mysql-存储引擎">MySQL 存储引擎</a>
       <ol>
-        <li><a href="#31myisam和innodb区别-myisame5928cinnodbe58cbae588ab">3.1MyISAM和InnoDB区别 {#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB}</a></li>
+        <li><a href="#myisam-和-innodb-区别">MyISAM 和 InnoDB 区别</a></li>
       </ol>
     </li>
-    <li><a href="#4mysql如何存储ip地址">4.MySQL如何存储IP地址</a></li>
+    <li><a href="#mysql-如何存储-ip-地址">MySQL 如何存储 IP 地址</a></li>
   </ol>
 </nav>
         </div>
@@ -417,7 +417,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 8 分钟
+                阅读时长: 6 分钟
             </time>
         </div>
         
@@ -459,110 +459,115 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <p><strong>目录</strong>{#main-toc}</p>
-<p><a class="link" href="#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B" >1.字段类型</a>{#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B-toc}</p>
-<p><a class="link" href="#VARCHAR%28100%29%E5%92%8C%20VARCHAR%2810%29%E5%8C%BA%E5%88%AB" >1.2VARCHAR(100)和 VARCHAR(10)区别</a>{#VARCHAR(100)%E5%92%8C%20VARCHAR(10)%E5%8C%BA%E5%88%AB-toc}</p>
-<p><a class="link" href="#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB" >1.3DECIMAL 和 FLOAT/DOUBLE 区别</a>{#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB-toc}</p>
-<p><a class="link" href="#TEXT%E5%92%8CBLOB" >1.4TEXT和BLOB</a>{#TEXT%E5%92%8CBLOB-toc}</p>
-<p><a class="link" href="#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP" >1.5DATETIME 和 TIMESTAMP</a>{#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP-toc}</p>
-<p><a class="link" href="#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB" >1.6NULL和&quot;&ldquo;的区别</a>{#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB-toc}</p>
-<p><a class="link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F" >1.7为什么 MySQL 不建议使用 NULL 作为列默认值？</a>{#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F-toc}</p>
-<p><a class="link" href="#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA" >1.8Boolean类型如何表示</a>{#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA-toc}</p>
-<p><a class="link" href="#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84" >2.MySQL基础架构</a>{#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84-toc}</p>
-<p><a class="link" href="#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0" >3.MySQL存储引擎</a>{#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0-toc}</p>
-<p><a class="link" href="#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB" >3.1MyISAM和InnoDB区别</a>{#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB-toc}</p>
-<blockquote>
-<p>MySQL是建立在关系模型基础上的关系型数据库，关系模型表明了数据库中所存储的数据之间的联系（一对一、一对多、多对多）。</p></blockquote>
-<h2 id="1字段类型-e5ad97e6aeb5e7b1bbe59e8b"><a href="#1%e5%ad%97%e6%ae%b5%e7%b1%bb%e5%9e%8b-e5ad97e6aeb5e7b1bbe59e8b" class="header-anchor"></a>1.字段类型 {#%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B}
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/d295b20e0f0941e381a4dda058c4c05c.png"
-	
-	
-	
+    <blockquote>
+<p>MySQL 是建立在关系模型基础上的关系型数据库，关系模型表明了数据库中所存储的数据之间的联系（一对一、一对多、多对多）。</p></blockquote>
+<h2 id="字段类型"><a href="#%e5%ad%97%e6%ae%b5%e7%b1%bb%e5%9e%8b" class="header-anchor"></a>字段类型
+</h2><p><img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image.png"
+	width="1654"
+	height="1426"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image_hu_8d67505423ab9cf5.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image_hu_fe9bc902be500416.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="115"
+		data-flex-basis="278px"
 	
 ></p>
 <blockquote>
 <ul>
-<li>TINYINT占1字节，INT占4字节，BIGINT占8字节。</li>
-<li>CHAR是定长字符串，VARCHAR是变长字符串。CHAR 在存储时会在右边填充空格以达到指定的长度，检索时会去掉空格；VARCHAR 在存储时需要使用 1 或 2 个额外<strong>字节</strong> 记录字符串的长度，检索时不需要处理。<strong>CHAR（100）指的是100个字符而非字节</strong></li>
-<li>MySQL中字符的存储是与字符集（<code>CHARSET</code>）相关的，具体的字节数取决于你使用的字符集和编码。 <strong><code>latin1</code></strong> 编码（单字节编码），每个字符占用 <strong>1 字节</strong> 。<strong><code>utf8mb4</code></strong> 编码（变长编码），每个字符可能占用 <strong>1 到 4 字节</strong>，具体取决于字符的内容。</li>
+<li>TINYINT 占 1 字节，INT 占 4 字节，BIGINT 占 8 字节。</li>
+<li>CHAR 是定长字符串，VARCHAR 是变长字符串。CHAR 在存储时会在右边填充空格以达到指定的长度，检索时会去掉空格；VARCHAR 在存储时需要使用 1 或 2 个额外<strong>字节</strong> 记录字符串的长度，检索时不需要处理。<strong>CHAR（100）指的是 100 个字符而非字节</strong></li>
+<li>MySQL 中字符的存储是与字符集（<code>CHARSET</code>）相关的，具体的字节数取决于你使用的字符集和编码。 <strong><code>latin1</code></strong> 编码（单字节编码），每个字符占用 <strong>1 字节</strong> 。<strong><code>utf8mb4</code></strong> 编码（变长编码），每个字符可能占用 <strong>1 到 4 字节</strong>，具体取决于字符的内容。</li>
 </ul></blockquote>
-<h3 id="12varchar100和-varchar10区别-varchar100e5928c20varchar10e58cbae588ab"><a href="#12varchar100%e5%92%8c-varchar10%e5%8c%ba%e5%88%ab-varchar100e5928c20varchar10e58cbae588ab" class="header-anchor"></a>1.2VARCHAR(100)和 VARCHAR(10)区别 {#VARCHAR(100)%E5%92%8C%20VARCHAR(10)%E5%8C%BA%E5%88%AB}
+<h3 id="varchar100和-varchar10区别"><a href="#varchar100%e5%92%8c-varchar10%e5%8c%ba%e5%88%ab" class="header-anchor"></a>VARCHAR(100)和 VARCHAR(10)区别
 </h3><blockquote>
 <p>VARCHAR(100)和 VARCHAR(10)都是变长类型，表示能存储最多 100 个字符和 10 个字符。但二者存储相同的字符串，所占用磁盘的存储空间其实是一样的，其所占用的磁盘空间是基于<strong>实际存储的字符长度</strong>，而不是字段的最大长度。</p></blockquote>
-<h3 id="13decimal-和-floatdouble-区别-decimal20e5928c20float2fdouble20e58cbae588ab"><a href="#13decimal-%e5%92%8c-floatdouble-%e5%8c%ba%e5%88%ab-decimal20e5928c20float2fdouble20e58cbae588ab" class="header-anchor"></a><strong>1.3DECIMAL 和 FLOAT/DOUBLE 区别</strong> {#DECIMAL%20%E5%92%8C%20FLOAT%2FDOUBLE%20%E5%8C%BA%E5%88%AB}
+<h3 id="decimal-和-floatdouble-区别"><a href="#decimal-%e5%92%8c-floatdouble-%e5%8c%ba%e5%88%ab" class="header-anchor"></a>DECIMAL 和 FLOAT/DOUBLE 区别
 </h3><blockquote>
-<br />
 <p><strong>DECIMAL 是定点数，可以存储精确的小数值。</strong></p>
-<p><strong>FLOAT（4字节），DOUBLE（8字节） 是浮点数，只能存储近似的小数值。</strong></p>
+<p><strong>FLOAT（4 字节），DOUBLE（8 字节） 是浮点数，只能存储近似的小数值。</strong></p>
 <p>DECIMAL 用于存储具有精度要求的小数，例如与货币相关的数据，可以避免浮点数带来的精度损失。</p></blockquote>
-<h3 id="14text和blob-texte5928cblob"><a href="#14text%e5%92%8cblob-texte5928cblob" class="header-anchor"></a>1.4TEXT和BLOB {#TEXT%E5%92%8CBLOB}
+<h3 id="text-和-blob"><a href="#text-%e5%92%8c-blob" class="header-anchor"></a>TEXT 和 BLOB
 </h3><blockquote>
 <ul>
-<li>TEXT可以存储更长的字符串，即长文本数据，例如博客内容。</li>
+<li>TEXT 可以存储更长的字符串，即长文本数据，例如博客内容。</li>
 <li>BLOB 类型主要用于存储二进制大对象，例如图片、音视频等文件。</li>
-<li>TEXT和BLOB缺点：
+<li>TEXT 和 BLOB 缺点：
 <ul>
 <li>不能有默认值。</li>
 <li>检索效率较低。</li>
 <li>在使用临时表时无法使用内存临时表，只能在磁盘上创建临时表。</li>
-<li>不能直接创建索引，需要指定前缀长度。</li>
+<li>不能直接创建索引，需要指定前缀长度。
+<img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-1.png"
+	width="990"
+	height="449"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-1_hu_dada62f7d2c52a32.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-1_hu_423eb2c7607370a0.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+> &gt; <img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-2.png"
+	width="999"
+	height="457"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-2_hu_8d460f34bb7ae061.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-2_hu_5cff2a90b8be2234.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></li>
 </ul>
 </li>
 </ul></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/5622941b4e654b0792f5e5178e70545f.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/e973f869c42e4bdf9d2299624c8cb578.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<h3 id="15datetime-和-timestamp-c2a0datetime20e5928c20timestamp"><a href="#15datetime-%e5%92%8c-timestamp-c2a0datetime20e5928c20timestamp" class="header-anchor"></a>1.5DATETIME 和 TIMESTAMP {#%C2%A0DATETIME%20%E5%92%8C%20TIMESTAMP}
+<h3 id="datetime-和-timestamp"><a href="#datetime-%e5%92%8c-timestamp" class="header-anchor"></a>DATETIME 和 TIMESTAMP
 </h3><p><a class="link" href="https://javaguide.cn/database/mysql/some-thoughts-on-database-storage-time.html#%E6%97%B6%E5%8C%BA%E4%BF%A1%E6%81%AF"  title="MySQL日期类型选择建议 | JavaGuide"
      target="_blank" rel="noopener"
-    >MySQL日期类型选择建议 | JavaGuide</a></p>
-<p>DATETIME 类型没有时区信息，TIMESTAMP 和时区有关。</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/26cdf6211f97459bb85803678f971882.png"
-	
-	
-	
+    >MySQL 日期类型选择建议 | JavaGuide</a></p>
+<p>DATETIME 类型没有时区信息，TIMESTAMP 和时区有关。
+<img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-3.png"
+	width="1594"
+	height="614"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-3_hu_38c6b5a7aa80305.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-3_hu_618882815bdb491b.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="259"
+		data-flex-basis="623px"
 	
 ></p>
-<h3 id="16null和的区别-nulle5928c2222e79a84e58cbae588ab"><a href="#16null%e5%92%8c%e7%9a%84%e5%8c%ba%e5%88%ab-nulle5928c2222e79a84e58cbae588ab" class="header-anchor"></a>1.6NULL和&quot;&ldquo;的区别 {#NULL%E5%92%8C%22%22%E7%9A%84%E5%8C%BA%E5%88%AB}
+<h3 id="null-和的区别"><a href="#null-%e5%92%8c%e7%9a%84%e5%8c%ba%e5%88%ab" class="header-anchor"></a>NULL 和&quot;&ldquo;的区别
 </h3><blockquote>
 <ul>
-<li><code>NULL</code> 代表一个不确定的值,就算是两个 <code>NULL</code>,它俩也不一定相等。例如，<code>SELECT NULL=NULL</code>的结果为NULL</li>
+<li><code>NULL</code> 代表一个不确定的值,就算是两个 <code>NULL</code>,它俩也不一定相等。例如，<code>SELECT NULL=NULL</code>的结果为 NULL</li>
 <li><code>''</code>的长度是 0，是不占用空间的，而<code>NULL</code> 是需要占用空间</li>
 </ul></blockquote>
-<h3 id="17为什么-mysql-不建议使用-null-作为列默认值-e4b8bae4bb80e4b98820mysql20e4b88de5bbbae8aeaee4bdbfe794a8c2a0nullc2a0e4bd9ce4b8bae58897e9bb98e8aea4e580bcefbc9f"><a href="#17%e4%b8%ba%e4%bb%80%e4%b9%88-mysql-%e4%b8%8d%e5%bb%ba%e8%ae%ae%e4%bd%bf%e7%94%a8-null-%e4%bd%9c%e4%b8%ba%e5%88%97%e9%bb%98%e8%ae%a4%e5%80%bc-e4b8bae4bb80e4b98820mysql20e4b88de5bbbae8aeaee4bdbfe794a8c2a0nullc2a0e4bd9ce4b8bae58897e9bb98e8aea4e580bcefbc9f" class="header-anchor"></a>1.7为什么 MySQL 不建议使用 <code>NULL</code> 作为列默认值？ {#%E4%B8%BA%E4%BB%80%E4%B9%88%20MySQL%20%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8%C2%A0NULL%C2%A0%E4%BD%9C%E4%B8%BA%E5%88%97%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%9F}
+<h3 id="为什么-mysql-不建议使用-null-作为列默认值"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-mysql-%e4%b8%8d%e5%bb%ba%e8%ae%ae%e4%bd%bf%e7%94%a8-null-%e4%bd%9c%e4%b8%ba%e5%88%97%e9%bb%98%e8%ae%a4%e5%80%bc" class="header-anchor"></a>为什么 MySQL 不建议使用 <code>NULL</code> 作为列默认值?
 </h3><blockquote>
 <p><code>NULL</code> 会影响聚合函数的结果。例如，<code>SUM</code>、<code>AVG</code>、<code>MIN</code>、<code>MAX</code> 等聚合函数会忽略 <code>NULL</code> 值，如果参数是某个字段名(<code>COUNT(列名)</code>)，则会忽略 <code>NULL</code> 值，只统计非空值的个数。查询 <code>NULL</code> 值时，必须使用 <code>IS NULL</code> 或 <code>IS NOT NULLl</code> 来判断，而不能使用 =、!=、 &lt;、&gt; 之类的比较运算符。而<code>''</code>是可以使用这些比较运算符的。</p></blockquote>
-<h3 id="18boolean类型如何表示-booleane7b1bbe59e8be5a682e4bd95e8a1a8e7a4ba"><a href="#18boolean%e7%b1%bb%e5%9e%8b%e5%a6%82%e4%bd%95%e8%a1%a8%e7%a4%ba-booleane7b1bbe59e8be5a682e4bd95e8a1a8e7a4ba" class="header-anchor"></a>1.8Boolean类型如何表示 {#Boolean%E7%B1%BB%E5%9E%8B%E5%A6%82%E4%BD%95%E8%A1%A8%E7%A4%BA}
+<h3 id="boolean-类型如何表示"><a href="#boolean-%e7%b1%bb%e5%9e%8b%e5%a6%82%e4%bd%95%e8%a1%a8%e7%a4%ba" class="header-anchor"></a>Boolean 类型如何表示
 </h3><blockquote>
 <p>MySQL 中没有专门的布尔类型，而是用 TINYINT(1) 类型来表示布尔值。TINYINT(1) 类型可以存储 0 或 1，分别对应 false 或 true。</p></blockquote>
-<h2 id="2mysql基础架构-mysqle59fbae7a180e69eb6e69e84"><a href="#2mysql%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84-mysqle59fbae7a180e69eb6e69e84" class="header-anchor"></a>2.MySQL基础架构 {#MySQL%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84}
-</h2><p><img src="https://i-blog.csdnimg.cn/direct/52e81da0b61c4abdba463a7d2d497216.png"
-	
-	
-	
+<h2 id="mysql-基础架构"><a href="#mysql-%e5%9f%ba%e7%a1%80%e6%9e%b6%e6%9e%84" class="header-anchor"></a>MySQL 基础架构
+</h2><p><img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-4.png"
+	width="1437"
+	height="1088"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-4_hu_703d27ddae52e213.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-4_hu_a495e2d79e84f504.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="132"
+		data-flex-basis="316px"
 	
 ></p>
 <blockquote>
-<br />
 <ul>
 <li><strong>连接器：</strong> 身份认证和权限相关(登录 MySQL 的时候)。</li>
 <li><strong>查询缓存：</strong> 执行查询语句的时候，会先查询缓存（MySQL 8.0 版本后移除，因为这个功能不太实用）。</li>
@@ -571,74 +576,81 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li><strong>执行器：</strong> 执行语句，然后从存储引擎返回数据。 执行语句之前会先判断是否有权限，如果没有权限的话，就会报错。</li>
 <li><strong>插件式存储引擎</strong> ：主要负责数据的存储和读取，采用的是<strong>插件式架构</strong>，支持 InnoDB、MyISAM、Memory 等多种存储引擎。InnoDB 是 MySQL 的默认存储引擎，绝大部分场景使用 InnoDB 就是最好的选择。</li>
 </ul></blockquote>
-<h2 id="3mysql存储引擎-mysqle5ad98e582a8e5bc95e6938ec2a0"><a href="#3mysql%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e-mysqle5ad98e582a8e5bc95e6938ec2a0" class="header-anchor"></a>3.MySQL存储引擎 {#MySQL%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%C2%A0}
+<h2 id="mysql-存储引擎"><a href="#mysql-%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e" class="header-anchor"></a>MySQL 存储引擎
 </h2><p><a class="link" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-storage-engine.html"  title="MySQL :: MySQL 8.0 Reference Manual :: 17 The InnoDB Storage Engine"
      target="_blank" rel="noopener"
     >MySQL :: MySQL 8.0 Reference Manual :: 17 The InnoDB Storage Engine</a></p>
 <p><a class="link" href="https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html"  title="MySQL :: MySQL 8.0 Reference Manual :: 18 Alternative Storage Engines"
      target="_blank" rel="noopener"
     >MySQL :: MySQL 8.0 Reference Manual :: 18 Alternative Storage Engines</a></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/3ff542af8a1645058a19cb364fd8d289.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-5.png"
+	width="2152"
+	height="538"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-5_hu_2c6352c126711b07.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-5_hu_58ed7189f3e90260.png 1024w"
 	loading="lazy"
 	
+	
+		class="gallery-image" 
+		data-flex-grow="400"
+		data-flex-basis="960px"
 	
 ></p>
 <blockquote>
 <ul>
-<li>MySQL 5.5.5 之前，MyISAM 是 MySQL 的默认存储引擎。5.5.5 版本之后，InnoDB 是 MySQL 的默认存储引擎。 在上述所有引擎中，<strong>只有InnoDB引擎支持事务。</strong></li>
-<li>上面还提到过MySQL 存储引擎采用的是 <strong>插件式架构</strong> ，支持多种存储引擎。<strong>存储引擎是基于表的，而不是数据库。</strong></li>
+<li>MySQL 5.5.5 之前，MyISAM 是 MySQL 的默认存储引擎。5.5.5 版本之后，InnoDB 是 MySQL 的默认存储引擎。 在上述所有引擎中，<strong>只有 InnoDB 引擎支持事务。</strong></li>
+<li>上面还提到过 MySQL 存储引擎采用的是 <strong>插件式架构</strong> ，支持多种存储引擎。<strong>存储引擎是基于表的，而不是数据库。</strong></li>
 </ul></blockquote>
-<h3 id="31myisam和innodb区别-myisame5928cinnodbe58cbae588ab"><a href="#31myisam%e5%92%8cinnodb%e5%8c%ba%e5%88%ab-myisame5928cinnodbe58cbae588ab" class="header-anchor"></a>3.1MyISAM和InnoDB区别 {#MyISAM%E5%92%8CInnoDB%E5%8C%BA%E5%88%AB}
+<h3 id="myisam-和-innodb-区别"><a href="#myisam-%e5%92%8c-innodb-%e5%8c%ba%e5%88%ab" class="header-anchor"></a>MyISAM 和 InnoDB 区别
 </h3><blockquote>
 <ul>
 <li>
-<p>**锁：**MyISAM 只有表级锁，而 InnoDB 支持行级锁和表级锁，默认为行级锁。对于并发操作，细粒度的行级锁性能肯定更好！</p>
+<p><strong>锁：</strong> MyISAM 只有表级锁，而 InnoDB 支持行级锁和表级锁，默认为行级锁。对于并发操作，细粒度的行级锁性能肯定更好！</p>
 </li>
 <li>
-<p><strong>事务：</strong></p>
-<p>MyISAM 不提供事务支持。InnoDB 提供事务支持，实现了四个隔离级别，分别是：<strong>读未提交、读已提交、可重复读、可串行化</strong>。InnoDB 默认是可重读，隔离级别是可以解决幻读问题发生的（基于 MVCC 和 Next-Key Lock）。</p>
+<p><strong>事务：</strong>
+MyISAM 不提供事务支持。InnoDB 提供事务支持，实现了四个隔离级别，分别是：<strong>读未提交、读已提交、可重复读、可串行化</strong>。InnoDB 默认是可重读，隔离级别是可以解决幻读问题发生的（基于 MVCC 和 Next-Key Lock）。</p>
 </li>
 <li>
-<p>**外键：**MyISAM 不支持物理外键，而 InnoDB 支持物理外键。然而外键的维护对数据库性能也有一定影响，特别是分布式、高并发项目，一个字段的更新往往会引起其他字段的更新，极大拉低数据库性能，因此是不建议使用物理外键，而是逻辑外键（在代码中进行约束）</p>
+<p><strong>外键：</strong> MyISAM 不支持物理外键，而 InnoDB 支持物理外键。然而外键的维护对数据库性能也有一定影响，特别是分布式、高并发项目，一个字段的更新往往会引起其他字段的更新，极大拉低数据库性能，因此是不建议使用物理外键，而是逻辑外键（在代码中进行约束）</p>
 </li>
 <li>
 <p><strong>数据恢复</strong> ：MyISAM 不支持，而 InnoDB 支持。使用 InnoDB 的数据库在异常崩溃后，数据库重新启动的时候依赖<strong>redo.log</strong>使数据库恢复到崩溃前的状态。</p>
 </li>
 <li>
-<p>**MVCC：**MVCC 可以看作是行级锁的一个升级，可以有效减少加锁操作，提高性能。MyISAM显然是不支持MVCC的，毕竟连行级锁都没有。</p>
+<p><strong>MVCC：</strong> MVCC 可以看作是行级锁的一个升级，可以有效减少加锁操作，提高性能。MyISAM 显然是不支持 MVCC 的，毕竟连行级锁都没有。</p>
 </li>
 <li>
-<p>**索引：**都使用 B+Tree 作为索引结构，但是两者的实现方式不太一样。InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。</p>
+<p><strong>索引：</strong> 都使用 B+Tree 作为索引结构，但是两者的实现方式不太一样。InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。</p>
 </li>
 <li>
-<p><strong>数据缓存策略和机制：<strong>InnoDB 使用缓冲池（Buffer Pool）缓存数据页和索引页，MyISAM 使用键缓存（Key Cache）仅缓存索引页而不缓存数据页。当数据库对数据做修改的时候，需要把数据页从磁盘读到buffer pool中，<strong>然后在buffer pool中进行修改</strong> ，此时buffer pool中的数据页就与磁盘上的数据页</strong>内容不一致</strong>，如果这个时候发生DB服务重启，那么这些数据并没有同步到磁盘文件中（同步到磁盘文件是个随机IO），就会发生数据丢失，如果这个时候，能够在有一个文件，当buffer pool 中的数据页变更结束后，把相应修改记录记录到这个文件（记录日志是顺序IO），那么当DB服务进行恢复DB的时候，可以根据这个文件的记录内容，重新持久化刷新到磁盘文件，保持数据的一致性。</p>
+<p><strong>数据缓存策略和机制：</strong> InnoDB 使用缓冲池（Buffer Pool）缓存数据页和索引页，MyISAM 使用键缓存（Key Cache）仅缓存索引页而不缓存数据页。当数据库对数据做修改的时候，需要把数据页从磁盘读到 buffer pool 中，<strong>然后在 buffer pool 中进行修改</strong> ，此时 buffer pool 中的数据页就与磁盘上的数据页<strong>内容不一致</strong>，如果这个时候发生 DB 服务重启，那么这些数据并没有同步到磁盘文件中（同步到磁盘文件是个随机 IO），就会发生数据丢失，如果这个时候，能够在有一个文件，当 buffer pool 中的数据页变更结束后，把相应修改记录记录到这个文件（记录日志是顺序 IO），那么当 DB 服务进行恢复 DB 的时候，可以根据这个文件的记录内容，重新持久化刷新到磁盘文件，保持数据的一致性。</p>
 </li>
 <li>
 <p><strong>性能：</strong> InnoDB 的性能比 MyISAM 更强大，不管是在读写混合模式下还是只读模式下，随着 CPU 核数的增加，InnoDB 的<strong>读写能力呈线性增长</strong>。MyISAM 因为读写不能并发，它的处理能力跟核数没关系。</p>
 </li>
-</ul>
-<p><img src="https://i-blog.csdnimg.cn/direct/0bd3f48d9efb46e2a6f41997a80ec06a.png"
-	
-	
-	
+</ul></blockquote>
+<p><img src="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-6.png"
+	width="1606"
+	height="549"
+	srcset="/zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-6_hu_66e9c13c13f7c56c.png 480w, /zh-cn/post/2024/12/mysql%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0/image-6_hu_41924396b50195ff.png 1024w"
 	loading="lazy"
 	
 	
-></p></blockquote>
-<h2 id="4mysql如何存储ip地址"><a href="#4mysql%e5%a6%82%e4%bd%95%e5%ad%98%e5%82%a8ip%e5%9c%b0%e5%9d%80" class="header-anchor"></a>4.MySQL如何存储IP地址
+		class="gallery-image" 
+		data-flex-grow="292"
+		data-flex-basis="702px"
+	
+></p>
+<h2 id="mysql-如何存储-ip-地址"><a href="#mysql-%e5%a6%82%e4%bd%95%e5%ad%98%e5%82%a8-ip-%e5%9c%b0%e5%9d%80" class="header-anchor"></a>MySQL 如何存储 IP 地址
 </h2><blockquote>
-<p>可以使用字符串存储，但是存储空间相对较大（每个字符占用1字节），每个IP占用空间为7-15个字节（1.1.1.1占用7字节，100.100.100.100占用15字节）。</p>
-<p>对于ipv4，其实是4字节32位的数字，可以将 IP 地址转换成整形数据存储，性能更好，占用空间也更小。</p>
+<p>可以使用字符串存储，但是存储空间相对较大（每个字符占用 1 字节），每个 IP 占用空间为 7-15 个字节（1.1.1.1 占用 7 字节，100.100.100.100 占用 15 字节）。</p>
+<p>对于 ipv4，其实是 4 字节 32 位的数字，可以将 IP 地址转换成整形数据存储，性能更好，占用空间也更小。</p>
 <p>MySQL 提供了两个方法来处理 ip 地址</p>
 <ul>
 <li><code>INET_ATON()</code>：把 ip 转为无符号整型 (4-8 位)</li>
 <li><code>INET_NTOA()</code> :把整型的 ip 转为地址</li>
 </ul>
 <p>插入数据前，先用 <code>INET_ATON()</code> 把 ip 地址转为整型，显示数据时，使用 <code>INET_NTOA()</code> 把整型的 ip 地址转为地址显示即可。</p></blockquote>
-<hr>
 
 </section>
 
@@ -678,28 +690,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
 
     
-
-<aside class="related-content--wrapper">
-    <h2 class="section-title">相关文章</h2>
-    <div class="related-content">
-        <div class="flex article-list--tile">
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/12/etcd-%E4%BA%AC%E4%B8%9Chotkey%E6%8E%A2%E6%B5%8B%E4%BD%BF%E7%94%A8/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">etcd&#43;京东hotkey探测使用</h2>
-            
-        </div>
-    </a>
-</article>
-            
-        </div>
-    </div>
-</aside>
 
      
     

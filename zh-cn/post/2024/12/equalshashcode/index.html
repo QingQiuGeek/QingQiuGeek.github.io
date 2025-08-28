@@ -11,7 +11,7 @@
 <meta property='og:description' content="都是用于比较两个对象是否相等。">
 <meta property='og:url' content='/zh-cn/post/2024/12/equalshashcode/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2024-12-29T15:23:14&#43;00:00'/><meta property='article:modified_time' content='2024-12-29T15:23:14&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Java' /><meta property='article:published_time' content='2024-12-29T15:23:14&#43;00:00'/><meta property='article:modified_time' content='2024-12-29T15:23:14&#43;00:00'/>
 <meta name="twitter:title" content="==、equals、hashcode">
 <meta name="twitter:description" content="都是用于比较两个对象是否相等。">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -336,10 +336,10 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#和equals区别">==和equals区别</a></li>
+    <li><a href="#和-equals-区别">==和 equals 区别</a></li>
     <li><a href="#hashcode">hashcode</a>
       <ol>
-        <li><a href="#为什么jdk同时提供hashcode-和-equals方法">为什么JDK同时提供<code>hashCode()</code> 和 <code>equals()方法</code></a></li>
+        <li><a href="#为什么-jdk-同时提供hashcode-和-equals方法">为什么 JDK 同时提供<code>hashCode()</code> 和 <code>equals()方法</code></a></li>
       </ol>
     </li>
   </ol>
@@ -442,12 +442,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <h2 id="和equals区别"><a href="#%e5%92%8cequals%e5%8c%ba%e5%88%ab" class="header-anchor"></a>==和equals区别
+    <h2 id="和-equals-区别"><a href="#%e5%92%8c-equals-%e5%8c%ba%e5%88%ab" class="header-anchor"></a>==和 equals 区别
 </h2><blockquote>
 <ul>
 <li>==用于基本数据类型，比较的是值，用于引用类型，比较的是对象的内存地址。</li>
-<li><strong>java中只有值传递</strong>，因此对于引用类型，实际比较的引用的内存地址的值。</li>
-<li>equals不能用来判断基本数据类型，只能判断引用数据类型，判断两个对象是否相等。</li>
+<li><strong>java 中只有值传递</strong>，因此对于引用类型，实际比较的引用的内存地址的值。</li>
+<li>equals 不能用来判断基本数据类型，只能判断引用数据类型，判断两个对象是否相等。</li>
 </ul></blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -475,25 +475,33 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 </h2><blockquote>
 <ul>
 <li>把输入的值经过哈希算法得出哈希码，即散列码，用来确定对象在哈希表的索引位置。</li>
-<li><code>hashCode()</code> 定义在 JDK 的 <code>Object</code> 类中，这就意味着 Java 中的任何类都包含有 <code>hashCode()</code> 函数。另外需要注意的是：<code>Object</code> 的 <code>hashCode()</code> 方法是<strong>本地方法</strong>，也就是用 C 语言或 C++ 实现的。</li>
+<li><code>hashCode()</code> 定义在 JDK 的 <code>Object</code> 类中，这就意味着 Java 中的任何类都包含有 <code>hashCode()</code> 函数。另外需要注意的是：<code>Object</code> 的 <code>hashCode()</code> 方法是<strong>本地方法</strong>，也就是用 C 语言或 C++ 实现的。
+<img src="/zh-cn/post/2024/12/equalshashcode/image.png"
+	width="441"
+	height="61"
+	srcset="/zh-cn/post/2024/12/equalshashcode/image_hu_a62765ad5e4dd9e1.png 480w, /zh-cn/post/2024/12/equalshashcode/image_hu_b257f5936eb5dbd3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="722"
+		data-flex-basis="1735px"
+	
+></li>
 </ul></blockquote>
-<p><img src="https://i-blog.csdnimg.cn/direct/64efb3735f254292a37e93baa32503a3.png"
-	
-	
-	
+<p><img src="/zh-cn/post/2024/12/equalshashcode/image-1.png"
+	width="742"
+	height="201"
+	srcset="/zh-cn/post/2024/12/equalshashcode/image-1_hu_26f20dd902a74d12.png 480w, /zh-cn/post/2024/12/equalshashcode/image-1_hu_5542c2f27c58587a.png 1024w"
 	loading="lazy"
 	
 	
-></p>
-<p><img src="https://i-blog.csdnimg.cn/direct/f4d6de6606c24cfebec709c1bc3f68b2.png"
-	
-	
-	
-	loading="lazy"
-	
+		class="gallery-image" 
+		data-flex-grow="369"
+		data-flex-basis="885px"
 	
 ></p>
-<h3 id="为什么jdk同时提供hashcode-和-equals方法"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88jdk%e5%90%8c%e6%97%b6%e6%8f%90%e4%be%9bhashcode-%e5%92%8c-equals%e6%96%b9%e6%b3%95" class="header-anchor"></a>为什么JDK同时提供<code>hashCode()</code> 和 <code>equals()方法</code>
+<h3 id="为什么-jdk-同时提供hashcode-和-equals方法"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-jdk-%e5%90%8c%e6%97%b6%e6%8f%90%e4%be%9bhashcode-%e5%92%8c-equals%e6%96%b9%e6%b3%95" class="header-anchor"></a>为什么 JDK 同时提供<code>hashCode()</code> 和 <code>equals()方法</code>
 </h3><blockquote>
 <p><code>hashCode()</code> 和 <code>equals()</code>都是用于比较两个对象是否相等。</p>
 <ul>
@@ -505,7 +513,6 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 <li><strong>那为什么两个对象有相同的 <code>hashCode</code> 值，它们也不一定是相等的？</strong><br>
 因为 <code>hashCode()</code> 所使用的哈希算法也许刚好会让多个对象传回相同的哈希值。越糟糕的哈希算法越容易碰撞，但这也与数据值域分布的特性有关（所谓哈希碰撞也就是指的是不同的对象得到相同的 <code>hashCode</code> )。</li>
 </ul></blockquote>
-<hr>
 
 </section>
 
@@ -553,12 +560,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/12/java%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%BC%93%E5%AD%98/">
+    <a href="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Java包装类型的缓存</h2>
+            <h2 class="article-title">为何String不可变，String的运算符重载</h2>
             
         </div>
     </a>
@@ -566,12 +573,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/2024/12/%E4%B8%BA%E4%BD%95string%E4%B8%8D%E5%8F%AF%E5%8F%98string%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/">
+    <a href="/zh-cn/post/2024/12/java%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%BC%93%E5%AD%98/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">为何String不可变，String的运算符重载</h2>
+            <h2 class="article-title">Java包装类型的缓存</h2>
             
         </div>
     </a>
