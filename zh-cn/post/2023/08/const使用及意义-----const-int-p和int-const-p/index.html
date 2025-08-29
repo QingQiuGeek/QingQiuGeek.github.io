@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='/zh-cn/post/2023/08/const%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%84%8F%E4%B9%89-----const-int-p%E5%92%8Cint-const-p/'>
 
-<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="const使用及意义-----const int* p和int* const p">
 <meta property='og:description' content="这个字符串copy函数中，把src指向的字符串复制到dest中，也就是src的值是不需要改变的，而dest指针指向的值改变。对*src加上const后就可以防止其中的值被修改，起到保护作用。在实参中，指针会指向一段内存地址，调用函数之后，函数会产生一个临时指针变量，这个临时指针变量的地址与实参的地址不同，但却指向同一块空间地址。如果用const修饰返回值类型为指针，那么函数返回值（即指针）的内容不能被修改，该返回值只能被赋给加const 修饰的同类型指针。即不存在引用的引用，但可以有指针的指针。">
 <meta property='og:url' content='/zh-cn/post/2023/08/const%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%84%8F%E4%B9%89-----const-int-p%E5%92%8Cint-const-p/'>
@@ -400,6 +400,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </div>
         
 
+        
         
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

@@ -7,7 +7,70 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 18 Jan 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 28 Aug 2025 19:22:50 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CPU、进程、线程上下文切换</title>
+        <link>/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</link>
+        <pubDate>Thu, 28 Aug 2025 19:22:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;参考：&lt;/strong&gt;&lt;a class=&#34;link&#34; href=&#34;https://xiaolincoding.com/os/4_process/process_base.html#%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2&#34;  title=&#34;5.1 进程、线程基础知识 | 小林coding | Java面试学习&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;5.1 进程、线程基础知识 | 小林 coding | Java 面试学习&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;程序计数器&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储 CPU 正在执行的指令位置、或者即将执行的下一条指令位置。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CPU 寄存器&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;位于&lt;strong&gt;CPU 核心&lt;/strong&gt;内部存储单元，用于暂存指令、数据、地址等信息。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CPU 缓存&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;位于 CPU 和和主内存之间的存储单元，在 CPU 内部，有 L1、L2、L3 三级缓存，L1 容量最小，速度最快，通常集成在 &lt;strong&gt;CPU 核心&lt;/strong&gt;内部，L2、L3 次之。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image.png&#34;
+	width=&#34;869&#34;
+	height=&#34;601&#34;
+	srcset=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image_hu_c7d2f9bac21c8962.png 480w, /zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image_hu_3468b7822abc461d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;144&#34;
+		data-flex-basis=&#34;347px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;cpu-上下文切换&#34;&gt;&lt;a href=&#34;#cpu-%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CPU 上下文切换
+&lt;/h2&gt;&lt;p&gt;任务交给 CPU 运行，那么 CPU 需要知道任务从哪里加载、从哪里开始运行，所以操作系统需要事先帮 CPU 设置好 CPU 寄存器、程序计数器。&lt;/p&gt;
+&lt;p&gt;CPU 上下文切换就是把前一个任务的上下文保存到寄存器和计数器，然后加载新的任务。这就包含了&lt;strong&gt;进程、线程、中断。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;进程上下文切换&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程上下文切换
+&lt;/h2&gt;&lt;p&gt;进程是由内核管理和调度的，所以&lt;strong&gt;进程的切换只能发生在内核态&lt;/strong&gt;。
+&lt;img src=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image-1.png&#34;
+	width=&#34;917&#34;
+	height=&#34;234&#34;
+	srcset=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image-1_hu_57ecf5298f63fd95.png 480w, /zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image-1_hu_3c6b16e4d2421be.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;391&#34;
+		data-flex-basis=&#34;940px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;进程上下文切换场景&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程上下文切换场景
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;当某个进程的时间片耗尽，进程就从运行状态变为就绪状态，系统从就绪队列选择另外一个进程运行；&lt;/li&gt;
+&lt;li&gt;进程在系统资源不足（比如内存不足）时，要等到资源满足后才可以运行，这个时候当前进程会被挂起，并由系统调度其他进程运行;&lt;/li&gt;
+&lt;li&gt;当进程通过睡眠函数 sleep 这样的方法将自己主动挂起时，自然也会重新调度；&lt;/li&gt;
+&lt;li&gt;当有优先级更高的进程运行时，为了保证高优先级进程的运行，当前进程会被挂起，由高优先级进程来运行;&lt;/li&gt;
+&lt;li&gt;发生硬件中断时，CPU 上的进程会被中断挂起，转而执行内核中的中断服务程序；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;线程上下文切换&#34;&gt;&lt;a href=&#34;#%e7%ba%bf%e7%a8%8b%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;线程上下文切换
+&lt;/h2&gt;&lt;p&gt;同一个进程内有多个线程，有共享内存和全局变量等资源，每个线程也有自己的寄存器和栈存放私有数据，各个线程可以并发执行。&lt;strong&gt;线程是 CPU 调度的基本单位，进程是资源分配的基本单位。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;当两个线程不属于同一个进程，则切换的过程就跟进程上下文切换一样；&lt;/li&gt;
+&lt;li&gt;当两个线程属于同一个进程，因为虚拟内存是共享的，所以在切换时，虚拟内存这些资源就保持不动，&lt;strong&gt;只需要切换线程的私有数据、寄存器等不共享的数据；&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝</title>
         <link>/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/</link>
         <pubDate>Sat, 18 Jan 2025 12:00:00 +0000</pubDate>

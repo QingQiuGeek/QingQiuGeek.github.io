@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/'>
 
-<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="【排坑】程序包jdk.nashorn.internal.ir.debug不存在">
 <meta property='og:description' content="有一定借鉴意义但是没解决问题，idea的classpath中已经包含了nashorn，且可以运行项目，但是maven就是打不成jar包，试来试去都没怀疑maven问题🤓，没想到还真是maven的问题。今天项目打包的时候报这样的错误，jdk8，在idea项目中明明可以找到该文件路径和代码，但是打包打不进去，maven的runner配置，jre原来是jdk17，改成1.8就ok了。参考了一些博客文章，">
 <meta property='og:url' content='/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/'>
@@ -358,6 +358,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </div>
         
 
+        
         
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

@@ -7,7 +7,27 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 19 Jul 2025 19:20:50 +0000</lastBuildDate><atom:link href="/zh-cn/categories/mysql/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 26 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/mysql/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Mysql的TimeStamp和DateTime异同</title>
+        <link>/zh-cn/post/2025/08/mysql%E7%9A%84timestamp%E5%92%8Cdatetime%E5%BC%82%E5%90%8C/</link>
+        <pubDate>Tue, 26 Aug 2025 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/mysql%E7%9A%84timestamp%E5%92%8Cdatetime%E5%BC%82%E5%90%8C/</guid>
+        <description>&lt;h2 id=&#34;同&#34;&gt;&lt;a href=&#34;#%e5%90%8c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;同
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;存储格式&lt;/strong&gt;：&lt;code&gt;YYYY-MM-DD HH:MM:SS&lt;/code&gt;，不包含时区信息&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;异&#34;&gt;&lt;a href=&#34;#%e5%bc%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;异
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;大小：TIMESTAMP占4字节，DATETIME占8字节&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;时区转换：TIMESTAMP则会根据服务器时区自动转换，DATETIME存储的值是固定的，不会根据时区自动转换&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;自动更新：TIMESTAMP支持自动更新，DATETIME就不支持自动更新，如：   CREATE TABLE users (       id INT AUTO_INCREMENT PRIMARY KEY,       username VARCHAR(50) NOT NULL,       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   );&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>Spring7个事务传播行为和5个隔离级别</title>
         <link>/zh-cn/post/2025/07/spring7%E4%B8%AA%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA%E5%92%8C5%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/</link>
         <pubDate>Sat, 19 Jul 2025 19:20:50 +0000</pubDate>

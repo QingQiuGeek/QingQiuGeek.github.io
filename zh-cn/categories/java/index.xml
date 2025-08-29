@@ -7,7 +7,47 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 19 Jul 2025 19:22:50 +0000</lastBuildDate><atom:link href="/zh-cn/categories/java/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 28 Aug 2025 19:20:50 +0000</lastBuildDate><atom:link href="/zh-cn/categories/java/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>JDK的ConcurrentHashMap为什么放弃了分段锁</title>
+        <link>/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/</link>
+        <pubDate>Thu, 28 Aug 2025 19:20:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://java2top.cn/java-interview-guide/java-collections/map/06-concurrenthashmap-segment.html&#34;  title=&#34;6. ConcurrentHashMap为什么放弃了Segment分段锁？如何保证高并发安全？ | Java八股文面试网 – Java2Top.cn&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;6. ConcurrentHashMap 为什么放弃了 Segment 分段锁？如何保证高并发安全？ | Java 八股文面试网 – Java2Top.cn&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;jdk7&#34;&gt;&lt;a href=&#34;#jdk7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JDK7
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image.png&#34;
+	width=&#34;1512&#34;
+	height=&#34;1053&#34;
+	srcset=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image_hu_9e1a4fd037c2be36.png 480w, /zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image_hu_6ec9f313b8a4a504.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;143&#34;
+		data-flex-basis=&#34;344px&#34;
+	
+&gt;
+ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组构成的。Segment 是一种可重入的锁 ReentrantLock，HashEntry 则用于存储键值对数据。&lt;/p&gt;
+&lt;p&gt;get 时不加锁，put 时加锁，锁粒度细，支持并发，但是若并发量低并且 hash 很少映射到同一个 segment 时也要加锁，性能就拉低了。扩容时更要对所有的 segment 加锁，并且加多个分段锁浪费内存空间&lt;/p&gt;
+&lt;h2 id=&#34;jdk8&#34;&gt;&lt;a href=&#34;#jdk8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JDK8
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image-1.png&#34;
+	width=&#34;1512&#34;
+	height=&#34;1165&#34;
+	srcset=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image-1_hu_d22a36c3aeee3fc3.png 480w, /zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image-1_hu_d55c9247441a9e12.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;311px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;JDK1.8 中的 ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS + synchronized 代替 ReentrantLock 来保证并发安全性，整个容器只分为一个 Segment。 &lt;strong&gt;插入第一个节点时&lt;/strong&gt;，CAS 直接写入，避免锁竞争。 &lt;strong&gt;存在哈希冲突时&lt;/strong&gt;，才对该桶加 &lt;code&gt;synchronized&lt;/code&gt;  进行加锁&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Java的CAS是如何实现的、ABA问题</title>
         <link>/zh-cn/post/2025/07/java%E7%9A%84cas%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84aba%E9%97%AE%E9%A2%98/</link>
         <pubDate>Sat, 19 Jul 2025 19:22:50 +0000</pubDate>

@@ -7,7 +7,162 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 28 Aug 2025 19:22:50 +0000</lastBuildDate><atom:link href="/zh-cn/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 29 Aug 2025 22:25:42 +0000</lastBuildDate><atom:link href="/zh-cn/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CPU、进程、线程上下文切换</title>
+        <link>/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</link>
+        <pubDate>Thu, 28 Aug 2025 19:22:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;参考：&lt;/strong&gt;&lt;a class=&#34;link&#34; href=&#34;https://xiaolincoding.com/os/4_process/process_base.html#%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2&#34;  title=&#34;5.1 进程、线程基础知识 | 小林coding | Java面试学习&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;5.1 进程、线程基础知识 | 小林 coding | Java 面试学习&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;程序计数器&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储 CPU 正在执行的指令位置、或者即将执行的下一条指令位置。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CPU 寄存器&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;位于&lt;strong&gt;CPU 核心&lt;/strong&gt;内部存储单元，用于暂存指令、数据、地址等信息。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CPU 缓存&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;位于 CPU 和和主内存之间的存储单元，在 CPU 内部，有 L1、L2、L3 三级缓存，L1 容量最小，速度最快，通常集成在 &lt;strong&gt;CPU 核心&lt;/strong&gt;内部，L2、L3 次之。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image.png&#34;
+	width=&#34;869&#34;
+	height=&#34;601&#34;
+	srcset=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image_hu_c7d2f9bac21c8962.png 480w, /zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image_hu_3468b7822abc461d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;144&#34;
+		data-flex-basis=&#34;347px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;cpu-上下文切换&#34;&gt;&lt;a href=&#34;#cpu-%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CPU 上下文切换
+&lt;/h2&gt;&lt;p&gt;任务交给 CPU 运行，那么 CPU 需要知道任务从哪里加载、从哪里开始运行，所以操作系统需要事先帮 CPU 设置好 CPU 寄存器、程序计数器。&lt;/p&gt;
+&lt;p&gt;CPU 上下文切换就是把前一个任务的上下文保存到寄存器和计数器，然后加载新的任务。这就包含了&lt;strong&gt;进程、线程、中断。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;进程上下文切换&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程上下文切换
+&lt;/h2&gt;&lt;p&gt;进程是由内核管理和调度的，所以&lt;strong&gt;进程的切换只能发生在内核态&lt;/strong&gt;。
+&lt;img src=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image-1.png&#34;
+	width=&#34;917&#34;
+	height=&#34;234&#34;
+	srcset=&#34;/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image-1_hu_57ecf5298f63fd95.png 480w, /zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/image-1_hu_3c6b16e4d2421be.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;391&#34;
+		data-flex-basis=&#34;940px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;进程上下文切换场景&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程上下文切换场景
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;当某个进程的时间片耗尽，进程就从运行状态变为就绪状态，系统从就绪队列选择另外一个进程运行；&lt;/li&gt;
+&lt;li&gt;进程在系统资源不足（比如内存不足）时，要等到资源满足后才可以运行，这个时候当前进程会被挂起，并由系统调度其他进程运行;&lt;/li&gt;
+&lt;li&gt;当进程通过睡眠函数 sleep 这样的方法将自己主动挂起时，自然也会重新调度；&lt;/li&gt;
+&lt;li&gt;当有优先级更高的进程运行时，为了保证高优先级进程的运行，当前进程会被挂起，由高优先级进程来运行;&lt;/li&gt;
+&lt;li&gt;发生硬件中断时，CPU 上的进程会被中断挂起，转而执行内核中的中断服务程序；&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;线程上下文切换&#34;&gt;&lt;a href=&#34;#%e7%ba%bf%e7%a8%8b%e4%b8%8a%e4%b8%8b%e6%96%87%e5%88%87%e6%8d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;线程上下文切换
+&lt;/h2&gt;&lt;p&gt;同一个进程内有多个线程，有共享内存和全局变量等资源，每个线程也有自己的寄存器和栈存放私有数据，各个线程可以并发执行。&lt;strong&gt;线程是 CPU 调度的基本单位，进程是资源分配的基本单位。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;当两个线程不属于同一个进程，则切换的过程就跟进程上下文切换一样；&lt;/li&gt;
+&lt;li&gt;当两个线程属于同一个进程，因为虚拟内存是共享的，所以在切换时，虚拟内存这些资源就保持不动，&lt;strong&gt;只需要切换线程的私有数据、寄存器等不共享的数据；&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>ES基础知识</title>
+        <link>/zh-cn/post/2025/08/es%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+        <pubDate>Thu, 28 Aug 2025 19:20:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/es%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;Elasticsearch 是一个基于 Lucene 构建的开源、分布式、RESTful 搜索引擎，专为云计算环境设计，能够实现近乎实时的数据搜索和分析功能，但是&lt;strong&gt;不支持 ACID 事务。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;基础概念&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e7%a1%80%e6%a6%82%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基础概念
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;文档（Document）&lt;/strong&gt;：Elasticsearch 中的基本数据单元，使用 JSON 格式表示，每个文档有唯一 ID 和类型。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;索引（Index）&lt;/strong&gt;：文档的集合，类似于关系数据库中的“数据库”概念，每个索引有自己的映射（mapping）和设置（settings）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;类型（Type）&lt;/strong&gt;：在 7.x 之前，用于表示索引中的文档类别，类似于关系数据库中的“表”。7.x 以后，每个索引只能有一个逻辑映射结构。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分片（Shard）&lt;/strong&gt;：索引的水平分割单元，每个分片本身是一个功能完整的“索引”，分为主分片（Primary Shard）和副本分片（Replica Shard），分布在不同节点上。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;节点（Node）&lt;/strong&gt;：运行中的 Elasticsearch 实例，节点可以承担不同角色，如数据节点、主节点、协调节点等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;停顿词过滤&#34;&gt;&lt;a href=&#34;#%e5%81%9c%e9%a1%bf%e8%af%8d%e8%bf%87%e6%bb%a4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;停顿词过滤
+&lt;/h2&gt;&lt;p&gt;停顿词过滤是指在分词过程中去除常见的、没有实际意义的词汇，如“的”、“是”等，以提高搜索效率和准确性。&lt;/p&gt;
+&lt;h2 id=&#34;常见数据类型&#34;&gt;&lt;a href=&#34;#%e5%b8%b8%e8%a7%81%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;常见数据类型
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;text&lt;/code&gt;、&lt;code&gt;keyword&lt;/code&gt;、&lt;code&gt;integer&lt;/code&gt;、long、&lt;code&gt;float&lt;/code&gt; 、double、&lt;code&gt;date、boolean、复合数据类型object（json对象）&lt;/code&gt;等。&lt;/p&gt;
+&lt;h2 id=&#34;text-和-keyword-区别&#34;&gt;&lt;a href=&#34;#text-%e5%92%8c-keyword-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Text 和 keyword 区别
+&lt;/h2&gt;&lt;p&gt;text 适合存储全文数据，会进行分词处理，拆分成多个单词或词元，便于进行&lt;strong&gt;全文搜索、match 查询，不支持精确匹配&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;keyword 存储不需要分词的字符串，如用户 ID、用户名等。适合&lt;strong&gt;精确匹配、term 查询，不适合全文搜索。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;es-和-mysql-区别&#34;&gt;&lt;a href=&#34;#es-%e5%92%8c-mysql-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ES 和 MYSQL 区别
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Elasticsearch&lt;/strong&gt;：适合全文搜索、实时数据分析，支持分布式存储和高并发查询。存储非结构化数据的 JSON 数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MySQL&lt;/strong&gt;：关系型数据库，适合事务处理、复杂查询，支持 ACID 事务，存储结构化数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;match-和-term-区别&#34;&gt;&lt;a href=&#34;#match-%e5%92%8c-term-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;match 和 term 区别
+&lt;/h2&gt;&lt;p&gt;term 和 match 都属于 query 查询类型，match 用于全文匹配，不适合精确。term 用于精确匹配，不适合全文。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>JDK的ConcurrentHashMap为什么放弃了分段锁</title>
+        <link>/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/</link>
+        <pubDate>Thu, 28 Aug 2025 19:20:50 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://java2top.cn/java-interview-guide/java-collections/map/06-concurrenthashmap-segment.html&#34;  title=&#34;6. ConcurrentHashMap为什么放弃了Segment分段锁？如何保证高并发安全？ | Java八股文面试网 – Java2Top.cn&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;6. ConcurrentHashMap 为什么放弃了 Segment 分段锁？如何保证高并发安全？ | Java 八股文面试网 – Java2Top.cn&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;jdk7&#34;&gt;&lt;a href=&#34;#jdk7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JDK7
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image.png&#34;
+	width=&#34;1512&#34;
+	height=&#34;1053&#34;
+	srcset=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image_hu_9e1a4fd037c2be36.png 480w, /zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image_hu_6ec9f313b8a4a504.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;143&#34;
+		data-flex-basis=&#34;344px&#34;
+	
+&gt;
+ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组构成的。Segment 是一种可重入的锁 ReentrantLock，HashEntry 则用于存储键值对数据。&lt;/p&gt;
+&lt;p&gt;get 时不加锁，put 时加锁，锁粒度细，支持并发，但是若并发量低并且 hash 很少映射到同一个 segment 时也要加锁，性能就拉低了。扩容时更要对所有的 segment 加锁，并且加多个分段锁浪费内存空间&lt;/p&gt;
+&lt;h2 id=&#34;jdk8&#34;&gt;&lt;a href=&#34;#jdk8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JDK8
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image-1.png&#34;
+	width=&#34;1512&#34;
+	height=&#34;1165&#34;
+	srcset=&#34;/zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image-1_hu_d22a36c3aeee3fc3.png 480w, /zh-cn/post/2025/08/jdk%E7%9A%84concurrenthashmap%E4%B8%BA%E4%BB%80%E4%B9%88%E6%94%BE%E5%BC%83%E4%BA%86%E5%88%86%E6%AE%B5%E9%94%81/image-1_hu_d55c9247441a9e12.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;311px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;JDK1.8 中的 ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS + synchronized 代替 ReentrantLock 来保证并发安全性，整个容器只分为一个 Segment。 &lt;strong&gt;插入第一个节点时&lt;/strong&gt;，CAS 直接写入，避免锁竞争。 &lt;strong&gt;存在哈希冲突时&lt;/strong&gt;，才对该桶加 &lt;code&gt;synchronized&lt;/code&gt;  进行加锁&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Mysql的TimeStamp和DateTime异同</title>
+        <link>/zh-cn/post/2025/08/mysql%E7%9A%84timestamp%E5%92%8Cdatetime%E5%BC%82%E5%90%8C/</link>
+        <pubDate>Tue, 26 Aug 2025 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/mysql%E7%9A%84timestamp%E5%92%8Cdatetime%E5%BC%82%E5%90%8C/</guid>
+        <description>&lt;h2 id=&#34;同&#34;&gt;&lt;a href=&#34;#%e5%90%8c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;同
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;存储格式&lt;/strong&gt;：&lt;code&gt;YYYY-MM-DD HH:MM:SS&lt;/code&gt;，不包含时区信息&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;异&#34;&gt;&lt;a href=&#34;#%e5%bc%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;异
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;大小：TIMESTAMP占4字节，DATETIME占8字节&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;时区转换：TIMESTAMP则会根据服务器时区自动转换，DATETIME存储的值是固定的，不会根据时区自动转换&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;自动更新：TIMESTAMP支持自动更新，DATETIME就不支持自动更新，如：   CREATE TABLE users (       id INT AUTO_INCREMENT PRIMARY KEY,       username VARCHAR(50) NOT NULL,       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,       last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   );&lt;/code&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>前端工程化与工具链</title>
         <link>/zh-cn/post/2025/07/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E5%B7%A5%E5%85%B7%E9%93%BE/</link>
         <pubDate>Mon, 28 Jul 2025 15:15:47 +0000</pubDate>
@@ -3089,11 +3244,11 @@ _ &lt;strong&gt;哈希桶扩容&lt;/strong&gt;：当哈希冲突过多时，可�
 </description>
         </item>
         <item>
-        <title>扫盲，CRM、ERP、OA、MVP ...</title>
-        <link>/zh-cn/post/2025/02/%E6%89%AB%E7%9B%B2crmerpoamvp-.../</link>
+        <title>名词扫盲CRM&#43;ERP&#43;OA&#43;MVP</title>
+        <link>/zh-cn/post/2025/02/%E5%90%8D%E8%AF%8D%E6%89%AB%E7%9B%B2crm-erp-oa-mvp/</link>
         <pubDate>Sat, 08 Feb 2025 14:05:24 +0000</pubDate>
         
-        <guid>/zh-cn/post/2025/02/%E6%89%AB%E7%9B%B2crmerpoamvp-.../</guid>
+        <guid>/zh-cn/post/2025/02/%E5%90%8D%E8%AF%8D%E6%89%AB%E7%9B%B2crm-erp-oa-mvp/</guid>
         <description>&lt;p&gt;MVP（Minimum Viable Product）&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;最小可行性产品&lt;/strong&gt;&lt;/p&gt;
@@ -29606,6 +29761,70 @@ const char *str = GetString();//正确
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>/zh-cn/page/categories/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title></title>
+        <link>/zh-cn/post/1/01/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/1/01/</guid>
         <description></description>
         </item>
         <item>

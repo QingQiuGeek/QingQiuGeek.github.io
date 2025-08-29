@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/'>
 
-<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="前后端分离场景下的用户登录玩法&Sa-token框架使用">
 <meta property='og:description' content="本文对比了两种基于Redis的Token认证方案。方案一采用传统双拦截器设计，前端需自行检查Token有效期并加密存储于localStorage，后端通过LoginInterceptor和RefreshTokenInterceptor分别处理登录校验和Token刷新，存在前后端有效期同步问题。方案二使用Sa-Token框架，实现多端登录隔离和自动续期，通过单一SaTokenInterceptor即可完成认证，内置Account-Session和Token-Session机制支持多终端独立管理，简化了开发流程">
 <meta property='og:url' content='/zh-cn/post/2025/06/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%8E%A9%E6%B3%95sa-token%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8/'>
@@ -403,6 +403,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </div>
         
 
+        
         
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

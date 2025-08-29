@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='/zh-cn/post/2025/02/concurrenthashmap/'>
 
-<link rel="stylesheet" href="/scss/style.min.3bac504d5aef8d75046efc7457198f0b43651625813a45a1ccfdbc56187209cc.css">
+<link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="ConcurrentHashMap">
 <meta property='og:description' content="在JDK1.7中用的是Segment数组+链表实现的。Segment是一种可重入锁(ReentrantLock)，链表则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment，一个Segment里包含一个链表。JDK1.7 的ConcurrentHashMap给每一段数据配一把锁，当一个线程访问其中该段数据的时候，会，那么其他段的数据也能被其他线程访问，能够实现真正的并发访问。Segment默认个数是 16，一旦。">
 <meta property='og:url' content='/zh-cn/post/2025/02/concurrenthashmap/'>
@@ -396,6 +396,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </div>
         
 
+        
         
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
