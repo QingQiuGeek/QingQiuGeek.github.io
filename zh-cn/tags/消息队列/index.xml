@@ -7,7 +7,33 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Fri, 14 Feb 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 29 Aug 2025 22:18:21 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>消息队列为啥这么快</title>
+        <link>/zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/</link>
+        <pubDate>Fri, 29 Aug 2025 22:18:21 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/</guid>
+        <description>&lt;h2 id=&#34;存储介质&#34;&gt;&lt;a href=&#34;#%e5%ad%98%e5%82%a8%e4%bb%8b%e8%b4%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;存储介质
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;磁盘顺序读写，&lt;strong&gt;操作系统通过页缓存减少 IO，提高性能，所谓页缓存就是写入磁盘时先写入页缓存，写入的页标记为脏页，然后在合适的实际刷盘，这个和 redis 的 AOF 日志一样。在读的时候会进行预读，根据&lt;/strong&gt;局部性原理&lt;/strong&gt;当读取的时候会把相邻的磁盘块读入页缓存中。&lt;/p&gt;
+&lt;h2 id=&#34;mmap-文件内存映射-memory-mapped-file&#34;&gt;&lt;a href=&#34;#mmap-%e6%96%87%e4%bb%b6%e5%86%85%e5%ad%98%e6%98%a0%e5%b0%84-memory-mapped-file&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;mmap 文件内存映射 memory mapped file
+&lt;/h2&gt;&lt;p&gt;页缓存属于内核空间，用户态不能访问，因此要把&lt;strong&gt;数据拷贝&lt;/strong&gt;到用户空间缓冲区，而 mmap 技术可以通过&lt;strong&gt;内存映射文件避免拷贝&lt;/strong&gt;，文件映射就是&lt;strong&gt;将内核态程序虚拟页面直接映射到用户进程的缓冲区&lt;/strong&gt;上，这样就无需从内核态再往用户态的拷贝，而且也避免了重复数据的产生。并且也不必再通过调用 read 或 write 方法对文件进行读写，可以通过 映射地址加偏移量的方式直接操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/image.png&#34;
+	width=&#34;1155&#34;
+	height=&#34;944&#34;
+	srcset=&#34;/zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/image_hu_55d4d7ef0119b099.png 480w, /zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/image_hu_6ce8102293728340.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;122&#34;
+		data-flex-basis=&#34;293px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>已老实！再学消息队列、死信队列</title>
         <link>/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/</link>
         <pubDate>Fri, 14 Feb 2025 12:00:00 +0000</pubDate>

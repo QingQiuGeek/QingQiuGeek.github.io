@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
-<title></title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="原子性（Atomicity） 定义：事务是一个不可分割的工作单位，其中的操作要么全部执行，要么全部不执行。\n实现原理：基于undo log（回滚日志）。当事务对数据库进行修改时，InnoDB 会生成对应的 undo log。如果事务执行失败或调用rollback，InnoDB 会利用 undo log 中的信息将数据回滚到修改之前的状态。undo log 记录了 SQL 执行的相关信息，包括被修改行的主键、修改的列以及修改前后的值等，回滚时根据这些信息执行与之前相反的操作。\n">
+<title>MySQL的ACID分别如何实现</title>
 
-<link rel='canonical' href='/zh-cn/post/1/01/'>
+<link rel='canonical' href='/zh-cn/post/2025/08/mysql%E7%9A%84acid%E5%88%86%E5%88%AB%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
-<meta property='og:title' content="">
-<meta property='og:description' content="">
-<meta property='og:url' content='/zh-cn/post/1/01/'>
+<meta property='og:title' content="MySQL的ACID分别如何实现">
+<meta property='og:description' content="原子性（Atomicity） 定义：事务是一个不可分割的工作单位，其中的操作要么全部执行，要么全部不执行。\n实现原理：基于undo log（回滚日志）。当事务对数据库进行修改时，InnoDB 会生成对应的 undo log。如果事务执行失败或调用rollback，InnoDB 会利用 undo log 中的信息将数据回滚到修改之前的状态。undo log 记录了 SQL 执行的相关信息，包括被修改行的主键、修改的列以及修改前后的值等，回滚时根据这些信息执行与之前相反的操作。\n">
+<meta property='og:url' content='/zh-cn/post/2025/08/mysql%E7%9A%84acid%E5%88%86%E5%88%AB%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='' />
-<meta name="twitter:title" content="">
-<meta name="twitter:description" content="">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='MySQL' /><meta property='article:published_time' content='2025-08-29T22:25:42&#43;00:00'/><meta property='article:modified_time' content='2025-08-29T22:25:42&#43;00:00'/>
+<meta name="twitter:title" content="MySQL的ACID分别如何实现">
+<meta name="twitter:description" content="原子性（Atomicity） 定义：事务是一个不可分割的工作单位，其中的操作要么全部执行，要么全部不执行。\n实现原理：基于undo log（回滚日志）。当事务对数据库进行修改时，InnoDB 会生成对应的 undo log。如果事务执行失败或调用rollback，InnoDB 会利用 undo log 中的信息将数据回滚到修改之前的状态。undo log 记录了 SQL 执行的相关信息，包括被修改行的主键、修改的列以及修改前后的值等，回滚时根据这些信息执行与之前相反的操作。\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -314,7 +314,42 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </li>
     </ol>
 </aside>
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#原子性atomicity">原子性（Atomicity）</a></li>
+    <li><a href="#持久性durability">持久性（Durability）</a></li>
+    <li><a href="#隔离性isolation">隔离性（Isolation）</a></li>
+    <li><a href="#一致性consistency">一致性（Consistency）</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -326,7 +361,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/1/01/"></a>
+            <a href="/zh-cn/post/2025/08/mysql%E7%9A%84acid%E5%88%86%E5%88%AB%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0/">MySQL的ACID分别如何实现</a>
         </h2>
 
         
@@ -339,6 +374,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     
     
     <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">July 29, 2025</time>
+        </div>
         
 
         
@@ -353,7 +401,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 0 分钟
+                阅读时长: 3 分钟
             </time>
         </div>
         
@@ -372,6 +420,11 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
+            
+            
+            <a href="/zh-cn/tags/mysql/">MySQL</a> 
+            
+            
         </div>
         
     </footer>
@@ -385,7 +438,45 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    
+    <h2 id="原子性atomicity"><a href="#%e5%8e%9f%e5%ad%90%e6%80%a7atomicity" class="header-anchor"></a>原子性（Atomicity）
+</h2><p><strong>定义</strong>：事务是一个不可分割的工作单位，其中的操作要么全部执行，要么全部不执行。</p>
+<blockquote>
+<p><strong>实现原理</strong>：基于<strong>undo log（回滚日志）</strong>。当事务对数据库进行修改时，InnoDB 会生成对应的 undo log。如果事务执行失败或调用<code>rollback</code>，InnoDB 会利用 undo log 中的信息将数据回滚到修改之前的状态。undo log 记录了 SQL 执行的相关信息，包括被修改行的主键、修改的列以及修改前后的值等，回滚时根据这些信息执行与之前相反的操作。</p></blockquote>
+<h2 id="持久性durability"><a href="#%e6%8c%81%e4%b9%85%e6%80%a7durability" class="header-anchor"></a>持久性（Durability）
+</h2><p><strong>定义</strong>：事务一旦提交，其对数据库的改变应该是永久性的，即使在系统故障或宕机的情况下也不会丢失。</p>
+<blockquote>
+<p><strong>实现原理</strong>：基于<strong>redo log（重做日志）</strong>。当数据修改时，除了修改 Buffer Pool 中的数据，还会在 redo log 中记录这次操作。事务提交时，会调用<code>fsync</code>接口将 redo log 刷盘。如果 MySQL 宕机，重启时可以通过读取 redo log 中的数据对数据库进行恢复。redo log 采用 WAL（Write-ahead logging，预写式日志）机制，即先写日志再更新数据，保证数据不会因 MySQL 宕机而丢失。</p></blockquote>
+<h2 id="隔离性isolation"><a href="#%e9%9a%94%e7%a6%bb%e6%80%a7isolation" class="header-anchor"></a>隔离性（Isolation）
+</h2><p><strong>定义</strong>：并发执行的事务之间不能互相干扰，事务内部的操作与其他事务隔离。</p>
+<blockquote>
+<p><strong>实现原理</strong>：</p>
+<p><strong>锁</strong>：通过锁机制保证不同事务之间的写操作不会冲突。InnoDB 支持行锁和表锁，行锁的粒度更细，性能更好。事务在修改数据之前需要先获得相应的锁，锁定的数据在事务提交或回滚之前不会被其他事务修改。</p>
+<p><strong>MVCC（多版本并发控制）</strong>：用于解决写操作对读操作的影响。MVCC 通过以下技术实现：</p>
+<ul>
+<li><strong>隐藏列</strong>：每行数据包含隐藏列，记录事务 id 和指向 undo log 的指针。</li>
+<li><strong>版本链</strong>：通过 undo log 形成版本链，记录数据的多个版本。</li>
+<li><strong>ReadView</strong>：事务在读取数据时生成 ReadView，根据 ReadView 判断数据的可见性。ReadView 包含以下内容：
+<ul>
+<li><strong>low_limit_id</strong>：生成 ReadView 时系统中下一个事务的 id，大于等于此 id 的事务对 ReadView 不可见。</li>
+<li><strong>up_limit_id</strong>：生成 ReadView 时系统中活跃事务的最小 id，小于此 id 的事务对 ReadView 可见。</li>
+<li><strong>rw_trx_ids</strong>：活跃事务的 id 列表，用于判断事务是否在 ReadView 生成时活跃。</li>
+</ul>
+</li>
+</ul></blockquote>
+<h2 id="一致性consistency"><a href="#%e4%b8%80%e8%87%b4%e6%80%a7consistency" class="header-anchor"></a>一致性（Consistency）
+</h2><p><strong>定义</strong>：事务执行结束后，数据库的完整性约束没有被破坏，事务执行的前后都是合法的数据状态。</p>
+<blockquote>
+<p><strong>实现原理</strong>：</p>
+<p><strong>依赖原子性、持久性和隔离性</strong>：这三者是实现一致性的基础。如果事务的原子性、持久性和隔离性无法保证，一致性也无法保证。<br>
+<strong>数据库层面的保障</strong>：数据库本身提供数据类型、长度、外键约束等完整性检查。<br>
+<strong>应用层面的保障</strong>：应用逻辑需要保证事务的逻辑一致性，例如转账操作中，扣除和增加金额的逻辑必须正确。</p></blockquote>
+<h2 id="总结"><a href="#%e6%80%bb%e7%bb%93" class="header-anchor"></a>总结
+</h2><blockquote>
+<p><strong>原子性</strong>通过<strong>undo log</strong>实现，确保事务的不可分割性。</p>
+<p><strong>持久性</strong>通过<strong>redo log</strong>实现，确保事务提交后数据不会丢失。</p>
+<p><strong>隔离性</strong>通过<strong>锁机制</strong>和<strong>MVCC</strong>实现，确保并发事务之间的隔离。</p>
+<p><strong>一致性</strong>依赖于其他三个特性，并结合数据库和应用层面的保障实现。</p></blockquote>
+
 </section>
 
 
@@ -432,12 +523,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/1/01/">
+    <a href="/zh-cn/post/2025/08/mysql%E7%9A%84timestamp%E5%92%8Cdatetime%E5%BC%82%E5%90%8C/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title"></h2>
+            <h2 class="article-title">Mysql的TimeStamp和DateTime异同</h2>
             
         </div>
     </a>
@@ -445,12 +536,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/1/01/">
+    <a href="/zh-cn/post/2025/07/%E6%85%A2sql%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title"></h2>
+            <h2 class="article-title">慢SQL优化思路</h2>
             
         </div>
     </a>
@@ -458,12 +549,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/1/01/">
+    <a href="/zh-cn/post/2025/07/spring7%E4%B8%AA%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E8%A1%8C%E4%B8%BA%E5%92%8C5%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title"></h2>
+            <h2 class="article-title">Spring7个事务传播行为和5个隔离级别</h2>
             
         </div>
     </a>
@@ -471,12 +562,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/1/01/">
+    <a href="/zh-cn/post/2025/05/%E6%89%A7%E8%A1%8C%E4%B8%80%E6%9D%A1select%E8%AF%AD%E5%8F%A5%E6%B5%81%E7%A8%8B/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title"></h2>
+            <h2 class="article-title">执行一条Select语句流程</h2>
             
         </div>
     </a>
@@ -484,12 +575,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
                 
 <article class="">
-    <a href="/zh-cn/post/1/01/">
+    <a href="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title"></h2>
+            <h2 class="article-title">MySQL索引失效的几种场景、回表、索引覆盖、索引下推</h2>
             
         </div>
     </a>

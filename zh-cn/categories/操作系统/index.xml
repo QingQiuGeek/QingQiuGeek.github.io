@@ -7,7 +7,48 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 28 Aug 2025 19:22:50 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 29 Aug 2025 22:20:30 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>虚拟内存和虚拟页面</title>
+        <link>/zh-cn/post/2025/08/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E9%A1%B5%E9%9D%A2/</link>
+        <pubDate>Fri, 29 Aug 2025 22:20:30 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E9%A1%B5%E9%9D%A2/</guid>
+        <description>&lt;h2 id=&#34;虚拟内存&#34;&gt;&lt;a href=&#34;#%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;虚拟内存
+&lt;/h2&gt;&lt;p&gt;虚拟内存是现代操作系统提供的一种内存管理机制，它&lt;strong&gt;允许程序访问比实际物理内存更大的地址空间&lt;/strong&gt;。虚拟内存通过将程序的地址空间划分为多个固定大小的块（称为页面），并将这些页面映射到物理内存或磁盘上的页面文件中，从而实现高效的内存管理和资源利用。&lt;/p&gt;
+&lt;p&gt;正常情况下，一块内存不能同时运行多个程序，如果第一个程序在 2000 的位置写入一个新的值，将会擦掉第二个程序存放在相同位置上的所有内容，因为他们都引用了**绝对物理地址，**而虚拟内存让操作系统为每个进程分配独立的一套「&lt;strong&gt;虚拟地址&lt;/strong&gt;」，这样进程所使用的地址「隔离」开来，各玩各的。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/08/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E9%A1%B5%E9%9D%A2/image.png&#34;
+	width=&#34;557&#34;
+	height=&#34;672&#34;
+	srcset=&#34;/zh-cn/post/2025/08/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E9%A1%B5%E9%9D%A2/image_hu_ae78660271288950.png 480w, /zh-cn/post/2025/08/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%92%8C%E8%99%9A%E6%8B%9F%E9%A1%B5%E9%9D%A2/image_hu_1427f5300029098.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;82&#34;
+		data-flex-basis=&#34;198px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;虚拟页&#34;&gt;&lt;a href=&#34;#%e8%99%9a%e6%8b%9f%e9%a1%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;虚拟页
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;虚拟页是虚拟内存的基本单位&lt;/strong&gt;，每个虚拟页是一个固定大小的内存块。操作系统将程序的地址空间划分为多个虚拟页面，并通过页表（Page Table）将虚拟页面映射到物理内存中的物理页面或磁盘上的页面文件中。&lt;/p&gt;
+&lt;h3 id=&#34;文件映射-mmapmemory-mapped-file&#34;&gt;&lt;a href=&#34;#%e6%96%87%e4%bb%b6%e6%98%a0%e5%b0%84-mmapmemory-mapped-file&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;文件映射 mmap（Memory-Mapped File）
+&lt;/h3&gt;&lt;p&gt;文件映射是一种将&lt;strong&gt;文件内容直接映射到进程的地址空间&lt;/strong&gt;的技术。通过文件映射，程序可以直接通过内存地址访问文件内容，无需通过传统的 &lt;code&gt;read&lt;/code&gt; 和 &lt;code&gt;write&lt;/code&gt; 系统调用。文件映射的主要优点包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;减少内核态和用户态之间的数据拷贝&lt;/strong&gt;：传统的文件读写操作需要在内核态和用户态之间进行数据拷贝，而文件映射可以直接在用户态访问文件内容，减少了数据拷贝的开销。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提高性能&lt;/strong&gt;：通过直接访问内存地址，文件映射可以显著提高文件读写操作的性能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;文件映射的工作原理&#34;&gt;&lt;a href=&#34;#%e6%96%87%e4%bb%b6%e6%98%a0%e5%b0%84%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;文件映射的工作原理
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;打开文件&lt;/strong&gt;：程序通过 &lt;code&gt;open&lt;/code&gt; 系统调用打开文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;映射文件&lt;/strong&gt;：程序通过 &lt;code&gt;mmap&lt;/code&gt; 系统调用将文件内容映射到进程的地址空间。&lt;code&gt;mmap&lt;/code&gt; 系统调用会返回一个指针，指向映射的内存区域。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;访问文件内容&lt;/strong&gt;：程序可以通过指针直接访问文件内容，而无需调用 &lt;code&gt;read&lt;/code&gt; 或 &lt;code&gt;write&lt;/code&gt; 系统调用。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;页缓存&#34;&gt;&lt;a href=&#34;#%e9%a1%b5%e7%bc%93%e5%ad%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;页缓存
+&lt;/h2&gt;&lt;p&gt;操作系统会将文件的内容缓存在页缓存中。页缓存是内核管理的一块内存区域，用于缓存文件的页面。当程序通过文件映射访问文件内容时，操作系统会将文件的页面从磁盘加载到页缓存中，并将虚拟页面映射到页缓存中的物理页面。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>CPU、进程、线程上下文切换</title>
         <link>/zh-cn/post/2025/08/cpu%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2/</link>
         <pubDate>Thu, 28 Aug 2025 19:22:50 +0000</pubDate>
@@ -68,6 +109,127 @@
 &lt;li&gt;当两个线程不属于同一个进程，则切换的过程就跟进程上下文切换一样；&lt;/li&gt;
 &lt;li&gt;当两个线程属于同一个进程，因为虚拟内存是共享的，所以在切换时，虚拟内存这些资源就保持不动，&lt;strong&gt;只需要切换线程的私有数据、寄存器等不共享的数据；&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>服务器CPU飙升该如何排查&amp;火焰图</title>
+        <link>/zh-cn/post/2025/06/%E6%9C%8D%E5%8A%A1%E5%99%A8cpu%E9%A3%99%E5%8D%87%E8%AF%A5%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E7%81%AB%E7%84%B0%E5%9B%BE/</link>
+        <pubDate>Tue, 10 Jun 2025 15:18:53 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/06/%E6%9C%8D%E5%8A%A1%E5%99%A8cpu%E9%A3%99%E5%8D%87%E8%AF%A5%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E7%81%AB%E7%84%B0%E5%9B%BE/</guid>
+        <description>&lt;h2 id=&#34;查看系统状态&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b%e7%b3%bb%e7%bb%9f%e7%8a%b6%e6%80%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;查看系统状态&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;使用工具如&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;htop&lt;/code&gt;、&lt;code&gt;ps&lt;/code&gt;等查看当前系统中&lt;strong&gt;各个进程的 CPU 使用情况&lt;/strong&gt;，确认是哪个进程导致 CPU 飙升。&lt;/p&gt;
+&lt;h2 id=&#34;查看进程类型&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b%e8%bf%9b%e7%a8%8b%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;查看进程类型&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;确定该进程是业务进程、系统进程还是其他类型&lt;/strong&gt;。如果是业务进程，进一步确认是哪个服务的进程。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 ps aux 列出所有进程的详细信息&lt;/li&gt;
+&lt;li&gt;Linux 系统中，每个进程的信息都存储在 &lt;code&gt;/proc/&amp;lt;pid&amp;gt;&lt;/code&gt; 目录中。使用 cat 查看/proc 目录&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;查看该进程的日志&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b%e8%af%a5%e8%bf%9b%e7%a8%8b%e7%9a%84%e6%97%a5%e5%bf%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;查看该进程的日志
+&lt;/h2&gt;&lt;p&gt;了解是否有异常日志信息，比如频繁的错误、异常的请求等。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;tail -f /var/log/&amp;lt;process_log_file&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;定位进程的线程&#34;&gt;&lt;a href=&#34;#%e5%ae%9a%e4%bd%8d%e8%bf%9b%e7%a8%8b%e7%9a%84%e7%ba%bf%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;定位进程的线程
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;找到进程 ID（PID）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ps -ef | grep &amp;lt;进程名&amp;gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;显示进程的所有线程&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用 &lt;code&gt;ps -L&lt;/code&gt; 选项可以显示指定进程的所有线程&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/06/%E6%9C%8D%E5%8A%A1%E5%99%A8cpu%E9%A3%99%E5%8D%87%E8%AF%A5%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E7%81%AB%E7%84%B0%E5%9B%BE/image.png&#34;
+	width=&#34;1446&#34;
+	height=&#34;931&#34;
+	srcset=&#34;/zh-cn/post/2025/06/%E6%9C%8D%E5%8A%A1%E5%99%A8cpu%E9%A3%99%E5%8D%87%E8%AF%A5%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E7%81%AB%E7%84%B0%E5%9B%BE/image_hu_1e797ac9c2d04920.png 480w, /zh-cn/post/2025/06/%E6%9C%8D%E5%8A%A1%E5%99%A8cpu%E9%A3%99%E5%8D%87%E8%AF%A5%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E7%81%AB%E7%84%B0%E5%9B%BE/image_hu_d960372203ebcfe2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;155&#34;
+		data-flex-basis=&#34;372px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;查看负载情况&#34;&gt;&lt;a href=&#34;#%e6%9f%a5%e7%9c%8b%e8%b4%9f%e8%bd%bd%e6%83%85%e5%86%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;查看负载情况
+&lt;/h2&gt;&lt;p&gt;检查是否有异常的流量涌入，导致进程负载过高。如果是由于流量过高导致的 CPU 飙升，可以尝试对流量进行控制，比如使用限流工具（如&lt;code&gt;nginx&lt;/code&gt;的限流模块、&lt;code&gt;iptables&lt;/code&gt;等）减少进入该服务的流量。&lt;/p&gt;
+&lt;h2 id=&#34;紧急处理&#34;&gt;&lt;a href=&#34;#%e7%b4%a7%e6%80%a5%e5%a4%84%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;紧急处理
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;优先级调整&lt;/strong&gt;：如果进程是业务进程且不能立即停止，可以尝试降低该进程的优先级，使用&lt;code&gt;nice&lt;/code&gt;或&lt;code&gt;renice&lt;/code&gt;命令，减少其对 CPU 的占用，从而让其他服务能够正常运行。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;renice -n 10 -p &amp;lt;pid&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;临时隔离&lt;/strong&gt;：如果该进程是某个服务的实例，可以尝试将该实例从负载均衡中移除，让其他正常实例继续提供服务。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;详细排查&#34;&gt;&lt;a href=&#34;#%e8%af%a6%e7%bb%86%e6%8e%92%e6%9f%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;详细排查
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;火焰图分析&lt;/strong&gt;：使用火焰图工具（如&lt;code&gt;perf&lt;/code&gt;、&lt;code&gt;flamegraph&lt;/code&gt;等）分析进程的 CPU 使用情况，找到具体的瓶颈点。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo perf record -g -p &amp;lt;pid&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo perf script | stackcollapse-perf.pl | flamegraph.pl &amp;gt; flamegraph.svg
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;代码分析&lt;/strong&gt;：根据火焰图的分析结果，定位到具体的代码位置，查看是否有逻辑问题，如死循环、高复杂度算法等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;依赖检查&lt;/strong&gt;：检查该进程是否依赖了其他服务或资源，是否存在依赖服务响应慢导致的阻塞。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;恢复与优化&#34;&gt;&lt;a href=&#34;#%e6%81%a2%e5%a4%8d%e4%b8%8e%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;恢复与优化
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;恢复服务&lt;/strong&gt;：如果经过分析确认该进程确实有问题且无法快速修复，可以考虑重启该进程，但在此之前确保有备份和回滚方案。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优化代码&lt;/strong&gt;：根据分析结果，对代码进行优化，减少 CPU 使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;资源扩展&lt;/strong&gt;：如果是因为资源不足导致的 CPU 飙升，可以考虑增加服务器资源，如 CPU、内存等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;火焰图&#34;&gt;&lt;a href=&#34;#%e7%81%ab%e7%84%b0%e5%9b%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;火焰图
+&lt;/h2&gt;&lt;p&gt;火焰图工具不是 linux 自带的，需要下载安装。&lt;/p&gt;
+&lt;h3 id=&#34;安装-perf-工具&#34;&gt;&lt;a href=&#34;#%e5%ae%89%e8%a3%85-perf-%e5%b7%a5%e5%85%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;安装  &lt;code&gt;perf&lt;/code&gt;  工具
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;perf&lt;/code&gt; 是 Linux 系统中用于性能分析的工具，通常可以通过包管理器安装。&lt;/p&gt;
+&lt;h3 id=&#34;下载和安装-flamegraph-工具&#34;&gt;&lt;a href=&#34;#%e4%b8%8b%e8%bd%bd%e5%92%8c%e5%ae%89%e8%a3%85-flamegraph-%e5%b7%a5%e5%85%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;下载和安装 FlameGraph 工具
+&lt;/h3&gt;&lt;p&gt;FlameGraph 是由 Brendan Gregg 开发的工具集，用于将 &lt;code&gt;perf&lt;/code&gt; 的输出转换为火焰图。&lt;/p&gt;
+&lt;h3 id=&#34;生成火焰图&#34;&gt;&lt;a href=&#34;#%e7%94%9f%e6%88%90%e7%81%ab%e7%84%b0%e5%9b%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;生成火焰图
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;使用 &lt;code&gt;perf record&lt;/code&gt; 命令捕获性能数据。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;例如，以下命令会在 60 秒内从所有 CPU 和进程生成性能样本：&lt;/p&gt;
+&lt;p&gt;perf record -a -g -F 99 sleep 60&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-a&lt;/code&gt;：从所有 CPU 捕获数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-g&lt;/code&gt;：启用调用图收集。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;-F 99&lt;/code&gt;：每秒采样 99 次。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;sleep 60&lt;/code&gt;：运行 60 秒后停止捕获。&lt;/p&gt;
+&lt;p&gt;2. &lt;strong&gt;将性能数据转换为文本格式&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;perf script &amp;gt; data.perf&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;&lt;strong&gt;生成 SVG 格式的火焰图&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;使用 &lt;code&gt;flamegraph.pl&lt;/code&gt; 脚本生成 SVG 格式的火焰图&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
