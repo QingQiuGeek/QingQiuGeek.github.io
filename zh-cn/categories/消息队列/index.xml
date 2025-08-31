@@ -7,7 +7,24 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Fri, 29 Aug 2025 22:18:21 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 30 Aug 2025 15:06:01 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>如何设计消息中间件</title>
+        <link>/zh-cn/post/2025/08/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/</link>
+        <pubDate>Sat, 30 Aug 2025 15:06:01 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/</guid>
+        <description>&lt;ul&gt;
+&lt;li&gt;消息中间件的几个重要角色，分别是生产者、消费者、Broker、注册中心。&lt;/li&gt;
+&lt;li&gt;简述下消息中间件数据流转过程，无非就是生产者生成消息，发送至 Broker，Broker 可以暂缓消息， 然后消费者再从 Broker 获取消息，用于消费。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;注册中心&lt;/strong&gt;用于服务的发现包括：Broker、生产者、消费者的发现，当然还包括下线， 可以说服务的高可用离不开注册中心。&lt;/li&gt;
+&lt;li&gt;然后开始简述实现要点，可以同通信讲起：各模块的通信可以基于 Netty 然后自定义协议来实现，注册中心可以利用 zookeeper、consul、eureka、nacos 等等，也可以像 RocketMQ 自己实现简单的 namesrv （这一句话就都是关键词）。&lt;/li&gt;
+&lt;li&gt;为了考虑扩容和整体的性能，采用&lt;strong&gt;分布式&lt;/strong&gt;的思想，像 Kafka 一样采取分区理念，一个 Topic 分为多个 partition，并且为保证数据可靠性，采取多副本存储，即 Leader 和 follower，根据性能和数据可靠的权衡提供异步和同步的刷盘存储。&lt;/li&gt;
+&lt;li&gt;利用&lt;strong&gt;选举算法&lt;/strong&gt;保证 Leader 挂了之后 follower 可以顶上，保证消息队列的高可用。&lt;/li&gt;
+&lt;li&gt;为了提高消息队列的可靠性利用本地文件系统来存储消息，并且采用顺序写的方式来提高性能。 可根据消息队列的特性利用内存映射、零拷贝进一步的提升性能，还可利用像 Kafka 这种批处理思想提 高整体的吞吐。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>消息队列为啥这么快</title>
         <link>/zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/</link>
         <pubDate>Fri, 29 Aug 2025 22:18:21 +0000</pubDate>
@@ -22,8 +39,6 @@
 	height=&#34;944&#34;
 	srcset=&#34;/zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/image_hu_55d4d7ef0119b099.png 480w, /zh-cn/post/2025/08/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%BA%E5%95%A5%E8%BF%99%E4%B9%88%E5%BF%AB/image_hu_6ce8102293728340.png 1024w&#34;
 	loading=&#34;lazy&#34;
-	
-		alt=&#34;alt text&#34;
 	
 	
 		class=&#34;gallery-image&#34; 

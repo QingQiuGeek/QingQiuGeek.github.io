@@ -7,7 +7,24 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 25 Jan 2025 16:12:01 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 30 Aug 2025 15:09:28 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>二维码扫码登录大概实现思路</title>
+        <link>/zh-cn/post/2025/08/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E5%A4%A7%E6%A6%82%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</link>
+        <pubDate>Sat, 30 Aug 2025 15:09:28 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/%E4%BA%8C%E7%BB%B4%E7%A0%81%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E5%A4%A7%E6%A6%82%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF/</guid>
+        <description>&lt;p&gt;二维码扫码登录的核心逻辑其实就是 “用已登录的手机给电脑授权”，具体分五步走：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;电脑端生成二维码&lt;/strong&gt;：用户打开网页时，后端生成一个唯一的二维码 ID（比如 UUID），存在 Redis 里，状态设为 “未扫描”，有效期 5 分钟左右。前端用这个 ID 生成二维码展示，同时每隔几秒查一次后端，看状态有没有变。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;手机扫码&lt;/strong&gt;：用户用已登录的 APP 扫这个二维码，就能读到里面的 ID，然后手机端带着这个 ID 和自己的登录凭证（比如 token）发给后端，说 “我扫了这个码”。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;手机确认登录&lt;/strong&gt;：后端收到后，先验证手机 token 是不是有效（确保手机确实登录着），然后把 Redis 里那个二维码 ID 的状态改成 “已确认”，并关联上用户信息（比如用户 ID）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;电脑端获取结果&lt;/strong&gt;：电脑端一直在轮询，发现状态变成 “已确认”，就知道授权通过了。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;完成登录&lt;/strong&gt;：后端给电脑端生成一个登录凭证（比如 session 或 token），返回给前端，电脑端就登录成功了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这里有几个关键点要注意：一是二维码必须有有效期，防止被复用；二是状态要在 Redis 里管理，查起来快；三是手机确认时一定要验证身份，不能随便授权；四是电脑端轮询可以用长轮询，减少请求次数。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>【已解决】OSS配置问题</title>
         <link>/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3oss%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/</link>
         <pubDate>Sat, 25 Jan 2025 16:12:01 +0000</pubDate>

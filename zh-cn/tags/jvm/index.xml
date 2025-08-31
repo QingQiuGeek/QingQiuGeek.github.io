@@ -7,7 +7,44 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 13 Feb 2025 14:03:21 +0000</lastBuildDate><atom:link href="/zh-cn/tags/jvm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 30 Aug 2025 15:10:58 +0000</lastBuildDate><atom:link href="/zh-cn/tags/jvm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>String str = new String(“abc“)</title>
+        <link>/zh-cn/post/2025/08/string-str-new-stringabc/</link>
+        <pubDate>Sat, 30 Aug 2025 15:10:58 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/string-str-new-stringabc/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;new 出来的对象和这个对象的引用 str，字符串的值 abc，这三个元素分别放在哪里？&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;字符串 abc 存在字符串常量池中，位于&lt;strong&gt;方法区&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;创建的 String 对象位于&lt;strong&gt;堆内存&lt;/strong&gt;，对象包含字符串的内容 &lt;code&gt;&amp;quot;abc&amp;quot;&lt;/code&gt;，但它是一个独立的对象，与字符串常量池中的对象不同。首次创建 String 对象时，字符串常量池并没有 abc，那么会在字符串常量池创建 abc 字符串，然后获取其引用，最终在&lt;strong&gt;堆中&lt;/strong&gt;创建了一个&amp;quot;abc&amp;quot;的 String 对象；第二次创建 String 对象时，会先去常量池找有没有字符串 abc，找到了就获取其引用，然后创建新的 String 对象。&lt;/li&gt;
+&lt;li&gt;引用变量 &lt;code&gt;a&lt;/code&gt; 是一个指向 &lt;code&gt;String&lt;/code&gt; 对象的引用。它&lt;strong&gt;存储了 &lt;code&gt;String&lt;/code&gt; 对象的内存地址，而不是对象本身的内容&lt;/strong&gt;。引用变量 &lt;code&gt;a&lt;/code&gt; 本身是一个局部变量，&lt;strong&gt;存储在当前线程的栈内存&lt;/strong&gt;中。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>线程崩溃了，所属进程也会崩溃吗</title>
+        <link>/zh-cn/post/2025/08/%E7%BA%BF%E7%A8%8B%E5%B4%A9%E6%BA%83%E4%BA%86%E6%89%80%E5%B1%9E%E8%BF%9B%E7%A8%8B%E4%B9%9F%E4%BC%9A%E5%B4%A9%E6%BA%83%E5%90%97/</link>
+        <pubDate>Sat, 30 Aug 2025 15:03:04 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/08/%E7%BA%BF%E7%A8%8B%E5%B4%A9%E6%BA%83%E4%BA%86%E6%89%80%E5%B1%9E%E8%BF%9B%E7%A8%8B%E4%B9%9F%E4%BC%9A%E5%B4%A9%E6%BA%83%E5%90%97/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;一般来说&lt;/strong&gt;，线程如果因为非法访问内存引发崩溃，那么进程也会崩溃，因为各个线程的地址空间共享，非法访问内存会影响其他线程，引发严重后果。&lt;/p&gt;
+&lt;h2 id=&#34;进程如何崩溃&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e7%a8%8b%e5%a6%82%e4%bd%95%e5%b4%a9%e6%ba%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进程如何崩溃
+&lt;/h2&gt;&lt;p&gt;进程崩溃是通过&lt;strong&gt;信号&lt;/strong&gt;实现的，常用的 kill -9 就是直接给指定进程 pid 发送终止信号 9。&lt;/p&gt;
+&lt;h2 id=&#34;cc-中线程崩溃导致进程崩溃的原因&#34;&gt;&lt;a href=&#34;#cc-%e4%b8%ad%e7%ba%bf%e7%a8%8b%e5%b4%a9%e6%ba%83%e5%af%bc%e8%87%b4%e8%bf%9b%e7%a8%8b%e5%b4%a9%e6%ba%83%e7%9a%84%e5%8e%9f%e5%9b%a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;C/C++ 中线程崩溃导致进程崩溃的原因
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;非法内存访问&lt;/strong&gt;：如果线程因为非法访问内存（如访问未分配的内存、写入只读内存等）而崩溃，操作系统会发送 &lt;code&gt;SIGSEGV&lt;/code&gt; 信号给进程。默认情况下，操作系统会终止整个进程，因为这种错误可能会导致进程的地址空间处于不稳定状态，影响其他线程的运行。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;信号处理机制&lt;/strong&gt;：操作系统通过信号机制处理线程的崩溃。如果进程没有定义自己的信号处理函数，操作系统会执行默认的信号处理程序，导致进程退出。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;java-中线程崩溃不会导致-jvm-崩溃的原因&#34;&gt;&lt;a href=&#34;#java-%e4%b8%ad%e7%ba%bf%e7%a8%8b%e5%b4%a9%e6%ba%83%e4%b8%8d%e4%bc%9a%e5%af%bc%e8%87%b4-jvm-%e5%b4%a9%e6%ba%83%e7%9a%84%e5%8e%9f%e5%9b%a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Java 中线程崩溃不会导致 JVM 崩溃的原因
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;JVM 的信号处理机制&lt;/strong&gt;：&lt;strong&gt;JVM 定义了自己的信号处理函数，拦截了 &lt;code&gt;SIGSEGV&lt;/code&gt; 等信号。当线程崩溃时，JVM 会捕获这些信号，并进行内部处理，而不是直接终止整个进程。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;异常处理机制&lt;/strong&gt;：在 Java 中，线程崩溃通常会抛出异常（如 &lt;code&gt;NullPointerException&lt;/code&gt; 或 &lt;code&gt;StackOverflowError&lt;/code&gt;）。JVM 会捕获这些异常并进行处理，而不是直接终止整个 JVM。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>符号引用和直接引用、强引用、软引用、弱引用、虚引用</title>
         <link>/zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/</link>
         <pubDate>Thu, 13 Feb 2025 14:03:21 +0000</pubDate>
