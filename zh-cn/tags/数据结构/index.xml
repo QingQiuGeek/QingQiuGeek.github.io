@@ -7,7 +7,73 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 04 Jan 2025 19:31:55 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 01 Apr 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>二叉搜索树、平衡二叉树、红黑树、B树、B&#43;树、跳表</title>
+        <link>/zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/</link>
+        <pubDate>Tue, 01 Apr 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/</guid>
+        <description>&lt;h2 id=&#34;二叉搜索树binary-sort-tree&#34;&gt;&lt;a href=&#34;#%e4%ba%8c%e5%8f%89%e6%90%9c%e7%b4%a2%e6%a0%91binary-sort-tree&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;二叉搜索树（Binary Sort Tree）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;左节点&amp;lt;根节点&amp;lt;右节点，增删改查时间复杂度是 logN，但是极端情况下会退化成线性链表（每次插入的节点都是最大的），此时时间复杂度是 N，为了解决这种情况就出现了二叉平衡树&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;平衡二叉树avl&#34;&gt;&lt;a href=&#34;#%e5%b9%b3%e8%a1%a1%e4%ba%8c%e5%8f%89%e6%a0%91avl&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;平衡二叉树（AVL）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;平衡二叉树可以自平衡，树枝通过&lt;strong&gt;左右旋&lt;/strong&gt;避免退化成线性链表，并且**规定了左子树和右子树的高度差&amp;lt;=1。**但是平衡二叉树过度追求平衡，会频繁左右旋，性能也会有所下降。&lt;/p&gt;
+&lt;p&gt;增删改查时间复杂度都是 logN&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;红黑树red-black-tree&#34;&gt;&lt;a href=&#34;#%e7%ba%a2%e9%bb%91%e6%a0%91red-black-tree&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;红黑树（Red Black Tree）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;自平衡的二叉树，但是和 AVL 不同，红黑树的自平衡是通过左右旋+颜色来实现的，它的节点的颜色为红色和黑色。它&lt;strong&gt;不严格控制左、右子树高度差&amp;lt;=1&lt;/strong&gt;。也是一种解决二叉查找树极端情况下退化成线性链表的数据结构。特点如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;节点非黑即红&lt;/li&gt;
+&lt;li&gt;根节点是黑色，叶子节点都是黑色的空节点。&lt;/li&gt;
+&lt;li&gt;每个红色节点的两个子节点都是黑色。&lt;/li&gt;
+&lt;li&gt;从根节点到叶子节点或空子节点的每条路径上，黑色节点的数量是相同的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;红黑树是保持“黑平衡”的二叉树，即从根节点开始搜索，一直搜索到叶子节点，所经历的黑色节点的个数是一样的。查找效率比 AVL 慢，但是添加和删除则比 AVL 快。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/image.png&#34;
+	width=&#34;1680&#34;
+	height=&#34;680&#34;
+	srcset=&#34;/zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/image_hu_da0e939860f288f8.png 480w, /zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/image_hu_31c3b79c37a9668a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;247&#34;
+		data-flex-basis=&#34;592px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;b-树&#34;&gt;&lt;a href=&#34;#b-%e6%a0%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;B 树
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在存储大量的数据并查询的时候，不论是红黑树还是平衡二叉树都存在深度问题，当其深度过于深，其检索效率会大大降低，所以开发出了 B 树。&lt;/p&gt;
+&lt;p&gt;B 树的键值存在每个节点中，每个节点的关键字（类似 mysql 索引）出现仅出现一次，&lt;/p&gt;
+&lt;p&gt;关键字内做一次查找，性能逼近二分查找的，左节点&amp;lt;根&amp;lt;右节点&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;b树&#34;&gt;&lt;a href=&#34;#b%e6%a0%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;B+树
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在 B 树的基础上，叶子节点之间通过双向指针链接，这就方便了范围查询&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;跳表&#34;&gt;&lt;a href=&#34;#%e8%b7%b3%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;跳表
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;基于链表的数据结构，通过添加多层索引实现跳跃性查询，特点如下：&lt;/p&gt;
+&lt;p&gt;跳表中的数据是有序的、跳表中的每个节点都包含一个指向下一层和右侧节点的指针。&lt;/p&gt;
+&lt;p&gt;redis 就使用跳表实现了 zset&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/image-1.png&#34;
+	width=&#34;1642&#34;
+	height=&#34;508&#34;
+	srcset=&#34;/zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/image-1_hu_e850316db64487bb.png 480w, /zh-cn/post/2025/04/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BA%A2%E9%BB%91%E6%A0%91b%E6%A0%91b-%E6%A0%91%E8%B7%B3%E8%A1%A8/image-1_hu_85aba53ae68611c1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;323&#34;
+		data-flex-basis=&#34;775px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>【泛型擦除】通过反射向List中添加不同类型的元素</title>
         <link>/zh-cn/post/2025/01/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E5%90%91list%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%83%E7%B4%A0/</link>
         <pubDate>Sat, 04 Jan 2025 19:31:55 +0000</pubDate>

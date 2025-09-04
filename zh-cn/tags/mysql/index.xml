@@ -7,7 +7,178 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 30 Aug 2025 15:07:39 +0000</lastBuildDate><atom:link href="/zh-cn/tags/mysql/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/mysql/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>如何保证redis和mysql的数据一致性</title>
+        <link>/zh-cn/post/2025/09/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81redis%E5%92%8Cmysql%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/</link>
+        <pubDate>Wed, 03 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81redis%E5%92%8Cmysql%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;参考:&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/xiaolincoding/p/16493675.html&#34;  title=&#34;面试官：3 种缓存更新策略是怎样的？ - 小林coding - 博客园&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;面试官：3 种缓存更新策略是怎样的？ - 小林 coding - 博客园&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.nowcoder.com/discuss/766955367430438912?sourceSSR=users&#34;  title=&#34;腾讯二面：Redis与MySQL一致性如何保证？_牛客网&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;腾讯二面：Redis 与 MySQL 一致性如何保证？_牛客网&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;旁路缓存模式cache-aside-pattern&#34;&gt;&lt;a href=&#34;#%e6%97%81%e8%b7%af%e7%bc%93%e5%ad%98%e6%a8%a1%e5%bc%8fcache-aside-pattern&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;旁路缓存模式（Cache Aside Pattern）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;适合读多写少的场景，因为当写入比较频繁时，&lt;strong&gt;缓存会被频繁删除&lt;/strong&gt;，对缓存的命中率有影响。&lt;br&gt;
+读时先读 redis，读不到则查 mysql，写时先更新 mysql，然后删除 redis 缓存。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;而上述成功的前提这两个操作都能同时执行成功，所以问题就是，在删除缓存（第二个操作）的时候失败了，导致缓存中的数据是旧值，而数据库是最新值。如何保证两个操作都能执行成功？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;消息队列重试机制&lt;br&gt;
+消息队列来重试缓存的删除，优点是保证缓存一致性的问题，缺点会对业务代码入侵&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;订阅 MySQL binlog，再操作缓存&lt;/p&gt;
+&lt;p&gt;订阅 MySQL binlog + 消息队列 + 重试缓存的删除，优点是规避了代码入侵问题，也很好的保证缓存一致性的问题，缺点就是引入的组件比较多。&lt;br&gt;
+做法：将 binlog 日志采集发送到 MQ 队列里面，然后编写一个简单的缓存删除消息者订阅 binlog 日志，根据更新 log 删除缓存，并且通过 ACK 机制确认处理这条更新 log，保证数据缓存一致性。&lt;br&gt;
+这两种方法有一个共同的特点，都是采用异步操作缓存。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;异步更新write-behind&#34;&gt;&lt;a href=&#34;#%e5%bc%82%e6%ad%a5%e6%9b%b4%e6%96%b0write-behind&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;异步更新（Write Behind）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;实时性&lt;/strong&gt;要求较高的场景中，可以先更新 Redis 缓存，然后再异步更新 MySQL 数据库。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;双写操作write-through&#34;&gt;&lt;a href=&#34;#%e5%8f%8c%e5%86%99%e6%93%8d%e4%bd%9cwrite-through&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;双写操作（Write Through）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在某些业务场景中，需要同时更新 Redis 和 MySQL 的数据。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;延迟回写write-back&#34;&gt;&lt;a href=&#34;#%e5%bb%b6%e8%bf%9f%e5%9b%9e%e5%86%99write-back&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  延迟回写（Write Back）
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Redis 中数据更新后并不立即同步更新 MySQL，而是在特定时机触发数据&lt;strong&gt;批量&lt;/strong&gt;回写。&lt;/p&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>MYSQL表结构优化场景</title>
+        <link>/zh-cn/post/2025/09/mysql%E8%A1%A8%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96%E5%9C%BA%E6%99%AF/</link>
+        <pubDate>Mon, 01 Sep 2025 15:41:13 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/mysql%E8%A1%A8%E7%BB%93%E6%9E%84%E4%BC%98%E5%8C%96%E5%9C%BA%E6%99%AF/</guid>
+        <description>&lt;h2 id=&#34;合理设计表字段类型&#34;&gt;&lt;a href=&#34;#%e5%90%88%e7%90%86%e8%ae%be%e8%ae%a1%e8%a1%a8%e5%ad%97%e6%ae%b5%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;合理设计表字段类型
+&lt;/h2&gt;&lt;p&gt;根据字段的实际用途选择最合适的数据类型。例如 char、varchar()、int、bigint，&lt;strong&gt;datetime 还是 timestamp&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;创建合适的索引&#34;&gt;&lt;a href=&#34;#%e5%88%9b%e5%bb%ba%e5%90%88%e9%80%82%e7%9a%84%e7%b4%a2%e5%bc%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;创建合适的索引
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;主键索引&lt;/strong&gt;：每个表都应该有一个主键，主键字段通常是唯一的且不可为空。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;唯一索引&lt;/strong&gt;：如果某个字段的值必须唯一，可以为其创建唯一索引。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;普通索引&lt;/strong&gt;：为经常用于查询条件的字段创建普通索引，可以提高查询效率。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;复合索引&lt;/strong&gt;：如果查询条件涉及多个字段，可以创建复合索引。例如，对于查询条件 &lt;code&gt;WHERE a = ? AND b = ?&lt;/code&gt;，可以创建复合索引 &lt;code&gt;(a, b)&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;表分区&#34;&gt;&lt;a href=&#34;#%e8%a1%a8%e5%88%86%e5%8c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;表分区
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;水平分区&lt;/strong&gt;：将表中的数据按行分割到多个分区中，可以提高查询效率，尤其是在处理大量数据时。例如，可以根据日期或用户 ID 进行分区。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;垂直分区&lt;/strong&gt;：将表中的字段按列分割到多个表中，可以减少表的宽度，提高查询效率。例如，将不常用的字段移到单独的表中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;归一化与反归一化&#34;&gt;&lt;a href=&#34;#%e5%bd%92%e4%b8%80%e5%8c%96%e4%b8%8e%e5%8f%8d%e5%bd%92%e4%b8%80%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;  归一化与反归一化
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;归一化（范式）&lt;/strong&gt;：将数据分解到多个表中，减少数据冗余，提高数据一致性。例如，将用户信息和订单信息分别存储在不同的表中。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;反归一化（反范式）&lt;/strong&gt;：在某些情况下，为了提高查询效率，可以适当冗余一些数据。例如，在订单表中冗余用户的基本信息，减少表连接操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;##  合理使用外键&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;外键约束&lt;/strong&gt;：外键可以确保数据的完整性，但在某些情况下可能会降低性能。如果性能是首要考虑因素，可以考虑在应用层实现数据完整性约束。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;外键的维护成本&lt;/strong&gt;：外键会增加插入、更新和删除操作的开销，尤其是在表数据量较大时。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;优化表的存储引擎&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e8%a1%a8%e7%9a%84%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化表的存储引擎
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;InnoDB&lt;/strong&gt;：支持事务、行级锁和外键，适合需要高并发和事务支持的场景。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MyISAM&lt;/strong&gt;：不支持事务，但查询速度较快，适合读多写少的场景。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;分表分库&#34;&gt;&lt;a href=&#34;#%e5%88%86%e8%a1%a8%e5%88%86%e5%ba%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分表分库
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分表&lt;/strong&gt;：当表的数据量过大时，可以将表拆分成多个子表，每个子表存储部分数据。例如，按日期或用户 ID 分表。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分库&lt;/strong&gt;：将不同的业务数据存储在不同的数据库中，可以减少单个数据库的压力，提高系统的可扩展性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;监控和分析&#34;&gt;&lt;a href=&#34;#%e7%9b%91%e6%8e%a7%e5%92%8c%e5%88%86%e6%9e%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;监控和分析
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;性能监控&lt;/strong&gt;：使用 MySQL 的性能监控工具（如 &lt;code&gt;SHOW STATUS&lt;/code&gt;、&lt;code&gt;SHOW GLOBAL STATUS&lt;/code&gt;）监控数据库的性能指标。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;慢查询日志&lt;/strong&gt;：启用慢查询日志，记录执行时间较长的查询语句，分析并优化这些查询。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;示例优化一个用户表&#34;&gt;&lt;a href=&#34;#%e7%a4%ba%e4%be%8b%e4%bc%98%e5%8c%96%e4%b8%80%e4%b8%aa%e7%94%a8%e6%88%b7%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;示例：优化一个用户表
+&lt;/h2&gt;&lt;p&gt;假设有一个用户表 &lt;code&gt;users&lt;/code&gt;，包含以下字段：&lt;/p&gt;
+&lt;h3 id=&#34;优化前的表结构&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%89%8d%e7%9a%84%e8%a1%a8%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;优化前的表结构&lt;/strong&gt;
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;users&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;INT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;PRIMARY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;KEY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;username&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;VARCHAR&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;255&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;email&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;VARCHAR&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;255&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;created_at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DATETIME&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;last_login&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DATETIME&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;优化后的表结构&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%90%8e%e7%9a%84%e8%a1%a8%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;优化后的表结构&lt;/strong&gt;
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;字段类型优化&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将 &lt;code&gt;username&lt;/code&gt; 和 &lt;code&gt;email&lt;/code&gt; 的长度调整为合理的值（如 50 和 100）。&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;TIMESTAMP&lt;/code&gt; 替代 &lt;code&gt;DATETIME&lt;/code&gt;，节省空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;索引优化&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为 &lt;code&gt;username&lt;/code&gt; 和 &lt;code&gt;email&lt;/code&gt; 添加唯一索引。&lt;/li&gt;
+&lt;li&gt;为 &lt;code&gt;last_login&lt;/code&gt; 添加普通索引，方便按最后登录时间查询。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;表分区&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;按 &lt;code&gt;created_at&lt;/code&gt; 进行水平分区，按年或月分区。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;存储引擎选择&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 &lt;code&gt;InnoDB&lt;/code&gt; 存储引擎，支持事务和行级锁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;CREATE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;users&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;INT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;PRIMARY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;KEY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;username&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;VARCHAR&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;UNIQUE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;email&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;VARCHAR&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;UNIQUE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;created_at&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;TIMESTAMP&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NOT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;last_login&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;TIMESTAMP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;INDEX&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;last_login&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ENGINE&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;InnoDB&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PARTITION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;BY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;RANGE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;YEAR&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;created_at&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PARTITION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p2023&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;VALUES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LESS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;THAN&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2024&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PARTITION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p2024&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;VALUES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LESS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;THAN&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2025&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PARTITION&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p2025&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;VALUES&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;LESS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;THAN&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2026&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>为什么B&#43;Tree 存储千万级的数据只需要 3-4 层高度</title>
         <link>/zh-cn/post/2025/08/%E4%B8%BA%E4%BB%80%E4%B9%88b-tree-%E5%AD%98%E5%82%A8%E5%8D%83%E4%B8%87%E7%BA%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%AA%E9%9C%80%E8%A6%81-3-4-%E5%B1%82%E9%AB%98%E5%BA%A6/</link>
         <pubDate>Sat, 30 Aug 2025 15:07:39 +0000</pubDate>
@@ -276,6 +447,135 @@
 &lt;/h3&gt;&lt;p&gt;在优化阶段，优化器会为 SQL 指定执行计划，比如表中有多个索引，优化器会基于成本考虑选择使用哪个索引&lt;/p&gt;
 &lt;h3 id=&#34;execute-阶段&#34;&gt;&lt;a href=&#34;#execute-%e9%98%b6%e6%ae%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;execute 阶段
 &lt;/h3&gt;&lt;p&gt;执行器会和存储引擎交互&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>MySQL为什么使用B&#43;树</title>
+        <link>/zh-cn/post/2025/04/mysql%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8b-%E6%A0%91/</link>
+        <pubDate>Sat, 05 Apr 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/04/mysql%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8b-%E6%A0%91/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&amp;amp;mid=2247502168&amp;amp;idx=1&amp;amp;sn=ff63afcea1e8835fca3fe7a97e6922b4&amp;amp;scene=21&amp;amp;poc_token=HEp7uWijzWxbzggsRmAOCYqdtfvrOjsqAUcgCVqD&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考此文章&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>MySQL性能优化</title>
+        <link>/zh-cn/post/2025/04/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</link>
+        <pubDate>Sat, 05 Apr 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/04/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</guid>
+        <description>&lt;h2 id=&#34;抓住核心慢-sql-定位与分析&#34;&gt;&lt;a href=&#34;#%e6%8a%93%e4%bd%8f%e6%a0%b8%e5%bf%83%e6%85%a2-sql-%e5%ae%9a%e4%bd%8d%e4%b8%8e%e5%88%86%e6%9e%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;抓住核心：慢 SQL 定位与分析
+&lt;/h2&gt;&lt;p&gt;性能优化的第一步永远是找到瓶颈。面试时，建议先从 &lt;strong&gt;慢 SQL 定位和分析&lt;/strong&gt; 入手，这不仅能展示你解决问题的思路，还能体现你对数据库性能监控的熟练掌握：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;监控工具：&lt;/strong&gt; 介绍常用的慢 SQL 监控工具，如 &lt;strong&gt;MySQL 慢查询日志&lt;/strong&gt;、&lt;strong&gt;Performance Schema&lt;/strong&gt; 等，说明你对这些工具的熟悉程度以及如何通过它们定位问题。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;EXPLAIN 命令：&lt;/strong&gt; 详细说明 &lt;code&gt;EXPLAIN&lt;/code&gt; 命令的使用，分析查询计划、索引使用情况，可以结合实际案例展示如何解读分析结果，比如执行顺序、索引使用情况、全表扫描等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;由点及面索引表结构和-sql-优化&#34;&gt;&lt;a href=&#34;#%e7%94%b1%e7%82%b9%e5%8f%8a%e9%9d%a2%e7%b4%a2%e5%bc%95%e8%a1%a8%e7%bb%93%e6%9e%84%e5%92%8c-sql-%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;由点及面：索引、表结构和 SQL 优化
+&lt;/h2&gt;&lt;p&gt;定位到慢 SQL 后，接下来就要针对具体问题进行优化。 这里可以重点介绍索引、表结构和 SQL 编写规范等方面的优化技巧：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;索引优化：&lt;/strong&gt; 这是 MySQL 性能优化的重点，可以介绍索引的创建原则、覆盖索引、最左前缀匹配原则等。如果能结合你项目的实际应用来说明如何选择合适的索引，会更加分一些。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;表结构优化：&lt;/strong&gt; 优化表结构设计，包括选择合适的字段类型、避免冗余字段、合理使用范式和反范式设计等等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SQL 优化：&lt;/strong&gt; 避免使用 &lt;code&gt;SELECT *&lt;/code&gt;、尽量使用具体字段、使用连接查询代替子查询、合理使用分页查询、批量操作等，都是 SQL 编写过程中需要注意的细节。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;进阶方案架构优化&#34;&gt;&lt;a href=&#34;#%e8%bf%9b%e9%98%b6%e6%96%b9%e6%a1%88%e6%9e%b6%e6%9e%84%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;进阶方案：架构优化
+&lt;/h2&gt;&lt;p&gt;当面试官对基础优化知识比较满意时，可能会深入探讨一些架构层面的优化方案。以下是一些常见的架构优化策略：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;读写分离：&lt;/strong&gt; 将读操作和写操作分离到不同的数据库实例，提升数据库的并发处理能力。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分库分表：&lt;/strong&gt; 将数据分散到多个数据库实例或数据表中，降低单表数据量，提升查询效率。但要权衡其带来的复杂性和维护成本，谨慎使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据冷热分离&lt;/strong&gt;：根据数据的访问频率和业务重要性，将数据分为冷数据和热数据，冷数据一般存储在存储在低成本、低性能的介质中，热数据高性能存储介质中。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缓存机制：&lt;/strong&gt; 使用 Redis 等缓存中间件，将热点数据缓存到内存中，减轻数据库压力。这个非常常用，提升效果非常明显，性价比极高！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;其他优化手段&#34;&gt;&lt;a href=&#34;#%e5%85%b6%e4%bb%96%e4%bc%98%e5%8c%96%e6%89%8b%e6%ae%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;其他优化手段
+&lt;/h2&gt;&lt;p&gt;除了慢 SQL 定位、索引优化和架构优化，还可以提及一些其他优化手段，展示你对 MySQL 性能调优的全面理解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;连接池配置：&lt;/strong&gt; 配置合理的数据库连接池（如 &lt;strong&gt;连接池大小&lt;/strong&gt;、&lt;strong&gt;超时时间&lt;/strong&gt; 等），能够有效提升数据库连接的效率，避免频繁的连接开销。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;硬件配置：&lt;/strong&gt; 提升硬件性能也是优化的重要手段之一。使用高性能服务器、增加内存、使用 &lt;strong&gt;SSD&lt;/strong&gt; 硬盘等硬件升级，都可以有效提升数据库的整体性能。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>多版本并发控制MVCC</title>
+        <link>/zh-cn/post/2025/04/%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6mvcc/</link>
+        <pubDate>Wed, 02 Apr 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/04/%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6mvcc/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_35190492/article/details/109044141&#34;  title=&#34;腾讯面试：MySQL事务与MVCC如何实现的隔离级别？_csdn三太子敖丙-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;腾讯面试：MySQL 事务与 MVCC 如何实现的隔离级别？_csdn 三太子敖丙-CSDN 博客&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;多版本并发控制  Multi-Version ConcurrencyControl，用于在&lt;strong&gt;多事务并发读写数据库时保持数据的一致性和隔离性&lt;/strong&gt;。它是&lt;strong&gt;通过在每个数据行上维护多个版本的数据来实现的&lt;/strong&gt;。当一个事务要对数据库中的数据进行修改时，MVCC 会&lt;strong&gt;为该事务创建一个数据快照，而不是直接修改实际的数据行&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MVCC 不对数据加锁，因此如果是非锁定读（普通的 select 读）就读取快照数据，解决部分幻读，而对于锁定读，则读取的是当前数据，就需要使用临键锁锁住区间防止数据插入。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;通常对数据库的操作无非是增删改查、事务提交、回滚&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;读操作（SELECT）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当一个事务执行读操作时，它会使用快照读取。快照读取是基于事务&lt;strong&gt;开始时&lt;/strong&gt;数据库中的状态创建的，因此事务不会读取其他事务尚未提交的修改。具体工作情况如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于读取操作，事务会查找符合条件的数据行，并选择符合其事务开始时间的数据版本进行读取。&lt;/li&gt;
+&lt;li&gt;如果某个数据行有多个版本，&lt;strong&gt;事务会选择不晚于其开始时间的最新版本，确保事务只读取在它开始之前已经存在的数据。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;事务读取的是快照数据，因此其他并发事务对数据行的修改不会影响当前事务的读取操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;写操作（INSERT、UPDATE、DELETE）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当一个事务执行写操作时，它会生成一个新的数据版本，并将修改后的数据写入数据库。具体工作情况如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于写操作，事务会为要修改的数据行创建一个新的版本，并将修改后的数据写入新版本。&lt;/li&gt;
+&lt;li&gt;新版本的数据带有当前事务的版本号，以便其他事务能够正确读取相应版本的数据。&lt;/li&gt;
+&lt;li&gt;原始版本的数据仍然存在，供其他事务使用快照读取，这保证了其他事务不受当前事务的写操作影响。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;事务提交和回滚&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当一个事务提交时，它所做的修改将成为数据库的最新版本，并且对其他事务可见。&lt;/li&gt;
+&lt;li&gt;当一个事务回滚时，它所做的修改将被撤销，对其他事务不可见。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;版本的回收&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;为了防止数据库中的版本无限增长，MVCC 会&lt;strong&gt;定期进行版本的回收&lt;/strong&gt;。回收机制会删除已经不再需要的旧版本数据，从而释放空间。&lt;/p&gt;
+&lt;p&gt;MVCC 通过创建数据的多个版本和使用快照读取来实现并发控制。&lt;strong&gt;读操作使用旧版本数据的快照，写操作创建新版本&lt;/strong&gt;，并确保原始版本仍然可用。这样，不同的事务可以在一定程度上并发执行，而不会相互干扰，从而提高了数据库的并发性能和数据一致性。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;非锁定读和锁定读&#34;&gt;&lt;a href=&#34;#%e9%9d%9e%e9%94%81%e5%ae%9a%e8%af%bb%e5%92%8c%e9%94%81%e5%ae%9a%e8%af%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;非锁定读和锁定读
+&lt;/h2&gt;&lt;h3 id=&#34;非锁定读&#34;&gt;&lt;a href=&#34;#%e9%9d%9e%e9%94%81%e5%ae%9a%e8%af%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;非锁定读
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;在 &lt;code&gt;InnoDB&lt;/code&gt; 存储引擎中，MVCC 就是对非锁定读的实现。如果读取的行正在执行 &lt;code&gt;DELETE&lt;/code&gt; 或 &lt;code&gt;UPDATE&lt;/code&gt; 操作，这时读取操作不会等行上锁的释放，而是读取行的快照数据，对于这种读取历史数据的方式，我们叫它快照读 (snapshot read)&lt;/p&gt;
+&lt;p&gt;在 &lt;code&gt;Repeatable Read&lt;/code&gt; 和 &lt;code&gt;Read Committed&lt;/code&gt; 两个隔离级别下，如果是执行&lt;strong&gt;普通的 &lt;code&gt;select&lt;/code&gt; 语句&lt;/strong&gt;（不包括 &lt;code&gt;select ... lock in share mode&lt;/code&gt; ,&lt;code&gt;select ... for update&lt;/code&gt;）则会使用 &lt;code&gt;一致性非锁定读（MVCC）&lt;/code&gt;。并且在 &lt;code&gt;Repeatable Read&lt;/code&gt; 下 &lt;code&gt;MVCC&lt;/code&gt; 实现了可重复读和防止&lt;strong&gt;部分幻读&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;锁定读&#34;&gt;&lt;a href=&#34;#%e9%94%81%e5%ae%9a%e8%af%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;锁定读
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;如果执行的是下列语句，就是 锁定读&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;select ... lock in share mode&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;select ... for update&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;insert&lt;/code&gt;、&lt;code&gt;update&lt;/code&gt;、&lt;code&gt;delete&lt;/code&gt; 操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在锁定读下，读取的是数据的最新版本，这种读也被称为&lt;strong&gt;当前读&lt;/strong&gt;。锁定读会对读取到的记录加锁。&lt;/p&gt;
+&lt;p&gt;在&lt;strong&gt;非锁定读&lt;/strong&gt;下，即使读取的记录已被其它事务加上 &lt;code&gt;X&lt;/code&gt; 锁，这时记录也是可以被读取的，因为&lt;strong&gt;此时读取的是快照数据&lt;/strong&gt;。在 &lt;code&gt;Repeatable Read&lt;/code&gt; 下 &lt;code&gt;MVCC&lt;/code&gt; &lt;strong&gt;防止了部分幻读，这边的 “部分”&lt;/strong&gt; 是指在 &lt;strong&gt;非锁定读&lt;/strong&gt;  情况下，只能读取到第一次查询之前所插入的数据（根据 Read View 判断数据可见性，Read View 在第一次查询时生成）。但是如果是&lt;strong&gt;当前读&lt;/strong&gt;，每次读取的都是最新数据，这时&lt;strong&gt;如果两次查询中间有其它事务插入数据，就会产生幻读&lt;/strong&gt;。所以， &lt;strong&gt;&lt;code&gt;InnoDB&lt;/code&gt; 在实现&lt;code&gt;Repeatable Read&lt;/code&gt; 时，如果执行的是当前读，则会对读取的记录使用 临键锁  ，来防止其它事务在间隙间插入数据&lt;/strong&gt;。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;read-view&#34;&gt;&lt;a href=&#34;#read-view&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;Read View&lt;/strong&gt;
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;ReadView 主要用来做可见性判断，里面保存了一些字段&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/04/%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6mvcc/image.png&#34;
+	width=&#34;850&#34;
+	height=&#34;343&#34;
+	srcset=&#34;/zh-cn/post/2025/04/%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6mvcc/image_hu_d994d37b700980c4.png 480w, /zh-cn/post/2025/04/%E5%A4%9A%E7%89%88%E6%9C%AC%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6mvcc/image_hu_1d012962b71fa609.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;247&#34;
+		data-flex-basis=&#34;594px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;读已提交和可重复读的隔离级别下-mvcc-差异&#34;&gt;&lt;a href=&#34;#%e8%af%bb%e5%b7%b2%e6%8f%90%e4%ba%a4%e5%92%8c%e5%8f%af%e9%87%8d%e5%a4%8d%e8%af%bb%e7%9a%84%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab%e4%b8%8b-mvcc-%e5%b7%ae%e5%bc%82&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;读已提交和可重复读的隔离级别下 MVCC 差异
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在事务隔离级别 &lt;code&gt;RC&lt;/code&gt; 和 &lt;code&gt;RR&lt;/code&gt;下，  通过&lt;code&gt;MVCC解决&lt;/code&gt;执行普通的 SEELCT 操作，但它们&lt;strong&gt;生成 &lt;code&gt;Read View&lt;/code&gt; 的时机却不同&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在 RC 隔离级别下的&lt;strong&gt;每次&lt;code&gt;select&lt;/code&gt; 查询&lt;/strong&gt;前都生成一个&lt;code&gt;Read View&lt;/code&gt; (m_ids 列表)&lt;/li&gt;
+&lt;li&gt;在 RR 隔离级别下只在事务开始后&lt;strong&gt;第一次&lt;code&gt;select&lt;/code&gt;&lt;/strong&gt; 数据前生成一个&lt;code&gt;Read View&lt;/code&gt;（m_ids 列表）&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;mvcc临键锁防止幻读&#34;&gt;&lt;a href=&#34;#mvcc%e4%b8%b4%e9%94%ae%e9%94%81%e9%98%b2%e6%ad%a2%e5%b9%bb%e8%af%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MVCC+临键锁防止幻读
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;1、执行普通 &lt;code&gt;select&lt;/code&gt;，此时会以 &lt;code&gt;MVCC&lt;/code&gt; 快照读的方式读取数据&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在快照读的情况下，RR 隔离级别只会&lt;strong&gt;在事务开启后的第一次查询生成 &lt;code&gt;Read View&lt;/code&gt;&lt;/strong&gt; ，并使用至事务提交。所以在生成 &lt;code&gt;Read View&lt;/code&gt; 之后其它事务所做的更新、插入记录版本对当前事务并&lt;strong&gt;不可见&lt;/strong&gt;，实现了可重复读和防止快照读下的 “幻读”&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2、执行 select&amp;hellip;for update/lock in share mode、insert、update、delete 等当前读&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在当前读下，读取的都是最新的数据，如果其它事务有插入新的记录，并且刚好在当前事务查询范围内，就会产生幻读！&lt;code&gt;InnoDB&lt;/code&gt; 使用&lt;strong&gt;临键锁&lt;/strong&gt;来防止这种情况。当执行当前读时，会锁定读取到的记录的同时，锁定它们的间隙，防止其它事务在查询范围内插入数据。只要我不让你插入，就不会发生幻读。&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>

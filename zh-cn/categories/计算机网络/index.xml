@@ -7,7 +7,48 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 16 Dec 2024 12:24:02 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Apr 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>IPV6、广播地址</title>
+        <link>/zh-cn/post/2025/04/ipv6%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80/</link>
+        <pubDate>Wed, 02 Apr 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/04/ipv6%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;初始动机&lt;/strong&gt;：应付“32-bit 地址空间耗尽”问题（CIDR 和 NAT 都无法从根本上解决地址短缺问题），增加地址空间，&lt;strong&gt;IPV6 没有子网掩码&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;IPv6 地址&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/04/ipv6%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80/image.png&#34;
+	width=&#34;1111&#34;
+	height=&#34;461&#34;
+	srcset=&#34;/zh-cn/post/2025/04/ipv6%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80/image_hu_d45e2abb3fa17e8.png 480w, /zh-cn/post/2025/04/ipv6%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80/image_hu_fee9034d82ffda20.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;240&#34;
+		data-flex-basis=&#34;578px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;由网络前缀和接口标识两个部分组成。网络前缀有 n 位，相当于 IPv4 地址中的网络号；那么接口标识有（128-n）位，相当于 IPv4 地址中的主机号。网络前缀相当于 IPV4 中的网络位，用来标识区分不同的网络范围，接口标识就是在这个网络范围内区分不同的主机。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;地址长度为 128bit，是 IPv4 地址长度的 4 倍&lt;/li&gt;
+&lt;li&gt;IPv6 地址空间数量约为 3*1038&lt;/li&gt;
+&lt;li&gt;IPv6 地址表示法，冒分十六进制，x : x : x : x : x : x : x : x
+&lt;ul&gt;
+&lt;li&gt;简化方法：每个 x 前面的 0 可省略，地址中包含的连续两个或多个均为 0 的组，可以用双冒号“::”来代替, 但是“::”只能出现 1 次&lt;/li&gt;
+&lt;li&gt;简化前地址，2001:0DA8:0000:0000:200C:0000:0000:00A5&lt;/li&gt;
+&lt;li&gt;简化后地址，2001:DA8:0000:0000:200C::A5&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由于无法在短时间内将网络中的全部系统从 IPv4 升级到 IPv6。最有效的过渡方案便是 IPv6 地址支持内嵌 IPv4 地址。啥意思呢？就是说可以使用 IPV6 的地址格式来表示一个 IPV4 的地址，换句话说就是把 IPv4 地址转变为了一种特殊形式的 IPv6 地址：&amp;ldquo;X:X:X:X:X:X:d.d.d.d&amp;rdquo; , 其中&amp;quot;X:X:X:X:X:X&amp;quot;的前 80 位设为 0，后 16 位设为 1，然后再跟 IPv4 地址。例如，IPv4 地址是 192.168.0.1，那么嵌入在 IPv6 协议中呈现的地址为::FFFF:192.168.0.1。&lt;/p&gt;
+&lt;p&gt;IPv6 地址有三种主要类型：&lt;/p&gt;
+&lt;p&gt;单播地址（Unicast Address）： 用于唯一标识单个接口。点对点通信&lt;br&gt;
+组播地址（Multicast Address）： 用于标识一组接口，数据包发送到组播地址时，传输到所有属于该地址的接口。一对多通信&lt;br&gt;
+任播地址（Anycast Address）： 用于标识一组接口，但数据包只传输到距离发送者最近的一个接口也就是一个计算机。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>【考前预习】4.计算机网络—网络层</title>
         <link>/zh-cn/post/2024/12/%E8%80%83%E5%89%8D%E9%A2%84%E4%B9%A04.%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E5%B1%82/</link>
         <pubDate>Mon, 16 Dec 2024 12:24:02 +0000</pubDate>
