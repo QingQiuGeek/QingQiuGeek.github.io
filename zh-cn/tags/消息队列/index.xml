@@ -7,7 +7,78 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 30 Aug 2025 15:06:01 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 04 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>消息队列如何消息不丢失、不重复消费、有序性、消息堆积</title>
+        <link>/zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/</link>
+        <pubDate>Thu, 04 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/</guid>
+        <description>&lt;h2 id=&#34;消息不丢失&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e4%b8%8d%e4%b8%a2%e5%a4%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息不丢失
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/image.png&#34;
+	width=&#34;1160&#34;
+	height=&#34;280&#34;
+	srcset=&#34;/zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/image_hu_f7a11945326350ca.png 480w, /zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/image_hu_e5dab9cdbf71d236.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;414&#34;
+		data-flex-basis=&#34;994px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;生产者：发送消息给 Broker，要处理 Broker 的响应，若响应失败则重试发送、报警等，确保 Broker 成功接收消息。&lt;/li&gt;
+&lt;li&gt;Broker：接收到消息后**刷盘存储，**然后响应给生产者，如果是集群，那么确保一半写成功。&lt;/li&gt;
+&lt;li&gt;消费者：确保消息拿到并执行完业务逻辑再响应给 Broker。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;不重复消费&#34;&gt;&lt;a href=&#34;#%e4%b8%8d%e9%87%8d%e5%a4%8d%e6%b6%88%e8%b4%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;不重复消费
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;生产者：消息不重复发送，比如确保收到正确的 Broker 响应，那么就可能存在 Broker 已经写入了，当时响应由于网络原因生产者没有收到，然后生产者又重发了一次，此时消息就重复了。&lt;/li&gt;
+&lt;li&gt;消费者：拿到消息消费，业务逻辑已经走完了，事务提交了，更新 offset 时消费者挂了，另一个消费者顶上，此时 offset 还没更新，于是又拿到刚才那条消息再消费一遍。于是消息又重复了。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;可以看到正常业务而言消息重复是不可避免的，因此我们只能从另一个角度来解决重复消息的问题。关键点就是&lt;strong&gt;幂等&lt;/strong&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;version 即版本号控制，对比消息中的版本号和数据库中的版本号。&lt;/li&gt;
+&lt;li&gt;数据库的约束例如唯一键，例如 insert into update on duplicate key&amp;hellip; 。&lt;/li&gt;
+&lt;li&gt;比如处理订单这种，记录处理过的订单 ID，假如有重复的消息过来，先判断下这个 ID 是否已经被处理过了，如果没处理再进行下一步。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;有序性&#34;&gt;&lt;a href=&#34;#%e6%9c%89%e5%ba%8f%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;有序性
+&lt;/h2&gt;&lt;p&gt;有序性即先发送的消息先被消费，实际生产可能因为&lt;strong&gt;网络延迟和消息丢失导致无序。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;时间戳&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在消息中添加时间戳，记录消息的发送时间。消费者可以根据时间戳对消息进行排序，从而保证处理顺序。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：这种方法依赖于生产者和消费者的时间同步，如果时间不同步，可能会导致排序错误。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;序列号&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在消息中添加序列号，记录消息的发送顺序。消费者可以根据序列号对消息进行排序，从而保证处理顺序。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;：如果消息丢失，序列号可能会出现断层，需要额外的机制来处理这种情况。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;全局有序&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/image-1.png&#34;
+	width=&#34;1107&#34;
+	height=&#34;246&#34;
+	srcset=&#34;/zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/image-1_hu_9f7d8bf4958c85ba.png 480w, /zh-cn/post/2025/09/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%A6%82%E4%BD%95%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9%E6%9C%89%E5%BA%8F%E6%80%A7%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF/image-1_hu_baaa13139da20fee.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;450&#34;
+		data-flex-basis=&#34;1080px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;局部有序&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;比如 kafka，一个 topic 多个分区，单个分区内消息有序，一个分区只能由一个消费者组中的一个消费者消费，保证了有序性、不重复消费。&lt;/p&gt;
+&lt;h2 id=&#34;消息堆积&#34;&gt;&lt;a href=&#34;#%e6%b6%88%e6%81%af%e5%a0%86%e7%a7%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;消息堆积
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;消息堆积原因：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;生产速度与消费速度不匹配&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;消息消费失败反复重试，如果是 bug 则处理 bug&lt;/p&gt;
+&lt;p&gt;消费者消费能力弱：优化下消费逻辑，比如之前是一条一条消费，可以改成批量消费。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;假如逻辑我们已经都优化了，但还是慢，那就得考虑&lt;strong&gt;水平扩容&lt;/strong&gt;了，增加 Topic 的队列数和消费者数量， 注意队列数一定要增加，不然新增加的消费者是没东西消费的。一个 Topic 中，一个队列只会分配给一个消费者。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>如何设计消息中间件</title>
         <link>/zh-cn/post/2025/08/%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/</link>
         <pubDate>Sat, 30 Aug 2025 15:06:01 +0000</pubDate>

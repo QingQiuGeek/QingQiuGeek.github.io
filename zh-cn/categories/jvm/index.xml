@@ -7,7 +7,36 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Tue, 02 Sep 2025 18:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/jvm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 05 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/jvm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>volatile关键字及内存屏障</title>
+        <link>/zh-cn/post/2025/09/volatile%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%8A%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C/</link>
+        <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/volatile%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%8A%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C/</guid>
+        <description>&lt;h2 id=&#34;volatile&#34;&gt;&lt;a href=&#34;#volatile&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;volatile
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;volatile&lt;/code&gt; 的主要作用是确保变量的&lt;strong&gt;可见性&lt;/strong&gt;和&lt;strong&gt;有序性&lt;/strong&gt;，但不保证操作的&lt;strong&gt;原子性，&lt;/strong&gt;&lt;code&gt;volatile&lt;/code&gt; 变量的读写操作会直接作用于主内存，而不是线程的本地缓存。这确保了当一个线程修改了 &lt;code&gt;volatile&lt;/code&gt; 变量时，这个修改会立即反映到主内存中，从而对其他线程可见。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&#34;可见性&#34;&gt;&lt;a href=&#34;#%e5%8f%af%e8%a7%81%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;可见性&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定义&lt;/strong&gt;：当一个线程修改了一个 &lt;code&gt;volatile&lt;/code&gt; 修饰的变量时，其他线程能够立即看到这个变量的最新值。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实现机制&lt;/strong&gt;：&lt;code&gt;volatile&lt;/code&gt; 修饰的变量的读写操作都会直接作用于主内存，而不是线程的本地缓存。这确保了变量的值对所有线程都是可见的。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;h3 id=&#34;禁止指令重排序&#34;&gt;&lt;a href=&#34;#%e7%a6%81%e6%ad%a2%e6%8c%87%e4%bb%a4%e9%87%8d%e6%8e%92%e5%ba%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;禁止指令重排序&lt;/strong&gt;
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定义&lt;/strong&gt;：在没有 &lt;code&gt;volatile&lt;/code&gt; 的情况下，编译器和处理器可能会对指令进行重排序以优化性能。&lt;code&gt;volatile&lt;/code&gt; 通过插入&lt;strong&gt;内存屏障&lt;/strong&gt;来禁止对 &lt;code&gt;volatile&lt;/code&gt; 变量的指令重排序。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存屏障&lt;/strong&gt;：&lt;code&gt;volatile&lt;/code&gt; 通过内存屏障确保对变量的读写操作按照程序定义的顺序执行。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;内存屏障&#34;&gt;&lt;a href=&#34;#%e5%86%85%e5%ad%98%e5%b1%8f%e9%9a%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;内存屏障
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;一种用于控制内存操作顺序的机制。内存屏障的主要作用是防止编译器和 CPU 对指令进行重排序，从而确保多线程环境下的内存可见性和操作顺序。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Load Barrier&lt;/strong&gt;（加载屏障）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Store Barrier&lt;/strong&gt;（存储屏障）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;StoreLoad Barrier&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;LoadStore Barrier&lt;/strong&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Java的transient关键字</title>
         <link>/zh-cn/post/2025/09/java%E7%9A%84transient%E5%85%B3%E9%94%AE%E5%AD%97/</link>
         <pubDate>Tue, 02 Sep 2025 18:39:19 +0000</pubDate>

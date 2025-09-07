@@ -7,7 +7,25 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Wed, 02 Apr 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 06 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>TCP粘包</title>
+        <link>/zh-cn/post/2025/09/tcp%E7%B2%98%E5%8C%85/</link>
+        <pubDate>Sat, 06 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/tcp%E7%B2%98%E5%8C%85/</guid>
+        <description>&lt;h2 id=&#34;为什么说-tcp-是面向字节流的协议udp-是面向报文的协议&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%af%b4-tcp-%e6%98%af%e9%9d%a2%e5%90%91%e5%ad%97%e8%8a%82%e6%b5%81%e7%9a%84%e5%8d%8f%e8%ae%aeudp-%e6%98%af%e9%9d%a2%e5%90%91%e6%8a%a5%e6%96%87%e7%9a%84%e5%8d%8f%e8%ae%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么说 TCP 是面向字节流的协议，UDP 是面向报文的协议？
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;原因在于两者发送方的机制不同，UDP 传输时，系统不会对报文进行拆分，在封装好 UDP 头部后就会交给网络层，所以发出去的 UDP 报文就是完整的一个消息，也就是每个 UDP 报文就是一个消息的边界。而 TCP 协议则会对发出消息拆分成多个报文，如果接收方不知道发送方的消息长度，就不知道消息的边界，无法读取有效的消息，因此 TCP 传输不能认为一个用户消息对应一个 TCP 报文，所以说 TCP 是面向字节流的协议。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;当两个消息的部分内容被分到同一个 TCP 报文，就出现了粘包，这时接收方不知道消息的边界的话，无法读出有效的消息。解决方式在于如何分包，确定消息边界。一般有三种方式分包的方式：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;固定长度的消息：每个消息长度固定，但该方式灵活度不高&lt;/li&gt;
+&lt;li&gt;特殊字符作为边界：两个用户消息之间插入特殊字符，如果刚好消息内容里有这个特殊字符，那么要在发送时对这个字符转义，避免被接收方当作消息的边界点而解析到无效的数据。&lt;/li&gt;
+&lt;li&gt;自定义消息结构：我们可以自定义一个消息结构，由包头和数据组成，其中包头包是固定大小的，而且包头里有一个字段来说明紧随其后的数据有多大。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>IPV6、广播地址</title>
         <link>/zh-cn/post/2025/04/ipv6%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80/</link>
         <pubDate>Wed, 02 Apr 2025 09:39:19 +0000</pubDate>

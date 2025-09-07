@@ -7,7 +7,53 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Tue, 10 Jun 2025 15:18:53 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 05 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>top命令和ps命令</title>
+        <link>/zh-cn/post/2025/09/top%E5%91%BD%E4%BB%A4%E5%92%8Cps%E5%91%BD%E4%BB%A4/</link>
+        <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/top%E5%91%BD%E4%BB%A4%E5%92%8Cps%E5%91%BD%E4%BB%A4/</guid>
+        <description>&lt;h2 id=&#34;top&#34;&gt;&lt;a href=&#34;#top&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;top
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;主要显示的是&lt;strong&gt;进程&lt;/strong&gt;信息。&lt;/li&gt;
+&lt;li&gt;默认情况下，&lt;code&gt;top&lt;/code&gt; 显示的是系统中当前活动的进程，并且会&lt;strong&gt;实时更新&lt;/strong&gt;（默认每 3 秒刷新一次）。&lt;/li&gt;
+&lt;li&gt;它显示的是进程的资源占用情况，如 CPU 使用率、内存使用率、进程 ID（PID）、进程优先级等。&lt;/li&gt;
+&lt;li&gt;如果需要查看线程，可以通过特定选项如 &lt;strong&gt;&lt;code&gt;-H切换到线程模式，&lt;/code&gt;来显示线程信息&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;ps&#34;&gt;&lt;a href=&#34;#ps&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ps
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;主要显示的是&lt;strong&gt;进程&lt;/strong&gt;信息。&lt;/li&gt;
+&lt;li&gt;默认情况下，&lt;code&gt;ps&lt;/code&gt; 显示的是当前终端会话中的进程信息，&lt;strong&gt;静态显示&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;可以通过不同的选项（如 &lt;code&gt;-e&lt;/code&gt;、&lt;code&gt;-a&lt;/code&gt;、&lt;code&gt;-x&lt;/code&gt; 等）来显示系统中所有进程或特定用户的所有进程。&lt;/li&gt;
+&lt;li&gt;如果需要查看线程，可以通过 &lt;strong&gt;&lt;code&gt;-L&lt;/code&gt; 选项来显示线程信息&lt;/strong&gt;。每个线程也会被显示为一行，但可以通过 &lt;code&gt;ps -L -p &amp;lt;PID&amp;gt;&lt;/code&gt; 来查看特定进程的所有线程。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;如何定位到进程的某个线程&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%ae%9a%e4%bd%8d%e5%88%b0%e8%bf%9b%e7%a8%8b%e7%9a%84%e6%9f%90%e4%b8%aa%e7%ba%bf%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何定位到进程的某个线程
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;找到进程 ID（PID）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ps -ef | grep &amp;lt;进程名&amp;gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;显示进程的所有线程&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;使用 &lt;code&gt;ps -L&lt;/code&gt; 选项可以显示指定进程的所有线程&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/09/top%E5%91%BD%E4%BB%A4%E5%92%8Cps%E5%91%BD%E4%BB%A4/image.png&#34;
+	width=&#34;1446&#34;
+	height=&#34;931&#34;
+	srcset=&#34;/zh-cn/post/2025/09/top%E5%91%BD%E4%BB%A4%E5%92%8Cps%E5%91%BD%E4%BB%A4/image_hu_1e797ac9c2d04920.png 480w, /zh-cn/post/2025/09/top%E5%91%BD%E4%BB%A4%E5%92%8Cps%E5%91%BD%E4%BB%A4/image_hu_d960372203ebcfe2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;155&#34;
+		data-flex-basis=&#34;372px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;kill--9-和-2&#34;&gt;&lt;a href=&#34;#kill--9-%e5%92%8c-2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;kill -9 和-2
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;-9  强制终止进程的信号，它会立即终止目标进程，不会给进程任何清理资源的机会。&lt;/p&gt;
+&lt;p&gt;-2  中断信号，通常用于通知进程用户请求的中断。这个信号可以被进程捕获、阻塞或忽略。如果进程没有处理这个信号，它会默认终止进程。通常用于正常终止进程，给进程一个机会来清理资源、保存状态等。&lt;/p&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>服务器CPU飙升该如何排查&amp;火焰图</title>
         <link>/zh-cn/post/2025/06/%E6%9C%8D%E5%8A%A1%E5%99%A8cpu%E9%A3%99%E5%8D%87%E8%AF%A5%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%E7%81%AB%E7%84%B0%E5%9B%BE/</link>
         <pubDate>Tue, 10 Jun 2025 15:18:53 +0000</pubDate>

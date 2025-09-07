@@ -7,7 +7,129 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Wed, 04 Sep 2024 00:12:24 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 06 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title></title>
+        <link>/zh-cn/post/2025/09/</link>
+        <pubDate>Sat, 06 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/</guid>
+        <description>&lt;h2 id=&#34;cap-概念&#34;&gt;&lt;a href=&#34;#cap-%e6%a6%82%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CAP 概念
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;CAP&lt;/strong&gt;  即  &lt;strong&gt;Consistency（一致性）&lt;/strong&gt;、&lt;strong&gt;Availability（可用性）&lt;/strong&gt;、&lt;strong&gt;Partition Tolerance（分区容错性）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;**一致性：**所有节点访问同一份最新的数据副本&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可用性:&lt;/strong&gt;   非故障的节点在合理的时间内返回合理的响应（不是错误或者超时的响应）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分区容错性：&lt;/strong&gt;  分布式系统出现网络分区的时候，仍然能够对外提供服务。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;cpap&#34;&gt;&lt;a href=&#34;#cpap&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CP&amp;amp;AP
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;分布式系统中，多个节点之间的网络本来是连通的，但是因为某些故障某些节点之间不连通了，整个网络就分成了几块区域，这就是&lt;strong&gt;网络分区&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;当发生网络分区的时候，如果要继续服务，那么 C 和 A 只能 2 选 1。也就是说当网络分区之后 P 是前提，分区容错性是必须要实现的。&lt;/p&gt;
+&lt;p&gt;因此，&lt;strong&gt;分布式系统理论上不可能选择 CA 架构，只能选择 CP 或者 AP 架构。&lt;/strong&gt; 比如 ZooKeeper、HBase 就是 CP 架构，Cassandra、Eureka 就是 AP 架构，Nacos 不仅支持 CP 架构也支持 AP 架构。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;为啥没有-ca-架构&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e5%95%a5%e6%b2%a1%e6%9c%89-ca-%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为啥没有 CA 架构
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;举个例子：若系统出现“分区”，系统中的某个节点在进行写操作。为了保证 C， 必须要禁止其他节点的读写操作，这就和 A 发生冲突了。如果为了保证 A，其他节点的读写操作正常的话，那就和 C 发生冲突了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;当然如果系统大部分状态是网络分区正常，也就说不需要保证 P 的时候，C 和 A 能够同时保证。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;base-概念&#34;&gt;&lt;a href=&#34;#base-%e6%a6%82%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;BASE 概念
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;BASE&lt;/strong&gt;  即  &lt;strong&gt;Basically Available（基本可用）&lt;/strong&gt;、&lt;strong&gt;Soft-state（软状态）&lt;/strong&gt;  和  &lt;strong&gt;Eventually Consistent（最终一致性）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;**基本可用：**分布式系统出现故障时允许损失部分可用性。如响应时间拉长、部分系统功能不能访问。&lt;/p&gt;
+&lt;p&gt;**软状态：**允许系统中的数据存在中间状态，但不会影响系统的整体可用性&lt;/p&gt;
+&lt;p&gt;**最终一致性：**系统中所有的数据副本，在经过一段时间的同步后，最终能够达到一个一致的状态，不需要保证实时的数据一致性。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;核心思想&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;即使无法做到强一致性，但每个应用都可以根据自身业务特点，采用适当的方式来使系统达到最终一致性。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在上面的 CAP 中说过，如果出现网络分区，那么通常要在 CP 和 AP 中权衡，而如果没有网络分区，那么就要考虑如何保证 CA 了，所以说 BASE 算是 AP 方案的延申补充。&lt;/p&gt;
+&lt;p&gt;因此，AP 方案&lt;strong&gt;只是在系统发生分区的时候放弃一致性&lt;/strong&gt;，而不是永远放弃一致性。**在分区故障恢复后，系统应该达到最终一致性。**这一点其实就是 BASE 理论延伸的地方，由网络分区的 AP 变成网络不分区的 CA。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;paxos-算法&#34;&gt;&lt;a href=&#34;#paxos-%e7%ae%97%e6%b3%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Paxos 算法
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Paxos 算法是第一个被证明完备的分布式系统共识算法。共识算法的作用是**让分布式系统中的多个节点之间对某个提案达成一致的看法。**提案的含义在分布式系统中十分丰富，比如  Leader 节点选举、多个事件发生的顺序。&lt;/p&gt;
+&lt;p&gt;Paxos 算法 前提条件之一是&lt;strong&gt;没有恶意节点&lt;/strong&gt;，即不存在拜占庭将军问题。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;paxos-核心&#34;&gt;&lt;a href=&#34;#paxos-%e6%a0%b8%e5%bf%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Paxos 核心
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Basic Paxos 算法&lt;/strong&gt;：描述的是多节点之间如何就某个值达成共识。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multi-Paxos 思想&lt;/strong&gt;：描述的是执行多个 Basic Paxos 实例，就一系列值达成共识。 说白了就是执行多次 Basic Paxos ，核心还是 Basic Paxos 。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Basic Paxos 算法 中存在 3 个重要的角色：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;提议者（Proposer）&lt;/strong&gt;：也可以叫做协调者（coordinator），提议者负责接受客户端的请求并发起提案。提案信息通常包括提案编号 (Proposal ID) 和提议的值 (Value)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;接受者（Acceptor）&lt;/strong&gt;：也可以叫做投票员（voter），负责对提议者的提案进行投票，同时需要记住自己的投票历史；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;学习者（Learner）&lt;/strong&gt;：如果有&lt;strong&gt;超过半数接受者&lt;/strong&gt;就某个提议达成了共识，那么学习者就需要接受这个提议，并就该提议作出运算，然后将运算结果返回给客户端。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;为了减少实现该算法所需的节点数，一个节点可以身兼多个角色。并且，一个提案被选定需要被半数以上的 Acceptor 接受。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;raft-算法&#34;&gt;&lt;a href=&#34;#raft-%e7%ae%97%e6%b3%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Raft 算法
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://javaguide.cn/distributed-system/protocol/raft-algorithm.html#_2-1-%E8%8A%82%E7%82%B9%E7%B1%BB%E5%9E%8B&#34;  title=&#34;Raft 算法详解 | JavaGuide&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Raft 算法详解 | JavaGuide&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;paxos 算法的简化，更易实现。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;zab-协议&#34;&gt;&lt;a href=&#34;#zab-%e5%8d%8f%e8%ae%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ZAB 协议
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://javaguide.cn/distributed-system/distributed-process-coordination/zookeeper/zookeeper-intro.html#zab-%E5%8D%8F%E8%AE%AE%E5%92%8C-paxos-%E7%AE%97%E6%B3%95&#34;  title=&#34;ZooKeeper相关概念总结(入门) | JavaGuide&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ZooKeeper 相关概念总结(入门) | JavaGuide&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_73181349/article/details/137792438&#34;  title=&#34;大数据—Zookeeper集群入门及使用_大数据动物园-CSDN博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;大数据—Zookeeper 集群入门及使用_大数据动物园-CSDN 博客&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>雪花算法生成分布式ID</title>
+        <link>/zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/</link>
+        <pubDate>Thu, 04 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;参考&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/687957959&#34;  title=&#34;https://zhuanlan.zhihu.com/p/687957959&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://zhuanlan.zhihu.com/p/687957959&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gg2002.github.io/2025/03/21/%E9%9D%A2%E7%BB%8F%E7%89%B9%E4%BE%9B/interview-distributed-id-generator/&#34;  title=&#34;分布式唯一 ID 生成算法笔记 | 羽殇之舞的个人博客&#34;
+     target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;分布式唯一 ID 生成算法笔记 | 羽殇之舞的个人博客&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;雪花算法&#34;&gt;&lt;a href=&#34;#%e9%9b%aa%e8%8a%b1%e7%ae%97%e6%b3%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;雪花算法
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;64Bit，强依赖时间戳，所以整体趋势会随着时间递增。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1bit 不用：因为二进制中最高位是符号位，1 表示负数，0 表示正数，生成的 id 一般都是用整数，所以最高位固定为 0&lt;/li&gt;
+&lt;li&gt;41bit 时间戳：这里采用的就是当前系统的具体时间，单位为毫秒&lt;/li&gt;
+&lt;li&gt;10bit 工作机器 ID（workerId）：每台机器分配一个 id，这样可以标示不同的机器，但是上限为 1024（2^10 次方），标示一个集群某个业务最多部署的机器个数上限&lt;/li&gt;
+&lt;li&gt;12bit 序列号（自增域）：表示在某一毫秒下，这个自增域最大可以分配的 bit 个数，在当前这种配置下，每个节点每毫秒可以分配 2^12 = 4096 个不同的 ID，当达到最大值时会从 0 重新开始。&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/image.png&#34;
+	width=&#34;947&#34;
+	height=&#34;273&#34;
+	srcset=&#34;/zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/image_hu_84e856cf73326114.png 480w, /zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/image_hu_c877b33c3e6a2d7a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;346&#34;
+		data-flex-basis=&#34;832px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;时间回拨&#34;&gt;&lt;a href=&#34;#%e6%97%b6%e9%97%b4%e5%9b%9e%e6%8b%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;时间回拨
+&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;当出现虚拟机、容器时间矫正或手动调整时间、硬件故障时会出现时间回拨，即系统时间被调整到一个比之前时间更早的时刻。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;将原本 10 位的机器码拆分成 3 位时钟序列及 7 位机器码。发生时间回拨的时候，时间已经发生了变化，那么这时将时钟序列新增 1 位，重新定义整个雪花 Id。为了&lt;strong&gt;避免实例重启引起时间序列丢失&lt;/strong&gt;，因此时钟序列最好通过 DB 存储起来。&lt;/p&gt;
+&lt;p&gt;这当然会导致分布式实例规模由 210(1024)2^{10}(1024)210(1024) 降至 27(128)2^7(128)27(128)，同时每个分布式实例支持最多 23(8)2^3(8)23(8) 次时间回拨。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/image-1.png&#34;
+	width=&#34;976&#34;
+	height=&#34;273&#34;
+	srcset=&#34;/zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/image-1_hu_ba30cd7c233ccbc1.png 480w, /zh-cn/post/2025/09/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E7%94%9F%E6%88%90%E5%88%86%E5%B8%83%E5%BC%8Fid/image-1_hu_b8ecd0c63edc4ba1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;357&#34;
+		data-flex-basis=&#34;858px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>一文入门大数据准流式计算引擎 Spark【万字详解，全网最新】</title>
         <link>/zh-cn/post/2024/09/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%87%86%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E-spark%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%85%A8%E7%BD%91%E6%9C%80%E6%96%B0/</link>
         <pubDate>Wed, 04 Sep 2024 00:12:24 +0000</pubDate>

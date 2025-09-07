@@ -12,7 +12,7 @@
 <meta property='og:description' content="博学而笃行,切问而近思">
 <meta property='og:url' content='/zh-cn/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2025-09-06T12:39:19&#43;00:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2025-09-07T12:39:19&#43;00:00 '/>
 <meta name="twitter:title" content="青秋博客">
 <meta name="twitter:description" content="博学而笃行,切问而近思"><link rel="alternate" type="application/rss&#43;xml" href="/zh-cn/index.xml">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -515,7 +515,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             <a href="/zh-cn/page/archives/#2025">
                 
                 <span class="year">2025</span>
-                <span class="count">83篇</span>
+                <span class="count">104篇</span>
                 
             </a>
         </div>
@@ -561,12 +561,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/%E5%B7%B2%E8%A7%A3%E5%86%B3-org.apache.catalina.core.standardservice-173-stopping-service-tomcat/">【已解决】 [ org.apache.catalina.core.StandardService : 173 ] - Stopping service [Tomcat]</a>
+            <a href="/zh-cn/post/2025/02/spring%E7%9A%84bean%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">Spring的bean初始化过程、生命周期</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            【已解决】 [ org.apache.catalina.core.StandardService : 173 ] - Stopping service [Tomcat]都是jar包惹的祸
+            实例化 —&gt; 属性赋值 —&gt; 初始化 —&gt; 销毁。springbean生命周期、初始化过程
         </h3>
         
     </div>
@@ -589,200 +589,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">Jan 23, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 1 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/">疑难杂症录</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/tomcat/">Tomcat</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/%E6%8E%92%E5%9D%91%E7%A8%8B%E5%BA%8F%E5%8C%85jdk.nashorn.internal.ir.debug%E4%B8%8D%E5%AD%98%E5%9C%A8/">【排坑】程序包jdk.nashorn.internal.ir.debug不存在</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            有一定借鉴意义但是没解决问题，idea的classpath中已经包含了nashorn，且可以运行项目，但是maven就是打不成jar包，试来试去都没怀疑maven问题🤓，没想到还真是maven的问题。今天项目打包的时候报这样的错误，jdk8，在idea项目中明明可以找到该文件路径和代码，但是打包打不进去，maven的runner配置，jre原来是jdk17，改成1.8就ok了。参考了一些博客文章，
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Jan 22, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 1 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/">疑难杂症录</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/%E5%A4%A7%E5%9D%91%E5%B7%B2%E8%A7%A3%E5%86%B3docker%E5%AE%B9%E5%99%A8jar%E5%8C%85%E8%BF%9E%E4%B8%8D%E4%B8%8A%E5%8F%A6%E4%B8%80%E4%B8%AA%E5%AE%B9%E5%99%A8%E7%9A%84mysql/">【大坑！已解决】docker容器jar包连不上另一个容器的mysql</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            docker容器jar包连不上另一个容器的mysql
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Jan 21, 2025</time>
+            <time class="article-time--published">Feb 19, 2025</time>
         </div>
         
 
@@ -819,12 +626,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87%E5%BD%95/">疑难杂症录</a> 
+            <a href="/zh-cn/tags/spring/">Spring</a> 
             
             
             , 
             
-            <a href="/zh-cn/tags/docker/">Docker</a> 
+            <a href="/zh-cn/tags/java/">Java</a> 
             
             
         </div>
@@ -848,12 +655,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81%E8%BF%9B%E7%A8%8B%E5%8D%8F%E7%A8%8B%E5%8F%8A%E7%BA%BF%E7%A8%8B%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81dma%E9%9B%B6%E6%8B%B7%E8%B4%9D/">用户态和内核态、进程、协程及线程几种状态、DMA、零拷贝</a>
+            <a href="/zh-cn/post/2025/02/concurrenthashmap/">ConcurrentHashMap</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            用户态、内核态切换，进程和线程、文件传输优化、DMA、零拷贝、sendfile、mmap、pagecache
+            在JDK1.7中用的是Segment数组&#43;链表实现的。Segment是一种可重入锁(ReentrantLock)，链表则用于存储键值对数据。一个ConcurrentHashMap里包含一个Segment，一个Segment里包含一个链表。JDK1.7 的ConcurrentHashMap给每一段数据配一把锁，当一个线程访问其中该段数据的时候，会，那么其他段的数据也能被其他线程访问，能够实现真正的并发访问。Segment默认个数是 16，一旦。
         </h3>
         
     </div>
@@ -876,101 +683,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">Jan 18, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 6 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E9%9B%B6%E6%8B%B7%E8%B4%9D/">零拷贝</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/synchronized%E9%94%81%E5%8D%87%E7%BA%A7/">synchronized锁升级</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            volatile区别在jdk1.5版本（包含）之前，锁的状态只有两种状态：无锁状态和重量级锁状态，只要有线程访问共享资源对象，则锁直接成为重量级锁，jdk1.6版本后，对synchronized锁进行了优化，新加了“偏向锁”和“轻量级锁”，用来减少上下文的切换以提高性能，所以锁就有了4种状态。注意：无锁到偏向锁这不是升级，是在偏向锁打开后，，没有从无锁升级到偏向锁的过程。偏向锁未开启，会直接从无锁升级到轻量级锁，偏向锁开启时，会从偏向锁升级到轻量级锁。
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Jan 16, 2025</time>
+            <time class="article-time--published">Feb 18, 2025</time>
         </div>
         
 
@@ -1031,12 +744,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/java%E5%8F%8D%E5%B0%84%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">Java反射、静态代理、动态代理</a>
+            <a href="/zh-cn/post/2025/02/%E7%BE%8E%E5%8C%96%E4%B8%AA%E4%BA%BAgithub%E4%B8%BB%E9%A1%B5%E9%83%A8%E7%BD%B2github-readme-stats/">美化个人github主页，部署github-readme-stats</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            java反射机制、静态代理、jdk、cglib动态代理
+            美化个人github主页，部署github-readme-stats
         </h3>
         
     </div>
@@ -1059,7 +772,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">Jan 15, 2025</time>
+            <time class="article-time--published">Feb 17, 2025</time>
         </div>
         
 
@@ -1075,7 +788,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 7 分钟
+                阅读时长: 4 分钟
             </time>
         </div>
         
@@ -1096,7 +809,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/java/">Java</a> 
+            <a href="/zh-cn/tags/github/">GitHub</a> 
             
             
         </div>
@@ -1120,12 +833,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/yumdnfapt%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/">yum、dnf、apt包管理工具</a>
+            <a href="/zh-cn/post/2025/02/spring%E4%BA%8B%E5%8A%A1%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF/">Spring事务失效的几种场景</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            rpm、yum、dnf、dpkg、apt、apt-get
+            Spring事务失效的几种场景
         </h3>
         
     </div>
@@ -1148,7 +861,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">Jan 13, 2025</time>
+            <time class="article-time--published">Feb 16, 2025</time>
         </div>
         
 
@@ -1185,7 +898,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/">前端</a> 
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/spring/">Spring</a> 
             
             
         </div>
@@ -1209,12 +927,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2025/01/web%E5%AE%9E%E6%97%B6%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%A1%88/">Web实时消息推送的几种方案</a>
+            <a href="/zh-cn/post/2025/02/mysql%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF%E5%9B%9E%E8%A1%A8%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8/">MySQL索引失效的几种场景、回表、索引覆盖、索引下推</a>
         </h2>
 
         
         <h3 class="article-subtitle">
-            消息推送常见方案、轮询、websocket、sse
+            索引下推、回表、索引覆盖、索引失效场景
         </h3>
         
     </div>
@@ -1237,7 +955,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">Jan 09, 2025</time>
+            <time class="article-time--published">Feb 15, 2025</time>
         </div>
         
 
@@ -1274,22 +992,289 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
+            <a href="/zh-cn/tags/mysql/">MySQL</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/02/synchronized%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E9%87%8D%E5%85%A5%E5%92%8Clock%E5%8C%BA%E5%88%AB/">synchronized如何实现可重入，和Lock区别</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            synchronized实现可重入、与lock区别
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Feb 15, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 1 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/02/%E5%B7%B2%E8%80%81%E5%AE%9E%E5%86%8D%E5%AD%A6%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97/">已老实！再学消息队列、死信队列</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            JMS、AMQP、消息队列、kafka、rocket、rabbitmq
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Feb 14, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 7 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/kafka/">Kafka</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/rocketmq/">RocketMQ</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/02/%E7%AC%A6%E5%8F%B7%E5%BC%95%E7%94%A8%E5%92%8C%E7%9B%B4%E6%8E%A5%E5%BC%95%E7%94%A8%E5%BC%BA%E5%BC%95%E7%94%A8%E8%BD%AF%E5%BC%95%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%E8%99%9A%E5%BC%95%E7%94%A8/">符号引用和直接引用、强引用、软引用、弱引用、虚引用</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            符号引用和直接引用、强引用、软引用、弱引用、虚引用
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Feb 13, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 2 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
             <a href="/zh-cn/tags/java/">Java</a> 
             
             
             , 
             
-            <a href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/">前端</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/websocket/">WebSocket</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/sse/">SSE</a> 
+            <a href="/zh-cn/tags/jvm/">JVM</a> 
             
             
         </div>
@@ -1380,7 +1365,19 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
                 
             
             
-                    <a class='page-link' href='/zh-cn/page/17/'>17</a>
+                    
+                
+            
+            
+                    
+                
+            
+            
+                    
+                
+            
+            
+                    <a class='page-link' href='/zh-cn/page/20/'>20</a>
                 
             
     </nav>
