@@ -3456,6 +3456,18 @@ Jsonp 其实就是一个跨域解决方案。跨域请求数据是不可以的�
 </description>
         </item>
         <item>
+        <title>LangGraph4j初体验，搭建一个有状态多智能体工作流</title>
+        <link>/zh-cn/post/2025/09/langgraph4j%E5%88%9D%E4%BD%93%E9%AA%8C%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E7%8A%B6%E6%80%81%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%B7%A5%E4%BD%9C%E6%B5%81/</link>
+        <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/09/langgraph4j%E5%88%9D%E4%BD%93%E9%AA%8C%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E7%8A%B6%E6%80%81%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%B7%A5%E4%BD%9C%E6%B5%81/</guid>
+        <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://opendeep.wiki/bsorrentino/langgraph4j/quick-start&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考文档&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Spring Ai Alibaba 搭建仿 Manus 有状态多智能体&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>spring-ai-alibaba初体验</title>
         <link>/zh-cn/post/2025/09/spring-ai-alibaba%E5%88%9D%E4%BD%93%E9%AA%8C/</link>
         <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>
