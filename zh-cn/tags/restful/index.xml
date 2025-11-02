@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>RestFul on 青秋博客</title>
+        <link>/zh-cn/tags/restful/</link>
+        <description>Recent content in RestFul on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Thu, 02 Oct 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/restful/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title></title>
+        <link>/zh-cn/post/2025/10/</link>
+        <pubDate>Thu, 02 Oct 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/10/</guid>
+        <description>&lt;p&gt;RESTful 是一种&lt;strong&gt;基于 HTTP 协议设计 API 的规范&lt;/strong&gt;，核心是通过「HTTP 方法+URL 路径」的组合，以统一、无状态的方式操作资源（如数据、文件等），且返回格式通常为 JSON（或 XML）。&lt;/p&gt;
+&lt;p&gt;简单来说，就是&lt;strong&gt;把 API 中的操作对象（如用户、商品、订单）视为“资源”，用 HTTP 方法表达对资源的“操作意图”&lt;/strong&gt;，而非通过 URL 路径直接包含动词（如&lt;code&gt;/getUser&lt;/code&gt;、&lt;code&gt;/deleteOrder&lt;/code&gt;）。&lt;/p&gt;
+&lt;h3 id=&#34;一restful-请求的核心原则通过例子理解&#34;&gt;&lt;a href=&#34;#%e4%b8%80restful-%e8%af%b7%e6%b1%82%e7%9a%84%e6%a0%b8%e5%bf%83%e5%8e%9f%e5%88%99%e9%80%9a%e8%bf%87%e4%be%8b%e5%ad%90%e7%90%86%e8%a7%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;一、RESTful 请求的核心原则（通过例子理解）
+&lt;/h3&gt;&lt;p&gt;我们以「用户资源（User）」为例，展示 RESTful 风格如何定义不同操作的请求格式，对比传统非 RESTful 写法，更易理解差异：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;操作意图&lt;/th&gt;
+          &lt;th&gt;RESTful 请求格式&lt;/th&gt;
+          &lt;th&gt;非 RESTful（不推荐）写法&lt;/th&gt;
+          &lt;th&gt;核心说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;1. 获取所有用户&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;GET /api/users&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;GET /api/getAllUsers&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;GET&lt;/code&gt;方法表示“查询”，URL 直接指向资源集合&lt;code&gt;/users&lt;/code&gt;，无多余动词。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;2. 获取单个用户&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;GET /api/users/123&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;GET /api/getUser?id=123&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;用 URL 路径参数&lt;code&gt;123&lt;/code&gt;（用户 ID）指定具体资源，而非 URL 带查询参数&lt;code&gt;?id=123&lt;/code&gt;。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;3. 创建新用户&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;POST /api/users&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;POST /api/addUser&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;POST&lt;/code&gt;方法表示“新增”，请求体携带用户数据（如姓名、年龄），URL 仍指向资源集合。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;4. 更新用户信息&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;PUT /api/users/123&lt;/code&gt;（全量更新）&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;POST /api/updateUser?id=123&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;PUT&lt;/code&gt;方法表示“全量替换”，需传递该用户的所有必填字段；URL 指定要更新的资源。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;5. 部分更新用户&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;PATCH /api/users/123&lt;/code&gt;（部分更新）&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;POST /api/updateUserName?id=123&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;PATCH&lt;/code&gt;方法表示“部分修改”，只需传递要更新的字段（如仅改姓名）。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;6. 删除用户&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;DELETE /api/users/123&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;GET /api/deleteUser?id=123&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;DELETE&lt;/code&gt;方法表示“删除”，语义明确，避免用&lt;code&gt;GET&lt;/code&gt;（&lt;code&gt;GET&lt;/code&gt;应无副作用）。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;三restful-请求的关键规范总结&#34;&gt;&lt;a href=&#34;#%e4%b8%89restful-%e8%af%b7%e6%b1%82%e7%9a%84%e5%85%b3%e9%94%ae%e8%a7%84%e8%8c%83%e6%80%bb%e7%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;三、RESTful 请求的关键规范（总结）
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;资源为核心&lt;/strong&gt;：URL 中只包含资源名称（复数形式，如&lt;code&gt;/users&lt;/code&gt;、&lt;code&gt;/orders&lt;/code&gt;），不包含动词（如&lt;code&gt;get&lt;/code&gt;、&lt;code&gt;add&lt;/code&gt;、&lt;code&gt;delete&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTTP 方法表意图&lt;/strong&gt;：用&lt;code&gt;GET&lt;/code&gt;（查）、&lt;code&gt;POST&lt;/code&gt;（增）、&lt;code&gt;PUT/PATCH&lt;/code&gt;（改）、&lt;code&gt;DELETE&lt;/code&gt;（删）表达操作，语义清晰。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无状态&lt;/strong&gt;：每个请求必须包含所有必要信息（如身份验证 Token），服务器不存储客户端的状态（如“登录状态”）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;统一响应格式&lt;/strong&gt;：通常用 JSON 返回数据，包含状态码（如业务码&lt;code&gt;code&lt;/code&gt;）、提示信息&lt;code&gt;message&lt;/code&gt;、数据&lt;code&gt;data&lt;/code&gt;，便于客户端解析。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;正确使用 HTTP 状态码&lt;/strong&gt;：如&lt;code&gt;200&lt;/code&gt;（成功）、&lt;code&gt;201&lt;/code&gt;（创建成功）、&lt;code&gt;400&lt;/code&gt;（请求参数错误）、&lt;code&gt;404&lt;/code&gt;（资源不存在）、&lt;code&gt;500&lt;/code&gt;（服务器错误），而非全用 200。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;四非-restful-请求的常见问题反例&#34;&gt;&lt;a href=&#34;#%e5%9b%9b%e9%9d%9e-restful-%e8%af%b7%e6%b1%82%e7%9a%84%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e5%8f%8d%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;四、非 RESTful 请求的常见问题（反例）
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;URL 带动词：&lt;code&gt;GET /api/getUserById/123&lt;/code&gt;（多余，&lt;code&gt;GET /api/users/123&lt;/code&gt;已明确）&lt;/li&gt;
+&lt;li&gt;用错 HTTP 方法：&lt;code&gt;GET /api/deleteUser/123&lt;/code&gt;（&lt;code&gt;GET&lt;/code&gt;不应用于“删除”这类有副作用的操作，应改用&lt;code&gt;DELETE&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;响应状态码混乱：无论成功/失败都返回&lt;code&gt;200&lt;/code&gt;，仅靠业务码区分（如&lt;code&gt;code: 1001&lt;/code&gt;表示“资源不存在”，不符合 HTTP 语义）&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>加密货币 on 青秋博客</title>
+        <link>/zh-cn/categories/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/</link>
+        <description>Recent content in 加密货币 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sat, 01 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>区块链入门：区块链、智能合约、加密货币、Web3</title>
+        <link>/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/</link>
+        <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/</guid>
+        <description>&lt;p&gt;&lt;strong&gt;本文大部分都是问的 ai&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;区块链发展历程&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97%e9%93%be%e5%8f%91%e5%b1%95%e5%8e%86%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块链发展历程
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;2008 年：中本聪发表《比特币：一种点对点的电子现金系统》白皮书，首次提出区块链概念。&lt;/li&gt;
+&lt;li&gt;2009 年：比特币主网上线，第一个区块&lt;strong&gt;创世区块&lt;/strong&gt;诞生，标志着区块链 1.0 时代开启。&lt;/li&gt;
+&lt;li&gt;2014 年：Vitalik Buterin 提出了&lt;strong&gt;状态通道&lt;/strong&gt;的想法：允许用户在链下进行多次交易，仅在开始和结束时与主链（Layer 1）交互，这是 Layer 2 思想的起点，核心理念是 &lt;strong&gt;“将计算和交易移至链下，仅将结果或争议提交到链上”&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;2015 年：以太坊（ETH）提出并上线，&lt;strong&gt;引入智能合约&lt;/strong&gt;，开启区块链 2.0 时代，支持&lt;strong&gt;去中心化应用（DApps）&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;2017 年至今：Layer2 理论体系的发展，扩容方案（如 Rollups）、跨链技术（如 Polkadot、Cosmos）、模块化区块链（如 Celestia）等推动区块链 3.0 发展，在此之前区块链 2.0 主要适用于金融领域，而区块链 3.0 则&lt;strong&gt;可扩展至其他领域&lt;/strong&gt;，强调可扩展性、互操作性和用户体验。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;加密货币&#34;&gt;&lt;a href=&#34;#%e5%8a%a0%e5%af%86%e8%b4%a7%e5%b8%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;加密货币
+&lt;/h2&gt;&lt;p&gt;和区块链经常出现在一起的，就是加密货币了，加密货币依靠链进行加密存在。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2009 年：比特币诞生，作为第一个去中心化数字货币。&lt;/li&gt;
+&lt;li&gt;2011 年：莱特币（Litecoin）等早期“山寨币”出现。&lt;/li&gt;
+&lt;li&gt;2015 年：以太坊（ETH）上线，其原生代币成为第二大加密货币。&lt;/li&gt;
+&lt;li&gt;2017 年：ICO（首次代币发行）热潮，大量项目通过&lt;strong&gt;发行代币融资&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;2020–2021 年：&lt;strong&gt;DeFi（去中心化金融）&lt;/strong&gt;、**NFT（非同质化代币）**爆发，推动加密货币应用场景扩展。&lt;/li&gt;
+&lt;li&gt;2022 年至今：监管趋严，行业进入整合期；稳定币（Stablecoin）、CBDC（央行数字货币）成为焦点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;web3&#34;&gt;&lt;a href=&#34;#web3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web3
+&lt;/h2&gt;&lt;h3 id=&#34;区块链加密货币web3-关系&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97%e9%93%be%e5%8a%a0%e5%af%86%e8%b4%a7%e5%b8%81web3-%e5%85%b3%e7%b3%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块链、加密货币、Web3 关系
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;区块链 是底层基石，提供去中心化、不可篡改的数据存储和传输机制。&lt;/li&gt;
+&lt;li&gt;加密货币 是区块链的原生资产，类似现实生活的各种货币，用于激励节点、支付交易费用或作为价值载体。&lt;/li&gt;
+&lt;li&gt;Web3 是基于区块链构建的下一代互联网愿景，强调用户拥有数据和身份主权，加密货币是其经济系统的核心。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;常用术语&#34;&gt;&lt;a href=&#34;#%e5%b8%b8%e7%94%a8%e6%9c%af%e8%af%ad&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;常用术语
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;区块链（Blockchain）：本质是分布式账本，每个数据块按时间顺序链接成区块链，后面的块包含前面块的哈希值，因此破解成本极大。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;去中心化（Decentralization）：所谓去中心化就是没有单一的控制方、存储方，比如现在互联网的大部分应用，用户数据都存储在应用开发商的服务器上，开发商就是控制存储方，而去中心化则是用户数据存储在链上的每个节点，没有所谓的中心，再举个例子：A 借给 B 钱，交易记录会广播到链的&lt;strong&gt;大部分节点&lt;/strong&gt;，这些节点都会记录这笔交易，就算某个节点被篡改了，也不会影响这笔交易，因为他有无数个&lt;strong&gt;备份&lt;/strong&gt;，而如果是在传统的银行，那么这笔交易则由银行主导控制，银行内部有权限的人或许可以修改、删除、回滚。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;共识机制（Consensus）：分布式系统中多个节点就数据状态达成一致的规则和算法。在区块链中，共识机制确保所有参与者（节点）对交易顺序和账本状态达成统一，防止双重支付、数据篡改等问题，是区块链去中心化、安全性和一致性的核心基础。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gas 费：因为区块链每笔交易都在链上进行加密等计算最终上块，肯定要消耗计算机资源，那么收点&lt;strong&gt;过路费&lt;/strong&gt;也不为过吧&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;去中心化金融（DeFi）：无需中介的金融服务，如借贷、交易（如 Uniswap、Aave）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非同质化代币（NFT）:唯一不可分割的数字资产，比如数字藏品、游戏道具等&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;去中心化自治组织（DAO）：通过智能合约和代币投票治理的组织形式&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;存储私钥和管理资产的工具，如 MetaMask&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;智能合约（Smart Contract）：自动执行的代码协议，部署在区块链上&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Layer 1,Layer 2：L1 是主链（如以太坊），L2 是扩容方案（如 Arbitrum、Optimism）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;跨链（Cross-chain）:不同区块链之间资产或数据互通的技术，比如微信就是以太坊，支付宝是比特币网络，他们有各自的用户和资产，无法直接聊天转账，跨链则是中间的翻译官和桥梁，让你能在微信里给支付宝朋友转钱，打通了链之间的壁垒，实现资产、用户的互通。技术上来说就是 Polkadot、Cosmos，具体不过多阐释。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;什么是-layer1layer2&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-layer1layer2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 Layer1、Layer2
+&lt;/h2&gt;&lt;p&gt;想象以太坊是一条高速公路（Layer 1），平时车少时开得很快。但一到节假日，车太多，堵得水泄不通，而过路费（Gas 费）还特别贵。那么 Layer 2 就像在高速旁边建一条“快速辅道”：大部分车辆先在辅道上跑（处理交易），最后再把结果批量“打包”回主路登记一下。这样主路不堵了，过路费用低，速度还快！&lt;/p&gt;
+&lt;p&gt;那么问题来了，既然 Layer2 速度快价格低，那所有交易都在 Layer2 不行吗，为啥还要 Layer1？原因如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Layer 2 的安全性最终依赖 Layer 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Layer2 本身没有独立的安全保障，其信任根来自 Layer1，如果 Layer1 崩了，Layer2 也会崩。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;进出 Layer 2 仍需 Layer 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;要使用 Layer 2，必须先通过 跨链桥 把资产从 Layer 1 存入 Layer 2。&lt;/p&gt;
+&lt;p&gt;所以说白了 Layer2 到底只是个辅链，永远没法&lt;strong&gt;篡位&lt;/strong&gt;！&lt;/p&gt;
+&lt;h3 id=&#34;rollups&#34;&gt;&lt;a href=&#34;#rollups&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Rollups
+&lt;/h3&gt;&lt;p&gt;Rollups 是目前主流的 Layer 2 方案，它把成百上千笔交易在链下计算，只把“压缩后的数据”和“证明”发到以太坊主链。&lt;/p&gt;
+&lt;h2 id=&#34;polkadotcosmos&#34;&gt;&lt;a href=&#34;#polkadotcosmos&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Polkadot、Cosmos
+&lt;/h2&gt;&lt;p&gt;跨链技术，上面说过了。&lt;/p&gt;
+&lt;h2 id=&#34;模块化区块链-celestia&#34;&gt;&lt;a href=&#34;#%e6%a8%a1%e5%9d%97%e5%8c%96%e5%8c%ba%e5%9d%97%e9%93%be-celestia&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;模块化区块链 Celestia
+&lt;/h2&gt;&lt;p&gt;传统的区块链是单体架构，要同时做四件事：执行交易、达成共识、数据可用性（确保数据公开可查）、结算（确认最终结果）&lt;/p&gt;
+&lt;p&gt;而 Celestia 只专注做第 3 件事：数据可用性。其他链（如 Rollup）只需把交易数据发给 Celestia 存储，自己专注执行，大幅降低开发门槛，避免造轮子。&lt;/p&gt;
+&lt;h2 id=&#34;去中心化金融-defi&#34;&gt;&lt;a href=&#34;#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e9%87%91%e8%9e%8d-defi&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;去中心化金融 DeFi
+&lt;/h2&gt;&lt;p&gt;Decentralized Finance，指&lt;strong&gt;用智能合约在区块链上重建传统金融功能的一整套应用&lt;/strong&gt;，比如存款、借贷，买保险做衍生品，就类似“银行”等机构了&lt;/p&gt;
+&lt;h2 id=&#34;智能合约&#34;&gt;&lt;a href=&#34;#%e6%99%ba%e8%83%bd%e5%90%88%e7%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;智能合约
+&lt;/h2&gt;&lt;p&gt;智能合约是约定+执行，靠的是预设的代码规则，&lt;strong&gt;而非法律合同，当然也有越来越多国家在承认它&lt;/strong&gt;，智能合约就像是一个自动售货机：你投币、选商品，机器自动检查钱够不够，如果够，就立刻吐出商品；如果不够，就退钱，全程不需要店员，也不会赖账。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-3.png&#34;
+	width=&#34;1456&#34;
+	height=&#34;527&#34;
+	srcset=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-3_hu_b1b25b53708c4aa9.png 480w, /zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-3_hu_9c93fa460d4d997b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;276&#34;
+		data-flex-basis=&#34;663px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自动执行：条件满足，立刻执行，不需要人操作&lt;/li&gt;
+&lt;li&gt;公开透明：合约代码在区块链上，谁都能看（无法隐藏规则）&lt;/li&gt;
+&lt;li&gt;不可篡改：一旦部署，连作者也不能改（除非提前写好升级逻辑）&lt;/li&gt;
+&lt;li&gt;无需信任：你不需要相信对方，只要相信代码和区块链就行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;代币-token&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e5%b8%81-token&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代币 Token
+&lt;/h2&gt;&lt;p&gt;代币不是货币，和 BTC 这种加密货币不一样，&lt;strong&gt;代币构建在已有区块链之上的数字资产&lt;/strong&gt;，比如用人民币买了游戏币、藏品，那么人民币就可理解为已有区块链之上的加密货币，游戏币、藏品就是代币，不能当钱花（除非有人愿意买）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;非同质化代币（Non-Fungible Token 简写 NFT ），像比特币这种原生的加密货币，每一单位都一样，可以互换（1 BTC = 1 BTC），是同质化，“非同质化”则是每个 NFT 都独一无二，不能互相替代，比如某个网站域名者签名球衣，可能全世界仅此一份。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;加密货币代币关系&#34;&gt;&lt;a href=&#34;#%e5%8a%a0%e5%af%86%e8%b4%a7%e5%b8%81%e4%bb%a3%e5%b8%81%e5%85%b3%e7%b3%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;加密货币、代币关系
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image.png&#34;
+	width=&#34;839&#34;
+	height=&#34;470&#34;
+	srcset=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image_hu_403c4ee886bb5afb.png 480w, /zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image_hu_c870ac040b583872.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;178&#34;
+		data-flex-basis=&#34;428px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;代币的标准&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e5%b8%81%e7%9a%84%e6%a0%87%e5%87%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代币的标准
+&lt;/h2&gt;&lt;p&gt;由上可知代币属于数字资产，那么为了满足不同类型数字资产的需求，就有了不同的代币标准（ERC）。
+&lt;img src=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-1.png&#34;
+	width=&#34;1884&#34;
+	height=&#34;568&#34;
+	srcset=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-1_hu_6cee97e84b59eaba.png 480w, /zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-1_hu_8abd74ff6e8f80b8.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;331&#34;
+		data-flex-basis=&#34;796px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;什么是-erc&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-erc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 ERC？
+&lt;/h3&gt;&lt;p&gt;Ethereum Request for Comment（以太坊改进提案），是一套技术规范、代币标准，规定了代币应该如何创建、转账、查询余额等。开发者遵循同一标准，就能让钱包、交易所、DApp 互相兼容（就像 USB 接口统一了设备连接）。&lt;/p&gt;
+&lt;h2 id=&#34;区块链执行一笔交易这笔交易会广播到链上的所有节点吗&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97%e9%93%be%e6%89%a7%e8%a1%8c%e4%b8%80%e7%ac%94%e4%ba%a4%e6%98%93%e8%bf%99%e7%ac%94%e4%ba%a4%e6%98%93%e4%bc%9a%e5%b9%bf%e6%92%ad%e5%88%b0%e9%93%be%e4%b8%8a%e7%9a%84%e6%89%80%e6%9c%89%e8%8a%82%e7%82%b9%e5%90%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块链执行一笔交易，这笔交易会广播到链上的所有节点吗？
+&lt;/h2&gt;&lt;p&gt;答案：交易记录几乎会传播到全网所有节点，但不是“主动发送给每一个”，而是通过“泛洪式广播（gossip protocol）”扩散。&lt;/p&gt;
+&lt;p&gt;当你发起一笔交易（例如通过 MetaMask），会有以下步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;它首先被发送到一个节点的内存池（mempool）——一个&lt;strong&gt;暂存已验证合法但尚未被打包的交易的池子&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后&lt;strong&gt;立刻广播到邻居节点&lt;/strong&gt;，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。&lt;/li&gt;
+&lt;li&gt;邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;能否控制交易记录传播的节点&#34;&gt;&lt;a href=&#34;#%e8%83%bd%e5%90%a6%e6%8e%a7%e5%88%b6%e4%ba%a4%e6%98%93%e8%ae%b0%e5%bd%95%e4%bc%a0%e6%92%ad%e7%9a%84%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;能否控制交易记录传播的节点？
+&lt;/h2&gt;&lt;p&gt;答案：在公链（如以太坊、比特币）上，基本无法控制传播范围。公链的设计原则是开放、无需许可、抗审查。一旦你把交易发出去，就无法阻止它被广播。
+即使你只发给一个私有节点，只要该节点连接到公网，它就会按协议转发交易。
+例外情况：
+私有链/联盟链（如 Hyperledger Fabric、Quorum）：可以配置节点白名单，控制交易可见性。
+MEV 搜索者或矿工直连：高级用户可通过 Flashbots（以太坊）等机制将交易直接发送给矿工/构建者，绕过公共 mempool，避免被抢跑。但这仍是发给“特定角色”，而非“限制传播范围”，且交易一旦上链仍会公开。&lt;/p&gt;
+&lt;h2 id=&#34;是否每个节点都要收-gas-费每次交易的总-gas-费是否是可控的&#34;&gt;&lt;a href=&#34;#%e6%98%af%e5%90%a6%e6%af%8f%e4%b8%aa%e8%8a%82%e7%82%b9%e9%83%bd%e8%a6%81%e6%94%b6-gas-%e8%b4%b9%e6%af%8f%e6%ac%a1%e4%ba%a4%e6%98%93%e7%9a%84%e6%80%bb-gas-%e8%b4%b9%e6%98%af%e5%90%a6%e6%98%af%e5%8f%af%e6%8e%a7%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;是否每个节点都要收 Gas 费，每次交易的总 Gas 费是否是可控的？
+&lt;/h2&gt;&lt;p&gt;答案：只有打包交易的矿工/验证者获得 Gas 费，其他节点不收费。
+Gas 费的本质：是你为使用区块链计算资源（如执行智能合约、存储数据）支付的报酬，而这笔费用全部支付给出块者，其他节点（如中继节点、全节点）只是帮忙转发和验证交易，没有参与计算不获得任何 Gas 收入。&lt;/p&gt;
+&lt;p&gt;Gas 费也不是可控的，只能控制“愿意支付多少”，但实际费用受网络拥堵影响，存在一定不确定性。如果是交易高峰期，网络拥堵，交易可能因出价太低而长时间不被打包，因为矿工/验证者会优先打包出价更高的交易（给的 Gas 费多）。但没有被打包并不意味着交易失败，而是可能被卡在内存池，直到网络拥堵缓解，你的出价变得相对有竞争力从而被矿工打包，或者发起一笔相同的 &lt;strong&gt;nonce&lt;/strong&gt; 但更高 Gas 费的交易 → 原交易被替换，或者块节点自动清理过期交易（通常 1–7 天后）→ 交易从 mempool 消失，交易撤回（不是失败）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-2.png&#34;
+	width=&#34;1433&#34;
+	height=&#34;432&#34;
+	srcset=&#34;/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-2_hu_5772a05c4b8b1016.png 480w, /zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/image-2_hu_d096617035b14cc2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;331&#34;
+		data-flex-basis=&#34;796px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

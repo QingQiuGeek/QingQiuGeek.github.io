@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="内置 api 文档 路径、查询、请求体参数 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 from typing import Union,Annotated,Literal from fastapi import FastAPI,Query,Path from pydantic import BaseModel,Field # Pydantic数据模型会自动进行自动数据校验，并且自动转换数据类型，比如前端传&#34;3.14&#34;，会自动转成浮点数 app = FastAPI() fake_items_db = [{&#34;item_name&#34;: &#34;Foo&#34;}, {&#34;item_name&#34;: &#34;Bar&#34;}, {&#34;item_name&#34;: &#34;Baz&#34;}] class Item(BaseModel): name: str description: str | None = None price: float tax: float | None = None # model_config 是 Pydantic V2 中用于配置模型行为的属性（替代了 Pydantic V1 中的 Config 类）。这里的 {&#34;extra&#34;: &#34;forbid&#34;} 作用是禁止接收FilterParams中未定义的字段 class FilterParams(BaseModel): model_config = {&#34;extra&#34;: &#34;forbid&#34;} limit: int = Field(100, gt=0, le=100) offset: int = Field(0, ge=0) order_by: Literal[&#34;created_at&#34;, &#34;updated_at&#34;] = &#34;created_at&#34; tags: list[str] = [] # 请求体 # 与声明查询参数一样，包含默认值的模型属性是可选的，否则就是必选的。默认值为 None 的模型属性也是可选的。 @app.post(&#34;/items/&#34;) async def create_item(item: Item): return item # 路径和下面的接口相同，一定要写在上面 @app.get(&#34;/users/me&#34;) async def read_user_me(): return {&#34;user_id&#34;: &#34;the current user&#34;} # 路径参数 @app.get(&#34;/users/{user_id}&#34;) async def read_user(user_id: str): return {&#34;user_id&#34;: user_id} # 查询参数 ?k=v&amp;k=v # 参数有默认值，因此可选 @app.get(&#34;/items/&#34;) async def read_item(skip: int = 0, limit: int = 10): return fake_items_db[skip : skip + limit] # Union表明或，数据类型要么是str要么为None，即使 q 是可选的，但只要提供了该参数，则该参数值不能超过50个字符的长度，同时也支持正则表达式 @app.get(&#34;/items/&#34;) async def read_items(q: Union[str, None] = Query(default=None, max_length=50,pattern=&#34;^fixedquery$&#34;)): results = {&#34;items&#34;: [{&#34;item_id&#34;: &#34;Foo&#34;}, {&#34;item_id&#34;: &#34;Bar&#34;}]} if q: results.update({&#34;q&#34;: q}) return results # Path的title是参数说明，会展示在api文档中，int是类型，Path是元数据校验/约束 @app.get(&#34;/items/{item_id}&#34;) async def read_items( item_id: Annotated[int, Path(title=&#34;The ID of the item to get&#34;, ge=10.5)], q: Annotated[str | None, Query(alias=&#34;item-query&#34;)] = None, ): results = {&#34;item_id&#34;: item_id} if q: results.update({&#34;q&#34;: q}) return results 上述接口定义顺序，/users/me 要写在/users/{user_id}之前，如果反过来，FastAPI 会认为正在接收值为 &ldquo;me&rdquo; 的 user_id 参数。\n">
+<title></title>
+
+<link rel='canonical' href='/zh-cn/post/2025/10/'>
+
+<link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
+<meta property='og:title' content="">
+<meta property='og:description' content="内置 api 文档 路径、查询、请求体参数 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 from typing import Union,Annotated,Literal from fastapi import FastAPI,Query,Path from pydantic import BaseModel,Field # Pydantic数据模型会自动进行自动数据校验，并且自动转换数据类型，比如前端传&#34;3.14&#34;，会自动转成浮点数 app = FastAPI() fake_items_db = [{&#34;item_name&#34;: &#34;Foo&#34;}, {&#34;item_name&#34;: &#34;Bar&#34;}, {&#34;item_name&#34;: &#34;Baz&#34;}] class Item(BaseModel): name: str description: str | None = None price: float tax: float | None = None # model_config 是 Pydantic V2 中用于配置模型行为的属性（替代了 Pydantic V1 中的 Config 类）。这里的 {&#34;extra&#34;: &#34;forbid&#34;} 作用是禁止接收FilterParams中未定义的字段 class FilterParams(BaseModel): model_config = {&#34;extra&#34;: &#34;forbid&#34;} limit: int = Field(100, gt=0, le=100) offset: int = Field(0, ge=0) order_by: Literal[&#34;created_at&#34;, &#34;updated_at&#34;] = &#34;created_at&#34; tags: list[str] = [] # 请求体 # 与声明查询参数一样，包含默认值的模型属性是可选的，否则就是必选的。默认值为 None 的模型属性也是可选的。 @app.post(&#34;/items/&#34;) async def create_item(item: Item): return item # 路径和下面的接口相同，一定要写在上面 @app.get(&#34;/users/me&#34;) async def read_user_me(): return {&#34;user_id&#34;: &#34;the current user&#34;} # 路径参数 @app.get(&#34;/users/{user_id}&#34;) async def read_user(user_id: str): return {&#34;user_id&#34;: user_id} # 查询参数 ?k=v&amp;k=v # 参数有默认值，因此可选 @app.get(&#34;/items/&#34;) async def read_item(skip: int = 0, limit: int = 10): return fake_items_db[skip : skip + limit] # Union表明或，数据类型要么是str要么为None，即使 q 是可选的，但只要提供了该参数，则该参数值不能超过50个字符的长度，同时也支持正则表达式 @app.get(&#34;/items/&#34;) async def read_items(q: Union[str, None] = Query(default=None, max_length=50,pattern=&#34;^fixedquery$&#34;)): results = {&#34;items&#34;: [{&#34;item_id&#34;: &#34;Foo&#34;}, {&#34;item_id&#34;: &#34;Bar&#34;}]} if q: results.update({&#34;q&#34;: q}) return results # Path的title是参数说明，会展示在api文档中，int是类型，Path是元数据校验/约束 @app.get(&#34;/items/{item_id}&#34;) async def read_items( item_id: Annotated[int, Path(title=&#34;The ID of the item to get&#34;, ge=10.5)], q: Annotated[str | None, Query(alias=&#34;item-query&#34;)] = None, ): results = {&#34;item_id&#34;: item_id} if q: results.update({&#34;q&#34;: q}) return results 上述接口定义顺序，/users/me 要写在/users/{user_id}之前，如果反过来，FastAPI 会认为正在接收值为 &ldquo;me&rdquo; 的 user_id 参数。\n">
+<meta property='og:url' content='/zh-cn/post/2025/10/'>
+<meta property='og:site_name' content='青秋博客'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='RestFul' /><meta property='article:published_time' content='2025-10-02T09:39:19&#43;00:00'/><meta property='article:modified_time' content='2025-10-02T09:39:19&#43;00:00'/>
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="内置 api 文档 路径、查询、请求体参数 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 from typing import Union,Annotated,Literal from fastapi import FastAPI,Query,Path from pydantic import BaseModel,Field # Pydantic数据模型会自动进行自动数据校验，并且自动转换数据类型，比如前端传&#34;3.14&#34;，会自动转成浮点数 app = FastAPI() fake_items_db = [{&#34;item_name&#34;: &#34;Foo&#34;}, {&#34;item_name&#34;: &#34;Bar&#34;}, {&#34;item_name&#34;: &#34;Baz&#34;}] class Item(BaseModel): name: str description: str | None = None price: float tax: float | None = None # model_config 是 Pydantic V2 中用于配置模型行为的属性（替代了 Pydantic V1 中的 Config 类）。这里的 {&#34;extra&#34;: &#34;forbid&#34;} 作用是禁止接收FilterParams中未定义的字段 class FilterParams(BaseModel): model_config = {&#34;extra&#34;: &#34;forbid&#34;} limit: int = Field(100, gt=0, le=100) offset: int = Field(0, ge=0) order_by: Literal[&#34;created_at&#34;, &#34;updated_at&#34;] = &#34;created_at&#34; tags: list[str] = [] # 请求体 # 与声明查询参数一样，包含默认值的模型属性是可选的，否则就是必选的。默认值为 None 的模型属性也是可选的。 @app.post(&#34;/items/&#34;) async def create_item(item: Item): return item # 路径和下面的接口相同，一定要写在上面 @app.get(&#34;/users/me&#34;) async def read_user_me(): return {&#34;user_id&#34;: &#34;the current user&#34;} # 路径参数 @app.get(&#34;/users/{user_id}&#34;) async def read_user(user_id: str): return {&#34;user_id&#34;: user_id} # 查询参数 ?k=v&amp;k=v # 参数有默认值，因此可选 @app.get(&#34;/items/&#34;) async def read_item(skip: int = 0, limit: int = 10): return fake_items_db[skip : skip + limit] # Union表明或，数据类型要么是str要么为None，即使 q 是可选的，但只要提供了该参数，则该参数值不能超过50个字符的长度，同时也支持正则表达式 @app.get(&#34;/items/&#34;) async def read_items(q: Union[str, None] = Query(default=None, max_length=50,pattern=&#34;^fixedquery$&#34;)): results = {&#34;items&#34;: [{&#34;item_id&#34;: &#34;Foo&#34;}, {&#34;item_id&#34;: &#34;Bar&#34;}]} if q: results.update({&#34;q&#34;: q}) return results # Path的title是参数说明，会展示在api文档中，int是类型，Path是元数据校验/约束 @app.get(&#34;/items/{item_id}&#34;) async def read_items( item_id: Annotated[int, Path(title=&#34;The ID of the item to get&#34;, ge=10.5)], q: Annotated[str | None, Query(alias=&#34;item-query&#34;)] = None, ): results = {&#34;item_id&#34;: item_id} if q: results.update({&#34;q&#34;: q}) return results 上述接口定义顺序，/users/me 要写在/users/{user_id}之前，如果反过来，FastAPI 会认为正在接收值为 &ldquo;me&rdquo; 的 user_id 参数。\n">
+    <link rel="shortcut icon" href="/img/favicon.png" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <figure class="site-avatar">
+            <a href="/zh-cn/">
+                
+                
+
+                
+                
+                <img src="/img/avatar_hu_797b86161150c780.png" width="300"
+                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+                
+            </a>
+            
+            <span class="emoji">💐</span>
+            
+        </figure>
+        
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/zh-cn/">青秋博客</a></h1>
+            <h2 class="site-description">博学而笃行,切问而近思</h2>
+        </div>
+    </header><ol class="menu-social">
+        
+        <li>
+            <a href='https://github.com/QingQiuGeek' target="_blank" 
+                title="GitHub"  rel="me">
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+            </a>
+        </li>
+        
+        <li>
+            <a href='https://blog.csdn.net/qq_73181349' target="_blank" 
+                title="CSDN"  rel="me">
+                
+                
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="105px" height="88px" viewBox="0 0 105 88" enable-background="new 0 0 105 88" xml:space="preserve">  <image id="image0" width="105" height="88" x="0" y="0"
+    xlink:href="data:image/png;base64,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" />
+</svg>
+
+                
+            </a>
+        </li>
+        
+    </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/zh-cn/page/about/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/archives/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/tags/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                
+                <span>标签</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/links/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/zh-cn/page/search/' >
+                
+                
+                
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+                
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#一restful-请求的核心原则通过例子理解">一、RESTful 请求的核心原则（通过例子理解）</a></li>
+        <li><a href="#三restful-请求的关键规范总结">三、RESTful 请求的关键规范（总结）</a></li>
+        <li><a href="#四非-restful-请求的常见问题反例">四、非 RESTful 请求的常见问题（反例）</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/10/"></a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Oct 02, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 2 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/python/">Python</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/fastapi/">FastAPI</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>RESTful 是一种<strong>基于 HTTP 协议设计 API 的规范</strong>，核心是通过「HTTP 方法+URL 路径」的组合，以统一、无状态的方式操作资源（如数据、文件等），且返回格式通常为 JSON（或 XML）。</p>
+<p>简单来说，就是<strong>把 API 中的操作对象（如用户、商品、订单）视为“资源”，用 HTTP 方法表达对资源的“操作意图”</strong>，而非通过 URL 路径直接包含动词（如<code>/getUser</code>、<code>/deleteOrder</code>）。</p>
+<h3 id="一restful-请求的核心原则通过例子理解"><a href="#%e4%b8%80restful-%e8%af%b7%e6%b1%82%e7%9a%84%e6%a0%b8%e5%bf%83%e5%8e%9f%e5%88%99%e9%80%9a%e8%bf%87%e4%be%8b%e5%ad%90%e7%90%86%e8%a7%a3" class="header-anchor"></a>一、RESTful 请求的核心原则（通过例子理解）
+</h3><p>我们以「用户资源（User）」为例，展示 RESTful 风格如何定义不同操作的请求格式，对比传统非 RESTful 写法，更易理解差异：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>操作意图</th>
+          <th>RESTful 请求格式</th>
+          <th>非 RESTful（不推荐）写法</th>
+          <th>核心说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1. 获取所有用户</td>
+          <td><code>GET /api/users</code></td>
+          <td><code>GET /api/getAllUsers</code></td>
+          <td><code>GET</code>方法表示“查询”，URL 直接指向资源集合<code>/users</code>，无多余动词。</td>
+      </tr>
+      <tr>
+          <td>2. 获取单个用户</td>
+          <td><code>GET /api/users/123</code></td>
+          <td><code>GET /api/getUser?id=123</code></td>
+          <td>用 URL 路径参数<code>123</code>（用户 ID）指定具体资源，而非 URL 带查询参数<code>?id=123</code>。</td>
+      </tr>
+      <tr>
+          <td>3. 创建新用户</td>
+          <td><code>POST /api/users</code></td>
+          <td><code>POST /api/addUser</code></td>
+          <td><code>POST</code>方法表示“新增”，请求体携带用户数据（如姓名、年龄），URL 仍指向资源集合。</td>
+      </tr>
+      <tr>
+          <td>4. 更新用户信息</td>
+          <td><code>PUT /api/users/123</code>（全量更新）</td>
+          <td><code>POST /api/updateUser?id=123</code></td>
+          <td><code>PUT</code>方法表示“全量替换”，需传递该用户的所有必填字段；URL 指定要更新的资源。</td>
+      </tr>
+      <tr>
+          <td>5. 部分更新用户</td>
+          <td><code>PATCH /api/users/123</code>（部分更新）</td>
+          <td><code>POST /api/updateUserName?id=123</code></td>
+          <td><code>PATCH</code>方法表示“部分修改”，只需传递要更新的字段（如仅改姓名）。</td>
+      </tr>
+      <tr>
+          <td>6. 删除用户</td>
+          <td><code>DELETE /api/users/123</code></td>
+          <td><code>GET /api/deleteUser?id=123</code></td>
+          <td><code>DELETE</code>方法表示“删除”，语义明确，避免用<code>GET</code>（<code>GET</code>应无副作用）。</td>
+      </tr>
+  </tbody>
+</table></div>
+<h3 id="三restful-请求的关键规范总结"><a href="#%e4%b8%89restful-%e8%af%b7%e6%b1%82%e7%9a%84%e5%85%b3%e9%94%ae%e8%a7%84%e8%8c%83%e6%80%bb%e7%bb%93" class="header-anchor"></a>三、RESTful 请求的关键规范（总结）
+</h3><ol>
+<li><strong>资源为核心</strong>：URL 中只包含资源名称（复数形式，如<code>/users</code>、<code>/orders</code>），不包含动词（如<code>get</code>、<code>add</code>、<code>delete</code>）。</li>
+<li><strong>HTTP 方法表意图</strong>：用<code>GET</code>（查）、<code>POST</code>（增）、<code>PUT/PATCH</code>（改）、<code>DELETE</code>（删）表达操作，语义清晰。</li>
+<li><strong>无状态</strong>：每个请求必须包含所有必要信息（如身份验证 Token），服务器不存储客户端的状态（如“登录状态”）。</li>
+<li><strong>统一响应格式</strong>：通常用 JSON 返回数据，包含状态码（如业务码<code>code</code>）、提示信息<code>message</code>、数据<code>data</code>，便于客户端解析。</li>
+<li><strong>正确使用 HTTP 状态码</strong>：如<code>200</code>（成功）、<code>201</code>（创建成功）、<code>400</code>（请求参数错误）、<code>404</code>（资源不存在）、<code>500</code>（服务器错误），而非全用 200。</li>
+</ol>
+<h3 id="四非-restful-请求的常见问题反例"><a href="#%e5%9b%9b%e9%9d%9e-restful-%e8%af%b7%e6%b1%82%e7%9a%84%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e5%8f%8d%e4%be%8b" class="header-anchor"></a>四、非 RESTful 请求的常见问题（反例）
+</h3><ul>
+<li>URL 带动词：<code>GET /api/getUserById/123</code>（多余，<code>GET /api/users/123</code>已明确）</li>
+<li>用错 HTTP 方法：<code>GET /api/deleteUser/123</code>（<code>GET</code>不应用于“删除”这类有副作用的操作，应改用<code>DELETE</code>）</li>
+<li>响应状态码混乱：无论成功/失败都返回<code>200</code>，仅靠业务码区分（如<code>code: 1001</code>表示“资源不存在”，不符合 HTTP 语义）</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 青秋博客
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
