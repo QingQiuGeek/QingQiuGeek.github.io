@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>RAG on 青秋博客</title>
+        <link>/zh-cn/tags/rag/</link>
+        <description>Recent content in RAG on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sun, 02 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/rag/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Agent、RAG分块策略</title>
+        <link>/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/</link>
+        <pubDate>Sun, 02 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/kvOnakKVr8xVrrC32HlhIg&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考文章&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;引言&#34;&gt;&lt;a href=&#34;#%e5%bc%95%e8%a8%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;引言
+&lt;/h2&gt;&lt;p&gt;RAG 的效果，除了 Prompt、检索算法、Embedding 模型之外，还有 Chunking 分块策略。&lt;/p&gt;
+&lt;h2 id=&#34;什么是分块chunking&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af%e5%88%86%e5%9d%97chunking&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是分块（Chunking）
+&lt;/h2&gt;&lt;p&gt;把大块文本拆分，使得文本数据更容易管理处理，进行嵌入，从而提升从向量数据库中召回内容的相关性准确性。分块过程中有 2 个概念“chunk_size”块的大小，“chunk_overlap” 重叠窗口。
+&lt;img src=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image.png&#34;
+	width=&#34;794&#34;
+	height=&#34;154&#34;
+	srcset=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image_hu_87cb3f3251a7e688.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image_hu_e509ec9dc80ec469.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;515&#34;
+		data-flex-basis=&#34;1237px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;为什么分块&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么分块
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;大模型上下文窗口限制：无法一次处理超长文本。&lt;/li&gt;
+&lt;li&gt;检索的信噪比：分块过大时无关内容会稀释信号、降低相似度判别力；分块过小时语境不足、容易“只命中词不命中义”。合适的块粒度可在召回与精度间取得更好平衡，既覆盖用户意图，又不引入多余噪声。在一定程度上提升检索相关性的同时又能保证结果稳定性。&lt;/li&gt;
+&lt;li&gt;语义连续性：防止段落的整体语义被拆分时出现语义切断，需要在连续的块中间设置适度的 chunk_overlap，以提升答案的连贯性与可追溯性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以合适的分块优势如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;较小的文本段落更容易进行嵌入和检索，提高模型处理的效率。&lt;/li&gt;
+&lt;li&gt;分块后的文本能更精确地匹配用户查询，提高了内容召回的准确性，获得相关性更高的结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;不恰当的分块策略会导致：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;上下文断裂&lt;/li&gt;
+&lt;li&gt;关键信息被拆散（如定义与解释分离）&lt;/li&gt;
+&lt;li&gt;表格/代码/标题结构破坏 -检索命中但无法支撑答案，甚至引发幻觉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;高质量分块则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;尊重自然语义边界（段落、标题、列表、代码块等）&lt;/li&gt;
+&lt;li&gt;设置适度重叠（chunk_overlap）以保持上下文连续（类似往期回顾）&lt;/li&gt;
+&lt;li&gt;保留元数据（如章节路径、来源位置），便于追溯与重排。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;常见分块策略&#34;&gt;&lt;a href=&#34;#%e5%b8%b8%e8%a7%81%e5%88%86%e5%9d%97%e7%ad%96%e7%95%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;常见分块策略
+&lt;/h2&gt;&lt;h3 id=&#34;基础分块&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e7%a1%80%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基础分块
+&lt;/h3&gt;&lt;h4 id=&#34;基于固定长度分块&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e4%ba%8e%e5%9b%ba%e5%ae%9a%e9%95%bf%e5%ba%a6%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基于固定长度分块
+&lt;/h4&gt;&lt;p&gt;按预设字符数 chunk_size 直接切分，不考虑文本结构。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：简单直接&lt;/li&gt;
+&lt;li&gt;缺点：破坏语义边界&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;基于句子分块&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e4%ba%8e%e5%8f%a5%e5%ad%90%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基于句子分块
+&lt;/h4&gt;&lt;p&gt;先按句子切分，再将若干句子聚合成满足 chunk_size 的块，保证句子基本语义完整。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：句子边界基本保留，完整性好&lt;/li&gt;
+&lt;li&gt;缺点：句子过短会导致分块过短，可能导致语境不足、容易“只命中词不命中义”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;基于递归字符分块&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e4%ba%8e%e9%80%92%e5%bd%92%e5%ad%97%e7%ac%a6%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基于递归字符分块
+&lt;/h4&gt;&lt;p&gt;给定一组由“粗到细”的分隔符（如标题 → 段落 → 换行 → 空格 → 字符），自上而下递归切分，在不超出 chunk_size 的前提下尽量保留自然语义边界。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：在“保持语义边界”和“控制块大小”之间取得稳健平衡，对大多数文本即插即用。&lt;/li&gt;
+&lt;li&gt;缺点：分隔符配置不当会导致块粒度失衡，对于&lt;strong&gt;格式化文本如表格、代码效果一般&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;结构感知分块&#34;&gt;&lt;a href=&#34;#%e7%bb%93%e6%9e%84%e6%84%9f%e7%9f%a5%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;结构感知分块
+&lt;/h3&gt;&lt;p&gt;利用文档固有的结构作为分块边界，逻辑清晰、可追溯性强，能在保证上下文完整性的同时&lt;strong&gt;提升检索信噪比&lt;/strong&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;结构化文本分块&#34;&gt;&lt;a href=&#34;#%e7%bb%93%e6%9e%84%e5%8c%96%e6%96%87%e6%9c%ac%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;结构化文本分块
+&lt;/h4&gt;&lt;p&gt;和递归字符分块比较像，以标题层级（H1–H6、编号标题）或语义块（段落、列表、表格、代码块）为此类型文档的天然边界，对过长的结构块再做二次细分，对过短的进行相邻合并。&lt;/p&gt;
+&lt;p&gt;记得对 PDF/HTML 先去噪（页眉页脚、导航、广告等），避免把噪声索引进库。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-2.png&#34;
+	width=&#34;1443&#34;
+	height=&#34;567&#34;
+	srcset=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-2_hu_4b8b6f31a9b72e11.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-2_hu_d7e8c15d31e22532.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;254&#34;
+		data-flex-basis=&#34;610px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;对话式分块&#34;&gt;&lt;a href=&#34;#%e5%af%b9%e8%af%9d%e5%bc%8f%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;对话式分块
+&lt;/h4&gt;&lt;p&gt;在客服对话、访谈、会议纪要、技术支持工单等多轮交流中，设定一个&lt;strong&gt;滑动会话窗口&lt;/strong&gt;存储若干条会话记录来支持上下文&lt;/p&gt;
+&lt;p&gt;举例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 我昨天在你们网站下单了蓝牙耳机，订单号是 #123456。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 您好！已查到该订单，状态为“已发货”，预计明天送达。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 但我今天又下了一单同款，订单号 #123789，想取消。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 好的，我帮您查看。#123789 目前还未发货，可以取消。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 太好了！另外，第一单能改地址吗？我想改成北京市朝阳区XX大厦。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 可以尝试联系物流拦截并修改地址，请稍等……已操作成功，新地址已更新。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 谢谢！对了，耳机支持防水吗？
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 是的，IPX7 级防水，可应对汗水和短时雨水。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;1️⃣ 分块阶段&lt;/p&gt;
+&lt;p&gt;✅ 分块原则&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每轮 = 用户发言 + 客服回复（构成一个完整交互单元）&lt;/li&gt;
+&lt;li&gt;若连续多轮围绕同一话题（如“订单取消”），可合并为一块&lt;/li&gt;
+&lt;li&gt;最大块长度控制（如 ≤ 400 字），避免过长&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;✅ 分块结果（3 个 chunk）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Chunk 1（订单查询 + 发货状态）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 我昨天在你们网站下单了蓝牙耳机，订单号是 #123456。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 您好！已查到该订单，状态为“已发货”，预计明天送达。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Chunk 2（订单取消 + 地址修改）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 但我今天又下了一单同款，订单号 #123789，想取消。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 好的，我帮您查看。#123789 目前还未发货，可以取消。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 太好了！另外，第一单能改地址吗？我想改成北京市朝阳区 XX 大厦。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 可以尝试联系物流拦截并修改地址，请稍等……已操作成功，新地址已更新。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Chunk 3（产品功能咨询）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;用户: 谢谢！对了，耳机支持防水吗？
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;客服: 是的，IPX7 级防水，可应对汗水和短时雨水。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;2️⃣ 检索阶段：邻接扩展（Context Expansion）&lt;/p&gt;
+&lt;p&gt;假设用户提问：“我的第二个订单能取消吗？”&lt;/p&gt;
+&lt;p&gt;首先向量检索命中最相关块：Chunk 2（包含“#123789 可以取消”）
+然后邻接扩展（取前后各 1 轮）：向前扩展：Chunk 1（了解用户背景：刚问过第一单），向后扩展：Chunk 3（无关，不扩展）
+最终大模型 不仅知道“能取消”，还理解这是用户的“第二单”，回答更自然：“您今天下的第二笔订单 #123789 尚未发货，已为您成功取消。&lt;/p&gt;
+&lt;h3 id=&#34;语义与主题分块&#34;&gt;&lt;a href=&#34;#%e8%af%ad%e4%b9%89%e4%b8%8e%e4%b8%bb%e9%a2%98%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;语义与主题分块
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;不依赖文档的物理结构&lt;/strong&gt;，而是依据&lt;strong&gt;语义连续性&lt;/strong&gt;与话题转移来决定切分点，尤其适合希望&lt;strong&gt;块内高度内聚、块间清晰分界&lt;/strong&gt;的知识库与研究类文本。&lt;/p&gt;
+&lt;h4 id=&#34;语义分块&#34;&gt;&lt;a href=&#34;#%e8%af%ad%e4%b9%89%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;语义分块
+&lt;/h4&gt;&lt;p&gt;对文本先做&lt;strong&gt;句级切分&lt;/strong&gt;，计算句子或短段的向量表示，当&lt;strong&gt;相邻语义的相似度显著下降（发生“语义突变”）时设为切分点&lt;/strong&gt;。这就有点类似机器学习了，适用于专题化、论证结构明显的文档、白皮书、论文、技术手册、FAQ 聚合页&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-3.png&#34;
+	width=&#34;1435&#34;
+	height=&#34;672&#34;
+	srcset=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-3_hu_86c2ffc11a065a7d.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-3_hu_1b56cbf1101fb312.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;213&#34;
+		data-flex-basis=&#34;512px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;主题分块&#34;&gt;&lt;a href=&#34;#%e4%b8%bb%e9%a2%98%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;主题分块
+&lt;/h4&gt;&lt;p&gt;利用主题模型或&lt;strong&gt;聚类算法&lt;/strong&gt;在&lt;strong&gt;宏观话题发生切换时进行切分&lt;/strong&gt;，更多的关注章节级、段落级的主题边界。该类分块策略主要适合长篇、多主题材料。&lt;/p&gt;
+&lt;h3 id=&#34;高级分块&#34;&gt;&lt;a href=&#34;#%e9%ab%98%e7%ba%a7%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;高级分块
+&lt;/h3&gt;&lt;h4 id=&#34;小-大分块&#34;&gt;&lt;a href=&#34;#%e5%b0%8f-%e5%a4%a7%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;小-大分块
+&lt;/h4&gt;&lt;p&gt;简单来说就是见微知著、以小见大，先用“小粒度块”（如句子/短句）做高精度召回，然后定位到最相关的微片段，然后再将其“所在的大粒度块”（如段落/小节）作为上下文送入 LLM，以兼顾精确性与上下文完整性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-4.png&#34;
+	width=&#34;1434&#34;
+	height=&#34;562&#34;
+	srcset=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-4_hu_29761c771c93acc5.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-4_hu_4c2f9ce8d0140477.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;255&#34;
+		data-flex-basis=&#34;612px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;父子段分块&#34;&gt;&lt;a href=&#34;#%e7%88%b6%e5%ad%90%e6%ae%b5%e5%88%86%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;父子段分块
+&lt;/h4&gt;&lt;p&gt;将文档按章节/段落等结构单元切成“父块”（Parent），再在每个父块内切出“子块”（通常为句子/短段或者笃固定块）。然后为“子块”建向量索引以做高精度召回。当检索时先召回子块，再按 parent_id 聚合并扩展到父块或父块中的局部窗口，兼顾最后召回内容的精准与上下文完整性。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;与“小-大分块”的关系&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;小-大分块是检索工作流（小粒度召回 → 大粒度上下文）；
+父子段分块是数据建模与索引设计（显式维护 parent–child 映射）。
+两者强相关、常配合使用：父子映射让小-大扩展更稳、更易去重与回链。&lt;/p&gt;
+&lt;h4 id=&#34;代理模块&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e7%90%86%e6%a8%a1%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代理模块
+&lt;/h4&gt;&lt;p&gt;说白了就是让专门的大模型进行动态分块，输出结构化边界信息与理由，这个大模型需要专门训练。&lt;/p&gt;
+&lt;p&gt;适用于高度复杂、长篇、非结构化且混合格式（文本+代码+表格）的文档；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-5.png&#34;
+	width=&#34;1477&#34;
+	height=&#34;852&#34;
+	srcset=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-5_hu_91535cbf9f1a774f.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-5_hu_d18f435dfc388ab6.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;173&#34;
+		data-flex-basis=&#34;416px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;&lt;a href=&#34;#%e6%80%bb%e7%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;总结
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-1.png&#34;
+	width=&#34;1075&#34;
+	height=&#34;560&#34;
+	srcset=&#34;/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-1_hu_ef7cf332efbddfd1.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-1_hu_4ec5c9390244785c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;191&#34;
+		data-flex-basis=&#34;460px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

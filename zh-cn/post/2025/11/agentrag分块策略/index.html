@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 循环依赖问题在 Spring 中主要有三种情况：\n通过构造方法进行依赖注入时产生的循环依赖问题。 通过 setter 方法进行依赖注入且是在**多例（原型）**模式下产生的循环依赖问题。 通过 setter 方法进行依赖注入且是在单例模式下产生的循环依赖问题。 只有【第三种方式】的循环依赖问题被 Spring 解决了，其他两种方式在遇到循环依赖问题时，Spring 都会产生异常。\nSpring 解决单例模式下的 setter 循环依赖问题的主要方式是通过三级缓存解决循环依赖。三级缓存指的是 Spring 在创建 Bean 的过程中，通过三级缓存来缓存正在创建的和已经创建完成的 Bean 实例。\n具体步聚如下：\n">
-<title>三级缓存能解决所有循环依赖吗</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="参考文章\n引言 RAG 的效果，除了 Prompt、检索算法、Embedding 模型之外，还有 Chunking 分块策略。\n什么是分块（Chunking） 把大块文本拆分，使得文本数据更容易管理处理，进行嵌入，从而提升从向量数据库中召回内容的相关性准确性。分块过程中有 2 个概念“chunk_size”块的大小，“chunk_overlap” 重叠窗口。 ">
+<title>Agent、RAG分块策略</title>
 
-<link rel='canonical' href='/zh-cn/post/2025/04/%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E8%83%BD%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/'>
+<link rel='canonical' href='/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
-<meta property='og:title' content="三级缓存能解决所有循环依赖吗">
-<meta property='og:description' content=" 循环依赖问题在 Spring 中主要有三种情况：\n通过构造方法进行依赖注入时产生的循环依赖问题。 通过 setter 方法进行依赖注入且是在**多例（原型）**模式下产生的循环依赖问题。 通过 setter 方法进行依赖注入且是在单例模式下产生的循环依赖问题。 只有【第三种方式】的循环依赖问题被 Spring 解决了，其他两种方式在遇到循环依赖问题时，Spring 都会产生异常。\nSpring 解决单例模式下的 setter 循环依赖问题的主要方式是通过三级缓存解决循环依赖。三级缓存指的是 Spring 在创建 Bean 的过程中，通过三级缓存来缓存正在创建的和已经创建完成的 Bean 实例。\n具体步聚如下：\n">
-<meta property='og:url' content='/zh-cn/post/2025/04/%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E8%83%BD%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/'>
+<meta property='og:title' content="Agent、RAG分块策略">
+<meta property='og:description' content="参考文章\n引言 RAG 的效果，除了 Prompt、检索算法、Embedding 模型之外，还有 Chunking 分块策略。\n什么是分块（Chunking） 把大块文本拆分，使得文本数据更容易管理处理，进行嵌入，从而提升从向量数据库中召回内容的相关性准确性。分块过程中有 2 个概念“chunk_size”块的大小，“chunk_overlap” 重叠窗口。 ">
+<meta property='og:url' content='/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Spring' /><meta property='article:published_time' content='2025-04-05T09:39:19&#43;00:00'/><meta property='article:modified_time' content='2025-04-05T09:39:19&#43;00:00'/>
-<meta name="twitter:title" content="三级缓存能解决所有循环依赖吗">
-<meta name="twitter:description" content=" 循环依赖问题在 Spring 中主要有三种情况：\n通过构造方法进行依赖注入时产生的循环依赖问题。 通过 setter 方法进行依赖注入且是在**多例（原型）**模式下产生的循环依赖问题。 通过 setter 方法进行依赖注入且是在单例模式下产生的循环依赖问题。 只有【第三种方式】的循环依赖问题被 Spring 解决了，其他两种方式在遇到循环依赖问题时，Spring 都会产生异常。\nSpring 解决单例模式下的 setter 循环依赖问题的主要方式是通过三级缓存解决循环依赖。三级缓存指的是 Spring 在创建 Bean 的过程中，通过三级缓存来缓存正在创建的和已经创建完成的 Bean 实例。\n具体步聚如下：\n">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Agent' /><meta property='article:tag' content='RAG' /><meta property='article:published_time' content='2025-11-02T09:39:19&#43;00:00'/><meta property='article:modified_time' content='2025-11-02T09:39:19&#43;00:00'/>
+<meta name="twitter:title" content="Agent、RAG分块策略">
+<meta name="twitter:description" content="参考文章\n引言 RAG 的效果，除了 Prompt、检索算法、Embedding 模型之外，还有 Chunking 分块策略。\n什么是分块（Chunking） 把大块文本拆分，使得文本数据更容易管理处理，进行嵌入，从而提升从向量数据库中召回内容的相关性准确性。分块过程中有 2 个概念“chunk_size”块的大小，“chunk_overlap” 重叠窗口。 ">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -314,7 +314,71 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
         </li>
     </ol>
 </aside>
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#什么是分块chunking">什么是分块（Chunking）</a></li>
+    <li><a href="#为什么分块">为什么分块</a></li>
+    <li><a href="#常见分块策略">常见分块策略</a>
+      <ol>
+        <li><a href="#基础分块">基础分块</a>
+          <ol>
+            <li><a href="#基于固定长度分块">基于固定长度分块</a></li>
+            <li><a href="#基于句子分块">基于句子分块</a></li>
+            <li><a href="#基于递归字符分块">基于递归字符分块</a></li>
+          </ol>
+        </li>
+        <li><a href="#结构感知分块">结构感知分块</a>
+          <ol>
+            <li><a href="#结构化文本分块">结构化文本分块</a></li>
+            <li><a href="#对话式分块">对话式分块</a></li>
+          </ol>
+        </li>
+        <li><a href="#语义与主题分块">语义与主题分块</a>
+          <ol>
+            <li><a href="#语义分块">语义分块</a></li>
+            <li><a href="#主题分块">主题分块</a></li>
+          </ol>
+        </li>
+        <li><a href="#高级分块">高级分块</a>
+          <ol>
+            <li><a href="#小-大分块">小-大分块</a></li>
+            <li><a href="#父子段分块">父子段分块</a></li>
+            <li><a href="#代理模块">代理模块</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -326,7 +390,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2025/04/%E4%B8%89%E7%BA%A7%E7%BC%93%E5%AD%98%E8%83%BD%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%90%97/">三级缓存能解决所有循环依赖吗</a>
+            <a href="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/">Agent、RAG分块策略</a>
         </h2>
 
         
@@ -350,7 +414,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-            <time class="article-time--published">Apr 05, 2025</time>
+            <time class="article-time--published">Nov 02, 2025</time>
         </div>
         
 
@@ -366,7 +430,7 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
 
 
             <time class="article-time--reading">
-                阅读时长: 2 分钟
+                阅读时长: 6 分钟
             </time>
         </div>
         
@@ -387,7 +451,12 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
             
             
             
-            <a href="/zh-cn/tags/spring/">Spring</a> 
+            <a href="/zh-cn/tags/agent/">Agent</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/rag/">RAG</a> 
             
             
         </div>
@@ -403,35 +472,232 @@ ZTp0aW1lc3RhbXAAMjAyNS0wNi0wMVQxNzoyNDozNCswMDowMJnST7YAAAAASUVORK5CYII=" />
     <section class="article-content">
     
     
-    <blockquote>
-<p>循环依赖问题在 Spring 中主要有三种情况：</p>
+    <p><a class="link" href="https://mp.weixin.qq.com/s/kvOnakKVr8xVrrC32HlhIg"  target="_blank" rel="noopener"
+    >参考文章</a></p>
+<h2 id="引言"><a href="#%e5%bc%95%e8%a8%80" class="header-anchor"></a>引言
+</h2><p>RAG 的效果，除了 Prompt、检索算法、Embedding 模型之外，还有 Chunking 分块策略。</p>
+<h2 id="什么是分块chunking"><a href="#%e4%bb%80%e4%b9%88%e6%98%af%e5%88%86%e5%9d%97chunking" class="header-anchor"></a>什么是分块（Chunking）
+</h2><p>把大块文本拆分，使得文本数据更容易管理处理，进行嵌入，从而提升从向量数据库中召回内容的相关性准确性。分块过程中有 2 个概念“chunk_size”块的大小，“chunk_overlap” 重叠窗口。
+<img src="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image.png"
+	width="794"
+	height="154"
+	srcset="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image_hu_87cb3f3251a7e688.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image_hu_e509ec9dc80ec469.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="515"
+		data-flex-basis="1237px"
+	
+></p>
+<h2 id="为什么分块"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e5%88%86%e5%9d%97" class="header-anchor"></a>为什么分块
+</h2><ul>
+<li>大模型上下文窗口限制：无法一次处理超长文本。</li>
+<li>检索的信噪比：分块过大时无关内容会稀释信号、降低相似度判别力；分块过小时语境不足、容易“只命中词不命中义”。合适的块粒度可在召回与精度间取得更好平衡，既覆盖用户意图，又不引入多余噪声。在一定程度上提升检索相关性的同时又能保证结果稳定性。</li>
+<li>语义连续性：防止段落的整体语义被拆分时出现语义切断，需要在连续的块中间设置适度的 chunk_overlap，以提升答案的连贯性与可追溯性。</li>
+</ul>
+<p>所以合适的分块优势如下：</p>
 <ul>
-<li>通过<strong>构造方法</strong>进行依赖注入时产生的循环依赖问题。</li>
-<li>通过 setter 方法进行依赖注入且是在**多例（原型）**模式下产生的循环依赖问题。</li>
-<li>通过 setter 方法进行依赖注入且是在<strong>单例模式</strong>下产生的循环依赖问题。</li>
-</ul></blockquote>
-<blockquote>
-<p>只有【第三种方式】的循环依赖问题被 Spring 解决了，其他两种方式在遇到循环依赖问题时，Spring 都会产生异常。<br>
-Spring 解决单例模式下的 setter 循环依赖问题的主要方式是通过三级缓存解决循环依赖。三级缓存指的是 Spring 在创建 Bean 的过程中，通过三级缓存来缓存正在创建的和已经创建完成的 Bean 实例。<br>
-具体步聚如下：</p>
-<ol>
-<li>实例化：Spring 在实例化 Bean 时，会先创建一个空的 Bean 对象，并将其放入<strong>一级缓存</strong>中。</li>
-<li>属性赋值：Spring 开始对 Bean 进行属性赋值，如果发现循环依赖，会将当前 Bean 对象<strong>在属性赋值前提前暴露</strong>给后续需要依赖的 Bean，放到二<strong>级缓存</strong>(通过提前暴露的方式解决循环依赖)。</li>
-<li>初始化：完成属性赋值后，Spring 将 Bean 进行初始化，并将其放入<strong>二级缓存</strong>中。</li>
-<li>注入依赖：Spring 继续对 Bean 进行依赖注入，如果发现循环依赖，会从二级缓存中获取已经完成初始化的 Bean 实例。</li>
-</ol>
-<p>那么从上面就可以看到其实两级缓存就解决依赖循环，那要三级缓存有什么用呢？具体看这个 👇👇👇</p>
-<p><a class="link" href="https://blog.csdn.net/u013737132/article/details/135096886"  title="Spring 解决循环依赖为什么需要三级缓存，而不是两级缓存?_spring循环依赖为什么不是二级缓存-CSDN博客"
-     target="_blank" rel="noopener"
-    >Spring 解决循环依赖为什么需要三级缓存，而不是两级缓存?_spring 循环依赖为什么不是二级缓存-CSDN 博客</a></p></blockquote>
-<blockquote>
+<li>较小的文本段落更容易进行嵌入和检索，提高模型处理的效率。</li>
+<li>分块后的文本能更精确地匹配用户查询，提高了内容召回的准确性，获得相关性更高的结果。</li>
+</ul>
+<p>不恰当的分块策略会导致：</p>
 <ul>
-<li>三级缓存的数据结构都是 Map&lt;k,v&gt;类型</li>
-<li><strong>一级缓存 (singletonObjects)</strong>：存储已经完全初始化的 Bean。</li>
-<li><strong>二级缓存 (earlySingletonObjects)</strong>：存储的 Bean 处于初始化过程中（例如，构造函数调用期间，但还未完全初始化的 Bean）。</li>
-<li><strong>三级缓存 (singletonFactories)</strong>：存储的是 ObjectFactory 对象，这些对象可以生成早期的 bean 引用。当一个 bean 正在创建过程中，如果它被其他 bean 依赖，那么这个正在创<br>
-建的 bean 就会通过这个 ObjectFactory 来创建一个早期引用，从而解决循环依赖的问题。</li>
-</ul></blockquote>
+<li>上下文断裂</li>
+<li>关键信息被拆散（如定义与解释分离）</li>
+<li>表格/代码/标题结构破坏 -检索命中但无法支撑答案，甚至引发幻觉</li>
+</ul>
+<p>高质量分块则：</p>
+<ul>
+<li>尊重自然语义边界（段落、标题、列表、代码块等）</li>
+<li>设置适度重叠（chunk_overlap）以保持上下文连续（类似往期回顾）</li>
+<li>保留元数据（如章节路径、来源位置），便于追溯与重排。</li>
+</ul>
+<h2 id="常见分块策略"><a href="#%e5%b8%b8%e8%a7%81%e5%88%86%e5%9d%97%e7%ad%96%e7%95%a5" class="header-anchor"></a>常见分块策略
+</h2><h3 id="基础分块"><a href="#%e5%9f%ba%e7%a1%80%e5%88%86%e5%9d%97" class="header-anchor"></a>基础分块
+</h3><h4 id="基于固定长度分块"><a href="#%e5%9f%ba%e4%ba%8e%e5%9b%ba%e5%ae%9a%e9%95%bf%e5%ba%a6%e5%88%86%e5%9d%97" class="header-anchor"></a>基于固定长度分块
+</h4><p>按预设字符数 chunk_size 直接切分，不考虑文本结构。</p>
+<ul>
+<li>优点：简单直接</li>
+<li>缺点：破坏语义边界</li>
+</ul>
+<h4 id="基于句子分块"><a href="#%e5%9f%ba%e4%ba%8e%e5%8f%a5%e5%ad%90%e5%88%86%e5%9d%97" class="header-anchor"></a>基于句子分块
+</h4><p>先按句子切分，再将若干句子聚合成满足 chunk_size 的块，保证句子基本语义完整。</p>
+<ul>
+<li>优点：句子边界基本保留，完整性好</li>
+<li>缺点：句子过短会导致分块过短，可能导致语境不足、容易“只命中词不命中义”</li>
+</ul>
+<h4 id="基于递归字符分块"><a href="#%e5%9f%ba%e4%ba%8e%e9%80%92%e5%bd%92%e5%ad%97%e7%ac%a6%e5%88%86%e5%9d%97" class="header-anchor"></a>基于递归字符分块
+</h4><p>给定一组由“粗到细”的分隔符（如标题 → 段落 → 换行 → 空格 → 字符），自上而下递归切分，在不超出 chunk_size 的前提下尽量保留自然语义边界。</p>
+<ul>
+<li>优点：在“保持语义边界”和“控制块大小”之间取得稳健平衡，对大多数文本即插即用。</li>
+<li>缺点：分隔符配置不当会导致块粒度失衡，对于<strong>格式化文本如表格、代码效果一般</strong>。</li>
+</ul>
+<h3 id="结构感知分块"><a href="#%e7%bb%93%e6%9e%84%e6%84%9f%e7%9f%a5%e5%88%86%e5%9d%97" class="header-anchor"></a>结构感知分块
+</h3><p>利用文档固有的结构作为分块边界，逻辑清晰、可追溯性强，能在保证上下文完整性的同时<strong>提升检索信噪比</strong>。</p>
+<h4 id="结构化文本分块"><a href="#%e7%bb%93%e6%9e%84%e5%8c%96%e6%96%87%e6%9c%ac%e5%88%86%e5%9d%97" class="header-anchor"></a>结构化文本分块
+</h4><p>和递归字符分块比较像，以标题层级（H1–H6、编号标题）或语义块（段落、列表、表格、代码块）为此类型文档的天然边界，对过长的结构块再做二次细分，对过短的进行相邻合并。</p>
+<p>记得对 PDF/HTML 先去噪（页眉页脚、导航、广告等），避免把噪声索引进库。</p>
+<p><img src="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-2.png"
+	width="1443"
+	height="567"
+	srcset="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-2_hu_4b8b6f31a9b72e11.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-2_hu_d7e8c15d31e22532.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="254"
+		data-flex-basis="610px"
+	
+></p>
+<h4 id="对话式分块"><a href="#%e5%af%b9%e8%af%9d%e5%bc%8f%e5%88%86%e5%9d%97" class="header-anchor"></a>对话式分块
+</h4><p>在客服对话、访谈、会议纪要、技术支持工单等多轮交流中，设定一个<strong>滑动会话窗口</strong>存储若干条会话记录来支持上下文</p>
+<p>举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">用户: 我昨天在你们网站下单了蓝牙耳机，订单号是 #123456。
+</span></span><span class="line"><span class="cl">客服: 您好！已查到该订单，状态为“已发货”，预计明天送达。
+</span></span><span class="line"><span class="cl">用户: 但我今天又下了一单同款，订单号 #123789，想取消。
+</span></span><span class="line"><span class="cl">客服: 好的，我帮您查看。#123789 目前还未发货，可以取消。
+</span></span><span class="line"><span class="cl">用户: 太好了！另外，第一单能改地址吗？我想改成北京市朝阳区XX大厦。
+</span></span><span class="line"><span class="cl">客服: 可以尝试联系物流拦截并修改地址，请稍等……已操作成功，新地址已更新。
+</span></span><span class="line"><span class="cl">用户: 谢谢！对了，耳机支持防水吗？
+</span></span><span class="line"><span class="cl">客服: 是的，IPX7 级防水，可应对汗水和短时雨水。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>1️⃣ 分块阶段</p>
+<p>✅ 分块原则</p>
+<ul>
+<li>每轮 = 用户发言 + 客服回复（构成一个完整交互单元）</li>
+<li>若连续多轮围绕同一话题（如“订单取消”），可合并为一块</li>
+<li>最大块长度控制（如 ≤ 400 字），避免过长</li>
+</ul>
+<p>✅ 分块结果（3 个 chunk）</p>
+<ul>
+<li>Chunk 1（订单查询 + 发货状态）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">用户: 我昨天在你们网站下单了蓝牙耳机，订单号是 #123456。
+</span></span><span class="line"><span class="cl">客服: 您好！已查到该订单，状态为“已发货”，预计明天送达。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Chunk 2（订单取消 + 地址修改）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">用户: 但我今天又下了一单同款，订单号 #123789，想取消。
+</span></span><span class="line"><span class="cl">客服: 好的，我帮您查看。#123789 目前还未发货，可以取消。
+</span></span><span class="line"><span class="cl">用户: 太好了！另外，第一单能改地址吗？我想改成北京市朝阳区 XX 大厦。
+</span></span><span class="line"><span class="cl">客服: 可以尝试联系物流拦截并修改地址，请稍等……已操作成功，新地址已更新。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Chunk 3（产品功能咨询）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">用户: 谢谢！对了，耳机支持防水吗？
+</span></span><span class="line"><span class="cl">客服: 是的，IPX7 级防水，可应对汗水和短时雨水。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2️⃣ 检索阶段：邻接扩展（Context Expansion）</p>
+<p>假设用户提问：“我的第二个订单能取消吗？”</p>
+<p>首先向量检索命中最相关块：Chunk 2（包含“#123789 可以取消”）
+然后邻接扩展（取前后各 1 轮）：向前扩展：Chunk 1（了解用户背景：刚问过第一单），向后扩展：Chunk 3（无关，不扩展）
+最终大模型 不仅知道“能取消”，还理解这是用户的“第二单”，回答更自然：“您今天下的第二笔订单 #123789 尚未发货，已为您成功取消。</p>
+<h3 id="语义与主题分块"><a href="#%e8%af%ad%e4%b9%89%e4%b8%8e%e4%b8%bb%e9%a2%98%e5%88%86%e5%9d%97" class="header-anchor"></a>语义与主题分块
+</h3><p><strong>不依赖文档的物理结构</strong>，而是依据<strong>语义连续性</strong>与话题转移来决定切分点，尤其适合希望<strong>块内高度内聚、块间清晰分界</strong>的知识库与研究类文本。</p>
+<h4 id="语义分块"><a href="#%e8%af%ad%e4%b9%89%e5%88%86%e5%9d%97" class="header-anchor"></a>语义分块
+</h4><p>对文本先做<strong>句级切分</strong>，计算句子或短段的向量表示，当<strong>相邻语义的相似度显著下降（发生“语义突变”）时设为切分点</strong>。这就有点类似机器学习了，适用于专题化、论证结构明显的文档、白皮书、论文、技术手册、FAQ 聚合页</p>
+<p><img src="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-3.png"
+	width="1435"
+	height="672"
+	srcset="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-3_hu_86c2ffc11a065a7d.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-3_hu_1b56cbf1101fb312.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="213"
+		data-flex-basis="512px"
+	
+></p>
+<h4 id="主题分块"><a href="#%e4%b8%bb%e9%a2%98%e5%88%86%e5%9d%97" class="header-anchor"></a>主题分块
+</h4><p>利用主题模型或<strong>聚类算法</strong>在<strong>宏观话题发生切换时进行切分</strong>，更多的关注章节级、段落级的主题边界。该类分块策略主要适合长篇、多主题材料。</p>
+<h3 id="高级分块"><a href="#%e9%ab%98%e7%ba%a7%e5%88%86%e5%9d%97" class="header-anchor"></a>高级分块
+</h3><h4 id="小-大分块"><a href="#%e5%b0%8f-%e5%a4%a7%e5%88%86%e5%9d%97" class="header-anchor"></a>小-大分块
+</h4><p>简单来说就是见微知著、以小见大，先用“小粒度块”（如句子/短句）做高精度召回，然后定位到最相关的微片段，然后再将其“所在的大粒度块”（如段落/小节）作为上下文送入 LLM，以兼顾精确性与上下文完整性。</p>
+<p><img src="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-4.png"
+	width="1434"
+	height="562"
+	srcset="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-4_hu_29761c771c93acc5.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-4_hu_4c2f9ce8d0140477.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="255"
+		data-flex-basis="612px"
+	
+></p>
+<h4 id="父子段分块"><a href="#%e7%88%b6%e5%ad%90%e6%ae%b5%e5%88%86%e5%9d%97" class="header-anchor"></a>父子段分块
+</h4><p>将文档按章节/段落等结构单元切成“父块”（Parent），再在每个父块内切出“子块”（通常为句子/短段或者笃固定块）。然后为“子块”建向量索引以做高精度召回。当检索时先召回子块，再按 parent_id 聚合并扩展到父块或父块中的局部窗口，兼顾最后召回内容的精准与上下文完整性。</p>
+<p><strong>与“小-大分块”的关系</strong></p>
+<p>小-大分块是检索工作流（小粒度召回 → 大粒度上下文）；
+父子段分块是数据建模与索引设计（显式维护 parent–child 映射）。
+两者强相关、常配合使用：父子映射让小-大扩展更稳、更易去重与回链。</p>
+<h4 id="代理模块"><a href="#%e4%bb%a3%e7%90%86%e6%a8%a1%e5%9d%97" class="header-anchor"></a>代理模块
+</h4><p>说白了就是让专门的大模型进行动态分块，输出结构化边界信息与理由，这个大模型需要专门训练。</p>
+<p>适用于高度复杂、长篇、非结构化且混合格式（文本+代码+表格）的文档；</p>
+<p><img src="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-5.png"
+	width="1477"
+	height="852"
+	srcset="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-5_hu_91535cbf9f1a774f.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-5_hu_d18f435dfc388ab6.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="416px"
+	
+></p>
+<h2 id="总结"><a href="#%e6%80%bb%e7%bb%93" class="header-anchor"></a>总结
+</h2><p><img src="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-1.png"
+	width="1075"
+	height="560"
+	srcset="/zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-1_hu_ef7cf332efbddfd1.png 480w, /zh-cn/post/2025/11/agentrag%E5%88%86%E5%9D%97%E7%AD%96%E7%95%A5/image-1_hu_4ec5c9390244785c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="191"
+		data-flex-basis="460px"
+	
+></p>
 
 </section>
 
@@ -479,12 +745,12 @@ Spring 解决单例模式下的 setter 循环依赖问题的主要方式是通�
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/02/spring%E7%9A%84bean%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+    <a href="/zh-cn/post/2025/09/springai%E5%BC%80%E5%8F%91mcp/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Spring的bean初始化过程、生命周期</h2>
+            <h2 class="article-title">SpringAI开发MCP</h2>
             
         </div>
     </a>
@@ -492,38 +758,12 @@ Spring 解决单例模式下的 setter 循环依赖问题的主要方式是通�
             
                 
 <article class="">
-    <a href="/zh-cn/post/2025/02/spring%E4%BA%8B%E5%8A%A1%E5%A4%B1%E6%95%88%E7%9A%84%E5%87%A0%E7%A7%8D%E5%9C%BA%E6%99%AF/">
+    <a href="/zh-cn/post/2025/09/trae%E5%9B%BD%E5%86%85%E7%89%88%E6%B5%8B%E8%AF%84/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">Spring事务失效的几种场景</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/02/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8nacosopenfeignsentinelgatewayseata/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">微服务概念入门：Nacos、OpenFeign、Sentinel、GateWay、Seata</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">一文入门SpringSecurity 5</h2>
+            <h2 class="article-title">Trae国内版测评</h2>
             
         </div>
     </a>

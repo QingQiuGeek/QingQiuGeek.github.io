@@ -7,7 +7,71 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 02 Oct 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 02 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Agent</title>
+        <link>/zh-cn/tags/agent/</link>
+        <pubDate>Sun, 02 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/agent/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Java</title>
+        <link>/zh-cn/tags/java/</link>
+        <pubDate>Sun, 02 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/java/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>RAG</title>
+        <link>/zh-cn/tags/rag/</link>
+        <pubDate>Sun, 02 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/rag/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>泛型</title>
+        <link>/zh-cn/tags/%E6%B3%9B%E5%9E%8B/</link>
+        <pubDate>Sun, 02 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/%E6%B3%9B%E5%9E%8B/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Web3</title>
+        <link>/zh-cn/tags/web3/</link>
+        <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/web3/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>加密货币</title>
+        <link>/zh-cn/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/</link>
+        <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>区块链</title>
+        <link>/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</link>
+        <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>智能合约</title>
+        <link>/zh-cn/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/</link>
+        <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>FastAPI</title>
         <link>/zh-cn/tags/fastapi/</link>
         <pubDate>Thu, 02 Oct 2025 09:39:19 +0000</pubDate>
@@ -29,14 +93,6 @@
         <pubDate>Thu, 02 Oct 2025 09:39:19 +0000</pubDate>
         
         <guid>/zh-cn/tags/restful/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Agent</title>
-        <link>/zh-cn/tags/agent/</link>
-        <pubDate>Sat, 13 Sep 2025 12:39:19 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/agent/</guid>
         <description></description>
         </item>
         <item>
@@ -77,14 +133,6 @@
         <pubDate>Sat, 13 Sep 2025 12:39:19 +0000</pubDate>
         
         <guid>/zh-cn/tags/spring-ai/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Java</title>
-        <link>/zh-cn/tags/java/</link>
-        <pubDate>Sat, 06 Sep 2025 12:39:19 +0000</pubDate>
-        
-        <guid>/zh-cn/tags/java/</guid>
         <description></description>
         </item>
         <item>
