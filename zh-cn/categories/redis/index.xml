@@ -7,7 +7,28 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Fri, 05 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/redis/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 04 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/redis/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Redis内存碎片</title>
+        <link>/zh-cn/post/2025/11/redis%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/</link>
+        <pubDate>Tue, 04 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/redis%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/Fj92SrvvFcUQxRi8mSKGvQ&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;什么是内存碎片&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是内存碎片
+&lt;/h2&gt;&lt;p&gt;存储数据实际所用内存空间少于系统分配的内存空间，没有被用到的这部分内存空间就是内存碎片。&lt;/p&gt;
+&lt;h2 id=&#34;redis-为什么有内存碎片&#34;&gt;&lt;a href=&#34;#redis-%e4%b8%ba%e4%bb%80%e4%b9%88%e6%9c%89%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Redis 为什么有内存碎片
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Redis 存储数据的时向操作系统申请的内存空间可能会大于数据实际需要的存储空间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Redis 有多种内存分配器，默认是 jemalloc，当程序申请的内存最接近某个固定值时，jemalloc 会给它分配相应大小的空间，就比如说程序需要申请 17 字节的内存，jemalloc 会直接给它分配 32 字节的内存而不是 16 字节，这样会导致有 15 字节内存的浪费。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;频繁修改 Redis 中的数据也会产生内存碎片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;比如删除数据时 Redis 通常不会轻易释放内存给操作系统，而是保留在自己的空闲池中，供后续分配复用。因为频繁地向系统申请和释放内存，性能开销很大，Redis 优先考虑 低延迟和高吞吐，因此宁愿“浪费”一点内存，也不愿频繁触发系统调用或产生页表抖动；&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>IO多路复用select、poll、epoll</title>
         <link>/zh-cn/post/2025/09/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8selectpollepoll/</link>
         <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>

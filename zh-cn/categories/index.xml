@@ -7,7 +7,23 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sun, 02 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 04 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>LLM</title>
+        <link>/zh-cn/categories/llm/</link>
+        <pubDate>Tue, 04 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/llm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Redis</title>
+        <link>/zh-cn/categories/redis/</link>
+        <pubDate>Tue, 04 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/redis/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Agent</title>
         <link>/zh-cn/categories/agent/</link>
         <pubDate>Sun, 02 Nov 2025 09:39:19 +0000</pubDate>
@@ -109,14 +125,6 @@
         <pubDate>Sat, 13 Sep 2025 12:39:19 +0000</pubDate>
         
         <guid>/zh-cn/categories/flask/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>LLM</title>
-        <link>/zh-cn/categories/llm/</link>
-        <pubDate>Sat, 13 Sep 2025 12:39:19 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/llm/</guid>
         <description></description>
         </item>
         <item>
@@ -229,14 +237,6 @@
         <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>
         
         <guid>/zh-cn/categories/rabbitmq/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Redis</title>
-        <link>/zh-cn/categories/redis/</link>
-        <pubDate>Fri, 05 Sep 2025 12:39:19 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/redis/</guid>
         <description></description>
         </item>
         <item>

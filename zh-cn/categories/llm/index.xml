@@ -7,7 +7,87 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 13 Sep 2025 12:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/llm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 04 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/llm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>大模型结构化输出</title>
+        <link>/zh-cn/post/2025/11/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA/</link>
+        <pubDate>Tue, 04 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/bT5Z9HBgLl2I4Ylbxklw0A&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;模式引导生成&#34;&gt;&lt;a href=&#34;#%e6%a8%a1%e5%bc%8f%e5%bc%95%e5%af%bc%e7%94%9f%e6%88%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;模式引导生成
+&lt;/h2&gt;&lt;p&gt;最简单的&lt;strong&gt;prompt 软引导&lt;/strong&gt;，通过提示词向模型提供明确的指令、具体格式要求，&lt;strong&gt;引导&lt;/strong&gt;模型返回预期结构内容。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;请将以下信息转换为JSON格式：&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;要求的JSON结构：&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;{&lt;/span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;title&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;标题&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;内容&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;tags&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;标签1&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;标签2&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;&amp;#34;metadata&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;{&lt;/span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;#34;created_at&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;创建时间&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nt&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;作者&amp;#34;&lt;/span&gt;   
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;}}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;大模型是基于逐令牌（token-by-token）预测器生成内容的，可以通过 temperature 参数设置得较低以&lt;strong&gt;减少模型生成响应的随机性&lt;/strong&gt;，但生成的内容仍具有不确定性，可能会输出不必要的解释文本或生成复杂的嵌套结构时出错。&lt;/p&gt;
+&lt;h2 id=&#34;验证与修复框架&#34;&gt;&lt;a href=&#34;#%e9%aa%8c%e8%af%81%e4%b8%8e%e4%bf%ae%e5%a4%8d%e6%a1%86%e6%9e%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;验证与修复框架
+&lt;/h2&gt;&lt;p&gt;可以对输出内容进行自校验并修正&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA/image.png&#34;
+	width=&#34;1080&#34;
+	height=&#34;535&#34;
+	srcset=&#34;/zh-cn/post/2025/11/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA/image_hu_ca0bc3cdfafe53d9.png 480w, /zh-cn/post/2025/11/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA/image_hu_71cad38adc4ce74.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;201&#34;
+		data-flex-basis=&#34;484px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;先使用 Pydantic 模型或 JsonSchema 等工具，详细定义期望的输出结构、字段类型、以及所需的验证规则和纠正措施。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;大模型生成输出内容，守卫对象会根据预先定义的结构规范对输出进行自动验证。如果发现输出格式无效、字段缺失、或内容不符合要求，会自动执行纠正措施。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;约束解码&#34;&gt;&lt;a href=&#34;#%e7%ba%a6%e6%9d%9f%e8%a7%a3%e7%a0%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;约束解码
+&lt;/h2&gt;&lt;p&gt;从根本上解决大模型的随机性问题，约束解码在模型的生成过程中进行&lt;strong&gt;事前干预&lt;/strong&gt;。其核心技术原理是在大语言模型生成每个令牌（Token）时，通过一个&lt;strong&gt;外部预定义的规则集或语法（如有限状态机，FSM）来动态地约束模型的输出空间&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;当模型预测下一个令牌的概率分布时，约束解码算法会检查这个分布中哪些令牌是符合预设语法规则的。然后，它将输出空间限制在这些合规的令牌上，并从中选择概率最高的那个作为下一个生成的令牌。&lt;/p&gt;
+&lt;p&gt;然而对于没有开源的黑盒 LLM，不能深入其内部，就无法在 LLM 输出时就从根本上进行约束解码，于是有了&lt;strong&gt;草图引导约束解码方案&lt;/strong&gt;，核心思想是将黑盒 LLM 的无约束自由文本输出视为一个“草图”，然后再用自己部署的辅助 LLM，根据预定义的规则对黑盒 LLM 输出的这个“草图”进行精炼和修正，在不访问黑盒模型内部机制的情况下实现了约束解码的效果。&lt;/p&gt;
+&lt;h2 id=&#34;监督式微调sft&#34;&gt;&lt;a href=&#34;#%e7%9b%91%e7%9d%a3%e5%bc%8f%e5%be%ae%e8%b0%83sft&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;监督式微调（SFT）
+&lt;/h2&gt;&lt;p&gt;使用特定领域的高质量有标签数据集训练预训练模型，调整其内部权重，使其永久性地学会生成特定模式输出的技术。&lt;/p&gt;
+&lt;h3 id=&#34;sft-高原现象&#34;&gt;&lt;a href=&#34;#sft-%e9%ab%98%e5%8e%9f%e7%8e%b0%e8%b1%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;“SFT 高原”现象
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;现象：即使在增加了大规模的有标签数据集之后，模型的性能提升也微乎其微，存在瓶颈无法突破。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;原因：SFT 本质上是一种模式记忆和泛化。对于需要复杂推理、逻辑链或涉及组合爆炸的任务，仅仅依靠增加数据量是无法让模型掌握其内在逻辑，也就是说纯书呆子，不会举一反三，碰到没见过的新的复杂结构就不行了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;强化学习优化&#34;&gt;&lt;a href=&#34;#%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;强化学习优化
+&lt;/h2&gt;&lt;p&gt;一句话“有进步就有奖励”，&lt;strong&gt;突破了 SFT 高原&lt;/strong&gt;，与 SFT 单纯依赖静态有标签数据不同，强化学习（RL）通过&lt;strong&gt;奖励机制&lt;/strong&gt;对模型生成结构化输出的正确性进行细粒度、动态的反馈，RL 允许模型通过试错来学习，即使某个输出不完美，只要它比之前的尝试更接近目标，就能获得正向奖励。&lt;/p&gt;
+&lt;h2 id=&#34;总结接口化能力&#34;&gt;&lt;a href=&#34;#%e6%80%bb%e7%bb%93%e6%8e%a5%e5%8f%a3%e5%8c%96%e8%83%bd%e5%8a%9b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;总结：接口化能力
+&lt;/h2&gt;&lt;p&gt;说白了就是 MCP 的函数调用，把大模型能力封装成接口，直接调接口返回指定格式的内容，比如返回一个对象，他有各种属性，极大降低开发者实现结构化输出的门槛，也方便对接、解析各种接口。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>SpringAI开发MCP</title>
         <link>/zh-cn/post/2025/09/springai%E5%BC%80%E5%8F%91mcp/</link>
         <pubDate>Sat, 13 Sep 2025 12:39:19 +0000</pubDate>
