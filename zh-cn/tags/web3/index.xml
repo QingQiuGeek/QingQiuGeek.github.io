@@ -7,7 +7,101 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 01 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 09 Nov 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Layer2发展</title>
+        <link>/zh-cn/post/2025/11/layer2%E5%8F%91%E5%B1%95/</link>
+        <pubDate>Sun, 09 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/layer2%E5%8F%91%E5%B1%95/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/373486590&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;发展史&#34;&gt;&lt;a href=&#34;#%e5%8f%91%e5%b1%95%e5%8f%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;发展史
+&lt;/h2&gt;&lt;p&gt;在 Layer2 出现之前，所有操作必须在主链（Layer 1）上完成，Layer2 出现是为了解决区块链&lt;strong&gt;主链交易处理速度低下而生&lt;/strong&gt;，即需要将需要计算处理的交易从主链 Layer1 移到 Layer2 线下进行，计算完后再将结果移到主链 Layer1。&lt;/p&gt;
+&lt;p&gt;去中心化应用基于区块链构建，每笔交易计算都要占用资源，2017 年一款去中心化的游戏应用“加密猫”作为一个基于智能合约的 NFT（非同质化代币）游戏，每次繁殖、买卖、转让猫咪都需要提交一笔以太坊交易。大量用户涌入短时间内产生了巨量交易请求，占用以太坊网络交易容量，当网络拥堵时，用户为了快速完成交易，纷纷提高 Gas 费，推高了全网 Gas 价格，使得正常普通用户因无法支付高昂 Gas 费而无法完成交易。&lt;/p&gt;
+&lt;h2 id=&#34;具体-layer2-方案&#34;&gt;&lt;a href=&#34;#%e5%85%b7%e4%bd%93-layer2-%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;具体 Layer2 方案
+&lt;/h2&gt;&lt;h3 id=&#34;rullup&#34;&gt;&lt;a href=&#34;#rullup&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Rullup
+&lt;/h3&gt;&lt;p&gt;Rullup 主要分为 Optimistic Rollup 和 ZK Rollup 以及 Arbitrum Rollup 三种。都是把运算放到链下，然后把数据存在链上，这样就可以实现既提高运算速度，又利用了以太坊主网的安全性，又解决了数据可得性的问题。&lt;/p&gt;
+&lt;p&gt;Optimistic Rollup 沿用了 Plasma「欺诈证明」的方式，即&lt;strong&gt;任何人都可以对返回链上的数据进行验证和质疑，一旦发现问题，这些数据就将被回滚以保证安全&lt;/strong&gt;，但是这种方式有个致命问题就是验证期的存在，通常验证期都是 2 周左右，也就意味着当用户想要从 Layer2 往 Layer1 转账的时候，需要等候两周左右的时间。&lt;/p&gt;
+&lt;p&gt;ZK Rollup 采用了 ZK-SNARK （简明的非交互式零知识证明），这种方式&lt;strong&gt;解决了验证期的问题&lt;/strong&gt;，但其缺点是&lt;strong&gt;计算量大，技术难度高且难以支持虚拟机&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Arbitrum Rollup 的设计方案里有一个验证人，验证人在链上记录时需要发送一个主张到以太坊上，同时验证人需要存一笔保证金。如果验证人的主张是假的，那么保证金就会丧失。
+验证人把主张发送到链上后会有一段时间任何人都可以提出的质疑。如果你不同意就会有争端，争端的解决机制就是 Arbitrum，机制是如果双方对某件事持不同意见，有效的解决机制是&lt;strong&gt;由大到小&lt;/strong&gt;进行拆分。比如某笔交易涉及到 10 亿步产生了争议，那么便将 10 亿步拆分成 100 份更小的主张，每个主张包含 1000 万步，这样就把 10 亿规模的争端缩小成了千万规模的。不同意的一方再从这 1000 万中挑出他不同意的，再进一步的由大化小，&lt;strong&gt;直到找到最关键的有争议的那一步&lt;/strong&gt;。找到关键的一步之后，&lt;strong&gt;再动用以太坊的合约来决定这一步到底是正确还是错误的，这一步显然可以由智能合约规定，具有扩展性&lt;/strong&gt;。通过这样的方式就可以实现高效的争端的解决。&lt;/p&gt;
+&lt;h3 id=&#34;状态通道&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e9%80%9a%e9%81%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态通道
+&lt;/h3&gt;&lt;p&gt;用户和用户之间直接建立一条通道，举个例子，用户 A 和用户 B 经常发生转账，因此他们可以直接建立一条通道，然后每个人都在这个通道里存放一定数量的代币，当需要转账时，就从存放好的代币中进行交易就好了。当然 A 和 B 不可能一直做交易，而且通道只有 A 和 B 可以使用，因此没有解决主链交易拥堵的问题。&lt;/p&gt;
+&lt;h3 id=&#34;侧链&#34;&gt;&lt;a href=&#34;#%e4%be%a7%e9%93%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;侧链
+&lt;/h3&gt;&lt;p&gt;在主链外另开一条公链分担压力，但是这条公链不够安全，以太坊上之所以能吸引这么多的应用和用户，正是因为它的生态已经构建成形，可以安全性，但是其他公链并不具备这个安全系数。打个比方，以太坊就像一条非常完备的高速公路，有警察，有救护车，一旦发生问题，可以及时解决，但是如果你在其他路上开车运货，不管是遇到车祸还是遇到抢匪，可能都没有保护措施，那么用户怎么敢在这条路上运货呢。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Web3发展史、核心要素</title>
+        <link>/zh-cn/post/2025/11/web3%E5%8F%91%E5%B1%95%E5%8F%B2%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0/</link>
+        <pubDate>Sun, 09 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/web3%E5%8F%91%E5%B1%95%E5%8F%B2%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learnblockchain.cn/article/3476&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考链接&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.chain.link/web3-zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;发展史&#34;&gt;&lt;a href=&#34;#%e5%8f%91%e5%b1%95%e5%8f%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;发展史
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;最初由 HTTP 的发明者提出，是指一个集成的通信框架，互联网数据可以&lt;strong&gt;跨越各个应用和系统&lt;/strong&gt;实现机器可读。Web 3.0 通常也被称作为“语义网”&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;2014 年，以太坊创始人重新定义了 Web3 概念，指一种区块链技术，可以**基于“无须信任的交互系统”**在“各方之间实现创新的交互模式”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;web10&#34;&gt;&lt;a href=&#34;#web10&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web1.0
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;时间：1994-2004&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特点：Web 1.0 主要是静态的 HTML 网页，用户之间很少交互，有聊天转账功能但是无法保证安全。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;实际在 1968 年，一个名为“ARPANET”的美国政府项目就已经启动了 Web 1.0。ARPANET 最初是由军方承包商和大学教授组成的一个用于交换数据小型网络。Web 1.0 时代中最具创新力的企业就是&lt;strong&gt;必胜客&lt;/strong&gt;。他们在 1995 年开发了一个订购披萨的网页，消费者可以在页面中下单，等到披萨送到后再付现金。&lt;/p&gt;
+&lt;h3 id=&#34;web20&#34;&gt;&lt;a href=&#34;#web20&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web2.0
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;时间：2004 - 至今&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特点：动态网页，用户之间互动性显著提升，用户使用互联网时必须&lt;strong&gt;授权中心化的第三方平台管理大量数据&lt;/strong&gt;。因此这些中心化的实体在数据和内容权限方面被赋予了巨大的权力和影响力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;web30&#34;&gt;&lt;a href=&#34;#web30&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web3.0
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;时间：2008 - 至今&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特点：&lt;strong&gt;基于数学加密证明，而非信任第三方数据中心平台&lt;/strong&gt;，即去中心化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2008 年中本聪提出了点对点的数字货币（比特币）和区块链概念。&lt;/p&gt;
+&lt;p&gt;智能合约出现后，去中心化互联网模式才逐渐流行，虚拟货币实现了点对点交易，智能合约不是传统的法律约束，而是可编程协议，通过编程实现约定的逻辑，好比商品贩卖机，规定输入硬币，选择商品后，规定输出商品。&lt;/p&gt;
+&lt;h2 id=&#34;web3-核心要素&#34;&gt;&lt;a href=&#34;#web3-%e6%a0%b8%e5%bf%83%e8%a6%81%e7%b4%a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web3 核心要素
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;区块链&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;安全性和去中心化水平都极高的网络，可以在一个&lt;strong&gt;共享账本&lt;/strong&gt;中储存数据、交换价值并记录交易活动，而且账本&lt;strong&gt;不受任何中心化&lt;/strong&gt;实体控制。区块链是 Web3 的基石&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;加密资产&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基于区块链构建的数字货币或代币，类似现实的货币&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;智能合约、去中心化应用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;智能合约是区块链上不可篡改的程序，利用“如果 x 是真实的，则执行 y”的代码逻辑自动执行交易。通过智能合约可以构建去中心化应用 dAPP，给用户使用。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;预言机&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;智能合约要充分实现其潜力，就必须能够与区块链网络以外的数据和系统交互。预言机能&lt;strong&gt;将区块链连接至真实世界中的数据和系统&lt;/strong&gt;，并提供关键的基础架构，打造一个具有互操作性且统一的 Web3 生态。&lt;/p&gt;
+&lt;h2 id=&#34;举例&#34;&gt;&lt;a href=&#34;#%e4%b8%be%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;举例
+&lt;/h2&gt;&lt;p&gt;假设某季节中的降雨量必须超过 20 英寸，才能保障农作物不欠收。一个农民希望买保险来对冲恶劣天气造成的不利影响。正常情况下他必须要经过漫长的理赔流程，并且要依靠&lt;strong&gt;中心化的保险机构&lt;/strong&gt;来核实降雨量。但是如果在 Web 的世界，一切都是事先编程约定好的合约，保险流程会非常高效迅速，并基于简单的二元逻辑判断农民是否应获得理赔。物联网传感器在当季记录的降雨量是否低于 20 英寸？如果是，则立即支付赔偿金给农民。如果否，则不支付赔偿金给农民。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>区块链入门：区块链、智能合约、加密货币、Web3</title>
         <link>/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/</link>
         <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>

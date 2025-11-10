@@ -3,18 +3,33 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/zh-cn/</loc>
-    <lastmod>2025-11-04T09:39:19+00:00</lastmod>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/</loc>
-    <lastmod>2025-11-04T09:39:19+00:00</lastmod>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2025/11/layer2%E5%8F%91%E5%B1%95/</loc>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/</loc>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/</loc>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/web3/</loc>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/web3/</loc>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2025/11/web3%E5%8F%91%E5%B1%95%E5%8F%B2%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0/</loc>
+    <lastmod>2025-11-09T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/llm/</loc>
     <lastmod>2025-11-04T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/llm/</loc>
-    <lastmod>2025-11-04T09:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/post/</loc>
     <lastmod>2025-11-04T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/redis/</loc>
@@ -24,9 +39,6 @@
     <lastmod>2025-11-04T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2025/11/redis%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/</loc>
-    <lastmod>2025-11-04T09:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/</loc>
     <lastmod>2025-11-04T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2025/11/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA/</loc>
@@ -61,12 +73,6 @@
   </url><url>
     <loc>/zh-cn/tags/%E6%B3%9B%E5%9E%8B/</loc>
     <lastmod>2025-11-02T09:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/web3/</loc>
-    <lastmod>2025-11-01T09:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/web3/</loc>
-    <lastmod>2025-11-01T09:39:19+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/</loc>
     <lastmod>2025-11-01T09:39:19+00:00</lastmod>
