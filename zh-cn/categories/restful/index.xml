@@ -8,11 +8,11 @@
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
         <lastBuildDate>Thu, 02 Oct 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/restful/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title></title>
-        <link>/zh-cn/post/2025/10/</link>
+        <title>RESTful规范</title>
+        <link>/zh-cn/post/2025/10/restful%E8%A7%84%E8%8C%83/</link>
         <pubDate>Thu, 02 Oct 2025 09:39:19 +0000</pubDate>
         
-        <guid>/zh-cn/post/2025/10/</guid>
+        <guid>/zh-cn/post/2025/10/restful%E8%A7%84%E8%8C%83/</guid>
         <description>&lt;p&gt;RESTful 是一种&lt;strong&gt;基于 HTTP 协议设计 API 的规范&lt;/strong&gt;，核心是通过「HTTP 方法+URL 路径」的组合，以统一、无状态的方式操作资源（如数据、文件等），且返回格式通常为 JSON（或 XML）。&lt;/p&gt;
 &lt;p&gt;简单来说，就是&lt;strong&gt;把 API 中的操作对象（如用户、商品、订单）视为“资源”，用 HTTP 方法表达对资源的“操作意图”&lt;/strong&gt;，而非通过 URL 路径直接包含动词（如&lt;code&gt;/getUser&lt;/code&gt;、&lt;code&gt;/deleteOrder&lt;/code&gt;）。&lt;/p&gt;
 &lt;h3 id=&#34;一restful-请求的核心原则通过例子理解&#34;&gt;&lt;a href=&#34;#%e4%b8%80restful-%e8%af%b7%e6%b1%82%e7%9a%84%e6%a0%b8%e5%bf%83%e5%8e%9f%e5%88%99%e9%80%9a%e8%bf%87%e4%be%8b%e5%ad%90%e7%90%86%e8%a7%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;一、RESTful 请求的核心原则（通过例子理解）

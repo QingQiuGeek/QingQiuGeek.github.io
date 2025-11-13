@@ -8,16 +8,16 @@
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
         <lastBuildDate>Thu, 02 Oct 2025 09:39:19 +0000</lastBuildDate><atom:link href="/zh-cn/categories/fastapi/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title></title>
-        <link>/zh-cn/post/2025/10/</link>
+        <title>初学FastAPI</title>
+        <link>/zh-cn/post/2025/10/%E5%88%9D%E5%AD%A6fastapi/</link>
         <pubDate>Thu, 02 Oct 2025 09:39:19 +0000</pubDate>
         
-        <guid>/zh-cn/post/2025/10/</guid>
+        <guid>/zh-cn/post/2025/10/%E5%88%9D%E5%AD%A6fastapi/</guid>
         <description>&lt;h2 id=&#34;内置-api-文档&#34;&gt;&lt;a href=&#34;#%e5%86%85%e7%bd%ae-api-%e6%96%87%e6%a1%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;内置 api 文档
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/10/image.png&#34;
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/10/%E5%88%9D%E5%AD%A6fastapi/image.png&#34;
 	width=&#34;1199&#34;
 	height=&#34;1080&#34;
-	srcset=&#34;/zh-cn/post/2025/10/image_hu_c2437689b1e6bb39.png 480w, /zh-cn/post/2025/10/image_hu_be9ac69bca435aa5.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/10/%E5%88%9D%E5%AD%A6fastapi/image_hu_c2437689b1e6bb39.png 480w, /zh-cn/post/2025/10/%E5%88%9D%E5%AD%A6fastapi/image_hu_be9ac69bca435aa5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
