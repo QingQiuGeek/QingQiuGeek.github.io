@@ -102,6 +102,82 @@
 </description>
         </item>
         <item>
+        <title>Web3钱包、交易</title>
+        <link>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93/</link>
+        <pubDate>Sun, 09 Nov 2025 09:39:19 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;交易流程&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易流程
+&lt;/h2&gt;&lt;p&gt;发起一笔交易，这笔交易会有以下流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;它首先被发送到一个节点的内存池（mempool）——一个&lt;strong&gt;暂存已验证合法但尚未被打包的交易的池子&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后&lt;strong&gt;立刻广播到邻居节点&lt;/strong&gt;，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。&lt;/li&gt;
+&lt;li&gt;邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;钱包&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://etherscan.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Etherscan&lt;/a&gt; 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如&lt;a class=&#34;link&#34; href=&#34;https://bscscan.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;BscScan&lt;/a&gt;，&lt;a class=&#34;link&#34; href=&#34;https://polygonscan.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Polygonscan&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/guides/how-to-use-a-wallet/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;如何使用钱包&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;钱包不是账户，而是一种能使用密钥和帐户互动的工具，也就是可视化界面，通过钱包可以查看账户余额、交易。&lt;/p&gt;
+&lt;p&gt;钱包种类有物理硬件钱包，最安全，还有应用程序钱包、浏览器钱包等。&lt;/p&gt;
+&lt;p&gt;根据资产不同，适用的钱包也不同，具体看这里 &lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/wallets/find-wallet/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;选择钱包&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Zerion：https://zerion.io/&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Rainbow：https://rainbow.me/&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Coinbase Wallet：https://www.coinbase.com/wallet&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;账户&#34;&gt;&lt;a href=&#34;#%e8%b4%a6%e6%88%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;账户
+&lt;/h2&gt;&lt;p&gt;以太坊帐户是一对密钥，一个用于创建可以随意共享的地址，另一个需要保密，因为它用于签名。结合使用这两个密钥，可以持有资产和进行交易。&lt;/p&gt;
+&lt;p&gt;以太坊帐户有一个地址，就像收件箱有电子邮件地址一样。它用于识别数字资产。&lt;/p&gt;
+&lt;h2 id=&#34;钱包链接项目是什么意思&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85%e9%93%be%e6%8e%a5%e9%a1%b9%e7%9b%ae%e6%98%af%e4%bb%80%e4%b9%88%e6%84%8f%e6%80%9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包链接项目是什么意思？
+&lt;/h2&gt;&lt;p&gt;将钱包连接到项目中，是 Web3 应用（DApp）使用中最基础、最关键的一步。它的本质不是“登录账号”，而是 &lt;strong&gt;建立用户与区块链应用&lt;/strong&gt;之间的可信通信通道&lt;/p&gt;
+&lt;h2 id=&#34;去中心化应用&#34;&gt;&lt;a href=&#34;#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e5%ba%94%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;去中心化应用
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Zora：https://zora.co/&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Uniswap：https://app.uniswap.org/&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Farcaster：https://farcaster.xyz/&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+&lt;h2 id=&#34;以太坊开发技术栈&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%bc%80%e5%8f%91%e6%8a%80%e6%9c%af%e6%a0%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊开发技术栈
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Hardhat&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Foundry&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Ethers.js&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Thirdweb&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Moralis&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>区块链入门：区块链、智能合约、加密货币、Web3</title>
         <link>/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/</link>
         <pubDate>Sat, 01 Nov 2025 09:39:19 +0000</pubDate>
