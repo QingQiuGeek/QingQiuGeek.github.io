@@ -102,11 +102,11 @@
 </description>
         </item>
         <item>
-        <title>Web3钱包、交易</title>
-        <link>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93/</link>
+        <title>Web3钱包、交易、账户</title>
+        <link>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/</link>
         <pubDate>Sun, 09 Nov 2025 09:39:19 +0000</pubDate>
         
-        <guid>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93/</guid>
+        <guid>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/</guid>
         <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;参考链接&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;交易流程&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易流程
@@ -117,7 +117,11 @@
 &lt;li&gt;邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;钱包&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包
-&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://etherscan.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;热钱包：连接网络，操作方便，适合日常交易。&lt;/li&gt;
+&lt;li&gt;冷钱包：离线存储，更安全，适合长期持有。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://etherscan.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Etherscan&lt;/a&gt; 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如&lt;a class=&#34;link&#34; href=&#34;https://bscscan.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;BscScan&lt;/a&gt;，&lt;a class=&#34;link&#34; href=&#34;https://polygonscan.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Polygonscan&lt;/a&gt;&lt;/p&gt;
@@ -127,21 +131,95 @@
 &lt;p&gt;钱包种类有物理硬件钱包，最安全，还有应用程序钱包、浏览器钱包等。&lt;/p&gt;
 &lt;p&gt;根据资产不同，适用的钱包也不同，具体看这里 &lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/wallets/find-wallet/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;选择钱包&lt;/a&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Zerion：https://zerion.io/&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Rainbow：https://rainbow.me/&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Coinbase Wallet：https://www.coinbase.com/wallet&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h2 id=&#34;账户&#34;&gt;&lt;a href=&#34;#%e8%b4%a6%e6%88%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;账户
 &lt;/h2&gt;&lt;p&gt;以太坊帐户是一对密钥，一个用于创建可以随意共享的地址，另一个需要保密，因为它用于签名。结合使用这两个密钥，可以持有资产和进行交易。&lt;/p&gt;
 &lt;p&gt;以太坊帐户有一个地址，就像收件箱有电子邮件地址一样。它用于识别数字资产。&lt;/p&gt;
-&lt;h2 id=&#34;钱包链接项目是什么意思&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85%e9%93%be%e6%8e%a5%e9%a1%b9%e7%9b%ae%e6%98%af%e4%bb%80%e4%b9%88%e6%84%8f%e6%80%9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包链接项目是什么意思？
+&lt;h2 id=&#34;杠杆&#34;&gt;&lt;a href=&#34;#%e6%9d%a0%e6%9d%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;杠杆
+&lt;/h2&gt;&lt;p&gt;杠杆允许交易者用较少的自有资金（保证金）控制更大价值的头寸。&lt;/p&gt;
+&lt;p&gt;1000 USDT 的本金，使用 10 倍杠杆，可开立价值 10,000 USDT 的合约头寸。盈亏按 10000 USDT 的变动计算，放大收益也放大风险。&lt;/p&gt;
+&lt;h2 id=&#34;多头仓位空头仓位&#34;&gt;&lt;a href=&#34;#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;多头仓位、空头仓位
+&lt;/h2&gt;&lt;h2 id=&#34;仓位&#34;&gt;&lt;a href=&#34;#%e4%bb%93%e4%bd%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;仓位
+&lt;/h2&gt;&lt;p&gt;仓位 = 用合约“虚拟持有”的资产头寸，我钱包里有 10,000 USDC，想参与 BTC 价格波动，但不想真的买 BTC（避免托管、转账麻烦），于是选择通过合约进行虚拟持有，具体看下面两个例子。&lt;/p&gt;
+&lt;p&gt;假设当前 BTC 市场价格 = $60,000&lt;/p&gt;
+&lt;h3 id=&#34;多头仓位看涨盈利&#34;&gt;&lt;a href=&#34;#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e6%b6%a8%e7%9b%88%e5%88%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;多头仓位：看涨盈利
+&lt;/h3&gt;&lt;p&gt;核心逻辑：你看涨 BTC，认为 BTC 价格会上涨，于是买入合约，等涨价后卖出平仓赚差价。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image.png&#34;
+	width=&#34;1274&#34;
+	height=&#34;494&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image_hu_20c99fe33443df26.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image_hu_a16c3a5a07f47ff4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;257&#34;
+		data-flex-basis=&#34;618px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6.png&#34;
+	width=&#34;1047&#34;
+	height=&#34;705&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6_hu_5fb0890cc87fba9c.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6_hu_8f4edffb3d556687.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;148&#34;
+		data-flex-basis=&#34;356px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2.png&#34;
+	width=&#34;1611&#34;
+	height=&#34;533&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2_hu_9f085f386a09f826.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2_hu_24c545857a82a431.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;302&#34;
+		data-flex-basis=&#34;725px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;空头仓位看跌盈利&#34;&gt;&lt;a href=&#34;#%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e8%b7%8c%e7%9b%88%e5%88%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;空头仓位：看跌盈利
+&lt;/h3&gt;&lt;p&gt;核心逻辑：你看跌 BTC，认为 BTC 价格会下跌，于是买入合约，等跌价后卖出平仓赚差价。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3.png&#34;
+	width=&#34;1128&#34;
+	height=&#34;393&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3_hu_e602f9ffab3950c7.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3_hu_acf0bebe52655d92.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;287&#34;
+		data-flex-basis=&#34;688px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5.png&#34;
+	width=&#34;1048&#34;
+	height=&#34;589&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5_hu_10ef159df8020633.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5_hu_ef7dcb7da8cedb40.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;427px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7.png&#34;
+	width=&#34;1196&#34;
+	height=&#34;334&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7_hu_c48b5c1f6b96b62d.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7_hu_20f4d3515285c46c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;358&#34;
+		data-flex-basis=&#34;859px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;爆仓&#34;&gt;&lt;a href=&#34;#%e7%88%86%e4%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;爆仓
+&lt;/h2&gt;&lt;h2 id=&#34;合仓平仓&#34;&gt;&lt;a href=&#34;#%e5%90%88%e4%bb%93%e5%b9%b3%e4%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;合仓（平仓）
+&lt;/h2&gt;&lt;h2 id=&#34;钱包链接项目是什么意思&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85%e9%93%be%e6%8e%a5%e9%a1%b9%e7%9b%ae%e6%98%af%e4%bb%80%e4%b9%88%e6%84%8f%e6%80%9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包链接项目是什么意思？
 &lt;/h2&gt;&lt;p&gt;将钱包连接到项目中，是 Web3 应用（DApp）使用中最基础、最关键的一步。它的本质不是“登录账号”，而是 &lt;strong&gt;建立用户与区块链应用&lt;/strong&gt;之间的可信通信通道&lt;/p&gt;
 &lt;h2 id=&#34;去中心化应用&#34;&gt;&lt;a href=&#34;#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e5%ba%94%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;去中心化应用
 &lt;/h2&gt;&lt;ul&gt;
