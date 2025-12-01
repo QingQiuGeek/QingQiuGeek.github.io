@@ -8,11 +8,11 @@
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
         <lastBuildDate>Wed, 24 Jul 2024 11:19:04 +0000</lastBuildDate><atom:link href="/zh-cn/tags/token/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Cookie、Session、JWT、Token</title>
-        <link>/zh-cn/post/2024/07/cookiesessionjwttoken/</link>
+        <title>Cookie、Session、JWT、Token、CSRF、XSS</title>
+        <link>/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/</link>
         <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>
         
-        <guid>/zh-cn/post/2024/07/cookiesessionjwttoken/</guid>
+        <guid>/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/</guid>
         <description>&lt;p&gt;JavaWeb 中，客户端通常是浏览器，通过浏览器向服务器发送请求，所以有时候称客户端为浏览器。&lt;/p&gt;
 &lt;h2 id=&#34;cookie&#34;&gt;&lt;a href=&#34;#cookie&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Cookie
 &lt;/h2&gt;&lt;p&gt;Cookie 是服务器生成，存储在浏览器的一段字符串，可以记录用户的身份信息等数据，但是这些信息是明文存储的，很不安全。&lt;/p&gt;
@@ -42,18 +42,18 @@
 &lt;/li&gt;
 &lt;/ol&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;误解：&lt;/strong&gt;&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;误解：&lt;/strong&gt;
 关闭浏览器 ，服务器的 session 不会立刻消失！&lt;/p&gt;
 &lt;p&gt;对 session 来说，除非浏览器通知服务器删除 session，否则服务器会一直保留。&lt;/p&gt;
 &lt;p&gt;然而浏览器从来不会在关闭之前主动通知服务器它将要关闭，大部分 session 机制都使用会话 cookie 来保存 JSESSIONID，而关闭浏览器后这个 JSESSIONID 就消失了，再次连接服务器时也就无法找到原来的 session。如果服务器设置的 cookie 被保存在硬盘上，或者使用某种手段改写浏览器发出的 HTTP 请求头，把原来的 JSESSIONID 发送给服务器，则再次打开浏览器仍然能够打开原来的 session。&lt;/p&gt;
 &lt;p&gt;恰恰是由于关闭浏览器不会导致 session 被删除，迫使服务器需要为 session 设置了一个失效时间，当距离客户端上一次使用 session 的时间超过这个失效时间时，服务器就可以以为客户端已经停止了活动，才会把 session 删除以节省存储空间。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;csrf-攻击&#34;&gt;&lt;a href=&#34;#csrf-%e6%94%bb%e5%87%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CSRF 攻击
-&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;跨站请求攻击，攻击者冒充用户的浏览器去访问一个用户曾经认证过的网站并运行一些操作，如发邮件、甚至财产操作。这利用了 web 中用户身份验证的一个漏洞：简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是&lt;strong&gt;用户自愿发出&lt;/strong&gt;的。csrf 并不能够拿到用户的任何信息，只是以用户浏览器身份进行操作。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/cookiesessionjwttoken/image.png&#34;
+&lt;h2 id=&#34;csrf-跨站请求伪造&#34;&gt;&lt;a href=&#34;#csrf-%e8%b7%a8%e7%ab%99%e8%af%b7%e6%b1%82%e4%bc%aa%e9%80%a0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CSRF 跨站请求伪造
+&lt;/h2&gt;&lt;p&gt;用户已登录网站 A，Cookie 中存有网站 A 的会话凭证，攻击者诱导用户访问恶意网站 B，此时请求自动携带了网站 A 的 Cookie，攻击者就可以通过 Cookie 做违法操作。&lt;/p&gt;
+&lt;p&gt;核心问题：浏览器请求会自动携带 Cookie，简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是&lt;strong&gt;用户自愿发出&lt;/strong&gt;的。CSRF 并不能够拿到用户的任何信息，只是以用户浏览器身份进行操作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image.png&#34;
 	width=&#34;1064&#34;
 	height=&#34;521&#34;
-	srcset=&#34;/zh-cn/post/2024/07/cookiesessionjwttoken/image_hu_646147344a4b9084.png 480w, /zh-cn/post/2024/07/cookiesessionjwttoken/image_hu_7c81077d39e0b717.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image_hu_646147344a4b9084.png 480w, /zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image_hu_7c81077d39e0b717.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -62,6 +62,29 @@
 		data-flex-basis=&#34;490px&#34;
 	
 &gt;​&lt;/p&gt;
+&lt;h2 id=&#34;xss-跨站脚本攻击&#34;&gt;&lt;a href=&#34;#xss-%e8%b7%a8%e7%ab%99%e8%84%9a%e6%9c%ac%e6%94%bb%e5%87%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;XSS 跨站脚本攻击
+&lt;/h2&gt;&lt;p&gt;攻击者向网页中注入恶意脚本（通常是 JavaScript），当其他用户浏览该页面时，脚本在用户浏览器中执行，从而窃取信息、冒充用户操作等。&lt;/p&gt;
+&lt;p&gt;核心问题：信任用户输入，未对输出进行安全转义。&lt;/p&gt;
+&lt;p&gt;假如论坛允许用户发帖，但未对内容做 HTML 转义：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;&amp;lt;!-- 用户 A 发了一条帖子 --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;script&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fetch&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;https://bank.com/transfer?to=attacker&amp;amp;amount=1000&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nx&#34;&gt;credentials&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;include&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 自动携带 Cookie
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;script&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;当用户 B（已登录银行网站）浏览该帖子时，浏览器会执行这段脚本，自动向银行发起转账请求（因为 Cookie 自动附带），导致资金被盗。&lt;/p&gt;
 &lt;h2 id=&#34;token&#34;&gt;&lt;a href=&#34;#token&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Token
 &lt;/h2&gt;&lt;p&gt;基于 session 的缺陷，我们的解决方案是怎么让服务器不保存 session，而让客户端去保存，可是如果不保存 JSESSIONID, 怎么验证客户端发给服务器 JSESSIONID 的确是服务器生成的呢？&lt;/p&gt;
 &lt;p&gt;关键点就在于验证，比如说， A 已经登录了系统， 服务器给 A 发一个令牌(token)， 里边包含了 A 的 user id 等信息， 下一次 A 再次通过 Http 请求访问服务器的时候， 把这个 token 通过 Http header 带过来就可以了。
@@ -69,10 +92,10 @@
 &lt;p&gt;这个 token 服务器不保存， 当 A 把这个 token 发给服务器的时候，服务器再用同样的 HMAC-SHA256 算法和同样的密钥，对数据再计算一次签名验证。&lt;/p&gt;
 &lt;p&gt;这样一来， 服务器就不保存 session 了， 服务器只生成 token , 然后验证 token ， 服务器用 CPU 计算时间获取了 session 存储空间 ！&lt;/p&gt;
 &lt;p&gt;解除了 session 这个负担， 服务器机器集群可以轻松地做水平扩展， 用户访问量增大， 直接加机器就行。 这种无状态（服务器不用存储 session，只负责签名和验证）的感觉实在是太好了！
-&lt;img src=&#34;/zh-cn/post/2024/07/cookiesessionjwttoken/image-1.png&#34;
+&lt;img src=&#34;/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image-1.png&#34;
 	width=&#34;423&#34;
 	height=&#34;344&#34;
-	srcset=&#34;/zh-cn/post/2024/07/cookiesessionjwttoken/image-1_hu_254eff129a90a345.png 480w, /zh-cn/post/2024/07/cookiesessionjwttoken/image-1_hu_4783b18942f2b0c3.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image-1_hu_254eff129a90a345.png 480w, /zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image-1_hu_4783b18942f2b0c3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -98,10 +121,10 @@
      target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;JSON Web Token Introduction - jwt.io&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;jwt-实现登录原理图&#34;&gt;&lt;a href=&#34;#jwt-%e5%ae%9e%e7%8e%b0%e7%99%bb%e5%bd%95%e5%8e%9f%e7%90%86%e5%9b%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JWT 实现登录原理图
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/cookiesessionjwttoken/image-2.png&#34;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image-2.png&#34;
 	width=&#34;1901&#34;
 	height=&#34;1099&#34;
-	srcset=&#34;/zh-cn/post/2024/07/cookiesessionjwttoken/image-2_hu_6699bf22c18c04e.png 480w, /zh-cn/post/2024/07/cookiesessionjwttoken/image-2_hu_a6724eb573c4ac34.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image-2_hu_6699bf22c18c04e.png 480w, /zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/image-2_hu_a6724eb573c4ac34.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
