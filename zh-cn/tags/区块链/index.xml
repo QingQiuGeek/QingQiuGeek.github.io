@@ -65,15 +65,15 @@
 		data-flex-basis=&#34;497px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;领取水龙头&#34;&gt;&lt;a href=&#34;#%e9%a2%86%e5%8f%96%e6%b0%b4%e9%be%99%e5%a4%b4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;领取水龙头
-&lt;/h2&gt;&lt;p&gt;水龙头是在测试网使用的货币，没有交易价值，铸造 NFT 的前提是钱包要有 Sepolia 水龙头，因为要支付 gas 费。我的 Sepolia 是在 ETH。&lt;/p&gt;
+&lt;h2 id=&#34;在-faucet-领取测试币&#34;&gt;&lt;a href=&#34;#%e5%9c%a8-faucet-%e9%a2%86%e5%8f%96%e6%b5%8b%e8%af%95%e5%b8%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;在 Faucet 领取测试币
+&lt;/h2&gt;&lt;p&gt;Faucet 就是水龙头，是免费发放测试币的工具，测试币是在测试网使用的货币，可以让开发者在不花真钱的情况下模拟主网环境，测试智能合约、DApp、NFT、交易、支付 gas 等，比如以太坊官方支持的测试网络 Sepolia&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepolia-faucet.pk910.de/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://sepolia-faucet.pk910.de/&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepoliafaucet.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://sepoliafaucet.org/&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;铸造-nft&#34;&gt;&lt;a href=&#34;#%e9%93%b8%e9%80%a0-nft&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;铸造 NFT
 &lt;/h2&gt;&lt;p&gt;在&lt;a class=&#34;link&#34; href=&#34;https://nft.myfirst.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;铸造网站&lt;/a&gt;搭配好自己的 NFT 头像后链接钱包，选择 Sepolia 网络并支付，如果没有 Sepolia 测试水龙头将无法铸造。&lt;/p&gt;
+    &gt;铸造网站&lt;/a&gt;搭配好自己的 NFT 头像后链接 metaMask 钱包，选择 Sepolia 测试网络并确认交易，交易需要支付 gas 费，也就是要消耗上一步领取的测试币，如果没有测试币将无法铸造 NFT。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/038e75366a312fff8eb4ab0e47ea5e6b.png&#34;
 	width=&#34;2312&#34;
 	height=&#34;1185&#34;
