@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>NFT on 青秋博客</title>
+        <link>/zh-cn/categories/nft/</link>
+        <description>Recent content in NFT on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sat, 17 Jan 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/nft/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>铸造我的第一个NFT</title>
+        <link>/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/</link>
+        <pubDate>Sat, 17 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://nft.myfirst.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;铸造网站&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image.png&#34;
+	width=&#34;2243&#34;
+	height=&#34;1082&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image_hu_51c6b71dfb22a2d5.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image_hu_bc8ee64c7fd0f16.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;207&#34;
+		data-flex-basis=&#34;497px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;领取水龙头&#34;&gt;&lt;a href=&#34;#%e9%a2%86%e5%8f%96%e6%b0%b4%e9%be%99%e5%a4%b4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;领取水龙头
+&lt;/h2&gt;&lt;p&gt;水龙头是在测试网使用的货币，没有交易价值，铸造 NFT 的前提是钱包要有 Sepolia 水龙头，因为要支付 gas 费。我的 Sepolia 是在 ETH。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepolia-faucet.pk910.de/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://sepolia-faucet.pk910.de/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepoliafaucet.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://sepoliafaucet.org/&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;铸造-nft&#34;&gt;&lt;a href=&#34;#%e9%93%b8%e9%80%a0-nft&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;铸造 NFT
+&lt;/h2&gt;&lt;p&gt;在&lt;a class=&#34;link&#34; href=&#34;https://nft.myfirst.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;铸造网站&lt;/a&gt;搭配好自己的 NFT 头像后链接钱包，选择 Sepolia 网络并支付，如果没有 Sepolia 测试水龙头将无法铸造。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/038e75366a312fff8eb4ab0e47ea5e6b.png&#34;
+	width=&#34;2312&#34;
+	height=&#34;1185&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/038e75366a312fff8eb4ab0e47ea5e6b_hu_847c415562f8b2b.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/038e75366a312fff8eb4ab0e47ea5e6b_hu_382aa0fc0041ab83.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;468px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/95f72910ba9a6cdbf39633bc0e1325c3.png&#34;
+	width=&#34;2361&#34;
+	height=&#34;1363&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/95f72910ba9a6cdbf39633bc0e1325c3_hu_19a5ce37467f2335.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/95f72910ba9a6cdbf39633bc0e1325c3_hu_9e47ff66b7eb3eea.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;173&#34;
+		data-flex-basis=&#34;415px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/66ea3d94d8abf19f6bf086fc7aae4278.png&#34;
+	width=&#34;2239&#34;
+	height=&#34;1288&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/66ea3d94d8abf19f6bf086fc7aae4278_hu_60f2a7dcb497878f.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/66ea3d94d8abf19f6bf086fc7aae4278_hu_3e99b624eeb8d043.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;173&#34;
+		data-flex-basis=&#34;417px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;使用-etherscan-查看交易内容&#34;&gt;&lt;a href=&#34;#%e4%bd%bf%e7%94%a8-etherscan-%e6%9f%a5%e7%9c%8b%e4%ba%a4%e6%98%93%e5%86%85%e5%ae%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;使用 EtherScan 查看交易内容
+&lt;/h2&gt;&lt;p&gt;364 是铸造的 Token ID，&lt;strong&gt;Mint&lt;/strong&gt;意为铸造&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-1.png&#34;
+	width=&#34;2736&#34;
+	height=&#34;1084&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-1_hu_813eadd6a0e07e8e.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-1_hu_338dc0bf6e3b196b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;252&#34;
+		data-flex-basis=&#34;605px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;下图可以看到 Token ID、合约地址、该 NFT 所属地址也就是我的钱包地址&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/a1591580f9227d3662023c1665f3b7db.png&#34;
+	width=&#34;2826&#34;
+	height=&#34;1198&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/a1591580f9227d3662023c1665f3b7db_hu_dfaec11698b1e707.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/a1591580f9227d3662023c1665f3b7db_hu_4b41cf072dbc84fd.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;235&#34;
+		data-flex-basis=&#34;566px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果要查看 NFT 具体内容，可以点击 Input Data 的 view in decoder&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-3.png&#34;
+	width=&#34;1634&#34;
+	height=&#34;536&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-3_hu_2a7b64a7bc41d3c.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-3_hu_84ef76a5bb5e880d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;304&#34;
+		data-flex-basis=&#34;731px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以看到 NFT 的图片链接了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-2.png&#34;
+	width=&#34;2728&#34;
+	height=&#34;1228&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-2_hu_f77f901b409c0544.png 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/image-2_hu_789a045372ac5cf5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;222&#34;
+		data-flex-basis=&#34;533px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Transaction Fee: 该笔交易最终花费的 ETH&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gas Price: gas 费价格，单位是 Gwei，好比油价，8 元/升，8 元就是 gas 价格，升就是 ETH&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;钱包导入-nft&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85%e5%af%bc%e5%85%a5-nft&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包导入 NFT
+&lt;/h2&gt;&lt;p&gt;打开 metaMask 钱包，选择 Sepolia 网络，输入铸造 NFT 合约地址，注意不是自己的钱包地址！是 NFT 合约地址！收藏品 ID 是 Token ID，即 364
+&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/bda26d3091e3ea07a72c740b636ca75d.jpg&#34;
+	width=&#34;1440&#34;
+	height=&#34;3200&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/bda26d3091e3ea07a72c740b636ca75d_hu_dc81a28309f93f66.jpg 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/bda26d3091e3ea07a72c740b636ca75d_hu_e311208cb72a15e1.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;45&#34;
+		data-flex-basis=&#34;108px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/a4671421917535fd018b510068f154e8.jpg&#34;
+	width=&#34;1440&#34;
+	height=&#34;3200&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/a4671421917535fd018b510068f154e8_hu_c252d4bc74581bb7.jpg 480w, /zh-cn/post/2026/01/%E9%93%B8%E9%80%A0%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAnft/a4671421917535fd018b510068f154e8_hu_48b4dbc1943bb4b5.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;45&#34;
+		data-flex-basis=&#34;108px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;导入后如果 NFT 头像没有加载出来是正常状况，可能是 IPFS 问题，可以尝试刷新，&lt;/p&gt;
+&lt;h2 id=&#34;ipfs&#34;&gt;&lt;a href=&#34;#ipfs&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;IPFS
+&lt;/h2&gt;&lt;p&gt;InterPlanetary File System 星际文件系统， 是一种去中心化的文件存储和传输协议，专为 Web3 和区块链生态设计，用来解决传统 HTTP 协议在 NFT、元宇宙等场景下的局限性。上传的文件会被分发保存到多个节点，一个节点的保存失效不影响其访问。&lt;/p&gt;
+&lt;h3 id=&#34;ipfs-地址长什么样&#34;&gt;&lt;a href=&#34;#ipfs-%e5%9c%b0%e5%9d%80%e9%95%bf%e4%bb%80%e4%b9%88%e6%a0%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;IPFS 地址长什么样？
+&lt;/h3&gt;&lt;p&gt;在铸造 NFT 时，把图片上传到 IPFS：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;图片内容 → 生成哈希：QmT8Tk2sVjKx7U9zZzZzZzZzZzZzZzZzZzZzZzZzZzZz&lt;/li&gt;
+&lt;li&gt;元数据 JSON 也上传 IPFS：QmY9Yk3sWjLx8U0aAaAaAaAaAaAaAaAaAaAaAaAaAaAa&lt;/li&gt;
+&lt;li&gt;铸造时传入：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nt&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MyFirstNFT #364&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nt&#34;&gt;&amp;#34;image&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;ipfs://QmT8Tk2sVjKx7U9zZzZzZzZzZzZzZzZzZzZzZzZzZzZz&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;原生格式：ipfs://QmXxxx&amp;hellip;（这是标准写法，Web3 应用推荐使用）&lt;/li&gt;
+&lt;li&gt;通过网关访问（浏览器兼容）：
+&lt;a class=&#34;link&#34; href=&#34;https://ipfs.io/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://ipfs.io/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;
+&lt;a class=&#34;link&#34; href=&#34;https://gateway.pinata.cloud/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://gateway.pinata.cloud/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;
+&lt;a class=&#34;link&#34; href=&#34;https://cloudflare-ipfs.com/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://cloudflare-ipfs.com/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;IPFS 是内容寻址，如果两个人上传了同一个文件，那么他们共享同一个哈希地址，指向同一份数据。
+如果我本地删除了这个相同的文件，不影响另一个人，因为文件被多个节点分布式保存。&lt;/p&gt;
+&lt;h3 id=&#34;如何上传-ipfs&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e4%b8%8a%e4%bc%a0-ipfs&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何上传 IPFS
+&lt;/h3&gt;&lt;p&gt;可以使用免费的 IPFS 网站，上传文件后即可获得 IPFS 链接
+&lt;a class=&#34;link&#34; href=&#34;https://app.nft.storage&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Pinata&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.pinata.cloud&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;nft.storage&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
