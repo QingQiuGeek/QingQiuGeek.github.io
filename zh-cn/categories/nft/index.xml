@@ -184,20 +184,24 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;原生格式：ipfs://QmXxxx&amp;hellip;（这是标准写法，Web3 应用推荐使用）&lt;/li&gt;
-&lt;li&gt;通过网关访问（浏览器兼容）：
-&lt;a class=&#34;link&#34; href=&#34;https://ipfs.io/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://ipfs.io/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;
-&lt;a class=&#34;link&#34; href=&#34;https://gateway.pinata.cloud/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://gateway.pinata.cloud/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;
-&lt;a class=&#34;link&#34; href=&#34;https://cloudflare-ipfs.com/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://cloudflare-ipfs.com/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;原生格式：ipfs://QmXxxx&amp;hellip;（这是标准写法，Web3 应用推荐使用）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过网关访问（浏览器兼容）：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ipfs.io/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://ipfs.io/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gateway.pinata.cloud/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://gateway.pinata.cloud/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://cloudflare-ipfs.com/ipfs/QmXxxx&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://cloudflare-ipfs.com/ipfs/QmXxxx&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;IPFS 是内容寻址，如果两个人上传了同一个文件，那么他们共享同一个哈希地址，指向同一份数据。
 如果我本地删除了这个相同的文件，不影响另一个人，因为文件被多个节点分布式保存。&lt;/p&gt;
 &lt;h3 id=&#34;如何上传-ipfs&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e4%b8%8a%e4%bc%a0-ipfs&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何上传 IPFS
-&lt;/h3&gt;&lt;p&gt;可以使用免费的 IPFS 网站，上传文件后即可获得 IPFS 链接
-&lt;a class=&#34;link&#34; href=&#34;https://app.nft.storage&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;/h3&gt;&lt;p&gt;可以使用免费的 IPFS 网站，上传文件后即可获得 IPFS 链接&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.nft.storage&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Pinata&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.pinata.cloud&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;nft.storage&lt;/a&gt;&lt;/p&gt;
