@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n它首先被发送到一个节点的内存池（mempool）——一个暂存已验证合法但尚未被打包的交易的池子。 加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后立刻广播到邻居节点，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。 邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。 钱包 热钱包：连接网络，操作方便，适合日常交易。 冷钱包：离线存储，更安全，适合长期持有。 Etherscan 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如BscScan，Polygonscan\n">
-<title>Web3钱包、交易、账户</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="博学而笃行,切问而近思">
+<title>Tag: 基金 - 青秋博客</title>
 
-<link rel='canonical' href='/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/'>
+<link rel='canonical' href='/zh-cn/tags/%E5%9F%BA%E9%87%91/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
-<meta property='og:title' content="Web3钱包、交易、账户">
-<meta property='og:description' content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n它首先被发送到一个节点的内存池（mempool）——一个暂存已验证合法但尚未被打包的交易的池子。 加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后立刻广播到邻居节点，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。 邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。 钱包 热钱包：连接网络，操作方便，适合日常交易。 冷钱包：离线存储，更安全，适合长期持有。 Etherscan 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如BscScan，Polygonscan\n">
-<meta property='og:url' content='/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/'>
+<meta property='og:title' content="Tag: 基金 - 青秋博客">
+<meta property='og:description' content="博学而笃行,切问而近思">
+<meta property='og:url' content='/zh-cn/tags/%E5%9F%BA%E9%87%91/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Web3' /><meta property='article:published_time' content='2025-11-09T09:39:19&#43;00:00'/><meta property='article:modified_time' content='2025-11-09T09:39:19&#43;00:00'/>
-<meta name="twitter:title" content="Web3钱包、交易、账户">
-<meta name="twitter:description" content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n它首先被发送到一个节点的内存池（mempool）——一个暂存已验证合法但尚未被打包的交易的池子。 加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后立刻广播到邻居节点，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。 邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。 钱包 热钱包：连接网络，操作方便，适合日常交易。 冷钱包：离线存储，更安全，适合长期持有。 Etherscan 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如BscScan，Polygonscan\n">
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-18T12:00:00&#43;00:00 '/>
+<meta name="twitter:title" content="Tag: 基金 - 青秋博客">
+<meta name="twitter:description" content="博学而笃行,切问而近思"><link rel="alternate" type="application/rss&#43;xml" href="/zh-cn/tags/%E5%9F%BA%E9%87%91/index.xml">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
-    <body class="
-    article-page
-    ">
+    <body class="">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -701,420 +699,273 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     <aside class="sidebar right-sidebar sticky">
         
             
-                
+                <form action="/zh-cn/page/search/" class="search-form widget" >
+        <p>
+            <label>搜索</label>
+            <input name="keyword" required placeholder="输入关键词..." />
+        
+            <button title="搜索">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
+            
+        
+            
+                <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body>
     <section class="widget archives">
         <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
 </svg>
 
 
 
         </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#交易流程">交易流程</a></li>
-    <li><a href="#钱包">钱包</a></li>
-    <li><a href="#账户">账户</a></li>
-    <li><a href="#杠杆">杠杆</a></li>
-    <li><a href="#多头仓位空头仓位">多头仓位、空头仓位</a></li>
-    <li><a href="#仓位">仓位</a>
-      <ol>
-        <li><a href="#多头仓位看涨盈利">多头仓位：看涨盈利</a></li>
-        <li><a href="#空头仓位看跌盈利">空头仓位：看跌盈利</a></li>
-      </ol>
-    </li>
-    <li><a href="#爆仓">爆仓</a></li>
-    <li><a href="#合仓平仓">合仓（平仓）</a></li>
-    <li><a href="#钱包链接项目是什么意思">钱包链接项目是什么意思？</a></li>
-    <li><a href="#去中心化应用">去中心化应用</a></li>
-    <li><a href="#以太坊开发技术栈">以太坊开发技术栈</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
+        <h2 class="widget-title section-title">关于</h2>
+        <div class="widget-archive--list">
+            <div class="about">
+                <span>
+                    🤓软件工程专业出身的♂️本科生，精通各类技术栈的单词拼写👀，在校期间主学Java后端开发，
+                    目前正在学习Python、Nodejs，目标成为一个使用AI辅助开发的超级全栈个体🤖，拥抱AI时代。
+                </span>
+                
+                <div class="chart-container">
+                    <div class="chart-pie">
+                        <span>✨ 感兴趣</span>
+                        <canvas id="interestsChart" width="400" height="400"></canvas>
+                    </div>
+                    <div class="chart-bar">
+                        <span>✨ 技术栈</span>
+                        <canvas id="techStackChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+                <script>
+                    
+                    const interestsData = {
+                        labels: ['做饭', '穿搭', 'AIGC', '全栈', 'Agent应用出海', '跨境电商', '自媒体'],
+                        datasets: [{
+                            label: '感兴趣',
+                            data: [30, 30, 30, 20, 25, 15, 5], 
+                            backgroundColor: [
+                                '#FE5F50', 
+                                '#FF6384', 
+                                '#2AF598', 
+                                '#36A2EB', 
+                                '#FFCE56', 
+                                '#4BC0C0', 
+                                '#FF9F40' 
+                            ],
+                            hoverOffset: 4,
+                            borderWidth: 1, 
+                        }]
+                    };
 
+                    
+                    const techStackData = {
+                        labels: ['Java', 'Spring', 'Next.js', 'TypeScript', 'Ant Design', 'React', "Python",
+                            "Nodejs"
+                        ],
+                        datasets: [{
+                            label: '技术栈',
+                            data: [25, 20, 15, 10, 10, 10, 10, 10], 
+                            backgroundColor: [
+                                '#FE5F50', 
+                                '#2AF598', 
+                                '#0093E9', 
+                                '#FFCE56', 
+                                '#52ACFF', 
+                                '#4BC0C0', 
+                                '#08AEEA', 
+                                '#05FAC3' 
+                            ],
+                            hoverOffset: 4
+                        }]
+                    };
+
+                    
+                    const interestsCtx = document.getElementById('interestsChart').getContext('2d');
+                    new Chart(interestsCtx, {
+                        type: 'pie',
+                        data: interestsData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false, 
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            return context.label + ': ' + context.raw + '%';
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 12
+                                    },
+                                    formatter: function (context) {
+                                        return context.label; 
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    
+                    const techStackCtx = document.getElementById('techStackChart').getContext('2d');
+                    new Chart(techStackCtx, {
+                        type: 'bar',
+                        data: techStackData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false, 
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            return context.label + ': ' + context.raw + '%';
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 12
+                                    },
+                                    formatter: function (value, context) {
+                                        return context.label; 
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+
+
+    </section>
+</body>
+
+</html>
+            
+        
+            
+                <section class="widget archives">
+    <div class="widget-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-infinity" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M9.828 9.172a4 4 0 1 0 0 5.656 a10 10 0 0 0 2.172 -2.828a10 10 0 0 1 2.172 -2.828 a4 4 0 1 1 0 5.656a10 10 0 0 1 -2.172 -2.828a10 10 0 0 0 -2.172 -2.828" />
+</svg>
+
+
+
+    </div>
+    <h2 class="widget-title section-title">归档</h2>
+
+    
+    
+    
+    
+
+    <div class="widget-archive--list">
+        <div class="archives-year">
+            <a href="/zh-cn/page/archives/#2026">
+                
+                <span class="year">2026</span>
+                <span class="count">9篇</span>
+                
+            </a>
+        </div>
+        <div class="archives-year">
+            <a href="/zh-cn/page/archives/#2025">
+                
+                <span class="year">2025</span>
+                <span class="count">130篇</span>
+                
+            </a>
+        </div>
+        <div class="archives-year">
+            <a href="/zh-cn/page/archives/#2024">
+                
+                <span class="year">2024</span>
+                <span class="count">51篇</span>
+                
+            </a>
+        </div>
+        <div class="archives-year">
+            <a href="/zh-cn/page/archives/#2023">
+                
+                <span class="year">2023</span>
+                <span class="count">2篇</span>
+                
+            </a>
+        </div>
+        
+    </div>
+</section>
             
         
     </aside>
 
 
             <main class="main full-width">
-    <article class="main-article">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/">Web3钱包、交易、账户</a>
-        </h2>
-
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Nov 09, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 3 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
+    <header>
+        <h3 class="section-title">
             
+                Tags
             
-            
-            
-            
-            <a href="/zh-cn/tags/web3/">Web3</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
+        </h3>
 
-
-    
-</div>
-</header>
-
-    <section class="article-content">
-    
-    
-    <p><a class="link" href="https://ethereum.org/zh/"  target="_blank" rel="noopener"
-    >参考链接</a></p>
-<h2 id="交易流程"><a href="#%e4%ba%a4%e6%98%93%e6%b5%81%e7%a8%8b" class="header-anchor"></a>交易流程
-</h2><p>发起一笔交易，这笔交易会有以下流程：</p>
-<ol>
-<li>它首先被发送到一个节点的内存池（mempool）——一个<strong>暂存已验证合法但尚未被打包的交易的池子</strong>。</li>
-<li>加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后<strong>立刻广播到邻居节点</strong>，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。</li>
-<li>邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。</li>
-</ol>
-<h2 id="钱包"><a href="#%e9%92%b1%e5%8c%85" class="header-anchor"></a>钱包
-</h2><ul>
-<li>热钱包：连接网络，操作方便，适合日常交易。</li>
-<li>冷钱包：离线存储，更安全，适合长期持有。</li>
-</ul>
-<p><a class="link" href="https://etherscan.io"  target="_blank" rel="noopener"
-    >Etherscan</a> 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如<a class="link" href="https://bscscan.com/"  target="_blank" rel="noopener"
-    >BscScan</a>，<a class="link" href="https://polygonscan.com/"  target="_blank" rel="noopener"
-    >Polygonscan</a></p>
-<p><a class="link" href="https://ethereum.org/zh/guides/how-to-use-a-wallet/"  target="_blank" rel="noopener"
-    >如何使用钱包</a></p>
-<p>钱包不是账户，而是一种能使用密钥和帐户互动的工具，也就是可视化界面，通过钱包可以查看账户余额、交易。</p>
-<p>钱包种类有物理硬件钱包，最安全，还有应用程序钱包、浏览器钱包等。</p>
-<p>根据资产不同，适用的钱包也不同，具体看这里 <a class="link" href="https://ethereum.org/zh/wallets/find-wallet/"  target="_blank" rel="noopener"
-    >选择钱包</a></p>
-<h2 id="账户"><a href="#%e8%b4%a6%e6%88%b7" class="header-anchor"></a>账户
-</h2><p>以太坊帐户是一对密钥，一个用于创建可以随意共享的地址，另一个需要保密，因为它用于签名。结合使用这两个密钥，可以持有资产和进行交易。</p>
-<p>以太坊帐户有一个地址，就像收件箱有电子邮件地址一样。它用于识别数字资产。</p>
-<h2 id="杠杆"><a href="#%e6%9d%a0%e6%9d%86" class="header-anchor"></a>杠杆
-</h2><p>杠杆允许交易者用较少的自有资金（保证金）控制更大价值的头寸。</p>
-<p>1000 USDT 的本金，使用 10 倍杠杆，可开立价值 10,000 USDT 的合约头寸。盈亏按 10000 USDT 的变动计算，放大收益也放大风险。</p>
-<h2 id="多头仓位空头仓位"><a href="#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d" class="header-anchor"></a>多头仓位、空头仓位
-</h2><h2 id="仓位"><a href="#%e4%bb%93%e4%bd%8d" class="header-anchor"></a>仓位
-</h2><p>仓位 = 用合约“虚拟持有”的资产头寸，我钱包里有 10,000 USDC，想参与 BTC 价格波动，但不想真的买 BTC（避免托管、转账麻烦），于是选择通过合约进行虚拟持有，具体看下面两个例子。</p>
-<p>假设当前 BTC 市场价格 = $60,000</p>
-<h3 id="多头仓位看涨盈利"><a href="#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e6%b6%a8%e7%9b%88%e5%88%a9" class="header-anchor"></a>多头仓位：看涨盈利
-</h3><p>核心逻辑：你看涨 BTC，认为 BTC 价格会上涨，于是买入合约，等涨价后卖出平仓赚差价。</p>
-<p><img src="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image.png"
-	width="1274"
-	height="494"
-	srcset="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image_hu_20c99fe33443df26.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image_hu_a16c3a5a07f47ff4.png 1024w"
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="257"
-		data-flex-basis="618px"
-	
-></p>
-<p><img src="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6.png"
-	width="1047"
-	height="705"
-	srcset="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6_hu_5fb0890cc87fba9c.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6_hu_8f4edffb3d556687.png 1024w"
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="148"
-		data-flex-basis="356px"
-	
-></p>
-<p><img src="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2.png"
-	width="1611"
-	height="533"
-	srcset="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2_hu_9f085f386a09f826.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2_hu_24c545857a82a431.png 1024w"
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="302"
-		data-flex-basis="725px"
-	
-></p>
-<h3 id="空头仓位看跌盈利"><a href="#%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e8%b7%8c%e7%9b%88%e5%88%a9" class="header-anchor"></a>空头仓位：看跌盈利
-</h3><p>核心逻辑：你看跌 BTC，认为 BTC 价格会下跌，于是买入合约，等跌价后卖出平仓赚差价。</p>
-<p><img src="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3.png"
-	width="1128"
-	height="393"
-	srcset="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3_hu_e602f9ffab3950c7.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3_hu_acf0bebe52655d92.png 1024w"
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="287"
-		data-flex-basis="688px"
-	
-></p>
-<p><img src="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5.png"
-	width="1048"
-	height="589"
-	srcset="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5_hu_10ef159df8020633.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5_hu_ef7dcb7da8cedb40.png 1024w"
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="177"
-		data-flex-basis="427px"
-	
-></p>
-<p><img src="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7.png"
-	width="1196"
-	height="334"
-	srcset="/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7_hu_c48b5c1f6b96b62d.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7_hu_20f4d3515285c46c.png 1024w"
-	loading="lazy"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="358"
-		data-flex-basis="859px"
-	
-></p>
-<h2 id="爆仓"><a href="#%e7%88%86%e4%bb%93" class="header-anchor"></a>爆仓
-</h2><h2 id="合仓平仓"><a href="#%e5%90%88%e4%bb%93%e5%b9%b3%e4%bb%93" class="header-anchor"></a>合仓（平仓）
-</h2><h2 id="钱包链接项目是什么意思"><a href="#%e9%92%b1%e5%8c%85%e9%93%be%e6%8e%a5%e9%a1%b9%e7%9b%ae%e6%98%af%e4%bb%80%e4%b9%88%e6%84%8f%e6%80%9d" class="header-anchor"></a>钱包链接项目是什么意思？
-</h2><p>将钱包连接到项目中，是 Web3 应用（DApp）使用中最基础、最关键的一步。它的本质不是“登录账号”，而是 <strong>建立用户与区块链应用</strong>之间的可信通信通道</p>
-<h2 id="去中心化应用"><a href="#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e5%ba%94%e7%94%a8" class="header-anchor"></a>去中心化应用
-</h2><ul>
-<li>
-<p>Zora：https://zora.co/</p>
-</li>
-<li>
-<p>Uniswap：https://app.uniswap.org/</p>
-</li>
-<li>
-<p>Farcaster：https://farcaster.xyz/</p>
-</li>
-</ul>
-<p>&hellip;</p>
-<h2 id="以太坊开发技术栈"><a href="#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%bc%80%e5%8f%91%e6%8a%80%e6%9c%af%e6%a0%88" class="header-anchor"></a>以太坊开发技术栈
-</h2><ul>
-<li>
-<p>Hardhat</p>
-</li>
-<li>
-<p>Foundry</p>
-</li>
-<li>
-<p>Ethers.js</p>
-</li>
-<li>
-<p>Thirdweb</p>
-</li>
-<li>
-<p>Moralis</p>
-</li>
-</ul>
-<p>&hellip;</p>
-
-</section>
-
-
-    <footer class="article-footer">
-    
-
-    </footer>
-
-    
-        <link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
-            ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
-                defer
-                >
-            </script><script>
-    window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
-            delimiters: [
-                { left: "$$", right: "$$", display: true },
-                { left: "$", right: "$", display: false },
-                { left: "\\(", right: "\\)", display: false },
-                { left: "\\[", right: "\\]", display: true }
-            ],
-            ignoredClasses: ["gist"]
-        });})
-</script>
-    
-</article>
-
-    
-
-    
-
-<aside class="related-content--wrapper">
-    <h2 class="section-title">相关文章</h2>
-    <div class="related-content">
-        <div class="flex article-list--tile">
-            
+        <div class="section-card">
+            <div class="section-details">
+                <h3 class="section-count">1 个页面</h3>
+                <h1 class="section-term">基金</h1>
                 
-<article class="">
-    <a href="/zh-cn/post/2025/11/layer2%E5%8F%91%E5%B1%95/">
-
+            </div>
+        </div>
+    </header>
+    
+    <section class="article-list--compact">
         
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Layer2发展</h2>
-            
+            <article>
+    <a href="/zh-cn/post/2026/01/%E5%9F%BA%E9%87%91%E5%B0%8F%E7%99%BD%E5%BF%85%E5%AD%A6-a%E8%82%A1%E4%BA%A4%E6%98%93%E7%9F%A5%E8%AF%86/">
+        <div class="article-details">
+            <h2 class="article-title">基金小白必学-A股交易知识</h2>
+            <footer class="article-time">
+                <time datetime='2026-01-17T12:00:00Z'>Jan 17, 2026</time>
+            </footer>
         </div>
     </a>
 </article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/11/web3%E5%8F%91%E5%B1%95%E5%8F%B2%E6%A0%B8%E5%BF%83%E8%A6%81%E7%B4%A0/">
-
         
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">Web3发展史、核心要素</h2>
-            
-        </div>
-    </a>
-</article>
-            
-                
-<article class="">
-    <a href="/zh-cn/post/2025/11/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%85%A5%E9%97%A8%E5%8C%BA%E5%9D%97%E9%93%BE%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81web3/">
-
-        
-
-        <div class="article-details tags-grid-item">
-            <h2 class="article-title">区块链入门：区块链、智能合约、加密货币、Web3</h2>
-            
-        </div>
-    </a>
-</article>
-            
-        </div>
-    </div>
-</aside>
-
-     
-    
-        
-    <div class="disqus-container">
-    <div id="disqus_thread"></div>
-<script>
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-
-<style>
-    .disqus-container {
-        background-color: var(--card-background);
-        border-radius: var(--card-border-radius);
-        box-shadow: var(--shadow-l1);
-        padding: var(--card-padding);
-    }
-</style>
-
-<script>
-    window.addEventListener('onColorSchemeChange', (e) => {
-        if (typeof DISQUS == 'object') {
-            DISQUS.reset({
-                reload: true
-            });
-        }
-    })
-</script>
-
-    
-
-    <footer class="site-footer">
+    </section>
+<footer class="site-footer">
     <section class="copyright">
         &copy; 
         
@@ -1129,84 +980,6 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     </section>
 </footer>
 
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
-            >
 
             </main>
         </div>

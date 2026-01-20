@@ -16,6 +16,44 @@
         <description></description>
         </item>
         <item>
+        <title>以太坊-从ERC-721到ERC-7962</title>
+        <link>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A-%E4%BB%8Eerc-721%E5%88%B0erc-7962/</link>
+        <pubDate>Sat, 17 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A-%E4%BB%8Eerc-721%E5%88%B0erc-7962/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=LpL1uOajgUo&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;youtube 链接&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;动机与背景&#34;&gt;&lt;a href=&#34;#%e5%8a%a8%e6%9c%ba%e4%b8%8e%e8%83%8c%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;动机与背景
+&lt;/h2&gt;&lt;p&gt;传统 NFT（ERC-721）的所有权与地址绑定，所有权与转移记录完全公开。这种透明性符合区块链精神，但在涉及“身份”或“会员资格”的业务场景中会产生隐私冲突。例如：星巴克会员希望在机场贵宾室以“会员身份”获得服务，但星巴克无法将完整会员名单直接提供给机场，也无法公开地址与身份信息。因此产生了“验证资格但不暴露身份”的需求。现有 ERC-721 在隐私与链上身份方面难以满足这种场景，促成了 ERC-7962 的设计。&lt;/p&gt;
+&lt;h2 id=&#34;核心理念&#34;&gt;&lt;a href=&#34;#%e6%a0%b8%e5%bf%83%e7%90%86%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;核心理念
+&lt;/h2&gt;&lt;p&gt;ERC-7962 的核心是在链上确认资产归属，同时避免暴露持有者的真实地址。协议将所有权表示从“地址”替换为“公钥哈希（kHash）”，链上不出现真实地址与可追踪路径。同时将“所有权”与“交易发起者”解耦，可由第三方代发交易。配合零知识证明用于完成“证明用户具有资格”但不暴露真实标识的过程，形成隐私友好的链上身份表达模式！&lt;/p&gt;
+&lt;h2 id=&#34;技术实现特点&#34;&gt;&lt;a href=&#34;#%e6%8a%80%e6%9c%af%e5%ae%9e%e7%8e%b0%e7%89%b9%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;技术实现特点
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;所有权标识替换
+owner 字段不再存储地址，而是公钥哈希，减少可关联性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UTXO 风格的密钥一次性使用
+转移后生成新密钥，避免交易链路被追踪，增强隐私。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;无 Approve 机制
+Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此被移除。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;交易发起者与所有权解耦
+用户无需钱包和 Gas，可由商家或服务方代付交易并提交链上操作。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这一机制本质上改善了 Web2 用户接入 Web3 的体验，也为企业级分发、批量空投、会员体系提供可行入口。&lt;/p&gt;
+&lt;h2 id=&#34;应用场景&#34;&gt;&lt;a href=&#34;#%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;应用场景
+&lt;/h2&gt;&lt;p&gt;协议主要面向“隐私 + 资格验证”的业务，例如企业会员体系。以前面的星巴克示例：星巴克将会员身份铸为 ERC-7962，用户无需管理地址或 Gas，通过签名表达意图即可；到机场贵宾室时，用户仅需出示证明自己“拥有会员资格”，无须暴露地址、交易记录或完整会员名单。Gas 可由星巴克或机场承担，符合商业激励逻辑。由此实现了链上隐私身份验证、降低 Web3 使用门槛，并可用于 C 端用户无感参与的 Web3 场景。&lt;/p&gt;
+&lt;h2 id=&#34;优势与局限&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8a%bf%e4%b8%8e%e5%b1%80%e9%99%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优势与局限
+&lt;/h2&gt;&lt;p&gt;协议优势包括：隐私保护、不可关联性、支持批量处理、支持代付 Gas、对 Web2 新手友好、适用于企业级场景。局限在于 Gas 成本高于传统 ERC、向后兼容较弱、公钥管理要求更高、密钥暴露风险需要轮换机制规避。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>以太坊的EIP和ERC是什么</title>
         <link>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88/</link>
         <pubDate>Sat, 17 Jan 2026 12:00:00 +0000</pubDate>
@@ -498,11 +536,11 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 </description>
         </item>
         <item>
-        <title>Web3钱包、交易、账户</title>
-        <link>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/</link>
+        <title>Web3钱包、交易、仓位</title>
+        <link>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/</link>
         <pubDate>Sun, 09 Nov 2025 09:39:19 +0000</pubDate>
         
-        <guid>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/</guid>
+        <guid>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/</guid>
         <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;参考链接&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;交易流程&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易流程
@@ -539,10 +577,10 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 &lt;p&gt;假设当前 BTC 市场价格 = $60,000&lt;/p&gt;
 &lt;h3 id=&#34;多头仓位看涨盈利&#34;&gt;&lt;a href=&#34;#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e6%b6%a8%e7%9b%88%e5%88%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;多头仓位：看涨盈利
 &lt;/h3&gt;&lt;p&gt;核心逻辑：你看涨 BTC，认为 BTC 价格会上涨，于是买入合约，等涨价后卖出平仓赚差价。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image.png&#34;
 	width=&#34;1274&#34;
 	height=&#34;494&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image_hu_20c99fe33443df26.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image_hu_a16c3a5a07f47ff4.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image_hu_20c99fe33443df26.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image_hu_a16c3a5a07f47ff4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -551,10 +589,10 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 		data-flex-basis=&#34;618px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-6.png&#34;
 	width=&#34;1047&#34;
 	height=&#34;705&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6_hu_5fb0890cc87fba9c.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-6_hu_8f4edffb3d556687.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-6_hu_5fb0890cc87fba9c.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-6_hu_8f4edffb3d556687.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -563,10 +601,10 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 		data-flex-basis=&#34;356px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-2.png&#34;
 	width=&#34;1611&#34;
 	height=&#34;533&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2_hu_9f085f386a09f826.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-2_hu_24c545857a82a431.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-2_hu_9f085f386a09f826.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-2_hu_24c545857a82a431.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -577,10 +615,10 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;空头仓位看跌盈利&#34;&gt;&lt;a href=&#34;#%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e8%b7%8c%e7%9b%88%e5%88%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;空头仓位：看跌盈利
 &lt;/h3&gt;&lt;p&gt;核心逻辑：你看跌 BTC，认为 BTC 价格会下跌，于是买入合约，等跌价后卖出平仓赚差价。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-3.png&#34;
 	width=&#34;1128&#34;
 	height=&#34;393&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3_hu_e602f9ffab3950c7.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-3_hu_acf0bebe52655d92.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-3_hu_e602f9ffab3950c7.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-3_hu_acf0bebe52655d92.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -589,10 +627,10 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 		data-flex-basis=&#34;688px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-5.png&#34;
 	width=&#34;1048&#34;
 	height=&#34;589&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5_hu_10ef159df8020633.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-5_hu_ef7dcb7da8cedb40.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-5_hu_10ef159df8020633.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-5_hu_ef7dcb7da8cedb40.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -601,10 +639,10 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 		data-flex-basis=&#34;427px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-7.png&#34;
 	width=&#34;1196&#34;
 	height=&#34;334&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7_hu_c48b5c1f6b96b62d.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E8%B4%A6%E6%88%B7/image-7_hu_20f4d3515285c46c.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-7_hu_c48b5c1f6b96b62d.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-7_hu_20f4d3515285c46c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
