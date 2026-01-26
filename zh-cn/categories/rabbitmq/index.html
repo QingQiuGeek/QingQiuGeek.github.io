@@ -11,7 +11,7 @@
 <meta property='og:description' content="博学而笃行,切问而近思">
 <meta property='og:url' content='/zh-cn/categories/rabbitmq/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-19T12:00:00&#43;00:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-25T12:00:00&#43;00:00 '/>
 <meta name="twitter:title" content="Category: RabbitMQ - 青秋博客">
 <meta name="twitter:description" content="博学而笃行,切问而近思"><link rel="alternate" type="application/rss&#43;xml" href="/zh-cn/categories/rabbitmq/index.xml">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -719,160 +719,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             
         
             
-                <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-</head>
-
-<body>
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">关于</h2>
-        <div class="widget-archive--list">
-            <div class="about">
-                <span>
-                    🤓软件工程专业出身的♂️本科生，精通各类技术栈的单词拼写👀，在校期间主学Java后端开发，
-                    目前正在学习Python、Nodejs，目标成为一个使用AI辅助开发的超级全栈个体🤖，拥抱AI时代。
-                </span>
                 
-                <div class="chart-container">
-                    <div class="chart-pie">
-                        <span>✨ 感兴趣</span>
-                        <canvas id="interestsChart" width="400" height="400"></canvas>
-                    </div>
-                    <div class="chart-bar">
-                        <span>✨ 技术栈</span>
-                        <canvas id="techStackChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-                <script>
-                    
-                    const interestsData = {
-                        labels: ['做饭', '穿搭', 'AIGC', '全栈', 'Agent应用出海', '跨境电商', '自媒体'],
-                        datasets: [{
-                            label: '感兴趣',
-                            data: [30, 30, 30, 20, 25, 15, 5], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#FF6384', 
-                                '#2AF598', 
-                                '#36A2EB', 
-                                '#FFCE56', 
-                                '#4BC0C0', 
-                                '#FF9F40' 
-                            ],
-                            hoverOffset: 4,
-                            borderWidth: 1, 
-                        }]
-                    };
-
-                    
-                    const techStackData = {
-                        labels: ['Java', 'Spring', 'Next.js', 'TypeScript', 'Ant Design', 'React', "Python",
-                            "Nodejs"
-                        ],
-                        datasets: [{
-                            label: '技术栈',
-                            data: [25, 20, 15, 10, 10, 10, 10, 10], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#2AF598', 
-                                '#0093E9', 
-                                '#FFCE56', 
-                                '#52ACFF', 
-                                '#4BC0C0', 
-                                '#08AEEA', 
-                                '#05FAC3' 
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-
-                    
-                    const interestsCtx = document.getElementById('interestsChart').getContext('2d');
-                    new Chart(interestsCtx, {
-                        type: 'pie',
-                        data: interestsData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    
-                    const techStackCtx = document.getElementById('techStackChart').getContext('2d');
-                    new Chart(techStackCtx, {
-                        type: 'bar',
-                        data: techStackData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (value, context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
-
-
-    </section>
-</body>
-
-</html>
             
         
             
@@ -898,7 +745,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <a href="/zh-cn/page/archives/#2026">
                 
                 <span class="year">2026</span>
-                <span class="count">11篇</span>
+                <span class="count">16篇</span>
                 
             </a>
         </div>

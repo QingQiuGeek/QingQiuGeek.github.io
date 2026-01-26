@@ -7,7 +7,312 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 19 Jan 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 25 Jan 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>以太坊节点和客户端</title>
+        <link>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF/</link>
+        <pubDate>Sun, 25 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%8A%82%E7%82%B9%E5%92%8C%E5%AE%A2%E6%88%B7%E7%AB%AF/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/developers/docs/nodes-and-clients/#execution-clients&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;以太坊节点、客户端&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;“节点”是指任何以太坊客户端软件的实例，它连接到其他也运行以太坊软件的计算机，形成一个网络。 &lt;strong&gt;一个节点需要运行两种客户端软件：共识客户端和执行客户端&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;执行客户端（也称为执行引擎、EL 客户端或旧称“以太坊 1”客户端）侦听网络中广播的新交易，并在 EVM 中执行，并保存所有当前以太坊数据的最新状态和数据库。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;共识客户端（也称为信标节点、CL 客户端或旧称“以太坊 2”客户端）&lt;strong&gt;实现权益证明共识算法&lt;/strong&gt;，&lt;strong&gt;使网络能够根据来自执行客户端的经验证数据达成一致&lt;/strong&gt;。 此外还有名为“验证者”的第三种软件，它们可被添加到共识客户端中，使节点能参与保护网络安全。节点分布可以看
+&lt;a class=&#34;link&#34; href=&#34;https://etherscan.io/nodetracker&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Etherscan 节点地图&lt;/a&gt; 、&lt;a class=&#34;link&#34; href=&#34;https://ethernodes.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;以太坊节点&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;节点类型&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e7%b1%bb%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点类型
+&lt;/h2&gt;&lt;p&gt;客户端可以运行三种类型的节点：轻节点、全节点和归档节点。&lt;/p&gt;
+&lt;h3 id=&#34;轻节点&#34;&gt;&lt;a href=&#34;#%e8%bd%bb%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;轻节点
+&lt;/h3&gt;&lt;p&gt;轻节点只下载区块头，不会下载每个区块。这些区块头包含区块内容的摘要信息。轻节点会向全节点请求其所需的任何其他信息。然后轻节点可以根据区块头中的状态根独自验证收到的数据。&lt;/p&gt;
+&lt;p&gt;轻节点可以让用户加入以太坊网络，无需运行全节点所需的功能强大的硬件或高带宽。&lt;strong&gt;轻节点不参与共识（不能成为矿工/验证者）&lt;/strong&gt;，但可以访问功能和安全保障和全节点相同的以太坊区块链。&lt;/p&gt;
+&lt;h3 id=&#34;全节点&#34;&gt;&lt;a href=&#34;#%e5%85%a8%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;全节点
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;全节点对区块链进行逐块验证&lt;/strong&gt;，包括下载和验证每个块的块体和状态数据。有些全节点从创世区块开始，验证区块链整个历史中的每一个区块（完全同步）。有些全节点则从更近期的区块开始验证（比如 Geth 的&lt;strong&gt;快照同步&lt;/strong&gt;），而且它们信任这些区块是有效的。&lt;/p&gt;
+&lt;p&gt;但是全节点并不保存全部区块链数据，而是只保存相对较新的数据，那么又如何逐块验证呢？&lt;/p&gt;
+&lt;p&gt;全节点会同步历史数据。如上所说，如果从创世开始验证，那么&lt;strong&gt;全节点会从创世区块开始&lt;/strong&gt;，逐块下载、执行并验证每一笔交易，从头构建完整的状态树，这是最彻底、最慢的方式，但能获得 100% 自验证的信任。&lt;/p&gt;
+&lt;p&gt;如果从近期区块开始验证，则会从某个最近的区块开始，逐块下载、执行并验证每一笔交易，这种方式显然更快，但是要 100%信任逐块下载的初始区块。&lt;/p&gt;
+&lt;p&gt;在逐块验证后，会进行&lt;strong&gt;修剪&lt;/strong&gt;。区块链的“状态”是指所有账户余额、合约代码和存储变量的&lt;strong&gt;当前值&lt;/strong&gt;。当执行交易时，会产生大量&lt;strong&gt;中间状态&lt;/strong&gt;。修剪机制会安全地删除那些不再被最新区块引用的旧状态数据，只保留从创世状态推导出最新状态所必需的“状态树”路径上的关键节点。&lt;/p&gt;
+&lt;h3 id=&#34;归档节点&#34;&gt;&lt;a href=&#34;#%e5%bd%92%e6%a1%a3%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;归档节点
+&lt;/h3&gt;&lt;p&gt;归档节点从创世块开始验证每个区块的全节点，存储全节点中保存的所有内容不删除任何下载的数据，并建立历史状态存档。&lt;/p&gt;
+&lt;p&gt;以归档以外的任何方式同步客户端将导致区块链数据被修剪。&lt;strong&gt;这意味着不存在包含所有历史状态的归档，但全节点能够在需要时构建它们。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;信标链&#34;&gt;&lt;a href=&#34;#%e4%bf%a1%e6%a0%87%e9%93%be&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;信标链
+&lt;/h2&gt;&lt;p&gt;信标链（Beacon Chain）是以太坊 2.0 的核心升级，它不处理日常交易，而是作为整个网络的“中央调度员”，负责管理验证者、分配共识任务，并协调未来的分片链。&lt;/p&gt;
+&lt;h2 id=&#34;同步模式&#34;&gt;&lt;a href=&#34;#%e5%90%8c%e6%ad%a5%e6%a8%a1%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;同步模式
+&lt;/h2&gt;&lt;h3 id=&#34;完全同步&#34;&gt;&lt;a href=&#34;#%e5%ae%8c%e5%85%a8%e5%90%8c%e6%ad%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;完全同步
+&lt;/h3&gt;&lt;p&gt;完全同步会下载所有区块（包括区块头和区块体），并通过执行自创世块以来的每个区块，以增量方式重新生成区块链的状态。&lt;/p&gt;
+&lt;h3 id=&#34;快速同步&#34;&gt;&lt;a href=&#34;#%e5%bf%ab%e9%80%9f%e5%90%8c%e6%ad%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;快速同步
+&lt;/h3&gt;&lt;p&gt;与完全同步一样，快速同步会下载所有区块（包括区块头、交易和收据）。 不过，快速同步并不重新处理历史交易，而是依赖&lt;strong&gt;收据&lt;/strong&gt;，直至到达最近的头部时，再切换到导入和处理区块，以提供一个完整的节点。&lt;/p&gt;
+&lt;p&gt;收据（Receipt）是交易被成功打包进区块并执行完毕后生成的“官方凭证”，它记录了交易的交易哈希、执行结果、状态变化、消耗 Gas、状态跟等信息，是快速同步机制中信任历史交易的关键依据。&lt;/p&gt;
+&lt;h3 id=&#34;快照同步&#34;&gt;&lt;a href=&#34;#%e5%bf%ab%e7%85%a7%e5%90%8c%e6%ad%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;快照同步
+&lt;/h3&gt;&lt;p&gt;快照同步从一个最近的已知为真实区块链一部分的受信任检查点开始。节点会定期保存检查点，同时删除早于某个时间的数据。这些快照被用于在需要时重新生成状态数据，而不是永久储存它。&lt;/p&gt;
+&lt;h3 id=&#34;轻量同步&#34;&gt;&lt;a href=&#34;#%e8%bd%bb%e9%87%8f%e5%90%8c%e6%ad%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;轻量同步
+&lt;/h3&gt;&lt;p&gt;轻客户端模式下载所有区块头和区块数据，并对其中一些进行随机验证。 仅从可信的检查点同步链的头部。&lt;/p&gt;
+&lt;h2 id=&#34;共识层同步模式&#34;&gt;&lt;a href=&#34;#%e5%85%b1%e8%af%86%e5%b1%82%e5%90%8c%e6%ad%a5%e6%a8%a1%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;共识层同步模式
+&lt;/h2&gt;&lt;h3 id=&#34;乐观同步&#34;&gt;&lt;a href=&#34;#%e4%b9%90%e8%a7%82%e5%90%8c%e6%ad%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;乐观同步
+&lt;/h3&gt;&lt;p&gt;乐观同步是一种合并后同步策略，专为选择加入和向后兼容而设计，允许执行节点通过已确立的方法进行同步。&lt;/p&gt;
+&lt;p&gt;执行引擎可以&lt;strong&gt;在不进行完全验证的情况下乐观地导入信标区块&lt;/strong&gt;，找到最新区块头，然后使用上述方法开始同步链。接着在执行客户端更新之后通知共识客户端信标链中交易的有效性。&lt;/p&gt;
+&lt;h3 id=&#34;检查点同步&#34;&gt;&lt;a href=&#34;#%e6%a3%80%e6%9f%a5%e7%82%b9%e5%90%8c%e6%ad%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;检查点同步
+&lt;/h3&gt;&lt;p&gt;检查点同步也称为&lt;strong&gt;弱主观性同步”&lt;/strong&gt;，它基于弱主观性假设，从最近的弱主观性检查点而不是从创世块同步信标链。检查点同步可大幅加快初始同步速度，意味着节点会连接到远程服务，以下载最近的最终确定状态并从该点继续验证数据。&lt;strong&gt;提供数据的第三方会受到信任，因此要谨慎选择。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;执行客户端&#34;&gt;&lt;a href=&#34;#%e6%89%a7%e8%a1%8c%e5%ae%a2%e6%88%b7%e7%ab%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;执行客户端
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Go Ethereum：简称 Geth，Go 语言实现，以太坊协议的原始实现之一。 目前，它是使用最为广泛的客户端，拥有最大的用户群，为用户和开发者提供各种工具。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Erigon：Go 实现，以前称为 Turbo‐Geth，最初是 Go Ethereum 的一个分叉，注重速度和磁盘空间效率。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Nethermind：C#、.NET 实现。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Besu：Java 实现，企业级以太坊客户端，面向公共网络和许可网络。 它运行所有以太坊主网功能（从追踪到 GraphQL），可进行大范围监控。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reth：Rust 实现，以太坊全节点。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;EthereumJS：TypeScript 实现。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;共识客户端&#34;&gt;&lt;a href=&#34;#%e5%85%b1%e8%af%86%e5%ae%a2%e6%88%b7%e7%ab%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;共识客户端
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Lighthous：Rust&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Grandine：Rust&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Lodestar：TypeScript&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Nimbus：Nim&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Teku：Java&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Prysm： Go&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>了解EVM、区块</title>
+        <link>/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/</link>
+        <pubDate>Wed, 21 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/developers/docs/evm/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;以太坊 EVM&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;从账本到状态机&#34;&gt;&lt;a href=&#34;#%e4%bb%8e%e8%b4%a6%e6%9c%ac%e5%88%b0%e7%8a%b6%e6%80%81%e6%9c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;从账本到状态机
+&lt;/h2&gt;&lt;p&gt;我们通常用“分布式账本”的类比来描述像比特币这样的区块链，它使用密码学的基本工具来实现去中心化的货币。而以太坊也有自己的本土加密货币并同样遵循着&lt;strong&gt;分布式账本规则&lt;/strong&gt;，但同时它也支持更强大的功能“智能合约”，这也是以太坊可编程的关键，因此以太坊除了是一个分布式账本之外，还是一个状态机器，可以根据预定义的规则（智能合约）在不同区块之间更改。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image.png&#34;
+	width=&#34;1080&#34;
+	height=&#34;607&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image_hu_c16a6ecd771652a5.png 480w, /zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image_hu_5ed3ebfdccc5da67.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;427px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;evm-如何工作&#34;&gt;&lt;a href=&#34;#evm-%e5%a6%82%e4%bd%95%e5%b7%a5%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EVM 如何工作
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;EVM 运行在以太坊的每个节点上&lt;/strong&gt;，当部署一个智能合约时，合约代码会被编译成字节码，然后通过网络广播到所有节点。EVM 在每个节点上执行这些字节码，确保所有节点对交易和合约状态达成共识。&lt;/p&gt;
+&lt;p&gt;和 Java 的 JVM 不同，EVM 不是一个需要单独下载的独立软件，而是&lt;strong&gt;嵌入在以太坊客户端中的运行时环境&lt;/strong&gt;。开发者可以通过以下方式获取 EVM 环境：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装以太坊客户端 ：如 ethereumjs-vm（js 实现）、evnone（c++实现）、revm（rust 实现） 或 Py-EVM（python 实现），这些客户端都内置了 EVM。&lt;/li&gt;
+&lt;li&gt;使用开发框架 ：如 Hardhat 或 Truffle，它们在本地启动一个模拟的 EVM 环境，方便开发和测试。&lt;/li&gt;
+&lt;li&gt;在线 IDE ：如 Remix IDE，无需本地安装，直接通过浏览器连接到远程 EVM 实例。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;比如用 Solidity 编写的合约，.sol 编译为 EVM 字节码（十六进制操作码）和 ABI 应用二进制接口。每个操作码执行会消耗燃料，具体看&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/developers/docs/evm/opcodes/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;EVM 操作码&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image-1.png&#34;
+	width=&#34;1505&#34;
+	height=&#34;1069&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image-1_hu_ea0bef1f00824c4d.png 480w, /zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image-1_hu_812dd3d5d3ff7312.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;140&#34;
+		data-flex-basis=&#34;337px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;区块&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>了解gas费</title>
+        <link>/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3gas%E8%B4%B9/</link>
+        <pubDate>Wed, 21 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3gas%E8%B4%B9/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://defiprime.com/gas&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;defiprime gas&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;支付的总 gas 费分为两部分：base fee（基础费，交易后被销毁） 和 priority fee（小费）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;gas 费以 gwei 计价，1 个 gwei 等于 1 个 ETH 的十亿分之一。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Base fee 由协议设定，是交易必须至少支付的金额，只有支付了 Base fee 交易才会被视为有效， Priority fee 是激励验证者的小费。&lt;/p&gt;
+&lt;p&gt;假设 A 要向 B 支付 1 个 ETH。 &lt;strong&gt;这笔转账需要 21,000 单位的燃料&lt;/strong&gt;，基础费是 10 gwei。 A 支付了 2 gwei 作为小费。&lt;/p&gt;
+&lt;p&gt;总费用等于：&lt;/p&gt;
+&lt;p&gt;使用的燃料单位数 *（基础费 + 优先费）&lt;/p&gt;
+&lt;p&gt;21,000 * (10 + 2) = 252,000 gwei（0.000252 个以太币）&lt;/p&gt;
+&lt;p&gt;也就是当 A 转账时，将从 A 帐户中扣除 1.000252 个以太币。 B 的帐户增加 1.0000 个以太币。 验证者收到价值 0.000042 个以太币的小费。 &lt;strong&gt;0.00021 个以太币的 base fee 被销毁&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;为什么是-21000-单位燃料&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af-21000-%e5%8d%95%e4%bd%8d%e7%87%83%e6%96%99&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么是 21,000 单位燃料
+&lt;/h2&gt;&lt;p&gt;21000 是标准以太币转账的燃料限额，以太坊虚拟机（EVM）在处理一笔最简单的 ETH 转账时，需要执行一系列标准化的底层操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;账户状态检查与更新 ：验证发送方余额、签名，并更新发送方与接收方的账户状态。&lt;/li&gt;
+&lt;li&gt;交易记录 ：在区块链上永久记录这笔交易。&lt;/li&gt;
+&lt;li&gt;基础开销 ：包括日志记录、状态变更等基础计算步骤。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;经过协议层面的测算，所有这些操作的总成本被精确地锚定为 21,000 Gas。当然这是最简单的一笔交易，所以&lt;strong&gt;21000 是以太坊网络“标准转账”的最低资源消耗要求！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;每当发起一笔交易时都要设置一个&lt;strong&gt;燃料限额&lt;/strong&gt;，这个数值&amp;gt;=21000，交易才会成功。比如我们设置了 50,000 单位燃料限额，如果实际消耗 30,000 单位，则最后会退回 20,000 单位，而如果设置 20,000 单位燃料限额且实际要消耗 30,000 单位，则交易会因为“Out of Gas”而失败，但&lt;strong&gt;已消耗的 20,000 Gas 费用将不予退还。&lt;/strong&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>UniSwap从V1到V4演进</title>
+        <link>/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/</link>
+        <pubDate>Tue, 20 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/</guid>
+        <description>&lt;h2 id=&#34;自动做市商&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%8a%a8%e5%81%9a%e5%b8%82%e5%95%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自动做市商
+&lt;/h2&gt;&lt;p&gt;自动做市商 Automated Market Maker，简称&lt;strong&gt;AMM&lt;/strong&gt;，它是一种&lt;strong&gt;部署在区块链上的智能合约协议&lt;/strong&gt;，通过数学算法（定价曲线），允许用户在无需传统订单簿和特定交易对手的情况下，直接与流动性池进行代币兑换，为代币提供流动性。&lt;/p&gt;
+&lt;p&gt;可以把 AMM 想象成一个永不停歇的“自动报价机”：它根据预设的数学公式（如 x * y = k）实时计算两种资产间的兑换价格。&lt;strong&gt;用户存入资产构成“资金池”&lt;/strong&gt;，交易者直接与这个池子交互，用 A 资产换取 B 资产，整个过程由代码自动执行，无需等待买家或卖家匹配。&lt;/p&gt;
+&lt;p&gt;用户存入资产就是 Liquidity ProVider，即&lt;strong&gt;流动性提供者&lt;/strong&gt;，简称 LP，他们不靠报价差赚钱，而是&lt;strong&gt;通过向交易池存入资金来赚取手续费&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;AMM 是一个统称&lt;/strong&gt;，它包含多种数学模型，比如 uniswap V2 的恒定乘积 x*y=k，稳定币的恒定总和 x+y=k。&lt;/p&gt;
+&lt;h2 id=&#34;无常损失&#34;&gt;&lt;a href=&#34;#%e6%97%a0%e5%b8%b8%e6%8d%9f%e5%a4%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;无常损失
+&lt;/h2&gt;&lt;p&gt;无常损失（Impermanent Loss, IL）是 DeFi 中 LP 面临的核心风险。它并非实际亏损，而是指将资产存入流动性池后，相较于直接持有这些资产，可能获得的价值的损失。&lt;/p&gt;
+&lt;p&gt;假设此时 ETH 价格为 $1000 /ETH，一个 LP 向 Uniswap V2 的 ETH/USDC 池存入价值 1000 美元的 ETH 和 1000 美元的 USDC，那么就是存入了 1 ETH 和 1000 U，恒定乘积 k = 1 * 1000 = 1000，假设他存入的资金占据池子 50%的份额。&lt;/p&gt;
+&lt;p&gt;当 ETH 翻倍至 $2000，套利者发现池内 ETH 价格低于市场价，于是用市场价 $2000 的 USDC 不断从池中买入便宜的 ETH。设新的 ETH 数量为 x，USDC 数量为 y，则新价格: $2000 = y / x =&amp;gt; y = 2000x，联立 x*y=1000，得出池子新状态 0.7071 ETH / 1414.21 USDC。&lt;/p&gt;
+&lt;p&gt;此时 LP 的资产是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;新 ETH 数量: 0.7071 * 50% ≈ 0.3536 ETH&lt;/li&gt;
+&lt;li&gt;新 USDC 数量: 1414.21 * 50% ≈ 707.11 USDC&lt;/li&gt;
+&lt;li&gt;当前价值: (0.3536 * 2000)+707.11=707.20 + 707.11=$1414.31&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果 LP 没有存入 Uniswap 提供流动性，而是直接持有 1 ETH 和 1000 USDC，则当前会有$3000，无常损失 = 直接持有价值 - LP 价值 = 3000−1414.31 = $1585.69，损失率 = (1585.69/3000) * 100% ≈ 52.86%&lt;/p&gt;
+&lt;p&gt;简单来说就是套利者从交易池子中买低价的 ETH，再以正常价格卖出获利，导致 LP 资产损失.
+&lt;img src=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image.png&#34;
+	width=&#34;1470&#34;
+	height=&#34;351&#34;
+	srcset=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image_hu_1463ef86f8f305b.png 480w, /zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image_hu_3fbfe3248faa6672.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;418&#34;
+		data-flex-basis=&#34;1005px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;池子深度和滑点&#34;&gt;&lt;a href=&#34;#%e6%b1%a0%e5%ad%90%e6%b7%b1%e5%ba%a6%e5%92%8c%e6%bb%91%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;池子深度和滑点
+&lt;/h2&gt;&lt;p&gt;如果把交易池比作一个水池，深度就是池子里水的多少：
+深水池： 往里扔一块巨石（大单交易），水位（价格）几乎没有波动。&lt;/p&gt;
+&lt;p&gt;浅水盆： 往里扔一块小石子（小单交易），水就会溅得到处都是，水位（价格）剧烈震荡。&lt;/p&gt;
+&lt;p&gt;深度的大小直接决定了滑点的大小。&lt;strong&gt;滑点是指“预期的执行价格”与“实际成交价格”之间的差额&lt;/strong&gt;。深度好： 买入 100 万美元的资产，价格只上涨了 $0.1%$。深度差： 买入 100 万美元的资产，价格瞬间被拉高了 $10%$。这时意味着买到的成本比市场价贵了很多, uniswap 支持设置可接受的滑点范围,范围越小,个人损失就越少,但是相对的交易越难达成.&lt;/p&gt;
+&lt;h2 id=&#34;从-uniswap-v1-到-v4&#34;&gt;&lt;a href=&#34;#%e4%bb%8e-uniswap-v1-%e5%88%b0-v4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;从 UniSwap V1 到 V4
+&lt;/h2&gt;&lt;p&gt;币安 / OKX 是中心化交易所 CEX，而 Uniswap 是去中心化交易 DEX，Uniswap 基于智能合约自动运行，无需注册，资产自托管，就像一个自动售货机，交易者可以自由进行代币兑换。&lt;/p&gt;
+&lt;h3 id=&#34;uniswap-v1&#34;&gt;&lt;a href=&#34;#uniswap-v1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V1
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;奠定了恒积做市商 x*y=k 的基础&lt;/strong&gt;，缺点是所有代币只能跟 ETH 配对，买 A 代币得先换成 ETH。&lt;/p&gt;
+&lt;h3 id=&#34;uniswap-v2&#34;&gt;&lt;a href=&#34;#uniswap-v2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V2
+&lt;/h3&gt;&lt;p&gt;V2 增加了&lt;strong&gt;ERC-20 自由配对&lt;/strong&gt;，ERC-20 是以太坊上创建和发行代币的技术标准，规定了代币转账、查询余额等基本功能。它就像代币的“通用接口”，&lt;strong&gt;任何两个符合 ERC-20 标准的代币都可以直接创建一个交易对池子，无需许可，让代币直接对换，不再强制经过 ETH&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;此时 UniSwap V2 的 LP 的资产均匀分布在整个价格区间 （从 0 到无穷大），还无法像 V3 那样选择特定的价格区间，可以说是大水漫灌，&lt;strong&gt;价格控制被动，价格完全由市场交易和公式决定&lt;/strong&gt;！&lt;/p&gt;
+&lt;p&gt;V2 还引加入了&lt;strong&gt;闪电贷 (Flash Loan)&lt;/strong&gt;。闪电贷是一种无需抵押、但必须在同一笔区块链交易内归还的贷款。核心是利用区块链交易的“原子性”（要么全部成功，要么全部回滚）。如果借款人在交易结束前未能连本带利归还，整个交易无效，贷款从未发生。&lt;/p&gt;
+&lt;h3 id=&#34;uniswap-v3&#34;&gt;&lt;a href=&#34;#uniswap-v3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V3
+&lt;/h3&gt;&lt;p&gt;在 V2 中，LP 提供的流动性会均匀分布在整个价格曲线（0 到无穷大）上，但大部分流动性可能永远用不到，而 V3 &lt;strong&gt;允许 LP 自定义价格区间&lt;/strong&gt;，实现精准滴灌，这样可以让资金集中在交易活跃区，在自定义的价格区间内提供集中流动性。&lt;/p&gt;
+&lt;p&gt;比如如果我认为 ETH 价格会在 1800-2200 美元之间波动，那么我就可以只在这个区间投入资金，资金不会被均匀分布在整个价格曲线，定位更精准，流动性更高。&lt;/p&gt;
+&lt;h3 id=&#34;uniswap-v4&#34;&gt;&lt;a href=&#34;#uniswap-v4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V4
+&lt;/h3&gt;&lt;p&gt;保留了 V3 的集中流动性核心，从“自动化做市商”向“可编程流动性平台 ”的范式转变.
+V4 新增了 &lt;strong&gt;Hooks&lt;/strong&gt;，允许开发者在流动性池生命周期的关键节点（如初始化、添加/移除流动性、交易前后）&lt;strong&gt;注入自定义的智能合约逻辑&lt;/strong&gt;，将 Uniswap 从一个固定的交易协议，转变为一个可组合的开发者平台。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在 V3 及更早版本中，&lt;strong&gt;每个流动性池都是一个独立的智能合约&lt;/strong&gt;，创建和交互成本高昂。V4 采用了&lt;strong&gt;单例设计，将所有池子集中在一个合约中管理&lt;/strong&gt;。
+配合闪电记账（Flash Accounting）机制，交易过程中代币的转移被简化为合约内部的余额记录，&lt;strong&gt;仅在交易最终结算时进行一次外部转账&lt;/strong&gt;。这使得创建新池的成本降低，跨池交易的 Gas 费用也大幅减少。&lt;/p&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>入门Hardhat和Foundry&amp;wagmi和viem基本使用</title>
+        <link>/zh-cn/post/2026/01/%E5%85%A5%E9%97%A8hardhat%E5%92%8Cfoundrywagmi%E5%92%8Cviem%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</link>
+        <pubDate>Tue, 20 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/01/%E5%85%A5%E9%97%A8hardhat%E5%92%8Cfoundrywagmi%E5%92%8Cviem%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;p&gt;Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。&lt;/p&gt;
+&lt;p&gt;Hardhat 基于 JavaScript/TypeScript 生态，插件丰富。Foundry 基于 Rust，追求极致的速度。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useAccount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useBalance&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useSendTransaction&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;wagmi&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;parseEther&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;viem&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 从 viem 引入工具函数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;WalletPay&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useAccount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// wagmi: 获取当前登录地址
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// wagmi: 获取余额状态，loading 和 error 自动帮你处理好了
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;balance&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useBalance&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// wagmi: 发送交易的钩子
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sendTransaction&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;useSendTransaction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;handleSend&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nx&#34;&gt;sendTransaction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;nx&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;0x1234...5678&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;c1&#34;&gt;// viem: 核心用法！将人类识别的 &amp;#34;0.01&amp;#34; 转换为以太坊单位 &amp;#34;10000000000000000&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;			&lt;span class=&#34;nx&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;parseEther&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;0.01&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;div&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;你的地址&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;address&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;/p&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;				&lt;span class=&#34;nx&#34;&gt;余额&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;balance&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;formatted&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;balance&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;symbol&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;/p&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;button&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;onClick&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;handleSend&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;打赏&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.01&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ETH&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;/button&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;/div&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>初学Solidity</title>
         <link>/zh-cn/post/2026/01/%E5%88%9D%E5%AD%A6solidity/</link>
         <pubDate>Mon, 19 Jan 2026 12:00:00 +0000</pubDate>
@@ -135,7 +440,87 @@
 &lt;p&gt;string：动态长度的字符串，底层是 bytes，不支持索引，但是可以通过 bytes(string)转成 bytes 类型。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;函数&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数
+&lt;h2 id=&#34;继承&#34;&gt;&lt;a href=&#34;#%e7%bb%a7%e6%89%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;继承
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 父合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Parent&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;parentVar&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;parentFunc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pure&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Hello from Parent&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 子合约继承父合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Child&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;is&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Parent&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;childFunc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pure&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// 直接访问父合约的变量和函数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;value&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;parentVar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;parentFunc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Solidity 支持多重继承。当多个父合约有同名函数时，子合约必须使用 override 关键字明确指定要重写的函数来源。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Base1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;greet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pure&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;virtual&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Hello from Base1&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Base2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;greet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pure&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;virtual&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Hello from Base2&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Derived&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;is&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Base1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Base2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;greet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pure&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;override&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Base1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Base2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Hello from Derived&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;函数&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数
 &lt;/h2&gt;&lt;h3 id=&#34;构造函数&#34;&gt;&lt;a href=&#34;#%e6%9e%84%e9%80%a0%e5%87%bd%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;构造函数
 &lt;/h3&gt;&lt;p&gt;在合约部署时只执行一次，用于初始化状态变量（如设置所有者、初始参数等）。&lt;/p&gt;
 &lt;p&gt;特点：&lt;/p&gt;
@@ -229,22 +614,26 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;view-修饰的函数&#34;&gt;&lt;a href=&#34;#view-%e4%bf%ae%e9%a5%b0%e7%9a%84%e5%87%bd%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;view 修饰的函数
-&lt;/h3&gt;&lt;p&gt;不修改区块链的状态，可被外部免费调用（不消耗 gas）&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;balanceOf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;user&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;view&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;balances&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;user&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;pure-修饰的函数&#34;&gt;&lt;a href=&#34;#pure-%e4%bf%ae%e9%a5%b0%e7%9a%84%e5%87%bd%e6%95%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;pure 修饰的函数
-&lt;/h3&gt;&lt;p&gt;既不读也不写区块链的状态，完全依赖参数计算&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id=&#34;函数可见性修饰符&#34;&gt;&lt;a href=&#34;#%e5%87%bd%e6%95%b0%e5%8f%af%e8%a7%81%e6%80%a7%e4%bf%ae%e9%a5%b0%e7%ac%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;函数可见性修饰符
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;public：public 修饰的函数或状态变量可以从合约内外被访问。对于状态变量，编译器会自动生成一个同名的外部 getter 函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;private：private 修饰的函数或状态变量仅能在其合约内部访问。即使是继承它的子合约也无法访问。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;internal：internal 修饰的函数或状态变量可以在当前合约内部以及所有继承自它的子合约内部被访问。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;external：external 修饰的函数只能从合约外部被调用，不能在合约内部直接调用。它通常用于定义合约的对外接口，在处理大型数据结构（如数组、字符串）时比 public 更节省 Gas。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;状态修饰符&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e4%bf%ae%e9%a5%b0%e7%ac%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态修饰符
+&lt;/h3&gt;&lt;p&gt;状态修饰符向 EVM 声明函数如何与区块链状态交互，直接影响交易执行和 Gas 消耗&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;pure：纯计算函数，既不读也不写区块链的状态，只能进行数学运算或处理传入参数，无法访问 block.timestamp、msg.sender 或任何存储变量。执行时使用 STATICCALL，Gas 成本最低。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -253,7 +642,116 @@
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pure&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 仅计算，不接触状态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;view：只读函数，可以读取状态变量但禁止修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;payable：可接收 ETH 函数，允许函数在调用时接收以太币&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;external 的 Gas 优势：当函数仅从外部调用时，使用 external 而非 public 可以节省 Gas，因为 external 函数的参数通过 calldata 传递而非 memory。
+pure/view 的误用：声明为 pure 或 view 的函数如果实际上读取或修改了状态，编译不会报错，但调用时会回滚。务必确保声明与实际行为一致。
+payable 的必要性：任何需要接收 ETH 的函数都必须标记 payable，否则发送的 ETH 会被退回，交易失败。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;如何获取合约的对象&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e5%90%88%e7%ba%a6%e7%9a%84%e5%af%b9%e8%b1%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何获取合约的对象
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;用 new 在当前交易中部署一个全新的合约实例到区块链上。这会执行构造函数并返回新合约的地址。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 基础合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Token&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;constructor&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 工厂合约：使用new创建新实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TokenFactory&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;Token&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;newToken&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;createToken&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;memory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// 使用new创建全新Token合约实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;newToken&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Token&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// newToken现在指向新部署的合约地址
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;用 ContractName(address)类型转换来获取已有合约对象引用。这不会创建新合约，而是与已部署的合约交互。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 已有Token合约部署在区块链上
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Token&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;transfer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;to&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;amount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 用户合约：引用现有Token实例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;contract&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;UserContract&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;Token&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;existingToken&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;setTokenAddress&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tokenAddress&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// 通过地址引用已部署的Token合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;existingToken&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Token&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tokenAddress&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// existingToken现在指向区块链上已有的合约
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;sendTokens&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;recipient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;amount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// 调用引用合约的方法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;existingToken&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;transfer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;recipient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;amount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
@@ -309,16 +807,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;关键字&#34;&gt;&lt;a href=&#34;#%e5%85%b3%e9%94%ae%e5%ad%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;关键字
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;external：函数可见性修饰符之一，主要用于声明&lt;strong&gt;这个函数只能从合约外部调用&lt;/strong&gt;，比如通过交易、其他合约调用或者 this.functionName()，不能直接 functionName() 调用，更省 gas！&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;public：可以直接 functionName()调用。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;一些全局变量&#34;&gt;&lt;a href=&#34;#%e4%b8%80%e4%ba%9b%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;一些全局变量
+&lt;/div&gt;&lt;h2 id=&#34;一些全局变量&#34;&gt;&lt;a href=&#34;#%e4%b8%80%e4%ba%9b%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;一些全局变量
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;msg：一个内置的全局结构体（struct），由以太坊虚拟机（EVM）在每次外部调用时自动提供，无需声明或初始化，在任何函数中都可以直接访问，它包含了当前函数调用的上下文信息。&lt;/li&gt;
 &lt;/ul&gt;
@@ -948,11 +1437,11 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 </description>
         </item>
         <item>
-        <title>Web3钱包、交易、仓位</title>
-        <link>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/</link>
+        <title>Web3区块打包上链流程</title>
+        <link>/zh-cn/post/2025/11/web3%E5%8C%BA%E5%9D%97%E6%89%93%E5%8C%85%E4%B8%8A%E9%93%BE%E6%B5%81%E7%A8%8B/</link>
         <pubDate>Sun, 09 Nov 2025 09:39:19 +0000</pubDate>
         
-        <guid>/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/</guid>
+        <guid>/zh-cn/post/2025/11/web3%E5%8C%BA%E5%9D%97%E6%89%93%E5%8C%85%E4%B8%8A%E9%93%BE%E6%B5%81%E7%A8%8B/</guid>
         <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;参考链接&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;交易流程&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易流程
@@ -980,125 +1469,6 @@ Real World Assets ，是通过区块链技术将房地产、国债、艺术品�
 &lt;h2 id=&#34;账户&#34;&gt;&lt;a href=&#34;#%e8%b4%a6%e6%88%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;账户
 &lt;/h2&gt;&lt;p&gt;以太坊帐户是一对密钥，一个用于创建可以随意共享的地址，另一个需要保密，因为它用于签名。结合使用这两个密钥，可以持有资产和进行交易。&lt;/p&gt;
 &lt;p&gt;以太坊帐户有一个地址，就像收件箱有电子邮件地址一样。它用于识别数字资产。&lt;/p&gt;
-&lt;h2 id=&#34;杠杆&#34;&gt;&lt;a href=&#34;#%e6%9d%a0%e6%9d%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;杠杆
-&lt;/h2&gt;&lt;p&gt;杠杆允许交易者用较少的自有资金（保证金）控制更大价值的头寸。&lt;/p&gt;
-&lt;p&gt;1000 USDT 的本金，使用 10 倍杠杆，可开立价值 10,000 USDT 的合约头寸。盈亏按 10000 USDT 的变动计算，放大收益也放大风险。&lt;/p&gt;
-&lt;h2 id=&#34;多头仓位空头仓位&#34;&gt;&lt;a href=&#34;#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;多头仓位、空头仓位
-&lt;/h2&gt;&lt;h2 id=&#34;仓位&#34;&gt;&lt;a href=&#34;#%e4%bb%93%e4%bd%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;仓位
-&lt;/h2&gt;&lt;p&gt;仓位 = 用合约“虚拟持有”的资产头寸，我钱包里有 10,000 USDC，想参与 BTC 价格波动，但不想真的买 BTC（避免托管、转账麻烦），于是选择通过合约进行虚拟持有，具体看下面两个例子。&lt;/p&gt;
-&lt;p&gt;假设当前 BTC 市场价格 = $60,000&lt;/p&gt;
-&lt;h3 id=&#34;多头仓位看涨盈利&#34;&gt;&lt;a href=&#34;#%e5%a4%9a%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e6%b6%a8%e7%9b%88%e5%88%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;多头仓位：看涨盈利
-&lt;/h3&gt;&lt;p&gt;核心逻辑：你看涨 BTC，认为 BTC 价格会上涨，于是买入合约，等涨价后卖出平仓赚差价。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image.png&#34;
-	width=&#34;1274&#34;
-	height=&#34;494&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image_hu_20c99fe33443df26.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image_hu_a16c3a5a07f47ff4.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;257&#34;
-		data-flex-basis=&#34;618px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-6.png&#34;
-	width=&#34;1047&#34;
-	height=&#34;705&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-6_hu_5fb0890cc87fba9c.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-6_hu_8f4edffb3d556687.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;148&#34;
-		data-flex-basis=&#34;356px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-2.png&#34;
-	width=&#34;1611&#34;
-	height=&#34;533&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-2_hu_9f085f386a09f826.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-2_hu_24c545857a82a431.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;302&#34;
-		data-flex-basis=&#34;725px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;h3 id=&#34;空头仓位看跌盈利&#34;&gt;&lt;a href=&#34;#%e7%a9%ba%e5%a4%b4%e4%bb%93%e4%bd%8d%e7%9c%8b%e8%b7%8c%e7%9b%88%e5%88%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;空头仓位：看跌盈利
-&lt;/h3&gt;&lt;p&gt;核心逻辑：你看跌 BTC，认为 BTC 价格会下跌，于是买入合约，等跌价后卖出平仓赚差价。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-3.png&#34;
-	width=&#34;1128&#34;
-	height=&#34;393&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-3_hu_e602f9ffab3950c7.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-3_hu_acf0bebe52655d92.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;287&#34;
-		data-flex-basis=&#34;688px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-5.png&#34;
-	width=&#34;1048&#34;
-	height=&#34;589&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-5_hu_10ef159df8020633.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-5_hu_ef7dcb7da8cedb40.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;177&#34;
-		data-flex-basis=&#34;427px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-7.png&#34;
-	width=&#34;1196&#34;
-	height=&#34;334&#34;
-	srcset=&#34;/zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-7_hu_c48b5c1f6b96b62d.png 480w, /zh-cn/post/2025/11/web3%E9%92%B1%E5%8C%85%E4%BA%A4%E6%98%93%E4%BB%93%E4%BD%8D/image-7_hu_20f4d3515285c46c.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;358&#34;
-		data-flex-basis=&#34;859px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;h2 id=&#34;爆仓&#34;&gt;&lt;a href=&#34;#%e7%88%86%e4%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;爆仓
-&lt;/h2&gt;&lt;h2 id=&#34;合仓平仓&#34;&gt;&lt;a href=&#34;#%e5%90%88%e4%bb%93%e5%b9%b3%e4%bb%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;合仓（平仓）
-&lt;/h2&gt;&lt;h2 id=&#34;钱包链接项目是什么意思&#34;&gt;&lt;a href=&#34;#%e9%92%b1%e5%8c%85%e9%93%be%e6%8e%a5%e9%a1%b9%e7%9b%ae%e6%98%af%e4%bb%80%e4%b9%88%e6%84%8f%e6%80%9d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;钱包链接项目是什么意思？
-&lt;/h2&gt;&lt;p&gt;将钱包连接到项目中，是 Web3 应用（DApp）使用中最基础、最关键的一步。它的本质不是“登录账号”，而是 &lt;strong&gt;建立用户与区块链应用&lt;/strong&gt;之间的可信通信通道&lt;/p&gt;
-&lt;h2 id=&#34;去中心化应用&#34;&gt;&lt;a href=&#34;#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e5%ba%94%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;去中心化应用
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Zora：https://zora.co/&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Uniswap：https://app.uniswap.org/&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Farcaster：https://farcaster.xyz/&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;h2 id=&#34;以太坊开发技术栈&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%bc%80%e5%8f%91%e6%8a%80%e6%9c%af%e6%a0%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊开发技术栈
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Hardhat&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Foundry&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Ethers.js&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Thirdweb&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Moralis&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
 </description>
         </item>
         <item>

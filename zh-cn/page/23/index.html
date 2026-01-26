@@ -12,7 +12,7 @@
 <meta property='og:description' content="博学而笃行,切问而近思">
 <meta property='og:url' content='/zh-cn/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-19T12:00:00&#43;00:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-25T12:00:00&#43;00:00 '/>
 <meta name="twitter:title" content="青秋博客">
 <meta name="twitter:description" content="博学而笃行,切问而近思"><link rel="alternate" type="application/rss&#43;xml" href="/zh-cn/index.xml">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -720,160 +720,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             
         
             
-                <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-</head>
-
-<body>
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">关于</h2>
-        <div class="widget-archive--list">
-            <div class="about">
-                <span>
-                    🤓软件工程专业出身的♂️本科生，精通各类技术栈的单词拼写👀，在校期间主学Java后端开发，
-                    目前正在学习Python、Nodejs，目标成为一个使用AI辅助开发的超级全栈个体🤖，拥抱AI时代。
-                </span>
                 
-                <div class="chart-container">
-                    <div class="chart-pie">
-                        <span>✨ 感兴趣</span>
-                        <canvas id="interestsChart" width="400" height="400"></canvas>
-                    </div>
-                    <div class="chart-bar">
-                        <span>✨ 技术栈</span>
-                        <canvas id="techStackChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-                <script>
-                    
-                    const interestsData = {
-                        labels: ['做饭', '穿搭', 'AIGC', '全栈', 'Agent应用出海', '跨境电商', '自媒体'],
-                        datasets: [{
-                            label: '感兴趣',
-                            data: [30, 30, 30, 20, 25, 15, 5], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#FF6384', 
-                                '#2AF598', 
-                                '#36A2EB', 
-                                '#FFCE56', 
-                                '#4BC0C0', 
-                                '#FF9F40' 
-                            ],
-                            hoverOffset: 4,
-                            borderWidth: 1, 
-                        }]
-                    };
-
-                    
-                    const techStackData = {
-                        labels: ['Java', 'Spring', 'Next.js', 'TypeScript', 'Ant Design', 'React', "Python",
-                            "Nodejs"
-                        ],
-                        datasets: [{
-                            label: '技术栈',
-                            data: [25, 20, 15, 10, 10, 10, 10, 10], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#2AF598', 
-                                '#0093E9', 
-                                '#FFCE56', 
-                                '#52ACFF', 
-                                '#4BC0C0', 
-                                '#08AEEA', 
-                                '#05FAC3' 
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-
-                    
-                    const interestsCtx = document.getElementById('interestsChart').getContext('2d');
-                    new Chart(interestsCtx, {
-                        type: 'pie',
-                        data: interestsData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    
-                    const techStackCtx = document.getElementById('techStackChart').getContext('2d');
-                    new Chart(techStackCtx, {
-                        type: 'bar',
-                        data: techStackData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (value, context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
-
-
-    </section>
-</body>
-
-</html>
             
         
             
@@ -899,7 +746,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <a href="/zh-cn/page/archives/#2026">
                 
                 <span class="year">2026</span>
-                <span class="count">11篇</span>
+                <span class="count">16篇</span>
                 
             </a>
         </div>
@@ -942,6 +789,481 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     
 
     <section class="article-list">
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/07/%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8springsecurity-5/">一文入门SpringSecurity 5</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            spring security案例、底层原理初探、认证授权流程图
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Jul 23, 2024</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 7 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/spring/">Spring</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/spring-security/">Spring Security</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/07/redis%E7%9A%84zset%E5%AE%9E%E7%8E%B0%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E6%87%92%E6%B1%89%E5%BC%8F%E5%85%B3%E6%B3%A8%E6%8E%A8%E9%80%81/">Redis的zset实现共同关注、懒汉式关注推送</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            用户共同关注功能、feed流新消息推送、zset实现滚动分页查询
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Jul 16, 2024</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 3 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/redis/">Redis</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%82%B9%E8%B5%9E%E7%82%B9%E8%B5%9Etop5%E7%94%A8%E6%88%B7%E6%8E%92%E5%BA%8F/">Redis实现用户点赞、点赞top5用户排序</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            redis的sorted_set集合实现点赞功能和最早点赞top5功能，bug修正WRONGTYPE Operation against a key holding the wrong kind of value，数据库in( )查询排序
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Jul 14, 2024</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 3 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/redis/">Redis</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/07/redis%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97listpubsubstream%E5%9F%BA%E4%BA%8Estream%E7%9A%84%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80/">Redis实现消息队列：list、PubSub、Stream，基于Stream的异步秒杀</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            redis消息队列，list、pubsub、stream，基于stream队列的异步秒杀、redis的消费者组
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Jul 11, 2024</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 6 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/redis/">Redis</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2024/07/%E5%9F%BA%E4%BA%8Eredis%E5%92%8C%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E7%9A%84-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%9A%E5%8A%A1/">基于Redis和阻塞队列的 异步秒杀业务</a>
+        </h2>
+
+        
+        <h3 class="article-subtitle">
+            基于Redis和阻塞队列的异步秒杀业务，Redis实现库存和秒杀资格判断，阻塞队列实现异步秒杀下单，lua脚本查询redis库存和一人一单的资格
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Jul 06, 2024</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 8 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/redis/">Redis</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
         
             
 <article class="">
@@ -1212,514 +1534,6 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             , 
             
             <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2024/05/%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9%E5%85%A5%E9%97%A8/">缓存穿透、缓存击穿、缓存雪崩【入门】</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            高并发、缓存穿透、缓存击穿、缓存雪崩、互斥锁、逻辑过期
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">May 16, 2024</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 4 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/redis/">Redis</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2024/05/redis%E5%AE%9E%E6%88%98%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C/">Redis实战—验证码登录注册</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            redis实战--短信验证码登录，基于session实现和基于redis实现，双重拦截器配置，token刷新
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">May 15, 2024</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 6 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/redis/">Redis</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2024/05/nvm%E5%AE%89%E8%A3%85%E5%8F%8Avue%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%9A%84n%E7%A7%8D%E6%96%B9%E5%BC%8F/">NVM安装及VUE创建项目的N种方式</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            NVM安装配置，vue项目创建的N种方式
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">May 14, 2024</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 3 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/">前端</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/vue/">Vue</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/javascript/">JavaScript</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/node.js/">Node.js</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2024/05/kafka%E5%AE%9E%E6%88%98-%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA-kraft%E6%A8%A1%E5%BC%8F/">kafka实战 集群搭建-Kraft模式</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            kafka集群实战，EFAK配置、kraft集群配置及启动 持续更新！
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">May 05, 2024</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 6 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/kafka/">Kafka</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2024/05/kafka%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9C%9F%E4%B8%87%E5%AD%97%E8%AF%A6%E8%A7%A3%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82/">Kafka入门到入土——万字详解，图文并茂</a>
-        </h2>
-
-        
-        <h3 class="article-subtitle">
-            万字Kafka详解！图文并茂！kafka架构、数据模型、消息队列MQ、数据请求机制、副本机制、生产者、消费者组详解、主题分区、broker、controller
-        </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">May 05, 2024</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 26 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/kafka/">Kafka</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/zookeeper/">Zookeeper</a> 
-            
-            
-            
             
             
         </div>

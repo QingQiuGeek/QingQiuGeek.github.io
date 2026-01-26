@@ -11,7 +11,7 @@
 <meta property='og:description' content="博学而笃行,切问而近思">
 <meta property='og:url' content='/zh-cn/post/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-19T12:00:00&#43;00:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-25T12:00:00&#43;00:00 '/>
 <meta name="twitter:title" content="Posts">
 <meta name="twitter:description" content="博学而笃行,切问而近思"><link rel="alternate" type="application/rss&#43;xml" href="/zh-cn/post/index.xml">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -719,160 +719,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             
         
             
-                <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-</head>
-
-<body>
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">关于</h2>
-        <div class="widget-archive--list">
-            <div class="about">
-                <span>
-                    🤓软件工程专业出身的♂️本科生，精通各类技术栈的单词拼写👀，在校期间主学Java后端开发，
-                    目前正在学习Python、Nodejs，目标成为一个使用AI辅助开发的超级全栈个体🤖，拥抱AI时代。
-                </span>
                 
-                <div class="chart-container">
-                    <div class="chart-pie">
-                        <span>✨ 感兴趣</span>
-                        <canvas id="interestsChart" width="400" height="400"></canvas>
-                    </div>
-                    <div class="chart-bar">
-                        <span>✨ 技术栈</span>
-                        <canvas id="techStackChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-                <script>
-                    
-                    const interestsData = {
-                        labels: ['做饭', '穿搭', 'AIGC', '全栈', 'Agent应用出海', '跨境电商', '自媒体'],
-                        datasets: [{
-                            label: '感兴趣',
-                            data: [30, 30, 30, 20, 25, 15, 5], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#FF6384', 
-                                '#2AF598', 
-                                '#36A2EB', 
-                                '#FFCE56', 
-                                '#4BC0C0', 
-                                '#FF9F40' 
-                            ],
-                            hoverOffset: 4,
-                            borderWidth: 1, 
-                        }]
-                    };
-
-                    
-                    const techStackData = {
-                        labels: ['Java', 'Spring', 'Next.js', 'TypeScript', 'Ant Design', 'React', "Python",
-                            "Nodejs"
-                        ],
-                        datasets: [{
-                            label: '技术栈',
-                            data: [25, 20, 15, 10, 10, 10, 10, 10], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#2AF598', 
-                                '#0093E9', 
-                                '#FFCE56', 
-                                '#52ACFF', 
-                                '#4BC0C0', 
-                                '#08AEEA', 
-                                '#05FAC3' 
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-
-                    
-                    const interestsCtx = document.getElementById('interestsChart').getContext('2d');
-                    new Chart(interestsCtx, {
-                        type: 'pie',
-                        data: interestsData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    
-                    const techStackCtx = document.getElementById('techStackChart').getContext('2d');
-                    new Chart(techStackCtx, {
-                        type: 'bar',
-                        data: techStackData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (value, context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
-
-
-    </section>
-</body>
-
-</html>
             
         
             
@@ -898,7 +745,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <a href="/zh-cn/page/archives/#2026">
                 
                 <span class="year">2026</span>
-                <span class="count">11篇</span>
+                <span class="count">16篇</span>
                 
             </a>
         </div>
@@ -944,7 +791,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
         <div class="section-card">
             <div class="section-details">
-                <h3 class="section-count">194 个页面</h3>
+                <h3 class="section-count">199 个页面</h3>
                 <h1 class="section-term">Posts</h1>
                 
             </div>
@@ -952,6 +799,61 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     </header>
     
     <section class="article-list--compact">
+        
+            <article>
+    <a href="/zh-cn/post/2025/09/docker%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">
+        <div class="article-details">
+            <h2 class="article-title">Docker基础概念</h2>
+            <footer class="article-time">
+                <time datetime='2025-09-06T12:39:19Z'>Sep 06, 2025</time>
+            </footer>
+        </div>
+    </a>
+</article>
+        
+            <article>
+    <a href="/zh-cn/post/2025/09/langchain4j%E5%88%9D%E4%BD%93%E9%AA%8C-@aiservicequeryroutercontentretrieverretrievalaugmentor/">
+        <div class="article-details">
+            <h2 class="article-title">langchain4j初体验-@AiService、queryRouter、ContentRetriever、RetrievalAugmentor</h2>
+            <footer class="article-time">
+                <time datetime='2025-09-06T12:39:19Z'>Sep 06, 2025</time>
+            </footer>
+        </div>
+    </a>
+</article>
+        
+            <article>
+    <a href="/zh-cn/post/2025/09/mysql%E9%94%81/">
+        <div class="article-details">
+            <h2 class="article-title">MySQL锁</h2>
+            <footer class="article-time">
+                <time datetime='2025-09-06T12:39:19Z'>Sep 06, 2025</time>
+            </footer>
+        </div>
+    </a>
+</article>
+        
+            <article>
+    <a href="/zh-cn/post/2025/09/springmvc%E6%B5%81%E7%A8%8B%E8%BF%87%E6%BB%A4%E5%99%A8%E6%8B%A6%E6%88%AA%E5%99%A8/">
+        <div class="article-details">
+            <h2 class="article-title">SpringMVC流程、过滤器、拦截器</h2>
+            <footer class="article-time">
+                <time datetime='2025-09-06T12:39:19Z'>Sep 06, 2025</time>
+            </footer>
+        </div>
+    </a>
+</article>
+        
+            <article>
+    <a href="/zh-cn/post/2025/09/tcp%E7%B2%98%E5%8C%85/">
+        <div class="article-details">
+            <h2 class="article-title">TCP粘包</h2>
+            <footer class="article-time">
+                <time datetime='2025-09-06T12:39:19Z'>Sep 06, 2025</time>
+            </footer>
+        </div>
+    </a>
+</article>
         
             <article>
     <a href="/zh-cn/post/2025/09/%E6%9C%AC%E5%9C%B0%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8serve/">
@@ -981,61 +883,6 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <h2 class="article-title">同源策略、CORS跨域</h2>
             <footer class="article-time">
                 <time datetime='2025-09-05T16:39:19Z'>Sep 05, 2025</time>
-            </footer>
-        </div>
-    </a>
-</article>
-        
-            <article>
-    <a href="/zh-cn/post/2025/09/aop%E4%B8%BB%E6%B5%81%E6%98%AF%E8%BF%90%E8%A1%8C%E7%BB%87%E5%85%A5%E8%BF%98%E6%98%AF%E7%BC%96%E8%AF%91%E7%BB%87%E5%85%A5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/">
-        <div class="article-details">
-            <h2 class="article-title">AOP主流是运行织入还是编译织入,有什么区别</h2>
-            <footer class="article-time">
-                <time datetime='2025-09-05T12:39:19Z'>Sep 05, 2025</time>
-            </footer>
-        </div>
-    </a>
-</article>
-        
-            <article>
-    <a href="/zh-cn/post/2025/09/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8selectpollepoll/">
-        <div class="article-details">
-            <h2 class="article-title">IO多路复用select、poll、epoll</h2>
-            <footer class="article-time">
-                <time datetime='2025-09-05T12:39:19Z'>Sep 05, 2025</time>
-            </footer>
-        </div>
-    </a>
-</article>
-        
-            <article>
-    <a href="/zh-cn/post/2025/09/java%E5%A6%82%E4%BD%95%E5%81%9C%E6%AD%A2%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C/">
-        <div class="article-details">
-            <h2 class="article-title">Java如何停止线程运行</h2>
-            <footer class="article-time">
-                <time datetime='2025-09-05T12:39:19Z'>Sep 05, 2025</time>
-            </footer>
-        </div>
-    </a>
-</article>
-        
-            <article>
-    <a href="/zh-cn/post/2025/09/kafkarabbitmq%E7%BB%93%E6%9E%84/">
-        <div class="article-details">
-            <h2 class="article-title">kafka、RabbitMQ结构</h2>
-            <footer class="article-time">
-                <time datetime='2025-09-05T12:39:19Z'>Sep 05, 2025</time>
-            </footer>
-        </div>
-    </a>
-</article>
-        
-            <article>
-    <a href="/zh-cn/post/2025/09/langgraph4j%E5%88%9D%E4%BD%93%E9%AA%8C%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E7%8A%B6%E6%80%81%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%B7%A5%E4%BD%9C%E6%B5%81/">
-        <div class="article-details">
-            <h2 class="article-title">LangGraph4j初体验，搭建一个有状态多智能体工作流</h2>
-            <footer class="article-time">
-                <time datetime='2025-09-05T12:39:19Z'>Sep 05, 2025</time>
             </footer>
         </div>
     </a>

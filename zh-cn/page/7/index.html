@@ -12,7 +12,7 @@
 <meta property='og:description' content="博学而笃行,切问而近思">
 <meta property='og:url' content='/zh-cn/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-19T12:00:00&#43;00:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-01-25T12:00:00&#43;00:00 '/>
 <meta name="twitter:title" content="青秋博客">
 <meta name="twitter:description" content="博学而笃行,切问而近思"><link rel="alternate" type="application/rss&#43;xml" href="/zh-cn/index.xml">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -720,160 +720,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             
         
             
-                <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-</head>
-
-<body>
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">关于</h2>
-        <div class="widget-archive--list">
-            <div class="about">
-                <span>
-                    🤓软件工程专业出身的♂️本科生，精通各类技术栈的单词拼写👀，在校期间主学Java后端开发，
-                    目前正在学习Python、Nodejs，目标成为一个使用AI辅助开发的超级全栈个体🤖，拥抱AI时代。
-                </span>
                 
-                <div class="chart-container">
-                    <div class="chart-pie">
-                        <span>✨ 感兴趣</span>
-                        <canvas id="interestsChart" width="400" height="400"></canvas>
-                    </div>
-                    <div class="chart-bar">
-                        <span>✨ 技术栈</span>
-                        <canvas id="techStackChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
-                <script>
-                    
-                    const interestsData = {
-                        labels: ['做饭', '穿搭', 'AIGC', '全栈', 'Agent应用出海', '跨境电商', '自媒体'],
-                        datasets: [{
-                            label: '感兴趣',
-                            data: [30, 30, 30, 20, 25, 15, 5], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#FF6384', 
-                                '#2AF598', 
-                                '#36A2EB', 
-                                '#FFCE56', 
-                                '#4BC0C0', 
-                                '#FF9F40' 
-                            ],
-                            hoverOffset: 4,
-                            borderWidth: 1, 
-                        }]
-                    };
-
-                    
-                    const techStackData = {
-                        labels: ['Java', 'Spring', 'Next.js', 'TypeScript', 'Ant Design', 'React', "Python",
-                            "Nodejs"
-                        ],
-                        datasets: [{
-                            label: '技术栈',
-                            data: [25, 20, 15, 10, 10, 10, 10, 10], 
-                            backgroundColor: [
-                                '#FE5F50', 
-                                '#2AF598', 
-                                '#0093E9', 
-                                '#FFCE56', 
-                                '#52ACFF', 
-                                '#4BC0C0', 
-                                '#08AEEA', 
-                                '#05FAC3' 
-                            ],
-                            hoverOffset: 4
-                        }]
-                    };
-
-                    
-                    const interestsCtx = document.getElementById('interestsChart').getContext('2d');
-                    new Chart(interestsCtx, {
-                        type: 'pie',
-                        data: interestsData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    
-                    const techStackCtx = document.getElementById('techStackChart').getContext('2d');
-                    new Chart(techStackCtx, {
-                        type: 'bar',
-                        data: techStackData,
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false, 
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            return context.label + ': ' + context.raw + '%';
-                                        }
-                                    }
-                                },
-                                datalabels: {
-                                    color: '#333',
-                                    font: {
-                                        size: 12
-                                    },
-                                    formatter: function (value, context) {
-                                        return context.label; 
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
-
-
-    </section>
-</body>
-
-</html>
             
         
             
@@ -899,7 +746,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <a href="/zh-cn/page/archives/#2026">
                 
                 <span class="year">2026</span>
-                <span class="count">11篇</span>
+                <span class="count">16篇</span>
                 
             </a>
         </div>
@@ -942,6 +789,456 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     
 
     <section class="article-list">
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/09/aop%E4%B8%BB%E6%B5%81%E6%98%AF%E8%BF%90%E8%A1%8C%E7%BB%87%E5%85%A5%E8%BF%98%E6%98%AF%E7%BC%96%E8%AF%91%E7%BB%87%E5%85%A5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/">AOP主流是运行织入还是编译织入,有什么区别</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Sep 05, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 3 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/spring/">Spring</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/09/io%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8selectpollepoll/">IO多路复用select、poll、epoll</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Sep 05, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 1 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/redis/">Redis</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/09/java%E5%A6%82%E4%BD%95%E5%81%9C%E6%AD%A2%E7%BA%BF%E7%A8%8B%E8%BF%90%E8%A1%8C/">Java如何停止线程运行</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Sep 05, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 2 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/09/kafkarabbitmq%E7%BB%93%E6%9E%84/">kafka、RabbitMQ结构</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Sep 05, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 3 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/kafka/">Kafka</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/rabbitmq/">RabbitMQ</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
+        
+            
+<article class="">
+    <header class="article-header">
+
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/zh-cn/post/2025/09/langgraph4j%E5%88%9D%E4%BD%93%E9%AA%8C%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9C%89%E7%8A%B6%E6%80%81%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%B7%A5%E4%BD%9C%E6%B5%81/">LangGraph4j初体验，搭建一个有状态多智能体工作流</a>
+        </h2>
+
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <footer class="article-time">
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+            <time class="article-time--published">Sep 05, 2025</time>
+        </div>
+        
+
+        
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+            <time class="article-time--reading">
+                阅读时长: 1 分钟
+            </time>
+        </div>
+        
+
+        
+        
+        <div class="article-tags">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+            
+            
+            
+            
+            
+            <a href="/zh-cn/tags/java/">Java</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/llm/">LLM</a> 
+            
+            
+            , 
+            
+            <a href="/zh-cn/tags/langgraph4j/">LangGraph4j</a> 
+            
+            
+        </div>
+        
+    </footer>
+    
+
+
+    
+</div>
+</header>
+</article>
         
             
 <article class="">
@@ -1200,436 +1497,6 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             , 
             
             <a href="/zh-cn/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/09/volatile%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%8A%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C/">volatile关键字及内存屏障</a>
-        </h2>
-
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Sep 05, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 1 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/jvm/">JVM</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/09/%E5%87%A0%E4%B8%AA%E5%9F%BA%E4%BA%8Eaqs%E7%9A%84%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BBsemaphorecountdownlatchcyclicbarrier/">几个基于AQS的同步工具类：Semaphore、CountDownLatch、CyclicBarrier</a>
-        </h2>
-
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Sep 05, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 4 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/09/%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95abc%E8%AF%B7%E9%97%AE%E6%9F%A5%E8%AF%A2%E5%93%AA%E4%BA%9B%E5%AD%97%E6%AE%B5%E8%83%BD%E5%91%BD%E4%B8%AD%E7%B4%A2%E5%BC%95/">联合索引abc，请问查询哪些字段能命中索引</a>
-        </h2>
-
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Sep 05, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 1 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/mysql/">MySQL</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/09/%E6%AD%BB%E9%94%81%E6%A6%82%E5%BF%B5%E5%8F%8A%E6%9D%A1%E4%BB%B6/">死锁概念及条件</a>
-        </h2>
-
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Sep 05, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 1 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/java/">Java</a> 
-            
-            
-        </div>
-        
-    </footer>
-    
-
-
-    
-</div>
-</header>
-</article>
-        
-            
-<article class="">
-    <header class="article-header">
-
-
-    <div class="article-details">
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/zh-cn/post/2025/09/mysql%E8%A1%A8%E5%88%86%E5%8C%BA/">MySQL表分区</a>
-        </h2>
-
-        
-    </div>
-
-    
-    
-    
-    
-    
-    
-    <footer class="article-time">
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
-</svg>
-            <time class="article-time--published">Sep 05, 2025</time>
-        </div>
-        
-
-        
-        
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-            <time class="article-time--reading">
-                阅读时长: 2 分钟
-            </time>
-        </div>
-        
-
-        
-        
-        <div class="article-tags">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
-  <circle cx="9" cy="9" r="2" />
-</svg>
-
-
-
-            
-            
-            
-            
-            
-            <a href="/zh-cn/tags/mysql/">MySQL</a> 
             
             
         </div>

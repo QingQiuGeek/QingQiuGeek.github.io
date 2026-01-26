@@ -727,18 +727,19 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
         <li><a href="#引用类型">引用类型</a></li>
       </ol>
     </li>
+    <li><a href="#继承">继承</a></li>
     <li><a href="#函数">函数</a>
       <ol>
         <li><a href="#构造函数">构造函数</a></li>
         <li><a href="#普通函数">普通函数</a></li>
-        <li><a href="#view-修饰的函数">view 修饰的函数</a></li>
-        <li><a href="#pure-修饰的函数">pure 修饰的函数</a></li>
+        <li><a href="#函数可见性修饰符">函数可见性修饰符</a></li>
+        <li><a href="#状态修饰符">状态修饰符</a></li>
+        <li><a href="#如何获取合约的对象">如何获取合约的对象</a></li>
         <li><a href="#fallback-函数">fallback 函数</a></li>
         <li><a href="#receive-函数">receive 函数</a></li>
         <li><a href="#modifier修饰器">modifier(修饰器)</a></li>
       </ol>
     </li>
-    <li><a href="#关键字">关键字</a></li>
     <li><a href="#一些全局变量">一些全局变量</a></li>
     <li><a href="#abi-接口">ABI 接口</a>
       <ol>
@@ -805,7 +806,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 5 分钟
+                阅读时长: 7 分钟
             </time>
         </div>
         
@@ -974,7 +975,87 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>string：动态长度的字符串，底层是 bytes，不支持索引，但是可以通过 bytes(string)转成 bytes 类型。</p>
 </li>
 </ul>
-<h2 id="函数"><a href="#%e5%87%bd%e6%95%b0" class="header-anchor"></a>函数
+<h2 id="继承"><a href="#%e7%bb%a7%e6%89%bf" class="header-anchor"></a>继承
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 父合约
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">Parent</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uint</span> <span class="n">public</span> <span class="n">parentVar</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">parentFunc</span><span class="p">()</span> <span class="n">public</span> <span class="n">pure</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">string</span> <span class="n">memory</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Hello from Parent&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 子合约继承父合约
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">Child</span> <span class="n">is</span> <span class="n">Parent</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">childFunc</span><span class="p">()</span> <span class="n">public</span> <span class="n">pure</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">string</span> <span class="n">memory</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 直接访问父合约的变量和函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">uint</span> <span class="n">value</span> <span class="o">=</span> <span class="n">parentVar</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">parentFunc</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Solidity 支持多重继承。当多个父合约有同名函数时，子合约必须使用 override 关键字明确指定要重写的函数来源。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">contract</span> <span class="n">Base1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">greet</span><span class="p">()</span> <span class="n">public</span> <span class="n">pure</span> <span class="n">virtual</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">string</span> <span class="n">memory</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Hello from Base1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">contract</span> <span class="n">Base2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">greet</span><span class="p">()</span> <span class="n">public</span> <span class="n">pure</span> <span class="n">virtual</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">string</span> <span class="n">memory</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Hello from Base2&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">contract</span> <span class="n">Derived</span> <span class="n">is</span> <span class="n">Base1</span><span class="p">,</span> <span class="n">Base2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">greet</span><span class="p">()</span> <span class="n">public</span> <span class="n">pure</span> <span class="nf">override</span><span class="p">(</span><span class="n">Base1</span><span class="p">,</span> <span class="n">Base2</span><span class="p">)</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">string</span> <span class="n">memory</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Hello from Derived&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="函数"><a href="#%e5%87%bd%e6%95%b0" class="header-anchor"></a>函数
 </h2><h3 id="构造函数"><a href="#%e6%9e%84%e9%80%a0%e5%87%bd%e6%95%b0" class="header-anchor"></a>构造函数
 </h3><p>在合约部署时只执行一次，用于初始化状态变量（如设置所有者、初始参数等）。</p>
 <p>特点：</p>
@@ -1068,22 +1149,26 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="view-修饰的函数"><a href="#view-%e4%bf%ae%e9%a5%b0%e7%9a%84%e5%87%bd%e6%95%b0" class="header-anchor"></a>view 修饰的函数
-</h3><p>不修改区块链的状态，可被外部免费调用（不消耗 gas）</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">function</span> <span class="nf">balanceOf</span><span class="p">(</span><span class="n">address</span> <span class="n">user</span><span class="p">)</span> <span class="n">public</span> <span class="n">view</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">balances</span><span class="p">[</span><span class="n">user</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="pure-修饰的函数"><a href="#pure-%e4%bf%ae%e9%a5%b0%e7%9a%84%e5%87%bd%e6%95%b0" class="header-anchor"></a>pure 修饰的函数
-</h3><p>既不读也不写区块链的状态，完全依赖参数计算</p>
+</div><h3 id="函数可见性修饰符"><a href="#%e5%87%bd%e6%95%b0%e5%8f%af%e8%a7%81%e6%80%a7%e4%bf%ae%e9%a5%b0%e7%ac%a6" class="header-anchor"></a>函数可见性修饰符
+</h3><ul>
+<li>
+<p>public：public 修饰的函数或状态变量可以从合约内外被访问。对于状态变量，编译器会自动生成一个同名的外部 getter 函数。</p>
+</li>
+<li>
+<p>private：private 修饰的函数或状态变量仅能在其合约内部访问。即使是继承它的子合约也无法访问。</p>
+</li>
+<li>
+<p>internal：internal 修饰的函数或状态变量可以在当前合约内部以及所有继承自它的子合约内部被访问。</p>
+</li>
+<li>
+<p>external：external 修饰的函数只能从合约外部被调用，不能在合约内部直接调用。它通常用于定义合约的对外接口，在处理大型数据结构（如数组、字符串）时比 public 更节省 Gas。</p>
+</li>
+</ul>
+<h3 id="状态修饰符"><a href="#%e7%8a%b6%e6%80%81%e4%bf%ae%e9%a5%b0%e7%ac%a6" class="header-anchor"></a>状态修饰符
+</h3><p>状态修饰符向 EVM 声明函数如何与区块链状态交互，直接影响交易执行和 Gas 消耗</p>
+<ul>
+<li>
+<p>pure：纯计算函数，既不读也不写区块链的状态，只能进行数学运算或处理传入参数，无法访问 block.timestamp、msg.sender 或任何存储变量。执行时使用 STATICCALL，Gas 成本最低。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1092,7 +1177,116 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">function</span> <span class="nf">add</span><span class="p">(</span><span class="n">uint</span> <span class="n">a</span><span class="p">,</span> <span class="n">uint</span> <span class="n">b</span><span class="p">)</span> <span class="n">public</span> <span class="n">pure</span> <span class="nf">returns</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="c1">// 仅计算，不接触状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>view：只读函数，可以读取状态变量但禁止修改</p>
+</li>
+<li>
+<p>payable：可接收 ETH 函数，允许函数在调用时接收以太币</p>
+</li>
+</ul>
+<blockquote>
+<p>external 的 Gas 优势：当函数仅从外部调用时，使用 external 而非 public 可以节省 Gas，因为 external 函数的参数通过 calldata 传递而非 memory。
+pure/view 的误用：声明为 pure 或 view 的函数如果实际上读取或修改了状态，编译不会报错，但调用时会回滚。务必确保声明与实际行为一致。
+payable 的必要性：任何需要接收 ETH 的函数都必须标记 payable，否则发送的 ETH 会被退回，交易失败。</p></blockquote>
+<h3 id="如何获取合约的对象"><a href="#%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e5%90%88%e7%ba%a6%e7%9a%84%e5%af%b9%e8%b1%a1" class="header-anchor"></a>如何获取合约的对象
+</h3><ol>
+<li>用 new 在当前交易中部署一个全新的合约实例到区块链上。这会执行构造函数并返回新合约的地址。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 基础合约
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">Token</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">public</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">constructor</span><span class="p">(</span><span class="n">string</span> <span class="n">memory</span> <span class="n">_name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">name</span> <span class="o">=</span> <span class="n">_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 工厂合约：使用new创建新实例
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">TokenFactory</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Token</span> <span class="n">public</span> <span class="n">newToken</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">createToken</span><span class="p">(</span><span class="n">string</span> <span class="n">memory</span> <span class="n">_name</span><span class="p">)</span> <span class="n">public</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 使用new创建全新Token合约实例
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">newToken</span> <span class="o">=</span> <span class="n">new</span> <span class="nf">Token</span><span class="p">(</span><span class="n">_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// newToken现在指向新部署的合约地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>用 ContractName(address)类型转换来获取已有合约对象引用。这不会创建新合约，而是与已部署的合约交互。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 已有Token合约部署在区块链上
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">Token</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">transfer</span><span class="p">(</span><span class="n">address</span> <span class="n">to</span><span class="p">,</span> <span class="n">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="n">public</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 用户合约：引用现有Token实例
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">UserContract</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Token</span> <span class="n">public</span> <span class="n">existingToken</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">setTokenAddress</span><span class="p">(</span><span class="n">address</span> <span class="n">tokenAddress</span><span class="p">)</span> <span class="n">public</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 通过地址引用已部署的Token合约
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">existingToken</span> <span class="o">=</span> <span class="nf">Token</span><span class="p">(</span><span class="n">tokenAddress</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// existingToken现在指向区块链上已有的合约
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">function</span> <span class="nf">sendTokens</span><span class="p">(</span><span class="n">address</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">uint</span> <span class="n">amount</span><span class="p">)</span> <span class="n">public</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 调用引用合约的方法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">existingToken</span><span class="p">.</span><span class="nf">transfer</span><span class="p">(</span><span class="n">recipient</span><span class="p">,</span> <span class="n">amount</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -1148,16 +1342,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="关键字"><a href="#%e5%85%b3%e9%94%ae%e5%ad%97" class="header-anchor"></a>关键字
-</h2><ul>
-<li>
-<p>external：函数可见性修饰符之一，主要用于声明<strong>这个函数只能从合约外部调用</strong>，比如通过交易、其他合约调用或者 this.functionName()，不能直接 functionName() 调用，更省 gas！</p>
-</li>
-<li>
-<p>public：可以直接 functionName()调用。</p>
-</li>
-</ul>
-<h2 id="一些全局变量"><a href="#%e4%b8%80%e4%ba%9b%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f" class="header-anchor"></a>一些全局变量
+</div><h2 id="一些全局变量"><a href="#%e4%b8%80%e4%ba%9b%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f" class="header-anchor"></a>一些全局变量
 </h2><ul>
 <li>msg：一个内置的全局结构体（struct），由以太坊虚拟机（EVM）在每次外部调用时自动提供，无需声明或初始化，在任何函数中都可以直接访问，它包含了当前函数调用的上下文信息。</li>
 </ul>

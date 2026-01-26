@@ -7,18 +7,10 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 19 Jan 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Solidity</title>
-        <link>/zh-cn/categories/solidity/</link>
-        <pubDate>Mon, 19 Jan 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/solidity/</guid>
-        <description></description>
-        </item>
-        <item>
+        <lastBuildDate>Sun, 25 Jan 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Web3</title>
         <link>/zh-cn/categories/web3/</link>
-        <pubDate>Mon, 19 Jan 2026 12:00:00 +0000</pubDate>
+        <pubDate>Sun, 25 Jan 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/categories/web3/</guid>
         <description></description>
@@ -26,9 +18,17 @@
         <item>
         <title>区块链</title>
         <link>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</link>
-        <pubDate>Mon, 19 Jan 2026 12:00:00 +0000</pubDate>
+        <pubDate>Sun, 25 Jan 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Solidity</title>
+        <link>/zh-cn/categories/solidity/</link>
+        <pubDate>Mon, 19 Jan 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/solidity/</guid>
         <description></description>
         </item>
         <item>
