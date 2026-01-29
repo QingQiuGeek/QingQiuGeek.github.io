@@ -969,7 +969,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </div>
 </div></li>
 <li>
-<p>mapping：映射，也就是哈希 map，仅能声明为 storge，只能声明在合约顶部，不能作为局部变量或函数出入参。key 只能是值类型，value 无限制，key 不存在时默认返回值是 0。mapping 没有长度，无法遍历，也不能作为函数参数传递。</p>
+<p>mapping：映射，也就是哈希 map，仅能声明为 storge，只能作为状态变量，不能作为局部变量或函数出入参。key 只能是值类型，value 无限制，key 不存在时默认返回值是 0。mapping 没有长度，无法遍历，也不能作为函数参数传递。</p>
 </li>
 <li>
 <p>string：动态长度的字符串，底层是 bytes，不支持索引，但是可以通过 bytes(string)转成 bytes 类型。</p>
@@ -1190,8 +1190,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </li>
 </ul>
 <blockquote>
-<p>external 的 Gas 优势：当函数仅从外部调用时，使用 external 而非 public 可以节省 Gas，因为 external 函数的参数通过 calldata 传递而非 memory。
-pure/view 的误用：声明为 pure 或 view 的函数如果实际上读取或修改了状态，编译不会报错，但调用时会回滚。务必确保声明与实际行为一致。
+<p>pure/view 的误用：声明为 pure 或 view 的函数如果实际上读取或修改了状态，编译不会报错，但调用时会回滚。务必确保声明与实际行为一致。
 payable 的必要性：任何需要接收 ETH 的函数都必须标记 payable，否则发送的 ETH 会被退回，交易失败。</p></blockquote>
 <h3 id="如何获取合约的对象"><a href="#%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e5%90%88%e7%ba%a6%e7%9a%84%e5%af%b9%e8%b1%a1" class="header-anchor"></a>如何获取合约的对象
 </h3><ol>
@@ -1548,12 +1547,12 @@ payable 的必要性：任何需要接收 ETH 的函数都必须标记 payable�
             
                 
 <article class="">
-    <a href="/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88/">
+    <a href="/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/">
 
         
 
         <div class="article-details tags-grid-item">
-            <h2 class="article-title">以太坊的EIP和ERC是什么</h2>
+            <h2 class="article-title">以太坊的EIP和ERC是什么，几大ERC解读</h2>
             
         </div>
     </a>

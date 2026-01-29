@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n它首先被发送到一个节点的内存池（mempool）——一个暂存已验证合法但尚未被打包的交易的池子。 加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后立刻广播到邻居节点，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。 邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。 钱包 热钱包：连接网络，操作方便，适合日常交易。 冷钱包：离线存储，更安全，适合长期持有。 Etherscan 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如BscScan，Polygonscan\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n1️⃣ 当发起一笔交易后，这笔交易首先被发送给区块链其中一个节点 A，在进入节点 A 前，先验证交易的格式、签名、nonce 等基本合法性，通过验证后这笔交易会被暂存到节点 A 的内存池中，这个池子 状态都是待打包(Pending)。\n">
 <title>Web3区块打包上链流程</title>
 
 <link rel='canonical' href='/zh-cn/post/2025/11/web3%E5%8C%BA%E5%9D%97%E6%89%93%E5%8C%85%E4%B8%8A%E9%93%BE%E6%B5%81%E7%A8%8B/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="Web3区块打包上链流程">
-<meta property='og:description' content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n它首先被发送到一个节点的内存池（mempool）——一个暂存已验证合法但尚未被打包的交易的池子。 加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后立刻广播到邻居节点，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。 邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。 钱包 热钱包：连接网络，操作方便，适合日常交易。 冷钱包：离线存储，更安全，适合长期持有。 Etherscan 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如BscScan，Polygonscan\n">
+<meta property='og:description' content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n1️⃣ 当发起一笔交易后，这笔交易首先被发送给区块链其中一个节点 A，在进入节点 A 前，先验证交易的格式、签名、nonce 等基本合法性，通过验证后这笔交易会被暂存到节点 A 的内存池中，这个池子 状态都是待打包(Pending)。\n">
 <meta property='og:url' content='/zh-cn/post/2025/11/web3%E5%8C%BA%E5%9D%97%E6%89%93%E5%8C%85%E4%B8%8A%E9%93%BE%E6%B5%81%E7%A8%8B/'>
 <meta property='og:site_name' content='青秋博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Web3' /><meta property='article:tag' content='区块链' /><meta property='article:published_time' content='2025-11-09T09:39:19&#43;00:00'/><meta property='article:modified_time' content='2025-11-09T09:39:19&#43;00:00'/>
 <meta name="twitter:title" content="Web3区块打包上链流程">
-<meta name="twitter:description" content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n它首先被发送到一个节点的内存池（mempool）——一个暂存已验证合法但尚未被打包的交易的池子。 加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后立刻广播到邻居节点，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。 邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。 钱包 热钱包：连接网络，操作方便，适合日常交易。 冷钱包：离线存储，更安全，适合长期持有。 Etherscan 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如BscScan，Polygonscan\n">
+<meta name="twitter:description" content="参考链接\n交易流程 发起一笔交易，这笔交易会有以下流程：\n1️⃣ 当发起一笔交易后，这笔交易首先被发送给区块链其中一个节点 A，在进入节点 A 前，先验证交易的格式、签名、nonce 等基本合法性，通过验证后这笔交易会被暂存到节点 A 的内存池中，这个池子 状态都是待打包(Pending)。\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -721,8 +721,6 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <nav id="TableOfContents">
   <ol>
     <li><a href="#交易流程">交易流程</a></li>
-    <li><a href="#钱包">钱包</a></li>
-    <li><a href="#账户">账户</a></li>
   </ol>
 </nav>
         </div>
@@ -829,29 +827,23 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     >参考链接</a></p>
 <h2 id="交易流程"><a href="#%e4%ba%a4%e6%98%93%e6%b5%81%e7%a8%8b" class="header-anchor"></a>交易流程
 </h2><p>发起一笔交易，这笔交易会有以下流程：</p>
-<ol>
-<li>它首先被发送到一个节点的内存池（mempool）——一个<strong>暂存已验证合法但尚未被打包的交易的池子</strong>。</li>
-<li>加入内存池前会先验证交易格式、签名、nonce 等基本合法性，只有通过这些检查的交易，才会被加入内存池（mempool），然后<strong>立刻广播到邻居节点</strong>，然后才在自己的池中会按照 Gas 费用高低排序，矿工/验证者会优先价格更高的交易进行打包到新区块。</li>
-<li>邻居节点收到交易也会首先进行合法性校验，通过后再转发给它们的邻居，重复步骤 2 ，如此“病毒式传播”，所以并非所有节点都会接收或保留它：节点可能因 Gas 费过低 而拒绝加入自己的内存池、可能因 内存池已满 而丢弃低优先级交易，直到足够多的出块节点收到。</li>
-</ol>
-<h2 id="钱包"><a href="#%e9%92%b1%e5%8c%85" class="header-anchor"></a>钱包
-</h2><ul>
-<li>热钱包：连接网络，操作方便，适合日常交易。</li>
-<li>冷钱包：离线存储，更安全，适合长期持有。</li>
+<p>1️⃣ 当发起一笔交易后，这笔交易首先被发送给区块链其中一个节点 A，在进入节点 A 前，先<strong>验证</strong>交易的格式、签名、nonce 等基本合法性，通过验证后这笔交易会被暂存到节点 A 的内存池中，这个池子
+状态都是<strong>待打包(Pending)</strong>。</p>
+<p>2️⃣ 然后节点 A <strong>立刻把交易广播到邻居节点</strong>，然后才在自己的池中<strong>按照 Gas 费用高低排序，矿工/验证者会优先选择一批价格更高的交易进行打包</strong>，此时这批交易会被构建到新的区块中成为<strong>候选区块</strong>(以太坊大概 12 秒出一个区块)，<strong>接着候选区块也会被广播</strong>。</p>
+<p>3️⃣ 邻居节点收到交易后也会先进行合法性校验，通过后再转发给它们的邻居。其他节点收到广播的候选区块后，也会<strong>对候选区块进行验证</strong>，包括区块头的有效性、共识证明以及区块内所有交易的合法性(再次验证签名、防止双花等)。验证通过后，节点会将候选区块追加到本地的区块链副本末尾。至此这笔交易才算是真正<strong>上链</strong>，状态变为<strong>已确认(Confirmed)</strong>。</p>
+<p>4️⃣ 然而“上链”并不意味着高枕无忧。在区块链中，存在区块被“重组”的风险，即网络可能选择在另一个竞争链上继续建设，导致你所在的区块被丢弃，其中的交易被回滚。所以还需一个<strong>最终确认(Finalized)！</strong>，最终确认的实现方式因链而异。</p>
+<ul>
+<li>
+<p>概率最终性(比特币)：基于“最长链原则”。你的交易所在区块后面跟的确认区块越多，它被推翻的概率就越低，呈指数级下降。通常等待 6 个区块确认后，即可视为最终确认。</p>
+</li>
+<li>
+<p>绝对最终性(以太坊 PoS)：通过验证者投票机制实现。在以太坊中，大约每 12-15 分钟会形成一个“检查点”，经过两轮连续的验证者投票后，之前的区块状态就被“最终确定”，在协议层面不可逆转，除非发生极端攻击。</p>
+</li>
 </ul>
-<p><a class="link" href="https://etherscan.io"  target="_blank" rel="noopener"
-    >Etherscan</a> 是以太坊一个用于浏览、搜索和验证以太坊区块链上所有数据（地址、交易、智能合约、代币、区块等）的权威网站。同时也有其他类似的网站如<a class="link" href="https://bscscan.com/"  target="_blank" rel="noopener"
-    >BscScan</a>，<a class="link" href="https://polygonscan.com/"  target="_blank" rel="noopener"
-    >Polygonscan</a></p>
-<p><a class="link" href="https://ethereum.org/zh/guides/how-to-use-a-wallet/"  target="_blank" rel="noopener"
-    >如何使用钱包</a></p>
-<p>钱包不是账户，而是一种能使用密钥和帐户互动的工具，也就是可视化界面，通过钱包可以查看账户余额、交易。</p>
-<p>钱包种类有物理硬件钱包，最安全，还有应用程序钱包、浏览器钱包等。</p>
-<p>根据资产不同，适用的钱包也不同，具体看这里 <a class="link" href="https://ethereum.org/zh/wallets/find-wallet/"  target="_blank" rel="noopener"
-    >选择钱包</a></p>
-<h2 id="账户"><a href="#%e8%b4%a6%e6%88%b7" class="header-anchor"></a>账户
-</h2><p>以太坊帐户是一对密钥，一个用于创建可以随意共享的地址，另一个需要保密，因为它用于签名。结合使用这两个密钥，可以持有资产和进行交易。</p>
-<p>以太坊帐户有一个地址，就像收件箱有电子邮件地址一样。它用于识别数字资产。</p>
+<blockquote>
+<p>交易广播时，并非所有节点都会接收或保留这笔交易，有些节点可能因 Gas 费过低而拒绝加入自己的内存池、可能因内存池已满而丢弃低优先级交易。所以每个节点的内存池的交易并不完全相同，只能是大致相同。</p></blockquote>
+<blockquote>
+<p>整个过程存在两个广播：交易广播和候选区块广播。交易被第一个节点验证后进入该节点的内存池然后被广播到其他节点，候选区块先被广播而后上链。交易状态从待打包-&gt;已确认-&gt;最终确认。</p></blockquote>
 
 </section>
 

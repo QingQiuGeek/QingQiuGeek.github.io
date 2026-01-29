@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。\nHardhat 基于 JavaScript/TypeScript 生态，插件丰富。Foundry 基于 Rust，追求极致的速度。\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。\nHardhat 基于 JavaScript/TypeScript 生态，用 js 或 ts 写测试，依赖 nodejs 环境，需要配置驱动 hardhat.config.js，将 Solidity 开发无缝融入 JavaScript 生态，特别适合全栈开发者（前端+合约）。。\n">
 <title>入门Hardhat和Foundry&amp;wagmi和viem基本使用</title>
 
 <link rel='canonical' href='/zh-cn/post/2026/01/%E5%85%A5%E9%97%A8hardhat%E5%92%8Cfoundrywagmi%E5%92%8Cviem%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="入门Hardhat和Foundry&wagmi和viem基本使用">
-<meta property='og:description' content="Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。\nHardhat 基于 JavaScript/TypeScript 生态，插件丰富。Foundry 基于 Rust，追求极致的速度。\n">
+<meta property='og:description' content="Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。\nHardhat 基于 JavaScript/TypeScript 生态，用 js 或 ts 写测试，依赖 nodejs 环境，需要配置驱动 hardhat.config.js，将 Solidity 开发无缝融入 JavaScript 生态，特别适合全栈开发者（前端+合约）。。\n">
 <meta property='og:url' content='/zh-cn/post/2026/01/%E5%85%A5%E9%97%A8hardhat%E5%92%8Cfoundrywagmi%E5%92%8Cviem%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/'>
 <meta property='og:site_name' content='青秋博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Web3' /><meta property='article:tag' content='区块链' /><meta property='article:published_time' content='2026-01-20T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-01-20T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="入门Hardhat和Foundry&wagmi和viem基本使用">
-<meta name="twitter:description" content="Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。\nHardhat 基于 JavaScript/TypeScript 生态，插件丰富。Foundry 基于 Rust，追求极致的速度。\n">
+<meta name="twitter:description" content="Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。\nHardhat 基于 JavaScript/TypeScript 生态，用 js 或 ts 写测试，依赖 nodejs 环境，需要配置驱动 hardhat.config.js，将 Solidity 开发无缝融入 JavaScript 生态，特别适合全栈开发者（前端+合约）。。\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -698,7 +698,51 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
         </li>
     </ol>
 </aside>
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#foundry">Foundry</a>
+      <ol>
+        <li><a href="#forge">forge</a></li>
+        <li><a href="#cast">cast</a></li>
+        <li><a href="#anvil">anvil</a></li>
+        <li><a href="#chisel">chisel</a></li>
+      </ol>
+    </li>
+    <li><a href="#hardhat">hardhat</a>
+      <ol>
+        <li><a href="#hardhat-测试typescript">Hardhat 测试（TypeScript）</a></li>
+        <li><a href="#hardhatconfigts-配置中心">hardhat.config.ts 配置中心</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -750,7 +794,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 4 分钟
             </time>
         </div>
         
@@ -793,8 +837,192 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     
     
     <p>Hardhat 和 Foundry 是当前最主流的两个智能合约开发框架,都致力于简化从编码、测试到部署的完整开发流程。</p>
-<p>Hardhat 基于 JavaScript/TypeScript 生态，插件丰富。Foundry 基于 Rust，追求极致的速度。</p>
+<p>Hardhat 基于 JavaScript/TypeScript 生态，用 js 或 ts 写测试，依赖 nodejs 环境，需要配置驱动 hardhat.config.js，将 Solidity 开发无缝融入 JavaScript 生态，特别适合全栈开发者（前端+合约）。。</p>
+<p>Foundry 基于 Rust（性能相对 nodejs 快很多），可用 Solidity 写测试，测试即合约，消除语言边界，并且约定优于配置：目录结构即配置（src/ → 合约, test/ → 测试）。</p>
+<h2 id="foundry"><a href="#foundry" class="header-anchor"></a>Foundry
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">┌─────────────────────────────────────────────────────┐
+</span></span><span class="line"><span class="cl">│           Foundry 四大核心组件（Rust 实现）          │
+</span></span><span class="line"><span class="cl">├───────────┬───────────┬───────────┬─────────────────┤
+</span></span><span class="line"><span class="cl">│  forge    │   cast    │  anvil    │    chisel       │
+</span></span><span class="line"><span class="cl">│ (编译/测试)│ (链交互)  │ (本地链)  │  (REPL 调试)    │
+</span></span><span class="line"><span class="cl">└─────┬─────┴─────┬─────┴─────┬─────┴────────┬────────┘
+</span></span><span class="line"><span class="cl">      │           │           │              │
+</span></span><span class="line"><span class="cl">      ▼           ▼           ▼              ▼
+</span></span><span class="line"><span class="cl">  编译合约    读写链状态   提供测试环境   快速验证逻辑
+</span></span><span class="line"><span class="cl">  运行测试    发送交易     分叉主网       实时计算
+</span></span><span class="line"><span class="cl">  部署合约    解码事件     模拟攻击        调试 Gas
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="forge"><a href="#forge" class="header-anchor"></a>forge
+</h3><p>test/ 目录下的 .t.sol 文件本质是继承 Test.sol 的合约，控制台执行 forge test 命令会：</p>
+<ul>
+<li>编译所有合约（含测试合约）</li>
+<li>部署测试合约到本地 EVM</li>
+<li>调用以 test 开头的函数（如 testIncrement）进行测试</li>
+<li>捕获断言失败/Gas 消耗/覆盖率</li>
+</ul>
+<p>同时还有模糊测试内置，函数参数带 (uint256 x) 会自动运行 256 次随机输入，无需额外配置。</p>
 <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">test</span><span class="o">/</span><span class="n">Counter</span><span class="p">.</span><span class="n">t</span><span class="p">.</span><span class="n">sol</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">pragma</span> <span class="n">solidity</span> <span class="o">^</span><span class="mf">0.8.20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="s">&#34;forge-std/Test.sol&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">import</span> <span class="s">&#34;../src/Counter.sol&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试合约本质是普通合约 + 特殊断言库
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">contract</span> <span class="n">CounterTest</span> <span class="n">is</span> <span class="n">Test</span> <span class="p">{</span>  <span class="c1">// Test 来自 forge-std
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">function</span> <span class="nf">testFuzz_Increment</span><span class="p">(</span><span class="n">uint256</span> <span class="n">start</span><span class="p">)</span> <span class="n">public</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Counter</span> <span class="n">c</span> <span class="o">=</span> <span class="n">new</span> <span class="nf">Counter</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">c</span><span class="p">.</span><span class="nf">setNumber</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">c</span><span class="p">.</span><span class="nf">increment</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">assertEq</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="nf">number</span><span class="p">(),</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// 断言在 EVM 中执行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="cast"><a href="#cast" class="header-anchor"></a>cast
+</h3><p>cast 无需写脚本就可以和任意 EVM 链交互</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 查询指定地址在以太坊主网上的 ETH 余额（单位：wei）</span>
+</span></span><span class="line"><span class="cl">cast balance 0x... --rpc-url https://eth.llamarpc.com
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用某个合约地址的只读函数（view/pure），无需支付 Gas，不改变链上状态</span>
+</span></span><span class="line"><span class="cl">cast call 0x... <span class="s2">&#34;name()&#34;</span> --rpc-url sepolia
+</span></span><span class="line"><span class="cl"><span class="c1"># 广播交易到区块链，调用可修改状态的函数（如转账），需支付 Gas，--private-key $PK是发送方私钥（极度敏感！）</span>
+</span></span><span class="line"><span class="cl">cast send 0x... <span class="s2">&#34;transfer(address,uint256)&#34;</span> 0x... <span class="m">100</span> --private-key <span class="nv">$PK</span> --rpc-url sepolia
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>cast 本质是 命令行版的 Web3.js，但用 Rust 实现，速度极快且无 JS 依赖。</p>
+<h3 id="anvil"><a href="#anvil" class="header-anchor"></a>anvil
+</h3><p>快速启动本地以太坊节点</p>
+<ul>
+<li>anvil &ndash;fork-url <a class="link" href="https://eth.llamarpc.com"  target="_blank" rel="noopener"
+    >https://eth.llamarpc.com</a> 瞬间复制主网状态，测试真实合约交互</li>
+<li>启动即提供 10 个带 10,000 ETH 的测试账户（私钥固定，方便调试）</li>
+<li>测试中用 vm.warp(timestamp) 操控区块时间（无需重启节点）</li>
+</ul>
+<h3 id="chisel"><a href="#chisel" class="header-anchor"></a>chisel
+</h3><p>REPL（Read-Eval-Print Loop）环境，实时验证 Solidity 逻辑</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">chisel
+</span></span><span class="line"><span class="cl">&gt;&gt; uint256 <span class="nv">x</span> <span class="o">=</span> <span class="m">100</span>
+</span></span><span class="line"><span class="cl">&gt;&gt; x * <span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="m">200</span>
+</span></span><span class="line"><span class="cl">&gt;&gt; address<span class="o">(</span>this<span class="o">)</span>.balance  <span class="c1"># 查看当前合约余额</span>
+</span></span><span class="line"><span class="cl"><span class="m">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="hardhat"><a href="#hardhat" class="header-anchor"></a>hardhat
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">┌──────────────────────────────────────────────────────────────┐
+</span></span><span class="line"><span class="cl">│          Hardhat 核心架构（Node.js + 插件系统）               │
+</span></span><span class="line"><span class="cl">├──────────────┬──────────────┬──────────────┬─────────────────┤
+</span></span><span class="line"><span class="cl">│  Hardhat     │ Hardhat      │  插件系统     │  开发者工具链    │
+</span></span><span class="line"><span class="cl">│  Core        │  Network     │ (Plugins)    │ (VS Code etc.)  │
+</span></span><span class="line"><span class="cl">│ (任务调度)    │ (本地EVM)     │              │                 │
+</span></span><span class="line"><span class="cl">└──────┬───────┴──────┬───────┴──────┬───────┴────────┬────────┘
+</span></span><span class="line"><span class="cl">       │              │              │                │
+</span></span><span class="line"><span class="cl">       ▼              ▼              ▼                ▼
+</span></span><span class="line"><span class="cl">   编译合约      模拟区块链     扩展功能：        深度集成：
+</span></span><span class="line"><span class="cl">   运行测试      捕获堆栈       部署/验证/        调试器/测试覆盖率
+</span></span><span class="line"><span class="cl">   执行脚本      时间旅行       类型生成          实时错误提示
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="hardhat-测试typescript"><a href="#hardhat-%e6%b5%8b%e8%af%95typescript" class="header-anchor"></a>Hardhat 测试（TypeScript）
+</h3><p>foundry 使用 solidity 编写测试，而 hardhat 使用 js/ts 编写测试，如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should transfer tokens&#39;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kr">await</span> <span class="nx">token</span><span class="p">.</span><span class="nx">transfer</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span> <span class="nx">amount</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">expect</span><span class="p">(</span><span class="kr">await</span> <span class="nx">token</span><span class="p">.</span><span class="nx">balanceOf</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">address</span><span class="p">)).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">amount</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 复杂逻辑示例：循环测试 100 次不同金额
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="kr">await</span> <span class="nx">token</span><span class="p">.</span><span class="nx">transfer</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span> <span class="nx">ethers</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">parseEther</span><span class="p">(</span><span class="nx">i</span><span class="p">.</span><span class="nx">toString</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// ... 验证逻辑
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="hardhatconfigts-配置中心"><a href="#hardhatconfigts-%e9%85%8d%e7%bd%ae%e4%b8%ad%e5%bf%83" class="header-anchor"></a>hardhat.config.ts 配置中心
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -826,38 +1054,90 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span><span class="lnt">28
 </span><span class="lnt">29
 </span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">useAccount</span><span class="p">,</span> <span class="nx">useBalance</span><span class="p">,</span> <span class="nx">useSendTransaction</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;wagmi&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">parseEther</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;viem&#39;</span><span class="p">;</span> <span class="c1">// 从 viem 引入工具函数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">WalletPay</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kr">const</span> <span class="p">{</span> <span class="nx">address</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">useAccount</span><span class="p">();</span> <span class="c1">// wagmi: 获取当前登录地址
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// wagmi: 获取余额状态，loading 和 error 自动帮你处理好了
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kr">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">balance</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">useBalance</span><span class="p">({</span> <span class="nx">address</span> <span class="p">});</span>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">HardhatUserConfig</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;hardhat/config&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="s1">&#39;@nomicfoundation/hardhat-toolbox&#39;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="c1">// wagmi: 发送交易的钩子
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kr">const</span> <span class="p">{</span> <span class="nx">sendTransaction</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">useSendTransaction</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">config</span><span class="o">:</span> <span class="nx">HardhatUserConfig</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">solidity</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;0.8.20&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">settings</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">optimizer</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">enabled</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">runs</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span> <span class="c1">// Windows 编译速度优化关键参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">networks</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// Windows 路径注意事项：使用正斜杠避免转义问题
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">hardhat</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">chainId</span><span class="o">:</span> <span class="mi">1337</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="c1">// 预设账户（Windows 开发常用）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">accounts</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">				<span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">privateKey</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">						<span class="s1">&#39;0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">balance</span><span class="o">:</span> <span class="s1">&#39;10000000000000000000000&#39;</span><span class="p">,</span> <span class="c1">// 10,000 ETH
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="p">},</span>
+</span></span><span class="line"><span class="cl">			<span class="p">],</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">sepolia</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">url</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SEPOLIA_RPC_URL</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">accounts</span><span class="o">:</span> <span class="p">[</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Windows 路径安全：输出目录使用正斜杠
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">sources</span><span class="o">:</span> <span class="s1">&#39;./contracts&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">tests</span><span class="o">:</span> <span class="s1">&#39;./test&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">cache</span><span class="o">:</span> <span class="s1">&#39;./cache&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">artifacts</span><span class="o">:</span> <span class="s1">&#39;./artifacts&#39;</span><span class="p">,</span> <span class="c1">// 生成的 ABI/字节码存放处
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kr">const</span> <span class="nx">handleSend</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">sendTransaction</span><span class="p">({</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">to</span><span class="o">:</span> <span class="s1">&#39;0x1234...5678&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">			<span class="c1">// viem: 核心用法！将人类识别的 &#34;0.01&#34; 转换为以太坊单位 &#34;10000000000000000&#34;
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">value</span><span class="o">:</span> <span class="nx">parseEther</span><span class="p">(</span><span class="s1">&#39;0.01&#39;</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">		<span class="p">});</span>
-</span></span><span class="line"><span class="cl">	<span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">config</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 1. Core 编译合约（触发 solidity 任务）
+</span></span><span class="line"><span class="cl">npx hardhat compile
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">		<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl">			<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">你的地址</span><span class="o">:</span> <span class="p">{</span><span class="nx">address</span><span class="p">}</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span></span><span class="line"><span class="cl">			<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl">				<span class="nx">余额</span><span class="o">:</span> <span class="p">{</span><span class="nx">balance</span><span class="o">?</span><span class="p">.</span><span class="nx">formatted</span><span class="p">}</span> <span class="p">{</span><span class="nx">balance</span><span class="o">?</span><span class="p">.</span><span class="nx">symbol</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl">			<span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span></span><span class="line"><span class="cl">			<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="nx">handleSend</span><span class="p">}</span><span class="o">&gt;</span><span class="nx">打赏</span> <span class="mf">0.01</span> <span class="nx">ETH</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
-</span></span><span class="line"><span class="cl">		<span class="o">&lt;</span><span class="err">/div&gt;</span>
-</span></span><span class="line"><span class="cl">	<span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"># 2. Network 启动本地链（自动触发）
+</span></span><span class="line"><span class="cl">npx hardhat test  # 内部自动启动 hardhat network
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 3. 插件提供能力
+</span></span><span class="line"><span class="cl">- hardhat-ethers: 部署合约
+</span></span><span class="line"><span class="cl">- typechain: 生成 TS 类型
+</span></span><span class="line"><span class="cl">- chai-matchers: 断言事件
+</span></span><span class="line"><span class="cl">- hardhat-gas-reporter: 测试时显示 Gas 消耗
+</span></span><span class="line"><span class="cl">- hardhat-deploy: 部署脚本管理 + 多网络配置
 </span></span></code></pre></td></tr></table>
 </div>
 </div>
