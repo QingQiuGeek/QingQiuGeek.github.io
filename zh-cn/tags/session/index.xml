@@ -7,64 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 01 Dec 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/session/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>token应该存储在cookie还是localStorage上</title>
-        <link>/zh-cn/post/2025/12/token%E5%BA%94%E8%AF%A5%E5%AD%98%E5%82%A8%E5%9C%A8cookie%E8%BF%98%E6%98%AFlocalstorage%E4%B8%8A/</link>
-        <pubDate>Mon, 01 Dec 2025 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/post/2025/12/token%E5%BA%94%E8%AF%A5%E5%AD%98%E5%82%A8%E5%9C%A8cookie%E8%BF%98%E6%98%AFlocalstorage%E4%B8%8A/</guid>
-        <description>&lt;ul&gt;
-&lt;li&gt;Cookie: 浏览器内置的存储机制,容量约 4KB,可设置&lt;strong&gt;有效期&lt;/strong&gt;、域名、路径,支持 HttpOnly/Secure 等安全属性,请求时会&lt;strong&gt;自动携带到对应域名&lt;/strong&gt;的接口中。&lt;/li&gt;
-&lt;li&gt;LocalStorage: HTML5 新增的本地存储机制,容量约 5-10MB,永久存储(除非手动删除),&lt;strong&gt;仅在前端通过 JS 访问,不会自动携带到请求中&lt;/strong&gt;。&lt;/li&gt;
-&lt;li&gt;SessionStorage: 仅会话期间有效（关闭标签页后失效），安全性与 LocalStorage 一致（易受 XSS 攻击），适合临时登录场景（如一次性操作、游客身份），非主流选择。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;安全性对比&#34;&gt;&lt;a href=&#34;#%e5%ae%89%e5%85%a8%e6%80%a7%e5%af%b9%e6%af%94&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;安全性对比
-&lt;/h2&gt;&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;安全维度&lt;/th&gt;
-          &lt;th&gt;Cookie（配置安全属性后）&lt;/th&gt;
-          &lt;th&gt;localStorage&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;防 XSS 攻击&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;✅ 支持 &lt;code&gt;HttpOnly&lt;/code&gt; 属性，禁止 JavaScript 访问，避免恶意脚本窃取 Token&lt;/td&gt;
-          &lt;td&gt;❌ 完全暴露给 JavaScript，若页面存在 XSS 漏洞，Token 极易被恶意脚本窃取&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;防 CSRF 攻击&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;⚠️ 默认随请求自动发送，需额外配置（如 &lt;code&gt;SameSite=Strict/Lax&lt;/code&gt;）才能有效降低 CSRF 风险&lt;/td&gt;
-          &lt;td&gt;✅ 不自动随请求发送，需前端显式添加，天然规避 CSRF 攻击&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;数据篡改风险&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;✅ 支持 &lt;code&gt;Secure&lt;/code&gt; 属性（仅 HTTPS 传输），可防止中间人窃听/篡改；配合签名可进一步防伪造&lt;/td&gt;
-          &lt;td&gt;❌ 仅存储于前端，无传输保护机制；若被篡改（如通过 XSS），易导致身份伪造&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;传输机制&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;自动随 HTTP 请求发送（需注意路径、域、Secure、SameSite 等属性）&lt;/td&gt;
-          &lt;td&gt;不自动传输，需通过 JavaScript 手动读取并附加到请求（如通过 Authorization 头）&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;适用建议&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;适合存储敏感凭证（如 Session ID、Token），配合 HttpOnly + Secure + SameSite 使用更安全&lt;/td&gt;
-          &lt;td&gt;适合存储非敏感数据；若存 Token，需确保无 XSS 漏洞，否则风险极高&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;总结&lt;/strong&gt;：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;安全性优先&lt;/strong&gt;：推荐使用 &lt;strong&gt;HttpOnly + Secure + SameSite=Strict/Lax&lt;/strong&gt; 的 Cookie 存储认证 Token。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;避免 localStorage 存 Token&lt;/strong&gt;：除非能完全杜绝 XSS，否则极易被窃取。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;CSRF 与 XSS 是权衡&lt;/strong&gt;：Cookie 有 CSRF 风险但可配置防御；localStorage 无 CSRF 但 XSS 风险更高。&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-</description>
-        </item>
-        <item>
+        <lastBuildDate>Wed, 24 Jul 2024 11:19:04 +0000</lastBuildDate><atom:link href="/zh-cn/tags/session/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Cookie、Session、JWT、Token、CSRF、XSS</title>
         <link>/zh-cn/post/2024/07/cookiesessionjwttokencsrfxss/</link>
         <pubDate>Wed, 24 Jul 2024 11:19:04 +0000</pubDate>

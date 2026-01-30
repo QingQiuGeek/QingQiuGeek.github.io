@@ -11,7 +11,7 @@
 <meta property='og:description' content=" Cookie: 浏览器内置的存储机制,容量约 4KB,可设置有效期、域名、路径,支持 HttpOnly/Secure 等安全属性,请求时会自动携带到对应域名的接口中。 LocalStorage: HTML5 新增的本地存储机制,容量约 5-10MB,永久存储(除非手动删除),仅在前端通过 JS 访问,不会自动携带到请求中。 SessionStorage: 仅会话期间有效（关闭标签页后失效），安全性与 LocalStorage 一致（易受 XSS 攻击），适合临时登录场景（如一次性操作、游客身份），非主流选择。 安全性对比 安全维度 Cookie（配置安全属性后） localStorage 防 XSS 攻击 ✅ 支持 HttpOnly 属性，禁止 JavaScript 访问，避免恶意脚本窃取 Token ❌ 完全暴露给 JavaScript，若页面存在 XSS 漏洞，Token 极易被恶意脚本窃取 防 CSRF 攻击 ⚠️ 默认随请求自动发送，需额外配置（如 SameSite=Strict/Lax）才能有效降低 CSRF 风险 ✅ 不自动随请求发送，需前端显式添加，天然规避 CSRF 攻击 数据篡改风险 ✅ 支持 Secure 属性（仅 HTTPS 传输），可防止中间人窃听/篡改；配合签名可进一步防伪造 ❌ 仅存储于前端，无传输保护机制；若被篡改（如通过 XSS），易导致身份伪造 传输机制 自动随 HTTP 请求发送（需注意路径、域、Secure、SameSite 等属性） 不自动传输，需通过 JavaScript 手动读取并附加到请求（如通过 Authorization 头） 适用建议 适合存储敏感凭证（如 Session ID、Token），配合 HttpOnly + Secure + SameSite 使用更安全 适合存储非敏感数据；若存 Token，需确保无 XSS 漏洞，否则风险极高 总结：\n">
 <meta property='og:url' content='/zh-cn/post/2025/12/token%E5%BA%94%E8%AF%A5%E5%AD%98%E5%82%A8%E5%9C%A8cookie%E8%BF%98%E6%98%AFlocalstorage%E4%B8%8A/'>
 <meta property='og:site_name' content='青秋博客'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='Cookie' /><meta property='article:tag' content='Session' /><meta property='article:published_time' content='2025-12-01T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-12-01T12:00:00&#43;00:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='前端' /><meta property='article:tag' content='Cookie' /><meta property='article:published_time' content='2025-12-01T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-12-01T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="token应该存储在cookie还是localStorage上">
 <meta name="twitter:description" content=" Cookie: 浏览器内置的存储机制,容量约 4KB,可设置有效期、域名、路径,支持 HttpOnly/Secure 等安全属性,请求时会自动携带到对应域名的接口中。 LocalStorage: HTML5 新增的本地存储机制,容量约 5-10MB,永久存储(除非手动删除),仅在前端通过 JS 访问,不会自动携带到请求中。 SessionStorage: 仅会话期间有效（关闭标签页后失效），安全性与 LocalStorage 一致（易受 XSS 攻击），适合临时登录场景（如一次性操作、游客身份），非主流选择。 安全性对比 安全维度 Cookie（配置安全属性后） localStorage 防 XSS 攻击 ✅ 支持 HttpOnly 属性，禁止 JavaScript 访问，避免恶意脚本窃取 Token ❌ 完全暴露给 JavaScript，若页面存在 XSS 漏洞，Token 极易被恶意脚本窃取 防 CSRF 攻击 ⚠️ 默认随请求自动发送，需额外配置（如 SameSite=Strict/Lax）才能有效降低 CSRF 风险 ✅ 不自动随请求发送，需前端显式添加，天然规避 CSRF 攻击 数据篡改风险 ✅ 支持 Secure 属性（仅 HTTPS 传输），可防止中间人窃听/篡改；配合签名可进一步防伪造 ❌ 仅存储于前端，无传输保护机制；若被篡改（如通过 XSS），易导致身份伪造 传输机制 自动随 HTTP 请求发送（需注意路径、域、Secure、SameSite 等属性） 不自动传输，需通过 JavaScript 手动读取并附加到请求（如通过 Authorization 头） 适用建议 适合存储敏感凭证（如 Session ID、Token），配合 HttpOnly + Secure + SameSite 使用更安全 适合存储非敏感数据；若存 Token，需确保无 XSS 漏洞，否则风险极高 总结：\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
@@ -808,11 +808,6 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             , 
             
             <a href="/zh-cn/tags/cookie/">Cookie</a> 
-            
-            
-            , 
-            
-            <a href="/zh-cn/tags/session/">Session</a> 
             
             
         </div>
