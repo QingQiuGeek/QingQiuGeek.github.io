@@ -1060,32 +1060,24 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span><span class="lnt">34
 </span><span class="lnt">35
 </span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">HardhatUserConfig</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;hardhat/config&#39;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="kr">import</span> <span class="s1">&#39;@nomicfoundation/hardhat-toolbox&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">config</span><span class="o">:</span> <span class="nx">HardhatUserConfig</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">solidity</span><span class="o">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;0.8.20&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">settings</span><span class="o">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">			<span class="nx">optimizer</span><span class="o">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">				<span class="nx">enabled</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">				<span class="nx">runs</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span> <span class="c1">// Windows 编译速度优化关键参数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="p">},</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">runs</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">},</span>
 </span></span><span class="line"><span class="cl">		<span class="p">},</span>
 </span></span><span class="line"><span class="cl">	<span class="p">},</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">networks</span><span class="o">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="c1">// Windows 路径注意事项：使用正斜杠避免转义问题
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">hardhat</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">hardhat</span><span class="o">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">			<span class="nx">chainId</span><span class="o">:</span> <span class="mi">1337</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">			<span class="c1">// 预设账户（Windows 开发常用）
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">accounts</span><span class="o">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">accounts</span><span class="o">:</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">				<span class="p">{</span>
 </span></span><span class="line"><span class="cl">					<span class="nx">privateKey</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">						<span class="s1">&#39;0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80&#39;</span><span class="p">,</span>
@@ -1098,15 +1090,13 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span></span><span class="line"><span class="cl">			<span class="nx">accounts</span><span class="o">:</span> <span class="p">[</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
 </span></span><span class="line"><span class="cl">		<span class="p">},</span>
 </span></span><span class="line"><span class="cl">	<span class="p">},</span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// Windows 路径安全：输出目录使用正斜杠
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">sources</span><span class="o">:</span> <span class="s1">&#39;./contracts&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">tests</span><span class="o">:</span> <span class="s1">&#39;./test&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">cache</span><span class="o">:</span> <span class="s1">&#39;./cache&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">artifacts</span><span class="o">:</span> <span class="s1">&#39;./artifacts&#39;</span><span class="p">,</span> <span class="c1">// 生成的 ABI/字节码存放处
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">},</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="nx">config</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
