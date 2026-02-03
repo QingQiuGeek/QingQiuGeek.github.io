@@ -225,6 +225,409 @@
 </description>
         </item>
         <item>
+        <title>2026 Web3入坑指北&amp;资源分享，不定时更新</title>
+        <link>/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/</link>
+        <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/</guid>
+        <description>&lt;h1 id=&#34;入门必看涵盖-web3-行业概览岗位全景工作方式简历投递---web3-实习手册&#34;&gt;&lt;a href=&#34;#%e5%85%a5%e9%97%a8%e5%bf%85%e7%9c%8b%e6%b6%b5%e7%9b%96-web3-%e8%a1%8c%e4%b8%9a%e6%a6%82%e8%a7%88%e5%b2%97%e4%bd%8d%e5%85%a8%e6%99%af%e5%b7%a5%e4%bd%9c%e6%96%b9%e5%bc%8f%e7%ae%80%e5%8e%86%e6%8a%95%e9%80%92---web3-%e5%ae%9e%e4%b9%a0%e6%89%8b%e5%86%8c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;入门必看！涵盖 Web3 行业概览、岗位全景、工作方式、简历投递 -&amp;gt; &lt;a class=&#34;link&#34; href=&#34;https://web3intern.xyz/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Web3 实习手册&lt;/a&gt;
+&lt;/h1&gt;&lt;h1 id=&#34;如何学习--获取资源&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%ad%a6%e4%b9%a0--%e8%8e%b7%e5%8f%96%e8%b5%84%e6%ba%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何学习 &amp;amp; 获取资源
+&lt;/h1&gt;&lt;p&gt;我个人以为，想要了解某个行业或者某项技能，最好的方法是以点破面，由浅入深，先广度再深度。&lt;/p&gt;
+&lt;p&gt;最快速简单的方法就是直接问 AI，比如“什么是 Web3？Web3 和 Web2 区别？Web3 发展历程？”。先了解基础概念，知道它是什么；再了解它的发展，对它有一个总体的把握。当然 AI 有时候也会犯错，混淆视听，所以还要结合“百度”，&lt;strong&gt;多方交叉验证&lt;/strong&gt;，这就是以点破面。&lt;/p&gt;
+&lt;p&gt;然后不妨再问 AI，“Web3 有哪些术语名词，给我列举并解释”，知道 Web3 有哪些东西，对于不懂的，继续追问或者“百度”或者找博客帖子（比如小红书），这样就提升了广度。&lt;/p&gt;
+&lt;p&gt;然后是深入学习，如果是某项技术，比较&lt;strong&gt;硬核的方法是直接看官方文档&lt;/strong&gt;，比如&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/developers/docs/intro-to-ethereum/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;以太坊官方文档&lt;/a&gt;、&lt;a class=&#34;link&#34; href=&#34;https://docs.soliditylang.org/en/v0.8.33/?color=light&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Solidity 官方文档&lt;/a&gt;，但是官方文档可能会比较生硬难懂，这时候还要返回来借助 AI，比如把某段文档或代码直接复制给 AI，然后说“用通俗易懂的方式解释下”。如果运营、投研之类的非技术，我个人倾向于去 X、小红书等媒体网站去搜，加一些群，白嫖一些资料。&lt;/p&gt;
+&lt;p&gt;几乎没有什么资源是白嫖不到的，几个获取资源的办法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;小红书找买课的打广告的，直接私信加 v，问有没有课程或资料（一般会免费给），如果给你了课程目录，那你大可以对着目录自己再去自学。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;B 站找教程&amp;amp;评论区获取资料&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;github&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;community--dao&#34;&gt;&lt;a href=&#34;#community--dao&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Community &amp;amp; DAO
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://web3career.build/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Web3 实习计划&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;专为 Web3 新人打造的实习课程。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-7.png&#34;
+	width=&#34;2528&#34;
+	height=&#34;1358&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-7_hu_2bba8944ef126808.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-7_hu_fe88a9824a17bd92.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;186&#34;
+		data-flex-basis=&#34;446px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://intensivecolearn.ing/programs&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;残酷共学&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;不定期有开源免费性质的课程，自主打卡制参与，有机会获得实习机会，很适合 web3 新人。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-4.png&#34;
+	width=&#34;2712&#34;
+	height=&#34;1367&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-4_hu_9198dc1dfc9b779f.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-4_hu_815f2b02696e156e.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;198&#34;
+		data-flex-basis=&#34;476px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://openbuild.xyz&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OpenBuild&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-8.png&#34;
+	width=&#34;2754&#34;
+	height=&#34;1359&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-8_hu_a57718f3c30488b3.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-8_hu_86349a7728d331f4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;202&#34;
+		data-flex-basis=&#34;486px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;开放共建的 Web3 组织，提供免费 web3 基础培训，有 web3 技术开发课、招聘求职课等等，很适合新手。比如：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://openbuild.xyz/learn/courses/1058263334&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OpenBuild Web3 前端训练营&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://openbuild.xyz/learn/courses/95&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OpenBuild Solidity 入门到精通&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://openbuild.xyz/learn/courses/1029240093&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OpenBuild Solana 亚太区开发者培训营&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://openbuild.xyz/learn/courses/1061416292&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OpenBuild 开源 DApp 极简入门教程&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethpanda.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ETHPanda 华语建设者组成的以太坊社区&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-2.png&#34;
+	width=&#34;2772&#34;
+	height=&#34;1293&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-2_hu_544e7f3ae3eb8108.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-2_hu_7dad5e40fb04b75b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;214&#34;
+		data-flex-basis=&#34;514px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://lxdao.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;lxdao 良心 dao&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.notion.so/lxdao/LXDAO-Notion-Working-Space-e6c82cfdae8b4ded98507538a9703dbc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;lxdao notion&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-3.png&#34;
+	width=&#34;2763&#34;
+	height=&#34;1346&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-3_hu_e4e2996b19059b70.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-3_hu_a000564be22a9146.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;205&#34;
+		data-flex-basis=&#34;492px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ethereum 以太坊&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethereum.org/zh/developers/docs/smart-contracts/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;以太坊开发文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://eips.ethereum.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;以太坊改进提案&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-6.png&#34;
+	width=&#34;2870&#34;
+	height=&#34;1358&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-6_hu_a90cda2a835206cb.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-6_hu_67964bd7a7fc36d7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;507px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learnblockchain.cn/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;登链社区&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;登链社区，偏技术，中国较大的 web3 网站，非技术岗也可以去了解下 web3 的相关名词术语。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-5.png&#34;
+	width=&#34;2612&#34;
+	height=&#34;1376&#34;
+	srcset=&#34;/zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-5_hu_a044c16e4f46bbfa.png 480w, /zh-cn/post/2026/02/2026-web3%E5%85%A5%E5%9D%91%E6%8C%87%E5%8C%97%E8%B5%84%E6%BA%90%E5%88%86%E4%BA%AB%E4%B8%8D%E5%AE%9A%E6%97%B6%E6%9B%B4%E6%96%B0/image-5_hu_c17daf666cbca2e4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;189&#34;
+		data-flex-basis=&#34;455px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;web3-学习培训&#34;&gt;&lt;a href=&#34;#web3-%e5%ad%a6%e4%b9%a0%e5%9f%b9%e8%ae%ad&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;web3 学习培训
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learnblockchain.cn/maps/Roadmap&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Web3 技术岗学习路线&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://learnweb3.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;learn web3 免费 web3 学习平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.web3.university&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;web3 university 免费 web3 学习平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.banklessacademy.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;banklessacademy 免费 web3 学习平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://unphishable.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;unphishable web3 安全攻防练习网站&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://ethernaut.openzeppelin.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ethernaut web3 合约漏洞攻击网站&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://speedrunethereum.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Speedrun Ethereum 以太坊开发者的实战训练营&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://rareskills.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;rareskills 付费 web3 培训&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://web3pass.tech/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;web3pass 付费 web3 培训&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;数据信息加密资讯平台&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e4%bf%a1%e6%81%af%e5%8a%a0%e5%af%86%e8%b5%84%e8%ae%af%e5%b9%b3%e5%8f%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据信息&amp;amp;加密资讯平台
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://defillama.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;defillama DeFi 领域的 TVL 聚合商&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://cn.rootdata.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;rootdata 时下热门的 Web3 项目&amp;amp;团队、融资与新闻信息&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://chainthink.cn/zh-CN/news&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;chainthink 区块链资讯平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.theblockbeats.info/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;theblockbeats 币圈资讯平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.panewslab.com/zh&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;panewslab 币圈信息官&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://cryptonews.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;cryptonews 加密新闻&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.techflowpost.com/zh-CN&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深潮资讯&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.coingecko.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;coingecko 行情聚合平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://coinmarketcap.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;coinmarketcap 行情聚合平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.coincarp.com/zh/upcoming-ido/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;coincarp 最近启动的加密项目 IDO、IEO、ICO 列表&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;链游&#34;&gt;&lt;a href=&#34;#%e9%93%be%e6%b8%b8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;链游
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://openloot.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;openloot 链游&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://pepenode.io&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PEPENODE “游戏化”的模因币挖矿平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://cryptonews.com/cryptocurrency/top-web3-games/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;cryptonews 2026 最值得期待的 14 款链游&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.alchemy.com/dapps/best/web3-games&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Alchemy&amp;rsquo;s 链游&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gamestarter.com/cn/home&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;game starter 链游&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;工具-tool&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e5%85%b7-tool&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工具 Tool
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://etherscan.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Etherscan 以太坊数据分析平台&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Etherscan 是专为以太坊区块链的区块浏览器和数据分析平台，提供实时交易、智能合约和钱包信息查询。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://remix.ethereum.org/#lang=zh&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;REMIX 在线智能合约开发 IDE&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://bq-tool.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;we3 工具导航&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://tally.so/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;tally 万能的表单、投票工具，web3 必备&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://luma.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;luma 活动页面创建工具&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://apidance.pro/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Twitter 数据抓取与区块链监控的 API 工具箱&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://vanity-eth.tk/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;钱包地址生成工具&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;nft&#34;&gt;&lt;a href=&#34;#nft&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;NFT
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://nft.myfirst.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;免费的 NFT 铸造网站，小白友好&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://gclx.xyz/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;国产良心 NFT&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.theone.art/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;一个卖 NFT 的网站&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;去中心化存储&#34;&gt;&lt;a href=&#34;#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e5%ad%98%e5%82%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;去中心化存储
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.pinata.cloud&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Pinata 去中心化云存储服务平台&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.nft.storage/signup&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;NFT.Storage 专为 NFT 提供的去中心化存储解决方案&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;免费水龙头&#34;&gt;&lt;a href=&#34;#%e5%85%8d%e8%b4%b9%e6%b0%b4%e9%be%99%e5%a4%b4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;免费水龙头
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepolia-faucet.pk910.de/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Sepolia PoW Faucet 最好用的水龙头！&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://getblock.io/faucet/eth-sepolia/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Ethereum Sepolia Faucet&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepoliafaucet.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Sepolia ETH Faucet&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://cloud.google.com/application/web3/faucet/ethereum/sepolia&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Google Web3 Ethereum Sepolia Faucet&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;去中心化预测市场&#34;&gt;&lt;a href=&#34;#%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e9%a2%84%e6%b5%8b%e5%b8%82%e5%9c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;去中心化预测市场
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://polymarket.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;polymarket&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.opinion.trade/macro&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;opinion&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://myriad.markets/markets&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;myriad&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.drift.trade/bet&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;drift&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://kalshi.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;kalshi&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://robinhood.com/eu/en/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;robinhood&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;交易所&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%89%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易所
+&lt;/h2&gt;&lt;p&gt;这里列出来几个比较主流的交易所，有中心化和去中心化的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bybit.com/zh-MY/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;bybit&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bitget.com/zh-CN&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;bitget&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.gate.com/zh&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;gate&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.binance.com/zh-CN&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;币安&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.okx.com/zh-hans-eu&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;okx&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://app.uniswap.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;uniswap&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://riverbit.io/ai-arena&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;riverbit ai 驱动的去中心化交易所&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>gas优化技巧</title>
         <link>/zh-cn/post/2026/02/gas%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/</link>
         <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>
