@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>AI on 青秋博客</title>
+        <link>/zh-cn/categories/ai/</link>
+        <description>Recent content in AI on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sun, 01 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/ai/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>openclaw</title>
+        <link>/zh-cn/post/2026/02/openclaw/</link>
+        <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/openclaw/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>
