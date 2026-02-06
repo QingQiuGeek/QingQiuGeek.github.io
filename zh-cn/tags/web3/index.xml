@@ -7,7 +7,99 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 02 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 04 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>区块链reactive睿应层</title>
+        <link>/zh-cn/post/2026/02/%E5%8C%BA%E5%9D%97%E9%93%BEreactive%E7%9D%BF%E5%BA%94%E5%B1%82/</link>
+        <pubDate>Wed, 04 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/%E5%8C%BA%E5%9D%97%E9%93%BEreactive%E7%9D%BF%E5%BA%94%E5%B1%82/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>一个助记词如何生成多个区块链账户地址的</title>
+        <link>/zh-cn/post/2026/02/%E4%B8%80%E4%B8%AA%E5%8A%A9%E8%AE%B0%E8%AF%8D%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90%E5%A4%9A%E4%B8%AA%E5%8C%BA%E5%9D%97%E9%93%BE%E8%B4%A6%E6%88%B7%E5%9C%B0%E5%9D%80%E7%9A%84/</link>
+        <pubDate>Wed, 04 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/%E4%B8%80%E4%B8%AA%E5%8A%A9%E8%AE%B0%E8%AF%8D%E5%A6%82%E4%BD%95%E7%94%9F%E6%88%90%E5%A4%9A%E4%B8%AA%E5%8C%BA%E5%9D%97%E9%93%BE%E8%B4%A6%E6%88%B7%E5%9C%B0%E5%9D%80%E7%9A%84/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>ERC-404图币合一</title>
+        <link>/zh-cn/post/2026/02/erc-404%E5%9B%BE%E5%B8%81%E5%90%88%E4%B8%80/</link>
+        <pubDate>Mon, 02 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/erc-404%E5%9B%BE%E5%B8%81%E5%90%88%E4%B8%80/</guid>
+        <description>&lt;h2 id=&#34;erc-404-是什么&#34;&gt;&lt;a href=&#34;#erc-404-%e6%98%af%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-404 是什么
+&lt;/h2&gt;&lt;p&gt;ERC-404 是 2024 年 2 月由匿名团队通过项目 &lt;strong&gt;Pandora&lt;/strong&gt; 在以太坊生态中引入的一个实验性、混合型代币标准，它试图&lt;strong&gt;融合 ERC-20（同质化代币）和 ERC-721（非同质化代币 NFT）的特性&lt;/strong&gt;，解决 NFT 流动性差的问题。&lt;/p&gt;
+&lt;p&gt;我们知道，ERC-20 是万链之基，是代币之间可以相互流通而必须遵守的协议，代币可以拆分为小数；ERC-721 的 NFT 具有不可篡改、唯一 ID、不可分割的特性，这意味着 NFT 不可能持有小数个，必须是整数个，和 ERC-20 是互斥的。&lt;/p&gt;
+&lt;p&gt;而 &lt;strong&gt;ERC-404 的核心思想是：每持有 1 个 ERC-404 代币，就自动拥有 1 个关联的 NFT；当代币被转移或销毁时，NFT 也随之变化（小数个 ERC-404 代币不会有关联的 NFT）。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;erc-404-技术实现要点&#34;&gt;&lt;a href=&#34;#erc-404-%e6%8a%80%e6%9c%af%e5%ae%9e%e7%8e%b0%e8%a6%81%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-404 技术实现要点
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;代币与 NFT 绑定
+合约内部维护一个 mapping(address =&amp;gt; uint256[]) nfts，记录每个地址拥有的 NFT ID。同时维护一个 ERC-20 风格的 balanceOf。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;“碎片化 NFT 集合”机制
+假设总共有 10,000 个 NFT（如 10,000 个独特头像）。当用户购买 1 个 ERC-404 代币（如 $ PANDORA），系统随机分配一个 NFT 给他。如果卖出代币，NFT 自动“消失”（实际上被合约回收，可能重新分配）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;NFT 流动性
+因为代币是 ERC-20 风格，可以在 Uniswap 等 DEX 上直接交易，无需专门的 NFT 市场。&lt;strong&gt;买代币 = 买 NFT，极大提升 NFT 流动性。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ERC-404 的代表性项目就是 Pandora，代币名称： $ PANDORA，NFT 集合：10,000 个独特的“Pandora Box” NFT&lt;/p&gt;
+&lt;h2 id=&#34;优势与劣势&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8a%bf%e4%b8%8e%e5%8a%a3%e5%8a%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优势与劣势
+&lt;/h2&gt;&lt;p&gt;✅ 优势&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;优势&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;提升 NFT 流动性&lt;/td&gt;
+          &lt;td&gt;无需挂单，直接在 DEX 交易&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;创新玩法&lt;/td&gt;
+          &lt;td&gt;结合 meme 币 + NFT + DeFi，吸引投机和收藏者&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;⚠️ 风险&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;风险&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;未经审计&lt;/td&gt;
+          &lt;td&gt;所有 ERC-404 合约均未经过安全审计，存在漏洞风险&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Gas 费高昂&lt;/td&gt;
+          &lt;td&gt;每次转账都涉及 NFT mint/burn，gas 成本远高于普通 ERC-20&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;市场操纵&lt;/td&gt;
+          &lt;td&gt;早期项目高度集中，易被“拉地毯”（rug pull）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;非标准协议&lt;/td&gt;
+          &lt;td&gt;不被钱包、交易所、DeFi 协议原生支持，兼容性差&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;目前 ERC-404 仍属小众实验，未被主流生态支持，大多数仍是 meme 币 + 炒作。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>ethernaut闯关记录</title>
         <link>/zh-cn/post/2026/02/ethernaut%E9%97%AF%E5%85%B3%E8%AE%B0%E5%BD%95/</link>
         <pubDate>Mon, 02 Feb 2026 12:00:00 +0000</pubDate>
@@ -223,6 +315,18 @@
 	
 &gt;&lt;/p&gt;
 </description>
+        </item>
+        <item>
+        <title>usdc、usdt、usde、usd1</title>
+        <link>/zh-cn/post/2026/02/usdcusdtusdeusd1/</link>
+        <pubDate>Mon, 02 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/usdcusdtusdeusd1/</guid>
+        <description>&lt;p&gt;usdc、usdt、usde、usd1 都是试图锚定 1 美元（USD） 的稳定币，但它们的发行方、抵押机制、去中心化程度、透明度和风险特征有显著区别。&lt;/p&gt;
+&lt;h2 id=&#34;usdt-离岸之王&#34;&gt;&lt;a href=&#34;#usdt-%e7%a6%bb%e5%b2%b8%e4%b9%8b%e7%8e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;USDT-离岸之王
+&lt;/h2&gt;&lt;p&gt;USDT 又叫泰达币，发行方 Tether，USDT&lt;/p&gt;
+&lt;h2 id=&#34;usdc-华尔街的乖孩子&#34;&gt;&lt;a href=&#34;#usdc-%e5%8d%8e%e5%b0%94%e8%a1%97%e7%9a%84%e4%b9%96%e5%ad%a9%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;USDC-华尔街的乖孩子
+&lt;/h2&gt;</description>
         </item>
         <item>
         <title>2026Web3入坑指北&amp;资源分享，不定时更新</title>
@@ -2441,7 +2545,18 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;a class=&#34;link&#34; href=&#34;https://ethereum-magicians.org/c/ercs/57&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;ERC 官方仓库&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;eip&#34;&gt;&lt;a href=&#34;#eip&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP
-&lt;/h2&gt;&lt;p&gt;Ethereum Improvement Proposal（以太坊改进提案），EIP 是向以太坊社区提出新功能、流程或标准的正式文档。任何重大变更（如协议升级、新操作码、费用机制）都必须先提交 EIP。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Ethereum Improvement Proposal（以太坊改进提案），EIP 是向以太坊社区提出新功能、流程或标准的正式文档。任何重大变更（如协议升级、新操作码、费用机制）都必须先提交 EIP，EIP 分为三大类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Standard Track（标准轨道）：涉及核心协议修改、网络层、接口层。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Meta（元提案）：涉及流程、决策制定。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Informational（信息提案）：非强制性的设计指南。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image.png&#34;
 	width=&#34;1590&#34;
 	height=&#34;703&#34;
@@ -2455,7 +2570,7 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;erc&#34;&gt;&lt;a href=&#34;#erc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC
-&lt;/h2&gt;&lt;p&gt;Ethereum Request for Comments（以太坊征求意见稿），ERC 是针对智能合约和 DApp 开发者制定的应用层标准，确保不同项目之间的互操作性，是 EIP 的的一个子类，每个 ERC 都是 EIP，但不是每个 EIP 都是 ERC。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Ethereum Request for Comments（以太坊征求意见稿），属于“标准轨道”下的一个子分类（Interface 层），是针对智能合约和 DApp 开发者制定的&lt;strong&gt;应用层标准&lt;/strong&gt;，确保不同项目之间的互操作性，是 EIP 的的一个子类，每个 ERC 都是 EIP，但不是每个 EIP 都是 ERC。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-5.png&#34;
 	width=&#34;1200&#34;
 	height=&#34;480&#34;

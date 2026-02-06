@@ -7,7 +7,213 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 17 Jan 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E7%90%86%E8%B4%A2/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 03 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E7%90%86%E8%B4%A2/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>学习k线-01</title>
+        <link>/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/</link>
+        <pubDate>Tue, 03 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.xiaohongshu.com/discovery/item/682eeec8000000000f03a9e7?source=webshare&amp;amp;xhsshare=pc_web&amp;amp;xsec_token=AByz-B6jl3-41MXOeKpxHFViQC5Jcw9WnflzFPIKyc2pM=&amp;amp;xsec_source=pc_share&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;看懂 k 线&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;k-线颜色&#34;&gt;&lt;a href=&#34;#k-%e7%ba%bf%e9%a2%9c%e8%89%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;k 线颜色
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-10.png&#34;
+	width=&#34;1181&#34;
+	height=&#34;497&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-10_hu_8a9cca8c538c7b95.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-10_hu_3f57a11a297e25a5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;237&#34;
+		data-flex-basis=&#34;570px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;阳线阴线&#34;&gt;&lt;a href=&#34;#%e9%98%b3%e7%ba%bf%e9%98%b4%e7%ba%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;阳线、阴线
+&lt;/h2&gt;&lt;p&gt;阳线上涨走势
+&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-6.png&#34;
+	width=&#34;834&#34;
+	height=&#34;468&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-6_hu_21e8d7cd59a5c9c6.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-6_hu_1a8ca35ed9f4b9d4.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;178&#34;
+		data-flex-basis=&#34;427px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;阴线下跌走势
+&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-7.png&#34;
+	width=&#34;823&#34;
+	height=&#34;467&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-7_hu_62d77a7f7ad08d4d.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-7_hu_c3afab90526cab10.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;176&#34;
+		data-flex-basis=&#34;422px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;k 线只是一个价格波动的表达形式，本质还是折线&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;通过折线画 k 线只有一种结果，通过 k 线画折线有无数种结果，因为 k 线无法体现出周期或者说时间范围内的波动&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-8.png&#34;
+	width=&#34;821&#34;
+	height=&#34;449&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-8_hu_4ff5342cec44ab68.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-8_hu_58e409439ce01b59.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;182&#34;
+		data-flex-basis=&#34;438px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-9.png&#34;
+	width=&#34;745&#34;
+	height=&#34;452&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-9_hu_7d95b5b66040a5b1.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-9_hu_b5923b8df23922f9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;164&#34;
+		data-flex-basis=&#34;395px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.xiaohongshu.com/discovery/item/685139db00000000220286e3?source=webshare&amp;amp;xhsshare=pc_web&amp;amp;xsec_token=ABAcg6SJDc17LgwJSWyiFieC4eywTA5OnNJXi7kItCsu0=&amp;amp;xsec_source=pc_share&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;孤立高低点&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;孤立高点压力位&#34;&gt;&lt;a href=&#34;#%e5%ad%a4%e7%ab%8b%e9%ab%98%e7%82%b9%e5%8e%8b%e5%8a%9b%e4%bd%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;孤立高点/压力位
+&lt;/h2&gt;&lt;p&gt;价格之所以升高，就是买的多卖的少，价格哄抬上去了。
+当价格&lt;strong&gt;两次&lt;/strong&gt;冲击同一高点都失败，表明上涨动能衰竭，无法持续推动价格突破，形成&lt;strong&gt;压力位&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-4.png&#34;
+	width=&#34;1795&#34;
+	height=&#34;825&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-4_hu_e9cc80f4e8a4bf50.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-4_hu_aaf74ffd5363fcd7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;217&#34;
+		data-flex-basis=&#34;522px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;当孤立高点两次突破未果时，不要加仓，而是考虑减仓。因为价格已经是高点了，后面要绛低。&lt;/p&gt;
+&lt;h2 id=&#34;孤立低点支撑位&#34;&gt;&lt;a href=&#34;#%e5%ad%a4%e7%ab%8b%e4%bd%8e%e7%82%b9%e6%94%af%e6%92%91%e4%bd%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;孤立低点/支撑位
+&lt;/h2&gt;&lt;p&gt;就是买的少卖的多，价格打下去了。价格&lt;strong&gt;两次&lt;/strong&gt;试探同一低点均未跌破，表明下跌动能衰竭，价格止跌企稳，形成坚实的支撑位。
+&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-5.png&#34;
+	width=&#34;1740&#34;
+	height=&#34;811&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-5_hu_4219987b9bfe9db9.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-5_hu_d32dec8435733889.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;214&#34;
+		data-flex-basis=&#34;514px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;当孤立低点两次突破未果时，可以考虑建仓。因为价格已经是最低点了，后面可能要升高，可以在低位买入。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.xiaohongshu.com/discovery/item/6880a9530000000022031b07?source=webshare&amp;amp;xhsshare=pc_web&amp;amp;xsec_token=ABcyx3lXJfYhFvumTO4bwme9d3BIvsmkdQUwLkN_dInl4=&amp;amp;xsec_source=pc_share&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;看懂趋势&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.xiaohongshu.com/discovery/item/688346e9000000002201e2b9?source=webshare&amp;amp;xhsshare=pc_web&amp;amp;xsec_token=ABGNNWejQ6udPpw6-tqnTCCFQmXJ0-BAiMPeR-9bhaenU=&amp;amp;xsec_source=pc_share&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;看趋势&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;上涨趋势&#34;&gt;&lt;a href=&#34;#%e4%b8%8a%e6%b6%a8%e8%b6%8b%e5%8a%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;上涨趋势
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-1.png&#34;
+	width=&#34;1579&#34;
+	height=&#34;741&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-1_hu_29b97ff737b22aa7.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-1_hu_4a9c82a236adb6fe.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;213&#34;
+		data-flex-basis=&#34;511px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;下跌趋势&#34;&gt;&lt;a href=&#34;#%e4%b8%8b%e8%b7%8c%e8%b6%8b%e5%8a%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;下跌趋势
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-2.png&#34;
+	width=&#34;1590&#34;
+	height=&#34;753&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-2_hu_46bfa3129a41c18a.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-2_hu_213e5183395f52b9.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;506px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;非趋势&#34;&gt;&lt;a href=&#34;#%e9%9d%9e%e8%b6%8b%e5%8a%bf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;非趋势
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-3.png&#34;
+	width=&#34;1601&#34;
+	height=&#34;758&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-3_hu_a62d3f6b2dfd58a1.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-3_hu_c2949a6308a0821.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;506px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;回调&#34;&gt;&lt;a href=&#34;#%e5%9b%9e%e8%b0%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;回调
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.xiaohongshu.com/discovery/item/68844ae4000000002400e580?source=webshare&amp;amp;xhsshare=pc_web&amp;amp;xsec_token=ABsII2ScEj4R4XjdAo_nIBknq0AtwiZKTCBHo04Z7tdq0=&amp;amp;xsec_source=pc_share&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;回调/突破&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-11.png&#34;
+	width=&#34;1262&#34;
+	height=&#34;564&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-11_hu_1b88348c7aae95dc.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-11_hu_37849d1819f17359.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;223&#34;
+		data-flex-basis=&#34;537px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;如果回调没有突破原趋势，则叫原趋势的逆势，如上图，第一根红线下跌，但是并没有超过第一根绿线的起涨点，那么第一根红线就是第一根绿线的逆势。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-12.png&#34;
+	width=&#34;1190&#34;
+	height=&#34;588&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-12_hu_2b251d1e9d8e26fc.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-12_hu_dbfd1cc817c931c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;202&#34;
+		data-flex-basis=&#34;485px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上图中，2 号区域是 1 号区域的逆势，也是 1 号的回调。&lt;/p&gt;
+&lt;h2 id=&#34;周期tick-数据&#34;&gt;&lt;a href=&#34;#%e5%91%a8%e6%9c%9ftick-%e6%95%b0%e6%8d%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;周期/tick 数据
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-13.png&#34;
+	width=&#34;1222&#34;
+	height=&#34;557&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-13_hu_d2158d9a607f39f1.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-13_hu_4cd97ce48b4c1b1c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;219&#34;
+		data-flex-basis=&#34;526px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-14.png&#34;
+	width=&#34;1051&#34;
+	height=&#34;495&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-14_hu_a23e6b1820bb2e76.png 480w, /zh-cn/post/2026/02/%E5%AD%A6%E4%B9%A0k%E7%BA%BF-01/image-14_hu_fae5148350837209.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;212&#34;
+		data-flex-basis=&#34;509px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>基金小白必学-A股交易知识</title>
         <link>/zh-cn/post/2026/01/%E5%9F%BA%E9%87%91%E5%B0%8F%E7%99%BD%E5%BF%85%E5%AD%A6-a%E8%82%A1%E4%BA%A4%E6%98%93%E7%9F%A5%E8%AF%86/</link>
         <pubDate>Sat, 17 Jan 2026 12:00:00 +0000</pubDate>
