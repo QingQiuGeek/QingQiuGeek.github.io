@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="概念 在 Solidity 中，状态变量 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。局部变量则是定义在函数之内。\nSolidity 函数调用有两种方式：\n内部调用（jump）：像普通函数调用，参数用内存指针传递。 外部调用（EVM message call）：通过 calldata 传递数据。 external 函数只支持外部调用，编译器知道参数只来自 calldata，所以可以直接读取 calldata 中的数据，不需要拷贝 → 节省 gas。\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="概念 Solidity 是一种静态类型的，面向合约的高级语言，用于在 Ethereum 平台上实现智能合约。\n在 Solidity 中，状态变量 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。局部变量则是定义在函数之内。\n">
 <title>solidity学习笔记01</title>
 
 <link rel='canonical' href='/zh-cn/post/2026/01/solidity-study-notes-01/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="solidity学习笔记01">
-<meta property='og:description' content="概念 在 Solidity 中，状态变量 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。局部变量则是定义在函数之内。\nSolidity 函数调用有两种方式：\n内部调用（jump）：像普通函数调用，参数用内存指针传递。 外部调用（EVM message call）：通过 calldata 传递数据。 external 函数只支持外部调用，编译器知道参数只来自 calldata，所以可以直接读取 calldata 中的数据，不需要拷贝 → 节省 gas。\n">
+<meta property='og:description' content="概念 Solidity 是一种静态类型的，面向合约的高级语言，用于在 Ethereum 平台上实现智能合约。\n在 Solidity 中，状态变量 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。局部变量则是定义在函数之内。\n">
 <meta property='og:url' content='/zh-cn/post/2026/01/solidity-study-notes-01/'>
 <meta property='og:site_name' content='青秋博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Web3' /><meta property='article:tag' content='区块链' /><meta property='article:tag' content='Solidity' /><meta property='article:published_time' content='2026-01-19T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-01-19T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="solidity学习笔记01">
-<meta name="twitter:description" content="概念 在 Solidity 中，状态变量 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。局部变量则是定义在函数之内。\nSolidity 函数调用有两种方式：\n内部调用（jump）：像普通函数调用，参数用内存指针传递。 外部调用（EVM message call）：通过 calldata 传递数据。 external 函数只支持外部调用，编译器知道参数只来自 calldata，所以可以直接读取 calldata 中的数据，不需要拷贝 → 节省 gas。\n">
+<meta name="twitter:description" content="概念 Solidity 是一种静态类型的，面向合约的高级语言，用于在 Ethereum 平台上实现智能合约。\n在 Solidity 中，状态变量 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。局部变量则是定义在函数之内。\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -735,9 +735,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
         <li><a href="#函数可见性修饰符">函数可见性修饰符</a></li>
         <li><a href="#状态修饰符">状态修饰符</a></li>
         <li><a href="#如何获取合约的对象">如何获取合约的对象</a></li>
-        <li><a href="#fallback-函数">fallback 函数</a></li>
         <li><a href="#receive-函数">receive 函数</a></li>
+        <li><a href="#fallback-函数">fallback 函数</a></li>
         <li><a href="#modifier修饰器">modifier(修饰器)</a></li>
+        <li><a href="#函数选择器">函数选择器</a></li>
       </ol>
     </li>
     <li><a href="#一些全局变量">一些全局变量</a></li>
@@ -806,7 +807,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 7 分钟
+                阅读时长: 9 分钟
             </time>
         </div>
         
@@ -854,7 +855,8 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     
     
     <h2 id="概念"><a href="#%e6%a6%82%e5%bf%b5" class="header-anchor"></a>概念
-</h2><p>在 Solidity 中，<strong>状态变量</strong> 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。<strong>局部变量</strong>则是定义在函数之内。</p>
+</h2><p>Solidity 是一种<strong>静态类型</strong>的，<strong>面向合约</strong>的高级语言，<strong>用于在 Ethereum 平台上实现智能合约。</strong></p>
+<p>在 Solidity 中，<strong>状态变量</strong> 指合约中所有存储在区块链上的变量，定义在合约之内，函数之外。<strong>局部变量</strong>则是定义在函数之内。</p>
 <p>Solidity 函数调用有两种方式：</p>
 <ol>
 <li>内部调用（jump）：像普通函数调用，参数用内存指针传递。</li>
@@ -887,16 +889,55 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </h2><h3 id="值类型"><a href="#%e5%80%bc%e7%b1%bb%e5%9e%8b" class="header-anchor"></a>值类型
 </h3><ul>
 <li>
-<p>bool：true | false</p>
+<p>bool：true | false，默认 false</p>
+<p><img src="/zh-cn/post/2026/01/solidity-study-notes-01/image-2.png"
+	width="467"
+	height="382"
+	srcset="/zh-cn/post/2026/01/solidity-study-notes-01/image-2_hu_68ce8a4ea384f519.png 480w, /zh-cn/post/2026/01/solidity-study-notes-01/image-2_hu_5160a147ff217fe5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="122"
+		data-flex-basis="293px"
+	
+></p>
 </li>
 <li>
-<p>int、uint：整数类型，后面可以加数字，步长是 8，从 int8、uint8 到 int256、uint256，省略数字则默认 256。</p>
+<p>int/uint：有符号、无符号整型，后面可以加数字，步长是 8，从 int8、uint8 到 int256、uint256，省略数字则默认 256，值 0。可以用 type(X).min 和 type(X).max 来访问该类型代表的最小值和最大值。</p>
+<p><img src="/zh-cn/post/2026/01/solidity-study-notes-01/image-3.png"
+	width="1272"
+	height="396"
+	srcset="/zh-cn/post/2026/01/solidity-study-notes-01/image-3_hu_6f3bdc4cc42f02ab.png 480w, /zh-cn/post/2026/01/solidity-study-notes-01/image-3_hu_8dbc1ca65c6ca5b7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="321"
+		data-flex-basis="770px"
+	
+></p>
+</li>
+<li>
+<p>fixed/ufixed：有符号、无符号的定长浮点型。Solidity 还没有完全支持定长浮点型，可以声明但不能赋值。在关键字 ufixedMxN 和 fixedMxN 中， M 表示该类型占用的位数， N 表示可用的小数位数。 M 必须能整除 8，即 8 到 256 位。 N 则可以是从 0 到 80 之间的任意数。 ufixed 和 fixed 分别是 ufixed128x18 和 fixed128x18 的别名。</p>
+<p><img src="/zh-cn/post/2026/01/solidity-study-notes-01/image-4.png"
+	width="1070"
+	height="242"
+	srcset="/zh-cn/post/2026/01/solidity-study-notes-01/image-4_hu_ecf6a5e5d4435b92.png 480w, /zh-cn/post/2026/01/solidity-study-notes-01/image-4_hu_4bfb1e820098dcf5.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="442"
+		data-flex-basis="1061px"
+	
+></p>
 </li>
 <li>
 <p>address：地址类型，仅能存储 20 字节的地址。</p>
 </li>
 <li>
-<p>address payable：可接收 ETH，有 .transfer() 和 .send() 方法，如：</p>
+<p>address payable：地址类型，有额外的 .transfer() 和 .send() 方法，可接收 ETH，如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -921,7 +962,8 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </div>
 </div></li>
 <li>
-<p>bytes：定长字节数组，从 bytes1 到 bytes32，支持索引，有长度。</p>
+<p>bytes1-32：定长字节数组，从 bytes1 到 bytes32，支持索引，有长度。每个单独的元素将被初始化为与其类型相应的默认值。</p>
+<p>如果要把一个 32 字节的变量转成 address，则需要 address(uint160(bytes20(b)))，因为 address 是 20 字节，因此要先截取前 20 字节，并通过数值类型显示转换，20 字节就是 160 位数字。</p>
 </li>
 <li>
 <p>enum：枚举类型，按定义顺序从 0 开始自动分配整数值。</p>
@@ -972,8 +1014,32 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>mapping：映射，也就是哈希 map，仅能声明为 storge，只能作为状态变量，不能作为局部变量或函数出入参。key 只能是值类型，value 无限制，key 不存在时默认返回值是 0。mapping 没有长度，无法遍历，也不能作为函数参数传递。</p>
 </li>
 <li>
-<p>string：动态长度的字符串，底层是 bytes，不支持索引，但是可以通过 bytes(string)转成 bytes 类型。</p>
+<p>string：动态长度的字符串，底层是 bytes，不支持索引，但是可以通过 bytes(string)转成 bytes 类型。默认值是一个字符串。</p>
 </li>
+<li>
+<p>bytes：变长字节数组，默认值是空数组。</p>
+</li>
+<li>
+<p>合约类型，每个合约定义后，其名称本身就是一个类型。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//如果 Child 继承自 Parent，那么 Child 实例可隐式转为 Parent 类型：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">Parent</span> <span class="n">p</span> <span class="o">=</span> <span class="n">new</span> <span class="nf">Child</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//任何合约实例都可以显式转为 address：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">MyToken</span> <span class="n">token</span> <span class="o">=</span> <span class="n">new</span> <span class="nf">MyToken</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">address</span> <span class="n">addr</span> <span class="o">=</span> <span class="nf">address</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
 <h2 id="继承"><a href="#%e7%bb%a7%e6%89%bf" class="header-anchor"></a>继承
 </h2><div class="highlight"><div class="chroma">
@@ -1183,7 +1249,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </div>
 </div></li>
 <li>
-<p>view：只读函数，可以读取状态变量但禁止修改</p>
+<p>view：只读函数，可以读取状态变量但禁止修改状态变量。为了实现不修改，EVM 提供了 STATICCALL 操作码，在 STATICCALL 执行期间，任何尝试修改状态的操作都会导致 revert，这是运行时（runtime）级别的保护。</p>
 </li>
 <li>
 <p>payable：可接收 ETH 函数，允许函数在调用时接收以太币</p>
@@ -1289,36 +1355,127 @@ payable 的必要性：任何需要接收 ETH 的函数都必须标记 payable�
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="fallback-函数"><a href="#fallback-%e5%87%bd%e6%95%b0" class="header-anchor"></a>fallback 函数
-</h3><p>当合约收到无 calldata 的调用或调用了不存在的函数时触发</p>
+</div><h3 id="receive-函数"><a href="#receive-%e5%87%bd%e6%95%b0" class="header-anchor"></a>receive 函数
+</h3><p>receive 是特殊函数关键字，一个合约最多可以有一个 receive 函数。交易仅发送 ETH，且 calldata 为空（msg.data.length == 0）时触发。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
+</span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">fallback</span><span class="p">()</span> <span class="n">external</span> <span class="n">payable</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 可接收 ETH
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//没有 function 关键字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">receive</span><span class="p">()</span> <span class="n">external</span> <span class="n">payable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 必须标记为 payable
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="receive-函数"><a href="#receive-%e5%87%bd%e6%95%b0" class="header-anchor"></a>receive 函数
-</h3><p>仅当合约通过普通转账（非函数调用）收到 ETH 时触发</p>
+</div><p>receive 优先级高于 fallback，举例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//场景 1：用户直接向合约转账 ETH（无附加数据）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">to</span><span class="p">:</span> <span class="mh">0xC</span><span class="n">ontract</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="nl">value</span><span class="p">:</span> <span class="mi">1</span> <span class="n">ether</span>
+</span></span><span class="line"><span class="cl"><span class="nl">data</span><span class="p">:</span> <span class="mi">0</span><span class="n">x</span> <span class="err">（空）</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">→ 触发 receive()（如果存在）
+</span></span></span><span class="line"><span class="cl"><span class="cm">→ 若无 receive()，则尝试触发 payable fallback()
+</span></span></span><span class="line"><span class="cl"><span class="cm">→ 若都没有 → 交易 revert
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//场景 2：用户调用一个不存在的函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">to</span><span class="p">:</span> <span class="mh">0xC</span><span class="n">ontract</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="nl">value</span><span class="p">:</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="nl">data</span><span class="p">:</span> <span class="mh">0x12345678</span> <span class="err">（无效函数选择器）</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">→ 触发 fallback()（无论是否 payable）
+</span></span></span><span class="line"><span class="cl"><span class="cm">→ 如果 fallback 不是 payable，但交易带 ETH → revert
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//场景 3：用户调用合约的某个函数（如 transfer(...)）
+</span></span></span><span class="line"><span class="cl"><span class="c1">//→ 正常执行该函数，不会触发 receive/fallback
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="fallback-函数"><a href="#fallback-%e5%87%bd%e6%95%b0" class="header-anchor"></a>fallback 函数
+</h3><p>fallback 是特殊函数关键字，一个合约最多可以有一个 fallback 函数。交易 calldata 非空，但不匹配任何函数时触发。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">receive</span><span class="p">()</span> <span class="n">external</span> <span class="n">payable</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 必须标记为 payable
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//没有 function 关键字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">fallback</span><span class="p">()</span> <span class="n">external</span> <span class="n">payable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 可接收 ETH
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// payable 可选
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="modifier修饰器"><a href="#modifier%e4%bf%ae%e9%a5%b0%e5%99%a8" class="header-anchor"></a>modifier(修饰器)
 </h3><p>用于复用校验逻辑（如权限控制）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//这个合约片段实现了一个 “仅限所有者提款” 的功能
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">//用modifier声明了onlyOwner函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">modifier</span> <span class="nf">onlyOwner</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">require</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">,</span> <span class="s">&#34;Not owner&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// _; 是一个占位符，表示“在这里插入被修饰的函数体”。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//当调用 withdraw()函数时，会先触发onlyOwner()校验，校验通过后才会执行payable(msg.sender)...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">function</span> <span class="nf">withdraw</span><span class="p">()</span> <span class="n">public</span> <span class="n">onlyOwner</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">payable</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">).</span><span class="nf">transfer</span><span class="p">(</span><span class="nf">address</span><span class="p">(</span><span class="n">this</span><span class="p">).</span><span class="n">balance</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="函数选择器"><a href="#%e5%87%bd%e6%95%b0%e9%80%89%e6%8b%a9%e5%99%a8" class="header-anchor"></a>函数选择器
+</h3><p>函数选择器是一个 4 字节的标识符，由函数签名（函数名 + 参数类型）经 Keccak256 哈希后取前 4 字节生成。例如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1327,21 +1484,18 @@ payable 的必要性：任何需要接收 ETH 的函数都必须标记 payable�
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">modifier</span> <span class="nf">onlyOwner</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">require</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span> <span class="o">==</span> <span class="n">owner</span><span class="p">,</span> <span class="s">&#34;Not owner&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">_</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">function</span> <span class="nf">withdraw</span><span class="p">()</span> <span class="n">public</span> <span class="n">onlyOwner</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">payable</span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sender</span><span class="p">).</span><span class="nf">transfer</span><span class="p">(</span><span class="nf">address</span><span class="p">(</span><span class="n">this</span><span class="p">).</span><span class="n">balance</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">function</span><span class="w"> </span><span class="nf">transfer</span><span class="p">(</span><span class="n">address</span><span class="w"> </span><span class="n">to</span><span class="p">,</span><span class="w"> </span><span class="n">uint256</span><span class="w"> </span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="n">external</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">函数签名字符串：&#34;transfer(address,uint256)&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cm">Keccak256 哈希：0xa9059cbb2...
+</span></span></span><span class="line"><span class="cl"><span class="cm">函数选择器：0xa9059cbb（前 4 字节）
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="一些全局变量"><a href="#%e4%b8%80%e4%ba%9b%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f" class="header-anchor"></a>一些全局变量
+</div><p>当外部账户或合约调用某个函数时，必须在交易的 calldata 开头放入这个 4 字节选择器，EVM 才知道要调用哪个函数。</p>
+<h2 id="一些全局变量"><a href="#%e4%b8%80%e4%ba%9b%e5%85%a8%e5%b1%80%e5%8f%98%e9%87%8f" class="header-anchor"></a>一些全局变量
 </h2><ul>
 <li>msg：一个内置的全局结构体（struct），由以太坊虚拟机（EVM）在每次外部调用时自动提供，无需声明或初始化，在任何函数中都可以直接访问，它包含了当前函数调用的上下文信息。</li>
 </ul>
