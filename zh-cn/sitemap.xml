@@ -3,36 +3,51 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/zh-cn/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/forge%E9%87%8D%E6%94%BE%E5%A4%B1%E8%B4%A5/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/foundry/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/foundry/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/solidity/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/solidity/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/web3/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/web3/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
+    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/foundry%E5%AE%89%E8%A3%85/</loc>
+    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/foundry%E5%88%86%E5%8F%89%E6%B5%8B%E8%AF%95/</loc>
     <lastmod>2026-02-07T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2026/02/solidity-study-notes-05/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/web3/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/web3/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
-    <lastmod>2026-02-07T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
     <lastmod>2026-02-07T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2026/02/solidity-study-notes-04/</loc>
