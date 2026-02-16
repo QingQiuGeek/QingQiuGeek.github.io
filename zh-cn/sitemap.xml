@@ -3,42 +3,60 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/zh-cn/</loc>
-    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/zh-cn/post/</loc>
-    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/post/2026/02/forge%E9%87%8D%E6%94%BE%E5%A4%B1%E8%B4%A5/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <loc>/zh-cn/categories/hardhat/</loc>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/categories/foundry/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <loc>/zh-cn/tags/hardhat/</loc>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
-    <loc>/zh-cn/tags/foundry/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <loc>/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/</loc>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/</loc>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/solidity/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/solidity/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/web3/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/web3/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
-    <lastmod>2026-02-14T12:00:00+00:00</lastmod>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
+    <lastmod>2026-02-16T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/categories/foundry/</loc>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/tags/foundry/</loc>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/foundry-gas%E8%BF%BD%E8%B8%AA/</loc>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/foundry-%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E4%B8%8D%E5%8F%98%E9%87%8F%E6%B5%8B%E8%AF%95%E5%B7%AE%E5%BC%82%E6%B5%8B%E8%AF%95/</loc>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/zkevm%E6%89%A9%E5%AE%B9%E6%96%B9%E6%A1%88/</loc>
+    <lastmod>2026-02-15T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/zh-cn/post/2026/02/foundry-forge%E9%87%8D%E6%94%BE%E5%A4%B1%E8%B4%A5/</loc>
     <lastmod>2026-02-14T12:00:00+00:00</lastmod>
   </url><url>
     <loc>/zh-cn/post/2026/02/foundry%E5%AE%89%E8%A3%85/</loc>
