@@ -2,17 +2,17 @@
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="环境 hardhat3.1.8、nodejs22.22、win11\n安装初始化 安装\nnpx hardhat &ndash;init\n有三种初始化方式，先选择了minimal Hardhat project，minimal只包含 Hardhat 核心功能，无测试框架：不预装 Mocha/Chai 或 Node Test Runner，无 Web3 库：不包含 Ethers.js、Viem 等\n">
-<title>hardhat笔记01</title>
+<title>hardhat安装、测试、部署</title>
 
-<link rel='canonical' href='/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/'>
+<link rel='canonical' href='/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
-<meta property='og:title' content="hardhat笔记01">
+<meta property='og:title' content="hardhat安装、测试、部署">
 <meta property='og:description' content="环境 hardhat3.1.8、nodejs22.22、win11\n安装初始化 安装\nnpx hardhat &ndash;init\n有三种初始化方式，先选择了minimal Hardhat project，minimal只包含 Hardhat 核心功能，无测试框架：不预装 Mocha/Chai 或 Node Test Runner，无 Web3 库：不包含 Ethers.js、Viem 等\n">
-<meta property='og:url' content='/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/'>
+<meta property='og:url' content='/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/'>
 <meta property='og:site_name' content='青秋博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Web3' /><meta property='article:tag' content='区块链' /><meta property='article:tag' content='Solidity' /><meta property='article:tag' content='Hardhat' /><meta property='article:published_time' content='2026-02-16T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-16T12:00:00&#43;00:00'/>
-<meta name="twitter:title" content="hardhat笔记01">
+<meta name="twitter:title" content="hardhat安装、测试、部署">
 <meta name="twitter:description" content="环境 hardhat3.1.8、nodejs22.22、win11\n安装初始化 安装\nnpx hardhat &ndash;init\n有三种初始化方式，先选择了minimal Hardhat project，minimal只包含 Hardhat 核心功能，无测试框架：不预装 Mocha/Chai 或 Node Test Runner，无 Web3 库：不包含 Ethers.js、Viem 等\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
@@ -749,7 +749,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/">hardhat笔记01</a>
+            <a href="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/">hardhat安装、测试、部署</a>
         </h2>
 
         
@@ -848,10 +848,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <blockquote>
 <p>npx hardhat &ndash;init</p></blockquote>
 <p>有三种初始化方式，先选择了minimal Hardhat project，minimal只包含 Hardhat 核心功能，无测试框架：不预装 Mocha/Chai 或 Node Test Runner，无 Web3 库：不包含 Ethers.js、Viem 等</p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image.png"
 	width="1488"
 	height="842"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image_hu_3346041d3953641a.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image_hu_c5fdec648b84874f.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image_hu_3346041d3953641a.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image_hu_c5fdec648b84874f.png 1024w"
 	loading="lazy"
 	
 	
@@ -861,10 +861,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>生成项目结构:</p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-1.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-1.png"
 	width="1137"
 	height="640"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-1_hu_7a7d43f428cfc0a8.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-1_hu_240b6076a654bbbc.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-1_hu_7a7d43f428cfc0a8.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-1_hu_240b6076a654bbbc.png 1024w"
 	loading="lazy"
 	
 	
@@ -877,10 +877,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </h2><ul>
 <li>
 <p>编译，编译后会生成artifacts目录</p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-2.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-2.png"
 	width="836"
 	height="414"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-2_hu_dbc8f01574466ceb.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-2_hu_cc2a6c43cc02d1f.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-2_hu_dbc8f01574466ceb.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-2_hu_cc2a6c43cc02d1f.png 1024w"
 	loading="lazy"
 	
 	
@@ -1038,10 +1038,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </h2><blockquote>
 <p>npx hardhat test solidity &ndash;coverage</p></blockquote>
 <p>执行后生成coverage目录</p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-5.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-5.png"
 	width="347"
 	height="923"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-5_hu_55d2519fd57fc758.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-5_hu_e23f58fa657b135f.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-5_hu_55d2519fd57fc758.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-5_hu_e23f58fa657b135f.png 1024w"
 	loading="lazy"
 	
 	
@@ -1051,10 +1051,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>打开html</p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-3.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-3.png"
 	width="2337"
 	height="683"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-3_hu_bdcc76eb9cc206ba.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-3_hu_8689f73efb9ebce7.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-3_hu_bdcc76eb9cc206ba.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-3_hu_8689f73efb9ebce7.png 1024w"
 	loading="lazy"
 	
 	
@@ -1064,10 +1064,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>终端输出
-<img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-4.png"
+<img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-4.png"
 	width="2277"
 	height="872"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-4_hu_596b79bdf64d9e2f.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-4_hu_cd9acc380780c236.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-4_hu_596b79bdf64d9e2f.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-4_hu_cd9acc380780c236.png 1024w"
 	loading="lazy"
 	
 	
@@ -1113,10 +1113,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </div><p>部署到默认网络（通常是 hardhat），可以在hardhat.config.ts 中 defaultNetwork 指定的网络</p>
 <blockquote>
 <p>npx hardhat ignition deploy ignition/modules/Counter.ts</p></blockquote>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-6.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-6.png"
 	width="1430"
 	height="671"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-6_hu_3a56c0b6a1c2982d.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-6_hu_7c95d64353f2c106.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-6_hu_3a56c0b6a1c2982d.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-6_hu_7c95d64353f2c106.png 1024w"
 	loading="lazy"
 	
 	
@@ -1134,10 +1134,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>配置hardhat.config.ts后部署到sepolia网络</p>
 <blockquote>
 <p>npx hardhat ignition deploy ignition/modules/Counter.ts &ndash;network sepolia</p></blockquote>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-8.png"
 	width="2084"
 	height="1342"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8_hu_d967b5114de2738e.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8_hu_ab8c14a73ce94ec7.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-8_hu_d967b5114de2738e.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-8_hu_ab8c14a73ce94ec7.png 1024w"
 	loading="lazy"
 	
 	
@@ -1149,10 +1149,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>测试网查看部署的合约：</p>
 <p><a class="link" href="https://sepolia.etherscan.io/"  target="_blank" rel="noopener"
     >sepolia.etherscan</a></p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-10.png"
 	width="2867"
 	height="1209"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10_hu_7173b6f19b6481ed.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10_hu_ea69019d6f3dba5c.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-10_hu_7173b6f19b6481ed.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-10_hu_ea69019d6f3dba5c.png 1024w"
 	loading="lazy"
 	
 	
@@ -1186,10 +1186,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </div><p>修改配置，将私钥添加到加密密钥库（keystore），不直接配置在文件中（有泄露风险），添加时，前两个密码是用来加密私钥的。以后每次部署，你只需要输入这个简短的密码，而不需要接触那串长长的私钥。第三个才是私钥：</p>
 <blockquote>
 <p>npx hardhat keystore set SEPOLIA_PRIVATE_KEY</p></blockquote>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-12.png"
 	width="1986"
 	height="382"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12_hu_9de8eb76def93564.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12_hu_e3dd5e9d445bad0a.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-12_hu_9de8eb76def93564.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-12_hu_e3dd5e9d445bad0a.png 1024w"
 	loading="lazy"
 	
 	
@@ -1199,10 +1199,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>修改配置后再次部署：</p>
-<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11.png"
+<p><img src="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-11.png"
 	width="1962"
 	height="290"
-	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11_hu_7829012e255d2fe2.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11_hu_531c50868176d407.png 1024w"
+	srcset="/zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-11_hu_7829012e255d2fe2.png 480w, /zh-cn/post/2026/02/hardhat%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95%E9%83%A8%E7%BD%B2/image-11_hu_531c50868176d407.png 1024w"
 	loading="lazy"
 	
 	
