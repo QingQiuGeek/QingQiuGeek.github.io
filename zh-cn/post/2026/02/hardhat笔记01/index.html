@@ -728,6 +728,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     <li><a href="#nodejs覆盖测试">nodejs覆盖测试</a></li>
     <li><a href="#全部覆盖测试">全部覆盖测试</a></li>
     <li><a href="#部署">部署</a></li>
+    <li><a href="#验证合约">验证合约</a></li>
   </ol>
 </nav>
         </div>
@@ -1130,6 +1131,108 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>npx hardhat node</p></blockquote>
 <blockquote>
 <p>npx hardhat ignition deploy ignition/modules/Counter.ts &ndash;network localhost</p></blockquote>
+<p>配置hardhat.config.ts后部署到sepolia网络</p>
+<blockquote>
+<p>npx hardhat ignition deploy ignition/modules/Counter.ts &ndash;network sepolia</p></blockquote>
+<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8.png"
+	width="2084"
+	height="1342"
+	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8_hu_d967b5114de2738e.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8_hu_ab8c14a73ce94ec7.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="372px"
+	
+></p>
+<p>测试网查看部署的合约：</p>
+<p><a class="link" href="https://sepolia.etherscan.io/"  target="_blank" rel="noopener"
+    >sepolia.etherscan</a></p>
+<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10.png"
+	width="2867"
+	height="1209"
+	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10_hu_7173b6f19b6481ed.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10_hu_ea69019d6f3dba5c.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="237"
+		data-flex-basis="569px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sepolia: {
+</span></span><span class="line"><span class="cl">			type: &#39;http&#39;,
+</span></span><span class="line"><span class="cl">			url: &#39;https://ethereum-sepolia-rpc.publicnode.com&#39;,
+</span></span><span class="line"><span class="cl">			// 或 https://sepolia.infura.io
+</span></span><span class="line"><span class="cl">			// configVariable(&#39;SEPOLIA_RPC_URL&#39;),
+</span></span><span class="line"><span class="cl">			//钱包导出的私钥
+</span></span><span class="line"><span class="cl">			accounts: [configVariable(&#39;SEPOLIA_PRIVATE_KEY&#39;)],
+</span></span><span class="line"><span class="cl">		},
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>修改配置，将私钥添加到加密密钥库（keystore），不直接配置在文件中（有泄露风险），添加时，前两个密码是用来加密私钥的。以后每次部署，你只需要输入这个简短的密码，而不需要接触那串长长的私钥。第三个才是私钥：</p>
+<blockquote>
+<p>npx hardhat keystore set SEPOLIA_PRIVATE_KEY</p></blockquote>
+<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12.png"
+	width="1986"
+	height="382"
+	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12_hu_9de8eb76def93564.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12_hu_e3dd5e9d445bad0a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="519"
+		data-flex-basis="1247px"
+	
+></p>
+<p>修改配置后再次部署：</p>
+<p><img src="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11.png"
+	width="1962"
+	height="290"
+	srcset="/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11_hu_7829012e255d2fe2.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11_hu_531c50868176d407.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="676"
+		data-flex-basis="1623px"
+	
+></p>
+<h2 id="验证合约"><a href="#%e9%aa%8c%e8%af%81%e5%90%88%e7%ba%a6" class="header-anchor"></a>验证合约
+</h2><p>配置ETHERSCAN_API_KEY</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">verify: {
+</span></span><span class="line"><span class="cl">    etherscan: {
+</span></span><span class="line"><span class="cl">      apiKey: configVariable(&#34;ETHERSCAN_API_KEY&#34;),
+</span></span><span class="line"><span class="cl">    },
+</span></span><span class="line"><span class="cl">  },
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>npx hardhat keystore set ETHERSCAN_API_KEY</p></blockquote>
+<blockquote>
+<p>npx hardhat ignition deploy ignition/modules/Counter.ts &ndash;network sepolia &ndash;verify</p></blockquote>
 
 </section>
 

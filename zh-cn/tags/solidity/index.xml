@@ -303,6 +303,108 @@
 &lt;p&gt;npx hardhat node&lt;/p&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;npx hardhat ignition deploy ignition/modules/Counter.ts &amp;ndash;network localhost&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;配置hardhat.config.ts后部署到sepolia网络&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npx hardhat ignition deploy ignition/modules/Counter.ts &amp;ndash;network sepolia&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8.png&#34;
+	width=&#34;2084&#34;
+	height=&#34;1342&#34;
+	srcset=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8_hu_d967b5114de2738e.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-8_hu_ab8c14a73ce94ec7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;155&#34;
+		data-flex-basis=&#34;372px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;测试网查看部署的合约：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://sepolia.etherscan.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;sepolia.etherscan&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10.png&#34;
+	width=&#34;2867&#34;
+	height=&#34;1209&#34;
+	srcset=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10_hu_7173b6f19b6481ed.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-10_hu_ea69019d6f3dba5c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;237&#34;
+		data-flex-basis=&#34;569px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sepolia: {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			type: &amp;#39;http&amp;#39;,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			url: &amp;#39;https://ethereum-sepolia-rpc.publicnode.com&amp;#39;,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			// 或 https://sepolia.infura.io
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			// configVariable(&amp;#39;SEPOLIA_RPC_URL&amp;#39;),
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			//钱包导出的私钥
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;			accounts: [configVariable(&amp;#39;SEPOLIA_PRIVATE_KEY&amp;#39;)],
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		},
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;修改配置，将私钥添加到加密密钥库（keystore），不直接配置在文件中（有泄露风险），添加时，前两个密码是用来加密私钥的。以后每次部署，你只需要输入这个简短的密码，而不需要接触那串长长的私钥。第三个才是私钥：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npx hardhat keystore set SEPOLIA_PRIVATE_KEY&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12.png&#34;
+	width=&#34;1986&#34;
+	height=&#34;382&#34;
+	srcset=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12_hu_9de8eb76def93564.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-12_hu_e3dd5e9d445bad0a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;519&#34;
+		data-flex-basis=&#34;1247px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;修改配置后再次部署：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11.png&#34;
+	width=&#34;1962&#34;
+	height=&#34;290&#34;
+	srcset=&#34;/zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11_hu_7829012e255d2fe2.png 480w, /zh-cn/post/2026/02/hardhat%E7%AC%94%E8%AE%B001/image-11_hu_531c50868176d407.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;676&#34;
+		data-flex-basis=&#34;1623px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;验证合约&#34;&gt;&lt;a href=&#34;#%e9%aa%8c%e8%af%81%e5%90%88%e7%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;验证合约
+&lt;/h2&gt;&lt;p&gt;配置ETHERSCAN_API_KEY&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;verify: {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    etherscan: {
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      apiKey: configVariable(&amp;#34;ETHERSCAN_API_KEY&amp;#34;),
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    },
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  },
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;npx hardhat keystore set ETHERSCAN_API_KEY&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npx hardhat ignition deploy ignition/modules/Counter.ts &amp;ndash;network sepolia &amp;ndash;verify&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
