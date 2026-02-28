@@ -7,7 +7,31 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sun, 01 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/ai/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 26 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/ai/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>reactAgent和graphAgent</title>
+        <link>/zh-cn/post/2026/02/reactagent%E5%92%8Cgraphagent/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/reactagent%E5%92%8Cgraphagent/</guid>
+        <description>&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/reactagent%E5%92%8Cgraphagent/image.png&#34;
+	width=&#34;1438&#34;
+	height=&#34;662&#34;
+	srcset=&#34;/zh-cn/post/2026/02/reactagent%E5%92%8Cgraphagent/image_hu_32b15758dd3b509c.png 480w, /zh-cn/post/2026/02/reactagent%E5%92%8Cgraphagent/image_hu_3f8e878e9a3a5774.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;217&#34;
+		data-flex-basis=&#34;521px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;ReAct和Graph区别本质上是在选择**“AI 说了算”还是“规则说了算”**。&lt;/p&gt;
+&lt;p&gt;ReAct 就像是一个经验丰富的自由职业者，灵活性极高，不需要预设成千上万种逻辑分支，LLM 会&lt;strong&gt;利用自身的推理能力（Reasoning）实时规划路径。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Graph 就像是一个高度标准化的工厂流水线，每一个节点都有明确的任务，且流转逻辑受到严格监控。具有安全性、确定性、可观测性。&lt;/p&gt;
+&lt;p&gt;ReAct和Graph两者并不冲突，可以融合，比如在Graph模式中，虽然Graph整体的流程是确定的，但是其中某个节点可能就需要使用ReAct模式灵活自由的处理任务。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Moltbook-Agent自己的贴吧、脸书</title>
         <link>/zh-cn/post/2026/02/moltbook-agent%E8%87%AA%E5%B7%B1%E7%9A%84%E8%B4%B4%E5%90%A7%E8%84%B8%E4%B9%A6/</link>
         <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>

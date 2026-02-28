@@ -7,18 +7,26 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sun, 22 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>GoLang</title>
-        <link>/zh-cn/categories/golang/</link>
-        <pubDate>Sun, 22 Feb 2026 12:00:00 +0000</pubDate>
+        <lastBuildDate>Thu, 26 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Agent</title>
+        <link>/zh-cn/categories/agent/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/categories/golang/</guid>
+        <guid>/zh-cn/categories/agent/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>AI</title>
+        <link>/zh-cn/categories/ai/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/ai/</guid>
         <description></description>
         </item>
         <item>
         <title>Web3</title>
         <link>/zh-cn/categories/web3/</link>
-        <pubDate>Sat, 21 Feb 2026 12:00:00 +0000</pubDate>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/categories/web3/</guid>
         <description></description>
@@ -26,9 +34,25 @@
         <item>
         <title>区块链</title>
         <link>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</link>
-        <pubDate>Sat, 21 Feb 2026 12:00:00 +0000</pubDate>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>GoLang</title>
+        <link>/zh-cn/categories/golang/</link>
+        <pubDate>Mon, 23 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/golang/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Web4</title>
+        <link>/zh-cn/categories/web4/</link>
+        <pubDate>Sat, 21 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/web4/</guid>
         <description></description>
         </item>
         <item>
@@ -61,22 +85,6 @@
         <pubDate>Tue, 03 Feb 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/categories/%E7%90%86%E8%B4%A2/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Agent</title>
-        <link>/zh-cn/categories/agent/</link>
-        <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/agent/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>AI</title>
-        <link>/zh-cn/categories/ai/</link>
-        <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/ai/</guid>
         <description></description>
         </item>
         <item>

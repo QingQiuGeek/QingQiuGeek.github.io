@@ -7,7 +7,699 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 21 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 26 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Polymarket架构</title>
+        <link>/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/ogalias/OGBC-Intern-Project/blob/master/stage1/stage1.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;polymarket-的核心数据模型&#34;&gt;&lt;a href=&#34;#polymarket-%e7%9a%84%e6%a0%b8%e5%bf%83%e6%95%b0%e6%8d%ae%e6%a8%a1%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Polymarket 的核心数据模型
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;数据模型：事件 (Event)、市场 (Market)、条件 (Condition)、集合 (Collection)、头寸 (Position 或 TokenId)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在 Polymarket 中，事件代表一个预测主题，例如&amp;quot;某次美联储利率决议&amp;quot;。一个事件下可以包含一个或多个市场。每个市场对应该事件下的一个具体预测问题。例如，对于事件&amp;quot;2024年美国大选&amp;quot;可以有多个市场：&amp;ldquo;候选人 A 当选总统？&amp;quot;、&amp;ldquo;候选人 B 当选总统？&amp;ldquo;等，每个市场通常是一个二元预测（Yes/No）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Market（市场）&lt;/p&gt;
+&lt;p&gt;对应具体的 Yes/No 问题，是交易发生的基本单位。一些事件只有一个市场（例如简单的二元事件），而有些事件包含多个市场形成一个多结果事件，此时通常采用 Polymarket 的&amp;quot;负风险 (NegativeRisk)&amp;ldquo;机制来提高资金效率。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;NegativeRisk（负风险）&lt;/p&gt;
+&lt;p&gt;当一个事件包含多个互斥市场（即&amp;quot;赢家通吃&amp;quot;的多选一事件）时，Polymarket 引入 NegRiskAdapter 合约，将这些市场关联起来，提高流动性利用率。具体来说，&lt;strong&gt;在同一事件下，一个市场的 NO 头寸可以转换为该事件中所有其他市场的 YES 头寸&lt;/strong&gt;。NegRiskAdapter 合约提供了 convert 功能，实现 NO → YES 的头寸转换。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;🎯 场景设定：2024 美国总统大选
+假设只有两个主要候选人：&lt;/p&gt;
+&lt;p&gt;市场 A：特朗普获胜，市场 B：哈里斯获胜。这是一个互斥事件，只有一方获胜。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;❌ 没有 NegRiskAdapter 时：&lt;/p&gt;
+&lt;p&gt;1.用户小明 认为“特朗普不会赢”，去市场 A 买入 NO (特朗普输)。&lt;/p&gt;
+&lt;p&gt;成本：假设 NO 价格是 $0.60。小明花 $60 买了 100 股 NO。&lt;/p&gt;
+&lt;p&gt;结果：如果特朗普输了（哈里斯赢），小明赚 $40。&lt;/p&gt;
+&lt;p&gt;2.用户小红 认为“哈里斯会赢”。去市场 B 买入 YES (哈里斯赢)。&lt;/p&gt;
+&lt;p&gt;成本：假设 YES 价格是 $0.55。小红花 $55 买了 100 股 YES。&lt;/p&gt;
+&lt;p&gt;结果：如果哈里斯赢了，小红赚 $45。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;虽然小明的观点（特朗普输）和小红的观点（哈里斯赢）在逻辑上是完全等价的，&lt;strong&gt;但他们的资金被锁在两个不同的市场池子里&lt;/strong&gt;，最后获利也不一样。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;✅ 引入 NegRiskAdapter 后：&lt;/p&gt;
+&lt;p&gt;Polymarket 将这两个市场通过 NegRiskAdapter 合约关联起来，形成一个事件组合。核心逻辑公式：在互斥事件中持有“市场 A 的 NO” = 持有“除了 A 以外所有结果的 YES”，即：NO(特朗普) ≡ YES(哈里斯)，此时交易如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/image.png&#34;
+	width=&#34;1886&#34;
+	height=&#34;931&#34;
+	srcset=&#34;/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/image_hu_f4b20bcb37d105bf.png 480w, /zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/image_hu_7dbf23e062bd86c6.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;202&#34;
+		data-flex-basis=&#34;486px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/image-1.png&#34;
+	width=&#34;1838&#34;
+	height=&#34;496&#34;
+	srcset=&#34;/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/image-1_hu_6d3011503be7679.png 480w, /zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/image-1_hu_cb085c5a13fab9d2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;370&#34;
+		data-flex-basis=&#34;889px&#34;
+	
+&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;NegRiskAdapter机制优势：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;流动性合并
+通过转换机制，同一事件所有市场的 NO 流动性都可以瞬间变成任意其他市场的 YES 流动性，让不同候选人市场里的资金形成了一个巨大的共享资金池。&lt;strong&gt;大户想进出大单，不会因为某个单一市场深度不够而滑点巨大。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;资本效率
+做市商不需要为每个结果都单独准备资金，可以只在一个市场（比如最热门的那个）提供 NO 流动性，然后通过 convert 自动满足其他市场 YES 的买单需求。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;无摩擦套利
+如果市场价格出现偏差，例如：Price(NO_Trump) = $0.60，Price(YES_Harris) = $0.70，套利者可以瞬间买入 NO_Trump，通过 Adapter 转换成 YES_Harris，然后卖出！&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Polymarket 使用 Gnosis 开发的条件代币框架 (Conditional Token Framework, CTF) 来实现预测市场的头寸代币化。&lt;/p&gt;
+&lt;h3 id=&#34;condition条件&#34;&gt;&lt;a href=&#34;#condition%e6%9d%a1%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Condition（条件）
+&lt;/h3&gt;&lt;p&gt;每个市场在链上的&amp;quot;登记身份&amp;rdquo;。创建市场时，会调用 CTF 合约的 prepareCondition 方法注册一个条件。ConditionId 是通过keccak256计算得出的&lt;strong&gt;唯一标识&lt;/strong&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-solidity&#34; data-lang=&#34;solidity&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;oracle 是预言机合约地址（Polymarket 目前使用 UMA Optimistic Oracle 作为预言机）。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;questionId 是问题的标识符（通常由问题内容等信息哈希得到，或 UMA Oracle 的 ancillary data 哈希）。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;outcomeSlotCount 是结果选项数量。对于二元市场，值为 2。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; *
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;conditionId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;keccak256&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;oracle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;questionId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;outcomeSlotCount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;position头寸&#34;&gt;&lt;a href=&#34;#position%e5%a4%b4%e5%af%b8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Position（头寸）
+&lt;/h3&gt;&lt;p&gt;头寸指用户持有的某市场某结果的份额。Polymarket 将每个头寸实现为一个 ERC-1155 标准的可交易代币（又称 PositionId 或 TokenId）。每种结果对应一个不同的 TokenId，用于区分 YES 和 NO 两种头寸。&lt;/p&gt;
+&lt;h3 id=&#34;collectionid集合-id&#34;&gt;&lt;a href=&#34;#collectionid%e9%9b%86%e5%90%88-id&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CollectionId（集合 ID）
+&lt;/h3&gt;&lt;p&gt;在条件代币框架中，中间引入了集合的概念，用于表示特定条件下某个结果集合。计算方法为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-solidity&#34; data-lang=&#34;solidity&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;parentCollectionId 对于独立的条件通常为 bytes32(0)（Polymarket 所有市场都是独立条件，没有嵌套条件，因此 parentCollectionId 一律为 0）。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;indexSet 是一个二进制位掩码，表示选取哪些结果槽位。对于二元市场，有两个可能的 indexSet：
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;YES 头寸的 indexSet = 1 (0b01，表示选取第一个结果槽)。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt;NO 头寸的 indexSet = 2 (0b10，表示选取第二个结果槽)。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; *
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cm&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;collectionId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;keccak256&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;parentCollectionId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;conditionId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;indexSet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;tokenidpositionid&#34;&gt;&lt;a href=&#34;#tokenidpositionid&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;TokenId（PositionId）
+&lt;/h3&gt;&lt;p&gt;最后，用抵押品代币地址和集合 ID 一起计算得到 ERC-1155 的 Token ID：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-solidity&#34; data-lang=&#34;solidity&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;tokenId&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;keccak256&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collateralToken&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;collectionId&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在 Polymarket 中，对于每个市场，会产生两个 TokenId，一个对应 YES 份额，一个对应 NO 份额。这两个 TokenId 是在该市场上交易的标的资产，代表了对同一预测问题的两种相反结果的头寸。&lt;/p&gt;
+&lt;h3 id=&#34;collateral抵押品&#34;&gt;&lt;a href=&#34;#collateral%e6%8a%b5%e6%8a%bc%e5%93%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Collateral（抵押品）
+&lt;/h3&gt;&lt;p&gt;Polymarket 市场的押注资金均以稳定币 USDC (Polygon 上为 USDC.e) 作为抵押品。&lt;strong&gt;每份 Outcome Token 背后对应 1 USDC 的抵押&lt;/strong&gt;，当市场结算时兑现。&lt;/p&gt;
+&lt;p&gt;价格含义：比如价格 0.60 USDC 意味着花 0.60 USDC 可购买该市场 1 份 YES 代币。如果该结果最终发生，持有者可赎回 1 USDC（获得净盈利 0.40 USDC）；如果未发生，则该代币价值归零，损失全部本金 0.60 USDC。因此，二元期权代币价格可以理解为市场对该事件发生概率的定价。&lt;/p&gt;
+&lt;h2 id=&#34;polymarket-链上日志在市场创建--交易--结算全过程中的作用&#34;&gt;&lt;a href=&#34;#polymarket-%e9%93%be%e4%b8%8a%e6%97%a5%e5%bf%97%e5%9c%a8%e5%b8%82%e5%9c%ba%e5%88%9b%e5%bb%ba--%e4%ba%a4%e6%98%93--%e7%bb%93%e7%ae%97%e5%85%a8%e8%bf%87%e7%a8%8b%e4%b8%ad%e7%9a%84%e4%bd%9c%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Polymarket 链上日志在&amp;quot;市场创建 → 交易 → 结算&amp;quot;全过程中的作用
+&lt;/h2&gt;&lt;h2 id=&#34;链上日志解析&#34;&gt;&lt;a href=&#34;#%e9%93%be%e4%b8%8a%e6%97%a5%e5%bf%97%e8%a7%a3%e6%9e%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;链上日志解析
+&lt;/h2&gt;</description>
+        </item>
+        <item>
+        <title>remix开发线上留言板</title>
+        <link>/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://web3intern.xyz/zh/smart-contract-development/#%E4%BA%94%E3%80%81%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;留言板项目&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ENVIRONMENT选择浏览器钱包，这样可以链接metamask，然后就可以用sepolia测试网部署合约了：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image.png&#34;
+	width=&#34;2879&#34;
+	height=&#34;1429&#34;
+	srcset=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image_hu_94419f12b6f5a9d9.png 480w, /zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image_hu_1d435e23bf154fdf.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;201&#34;
+		data-flex-basis=&#34;483px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;部署结果：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-3.png&#34;
+	width=&#34;2107&#34;
+	height=&#34;477&#34;
+	srcset=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-3_hu_51c77b60bcda7881.png 480w, /zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-3_hu_64fb9c5c66af68e3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;441&#34;
+		data-flex-basis=&#34;1060px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;部署在测试网，可以用合约地址在etherscan查询到：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-2.png&#34;
+	width=&#34;2656&#34;
+	height=&#34;839&#34;
+	srcset=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-2_hu_23836fc7bef6fa92.png 480w, /zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-2_hu_647bbb2e60330b59.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;316&#34;
+		data-flex-basis=&#34;759px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;etherscan是以太网的浏览器，只能查询以太坊的交易吗&lt;/p&gt;
+&lt;p&gt;还可以用&lt;a class=&#34;link&#34; href=&#34;https://repo.sourcify.dev&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;sourcify验证&lt;/a&gt;验证
+&lt;a class=&#34;link&#34; href=&#34;https://repo.sourcify.dev/11155111/0xA786B674Db19308E6827cB8b92554Bea5a81F211/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://repo.sourcify.dev/11155111/0xA786B674Db19308E6827cB8b92554Bea5a81F211/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-4.png&#34;
+	width=&#34;2099&#34;
+	height=&#34;1361&#34;
+	srcset=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-4_hu_a42f294966f3870b.png 480w, /zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-4_hu_da6f1c21000aaafb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;154&#34;
+		data-flex-basis=&#34;370px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;testnet.routescan.io&#34; &gt;routescan测试网&lt;/a&gt;也可以查询部署的合约
+&lt;a class=&#34;link&#34; href=&#34;https://testnet.routescan.io/address/0xA786B674Db19308E6827cB8b92554Bea5a81F211/contract/11155111/code&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://testnet.routescan.io/address/0xA786B674Db19308E6827cB8b92554Bea5a81F211/contract/11155111/code&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-5.png&#34;
+	width=&#34;2871&#34;
+	height=&#34;1343&#34;
+	srcset=&#34;/zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-5_hu_3ee0fd105552934b.png 480w, /zh-cn/post/2026/02/remix%E5%BC%80%E5%8F%91%E7%BA%BF%E4%B8%8A%E7%95%99%E8%A8%80%E6%9D%BF/image-5_hu_eb66a39be7ba7293.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;213&#34;
+		data-flex-basis=&#34;513px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>VirtualsProtocol和A2A</title>
+        <link>/zh-cn/post/2026/02/virtualsprotocol%E5%92%8Ca2a/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/virtualsprotocol%E5%92%8Ca2a/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.techflowpost.com/zh-CN/article/21947&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;techflowpost&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.datawallet.com/zh/%E9%9A%90%E8%94%BD%E6%80%A7/what-is-virtuals-protocol&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;datawallet&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.odaily.news/zh-CN/post/5205010&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;odaily&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.gate.com/zh/learn/articles/what-is-virtuals-protocol-all-you-need-to-know-about-virtual/4755&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;gate&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Virtuals Protocol 是一个 经济层/资产层协议（在区块链上），专注于 AI 代理的发行、所有权确权和交易。它解决的是“AI 代理作为数字资产，如何被创建、拥有和买卖”的问题，让它成为可交易的资产。&lt;/p&gt;
+&lt;p&gt;A2A Protocol 是一个 通信层/技术层协议（在互联网/软件架构上），专注于 AI 代理之间的互操作性与协作。它解决的是“不同公司开发的 AI 代理，如何互相说话、分工合作完成任务”的问题。&lt;/p&gt;
+&lt;p&gt;举例：&lt;/p&gt;
+&lt;p&gt;你在 Virtuals Protocol 上购买了一个 “旅行规划师 AI” 的代币，成为了它的股东。当这个“旅行规划师 AI”给别人提供服务时，通过 A2A Protocol 自动联系了：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;一个由 Expedia 运营的 “机票预订代理”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个由万豪酒店运营的 “住宿代理”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一个由 Visa 运营的 “支付代理”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;它们通过 A2A 协商好了价格和行程，完成了旅行预订。“旅行规划师 AI”从中赚取了服务费。这笔服务费通过 Virtuals Protocol 的智能合约，自动分红给了作为股东的你。&lt;/p&gt;
+&lt;p&gt;在这个闭环中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Virtuals 负责 钱和权（谁拥有它，谁分钱）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A2A 负责 事和工（它怎么干活，怎么和别人合作）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>构建ERC8004Agent</title>
+        <link>/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/</link>
+        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.8004.org/build&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;erc-8004-agent&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.npmjs.com/package/create-8004-agent&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;npm create-8004-agent&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npx create-8004-agent&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;构建支持ETH Sepolia网络的agent：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-2.png&#34;
+	width=&#34;1860&#34;
+	height=&#34;1023&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-2_hu_565a819da8e351a6.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-2_hu_8fae18c2badf44d7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;181&#34;
+		data-flex-basis=&#34;436px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;构建成功：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-3.png&#34;
+	width=&#34;1304&#34;
+	height=&#34;1308&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-3_hu_352e6614e6a7202c.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-3_hu_3b48c21b91eb75f0.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;99&#34;
+		data-flex-basis=&#34;239px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;mint的agent实际就是一个NFT，有tokenID&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-7.png&#34;
+	width=&#34;2364&#34;
+	height=&#34;1240&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-7_hu_8952380cdcfc70c0.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-7_hu_87f0541d56a6d906.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;190&#34;
+		data-flex-basis=&#34;457px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-6.png&#34;
+	width=&#34;2880&#34;
+	height=&#34;1376&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-6_hu_fe46dd9c5df60032.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-6_hu_40baae0a0bb608b1.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注册，这样agent就能被发现了
+npm run register&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-8.png&#34;
+	width=&#34;2508&#34;
+	height=&#34;868&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-8_hu_8ecc55634f23be8b.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-8_hu_f2ffbaec9fc4335f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;288&#34;
+		data-flex-basis=&#34;693px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npm run start:a2a&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-10.png&#34;
+	width=&#34;1302&#34;
+	height=&#34;336&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-10_hu_807d15f3b1038204.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-10_hu_dbfb747366886a67.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;387&#34;
+		data-flex-basis=&#34;930px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npm run a2a:discover&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-9.png&#34;
+	width=&#34;1512&#34;
+	height=&#34;768&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-9_hu_a40feddfffed2389.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-9_hu_449c17f0408dc9d.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;196&#34;
+		data-flex-basis=&#34;472px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npm run a2a:chat&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-11.png&#34;
+	width=&#34;1434&#34;
+	height=&#34;740&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-11_hu_6d0c00b07374540c.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-11_hu_6cb8459a3ef55443.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;pinata上已经上传了agent的元数据，因为注册了两次，一次是active:false，另一次是active:true，相当于mint了两次，生成了两个tokenID，也就是agentID&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-12.png&#34;
+	width=&#34;2880&#34;
+	height=&#34;1376&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-12_hu_6cde5e29f510dfd4.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-12_hu_6980615c36881805.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-13.png&#34;
+	width=&#34;1476&#34;
+	height=&#34;1000&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-13_hu_fdb80f1a52a794b1.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-13_hu_5b650f94efe6499f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;147&#34;
+		data-flex-basis=&#34;354px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-14.png&#34;
+	width=&#34;1368&#34;
+	height=&#34;976&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-14_hu_eb669fd9c9bed5b6.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-14_hu_b8bb37bf4520b852.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;140&#34;
+		data-flex-basis=&#34;336px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在8004网络找自己的agent，经测试似乎探测到agent是由延迟的，注册后不会立刻被发现。我在这里找到的：&lt;a class=&#34;link&#34; href=&#34;https://8004agents.ai/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;8004agents&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-16.png&#34;
+	width=&#34;1972&#34;
+	height=&#34;799&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-16_hu_d3507a83024ea53.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-16_hu_6b1447a3671c1d4f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;246&#34;
+		data-flex-basis=&#34;592px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这个就比较慢一点，找不到&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://testnet.8004scan.io/agents&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;testnet.8004scan&lt;/a&gt;
+&lt;img src=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-15.png&#34;
+	width=&#34;2880&#34;
+	height=&#34;1376&#34;
+	srcset=&#34;/zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-15_hu_34a402eb6e61f663.png 480w, /zh-cn/post/2026/02/%E6%9E%84%E5%BB%BAerc8004agent/image-15_hu_68ffa970be9acc06.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Web3还没整明白，Web4就要来了</title>
+        <link>/zh-cn/post/2026/02/web3%E8%BF%98%E6%B2%A1%E6%95%B4%E6%98%8E%E7%99%BDweb4%E5%B0%B1%E8%A6%81%E6%9D%A5%E4%BA%86/</link>
+        <pubDate>Sat, 21 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/web3%E8%BF%98%E6%B2%A1%E6%95%B4%E6%98%8E%E7%99%BDweb4%E5%B0%B1%E8%A6%81%E6%9D%A5%E4%BA%86/</guid>
+        <description>&lt;h1 id=&#34;web4-调研报告短篇&#34;&gt;&lt;a href=&#34;#web4-%e8%b0%83%e7%a0%94%e6%8a%a5%e5%91%8a%e7%9f%ad%e7%af%87&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Web4 调研报告（短篇）
+&lt;/h1&gt;&lt;h2 id=&#34;一概念与背景&#34;&gt;&lt;a href=&#34;#%e4%b8%80%e6%a6%82%e5%bf%b5%e4%b8%8e%e8%83%8c%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;一、概念与背景
+&lt;/h2&gt;&lt;p&gt;近年来，“Web4（或 Web 4.0）”在技术圈和投资圈迅速走红，但目前尚无完全统一的官方定义。综合多方资料，可以归纳出相对共识：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Web1&lt;/strong&gt;：只读的静态网页时代&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Web2&lt;/strong&gt;：社交 + 移动互联网，用户生成内容&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Web3&lt;/strong&gt;：在 Web2 之上加入“所有权”和“去中心化”（区块链、加密资产、DAO 等）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Web4&lt;/strong&gt;：在 Web3 的基础上，引入&lt;strong&gt;自主 AI 智能体（AI agents）&lt;/strong&gt;，形成一个由智能体主导的、智能化、主动式的“&lt;strong&gt;智能/共生互联网（Intelligent Web / Symbiotic Web / Agentic Web）&lt;/strong&gt;”[1][2][3]。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一句话概括：&lt;br&gt;
+&lt;strong&gt;Web3 让资产上链、关系去中心；Web4 让 AI 智能体走上前台，代表人类做决策和行动。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;中文语境下，也常把 Web4 描述为“人工智能嵌入每个角落、能预测、规划和行动的第四代互联网”，即从“人操作的网”走向“智能体执行、人类决策的网”[4][5]。&lt;/p&gt;
+&lt;h2 id=&#34;二核心特征与技术构成&#34;&gt;&lt;a href=&#34;#%e4%ba%8c%e6%a0%b8%e5%bf%83%e7%89%b9%e5%be%81%e4%b8%8e%e6%8a%80%e6%9c%af%e6%9e%84%e6%88%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;二、核心特征与技术构成
+&lt;/h2&gt;&lt;h3 id=&#34;1-agent-主导从人驱动到智能体驱动&#34;&gt;&lt;a href=&#34;#1-agent-%e4%b8%bb%e5%af%bc%e4%bb%8e%e4%ba%ba%e9%a9%b1%e5%8a%a8%e5%88%b0%e6%99%ba%e8%83%bd%e4%bd%93%e9%a9%b1%e5%8a%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1. Agent 主导：从人驱动到智能体驱动
+&lt;/h3&gt;&lt;p&gt;Web4 的最核心变化，是&lt;strong&gt;主体从人转向 AI 智能体&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;智能体不再只是对话机器人，而是：
+&lt;ul&gt;
+&lt;li&gt;能感知环境、规划任务、调用工具、发起交易、执行工作流的&lt;strong&gt;自主软件实体&lt;/strong&gt;[2][3][6]；&lt;/li&gt;
+&lt;li&gt;拥有持续的&lt;strong&gt;记忆&lt;/strong&gt;和&lt;strong&gt;偏好建模&lt;/strong&gt;，长期代表某个用户或组织行动；&lt;/li&gt;
+&lt;li&gt;可以和其它智能体进行协商、竞价、合作，形成“机器经济（machine economy）”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在很多 Web4 讨论中，都出现类似表述：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“互联网的主角不再是人，而是数以亿计的 AI 智能体；人类从操作者变成监督和决策者。”[5][6]&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h3 id=&#34;2-智能-web从被动响应到主动服务&#34;&gt;&lt;a href=&#34;#2-%e6%99%ba%e8%83%bd-web%e4%bb%8e%e8%a2%ab%e5%8a%a8%e5%93%8d%e5%ba%94%e5%88%b0%e4%b8%bb%e5%8a%a8%e6%9c%8d%e5%8a%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. 智能 Web：从被动响应到主动服务
+&lt;/h3&gt;&lt;p&gt;Web4 经常被称为“智能 Web”或“共生 Web”[1][2][3]，意味着：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;从“你问我答”到“未雨绸缪”&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;Web2/3：用户发起搜索、点击、交易；&lt;/li&gt;
+&lt;li&gt;Web4：智能体持续监听用户状态和外界变化，&lt;strong&gt;主动给出方案甚至直接执行&lt;/strong&gt;（比如自动再平衡资产组合、自动采购、自动调整营销预算）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多模态和情境感知&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;结合 AI、大模型、IoT 传感器、行为数据，理解“人现在在干什么、在乎什么、可能要什么”，而不是只处理孤立请求[1][3]。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;持续、人格化的数字化身&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;长期存在的“数字分身 / avatar / 个人 agent”，既懂你的长期目标，又懂短期约束。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-去中心化与可信执行&#34;&gt;&lt;a href=&#34;#3-%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96%e4%b8%8e%e5%8f%af%e4%bf%a1%e6%89%a7%e8%a1%8c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3. 去中心化与可信执行
+&lt;/h3&gt;&lt;p&gt;大部分较严肃的 Web4 论述，都强调：&lt;br&gt;
+&lt;strong&gt;Web4 不是丢掉 Web3，而是“AI + Web3”&lt;/strong&gt;[2][3][6]。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基础仍然是：
+&lt;ul&gt;
+&lt;li&gt;区块链 / 去中心化账本：记录智能体资产、行为轨迹；&lt;/li&gt;
+&lt;li&gt;去中心化身份（DID）、信誉系统：标记 agent 与人的关系及其历史表现；&lt;/li&gt;
+&lt;li&gt;智能合约：保证 agent 之间的协议可执行、可审计。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;新增关注点：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;可验证的 AI 行为&lt;/strong&gt;：用链上记录、零知识证明等方式，让 agent 的决策逻辑、操作结果可以审计和追责；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;治理与对齐&lt;/strong&gt;：需要新的规则体系，约束 autonomous agents 不得越权或作恶。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;简要来说，&lt;strong&gt;Web3 解决的是“信任机器（账本）”，Web4 进一步要解决“信任机器大脑（智能体）”&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;4-与-iotxr-等的深度融合&#34;&gt;&lt;a href=&#34;#4-%e4%b8%8e-iotxr-%e7%ad%89%e7%9a%84%e6%b7%b1%e5%ba%a6%e8%9e%8d%e5%90%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;4. 与 IoT、XR 等的深度融合
+&lt;/h3&gt;&lt;p&gt;在不少 Web4 论文和政策文档中，Web4 也被定义为将以下技术统一到一张“智能网”上的阶段[1][3]：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;AI / 大模型（智能决策与生成）&lt;/li&gt;
+&lt;li&gt;区块链 / Web3（确权、结算、治理）&lt;/li&gt;
+&lt;li&gt;物联网（IoT）（把现实世界的设备、环境和数据接入）&lt;/li&gt;
+&lt;li&gt;XR / 虚拟世界 / 元宇宙（沉浸式交互空间）&lt;/li&gt;
+&lt;li&gt;未来可能包括脑机接口（BCI）等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这些组成一起，使 Web4 更像一个&lt;strong&gt;贯穿物理世界与数字世界的“共生环境”&lt;/strong&gt;，而不是单纯的网页超链接集合。&lt;/p&gt;
+&lt;h2 id=&#34;三典型架构与层次&#34;&gt;&lt;a href=&#34;#%e4%b8%89%e5%85%b8%e5%9e%8b%e6%9e%b6%e6%9e%84%e4%b8%8e%e5%b1%82%e6%ac%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;三、典型架构与层次
+&lt;/h2&gt;&lt;p&gt;根据一份关于 Web4 深度研究的文档以及学术论文，可抽象出一个普遍的分层思路[1][3]（不同来源名称略有差异，但本质相近）：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;基础设施层&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;计算与存储：云计算、边缘计算、去中心化算力网络。&lt;/li&gt;
+&lt;li&gt;网络：高速网络、5G/6G、设备互联（IoT）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;信任与协议层&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;区块链和 Rollup 等结算与共识层；&lt;/li&gt;
+&lt;li&gt;DID、隐私计算、审计与合规工具；&lt;/li&gt;
+&lt;li&gt;智能体通信协议和互操作标准。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;智能体与模型层&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;大语言模型、多模态模型作为“通用大脑”；&lt;/li&gt;
+&lt;li&gt;各类 domain-specific models；&lt;/li&gt;
+&lt;li&gt;Agent 框架（规划、记忆、工具调用、协作机制）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;应用与场景层&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;面向具体行业：金融、供应链、政府服务、教育、医疗、城市运营等，构建 agent 网络。&lt;/li&gt;
+&lt;li&gt;各类 B2B、B2C 的 agent 市场和平台。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;交互与体验层&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数字分身 / 头像、XR 体验、语音/自然语言界面；&lt;/li&gt;
+&lt;li&gt;“无点击”交互（用户更多通过自然语言、情境和少量确认来驱动）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;治理与伦理层&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;规范：谁对 agent 负责？出了问题谁赔？&lt;/li&gt;
+&lt;li&gt;对齐：如何确保 agent 的目标真实代表用户，而非平台或攻击者？&lt;/li&gt;
+&lt;li&gt;监管接口：为政府/审计机构提供监督通道。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;可以理解为：&lt;strong&gt;Web4 = 在 Web3/IoT/XR 之上，叠加一个规模化、可治理的智能体层&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;四当前发展现状与代表实践&#34;&gt;&lt;a href=&#34;#%e5%9b%9b%e5%bd%93%e5%89%8d%e5%8f%91%e5%b1%95%e7%8e%b0%e7%8a%b6%e4%b8%8e%e4%bb%a3%e8%a1%a8%e5%ae%9e%e8%b7%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;四、当前发展现状与代表实践
+&lt;/h2&gt;&lt;h3 id=&#34;1-概念与标准层面&#34;&gt;&lt;a href=&#34;#1-%e6%a6%82%e5%bf%b5%e4%b8%8e%e6%a0%87%e5%87%86%e5%b1%82%e9%9d%a2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1. 概念与标准层面
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;欧盟等机构已经在“Web 4.0 与虚拟世界”框架中，把 Web4 视作整合 AI、物联网、沉浸式虚拟环境的新阶段，并开始资助架构框架研究[3]。&lt;/li&gt;
+&lt;li&gt;一些研究论文开始讨论：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;“Towards Web 4.0: Frameworks for autonomous AI agents in decentralized systems”&lt;/strong&gt; 等工作，系统分析了在去中心化环境里部署大规模智能体所需的基础设施、行为规范和治理机制[3]。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;中文圈也出现了“Agentic Web / 智能体互联网”的系统性讨论，把“&lt;strong&gt;数十亿智能体的协作网络&lt;/strong&gt;”作为长期目标[5][6]。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-产业与产品层面方向性概览&#34;&gt;&lt;a href=&#34;#2-%e4%ba%a7%e4%b8%9a%e4%b8%8e%e4%ba%a7%e5%93%81%e5%b1%82%e9%9d%a2%e6%96%b9%e5%90%91%e6%80%a7%e6%a6%82%e8%a7%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. 产业与产品层面（方向性概览）
+&lt;/h3&gt;&lt;p&gt;虽然距离真正意义上的 Web4 还有距离，但以下方向已在加速落地：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Agent 基础设施与平台&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;开放的 agent 网络与“agent 市场”，支持：
+&lt;ul&gt;
+&lt;li&gt;为用户生成专属智能体；&lt;/li&gt;
+&lt;li&gt;上架、租用、组合不同能力的智能体；&lt;/li&gt;
+&lt;li&gt;让 agent 之间撮合交易、分成收益[1][3]。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;链上 / 可审计智能体&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;利用区块链记录 agent 的决策与资产变动，形成可追踪的轨迹，降低“黑箱 AI”风险[3]。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;行业试点场景&lt;/strong&gt;（典型关注点）：
+&lt;ul&gt;
+&lt;li&gt;金融与支付：agent 自动化做收付款、对账、风控、投资组合再平衡[3]；&lt;/li&gt;
+&lt;li&gt;供应链与物流：agent 自动下单、排产、调度仓配；&lt;/li&gt;
+&lt;li&gt;政务服务：面向公众的“政府 agent”协助办理业务、自动对接内部系统；&lt;/li&gt;
+&lt;li&gt;教育：个性化学习助理、跨平台学习路径规划 agent[3]；&lt;/li&gt;
+&lt;li&gt;城市运营与能源：智能体管理能源、交通灯、设备维护（与 IoT 结合）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;总体上，&lt;strong&gt;2024–2026 更像是“Web4 的试验期与话语权争夺期”&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;概念先行、基础设施和标准在摸索，&lt;/li&gt;
+&lt;li&gt;大量项目还处在 PoC 或小规模试点阶段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;五关键机遇与挑战&#34;&gt;&lt;a href=&#34;#%e4%ba%94%e5%85%b3%e9%94%ae%e6%9c%ba%e9%81%87%e4%b8%8e%e6%8c%91%e6%88%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;五、关键机遇与挑战
+&lt;/h2&gt;&lt;h3 id=&#34;1-机遇&#34;&gt;&lt;a href=&#34;#1-%e6%9c%ba%e9%81%87&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1. 机遇
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;效率与自动化的数量级提升&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;许多跨系统、反复性的数字化工作可以交给 agent，&lt;/li&gt;
+&lt;li&gt;企业组织结构和分工方式可能被重塑（“人 + 千万智能体”的新组织）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;新型商业模式与机器经济&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;智能体可以：
+&lt;ul&gt;
+&lt;li&gt;自主赚取收入、支付算力和 API 使用费；&lt;/li&gt;
+&lt;li&gt;以“服务单位（Service Agent）”的形式交易。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;催生出**“为智能体而设计”的产品和基础设施**，如 agent 专用 API、结算、监控、安全等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;更深层次的数字化与个性化体验&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每个人拥有一套长期进化的“个人数字团队”，&lt;/li&gt;
+&lt;li&gt;数字体验从“应用为中心”转向“目标为中心”——用户只说目标，agent 完成跨应用协作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;2-挑战&#34;&gt;&lt;a href=&#34;#2-%e6%8c%91%e6%88%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. 挑战
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;安全与可控性&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Agent 具备资金权限和执行能力，一旦被攻击或设计不当，破坏力远超传统脚本。&lt;/li&gt;
+&lt;li&gt;如何设置&lt;strong&gt;权限边界、审计机制、紧急制动（kill switch）&lt;/strong&gt;，是核心技术与监管课题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;对齐与伦理&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如何确保 agent 始终代表用户利益，而不是平台、广告主或攻击者？&lt;/li&gt;
+&lt;li&gt;深度伪造、信息操控、情感操纵等风险在 Web4 时代会被放大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;标准与互操作&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果没有跨平台的 agent 协议和身份标准，Web4 很容易演变成若干个大型公司的“私有智能网络”，与互联网开放精神背道而驰。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;监管与法律责任&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Agent 违法违规时：责任在用户？开发者？平台？还是要引入新的“电子主体”法律地位？&lt;/li&gt;
+&lt;li&gt;各国监管框架需要同步演进，当前仍高度不确定。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>比特币UTXO</title>
         <link>/zh-cn/post/2026/02/%E6%AF%94%E7%89%B9%E5%B8%81utxo/</link>
         <pubDate>Sat, 21 Feb 2026 12:00:00 +0000</pubDate>
@@ -6012,7 +6704,38 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;p&gt;时间加权平均：系统会记录每个区块的时间戳和对应的价格，将每个价格乘以其持续的时间长度，再将所有加权值相加后除以总时长，得到最终价格。公式：TWAP = Σ(价格_i × 时间间隔_i) / 总时间间隔&lt;/p&gt;
 &lt;p&gt;这意味着攻击者若想成功操纵 TWAP 价格，必须在一段较长的时间内维持异常价格，这需要很大的资金成本，使得攻击在经济上几乎不可行。&lt;/p&gt;
 &lt;h3 id=&#34;erc-4337-账户私钥的抽象&#34;&gt;&lt;a href=&#34;#erc-4337-%e8%b4%a6%e6%88%b7%e7%a7%81%e9%92%a5%e7%9a%84%e6%8a%bd%e8%b1%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-4337 账户、私钥的抽象
-&lt;/h3&gt;&lt;p&gt;在传统 Web3 中，&lt;strong&gt;私钥即账户&lt;/strong&gt;，用户必须管理一个私钥，私钥一旦丢失或被盗，资产就无法找回。而 ERC-4337 把“账户”和“私钥”这两个概念分离开，让用户&lt;strong&gt;不再需要直接管理私钥&lt;/strong&gt;。用户看到的是一个“账户”，它拥有资产、可以执行交易，但这个账户的底层逻辑是由一个智能合约（而不是一个私钥）来控制的。这个智能合约可以被编程，实现各种高级功能，比如：&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-7.png&#34;
+	width=&#34;1579&#34;
+	height=&#34;732&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-7_hu_ed7663da9020c94d.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-7_hu_4bc80b233f46ced7.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;215&#34;
+		data-flex-basis=&#34;517px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在 ERC-4337 之前，以太坊只有两种账户：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;EOA (外部拥有账户)：由私钥控制（如 MetaMask）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;❌ 必须用 ETH 支付 Gas：哪怕你想转账 USDC，钱包里也必须要有 ETH。&lt;/li&gt;
+&lt;li&gt;❌ 助记词地狱：丢失助记词 = 资产永久丢失，无法找回。&lt;/li&gt;
+&lt;li&gt;❌ 交易原子性差：不能在一个交易中完成“授权 + 转账”等多步操作。&lt;/li&gt;
+&lt;li&gt;❌ 无社交恢复：没有“忘记密码”功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;合约账户：由代码控制。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;❌ 不能主动发起交易：必须由 EOA 触发才能运行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;ERC-4337 的目标：让合约账户拥有 EOA 的所有功能，并在此基础上增加高级特性，同时不需要硬分叉以太坊主网。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;用户看到的是一个“账户”，账户就拥有资产、可以执行交易，但这个账户的底层逻辑是由一个智能合约（而不是一个私钥）来控制的。这个智能合约可以被编程，实现各种高级功能，比如：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;社交恢复：用户丢失了“登录凭证”，可以通过预先设置的“好友”或“机构”来帮助恢复账户，就像忘记密码时可以通过邮箱或手机找回一样。&lt;/p&gt;
@@ -6044,6 +6767,91 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;/ul&gt;
 &lt;h3 id=&#34;erc-1271-智能合约钱包的签名验证标准&#34;&gt;&lt;a href=&#34;#erc-1271-%e6%99%ba%e8%83%bd%e5%90%88%e7%ba%a6%e9%92%b1%e5%8c%85%e7%9a%84%e7%ad%be%e5%90%8d%e9%aa%8c%e8%af%81%e6%a0%87%e5%87%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-1271 智能合约钱包的签名验证标准
 &lt;/h3&gt;&lt;p&gt;ERC-1271 定义了一个标准化的函数 isValidSignature(bytes32 _messageHash, bytes _signature) ，智能合约钱包通过实现此函数来验证签名。当 DApp 需要验证一个智能合约钱包的签名时，它会首先检查该地址是否实现了 ERC-1271 接口。如果实现则调用 isValidSignature 函数进行验证，验证有效则返回一个预定义的值 0x1626ba7e；如果没有实现 1271 接口，则退回到传统的 ecrecover 方法。&lt;/p&gt;
+&lt;h2 id=&#34;eip-1&#34;&gt;&lt;a href=&#34;#eip-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP
+&lt;/h2&gt;&lt;h3 id=&#34;eip-712&#34;&gt;&lt;a href=&#34;#eip-712&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP-712
+&lt;/h3&gt;&lt;p&gt;解决 &lt;strong&gt;用户不知道自己在签什么&lt;/strong&gt;，它让用户在钱包（如 MetaMask）中签名时，看到的不再是乱码般的十六进制字符串，而是清晰、可读的结构化数据。&lt;/p&gt;
+&lt;p&gt;没有 EIP-712 之前，当 DApp 请求你签名一段数据（比如授权转账、投票、登录）时，用户看到的内容是一串毫无意义的十六进制哈希值。用户完全不知道自己在签什么。恶意网站可以伪装成“登录”，实际让你签的是“授权转移所有资产”。这就是著名的 钓鱼攻击。&lt;/p&gt;
+&lt;p&gt;有了 EIP-712 之后，DApp 将数据按照 EIP-712 标准格式化后请求签名，用户能看到的可读的内容。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;应用:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ERC-20 免 Gas 授权&lt;/li&gt;
+&lt;li&gt;NFT挂单交易&lt;/li&gt;
+&lt;li&gt;身份验证&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h4 id=&#34;原理&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;Domain Separator (域分离器)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;用于隔离不同的应用、版本和链，防止重放攻击（Replay Attack）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;包含字段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;name: 应用名称 (e.g., &amp;ldquo;MyDApp&amp;rdquo;)&lt;/li&gt;
+&lt;li&gt;version: 版本号 (e.g., &amp;ldquo;1&amp;rdquo;)&lt;/li&gt;
+&lt;li&gt;chainId: 链 ID (e.g., 1 for Mainnet, 11155111 for Sepolia)&lt;/li&gt;
+&lt;li&gt;verifyingContract: 验证合约地址 (可选)&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;作用：确保 A 应用的签名，不能在 B 应用中使用。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Types (类型定义)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;定义数据的结构（类似 Solidity 的 struct）。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;types&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;Permit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;owner&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;address&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;spender&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;address&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;value&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;uint256&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;nonce&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;uint256&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;deadline&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;uint256&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Message (具体数据)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;message&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;owner&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;0x123...&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;spender&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;0x456...&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;1000000000000000000&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 1 ETH
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;nonce&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;deadline&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1735689600&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;🧮 哈希计算流程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对 Types 进行编码哈希 → 得到 typeHash。&lt;/li&gt;
+&lt;li&gt;对 Message 中的数据进行编码哈希 → 得到 messageHash。&lt;/li&gt;
+&lt;li&gt;对 Domain Separator 进行编码哈希 → 得到 domainSeparator。&lt;/li&gt;
+&lt;li&gt;最终摘要：用户对 digest 进行签名（ECDSA）&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
