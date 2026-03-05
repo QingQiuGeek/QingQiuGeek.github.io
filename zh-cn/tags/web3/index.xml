@@ -7,7 +7,17 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 26 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 28 Feb 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>NEAR&amp;bittensor&amp;virtual</title>
+        <link>/zh-cn/post/2026/02/nearbittensorvirtual/</link>
+        <pubDate>Sat, 28 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/nearbittensorvirtual/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.binance.com/zh-CN/academy/articles/what-is-bittensor-tao&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.binance.com/zh-CN/academy/articles/what-is-bittensor-tao&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Polymarket架构</title>
         <link>/zh-cn/post/2026/02/polymarket%E6%9E%B6%E6%9E%84/</link>
         <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
@@ -1117,6 +1127,89 @@ npm run register&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;npx hardhat keystore set ETHERSCAN_API_KEY&lt;/p&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;npx hardhat ignition deploy ignition/modules/Counter.ts &amp;ndash;network sepolia &amp;ndash;verify&lt;/p&gt;&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>claudeCode初使用</title>
+        <link>/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/</link>
+        <pubDate>Sun, 15 Feb 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/</guid>
+        <description>&lt;p&gt;插件！=skills，插件是全局安装，保存在用户目录的.claude文件夹。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image.png&#34;
+	width=&#34;2640&#34;
+	height=&#34;1222&#34;
+	srcset=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image_hu_178c9e06fc8771a.png 480w, /zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image_hu_57544df10842861a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;216&#34;
+		data-flex-basis=&#34;518px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-1.png&#34;
+	width=&#34;2590&#34;
+	height=&#34;1222&#34;
+	srcset=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-1_hu_862cc1b2e756c713.png 480w, /zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-1_hu_558cb2f771d9921b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;211&#34;
+		data-flex-basis=&#34;508px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;可以进行选择，一次安装多个
+npx skills add &lt;a class=&#34;link&#34; href=&#34;https://github.com/anthropics/skills&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/anthropics/skills&lt;/a&gt; &amp;ndash;skills&lt;/p&gt;
+&lt;p&gt;一次安装一个，最后面空格分离也可以安装多个
+npx skills add &lt;a class=&#34;link&#34; href=&#34;https://github.com/anthropics/skills&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/anthropics/skills&lt;/a&gt; &amp;ndash;skill frontend-design&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;skills可以全局安装或项目级安装：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;全局安装的skills保存在用户目录的.agents文件夹，同时.claude/skills里面存的是.agents/skills的快捷方式！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-4.png&#34;
+	width=&#34;1173&#34;
+	height=&#34;296&#34;
+	srcset=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-4_hu_bb5cc105d26717b0.png 480w, /zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-4_hu_750dee165a95e3c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;396&#34;
+		data-flex-basis=&#34;951px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;项目级安装会在项目目录生成.agents和.claude文件夹，.agents文件夹保存着skills的真实文件，而.claude/skills里面存的是.agents/skills的快捷方式！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-3.png&#34;
+	width=&#34;1018&#34;
+	height=&#34;444&#34;
+	srcset=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-3_hu_ba26321d6e1570a3.png 480w, /zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-3_hu_fd32a3128f166780.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;229&#34;
+		data-flex-basis=&#34;550px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-2.png&#34;
+	width=&#34;1086&#34;
+	height=&#34;472&#34;
+	srcset=&#34;/zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-2_hu_3da6c3d5e3545f0b.png 480w, /zh-cn/post/2026/02/claudecode%E5%88%9D%E4%BD%BF%E7%94%A8/image-2_hu_aa5c529b69a4982a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;230&#34;
+		data-flex-basis=&#34;552px&#34;
+	
+&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
