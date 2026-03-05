@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="环境 阿里云服务器2核2g\n安装 1 curl -fsSL https://openclaw.ai/install.sh | bash 如果提示缺少sharp依赖报错，使用下面的命令安装：\n1 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g openclaw@latest 远程访问 两种方式\n通过公网的ip+端口 该方法需要防火墙放行18789并reload防火墙，实测如下：\n">
-<title>openclaw安装</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="环境 阿里云服务器2核2g、openclaw-version： 2026.3.2\n安装 1 curl -fsSL https://openclaw.ai/install.sh | bash 如果提示缺少sharp依赖报错，使用下面的命令安装：\n1 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g openclaw@latest 远程访问 两种方式\n">
+<title>openclaw初体验</title>
 
-<link rel='canonical' href='/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/'>
+<link rel='canonical' href='/zh-cn/post/2026/03/openclaw-init-use/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
-<meta property='og:title' content="openclaw安装">
-<meta property='og:description' content="环境 阿里云服务器2核2g\n安装 1 curl -fsSL https://openclaw.ai/install.sh | bash 如果提示缺少sharp依赖报错，使用下面的命令安装：\n1 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g openclaw@latest 远程访问 两种方式\n通过公网的ip+端口 该方法需要防火墙放行18789并reload防火墙，实测如下：\n">
-<meta property='og:url' content='/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/'>
+<meta property='og:title' content="openclaw初体验">
+<meta property='og:description' content="环境 阿里云服务器2核2g、openclaw-version： 2026.3.2\n安装 1 curl -fsSL https://openclaw.ai/install.sh | bash 如果提示缺少sharp依赖报错，使用下面的命令安装：\n1 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g openclaw@latest 远程访问 两种方式\n">
+<meta property='og:url' content='/zh-cn/post/2026/03/openclaw-init-use/'>
 <meta property='og:site_name' content='青秋博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='OpenClaw' /><meta property='article:published_time' content='2026-03-02T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-02T12:00:00&#43;00:00'/>
-<meta name="twitter:title" content="openclaw安装">
-<meta name="twitter:description" content="环境 阿里云服务器2核2g\n安装 1 curl -fsSL https://openclaw.ai/install.sh | bash 如果提示缺少sharp依赖报错，使用下面的命令安装：\n1 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g openclaw@latest 远程访问 两种方式\n通过公网的ip+端口 该方法需要防火墙放行18789并reload防火墙，实测如下：\n">
+<meta name="twitter:title" content="openclaw初体验">
+<meta name="twitter:description" content="环境 阿里云服务器2核2g、openclaw-version： 2026.3.2\n安装 1 curl -fsSL https://openclaw.ai/install.sh | bash 如果提示缺少sharp依赖报错，使用下面的命令安装：\n1 SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g openclaw@latest 远程访问 两种方式\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -749,7 +749,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/">openclaw安装</a>
+            <a href="/zh-cn/post/2026/03/openclaw-init-use/">openclaw初体验</a>
         </h2>
 
         
@@ -789,7 +789,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 2 分钟
             </time>
         </div>
         
@@ -827,7 +827,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     
     
     <h2 id="环境"><a href="#%e7%8e%af%e5%a2%83" class="header-anchor"></a>环境
-</h2><p>阿里云服务器2核2g</p>
+</h2><p>阿里云服务器2核2g、openclaw-version： 2026.3.2</p>
 <h2 id="安装"><a href="#%e5%ae%89%e8%a3%85" class="header-anchor"></a>安装
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -850,10 +850,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </h2><p>两种方式</p>
 <h3 id="通过公网的ip端口"><a href="#%e9%80%9a%e8%bf%87%e5%85%ac%e7%bd%91%e7%9a%84ip%e7%ab%af%e5%8f%a3" class="header-anchor"></a>通过公网的ip+端口
 </h3><p>该方法需要防火墙放行18789并reload防火墙，实测如下：</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image.png"
 	width="2880"
 	height="1376"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image_hu_d54bbe6a160e83aa.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image_hu_c1275bf0ae144a01.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image_hu_d54bbe6a160e83aa.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image_hu_c1275bf0ae144a01.png 1024w"
 	loading="lazy"
 	
 	
@@ -872,10 +872,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </div>
 </div><p>这是 OpenClaw 的一种安全保护机制。OpenClaw 的 Dashboard（控制界面）默认只允许从服务器本机（即 localhost）访问。
 如果尝试通过 公网 IP直接访问，这与服务器预期的 localhost 不匹配，因此被拦截。</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-1.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-1.png"
 	width="1614"
 	height="996"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-1_hu_9d4c86fa901ba02e.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-1_hu_2bfd329f8bb91d26.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-1_hu_9d4c86fa901ba02e.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-1_hu_2bfd329f8bb91d26.png 1024w"
 	loading="lazy"
 	
 	
@@ -896,10 +896,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后输入密码，即可浏览器通过localhost:18789访问，这样更安全</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-2.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-2.png"
 	width="2876"
 	height="1536"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-2_hu_5e5ed526d198edba.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-2_hu_aae9ea8889ac8078.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-2_hu_5e5ed526d198edba.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-2_hu_aae9ea8889ac8078.png 1024w"
 	loading="lazy"
 	
 	
@@ -910,10 +910,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 ></p>
 <h2 id="踩坑"><a href="#%e8%b8%a9%e5%9d%91" class="header-anchor"></a>踩坑
 </h2><p>404 status code no body</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-3.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-3.png"
 	width="1726"
 	height="754"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-3_hu_58ca3a5cc533bfc2.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-3_hu_ea99040f1496a452.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-3_hu_58ca3a5cc533bfc2.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-3_hu_ea99040f1496a452.png 1024w"
 	loading="lazy"
 	
 	
@@ -923,10 +923,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>openclaw tui的会话是main会话，链接飞书的会话是ou_&hellip;，另外两个是飞书会话通过sessions_spawn创建的两个子代理用于执行任务</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-4.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-4.png"
 	width="871"
 	height="447"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-4_hu_34132cc3f7de8998.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-4_hu_858b7a08a8a4c3c6.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-4_hu_34132cc3f7de8998.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-4_hu_858b7a08a8a4c3c6.png 1024w"
 	loading="lazy"
 	
 	
@@ -936,10 +936,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>这里也可以看到会话数量</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-5.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-5.png"
 	width="2846"
 	height="1254"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-5_hu_43e50e5b13e097c4.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-5_hu_a40c56a995937b06.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-5_hu_43e50e5b13e097c4.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-5_hu_a40c56a995937b06.png 1024w"
 	loading="lazy"
 	
 	
@@ -949,10 +949,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>下面这个密钥表示：主 Agent （main会话）通过飞书，与 ID 为 ou_1636&hellip; 的会话进行私聊。</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-6.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-6.png"
 	width="2880"
 	height="1376"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-6_hu_f36902d2e93515e0.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-6_hu_7665a83c8b8ce024.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-6_hu_f36902d2e93515e0.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-6_hu_7665a83c8b8ce024.png 1024w"
 	loading="lazy"
 	
 	
@@ -962,10 +962,10 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <p>详细会话：</p>
-<p><img src="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-7.png"
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-7.png"
 	width="2880"
 	height="1376"
-	srcset="/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-7_hu_835e5871fa5cac08.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-7_hu_78ae7e55a038481a.png 1024w"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-7_hu_835e5871fa5cac08.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-7_hu_78ae7e55a038481a.png 1024w"
 	loading="lazy"
 	
 	

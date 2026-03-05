@@ -8,13 +8,13 @@
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
         <lastBuildDate>Mon, 02 Mar 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/openclaw/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>openclaw安装</title>
-        <link>/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/</link>
+        <title>openclaw初体验</title>
+        <link>/zh-cn/post/2026/03/openclaw-init-use/</link>
         <pubDate>Mon, 02 Mar 2026 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/</guid>
+        <guid>/zh-cn/post/2026/03/openclaw-init-use/</guid>
         <description>&lt;h2 id=&#34;环境&#34;&gt;&lt;a href=&#34;#%e7%8e%af%e5%a2%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;环境
-&lt;/h2&gt;&lt;p&gt;阿里云服务器2核2g&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;阿里云服务器2核2g、openclaw-version： 2026.3.2&lt;/p&gt;
 &lt;h2 id=&#34;安装&#34;&gt;&lt;a href=&#34;#%e5%ae%89%e8%a3%85&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;安装
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -37,10 +37,10 @@
 &lt;/h2&gt;&lt;p&gt;两种方式&lt;/p&gt;
 &lt;h3 id=&#34;通过公网的ip端口&#34;&gt;&lt;a href=&#34;#%e9%80%9a%e8%bf%87%e5%85%ac%e7%bd%91%e7%9a%84ip%e7%ab%af%e5%8f%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;通过公网的ip+端口
 &lt;/h3&gt;&lt;p&gt;该方法需要防火墙放行18789并reload防火墙，实测如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image.png&#34;
 	width=&#34;2880&#34;
 	height=&#34;1376&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image_hu_d54bbe6a160e83aa.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image_hu_c1275bf0ae144a01.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image_hu_d54bbe6a160e83aa.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image_hu_c1275bf0ae144a01.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -59,10 +59,10 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这是 OpenClaw 的一种安全保护机制。OpenClaw 的 Dashboard（控制界面）默认只允许从服务器本机（即 localhost）访问。
 如果尝试通过 公网 IP直接访问，这与服务器预期的 localhost 不匹配，因此被拦截。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-1.png&#34;
 	width=&#34;1614&#34;
 	height=&#34;996&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-1_hu_9d4c86fa901ba02e.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-1_hu_2bfd329f8bb91d26.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-1_hu_9d4c86fa901ba02e.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-1_hu_2bfd329f8bb91d26.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -83,10 +83,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;然后输入密码，即可浏览器通过localhost:18789访问，这样更安全&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-2.png&#34;
 	width=&#34;2876&#34;
 	height=&#34;1536&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-2_hu_5e5ed526d198edba.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-2_hu_aae9ea8889ac8078.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-2_hu_5e5ed526d198edba.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-2_hu_aae9ea8889ac8078.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -97,10 +97,10 @@
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;踩坑&#34;&gt;&lt;a href=&#34;#%e8%b8%a9%e5%9d%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;踩坑
 &lt;/h2&gt;&lt;p&gt;404 status code no body&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-3.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-3.png&#34;
 	width=&#34;1726&#34;
 	height=&#34;754&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-3_hu_58ca3a5cc533bfc2.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-3_hu_ea99040f1496a452.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-3_hu_58ca3a5cc533bfc2.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-3_hu_ea99040f1496a452.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -110,10 +110,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;openclaw tui的会话是main会话，链接飞书的会话是ou_&amp;hellip;，另外两个是飞书会话通过sessions_spawn创建的两个子代理用于执行任务&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-4.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-4.png&#34;
 	width=&#34;871&#34;
 	height=&#34;447&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-4_hu_34132cc3f7de8998.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-4_hu_858b7a08a8a4c3c6.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-4_hu_34132cc3f7de8998.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-4_hu_858b7a08a8a4c3c6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -123,10 +123,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;这里也可以看到会话数量&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-5.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-5.png&#34;
 	width=&#34;2846&#34;
 	height=&#34;1254&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-5_hu_43e50e5b13e097c4.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-5_hu_a40c56a995937b06.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-5_hu_43e50e5b13e097c4.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-5_hu_a40c56a995937b06.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -136,10 +136,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;下面这个密钥表示：主 Agent （main会话）通过飞书，与 ID 为 ou_1636&amp;hellip; 的会话进行私聊。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-6.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-6.png&#34;
 	width=&#34;2880&#34;
 	height=&#34;1376&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-6_hu_f36902d2e93515e0.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-6_hu_7665a83c8b8ce024.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-6_hu_f36902d2e93515e0.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-6_hu_7665a83c8b8ce024.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -149,10 +149,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;详细会话：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-7.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-7.png&#34;
 	width=&#34;2880&#34;
 	height=&#34;1376&#34;
-	srcset=&#34;/zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-7_hu_835e5871fa5cac08.png 480w, /zh-cn/post/2026/03/openclaw%E5%AE%89%E8%A3%85/image-7_hu_78ae7e55a038481a.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-7_hu_835e5871fa5cac08.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-7_hu_78ae7e55a038481a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
