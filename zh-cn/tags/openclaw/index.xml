@@ -96,8 +96,8 @@
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;踩坑&#34;&gt;&lt;a href=&#34;#%e8%b8%a9%e5%9d%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;踩坑
-&lt;/h2&gt;&lt;p&gt;404 status code no body&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-3.png&#34;
+&lt;/h2&gt;&lt;h3 id=&#34;404-status-code-no-body&#34;&gt;&lt;a href=&#34;#404-status-code-no-body&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;404 status code no body
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-3.png&#34;
 	width=&#34;1726&#34;
 	height=&#34;754&#34;
 	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-3_hu_58ca3a5cc533bfc2.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-3_hu_ea99040f1496a452.png 1024w&#34;
@@ -109,7 +109,8 @@
 		data-flex-basis=&#34;549px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;openclaw tui的会话是main会话，链接飞书的会话是ou_&amp;hellip;，另外两个是飞书会话通过sessions_spawn创建的两个子代理用于执行任务&lt;/p&gt;
+&lt;h3 id=&#34;会话子代理&#34;&gt;&lt;a href=&#34;#%e4%bc%9a%e8%af%9d%e5%ad%90%e4%bb%a3%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;会话、子代理
+&lt;/h3&gt;&lt;p&gt;openclaw tui的会话是main会话，链接飞书的会话是ou_&amp;hellip;，另外两个是飞书会话通过sessions_spawn创建的两个子代理用于执行任务&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-4.png&#34;
 	width=&#34;871&#34;
 	height=&#34;447&#34;
@@ -159,6 +160,30 @@
 		class=&#34;gallery-image&#34; 
 		data-flex-grow=&#34;209&#34;
 		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;clawhub安装skill&#34;&gt;&lt;a href=&#34;#clawhub%e5%ae%89%e8%a3%85skill&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;clawhub安装skill
+&lt;/h3&gt;&lt;p&gt;直接用clawhub安装skills可能遇到rate limit，解决方法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;登录calwhub，获取token&lt;/li&gt;
+&lt;li&gt;clawhub login &amp;ndash;token=xxx，然后再安装skill就不会限速了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;openclaw-onboard-daemon卡住&#34;&gt;&lt;a href=&#34;#openclaw-onboard-daemon%e5%8d%a1%e4%bd%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;openclaw onboard &amp;ndash;daemon卡住
+&lt;/h3&gt;&lt;p&gt;这种情况在云服务器安装遇到过，引导程序出不来，得跳过。解决方法如下：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/53ifudb--SsI7PFqb-GTHg&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;公众号链接&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-8.png&#34;
+	width=&#34;1534&#34;
+	height=&#34;1344&#34;
+	srcset=&#34;/zh-cn/post/2026/03/openclaw-init-use/image-8_hu_8641d8dea5df3db4.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-8_hu_791456748fe1a6de.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;114&#34;
+		data-flex-basis=&#34;273px&#34;
 	
 &gt;&lt;/p&gt;
 </description>

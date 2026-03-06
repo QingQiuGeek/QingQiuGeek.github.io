@@ -728,7 +728,14 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
         <li><a href="#ssh推荐">SSH（推荐）</a></li>
       </ol>
     </li>
-    <li><a href="#踩坑">踩坑</a></li>
+    <li><a href="#踩坑">踩坑</a>
+      <ol>
+        <li><a href="#404-status-code-no-body">404 status code no body</a></li>
+        <li><a href="#会话子代理">会话、子代理</a></li>
+        <li><a href="#clawhub安装skill">clawhub安装skill</a></li>
+        <li><a href="#openclaw-onboard-daemon卡住">openclaw onboard &ndash;daemon卡住</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -909,8 +916,8 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 	
 ></p>
 <h2 id="踩坑"><a href="#%e8%b8%a9%e5%9d%91" class="header-anchor"></a>踩坑
-</h2><p>404 status code no body</p>
-<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-3.png"
+</h2><h3 id="404-status-code-no-body"><a href="#404-status-code-no-body" class="header-anchor"></a>404 status code no body
+</h3><p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-3.png"
 	width="1726"
 	height="754"
 	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-3_hu_58ca3a5cc533bfc2.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-3_hu_ea99040f1496a452.png 1024w"
@@ -922,7 +929,8 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 		data-flex-basis="549px"
 	
 ></p>
-<p>openclaw tui的会话是main会话，链接飞书的会话是ou_&hellip;，另外两个是飞书会话通过sessions_spawn创建的两个子代理用于执行任务</p>
+<h3 id="会话子代理"><a href="#%e4%bc%9a%e8%af%9d%e5%ad%90%e4%bb%a3%e7%90%86" class="header-anchor"></a>会话、子代理
+</h3><p>openclaw tui的会话是main会话，链接飞书的会话是ou_&hellip;，另外两个是飞书会话通过sessions_spawn创建的两个子代理用于执行任务</p>
 <p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-4.png"
 	width="871"
 	height="447"
@@ -972,6 +980,30 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 		class="gallery-image" 
 		data-flex-grow="209"
 		data-flex-basis="502px"
+	
+></p>
+<h3 id="clawhub安装skill"><a href="#clawhub%e5%ae%89%e8%a3%85skill" class="header-anchor"></a>clawhub安装skill
+</h3><p>直接用clawhub安装skills可能遇到rate limit，解决方法：</p>
+<ol>
+<li>登录calwhub，获取token</li>
+<li>clawhub login &ndash;token=xxx，然后再安装skill就不会限速了</li>
+</ol>
+<h3 id="openclaw-onboard-daemon卡住"><a href="#openclaw-onboard-daemon%e5%8d%a1%e4%bd%8f" class="header-anchor"></a>openclaw onboard &ndash;daemon卡住
+</h3><p>这种情况在云服务器安装遇到过，引导程序出不来，得跳过。解决方法如下：</p>
+<p><a class="link" href="https://mp.weixin.qq.com/s/53ifudb--SsI7PFqb-GTHg"  target="_blank" rel="noopener"
+    >公众号链接</a></p>
+<p><img src="/zh-cn/post/2026/03/openclaw-init-use/image-8.png"
+	width="1534"
+	height="1344"
+	srcset="/zh-cn/post/2026/03/openclaw-init-use/image-8_hu_8641d8dea5df3db4.png 480w, /zh-cn/post/2026/03/openclaw-init-use/image-8_hu_791456748fe1a6de.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="114"
+		data-flex-basis="273px"
 	
 ></p>
 
