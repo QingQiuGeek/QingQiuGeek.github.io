@@ -725,6 +725,13 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     <li><a href="#为什么需要-x402">为什么需要 x402</a></li>
     <li><a href="#为什么-x402-对-web3-与-ai-很重要">为什么 x402 对 Web3 与 AI 很重要</a></li>
     <li><a href="#x402-v1-和-x402-v2">x402 v1 和 x402 v2</a></li>
+    <li><a href="#x402-v2-支付头">x402 v2 支付头</a></li>
+    <li><a href="#集市发现层bazaar">集市发现层：Bazaar</a>
+      <ol>
+        <li><a href="#基本流程">基本流程</a></li>
+        <li><a href="#discoveryresources-端点">discovery/resources 端点</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -827,7 +834,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     <section class="article-content">
     
     
-    <p><a class="link" href="https://www.x402.org/"  target="_blank" rel="noopener"
+    <p><a class="link" href="https://docs.x402.org/introduction"  target="_blank" rel="noopener"
     >x402</a></p>
 <p><a class="link" href="https://www.eoje.cn/qkljs/11406.html"  target="_blank" rel="noopener"
     >链技术</a></p>
@@ -862,13 +869,24 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </li>
 </ol>
 <h2 id="为什么需要-x402"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81-x402" class="header-anchor"></a>为什么需要 x402
-</h2><p>传统网络支付是为人设计的，而不是为机器设计的，但现在的互联网正快速进入一个 AI 自主服务、API 经济、即时资源共享的时代。</p>
-<p>想像以下情境：</p>
-<p>－ 一个 AI 助手支付 0.05 美元，使用一次高阶语言模型。</p>
-<p>－ 一个开发者按每次 API 呼叫收费，而非月费。</p>
-<p>－ 一个资料提供者可以让人付 1 美元就获取一份资料集。</p>
-<p>x402 让这一切成为可能，因为它让链上微支付能在网络层即时发生。</p>
-<h2 id="为什么-x402-对-web3-与-ai-很重要"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-x402-%e5%af%b9-web3-%e4%b8%8e-ai-%e5%be%88%e9%87%8d%e8%a6%81" class="header-anchor"></a>为什么 x402 对 Web3 与 AI 很重要
+</h2><p>以下是官方解释：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- 机器对机器（M2M）支付（例如，人工智能代理）。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">- 按次付费模式，如 API 调用或付费墙内容。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">- 无需账户创建或传统支付轨道的微支付。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="为什么-x402-对-web3-与-ai-很重要"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-x402-%e5%af%b9-web3-%e4%b8%8e-ai-%e5%be%88%e9%87%8d%e8%a6%81" class="header-anchor"></a>为什么 x402 对 Web3 与 AI 很重要
 </h2><p>x402 不只是支付协议，它更是「资料 × 价值」整合的关键桥梁。</p>
 <p>在 Web3 的世界里，资讯可以自由流动，但「价值」的流通仍受限。
 x402 的出现让两者得以融合。</p>
@@ -894,6 +912,51 @@ x402 的出现让两者得以融合。</p>
 <p>“按请求路由”的能力，支持将支付定向至特定地址、角色，或基于回调逻辑进行分发，从而实现更复杂的多步骤支付工作流。</p>
 </li>
 </ol>
+<h2 id="x402-v2-支付头"><a href="#x402-v2-%e6%94%af%e4%bb%98%e5%a4%b4" class="header-anchor"></a>x402 v2 支付头
+</h2><ul>
+<li>
+<p>PAYMENT-REQUIRED：从服务器→客户端，Base64 编码的 PaymentRequired 对象，包含接受的支付方案、价格、网络和目的地地址等详细信息。</p>
+</li>
+<li>
+<p>PAYMENT-SIGNATURE： 从客户端→服务器，Base64 编码的 PaymentPayload 对象，客户端在收到 402 响应后重试请求时发送该头部，以证明他们已授权付款。</p>
+</li>
+<li>
+<p>PAYMENT-RESPONSE：从服务器→客户端，Base64 编码的 SettlementResponse 对象，无论结算成功或失败，服务器都会返回该头部，提供关于支付结果的结构化反馈。</p>
+</li>
+</ul>
+<h2 id="集市发现层bazaar"><a href="#%e9%9b%86%e5%b8%82%e5%8f%91%e7%8e%b0%e5%b1%82bazaar" class="header-anchor"></a>集市发现层：Bazaar
+</h2><p><a class="link" href="https://docs.x402.org/extensions/bazaar#quickstart-for-buyers"  target="_blank" rel="noopener"
+    >快速入门</a></p>
+<p>x402 Bazaar 是 x402 生态系统的发现层，解决了买方能找到卖方的问题。</p>
+<p>Bazaar 会提供 /discovery/resources 端点，客户端查询 /discovery/resources 端点以查找兼容x402的可用服务。</p>
+<h3 id="基本流程"><a href="#%e5%9f%ba%e6%9c%ac%e6%b5%81%e7%a8%8b" class="header-anchor"></a>基本流程
+</h3><ol>
+<li>
+<p>发现： 客户端查询 /discovery/resources 端点以查找可用服务</p>
+</li>
+<li>
+<p>选择 ：根据价格、能力和需求选择服务</p>
+</li>
+<li>
+<p>执行： 使用 x402 支付并访问所选服务</p>
+</li>
+<li>
+<p>无需手动设置 ：无需 API 密钥，无需账户创建，只需发现并支付</p>
+</li>
+</ol>
+<h3 id="discoveryresources-端点"><a href="#discoveryresources-%e7%ab%af%e7%82%b9" class="header-anchor"></a>discovery/resources 端点
+</h3><ul>
+<li>Coinbase</li>
+</ul>
+<blockquote>
+<p>GET <a class="link" href="https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources"  target="_blank" rel="noopener"
+    >https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources</a></p></blockquote>
+<ul>
+<li>PayAI</li>
+</ul>
+<blockquote>
+<p>GET <a class="link" href="https://facilitator.payai.network/discovery/resources"  target="_blank" rel="noopener"
+    >https://facilitator.payai.network/discovery/resources</a></p></blockquote>
 
 </section>
 

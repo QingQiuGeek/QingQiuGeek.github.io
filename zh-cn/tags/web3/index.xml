@@ -4856,7 +4856,7 @@ slot = keccak256(&amp;ldquo;org.zeppelinos.proxy.implementation&amp;rdquo;) - 1&
         <pubDate>Sun, 01 Feb 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2026/02/x402%E6%94%AF%E4%BB%98%E5%8D%8F%E8%AE%AE/</guid>
-        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.x402.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.x402.org/introduction&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;x402&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.eoje.cn/qkljs/11406.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;链技术&lt;/a&gt;&lt;/p&gt;
@@ -4891,13 +4891,24 @@ slot = keccak256(&amp;ldquo;org.zeppelinos.proxy.implementation&amp;rdquo;) - 1&
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;为什么需要-x402&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81-x402&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么需要 x402
-&lt;/h2&gt;&lt;p&gt;传统网络支付是为人设计的，而不是为机器设计的，但现在的互联网正快速进入一个 AI 自主服务、API 经济、即时资源共享的时代。&lt;/p&gt;
-&lt;p&gt;想像以下情境：&lt;/p&gt;
-&lt;p&gt;－ 一个 AI 助手支付 0.05 美元，使用一次高阶语言模型。&lt;/p&gt;
-&lt;p&gt;－ 一个开发者按每次 API 呼叫收费，而非月费。&lt;/p&gt;
-&lt;p&gt;－ 一个资料提供者可以让人付 1 美元就获取一份资料集。&lt;/p&gt;
-&lt;p&gt;x402 让这一切成为可能，因为它让链上微支付能在网络层即时发生。&lt;/p&gt;
-&lt;h2 id=&#34;为什么-x402-对-web3-与-ai-很重要&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88-x402-%e5%af%b9-web3-%e4%b8%8e-ai-%e5%be%88%e9%87%8d%e8%a6%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么 x402 对 Web3 与 AI 很重要
+&lt;/h2&gt;&lt;p&gt;以下是官方解释：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- 机器对机器（M2M）支付（例如，人工智能代理）。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- 按次付费模式，如 API 调用或付费墙内容。
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- 无需账户创建或传统支付轨道的微支付。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;为什么-x402-对-web3-与-ai-很重要&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88-x402-%e5%af%b9-web3-%e4%b8%8e-ai-%e5%be%88%e9%87%8d%e8%a6%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么 x402 对 Web3 与 AI 很重要
 &lt;/h2&gt;&lt;p&gt;x402 不只是支付协议，它更是「资料 × 价值」整合的关键桥梁。&lt;/p&gt;
 &lt;p&gt;在 Web3 的世界里，资讯可以自由流动，但「价值」的流通仍受限。
 x402 的出现让两者得以融合。&lt;/p&gt;
@@ -4923,6 +4934,51 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 &lt;p&gt;“按请求路由”的能力，支持将支付定向至特定地址、角色，或基于回调逻辑进行分发，从而实现更复杂的多步骤支付工作流。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h2 id=&#34;x402-v2-支付头&#34;&gt;&lt;a href=&#34;#x402-v2-%e6%94%af%e4%bb%98%e5%a4%b4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;x402 v2 支付头
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;PAYMENT-REQUIRED：从服务器→客户端，Base64 编码的 PaymentRequired 对象，包含接受的支付方案、价格、网络和目的地地址等详细信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PAYMENT-SIGNATURE： 从客户端→服务器，Base64 编码的 PaymentPayload 对象，客户端在收到 402 响应后重试请求时发送该头部，以证明他们已授权付款。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PAYMENT-RESPONSE：从服务器→客户端，Base64 编码的 SettlementResponse 对象，无论结算成功或失败，服务器都会返回该头部，提供关于支付结果的结构化反馈。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;集市发现层bazaar&#34;&gt;&lt;a href=&#34;#%e9%9b%86%e5%b8%82%e5%8f%91%e7%8e%b0%e5%b1%82bazaar&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;集市发现层：Bazaar
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.x402.org/extensions/bazaar#quickstart-for-buyers&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;快速入门&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;x402 Bazaar 是 x402 生态系统的发现层，解决了买方能找到卖方的问题。&lt;/p&gt;
+&lt;p&gt;Bazaar 会提供 /discovery/resources 端点，客户端查询 /discovery/resources 端点以查找兼容x402的可用服务。&lt;/p&gt;
+&lt;h3 id=&#34;基本流程&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e6%9c%ac%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基本流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;发现： 客户端查询 /discovery/resources 端点以查找可用服务&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选择 ：根据价格、能力和需求选择服务&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行： 使用 x402 支付并访问所选服务&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;无需手动设置 ：无需 API 密钥，无需账户创建，只需发现并支付&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;discoveryresources-端点&#34;&gt;&lt;a href=&#34;#discoveryresources-%e7%ab%af%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;discovery/resources 端点
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Coinbase&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GET &lt;a class=&#34;link&#34; href=&#34;https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;PayAI&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;GET &lt;a class=&#34;link&#34; href=&#34;https://facilitator.payai.network/discovery/resources&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://facilitator.payai.network/discovery/resources&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
