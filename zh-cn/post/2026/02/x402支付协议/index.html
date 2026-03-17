@@ -723,15 +723,19 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     <li><a href="#什么是-x402">什么是 x402</a></li>
     <li><a href="#运作方式">运作方式</a></li>
     <li><a href="#为什么需要-x402">为什么需要 x402</a></li>
-    <li><a href="#为什么-x402-对-web3-与-ai-很重要">为什么 x402 对 Web3 与 AI 很重要</a></li>
     <li><a href="#x402-v1-和-x402-v2">x402 v1 和 x402 v2</a></li>
     <li><a href="#x402-v2-支付头">x402 v2 支付头</a></li>
+    <li><a href="#facilitator-协调器">Facilitator 协调器</a>
+      <ol>
+        <li><a href="#如果钱没到账资源服务器不就亏了">如果钱没到账，资源服务器不就亏了？</a></li>
+      </ol>
+    </li>
     <li><a href="#集市发现层bazaar">集市发现层：Bazaar</a>
       <ol>
-        <li><a href="#基本流程">基本流程</a></li>
         <li><a href="#discoveryresources-端点">discovery/resources 端点</a></li>
       </ol>
     </li>
+    <li><a href="#为什么-x402-对-web3-与-ai-很重要">为什么 x402 对 Web3 与 AI 很重要</a></li>
   </ol>
 </nav>
         </div>
@@ -792,7 +796,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 3 分钟
+                阅读时长: 5 分钟
             </time>
         </div>
         
@@ -886,16 +890,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </span></span><span class="line"><span class="cl">- 无需账户创建或传统支付轨道的微支付。
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="为什么-x402-对-web3-与-ai-很重要"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-x402-%e5%af%b9-web3-%e4%b8%8e-ai-%e5%be%88%e9%87%8d%e8%a6%81" class="header-anchor"></a>为什么 x402 对 Web3 与 AI 很重要
-</h2><p>x402 不只是支付协议，它更是「资料 × 价值」整合的关键桥梁。</p>
-<p>在 Web3 的世界里，资讯可以自由流动，但「价值」的流通仍受限。
-x402 的出现让两者得以融合。</p>
-<p>－ Web3 商业模式升级：内容创作者或 API 提供者能为每一次使用收费。</p>
-<p>－ AI 经济启动：AI 代理能自动为所需的资料或服务付款。</p>
-<p>－ 去平台化支付：不再依赖集中式平台，每个网站都能自设收费逻辑。</p>
-<p>－ 开启新型营收模式：从「订阅制」变为「即用即付」的自由经济。</p>
-<p>这意味着未来的网络，将不仅传递资讯，也会同时传递价值。</p>
-<h2 id="x402-v1-和-x402-v2"><a href="#x402-v1-%e5%92%8c-x402-v2" class="header-anchor"></a>x402 v1 和 x402 v2
+</div><h2 id="x402-v1-和-x402-v2"><a href="#x402-v1-%e5%92%8c-x402-v2" class="header-anchor"></a>x402 v1 和 x402 v2
 </h2><p>v1 把区块链支付嵌入 HTTP 协议，<strong>每次请求都走一遍链上流程，高频场景下手续费与延迟居高不下，且无法跨链、无法复用身份。</strong></p>
 <p>v2 在 v1 基础上，实现了：</p>
 <ol>
@@ -924,26 +919,54 @@ x402 的出现让两者得以融合。</p>
 <p>PAYMENT-RESPONSE：从服务器→客户端，Base64 编码的 SettlementResponse 对象，无论结算成功或失败，服务器都会返回该头部，提供关于支付结果的结构化反馈。</p>
 </li>
 </ul>
+<h2 id="facilitator-协调器"><a href="#facilitator-%e5%8d%8f%e8%b0%83%e5%99%a8" class="header-anchor"></a>Facilitator 协调器
+</h2><p>facilitator是可选但推荐的服务，能简化client与server之间核实和结算付款的过程。主要是代表服务器在区块链上结算付款、核实客户提交的付款有效载荷。工作流程如下：</p>
+<ol>
+<li>
+<p>客户端向资源服务器发送 HTTP 请求</p>
+</li>
+<li>
+<p>资源服务器会以 402 支付状态和包含 Base64 编码支付需求的 PAYMENT-REQUIRED 头响应。</p>
+</li>
+<li>
+<p>客户端创建支付载荷，将包含支付有效载荷 （Base64 编码，好比用户私钥签名的纸质支票！并非证明“我已经付了钱”，而是证明“我授权你从我的账户里拿走这笔钱”）的 PAYMENT-SIGNATURE 头部向资源服务器发送 HTTP 请求</p>
+</li>
+<li>
+<p><strong>资源服务器通过本地验证或通过 POST 将支付有效载荷和付款详情发送到Facilitator的 /verify 端点来验证该支付负载的有效性（让Facilitator验证支票的真实性）</strong></p>
+</li>
+<li>
+<p>Facilitator根据支付有效载荷的方案和网络 ID 对对象进行验证，并返回验证响应。</p>
+</li>
+<li>
+<p>如果验证响应有效，资源服务器会执行该请求的工作，客户端此时就可以享受服务了，无需等到钱到账。如果验证响应无效，资源服务器会返回带有 PAYMENT-REQUIRED 头部的 402 Payment Required 状态。</p>
+</li>
+<li>
+<p>而后资源服务器要么通过直接与区块链交互来结算付款，要么通过 POST 支付载荷和付款详情给 Facilitator的 /settle 端点，Facilitator会替资源服务器处理复杂的链上操作：构造交易、支付Gas、广播交易、等待确认。</p>
+</li>
+<li>
+<p>Facilitator的根据支付有效载荷的方案和网络 ID 向区块链提交付款，等待付款在区块链上的确认，最后返回支付执行响应给资源服务器。</p>
+</li>
+<li>
+<p>资源服务器返回给客户端带有包含结算响应的 REPLY（Base64编码的JSON）。成功则200 OK，失败则402并带有错误详情。</p>
+</li>
+</ol>
+<h3 id="如果钱没到账资源服务器不就亏了"><a href="#%e5%a6%82%e6%9e%9c%e9%92%b1%e6%b2%a1%e5%88%b0%e8%b4%a6%e8%b5%84%e6%ba%90%e6%9c%8d%e5%8a%a1%e5%99%a8%e4%b8%8d%e5%b0%b1%e4%ba%8f%e4%ba%86" class="header-anchor"></a>如果钱没到账，资源服务器不就亏了？
+</h3><ul>
+<li>
+<p>Facilitator扮演了支付担保人的角色，这个损失不是由服务器承担，而是由中间人承担。</p>
+</li>
+<li>
+<p>x402 主要用于小额支付。即使真的出现极小概率的欺诈，服务器的损失也是非常有限的。</p>
+</li>
+<li>
+<p>如果真的发生了支付失败（比如签名无效、余额不足），中间人会记录下这个客户端的地址。服务器可以根据中间人的反馈，把这个客户端拉入黑名单，拒绝为其提供服务。</p>
+</li>
+</ul>
 <h2 id="集市发现层bazaar"><a href="#%e9%9b%86%e5%b8%82%e5%8f%91%e7%8e%b0%e5%b1%82bazaar" class="header-anchor"></a>集市发现层：Bazaar
 </h2><p><a class="link" href="https://docs.x402.org/extensions/bazaar#quickstart-for-buyers"  target="_blank" rel="noopener"
     >快速入门</a></p>
 <p>x402 Bazaar 是 x402 生态系统的发现层，解决了买方能找到卖方的问题。</p>
 <p>Bazaar 会提供 /discovery/resources 端点，客户端查询 /discovery/resources 端点以查找兼容x402的可用服务。</p>
-<h3 id="基本流程"><a href="#%e5%9f%ba%e6%9c%ac%e6%b5%81%e7%a8%8b" class="header-anchor"></a>基本流程
-</h3><ol>
-<li>
-<p>发现： 客户端查询 /discovery/resources 端点以查找可用服务</p>
-</li>
-<li>
-<p>选择 ：根据价格、能力和需求选择服务</p>
-</li>
-<li>
-<p>执行： 使用 x402 支付并访问所选服务</p>
-</li>
-<li>
-<p>无需手动设置 ：无需 API 密钥，无需账户创建，只需发现并支付</p>
-</li>
-</ol>
 <h3 id="discoveryresources-端点"><a href="#discoveryresources-%e7%ab%af%e7%82%b9" class="header-anchor"></a>discovery/resources 端点
 </h3><ul>
 <li>Coinbase</li>
@@ -957,6 +980,15 @@ x402 的出现让两者得以融合。</p>
 <blockquote>
 <p>GET <a class="link" href="https://facilitator.payai.network/discovery/resources"  target="_blank" rel="noopener"
     >https://facilitator.payai.network/discovery/resources</a></p></blockquote>
+<h2 id="为什么-x402-对-web3-与-ai-很重要"><a href="#%e4%b8%ba%e4%bb%80%e4%b9%88-x402-%e5%af%b9-web3-%e4%b8%8e-ai-%e5%be%88%e9%87%8d%e8%a6%81" class="header-anchor"></a>为什么 x402 对 Web3 与 AI 很重要
+</h2><p>x402 不只是支付协议，它更是「资料 × 价值」整合的关键桥梁。</p>
+<p>在 Web3 的世界里，资讯可以自由流动，但「价值」的流通仍受限。
+x402 的出现让两者得以融合。</p>
+<p>－ Web3 商业模式升级：内容创作者或 API 提供者能为每一次使用收费。</p>
+<p>－ AI 经济启动：AI 代理能自动为所需的资料或服务付款。</p>
+<p>－ 去平台化支付：不再依赖集中式平台，每个网站都能自设收费逻辑。</p>
+<p>－ 开启新型营收模式：从「订阅制」变为「即用即付」的自由经济。</p>
+<p>这意味着未来的网络，将不仅传递资讯，也会同时传递价值。</p>
 
 </section>
 
