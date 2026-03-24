@@ -7,7 +7,92 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 01 Dec 2025 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 18 Mar 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>nextjs学习笔记</title>
+        <link>/zh-cn/post/2026/03/nextjs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Wed, 18 Mar 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/03/nextjs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Next.js 会自动将 page.tsx 组件作为 children 属性，传递给离它最近的 layout.tsx 组件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;app/：App Router 的核心目录。这是 Next.js 13 及以后版本推荐使用的路由系统，基于 React Server Components，支持嵌套路由、布局、加载状态等，所有的页面和 API 路由都在此定义。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;pages/：Pages Router 的目录。这是旧版的路由系统，主要用于兼容旧项目。在新项目中，通常不推荐与 app/ 目录混用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;嵌套布局，src/layout会嵌套src/blog/layout会继承。换言之src/layout是根layout，是最外层的，里面可以嵌套其他页面的布局。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>前端的水合问题</title>
+        <link>/zh-cn/post/2026/03/%E5%89%8D%E7%AB%AF%E7%9A%84%E6%B0%B4%E5%90%88%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Wed, 18 Mar 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/03/%E5%89%8D%E7%AB%AF%E7%9A%84%E6%B0%B4%E5%90%88%E9%97%AE%E9%A2%98/</guid>
+        <description>&lt;p&gt;使用 Next.js 访问一个页面时，为了让用户尽快看到内容，程序会经历两个阶段：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;静态渲染（干货阶段）：服务器先跑一边react，把数据填进 HTML 并发给浏览器。这时候页面上有文字、有图片有CSS样式，但此时 JavaScript 还没跑起来，所以按钮、输入框无法交互。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;水合过程（注水阶段）：浏览器下载并执行 JS 代码。React 会扫描页面上的 HTML，把事件监听器（比如 onClick）重新绑定到对应的 DOM 元素上，激活状态管理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;水合问题就是因为服务器渲染的内容和浏览器第一次渲染的内容不一致。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;常见问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;useEffect使用不当：确保那些依赖浏览器环境（时间、本地存储、窗口大小）的代码只在客户端运行&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;为什么是浏览器加载-js&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e6%98%af%e6%b5%8f%e8%a7%88%e5%99%a8%e5%8a%a0%e8%bd%bd-js&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么是浏览器加载 JS
+&lt;/h2&gt;&lt;p&gt;浏览器跑 JS 确实是在进行渲染逻辑，但它和纯 CSR 有两个本质区别：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;不产生新 DOM：在水合过程中，React 会尽量复用服务器发来的 HTML 节点，而不是把它们删了重建。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;接管而非创建：它是在“接管”现有的页面。一旦水合完成，接下来的页面跳转（比如点链接跳到下一页）就会变成完全的客户端渲染，不再刷新网页。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;use-client&#34;&gt;&lt;a href=&#34;#use-client&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;use client
+&lt;/h2&gt;&lt;p&gt;Next.js 13+ 默认所有组件都是“服务端组件 (Server Components)”。只有在需要交互时，才主动声明 use client。&lt;/p&gt;
+&lt;p&gt;当需要在页面上添加“活”的逻辑时，必须在文件最顶部写上这个指令。&lt;/p&gt;
+&lt;p&gt;运行位置：代码会在服务器渲染一次（生成 HTML），然后在浏览器再跑一次（水合）。&lt;/p&gt;
+&lt;p&gt;使用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;使用 Hooks (如 useState, useEffect, useContext)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 浏览器 API (如 window, localStorage, document)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;绑定 事件监听器 (如 onClick, onChange)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;use-server&#34;&gt;&lt;a href=&#34;#use-server&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;use server
+&lt;/h2&gt;&lt;p&gt;用来定义服务端动作。它标记一个异步函数：这个函数虽然在前端触发，但&lt;strong&gt;逻辑只在服务器运行&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;运行位置：只在服务器运行。&lt;/p&gt;
+&lt;p&gt;使用场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据库操作：增删改查。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;处理表单提交。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;读取敏感信息：比如 API Key（不会泄露给浏览器）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>token应该存储在cookie还是localStorage上</title>
         <link>/zh-cn/post/2025/12/token%E5%BA%94%E8%AF%A5%E5%AD%98%E5%82%A8%E5%9C%A8cookie%E8%BF%98%E6%98%AFlocalstorage%E4%B8%8A/</link>
         <pubDate>Mon, 01 Dec 2025 12:00:00 +0000</pubDate>

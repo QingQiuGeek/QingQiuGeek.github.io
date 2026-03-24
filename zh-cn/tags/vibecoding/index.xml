@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>VibeCoding on 青秋博客</title>
+        <link>/zh-cn/tags/vibecoding/</link>
+        <description>Recent content in VibeCoding on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Wed, 18 Mar 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/vibecoding/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>vibeCoding开发技巧</title>
+        <link>/zh-cn/post/2026/03/vibecoding%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/</link>
+        <pubDate>Wed, 18 Mar 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/03/vibecoding%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/</guid>
+        <description>&lt;ol&gt;
+&lt;li&gt;生成需求文档：项目开发，先用ai写需求文档，可以把图片传给ai&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
