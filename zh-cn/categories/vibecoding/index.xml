@@ -14,7 +14,27 @@
         
         <guid>/zh-cn/post/2026/03/vibecoding%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/</guid>
         <description>&lt;ol&gt;
-&lt;li&gt;生成需求文档：项目开发，先用ai写需求文档，可以把图片传给ai&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;生成需求文档：项目开发，先用ai写需求文档，可以把图片传给ai&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;AntdRegistry 将 antd 首屏样式按需抽离并植入到 HTML 中，以避免页面闪动的情况，适用于nextjs&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/03/vibecoding%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/image.png&#34;
+	width=&#34;2868&#34;
+	height=&#34;1376&#34;
+	srcset=&#34;/zh-cn/post/2026/03/vibecoding%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/image_hu_a8ed58dbefa17b91.png 480w, /zh-cn/post/2026/03/vibecoding%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/image_hu_fc33a7af6dd5563f.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;208&#34;
+		data-flex-basis=&#34;500px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;前端改 bug 用 chrome-mcp 调试&lt;/li&gt;
 &lt;/ol&gt;
 </description>
         </item>
