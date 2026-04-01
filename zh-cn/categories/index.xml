@@ -7,7 +7,39 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 26 Mar 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 30 Mar 2026 14:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Agent</title>
+        <link>/zh-cn/categories/agent/</link>
+        <pubDate>Mon, 30 Mar 2026 14:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/agent/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>AI</title>
+        <link>/zh-cn/categories/ai/</link>
+        <pubDate>Mon, 30 Mar 2026 14:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/ai/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Harness</title>
+        <link>/zh-cn/categories/harness/</link>
+        <pubDate>Mon, 30 Mar 2026 14:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/harness/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>VibeCoding</title>
+        <link>/zh-cn/categories/vibecoding/</link>
+        <pubDate>Mon, 30 Mar 2026 14:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/categories/vibecoding/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Web3</title>
         <link>/zh-cn/categories/web3/</link>
         <pubDate>Thu, 26 Mar 2026 12:00:00 +0000</pubDate>
@@ -32,14 +64,6 @@
         <description></description>
         </item>
         <item>
-        <title>VibeCoding</title>
-        <link>/zh-cn/categories/vibecoding/</link>
-        <pubDate>Wed, 18 Mar 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/vibecoding/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>A2A</title>
         <link>/zh-cn/categories/a2a/</link>
         <pubDate>Fri, 06 Mar 2026 12:00:00 +0000</pubDate>
@@ -48,27 +72,11 @@
         <description></description>
         </item>
         <item>
-        <title>Agent</title>
-        <link>/zh-cn/categories/agent/</link>
-        <pubDate>Fri, 06 Mar 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/agent/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>OpenClaw</title>
         <link>/zh-cn/categories/openclaw/</link>
         <pubDate>Mon, 02 Mar 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/categories/openclaw/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>AI</title>
-        <link>/zh-cn/categories/ai/</link>
-        <pubDate>Thu, 26 Feb 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/categories/ai/</guid>
         <description></description>
         </item>
         <item>
