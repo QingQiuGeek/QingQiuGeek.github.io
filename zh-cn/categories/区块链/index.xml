@@ -7,7 +7,112 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 26 Mar 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 02 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>区块链分叉fork</title>
+        <link>/zh-cn/post/2026/04/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%88%86%E5%8F%89fork/</link>
+        <pubDate>Thu, 02 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%88%86%E5%8F%89fork/</guid>
+        <description>&lt;p&gt;曾经的以太坊因为 The DAO 黑客攻击事件，被迫硬分叉，ETH 分成了 ETC 和如今的 ETH。&lt;/p&gt;
+&lt;h2 id=&#34;温和的软分叉soft-fork&#34;&gt;&lt;a href=&#34;#%e6%b8%a9%e5%92%8c%e7%9a%84%e8%bd%af%e5%88%86%e5%8f%89soft-fork&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;温和的软分叉（Soft Fork）
+&lt;/h2&gt;&lt;p&gt;软分叉可以理解为一种&amp;quot;收紧规则&amp;quot;或者是&amp;quot;向下兼容&amp;quot;的升级，旧的节点依然能接受新的区块。&lt;/p&gt;
+&lt;p&gt;假设原来的规则是：&amp;ldquo;每一页账本的大小不能超过 1MB&amp;rdquo;。现在，为了提高效率，大家决定在这个 1MB 的空间里把字写得小一点，腾出更多地方记更多的账。&lt;/p&gt;
+&lt;p&gt;村里有一半人升级了新规则（新节点），开始用小字体记账；另一半人还在用旧规则（老节点）。神奇的事情发生了：因为新规则（小字体）并没有突破旧规则（1MB 上限）的红线，所以在那些没升级的老节点眼里，新节点记的账依然是&amp;quot;合法&amp;quot;的。虽然他们看不懂那些小字体的具体含义，但他们依然承认这页账本有效。&lt;/p&gt;
+&lt;p&gt;比如比特币 2017 年的 SegWit（隔离见证）。&lt;/p&gt;
+&lt;h2 id=&#34;决裂的硬分叉hard-fork&#34;&gt;&lt;a href=&#34;#%e5%86%b3%e8%a3%82%e7%9a%84%e7%a1%ac%e5%88%86%e5%8f%89hard-fork&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;决裂的硬分叉（Hard Fork）
+&lt;/h2&gt;&lt;p&gt;新规则和旧规则是彻底冲突的，原本的一条链硬生生地掰成了两条互不相认的链。&lt;/p&gt;
+&lt;p&gt;不过硬分叉并不全是&amp;quot;坏事&amp;quot;。它其实分为两种类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;计划内硬分叉（Planned Hard Fork）&lt;/strong&gt;：社区提前达成了高度共识，几乎所有人都会升级到新版本，旧链自然消亡，不会产生新币。以太坊的多次网络升级（如&amp;quot;伦敦升级&amp;quot;&amp;ldquo;上海升级&amp;rdquo;）都属于这种——虽然技术上是硬分叉，但因为全网共识一致，实际上并未产生链的分裂。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;争议性硬分叉（Contentious Hard Fork）&lt;/strong&gt;：社区严重撕裂，相当一部分人拒绝升级，新旧链各自存活，两条链上的资产独立运行。BTC 与 BCH 的分裂就是最典型的案例。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;硬分叉免费的糖果&#34;&gt;&lt;a href=&#34;#%e7%a1%ac%e5%88%86%e5%8f%89%e5%85%8d%e8%b4%b9%e7%9a%84%e7%b3%96%e6%9e%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;硬分叉免费的糖果
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;硬分叉最迷人、也最让人困惑的地方在于：它会创造出&amp;quot;平行宇宙&amp;quot;。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在分叉的那一秒之前，两条链的历史数据是一模一样的。所以，如果你在分叉前持有 10 个比特币，分叉后，你会在旧链上拥有 10 个旧币，同时在新链上免费获得 10 个新币。这就是为什么老韭菜们常说&amp;quot;硬分叉就是发糖果&amp;quot;。&lt;/p&gt;
+&lt;p&gt;然而这也带来了巨大的代价和风险，而这个代价的大小，首先取决于这个村子到底是用什么规则在记账。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PoW 硬分叉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果是一个 &lt;strong&gt;PoW（工作量证明）&lt;/strong&gt; 的链，比如比特币发生了硬分叉，那场面就像是一次惨烈的&amp;quot;分家产&amp;quot;。因为 PoW 依靠的是物理世界的矿机和电力。当分叉发生时，原本守护这一条链的算力大军被迫选边站队。也许 60% 的矿工去了新链，40% 的矿工留在了旧链。&lt;/p&gt;
+&lt;p&gt;这就导致了一个可怕的后果：旧链的算力大幅下降，挖矿难度虽然会调整，但在调整前的空窗期，这条链会变得极其脆弱，甚至容易遭到黑客的 &lt;strong&gt;51% 攻击&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Pos 硬分叉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为 PoS 不依赖物理矿机，而是依赖链上的资产（质押的币）。当分叉发生时，甚至不需要你做任何选择，你的资产和质押状态会被瞬间&amp;quot;克隆&amp;quot;到两条链上。&lt;/p&gt;
+&lt;p&gt;但问题来了：&lt;strong&gt;无利害关系（Nothing at Stake）&lt;/strong&gt;。既然两边都有钱，作为验证者的你，最理性的选择就是两边都下注，两边都记账。这就导致 PoS 链在分叉时，更容易产生混乱和冗余，社区的信仰被割裂得更加彻底，因为&amp;quot;背叛&amp;quot;的成本太低了。&lt;/p&gt;
+&lt;p&gt;分叉后还有一个风险——&lt;strong&gt;重放攻击（Replay Attack）&lt;/strong&gt;。由于分叉前两条链共享相同的交易格式和历史记录，在 A 链上签名的一笔交易，可能被别人&amp;quot;复制&amp;quot;到 B 链上重新广播执行。&lt;/p&gt;
+&lt;p&gt;比如在 BTC 链上给朋友转了 1 个 BTC，黑客可能把这笔交易原封不动地搬到 BCH 链上，导致同时也损失了 1 个 BCH。&lt;/p&gt;
+&lt;p&gt;这就是为什么负责任的分叉项目通常会加入 &lt;strong&gt;重放保护（Replay Protection） 机制&lt;/strong&gt;，给交易加上一个只属于本链的&amp;quot;身份标签&amp;quot;，让它无法被另一条链接受。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;价值是不会凭空产生的。如果把一张 100 元的钞票撕成两半，它不会变成两张 100 元，甚至可能连 两张 50 元都不值。分叉后的两条链，市值加起来勉强等于分叉前的市值。甚至更多时候，因为社区分裂导致的恐慌，两条链加起来的市值反而会暴跌。&lt;/strong&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>区块链四种共识机制</title>
+        <link>/zh-cn/post/2026/04/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9B%9B%E7%A7%8D%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Thu, 02 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9B%9B%E7%A7%8D%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6/</guid>
+        <description>&lt;h2 id=&#34;pow-proof-of-work--工作量证明&#34;&gt;&lt;a href=&#34;#pow-proof-of-work--%e5%b7%a5%e4%bd%9c%e9%87%8f%e8%af%81%e6%98%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;PoW (Proof of Work)&lt;/strong&gt; — 工作量证明
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;工作量证明（PoW）&lt;/strong&gt; 是最早由 &lt;strong&gt;比特币&lt;/strong&gt; 引入并广泛应用的共识机制。&lt;/p&gt;
+&lt;h3 id=&#34;工作原理&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工作原理：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;矿工&lt;/strong&gt; 通过计算机进行复杂的数学运算（即“挖矿”），解决一个数学难题来 &lt;strong&gt;竞争&lt;/strong&gt; 新区块的创建权。&lt;/li&gt;
+&lt;li&gt;这个计算过程消耗大量的计算资源，通常是通过尝试大量的输入（&lt;strong&gt;哈希碰撞&lt;/strong&gt;）来寻找合适的输出。&lt;/li&gt;
+&lt;li&gt;当一个矿工成功解决了问题，就能将新区块添加到区块链中，并获得奖励（例如比特币的区块奖励）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优缺点&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e7%bc%ba%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优缺点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：非常安全、去中心化，算力决定了谁能生成新区块，攻击者需要掌控大部分的计算能力才能控制网络。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：能源消耗大，计算资源要求高，且随着网络发展，挖矿难度逐渐增加。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pos-proof-of-stake--权益证明&#34;&gt;&lt;a href=&#34;#pos-proof-of-stake--%e6%9d%83%e7%9b%8a%e8%af%81%e6%98%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;PoS (Proof of Stake)&lt;/strong&gt; — 权益证明
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;权益证明（PoS）&lt;/strong&gt; 是一种比 PoW 更加节能的共识机制，常用于一些新型区块链网络（早期以太坊也是PoW机制，后来升级成了Pos）。&lt;/p&gt;
+&lt;h3 id=&#34;工作原理-1&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工作原理：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;在 &lt;strong&gt;PoS&lt;/strong&gt; 网络中，矿工（或节点）被称为 &lt;strong&gt;验证者&lt;/strong&gt;，他们通过 &lt;strong&gt;质押一定数量的代币&lt;/strong&gt; 来成为区块验证者。&lt;/li&gt;
+&lt;li&gt;被选中的验证者（根据随机性和质押数量）负责验证区块，并在验证成功后获得奖励。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区块奖励&lt;/strong&gt; 和 &lt;strong&gt;手续费&lt;/strong&gt; 通常分配给验证者，奖励数量通常与其质押的代币数量成正比。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优缺点-1&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e7%bc%ba%e7%82%b9-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优缺点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：节省能源和计算资源，交易处理速度更快，适合大规模使用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：马太效应，质押代币集中可能导致少数验证者控制网络，存在潜在的 &lt;strong&gt;富者越富&lt;/strong&gt; 问题。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;流动性质押&#34;&gt;&lt;a href=&#34;#%e6%b5%81%e5%8a%a8%e6%80%a7%e8%b4%a8%e6%8a%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;流动性质押
+&lt;/h3&gt;&lt;p&gt;为了解决马太效应，可以把手里的少量以太币交给像 Lido 这样的去中心化协议，或者直接放在交易所的理财账户里。这些平台会扮演&amp;quot;团长&amp;quot;的角色，&lt;strong&gt;把成千上万个散户手中的零钱凑在一起，凑成无数个 32 枚以太币去参与记账，赚到的收益再按比例分给大家&lt;/strong&gt;。通过这种方式，哪怕你只有 0.01 个币，也能成为维护网络安全的一份子。&lt;/p&gt;
+&lt;h2 id=&#34;dpos-delegated-proof-of-stake--委托权益证明&#34;&gt;&lt;a href=&#34;#dpos-delegated-proof-of-stake--%e5%a7%94%e6%89%98%e6%9d%83%e7%9b%8a%e8%af%81%e6%98%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;DPoS (Delegated Proof of Stake)&lt;/strong&gt; — 委托权益证明
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;委托权益证明（DPoS）&lt;/strong&gt; 是一种改进的 &lt;strong&gt;PoS&lt;/strong&gt; 机制，旨在提高效率并解决 PoS 中的集中化问题。&lt;/p&gt;
+&lt;h3 id=&#34;工作原理-2&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86-2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工作原理：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;在 &lt;strong&gt;DPoS&lt;/strong&gt; 中，代币持有者 &lt;strong&gt;选举&lt;/strong&gt; 出一定数量的代表（通常是 21 或 100 个）来代为验证区块和进行决策。&lt;/li&gt;
+&lt;li&gt;这些 &lt;strong&gt;代表&lt;/strong&gt; 被称为 &lt;strong&gt;“生产者”&lt;/strong&gt;，他们的任务是根据选民的信任和授权来维护网络安全。&lt;/li&gt;
+&lt;li&gt;如果代表没有履行职责，选民可以将选票投给其他代表，确保网络的去中心化和公正性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优缺点-2&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e7%bc%ba%e7%82%b9-2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优缺点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：相比 PoS，DPoS 提供更高的交易速度和处理能力，能通过少数代表快速达成共识。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：去中心化程度较低，因为网络中验证区块的数量有限，可能被少数几个代表控制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;poh-proof-of-history--历史证明&#34;&gt;&lt;a href=&#34;#poh-proof-of-history--%e5%8e%86%e5%8f%b2%e8%af%81%e6%98%8e&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;PoH (Proof of History)&lt;/strong&gt; — 历史证明
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;历史证明（PoH）&lt;/strong&gt; 是一种 &lt;strong&gt;创新的共识机制&lt;/strong&gt;，最初由 &lt;strong&gt;Solana&lt;/strong&gt; 引入，旨在提高区块链的处理速度和时间排序问题。&lt;/p&gt;
+&lt;h3 id=&#34;工作原理-3&#34;&gt;&lt;a href=&#34;#%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86-3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;工作原理：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PoH&lt;/strong&gt; 是基于 &lt;strong&gt;时间戳&lt;/strong&gt; 的共识机制，它通过一个连续的时间序列来记录每个事件的顺序。每个事件（区块）都会被附加一个 &lt;strong&gt;历史时间戳&lt;/strong&gt;，通过区块的时间顺序来验证历史。&lt;/li&gt;
+&lt;li&gt;它利用 &lt;strong&gt;加密哈希&lt;/strong&gt; 来生成时间顺序，而不需要像 PoW 那样通过计算来验证工作量。&lt;/li&gt;
+&lt;li&gt;通过这种方法，PoH 可以有效地 &lt;strong&gt;减少网络的延迟&lt;/strong&gt;，提高交易速度。最著名的应用就是 Solana。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;优缺点-3&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e7%bc%ba%e7%82%b9-3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优缺点：
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;：高吞吐量、低延迟，能处理非常高频的交易。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺点&lt;/strong&gt;：相对较新的机制，可能面临扩展性和安全性方面的挑战。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>bitensor、near、0g</title>
         <link>/zh-cn/post/2026/03/bitensornear0g/</link>
         <pubDate>Thu, 26 Mar 2026 12:00:00 +0000</pubDate>
