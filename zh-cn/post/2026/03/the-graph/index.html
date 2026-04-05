@@ -722,6 +722,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
   <ol>
     <li><a href="#概念">概念</a></li>
     <li><a href="#the-graph-的核心工作原理">The Graph 的核心工作原理</a></li>
+    <li><a href="#subgraph子图">Subgraph（子图）</a></li>
     <li><a href="#graphql">GraphQL</a></li>
   </ol>
 </nav>
@@ -783,7 +784,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 2 分钟
             </time>
         </div>
         
@@ -839,10 +840,25 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </li>
 </ul>
 <p>开发者通过 GraphQL 接口，瞬间就能查到复杂的数据关联。</p>
+<h2 id="subgraph子图"><a href="#subgraph%e5%ad%90%e5%9b%be" class="header-anchor"></a>Subgraph（子图）
+</h2><p>The Graph 的核心单元叫做 <strong>Subgraph（子图）</strong>。你可以把 Subgraph 理解成一个&quot;定制化的数据订阅方案&quot;。</p>
+<p>Subgraph 就是你在这条流水线旁边安装的一个<strong>专属筛选机器</strong>。你告诉它：&ldquo;我要监听 Uniswap V3 合约，只要有 Swap 事件，就把里面的代币对、交易量、价格这些字段提取出来，存到我专属的数据库里。&rdquo; 从此，这个 Subgraph 就会 7×24 小时不间断地自动运行，把你关心的数据实时地整理好，存入一个可以被 <strong>GraphQL</strong> 查询的数据库。</p>
 <h2 id="graphql"><a href="#graphql" class="header-anchor"></a>GraphQL
 </h2><p>GraphQL 是一种用于 API 的查询语言，以及一个用于履行这些查询的运行时（Runtime）。</p>
 <p>它最初由 Facebook 开发，旨在解决 REST API 的痛点。它的核心理念是：让客户端（前端）自己定义“我需要什么数据”，然后服务器（Backend/Graph）精确地返回这些数据。</p>
 <p>而 REST API 是服务器定义好 JSON 结构。</p>
+<p><img src="/zh-cn/post/2026/03/the-graph/image.png"
+	width="1442"
+	height="796"
+	srcset="/zh-cn/post/2026/03/the-graph/image_hu_e5c2dec478dc1701.png 480w, /zh-cn/post/2026/03/the-graph/image_hu_1873e8eff709c01d.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="181"
+		data-flex-basis="434px"
+	
+></p>
 
 </section>
 

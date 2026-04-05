@@ -89,8 +89,6 @@
 &lt;p&gt;所以说白了 Layer2 到底只是个辅链，永远没法&lt;strong&gt;篡位&lt;/strong&gt;！&lt;/p&gt;
 &lt;h3 id=&#34;rollups&#34;&gt;&lt;a href=&#34;#rollups&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Rollups
 &lt;/h3&gt;&lt;p&gt;Rollups 是目前主流的 Layer 2 方案，它把成百上千笔交易在链下计算，只把“压缩后的数据”和“证明”发到以太坊主链。&lt;/p&gt;
-&lt;h2 id=&#34;polkadotcosmos&#34;&gt;&lt;a href=&#34;#polkadotcosmos&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Polkadot、Cosmos
-&lt;/h2&gt;&lt;p&gt;跨链技术，上面说过了。&lt;/p&gt;
 &lt;h2 id=&#34;模块化区块链-celestia&#34;&gt;&lt;a href=&#34;#%e6%a8%a1%e5%9d%97%e5%8c%96%e5%8c%ba%e5%9d%97%e9%93%be-celestia&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;模块化区块链 Celestia
 &lt;/h2&gt;&lt;p&gt;传统的区块链是单体架构，要同时做四件事：执行交易、达成共识、数据可用性（确保数据公开可查）、结算（确认最终结果）&lt;/p&gt;
 &lt;p&gt;而 Celestia 只专注做第 3 件事：数据可用性。其他链（如 Rollup）只需把交易数据发给 Celestia 存储，自己专注执行，大幅降低开发门槛，避免造轮子。&lt;/p&gt;

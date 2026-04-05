@@ -721,7 +721,12 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
             <nav id="TableOfContents">
   <ol>
     <li><a href="#交互式证明">交互式证明</a></li>
-    <li><a href="#非交互式证明">非交互式证明</a></li>
+    <li><a href="#非交互式证明">非交互式证明</a>
+      <ol>
+        <li><a href="#zk-snarks-零知识简洁非交互式知识论证">zk-SNARKs 零知识简洁非交互式知识论证</a></li>
+        <li><a href="#zk-starks-零知识可扩展透明知识论证">zk-STARKs 零知识可扩展透明知识论证</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -782,7 +787,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 2 分钟
+                阅读时长: 3 分钟
             </time>
         </div>
         
@@ -828,6 +833,19 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     >以太坊 零知识证明</a></p>
 <p>Zero—Knowledge Proof 零知识证明，一种密码学工具，证明者可以向验证者证明某个声明是真实的，并且除了证明该声明是真实的之外不会透露任何额外信息。</p>
 <p>例如，“我是 X 国的公民”。你需要提供“证据”来支持你的声明，例如护照或身份证。但这种方法缺乏隐私，我的个人身份信息储存在中心化数据库中与其他第三方服务商共享，这些数据库很容易受到黑客攻击，导致身份泄露或被盗用。那么零知识证明就可以在不透露我的护照、身份证的情况下证明我确实是 X 国公民！</p>
+<p>要具备：</p>
+<p><img src="/zh-cn/post/2026/01/zk%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/image.png"
+	width="1246"
+	height="1022"
+	srcset="/zh-cn/post/2026/01/zk%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/image_hu_99d34476229ba470.png 480w, /zh-cn/post/2026/01/zk%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/image_hu_475545224f24c75a.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="121"
+		data-flex-basis="292px"
+	
+></p>
 <h2 id="交互式证明"><a href="#%e4%ba%a4%e4%ba%92%e5%bc%8f%e8%af%81%e6%98%8e" class="header-anchor"></a>交互式证明
 </h2><p>证明者和验证者相互提问验证对方是否是真的。</p>
 <ol>
@@ -845,6 +863,26 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <h2 id="非交互式证明"><a href="#%e9%9d%9e%e4%ba%a4%e4%ba%92%e5%bc%8f%e8%af%81%e6%98%8e" class="header-anchor"></a>非交互式证明
 </h2><p>互动式证明的作用有限，因为它要求双方同时在线，反复互动。 即使验证者相信证明者是诚实的，该证明也不能用于独立验证（计算一个新的证明需要证明者和验证者之间一个新的信息集）。</p>
 <p>非互动式证明只需要证明者和验证者之间进行一轮沟通。证明者把秘密信息输入到一个特殊的算法中，然后计算出一个零知识证明。这个证明会被发送给验证者，验证者使用另一个算法来检验证明者是否知道秘密信息，就好像他们的公钥和私钥。</p>
+<h3 id="zk-snarks-零知识简洁非交互式知识论证"><a href="#zk-snarks-%e9%9b%b6%e7%9f%a5%e8%af%86%e7%ae%80%e6%b4%81%e9%9d%9e%e4%ba%a4%e4%ba%92%e5%bc%8f%e7%9f%a5%e8%af%86%e8%ae%ba%e8%af%81" class="header-anchor"></a>zk-SNARKs 零知识简洁非交互式知识论证
+</h3><p>全称是 Zero-Knowledge Succinct Non-interactive ARguments of Knowledge。</p>
+<p>这种方式生成的证明文件非常小，验证起来也极快。打个比方，无论被证明的计算有多么复杂——哪怕是把一栋大楼的建筑图纸压缩成一张 A4 纸——最终生成的证明文件大小都差不多，验证时间也差不多。这对区块链来说是福音，因为区块链上的每一次验证都要花费 Gas，证明越小越快，成本就越低。</p>
+<p>zk-SNARKs 的缺点是一个非常严重的&quot;原罪&quot;：它依赖一个叫做**可信初始化（Trusted Setup）**的仪式。在部署一套 zk-SNARK 系统之前，必须先有一些人坐在一起，共同生成一组特殊的&quot;公共参数&quot;（也叫&quot;有毒废料&quot;，Toxic Waste）。这个仪式结束后，所有参与者必须销毁自己手中那份参数的碎片。道理很简单：如果任何一个参与者暗中留存了自己的那份碎片，他就可以利用它凭空捏造出虚假但看起来合法的证明，相当于在系统里留了一个&quot;上帝后门&quot;。</p>
+<h3 id="zk-starks-零知识可扩展透明知识论证"><a href="#zk-starks-%e9%9b%b6%e7%9f%a5%e8%af%86%e5%8f%af%e6%89%a9%e5%b1%95%e9%80%8f%e6%98%8e%e7%9f%a5%e8%af%86%e8%ae%ba%e8%af%81" class="header-anchor"></a>zk-STARKs 零知识可扩展透明知识论证
+</h3><p>STARK 的全称是 Zero-Knowledge Scalable Transparent Arguments of Knowledge。</p>
+<p>关键词：<strong>可扩展（Scalable）</strong> 和 <strong>透明（Transparent）</strong>。&ldquo;透明&quot;是 STARKs 最大的底气所在。它彻底抛弃了可信初始化仪式，&ldquo;可扩展&quot;则意味着它在处理大规模计算时效率更高。SNARKs 的证明生成速度会随着计算量增加而变慢，但 STARKs 的增长是亚线性的，更能应对复杂的计算场景。</p>
+<p>其最大的缺点是证明文件体积更大，往往比 SNARKs 大出几十倍甚至上百倍。这意味着把这个证明发布到链上的 Gas 费会更贵，也更占用网络带宽。此外，STARKs 依赖的密码学假设（主要是哈希函数的抗碰撞性）在数学上更&quot;朴素&rdquo;，被认为在量子计算时代来临时，具有<strong>更强的抗量子攻击能力</strong>。</p>
+<p><img src="/zh-cn/post/2026/01/zk%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/image-1.png"
+	width="1289"
+	height="640"
+	srcset="/zh-cn/post/2026/01/zk%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/image-1_hu_b90258e1cddc0407.png 480w, /zh-cn/post/2026/01/zk%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/image-1_hu_a27ed881d5414dde.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
 
 </section>
 
