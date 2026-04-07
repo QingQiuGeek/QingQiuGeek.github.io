@@ -7,7 +7,55 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Thu, 26 Mar 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 06 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>去中心化借贷</title>
+        <link>/zh-cn/post/2026/04/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E5%80%9F%E8%B4%B7/</link>
+        <pubDate>Mon, 06 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E5%80%9F%E8%B4%B7/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.notion.so/Moledao-Web3-32e37e708cae8032a077c2047f229a89?pvs=11&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;去中心化借贷无需征信、收入证明、个人信息，只需要一个钱包、账户。&lt;/p&gt;
+&lt;h2 id=&#34;超额抵押&#34;&gt;&lt;a href=&#34;#%e8%b6%85%e9%a2%9d%e6%8a%b5%e6%8a%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;超额抵押
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;#34;如果我已经有了价值 1000 美元的 ETH，为什么我还要抵押它去借 700 美元？我直接卖掉 ETH 不就好了吗？&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;要理解这个问题，先明白超额抵押，也就是借出的钱，永远少于你抵押品的价值。&lt;/p&gt;
+&lt;p&gt;比如我有 10 个 ETH，现在每个 ETH 价值 2K U，我看好他们未来会涨，因此会一直拿着，不会卖掉，然而这时我看到有一个 meme 币很火，想投入 1W U去搏一把，这时我要么卖掉一部分 ETH（但我不想），要么去银行贷款（但银行不接受 ETH 作为抵押品）。&lt;/p&gt;
+&lt;p&gt;因此还有第三条路：去中心化借贷，我抵押全部 ETH（价值 2W U）借出 1W U 去搏一把 meme 币。这样整个过程中，我一个 ETH 都没有卖掉。这在金融术语里叫做 杠杆（Leverage）：用借来的钱去放大收益。&lt;/p&gt;
+&lt;p&gt;所以&lt;strong&gt;人们抵押资产去借贷，有时候不是因为他们&amp;quot;缺钱&amp;quot;，而是因为他们不想卖掉看好的资产，同时又想获得流动性去做其他事情。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;清算阈值&#34;&gt;&lt;a href=&#34;#%e6%b8%85%e7%ae%97%e9%98%88%e5%80%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;清算阈值
+&lt;/h2&gt;&lt;p&gt;如果 ETH 贬值，比如降到 1.2K，那么此时抵押的 10 个 ETH 总价值是 1.2W U，而我借出的是 1W U，当前抵押率：12,000 / 10,000 = 120%，而协议规定的清算阈值（Liquidation Threshold）是 125%。也就是说，当抵押率跌破 125% 时，我的仓位就进入了&amp;quot;危险区&amp;quot;，此时我要么追加抵押品提高抵押率，要么等待被清算。&lt;/p&gt;
+&lt;p&gt;因此使用 DeFi 借贷的人，必须时刻关注自己的 &lt;strong&gt;健康因子（Health Factor）&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;健康因子 = 抵押品价值 × 清算阈值 / 借出资产价值&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当健康因子 &amp;gt; 1 时是安全的；当健康因子 = 1 时正站在悬崖边上；当健康因子 &amp;lt; 1 时清算的刀已经落下。&lt;/p&gt;
+&lt;h2 id=&#34;利率模型&#34;&gt;&lt;a href=&#34;#%e5%88%a9%e7%8e%87%e6%a8%a1%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;利率模型
+&lt;/h2&gt;&lt;p&gt;假设一个借贷池里，储户们一共存入了 100 万 USDC（这些储户就是&amp;quot;放贷人&amp;quot;），而借款人一共借走了 60 万 USDC。那么，这个池子的资金利用率就是 60 / 100 = 60%。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;利用率越高，意味着池子里剩余的&amp;quot;闲钱&amp;quot;越少&lt;/strong&gt;。这时候会发生两件事：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;借款利率上升&lt;/strong&gt;：让借钱变得更&amp;quot;贵&amp;quot;，从而抑制过度借贷。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;存款利率也随之上升&lt;/strong&gt;：更高的利率会吸引更多人来存钱（放贷），从而增加池子里的资金供给，恢复平衡。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在 DeFi 借贷中，利率是按秒计算的，因此 APY（年化收益率）会时刻变化。&lt;/p&gt;
+&lt;h3 id=&#34;拐点利率模型&#34;&gt;&lt;a href=&#34;#%e6%8b%90%e7%82%b9%e5%88%a9%e7%8e%87%e6%a8%a1%e5%9e%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;拐点利率模型
+&lt;/h3&gt;&lt;p&gt;拐点利率模型（Kinked Rate Model）。这个模型设定了一个&amp;quot;最优利用率&amp;quot;（比如 80%），在这个点以下，利率平稳上升；一旦突破这个点，利率就会陡然飙升，像一根急剧上翘的曲棍球杆。&lt;/p&gt;
+&lt;h3 id=&#34;资金池模式---点对池模式peer-to-pool&#34;&gt;&lt;a href=&#34;#%e8%b5%84%e9%87%91%e6%b1%a0%e6%a8%a1%e5%bc%8f---%e7%82%b9%e5%af%b9%e6%b1%a0%e6%a8%a1%e5%bc%8fpeer-to-pool&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;资金池模式 - 点对池模式（Peer-to-Pool）
+&lt;/h3&gt;&lt;p&gt;AMM 让交易者和流动性池交互，而非与特定对手方交互。&lt;/p&gt;
+&lt;p&gt;DeFi 借贷也是同样的逻辑——存款人把钱存入一个公共资金池，借款人从同一个池子里借钱。每个人面对的都是池子，而不是另一个具体的人。&lt;/p&gt;
+&lt;p&gt;当你在 Aave 或 Compound 中存入资产时，你会收到一种叫做 &lt;strong&gt;存款凭证代币（如 Aave 的 aToken、Compound 的 cToken）&lt;/strong&gt; 的东西。比如你存了 1000 USDC 到 Aave，你会收到 1000 aUSDC。这些 aToken 代表了你在资金池中的份额，并且它们的余额会&lt;strong&gt;自动增长&lt;/strong&gt;——每秒钟都在增加一点点，因为利息是&lt;strong&gt;实时累积的&lt;/strong&gt;。当你想取回本金和利息时，只需要把 aToken 还给协议，智能合约就会把相应数量的 USDC（本金 + 利息）退还给你。&lt;/p&gt;
+&lt;p&gt;更精妙的是，这些存款凭证代币本身也是可以在 DeFi 生态中流通的。你的 aUSDC 可以拿去做其他事情——比如提供给另一个协议作为流动性、用作别处的抵押品等等。&lt;strong&gt;可组合性（Composability）&lt;/strong&gt;——也就是&amp;quot;DeFi 乐高&amp;quot;——一个协议的输出可以成为另一个协议的输入。存款凭证代币正是这种可组合性在借贷领域最典型的体现。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>bitensor、near、0g</title>
         <link>/zh-cn/post/2026/03/bitensornear0g/</link>
         <pubDate>Thu, 26 Mar 2026 12:00:00 +0000</pubDate>
@@ -6266,11 +6314,11 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 &lt;/h4&gt;&lt;p&gt;预言机节点是预言机服务的&lt;strong&gt;链下部分&lt;/strong&gt;，它从外部来源提取信息，例如托管在第三方服务器上的应用程序接口，并将信息放在链上供智能合约使用。&lt;/p&gt;
 &lt;h3 id=&#34;种类&#34;&gt;&lt;a href=&#34;#%e7%a7%8d%e7%b1%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;种类
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;发布-订阅预言机&lt;/li&gt;
+&lt;li&gt;推送型预言机&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;预言机节点主动定期将数据更新提交到链上的智能合约存储，合约可以随时读取。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;请求-响应预言机&lt;/li&gt;
+&lt;li&gt;拉取型预言机&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;智能合约在需要数据时发起数据请求，预言机节点响应并将数据返回给链上。&lt;/p&gt;
 &lt;ul&gt;
@@ -6295,15 +6343,28 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 &lt;p&gt;激励兼容性：预言机应激励链下数据提供者向智能合约提交正确的信息。 奖励兼容性包括&lt;strong&gt;可归因性和问责性&lt;/strong&gt;。 可归因性指将一条外部信息与其提供者联系起来，而问责性则将数据提供者和他们提供的信息联结起来，因此能够&lt;strong&gt;根据提供的数据质量奖励或者惩罚数据提供者。&lt;/strong&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;最出名的预言机 chainlink&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E9%A2%84%E8%A8%80%E6%9C%BA%E5%92%8C%E8%B7%A8%E9%93%BE%E6%A1%A5/image-1.png&#34;
+	width=&#34;1378&#34;
+	height=&#34;955&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E9%A2%84%E8%A8%80%E6%9C%BA%E5%92%8C%E8%B7%A8%E9%93%BE%E6%A1%A5/image-1_hu_eb5f1d35a33ebad9.png 480w, /zh-cn/post/2026/01/%E9%A2%84%E8%A8%80%E6%9C%BA%E5%92%8C%E8%B7%A8%E9%93%BE%E6%A1%A5/image-1_hu_691e2c4aed8f911b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;144&#34;
+		data-flex-basis=&#34;346px&#34;
+	
+&gt;&lt;/p&gt;
 &lt;h2 id=&#34;跨链桥&#34;&gt;&lt;a href=&#34;#%e8%b7%a8%e9%93%be%e6%a1%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;跨链桥
 &lt;/h2&gt;&lt;p&gt;预言机是为了解决区块链从现实世界获取数据的问题，那么跨链桥则是不同区块链之间沟通的桥梁。传统区块链存在于孤立的环境中，区块链之间无法进行交易和通信，连通性和互操作性受到限制。跨链桥则在区块链之间建立一条条传输路线，允许区块链网络之间交换数据和转移资产。&lt;/p&gt;
 &lt;p&gt;跨链桥设计多种多样，以下是三种常见的资产跨链转移的方法：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;锁定并铸币 – 锁定源链上的资产 ETH 并在目标链上铸币 Wrapped ETH 简称 wETH。&lt;/p&gt;
+&lt;p&gt;锁定、铸币 – 锁定源链上的资产 ETH 并在目标链上铸币 Wrapped ETH 简称 wETH。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;销毁并铸币 – 销毁源链上的资产并在目标链上铸币。&lt;/p&gt;
+&lt;p&gt;销毁、铸币 – 销毁源链上的资产并在目标链上铸币。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;原子交换 – 通过第三方将源链上的资产与目标链上的资产交换。&lt;/p&gt;
@@ -6444,7 +6505,8 @@ x402 的出现让两者得以融合。&lt;/p&gt;
     &gt;以太坊 EVM&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;从账本到状态机&#34;&gt;&lt;a href=&#34;#%e4%bb%8e%e8%b4%a6%e6%9c%ac%e5%88%b0%e7%8a%b6%e6%80%81%e6%9c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;从账本到状态机
 &lt;/h2&gt;&lt;p&gt;我们通常用“分布式账本”的类比来描述像比特币这样的区块链，它使用密码学的基本工具来实现去中心化的货币。而以太坊也有自己的本土加密货币并同样遵循着&lt;strong&gt;分布式账本规则&lt;/strong&gt;，但同时它也支持更强大的功能“智能合约”，这也是以太坊可编程的关键，因此以太坊除了是一个分布式账本之外，还是一个状态机器，可以根据预定义的规则（智能合约）在不同区块之间更改。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image.png&#34;
+&lt;h2 id=&#34;组件&#34;&gt;&lt;a href=&#34;#%e7%bb%84%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;组件
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image.png&#34;
 	width=&#34;1080&#34;
 	height=&#34;607&#34;
 	srcset=&#34;/zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image_hu_c16a6ecd771652a5.png 480w, /zh-cn/post/2026/01/%E4%BA%86%E8%A7%A3evm%E5%8C%BA%E5%9D%97/image_hu_5ed3ebfdccc5da67.png 1024w&#34;
@@ -6456,6 +6518,23 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 		data-flex-basis=&#34;427px&#34;
 	
 &gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;程序计数器 (Program Counter, PC)：记录当前正在执行的指令在字节码中的位置。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;栈 (Stack)：用于存放操作数。栈项的大小为 256 位，最大深度为 1024 层。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;内存 (Memory)：一个按字节寻址的连续字节数组，初始为空，执行时按 32 字节（Word）为单位动态扩展。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;剩余 Gas (gasAvailable)：当前上下文中可供使用的计算资源总量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;存储 (Storage)：这是持久化状态的一部分（属于全局状态 σ），不像栈和内存那样在执行结束后消失&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;evm-如何工作&#34;&gt;&lt;a href=&#34;#evm-%e5%a6%82%e4%bd%95%e5%b7%a5%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EVM 如何工作
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;EVM 运行在以太坊的每个节点上&lt;/strong&gt;，当部署一个智能合约时，合约代码会被编译成字节码，然后通过网络广播到所有节点。EVM 在每个节点上执行这些字节码，确保所有节点对交易和合约状态达成共识。&lt;/p&gt;
 &lt;p&gt;和 Java 的 JVM 不同，EVM 不是一个需要单独下载的独立软件，而是&lt;strong&gt;嵌入在以太坊客户端中的运行时环境&lt;/strong&gt;。开发者可以通过以下方式获取 EVM 环境：&lt;/p&gt;
@@ -6478,6 +6557,77 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 		data-flex-basis=&#34;337px&#34;
 	
 &gt;&lt;/p&gt;
+&lt;h2 id=&#34;交易执行的三阶段&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%89%a7%e8%a1%8c%e7%9a%84%e4%b8%89%e9%98%b6%e6%ae%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易执行的三阶段
+&lt;/h2&gt;&lt;p&gt;一笔交易进入 EVM 到产生结果，通常经历三个阶段：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;第一阶段：检查点与预扣费： 验证交易合法性后，系统会增加发送者的 Nonce，并从其余额中扣除预付成本 (upfrontCost)，以建立执行环境。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;第二阶段：消息标准化： EVM 会根据交易类型（合约创建或消息调用）将交易内容统一封装成一个“消息（Message）”结构。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;合约创建：计算新合约地址，初始化账户（Nonce=1，Balance 注入，Storage 为空）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;消息调用：根据目标地址获取代码并开始执行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;第三阶段：主执行循环，这是 EVM 最核心的运算过程，通过一个递归或循环的解释器来运行代码，步骤如下：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;获取指令 (Fetch)：根据 programCounter 从字节码中读取当前的操作码 (Opcode)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gas 计算：计算当前指令的基础 Gas 成本，以及是否涉及内存扩展成本。如果剩余 Gas 不足，则触发异常停机。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;操作执行：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例如执行 ADD（加法）时，会从栈中弹出两个值，相加后将结果压回栈。&lt;/p&gt;
+&lt;p&gt;执行 PUSH 指令时，会将字节码中的数据加载到栈中。&lt;/p&gt;
+&lt;p&gt;执行 JUMP（跳转）指令时，会修改 programCounter 到指定位置，前提是该位置必须是合法的跳转目标（JUMPDEST）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;更新状态：更新 programCounter 到下一条指令的位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;预编译合约-precompiled-contracts&#34;&gt;&lt;a href=&#34;#%e9%a2%84%e7%bc%96%e8%af%91%e5%90%88%e7%ba%a6-precompiled-contracts&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;预编译合约 Precompiled Contracts
+&lt;/h2&gt;&lt;p&gt;预编译合约是以太坊中一类特殊的合约，它们并不存储 EVM 字节码，而是将特定的复杂计算逻辑直接集成在以太坊客户端的底层代码中，位于以太坊地址空间中极其靠前的特定地址（1 到 9 号地址）。当以太坊执行层发现交易的目标地址属于这个集合时，它不会启动普通的虚拟机指令解析流程，而是将执行权重定向到客户端实现的“原生函数（Native Functions）”。&lt;/p&gt;
+&lt;p&gt;根据目前的规格，这些预编译合约主要负责处理高强度的密码学运算，包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;1号地址：ECDSA 公钥恢复（用于验证签名）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;2号与3号地址：SHA-256 和 RIPEMD-160 哈希运算。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;4号地址：标识函数（Identity function）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;5至8号地址：椭圆曲线运算（alt_bn128），常用于零知识证明。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;9号地址：BLAKE2 压缩函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;预编译合约比普通字节码效率更高&#34;&gt;&lt;a href=&#34;#%e9%a2%84%e7%bc%96%e8%af%91%e5%90%88%e7%ba%a6%e6%af%94%e6%99%ae%e9%80%9a%e5%ad%97%e8%8a%82%e7%a0%81%e6%95%88%e7%8e%87%e6%9b%b4%e9%ab%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;预编译合约比普通字节码效率更高
+&lt;/h3&gt;&lt;p&gt;预编译合约比普通字节码效率更高，主要源于其执行机制的本质区别：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;免除了解释器的开销：普通的智能合约需要在 EVM 的主执行循环中运行，经历“取指（Fetch）、译码（Decode）、执行（Execute）”的过程，而预编译合约直接运行编译后的机器码，跳过了虚拟机的解释环节。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;由于这些操作直接在底层高效运行，协议可以为这些复杂的密码学任务设置相对较低且固定的 Gas 消耗，而如果用普通的 EVM 指令去实现同样的逻辑，其 Gas 消耗将高到无法在单个区块内完成。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;预编译合约通常是无状态的（Stateless），它们仅根据输入产生输出，不涉及复杂的合约存储状态修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>
@@ -6520,6 +6670,20 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 &lt;p&gt;可以把 AMM 想象成一个永不停歇的“自动报价机”：它根据预设的数学公式（如 x * y = k）实时计算两种资产间的兑换价格。&lt;strong&gt;用户存入资产构成“资金池”&lt;/strong&gt;，交易者直接与这个池子交互，用 A 资产换取 B 资产，整个过程由代码自动执行，无需等待买家或卖家匹配。&lt;/p&gt;
 &lt;p&gt;用户存入资产就是 Liquidity ProVider，即&lt;strong&gt;流动性提供者&lt;/strong&gt;，简称 LP，他们不靠报价差赚钱，而是&lt;strong&gt;通过向交易池存入资金来赚取手续费&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;AMM 是一个统称&lt;/strong&gt;，它包含多种数学模型，比如 uniswap V2 的恒定乘积 x*y=k，稳定币的恒定总和 x+y=k。&lt;/p&gt;
+&lt;h2 id=&#34;滑点&#34;&gt;&lt;a href=&#34;#%e6%bb%91%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;滑点
+&lt;/h2&gt;&lt;p&gt;滑点是指在 交易执行时，预期价格 和 实际成交价格 之间的差异。滑点通常发生在市场波动性较大或者流动性较低时，特别是在进行大额交易时。滑点的大小取决于交易对的流动性、市场波动以及交易量。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image-1.png&#34;
+	width=&#34;1334&#34;
+	height=&#34;595&#34;
+	srcset=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image-1_hu_1c8f4665a772303.png 480w, /zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image-1_hu_2e171d701eb0c15b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;224&#34;
+		data-flex-basis=&#34;538px&#34;
+	
+&gt;&lt;/p&gt;
 &lt;h2 id=&#34;无常损失&#34;&gt;&lt;a href=&#34;#%e6%97%a0%e5%b8%b8%e6%8d%9f%e5%a4%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;无常损失
 &lt;/h2&gt;&lt;p&gt;无常损失（Impermanent Loss, IL）是 DeFi 中 LP 面临的核心风险。它并非实际亏损，而是指将资产存入流动性池后，相较于直接持有这些资产，可能获得的价值的损失。&lt;/p&gt;
 &lt;p&gt;假设此时 ETH 价格为 $1000 /ETH，一个 LP 向 Uniswap V2 的 ETH/USDC 池存入价值 1000 美元的 ETH 和 1000 美元的 USDC，那么就是存入了 1 ETH 和 1000 U，恒定乘积 k = 1 * 1000 = 1000，假设他存入的资金占据池子 50%的份额。&lt;/p&gt;

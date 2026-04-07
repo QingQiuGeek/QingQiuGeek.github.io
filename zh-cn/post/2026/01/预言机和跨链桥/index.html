@@ -897,11 +897,11 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </h4><p>预言机节点是预言机服务的<strong>链下部分</strong>，它从外部来源提取信息，例如托管在第三方服务器上的应用程序接口，并将信息放在链上供智能合约使用。</p>
 <h3 id="种类"><a href="#%e7%a7%8d%e7%b1%bb" class="header-anchor"></a>种类
 </h3><ul>
-<li>发布-订阅预言机</li>
+<li>推送型预言机</li>
 </ul>
 <p>预言机节点主动定期将数据更新提交到链上的智能合约存储，合约可以随时读取。</p>
 <ul>
-<li>请求-响应预言机</li>
+<li>拉取型预言机</li>
 </ul>
 <p>智能合约在需要数据时发起数据请求，预言机节点响应并将数据返回给链上。</p>
 <ul>
@@ -926,15 +926,28 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>激励兼容性：预言机应激励链下数据提供者向智能合约提交正确的信息。 奖励兼容性包括<strong>可归因性和问责性</strong>。 可归因性指将一条外部信息与其提供者联系起来，而问责性则将数据提供者和他们提供的信息联结起来，因此能够<strong>根据提供的数据质量奖励或者惩罚数据提供者。</strong></p>
 </li>
 </ul>
+<p>最出名的预言机 chainlink</p>
+<p><img src="/zh-cn/post/2026/01/%E9%A2%84%E8%A8%80%E6%9C%BA%E5%92%8C%E8%B7%A8%E9%93%BE%E6%A1%A5/image-1.png"
+	width="1378"
+	height="955"
+	srcset="/zh-cn/post/2026/01/%E9%A2%84%E8%A8%80%E6%9C%BA%E5%92%8C%E8%B7%A8%E9%93%BE%E6%A1%A5/image-1_hu_eb5f1d35a33ebad9.png 480w, /zh-cn/post/2026/01/%E9%A2%84%E8%A8%80%E6%9C%BA%E5%92%8C%E8%B7%A8%E9%93%BE%E6%A1%A5/image-1_hu_691e2c4aed8f911b.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="346px"
+	
+></p>
 <h2 id="跨链桥"><a href="#%e8%b7%a8%e9%93%be%e6%a1%a5" class="header-anchor"></a>跨链桥
 </h2><p>预言机是为了解决区块链从现实世界获取数据的问题，那么跨链桥则是不同区块链之间沟通的桥梁。传统区块链存在于孤立的环境中，区块链之间无法进行交易和通信，连通性和互操作性受到限制。跨链桥则在区块链之间建立一条条传输路线，允许区块链网络之间交换数据和转移资产。</p>
 <p>跨链桥设计多种多样，以下是三种常见的资产跨链转移的方法：</p>
 <ul>
 <li>
-<p>锁定并铸币 – 锁定源链上的资产 ETH 并在目标链上铸币 Wrapped ETH 简称 wETH。</p>
+<p>锁定、铸币 – 锁定源链上的资产 ETH 并在目标链上铸币 Wrapped ETH 简称 wETH。</p>
 </li>
 <li>
-<p>销毁并铸币 – 销毁源链上的资产并在目标链上铸币。</p>
+<p>销毁、铸币 – 销毁源链上的资产并在目标链上铸币。</p>
 </li>
 <li>
 <p>原子交换 – 通过第三方将源链上的资产与目标链上的资产交换。</p>
