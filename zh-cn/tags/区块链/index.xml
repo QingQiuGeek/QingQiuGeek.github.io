@@ -7,7 +7,524 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 06 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 12 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>EPF学习笔记-交易解析</title>
+        <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%A4%E6%98%93%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Sun, 12 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%A4%E6%98%93%E8%A7%A3%E6%9E%90/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/EL/transaction&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;交易结构&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;交易结构&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易结构
+&lt;/h2&gt;&lt;p&gt;交易是由**外部账户（External Account）**发出的、经过加密签名的指令，通过 JSON-RPC 广播到整个网络。&lt;/p&gt;
+&lt;p&gt;一个交易的解剖结构包含以下核心字段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;nonce&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gasPrice（每单位gas价格）、&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gasLimit（交易执行允许消耗的最大 Gas 数量）、&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;to：20 字节的接收者地址。该字段决定了交易的模式：若字段为空（Empty），则为合约创建模式。若地址为外部账户，则为价值转移（转账）。若地址为合约账户，则为合约执行，会调用合约代码）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;value：转移给接收者的 Wei 数量。在合约创建模式中，这会成为新合约账户的初始余额&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;data：指定给 EVM 输入的无限大小字节数组。在合约创建中，它是初始化字节码；否则是输入数据数组&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Signature：发送者的 ECDSA 签名&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;以太坊中合约创建与代码执行的区别&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e4%b8%ad%e5%90%88%e7%ba%a6%e5%88%9b%e5%bb%ba%e4%b8%8e%e4%bb%a3%e7%a0%81%e6%89%a7%e8%a1%8c%e7%9a%84%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊中合约创建与代码执行的区别
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%A4%E6%98%93%E8%A7%A3%E6%9E%90/image.png&#34;
+	width=&#34;1550&#34;
+	height=&#34;607&#34;
+	srcset=&#34;/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%A4%E6%98%93%E8%A7%A3%E6%9E%90/image_hu_661f31ea6cdd632c.png 480w, /zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%A4%E6%98%93%E8%A7%A3%E6%9E%90/image_hu_839591a8e6b4256a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;255&#34;
+		data-flex-basis=&#34;612px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;如何利用-nonce-替换已发送的交易&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%88%a9%e7%94%a8-nonce-%e6%9b%bf%e6%8d%a2%e5%b7%b2%e5%8f%91%e9%80%81%e7%9a%84%e4%ba%a4%e6%98%93&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何利用 nonce 替换已发送的交易
+&lt;/h2&gt;&lt;p&gt;当一笔交易因为 Gas 价格设置过低而“卡住”在待处理队列中时，可以利用 nonce 机制进行替换。&lt;/p&gt;
+&lt;p&gt;操作方法：发送一笔新的交易，该交易必须具备与原交易相同的 nonce 值，并支付更高的 gasPrice。&lt;/p&gt;
+&lt;p&gt;矿工通常会优先处理 Gas 价格更高的交易。一旦新交易被包含进区块，具有相同 nonce 的旧交易就会被 EVM 拒绝，因为它违反了 nonce 必须递增且唯一的规则。&lt;/p&gt;
+&lt;p&gt;取消交易：有些钱包利用这一特性，通过发送一笔相同 nonce、更高 Gas 价格、但 value 为 0 的交易来有效地“撤回”或覆盖原有的待处理交易。&lt;/p&gt;
+&lt;h2 id=&#34;合约创建模式下的-data-字段包含什么&#34;&gt;&lt;a href=&#34;#%e5%90%88%e7%ba%a6%e5%88%9b%e5%bb%ba%e6%a8%a1%e5%bc%8f%e4%b8%8b%e7%9a%84-data-%e5%ad%97%e6%ae%b5%e5%8c%85%e5%90%ab%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;合约创建模式下的 data 字段包含什么
+&lt;/h2&gt;&lt;p&gt;在合约创建模式中，to 字段为空，此时的 data（也称为 init）字段是一个无限大小的字节数组，指定了给 EVM 的输入。&lt;/p&gt;
+&lt;p&gt;初始化字节码：&lt;strong&gt;该字段包含的是用于部署合约的初始化代码&lt;/strong&gt;，而非合约本身的业务逻辑。&lt;/p&gt;
+&lt;p&gt;执行逻辑：这段 init 代码仅在账户创建时由 EVM 执行一次。&lt;/p&gt;
+&lt;p&gt;返回值：执行 init 代码后的返回值被确定为&lt;strong&gt;运行时字节码&lt;/strong&gt;（runtime bytecode），这部分代码会&lt;strong&gt;永久存储在合约账户中&lt;/strong&gt;，并在后续每次调用该合约时执行。&lt;/p&gt;
+&lt;h2 id=&#34;运行时字节码与初始化字节码的区别&#34;&gt;&lt;a href=&#34;#%e8%bf%90%e8%a1%8c%e6%97%b6%e5%ad%97%e8%8a%82%e7%a0%81%e4%b8%8e%e5%88%9d%e5%a7%8b%e5%8c%96%e5%ad%97%e8%8a%82%e7%a0%81%e7%9a%84%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;运行时字节码与初始化字节码的区别
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;初始化字节码 (Initialization Bytecode / init)：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这是包含在交易 data 字段中的代码。&lt;/p&gt;
+&lt;p&gt;执行频率：它仅在账户创建时由以太坊虚拟机（EVM）执行一次。&lt;/p&gt;
+&lt;p&gt;作用：它的主要任务是设置合约的初始状态并返回合约的逻辑代码。例如，它可能会将逻辑代码复制到内存中并将其返回。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;运行时字节码 (Runtime Bytecode)：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这是初始化代码执行后的返回值。&lt;/p&gt;
+&lt;p&gt;存储与执行：它会被永久存储在合约账户中。每当该合约收到交易（即代码执行模式）时，EVM 就会运行这段运行时字节码。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>EPF学习笔记-EL区块构建和数据结构</title>
+        <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-el%E5%8C%BA%E5%9D%97%E6%9E%84%E5%BB%BA%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+        <pubDate>Sat, 11 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-el%E5%8C%BA%E5%9D%97%E6%9E%84%E5%BB%BA%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+        <description>&lt;h2 id=&#34;以太坊节点在构建新区块时具体的执行流程&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e8%8a%82%e7%82%b9%e5%9c%a8%e6%9e%84%e5%bb%ba%e6%96%b0%e5%8c%ba%e5%9d%97%e6%97%b6%e5%85%b7%e4%bd%93%e7%9a%84%e6%89%a7%e8%a1%8c%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊节点在构建新区块时具体的执行流程
+&lt;/h2&gt;&lt;p&gt;区块的构建是一个涉及共识层 (CL) 与执行层 (EL) 协同。具体执行流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;启动构建程序&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;区块构建过程始于共识层。当一个验证者被选定在某个时隙 (Slot) 提议区块时，共识层会通过 Engine API 的 forkchoiceUpdated 端点向执行层发出指令，执行层接收到指令后，会启动名为负载构建程序 (Payload building routine) 的过程。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;初始化环境与空区块&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在执行层（以 Geth 客户端为例），buildPayload 函数会首先创建一个空区块。目的是为了&lt;strong&gt;防止节点错过该时隙，节点可以确保自己无论如何都有一个可用的区块可以提议，从而履行其作为验证者的职责&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;环境准备：节点会设置构建环境，包括获取区块号、时间戳、前一区块哈希、基础费用 (Base Fee) 以及所有需要在该区块中进行的提款 (Withdrawals) 信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;交易填充与执行
+随后节点会启动一个并发进程（Go 协程）来尝试填充交易。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;交易来源：交易从 Mempool 中获取。这些交易之前已经过验证（如检查 Nonce、余额和签名）并存储在池中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;排序与筛选：为了使收益最大化，执行层通常会将交易按价值（如 Gas 价格）升序或盈利能力排序。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;循环执行：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;筛选交易：从交易池中取出下一笔最有价值的交易，在 EVM 中执行该交易。执行过程会传入当前的环境信息、交易数据和当前的状态数据库。&lt;/p&gt;
+&lt;p&gt;状态更新：如果交易执行成功，它会产生更新后的状态并累加到状态数据库中&lt;/p&gt;
+&lt;p&gt;Gas 追踪：节点会追踪已消耗的 Gas。由于区块有固定的 Gas 限制（例如主网约为 3000 万），节点会持续添加交易，直到交易池耗尽或达到 Gas 上限。&lt;/p&gt;
+&lt;p&gt;异常处理：如果某笔交易执行失败（例如因链上原因、Gas 耗尽或合约调用失败），&lt;strong&gt;节点会直接跳过它并继续尝试下一笔交易，而不会停止整个区块的构建&lt;/strong&gt;。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;状态生成与根计算&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;一旦交易填充完成，执行层需要生成最终的区块信息并计算相关的加密根：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;默克尔化 (Merkleization)：节点会计算并生成交易根 (Transactions Root)、收据根 (Receipts Root) 以及提款根 (Withdrawals Root)。这些根是通过对相应列表进行默克尔化处理得到的，并被添加到区块头中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;世界状态根 (State Root)：在所有交易处理完毕后，执行层会计算世界状态根。这是对整个系统状态的加密承诺，反映了执行完该区块所有交易后的最终状态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;负载交付 (Payload Delivery)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;最后共识层会再次通过 Engine API（调用 getPayload 方法）向执行层请求构建好的执行负载。执行层将组装好的负载（包含区块头、交易列表等）返回给共识层。&lt;strong&gt;共识层将该负载放入信标区块中，并向全网广播。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;**共识层作会在该时隙（Slot）即将结束需要广播时，通过 getPayload 获取成果。**由于有空区块兜底，不存在“没东西交”的情况，只存在“交易填了多少”的区别。&lt;/p&gt;
+&lt;h2 id=&#34;失败交易的处理方式&#34;&gt;&lt;a href=&#34;#%e5%a4%b1%e8%b4%a5%e4%ba%a4%e6%98%93%e7%9a%84%e5%a4%84%e7%90%86%e6%96%b9%e5%bc%8f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;失败交易的处理方式
+&lt;/h2&gt;&lt;p&gt;如果交易由于 Gas 耗尽或合约报错而执行失败：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;不予包含：如果 ApplyTransaction 执行报错，该交易的状态更改将&lt;strong&gt;不会被应用到执行层的本地状态中。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;直接跳过：节点会直接跳过该交易并继续处理下一笔。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;保留在池中或剔除：资料指出失败通常意味着交易无效或环境变化。这类交易不会进入当前的区块列表中，因此不会出现在该区块的交易树（Transaction Trie）中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;verkle-树相比当前的-mpt-结构有哪些核心改进&#34;&gt;&lt;a href=&#34;#verkle-%e6%a0%91%e7%9b%b8%e6%af%94%e5%bd%93%e5%89%8d%e7%9a%84-mpt-%e7%bb%93%e6%9e%84%e6%9c%89%e5%93%aa%e4%ba%9b%e6%a0%b8%e5%bf%83%e6%94%b9%e8%bf%9b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Verkle 树相比当前的 MPT 结构有哪些核心改进
+&lt;/h2&gt;&lt;p&gt;Verkle 树（Verkle Tree，结合了“Vector Commitment”和“Merkle Tree”）是为替换以太坊当前的默克尔帕特里夏树（MPT）而设计的新型数据结构，旨在提高效率和可扩展性，核心改进主要体现在以下几个方面：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;证明规模的大幅缩减，更省空间&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;MPT 的局限性：MPT 是 2 叉或 16 叉树结构，其证明（Witness）包含从根到叶子路径上每一层的所有兄弟节点哈希，导致证明数据量随树的增大而变得非常庞大，对于无状态客户端很不友好。&lt;/p&gt;
+&lt;p&gt;Verkle 的优化：Verkle 树使用**向量承诺（Vector Commitments）**代替简单的哈希。这使得证明只需要提供路径上的承诺数据，且通过聚合技术使证明过程变得非常紧凑。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;树结构从“深”变“宽”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;更宽的节点：MPT 通常是 2 或 16 叉树，而 Verkle 树采用了更宽的 n-ary 结构（目前提议为每个节点 256 个子节点）。由于宽度增加，树的深度显著降低，这不仅减小了证明长度，也优化了查找效率。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;实现“无状态客户端”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;无状态验证：由于证明数据量极小，可以将证明包含在区块中而不显著增加区块大小。&lt;/p&gt;
+&lt;p&gt;无需存储全量状态：这使得无状态客户端成为可能，即客户端无需存储完整的以太坊状态（State），仅凭区块中的证明即可验证状态转换的正确性。&lt;/p&gt;
+&lt;h2 id=&#34;执行层如何通过排序来最大化区块的收益&#34;&gt;&lt;a href=&#34;#%e6%89%a7%e8%a1%8c%e5%b1%82%e5%a6%82%e4%bd%95%e9%80%9a%e8%bf%87%e6%8e%92%e5%ba%8f%e6%9d%a5%e6%9c%80%e5%a4%a7%e5%8c%96%e5%8c%ba%e5%9d%97%e7%9a%84%e6%94%b6%e7%9b%8a&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;执行层如何通过排序来最大化区块的收益
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;基于交易价值的排序&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在实际操作中这种排序是基于&lt;strong&gt;手续费（Fee）&lt;strong&gt;进行的，交易中的 &lt;strong&gt;maxPriorityFeePerGas&lt;/strong&gt; 字段代表了发送者愿意支付给验证者的最高“小费”，而 &lt;strong&gt;maxFeePerGas&lt;/strong&gt; 则代表了其愿意为&lt;/strong&gt;每单位 Gas支付&lt;/strong&gt;的总最高费用。执行层通过优先选择这些费用更高的交易来提升区块的总收益。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;贪婪算法填充过程&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;由于区块的 Gas 上限是固定的（例如主网约为 3000 万），节点会持续添加交易并追踪已消耗的 Gas，直到交易池排空或达到 Gas 限制为止。这种做法类似于“装箱问题”，确保在有限的区块空间内塞入价值最高的交易组合，&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;容错与效率优化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为了防止无效交易占用创收空间，执行层还具备以下逻辑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;跳过失败交易：如果某笔交易在 EVM 执行中失败（例如由于 Gas 耗尽或合约调用错误），节点不会停止构建，而是&lt;strong&gt;直接跳过该交易&lt;/strong&gt;并尝试处理下一笔。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;动态填充：这种机制确保了即使某些高价值交易失效，区块中剩余的可用 Gas 仍能被后续的有效、有收益的交易填充，从而保证了区块的整体盈利能力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;什么是-pbs-机制以及它如何改变区块构建&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-pbs-%e6%9c%ba%e5%88%b6%e4%bb%a5%e5%8f%8a%e5%ae%83%e5%a6%82%e4%bd%95%e6%94%b9%e5%8f%98%e5%8c%ba%e5%9d%97%e6%9e%84%e5%bb%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 PBS 机制以及它如何改变区块构建
+&lt;/h2&gt;&lt;p&gt;PBS 全称是提议者-构建者分离（Proposer-Builder Separation）。它是一种将区块链节点的两项核心任务——“构建区块”与“提议（广播）区块”进行解耦的机制。&lt;/p&gt;
+&lt;p&gt;在传统的区块构建流程中验证者同时承担这两项工作，在 PBS 框架下，出现了专门的外部构建者 (External Builders)，他们专注于收集交易并构建最优化的区块。&lt;/p&gt;
+&lt;p&gt;构建者负责筛选、排序交易并最大化区块价值；提议者则只负责从多个构建者提供的备选区块中选出收益最高的一个，并将其签署后广播到网络中。&lt;/p&gt;
+&lt;p&gt;由于外部构建者可以使用极其复杂的算法和策略来提取最大可提取价值 (MEV)，&lt;strong&gt;他们构建的区块通常比普通验证者节点自行构建的区块更有利可图。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;无状态客户端如何验证区块的正确性&#34;&gt;&lt;a href=&#34;#%e6%97%a0%e7%8a%b6%e6%80%81%e5%ae%a2%e6%88%b7%e7%ab%af%e5%a6%82%e4%bd%95%e9%aa%8c%e8%af%81%e5%8c%ba%e5%9d%97%e7%9a%84%e6%ad%a3%e7%a1%ae%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;无状态客户端如何验证区块的正确性
+&lt;/h2&gt;&lt;p&gt;无状态客户端（Stateless Client）验证区块正确性的核心机制是依赖&lt;strong&gt;区块证据（Witness）&lt;/strong&gt;，而不是存储完整的以太坊状态数据库。其具体验证流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;依赖区块证据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;无状态客户端不存储完整的“世界状态树”（World State Trie），因此无法直接查询账户余额或合约代码。当一个区块被广播给无状态客户端时，它必须包含验证该区块内交易所必需的所有数据片段（如涉及账户的余额、Nonce 等）以及相关的&lt;strong&gt;加密证明&lt;/strong&gt;，这些证明允许客户端在没有完整数据库的情况下，验证所提供的数据片段是否确实属于当前的状态根（State Root）。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;验证执行过程&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;无状态客户端接收到区块和证据后，按以下步骤验证：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;加载上下文：利用区块头中的上一个区块的状态根作为锚点。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;构建局部状态：利用证据中提供的数据“填补”缺失的状态信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行交易：在 EVM 中重新执行区块中的所有交易。由于证据提供了所有必要的数据输入，客户端可以像全节点一样计算出状态转换的结果。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;计算并对比根哈希：执行完所有交易后，客户端会独立计算产生的新状态根。如果计算出的结果与区块头中提议的状态根一致，则该区块被视为有效。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;以太坊中的四种mpt树分别存储什么样的数据内容&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e4%b8%ad%e7%9a%84%e5%9b%9b%e7%a7%8dmpt%e6%a0%91%e5%88%86%e5%88%ab%e5%ad%98%e5%82%a8%e4%bb%80%e4%b9%88%e6%a0%b7%e7%9a%84%e6%95%b0%e6%8d%ae%e5%86%85%e5%ae%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊中的四种MPT树分别存储什么样的数据内容
+&lt;/h2&gt;&lt;p&gt;以太坊的执行层状态主要存储在四种改良后的**默克尔帕特里夏树（MPT）**结构中：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;交易树 (Transaction Trie)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;交易树负责存储特定区块内的所有交易数据。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储内容：每个区块都有自己独立的交易树，存储该区块包含的所有交易。&lt;/p&gt;
+&lt;p&gt;键 (Key)：交易在区块中的索引（Index）的 RLP 编码。&lt;/p&gt;
+&lt;p&gt;值 (Value)：交易详情（T）的 RLP 编码，包含 Nonce、Gas 费用参数（如最高小费和最高总费用）、Gas 限制、发送者与接收者地址、转账金额 (Value)、输入数据 (Input Data) 以及数字签名 (v, r, s)。&lt;/p&gt;
+&lt;p&gt;特性：一旦区块执行完毕并固化，该区块的交易树内容便不可更改。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;收据树 (Receipt Trie)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;收据树用于验证区块中每笔交易的指令是否已被实际执行，并记录执行结果。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储内容：存储与交易执行结果相关的 RLP 编码收据数据。&lt;/p&gt;
+&lt;p&gt;键 (Key)：交易在区块中的索引。&lt;/p&gt;
+&lt;p&gt;值 (Value)：交易收据，包含交易执行后的结果证明。&lt;/p&gt;
+&lt;p&gt;用途：主要用于索引历史交易结果而无需重新执行交易，同时也允许轻客户端通过默克尔证明验证交易结果。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;世界状态树 (World State Trie)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;世界状态树是以太坊的核心数据结构，代表了系统当前的全局状态。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;存储内容：它将账户地址映射到其对应的账户状态。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;键 (Key)：经过 Keccak-256 哈希处理的 20 字节账户地址。&lt;/p&gt;
+&lt;p&gt;值 (Value)：RLP 编码的账户对象，包含四个核心字段：Nonce（已发送交易数）、余额 (Balance)、代码哈希 (Code Hash)（合约代码的哈希，外部账户为空字符串哈希）以及存储根哈希 (Storage Root Hash)。&lt;/p&gt;
+&lt;p&gt;特性：它是随区块演化的持续结构，其根哈希（State Root）存储在每个区块头中，作为整个系统状态的加密承诺。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;存储树 (Storage Trie)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;存储树用于保存智能合约的持久化变量。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储内容：每个合约账户都有自己独立的存储树，用于维护该合约特有的键值对状态。&lt;/p&gt;
+&lt;p&gt;引用方式：它不直接嵌套在世界状态树中，而是通过世界状态树中账户节点的 storageRoot 字段进行引用。&lt;/p&gt;
+&lt;p&gt;键 (Key)：经过 Keccak-256 哈希处理的 256 位存储插槽（Storage Slot）索引。&lt;/p&gt;
+&lt;p&gt;值 (Value)：对应插槽中存储数据的 RLP 编码值。&lt;/p&gt;
+&lt;p&gt;用途：外部账户 (EOA) 的存储树为空，只有合约账户会通过 SSTORE 和 SLOAD 指令操作该树。&lt;/p&gt;
+&lt;h2 id=&#34;mempool-交易准入还需要检查哪些条件&#34;&gt;&lt;a href=&#34;#mempool-%e4%ba%a4%e6%98%93%e5%87%86%e5%85%a5%e8%bf%98%e9%9c%80%e8%a6%81%e6%a3%80%e6%9f%a5%e5%93%aa%e4%ba%9b%e6%9d%a1%e4%bb%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;mempool 交易准入还需要检查哪些条件
+&lt;/h2&gt;&lt;p&gt;签名验证&lt;/p&gt;
+&lt;p&gt;Nonce 的正确性 (Nonce Correctness)：节点会检查交易的 Nonce 是否与发送者账户的序列号相匹配。Nonce 是一个标量值，用于识别该账户成功发送的交易数量，它的存在是为了确保交易按顺序处理并防止重放攻击。&lt;/p&gt;
+&lt;p&gt;账户余额&lt;/p&gt;
+&lt;p&gt;Gas 限制与费用参数：交易本身必须包含合法的 gasLimit（交易愿意消耗的最大 Gas 单位）和费用字段（如 maxPriorityFeePerGas 和 maxFeePerGas），以便节点评估其有效性和盈利能力。&lt;/p&gt;
+&lt;h2 id=&#34;nonce-在防止重放攻击中具体是如何起作用的&#34;&gt;&lt;a href=&#34;#nonce-%e5%9c%a8%e9%98%b2%e6%ad%a2%e9%87%8d%e6%94%be%e6%94%bb%e5%87%bb%e4%b8%ad%e5%85%b7%e4%bd%93%e6%98%af%e5%a6%82%e4%bd%95%e8%b5%b7%e4%bd%9c%e7%94%a8%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Nonce 在防止重放攻击中具体是如何起作用的
+&lt;/h2&gt;&lt;p&gt;对于由同一发送者提交的每一笔新交易，其 Nonce 值都会依次增加。这意味着对于一个特定的账户地址，每一笔合法的交易都必须拥有一个独一无二的、按顺序排列的 Nonce 编号。在以太坊的世界状态树（World State Trie）中，每个账户对象都维护着一个当前的 Nonce 字段。&lt;/p&gt;
+&lt;p&gt;已经执行过的合法交易，并尝试再次发送到网络中以欺诈性地重复执行。Nonce 通过以下方式拦截这种攻击：&lt;/p&gt;
+&lt;p&gt;匹配规则：网络只接受 Nonce 值恰好等于该账户当前状态中记录的 Nonce 值的交易。&lt;/p&gt;
+&lt;p&gt;拦截重放：一旦一笔交易被纳入区块并成功执行，该账户在状态数据库中的 Nonce 就会增加
+。如果攻击者尝试重放之前的那笔交易，由于该交易携带的是旧的 Nonce，节点会识别出该 Nonce 是“已使用过”的或“过时的”，从而直接拒绝该交易。&lt;/p&gt;
+&lt;h2 id=&#34;区块包含的-blob-的数量限制&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97%e5%8c%85%e5%90%ab%e7%9a%84-blob-%e7%9a%84%e6%95%b0%e9%87%8f%e9%99%90%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块包含的 blob 的数量限制
+&lt;/h2&gt;&lt;p&gt;每个区块允许包含的 blob 数量是由 EIP-4844 协议规范定义的，在区块构建的具体流程中，执行层（EL）的 commitTransactions 函数在尝试将携带 blob 的交易提交到区块时，会进行专门的检查。&lt;/p&gt;
+&lt;p&gt;构建逻辑：节点在填充交易（fillTransactions）时，虽然会从内存池中检索包括 blob 在内的所有待处理交易，但在最终确认包含之前，必须确保该区块内的 blob 总量不超过协议规定的上限。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>EPF学习笔记-执行层客户端架构</title>
+        <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%89%A7%E8%A1%8C%E5%B1%82%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9E%B6%E6%9E%84/</link>
+        <pubDate>Fri, 10 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%89%A7%E8%A1%8C%E5%B1%82%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9E%B6%E6%9E%84/</guid>
+        <description>&lt;h2 id=&#34;客户端-besureth&#34;&gt;&lt;a href=&#34;#%e5%ae%a2%e6%88%b7%e7%ab%af-besureth&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;客户端 besu、reth
+&lt;/h2&gt;&lt;p&gt;以太坊执行层（EL）拥有多种客户端实现，其中 &lt;strong&gt;Besu&lt;/strong&gt; 和 &lt;strong&gt;Reth&lt;/strong&gt; 是两个重要的代表。它们的主要职责是&lt;strong&gt;处理交易执行、维护全局状态&lt;/strong&gt;以及通过 Engine API 与共识层（Consensus Layer，CL）协同工作。&lt;/p&gt;
+&lt;h3 id=&#34;besu&#34;&gt;&lt;a href=&#34;#besu&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Besu
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Besu&lt;/strong&gt; 是一个基于 &lt;strong&gt;Java&lt;/strong&gt; 开发的以太坊执行层客户端。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;架构设计&lt;/strong&gt;：Besu 采用多模块的 Gradle 项目结构，主要模块包括：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;evm&lt;/code&gt;&lt;/strong&gt;：负责以太坊虚拟机（EVM）的行为，实现了每个操作码（opcode）的功能。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;ethereum&lt;/code&gt;&lt;/strong&gt;：包含 &lt;code&gt;api&lt;/code&gt;（与以太坊状态交互）和 &lt;code&gt;core&lt;/code&gt;（数据存储和共识设置）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;besu&lt;/code&gt;&lt;/strong&gt;：定义了所有命令行界面（CLI）参数，并包含主程序入口。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;config&lt;/code&gt;&lt;/strong&gt;：负责配置的组装、验证以及创世信息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心组件&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;BesuControllerBuilder&lt;/code&gt;&lt;/strong&gt;：管理设置客户端所需的所有组件并返回控制器。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;ProtocolSpec&lt;/code&gt; 与 &lt;code&gt;MainnetProtocolSpec&lt;/code&gt;&lt;/strong&gt;：定义了协议内部的具体运作规则，涵盖了从 Frontier 阶段至今的所有主网规范。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;MainnetEVMs&lt;/code&gt;&lt;/strong&gt;：为 EVM 提供适用于不同硬分叉的操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;测试体系&lt;/strong&gt;：Besu 拥有严谨的测试流程，包括单元测试、集成测试、接受测试（运行多个节点以创建共识算法任务）以及引用测试（来自以太坊基金会的标准化测试）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;reth&#34;&gt;&lt;a href=&#34;#reth&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Reth
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Reth&lt;/strong&gt; 是一个注重性能的执行层客户端实现，其架构围绕高效的同步和存储设计。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;流水线架构（Pipeline）&lt;/strong&gt;：Reth 的核心驱动力是其同步流水线，该流水线被划分为 &lt;strong&gt;12 个可配置阶段（Stages）&lt;/strong&gt;，按顺序（由上至下）执行：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;HeaderStage&lt;/code&gt; 与 &lt;code&gt;BodyStage&lt;/code&gt;&lt;/strong&gt;：负责验证区块头并通过 P2P 下载区块数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;SenderRecoveryStage&lt;/code&gt;&lt;/strong&gt;：执行耗时较高的操作，从交易签名中恢复发送者地址。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;ExecutionStage&lt;/code&gt;&lt;/strong&gt;：通过 &lt;strong&gt;REVM&lt;/strong&gt; 执行交易，生成收据（receipts）和变更集（change sets）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;MerkleStage&lt;/code&gt;&lt;/strong&gt;：在执行后计算并验证状态根是否准确。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;历史索引阶段&lt;/strong&gt;：如 &lt;code&gt;IndexStorageHistoryStage&lt;/code&gt; 和 &lt;code&gt;IndexAccountHistoryStage&lt;/code&gt;，允许查询任意区块号的历史数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;存储与数据库&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;Reth 主要使用 &lt;strong&gt;MDBX&lt;/strong&gt; 数据库，并通过 &lt;code&gt;Provider&lt;/code&gt; 抽象层进行访问，以便未来能够以最小改动更换底层数据库。&lt;/li&gt;
+&lt;li&gt;使用 &lt;strong&gt;Codecs（编解码器）&lt;/strong&gt; 优化存储空间，例如通过 &lt;code&gt;Compact&lt;/code&gt; 特性压缩无符号整数的领先零。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;特色组件&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;BlockchainTree&lt;/code&gt;&lt;/strong&gt;：当同步接近链尖（Tip）时，在内存中进行状态根验证和执行.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;Pruner&lt;/code&gt;（修剪器）&lt;/strong&gt;：允许运行全节点（Full Node）模式，在区块最终确定（Finalized）后删除旧的变更集和历史索引以节省空间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;engine-api&#34;&gt;&lt;a href=&#34;#engine-api&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Engine API
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Engine API&lt;/strong&gt; 是位于&lt;strong&gt;执行层（EL）&lt;strong&gt;中的一个标准化接口，专门用于&lt;/strong&gt;共识层（CL）与执行层之间的内部通信&lt;/strong&gt;。它是以太坊转向权益证明（PoS）架构后的核心组件，确保了共识逻辑与交易执行的清晰分离。&lt;/p&gt;
+&lt;h3 id=&#34;核心定义与功能&#34;&gt;&lt;a href=&#34;#%e6%a0%b8%e5%bf%83%e5%ae%9a%e4%b9%89%e4%b8%8e%e5%8a%9f%e8%83%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;核心定义与功能
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;通信桥梁&lt;/strong&gt;：执行层客户端（如 Besu、Reth、Geth）作为一个“执行引擎”，通过 Engine API 接收来自共识层客户端（如 Lighthouse、Prysm）的指令。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;职责分离&lt;/strong&gt;：在这种设计下，&lt;strong&gt;共识层负责处理共识规则和分叉选择，而执行层则专注于验证区块头、执行交易以及维护全局状态。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内部使用&lt;/strong&gt;：该 API 不同于面向用户的 JSON-RPC API（如 DApp 使用的 API），它仅供 CL 访问，不向公众开放。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;技术特性&#34;&gt;&lt;a href=&#34;#%e6%8a%80%e6%9c%af%e7%89%b9%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;技术特性
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;通信协议&lt;/strong&gt;：使用基于 HTTP 的 &lt;strong&gt;JSON-RPC&lt;/strong&gt; 接口。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;身份验证&lt;/strong&gt;：为了安全起见，通信必须通过 &lt;strong&gt;JWT（JSON Web Token）令牌&lt;/strong&gt;进行身份验证，以确保只有授权的共识层客户端能够驱动执行引擎。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;驱动机制&lt;/strong&gt;：执行层不能自主运行，必须由共识层通过调用 Engine API 方法来驱动其功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;核心方法&#34;&gt;&lt;a href=&#34;#%e6%a0%b8%e5%bf%83%e6%96%b9%e6%b3%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;核心方法
+&lt;/h3&gt;&lt;p&gt;Engine API 主要通过以下几类端点实现协同工作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;engine_newPayload&lt;/code&gt;&lt;/strong&gt;：用于处理负载的验证与插入。当共识层收到新的信标区块时，会提取其中的执行负载并调用此方法，要求执行层验证交易合法性并更新状态。执行层会返回 &lt;code&gt;VALID&lt;/code&gt;（有效）、&lt;code&gt;INVALID&lt;/code&gt;（无效）或 &lt;code&gt;SYNCING&lt;/code&gt;（同步中）等状态。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;engine_forkchoiceUpdated&lt;/code&gt;&lt;/strong&gt;：用于管理状态同步并触发区块构建。共识层通过此方法通知执行层最新的规范链头（Head）、安全区块（Safe）和最终确定的区块（Finalized）哈希。如果节点被选为提议者，此调用还会包含负载属性以启动区块构建任务。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;engine_exchangeCapabilities&lt;/code&gt;&lt;/strong&gt;：在节点启动时，双方通过此方法协商支持的 API 版本（如 V1、V2、V3），以确保兼容性并启用新功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;典型工作流程&#34;&gt;&lt;a href=&#34;#%e5%85%b8%e5%9e%8b%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;典型工作流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;节点启动&lt;/strong&gt;：CL 与 EL 交换功能列表并建立通信。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;同步与更新&lt;/strong&gt;：CL 持续发送 &lt;code&gt;forkchoiceUpdated&lt;/code&gt; 指令，告知 EL 全局网络达成的共识状态，引导 EL 进行状态同步。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;验证者操作&lt;/strong&gt;：当验证者需要提议区块时，CL 通过 API 获取 EL 构建好的执行负载；当收到他人提议的区块时，CL 调用 &lt;code&gt;newPayload&lt;/code&gt; 让 EL 执行状态转换函数（STF）以确认区块有效性。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;新有效载荷engine_newpayload的具体验证步骤&#34;&gt;&lt;a href=&#34;#%e6%96%b0%e6%9c%89%e6%95%88%e8%bd%bd%e8%8d%b7engine_newpayload%e7%9a%84%e5%85%b7%e4%bd%93%e9%aa%8c%e8%af%81%e6%ad%a5%e9%aa%a4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;新有效载荷（engine_newPayload）的具体验证步骤？
+&lt;/h2&gt;&lt;p&gt;在以太坊架构中，&lt;code&gt;engine_newPayload&lt;/code&gt; 是执行层（EL）验证由共识层（CL）传递的“执行有效载荷”（Execution Payload）的核心方法。该过程实质上是触发执行层的&lt;strong&gt;状态转换函数（STF）&lt;/strong&gt;，以确保新区块符合协议规则。&lt;/p&gt;
+&lt;p&gt;具体验证步骤可以分为以下三个阶段：&lt;/p&gt;
+&lt;h3 id=&#34;区块头验证header-verification&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97%e5%a4%b4%e9%aa%8c%e8%af%81header-verification&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块头验证（Header Verification）
+&lt;/h3&gt;&lt;p&gt;在执行任何交易之前，执行引擎首先对载荷的头部信息进行一系列“轻量级”的一致性检查：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;父块哈希验证&lt;/strong&gt;：确认载荷头部的父块哈希（parent hash）在本地链中存在，且与预期相符。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;区块连续性&lt;/strong&gt;：验证当前区块高度（number）是否正好是父块高度加 1。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;时间戳检查&lt;/strong&gt;：确保当前区块的时间戳大于其父块的时间戳。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas 相关校验&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;验证区块使用的 Gas（$H_{gasUsed}$）不超过区块 Gas 限制（$H_{gasLimit}$）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gas 限制波动检查&lt;/strong&gt;：$H_{gasLimit}$ 的变动幅度不能超过前一区块的 1/1024。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Base Fee 校验&lt;/strong&gt;：验证 EIP-1559 的基本费用是否根据上个区块的 Gas 使用情况进行了准确更新。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;合并（Post-Merge）特定规则&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;验证难度值（Difficulty）必须为 0。&lt;/li&gt;
+&lt;li&gt;验证 Nonce 必须为全零（0x00&amp;hellip;0）。&lt;/li&gt;
+&lt;li&gt;验证叔块哈希（ommersHash）为空列表的哈希值。&lt;/li&gt;
+&lt;li&gt;对于 Cancun 升级后的载荷，还会检查 Blob Gas 使用量是否符合限制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;交易执行与状态转换transaction-execution&#34;&gt;&lt;a href=&#34;#%e4%ba%a4%e6%98%93%e6%89%a7%e8%a1%8c%e4%b8%8e%e7%8a%b6%e6%80%81%e8%bd%ac%e6%8d%a2transaction-execution&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;交易执行与状态转换（Transaction Execution）
+&lt;/h3&gt;&lt;p&gt;一旦头部验证通过，EL 将进入核心执行阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;环境初始化&lt;/strong&gt;：将区块头中的 coinbase（提款地址）、gas limit 和 timestamp 等信息作为上下文传递给 &lt;strong&gt;EVM（以太坊虚拟机）&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逐笔执行交易&lt;/strong&gt;：在 EVM 中按顺序处理区块内的所有交易。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;合法性检查&lt;/strong&gt;：包括验证签名、检查 Nonce 是否匹配、扣除 Gas 费用等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;状态修改&lt;/strong&gt;：如果交易合法，将修改账户余额、合约代码及存储数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;报错处理&lt;/strong&gt;：如果区块中存在任何一笔无效交易，整个区块将被视为无效（Invalid），因为这会污染整个区块的状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;结果汇总与状态确认&#34;&gt;&lt;a href=&#34;#%e7%bb%93%e6%9e%9c%e6%b1%87%e6%80%bb%e4%b8%8e%e7%8a%b6%e6%80%81%e7%a1%ae%e8%ae%a4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;结果汇总与状态确认
+&lt;/h3&gt;&lt;p&gt;执行完成后，EL 会进行最后的一致性比对：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;状态根比对&lt;/strong&gt;：在所有交易执行完毕后，EL 会计算最终的&lt;strong&gt;状态根哈希（State Root）&lt;/strong&gt;，并确认其与载荷头部的 root 属性一致。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提款处理&lt;/strong&gt;：对于支持提款（Withdrawals）的区块（如 Shanghai 升级后），EL 会将提款金额增加到相应地址的余额中，并计入最终状态。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;返回状态标识&lt;/strong&gt;：EL 向 CL 返回验证结果：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VALID&lt;/strong&gt;：所有验证通过，状态转换成功。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;INVALID&lt;/strong&gt;：头部验证失败或交易执行出错。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SYNCING&lt;/strong&gt;：执行层仍在同步中，暂时无法验证该载荷。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ACCEPTED&lt;/strong&gt;：基础检查通过，但由于节点处于浅状态（Shallow state）等原因尚未完成完整执行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;状态机&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e6%9c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态机
+&lt;/h2&gt;&lt;p&gt;以太坊是一个&lt;strong&gt;通用计算系统&lt;/strong&gt;，其核心运作模式是一个&lt;strong&gt;状态机（State Machine）&lt;/strong&gt;。这意味着它会根据接收到的输入（即交易），在不同的状态之间进行转换。&lt;/p&gt;
+&lt;h3 id=&#34;全局状态global-state&#34;&gt;&lt;a href=&#34;#%e5%85%a8%e5%b1%80%e7%8a%b6%e6%80%81global-state&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;全局状态（Global State）
+&lt;/h3&gt;&lt;p&gt;与比特币仅维护全局未花费交易输出（UTXO）的设计不同，以太坊维护着一个&lt;strong&gt;全局状态&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;内容组成&lt;/strong&gt;：状态是指所有账户的综合集合，包括&lt;strong&gt;地址、余额、智能合约的代码与存储数据&lt;/strong&gt;，以及当前的系统和网络状态。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据结构&lt;/strong&gt;：这些数据通过 &lt;strong&gt;Merkle-Patricia Tries (MPT)&lt;/strong&gt; 这种特定的数据结构进行组织，并存储在底层的键值数据库（如 LevelDB, Pebble 或 MDBX）中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;状态转换函数stf&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e8%bd%ac%e6%8d%a2%e5%87%bd%e6%95%b0stf&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态转换函数（STF）
+&lt;/h3&gt;&lt;p&gt;状态机通过**状态转换函数（STF）**来实现从旧状态到新状态的迁移。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;触发机制&lt;/strong&gt;：状态转换由**交易（Transactions）**触发。当交易在执行引擎中被处理时，如果被判定为合法，就会导致以太坊网络的状态发生改变。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;执行环境（EVM）&lt;/strong&gt;：**以太坊虚拟机（EVM）**充当了状态机的虚拟 CPU。它负责处理智能合约逻辑，并确保无论在何种硬件平台上运行，所有节点都能得到确定且一致的计算结果，从而达成共识。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;执行层el在状态机中的角色&#34;&gt;&lt;a href=&#34;#%e6%89%a7%e8%a1%8c%e5%b1%82el%e5%9c%a8%e7%8a%b6%e6%80%81%e6%9c%ba%e4%b8%ad%e7%9a%84%e8%a7%92%e8%89%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;执行层（EL）在状态机中的角色
+&lt;/h3&gt;&lt;p&gt;在以太坊转向权益证明（PoS）后，执行层客户端（如 Besu, Reth, Geth）的主要职责被简化为执行状态转换函数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;通信流程&lt;/strong&gt;：共识层（CL）通过 &lt;strong&gt;Engine API&lt;/strong&gt; 调用 &lt;code&gt;engine_newPayload&lt;/code&gt; 方法，将执行负载传达给执行层。执行层随后运行 STF 进行验证。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;具体验证步骤&lt;/strong&gt;：
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;验证区块头&lt;/strong&gt;：检查父块哈希、时间戳、Gas 限制（变动幅度需在 1/1024 以内）以及 EIP-1559 基础费用等。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;环境初始化&lt;/strong&gt;：将区块头中的 coinbase、Gas 限制和时间戳等作为上下文传递给 EVM。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;逐笔执行交易&lt;/strong&gt;：在 EVM 中按顺序处理交易，验证签名、Nonce 并扣除费用。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最终状态提交&lt;/strong&gt;：一旦所有交易执行完毕且验证通过，系统会计算新的状态根哈希并提交，完成状态更新。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;状态的一致性与完整性&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e7%9a%84%e4%b8%80%e8%87%b4%e6%80%a7%e4%b8%8e%e5%ae%8c%e6%95%b4%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态的一致性与完整性
+&lt;/h3&gt;&lt;p&gt;为了确保状态机的鲁棒性，执行层采取了严格的验证措施：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;原子性&lt;/strong&gt;：如果区块中存在任何一笔无效交易，整个区块都会被视为无效，因为它会“污染”整个状态转换过程。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;状态根验证&lt;/strong&gt;：在每个区块处理结束时，计算出的&lt;strong&gt;状态根哈希&lt;/strong&gt;必须与区块头中的预期值匹配，以确保所有节点对“全局状态”的看法完全一致。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;同步机制&lt;/strong&gt;：新加入的节点可以通过**全同步（Full Sync）&lt;strong&gt;从创世块开始重播所有交易来重建状态，或通过&lt;/strong&gt;快照同步（Snap Sync）**下载特定时间点的状态快照并进行愈合（Healing），以快速赶上网络的最新状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;evm-data-locations&#34;&gt;&lt;a href=&#34;#evm-data-locations&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EVM Data Locations
+&lt;/h2&gt;&lt;p&gt;以太坊虚拟机（EVM）在执行智能合约时，主要通过四个核心数据位置来管理和操作数据：&lt;strong&gt;Stack（栈）&lt;/strong&gt;、&lt;strong&gt;Memory（内存）&lt;/strong&gt;、**Storage（存储）**和 &lt;strong&gt;Calldata（调用数据）&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;stack-栈&#34;&gt;&lt;a href=&#34;#stack-%e6%a0%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Stack (栈)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;结构与原则&lt;/strong&gt;：栈是一个简单的 LIFO（后进先出）数据结构，支持 &lt;strong&gt;PUSH&lt;/strong&gt;（压入）和 &lt;strong&gt;POP&lt;/strong&gt;（弹出）操作。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用途&lt;/strong&gt;：它是大多数 EVM 操作码工作的场所，用于存储中间计算值并为操作码提供参数。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;限制&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最大容量&lt;/strong&gt;：最多可容纳 &lt;strong&gt;1024个项目&lt;/strong&gt;，每个项目大小为 &lt;strong&gt;32字节&lt;/strong&gt;（即 1个字/Word）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;访问限制&lt;/strong&gt;：通过 &lt;code&gt;DUP&lt;/code&gt; 和 &lt;code&gt;SWAP&lt;/code&gt; 操作码，仅能访问栈顶的 &lt;strong&gt;16个项目&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;生命周期&lt;/strong&gt;：每次合约执行完成后，栈都会被重置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;memory-内存&#34;&gt;&lt;a href=&#34;#memory-%e5%86%85%e5%ad%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Memory (内存)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;结构&lt;/strong&gt;：内存是一个字节数组，所有位置最初都定义为零。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用途&lt;/strong&gt;：存储与整个程序相关的临时（临时性）数据。由于栈有严格的容量限制，&lt;strong&gt;内存通过索引访问任意大小的数据&lt;/strong&gt;，作为栈的补充。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;动态扩展与成本&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;内存在逻辑上可以无限扩展（达 $2^{256}$ 字节），但实际上受 Gas 成本限制。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存扩展（Memory Expansion）&lt;/strong&gt;：内存按“页”（每页 1个字，即32字节）进行动态分配，扩展页数越多，消耗的 Gas 越高。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;操作&lt;/strong&gt;：常用的操作码包括 &lt;code&gt;MSTORE&lt;/code&gt;（存储一个字）、&lt;code&gt;MSTORE8&lt;/code&gt;（存储一个字节）和 &lt;code&gt;MLOAD&lt;/code&gt;（读取一个字）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;storage-存储&#34;&gt;&lt;a href=&#34;#storage-%e5%ad%98%e5%82%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Storage (存储)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;结构&lt;/strong&gt;：存储被设计为一个&lt;strong&gt;按字寻址的字数组&lt;/strong&gt;（键值数据库），拥有 $2^{256}$ 个插槽，每个插槽 32 字节。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;持久性&lt;/strong&gt;：与内存不同，存储与以太坊账户相关联，并且作为&lt;strong&gt;世界状态（World State）&lt;strong&gt;的一部分在交易之间&lt;/strong&gt;持久化&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;成本与优化&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;由于存储操作需要跨所有节点同步，因此 &lt;code&gt;SSTORE&lt;/code&gt;（写入）操作非常昂贵。&lt;/li&gt;
+&lt;li&gt;Solidity 等高级语言通常会将多个小变量打包进同一个 32 字节的插槽中以优化成本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;底层实现&lt;/strong&gt;：合约账户包含一个&lt;strong&gt;存储根（Storage Root）&lt;/strong&gt;，指向该合约专属的梅克尔-帕特里夏树（Merkle Patricia Trie）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;calldata-调用数据&#34;&gt;&lt;a href=&#34;#calldata-%e8%b0%83%e7%94%a8%e6%95%b0%e6%8d%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Calldata (调用数据)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;特性&lt;/strong&gt;：调用数据是&lt;strong&gt;只读&lt;/strong&gt;的输入数据，通过交易或消息调用指令传递给 EVM。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;结构&lt;/strong&gt;：它以字节序列的形式存储。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;访问方式&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CALLDATALOAD&lt;/code&gt;：从指定偏移量读取 32 字节到栈上。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CALLDATACOPY&lt;/code&gt;：将调用数据的某一部分复制到内存中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>DePIN</title>
+        <link>/zh-cn/post/2026/04/depin/</link>
+        <pubDate>Mon, 06 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/depin/</guid>
+        <description>&lt;p&gt;RWA 的逻辑是&amp;quot;把资产搬上链&amp;quot;，它的方向是从物理世界到数字世界，从链下到链上。&lt;/p&gt;
+&lt;p&gt;DePIN 完全相反，要用区块链的力量&amp;quot;长出&amp;quot;现实世界的东西——基站、传感器、摄像头、GPU 算力、充电桩、气象站……这些实打实的、看得见摸得着的物理基础设施。&lt;/p&gt;
+&lt;p&gt;DePIN（Decentralized Physical Infrastructure Networks，去中心化物理基础设施网络）&lt;/p&gt;
+&lt;h2 id=&#34;什么是-depin&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-depin&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 DePIN
+&lt;/h2&gt;&lt;p&gt;DePIN 是一种利用&lt;strong&gt;代币经济激励&lt;/strong&gt;，让全球分散的个人自愿贡献硬件设备和物理资源，从而共同建设和运营基础设施网络的模式。&lt;/p&gt;
+&lt;p&gt;关键词：物理基础设施、代币经济激励、去中心化&lt;/p&gt;
+&lt;p&gt;DePIN 分为两大阵营，PRN（Physical Resource Networks，物理资源网络） 和 DRN（Digital Resource Networks，数字资源网络）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/depin/image.png&#34;
+	width=&#34;1300&#34;
+	height=&#34;801&#34;
+	srcset=&#34;/zh-cn/post/2026/04/depin/image_hu_491892e89d49dafb.png 480w, /zh-cn/post/2026/04/depin/image_hu_479c642bc4971ed2.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;162&#34;
+		data-flex-basis=&#34;389px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;一、无线网络（Wireless Networks&lt;/p&gt;
+&lt;p&gt;二、传感器与数据采集网络（Sensor &amp;amp; Data Networks）&lt;/p&gt;
+&lt;p&gt;三、能源网络（Energy Networks）&lt;/p&gt;
+&lt;p&gt;四、去中心化算力与 GPU 网络（Decentralized Compute &amp;amp; GPU）&lt;/p&gt;
+&lt;p&gt;五、去中心化存储（Decentralized Storage）&lt;/p&gt;
+&lt;p&gt;六、定位服务（Positioning &amp;amp; Location）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/depin/image-1.png&#34;
+	width=&#34;1305&#34;
+	height=&#34;790&#34;
+	srcset=&#34;/zh-cn/post/2026/04/depin/image-1_hu_6bcd4c5974277b23.png 480w, /zh-cn/post/2026/04/depin/image-1_hu_92dbd79538fa89a5.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;165&#34;
+		data-flex-basis=&#34;396px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>EPF学习笔记-执行层规范</title>
         <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%89%A7%E8%A1%8C%E5%B1%82%E8%A7%84%E8%8C%83/</link>
         <pubDate>Mon, 06 Apr 2026 12:00:00 +0000</pubDate>
@@ -548,7 +1065,11 @@ Cosmos 的思路与 Polkadot 略有不同：它提供了 &lt;strong&gt;IBC（Int
 &lt;li&gt;DID 文档允许其它实体与该 DID 进行交互，验证其身份或通过加密手段进行安全通信。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可验证凭证（Verifiable Credential, VC）&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
+&lt;p&gt;VC 是由第三方机构（可以是大学、公司、政府、甚至一个 DAO）颁发给你的数字证书，它被发行者的私钥签名后，像一枚防伪印章一样附着在你的 DID 上。&lt;/p&gt;
 &lt;h3 id=&#34;did-的工作原理&#34;&gt;&lt;a href=&#34;#did-%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;&lt;strong&gt;DID 的工作原理&lt;/strong&gt;
 &lt;/h3&gt;&lt;ol&gt;
 &lt;li&gt;
@@ -572,6 +1093,29 @@ Cosmos 的思路与 Polkadot 略有不同：它提供了 &lt;strong&gt;IBC（Int
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h3 id=&#34;选择性披露&#34;&gt;&lt;a href=&#34;#%e9%80%89%e6%8b%a9%e6%80%a7%e6%8a%ab%e9%9c%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;选择性披露
+&lt;/h3&gt;&lt;p&gt;如果我所有凭证都在链上，那岂不是任何人都能看到我的全部信息？这不是比 Web2 更没隐私吗？为了解决这个问题，就出现了选择性披露.&lt;/p&gt;
+&lt;p&gt;它让 DID 持有者可以针对不同的验证场景，精确控制展示哪些凭证、隐藏哪些细节。&lt;/p&gt;
+&lt;h2 id=&#34;sbtsoulbound-token灵魂绑定代币&#34;&gt;&lt;a href=&#34;#sbtsoulbound-token%e7%81%b5%e9%ad%82%e7%bb%91%e5%ae%9a%e4%bb%a3%e5%b8%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;SBT（Soulbound Token，灵魂绑定代币）
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;SBT 是一种一旦发到你的钱包里，就永远无法转让、出售或交易的特殊 NFT。它像一枚刻在灵魂上的印记，代表着你的身份、成就、资格或声誉。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;Soulbound&amp;quot;出自全球最著名的网络游戏《魔兽世界》，2022 年 1 月，以太坊创始人 Vitalik Buterin（V 神） 在他的博客上首次提出了&amp;quot;Soulbound&amp;quot;这个概念，将其引入区块链世界。随后在 2022 年 5 月，他与经济学家 E. Glen Weyl 和律师 Puja Ohlhaver 共同发表了一篇极具影响力的论文——《去中心化社会：寻找 Web3 的灵魂》（Decentralized Society: Finding Web3&amp;rsquo;s Soul）&lt;/p&gt;
+&lt;p&gt;从技术角度来说，SBT 并不是一种全新的发明，而是在我们已经熟悉的 ERC-721（NFT 标准） 的基础上做了一个关键修改——禁用转让功能。&lt;/p&gt;
+&lt;h2 id=&#34;代表项目&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e8%a1%a8%e9%a1%b9%e7%9b%ae&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代表项目
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;ENS（Ethereum Name Service）——区块链的&amp;quot;域名系统&amp;rdquo;，将十六进制字符串映射成一个人类可读的名字，比如 vitalik.eth。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Worldcoin / World ID——用虹膜扫描证明&amp;quot;你是人类&amp;quot;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Worldcoin&lt;/strong&gt; 是一个极具争议但也极其雄心勃勃的项目，由 OpenAI 的联合创始人 &lt;strong&gt;Sam Altman&lt;/strong&gt; 发起。它的核心目标只有一个：&lt;strong&gt;在 AI 时代，证明你是一个真实的人类，而不是一个 AI 机器人。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;它的方法也足够硬核——用一个银色的球形设备 &lt;strong&gt;Orb（球体）&lt;/strong&gt; 扫描你的&lt;strong&gt;虹膜&lt;/strong&gt;（眼球上那个独一无二的纹理图案），生成一个加密的身份哈希值，然后颁发一个叫做 &lt;strong&gt;World ID&lt;/strong&gt; 的去中心化身份凭证。这个 World ID 可以证明&amp;quot;有一个独一无二的人类拥有这个地址&amp;quot;，但不会暴露你的姓名、国籍或任何其他个人信息。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Galxe（原 Project Galaxy）——链上凭证的&amp;quot;打卡平台&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Galxe&lt;/strong&gt; 是目前 Web3 世界里最大的链上凭证和身份平台之一。如果你在 Web3 圈子里&amp;quot;刷过任务&amp;quot;&amp;ldquo;做过交互&amp;quot;&amp;ldquo;领过 OAT&amp;rdquo;，你几乎一定用过 Galxe。&lt;/p&gt;
+&lt;p&gt;它的核心模式是：各种 Web3 项目方在 Galxe 上发布&amp;quot;任务&amp;rdquo;（比如&amp;quot;在 Uniswap 上完成一次交易&amp;quot;&amp;ldquo;在 Twitter 上关注并转推&amp;quot;&amp;ldquo;参加某个 Discord AMA&amp;rdquo;），用户完成任务后，就能领取一个链上凭证——这些凭证通常以 OAT（On-chain Achievement Token）的形式存在，本质上就是一种 SBT。&lt;/p&gt;
 </description>
         </item>
         <item>

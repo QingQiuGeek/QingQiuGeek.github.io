@@ -725,8 +725,11 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
         <li><a href="#did-的定义"><strong>DID 的定义</strong></a></li>
         <li><a href="#did-的组成"><strong>DID 的组成</strong></a></li>
         <li><a href="#did-的工作原理"><strong>DID 的工作原理</strong></a></li>
+        <li><a href="#选择性披露">选择性披露</a></li>
       </ol>
     </li>
+    <li><a href="#sbtsoulbound-token灵魂绑定代币">SBT（Soulbound Token，灵魂绑定代币）</a></li>
+    <li><a href="#代表项目">代表项目</a></li>
   </ol>
 </nav>
         </div>
@@ -787,7 +790,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 2 分钟
+                阅读时长: 5 分钟
             </time>
         </div>
         
@@ -845,7 +848,11 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <li>DID 文档允许其它实体与该 DID 进行交互，验证其身份或通过加密手段进行安全通信。</li>
 </ul>
 </li>
+<li>
+<p>可验证凭证（Verifiable Credential, VC）</p>
+</li>
 </ol>
+<p>VC 是由第三方机构（可以是大学、公司、政府、甚至一个 DAO）颁发给你的数字证书，它被发行者的私钥签名后，像一枚防伪印章一样附着在你的 DID 上。</p>
 <h3 id="did-的工作原理"><a href="#did-%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="header-anchor"></a><strong>DID 的工作原理</strong>
 </h3><ol>
 <li>
@@ -869,6 +876,29 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 </ul>
 </li>
 </ol>
+<h3 id="选择性披露"><a href="#%e9%80%89%e6%8b%a9%e6%80%a7%e6%8a%ab%e9%9c%b2" class="header-anchor"></a>选择性披露
+</h3><p>如果我所有凭证都在链上，那岂不是任何人都能看到我的全部信息？这不是比 Web2 更没隐私吗？为了解决这个问题，就出现了选择性披露.</p>
+<p>它让 DID 持有者可以针对不同的验证场景，精确控制展示哪些凭证、隐藏哪些细节。</p>
+<h2 id="sbtsoulbound-token灵魂绑定代币"><a href="#sbtsoulbound-token%e7%81%b5%e9%ad%82%e7%bb%91%e5%ae%9a%e4%bb%a3%e5%b8%81" class="header-anchor"></a>SBT（Soulbound Token，灵魂绑定代币）
+</h2><p><strong>SBT 是一种一旦发到你的钱包里，就永远无法转让、出售或交易的特殊 NFT。它像一枚刻在灵魂上的印记，代表着你的身份、成就、资格或声誉。</strong></p>
+<p>&ldquo;Soulbound&quot;出自全球最著名的网络游戏《魔兽世界》，2022 年 1 月，以太坊创始人 Vitalik Buterin（V 神） 在他的博客上首次提出了&quot;Soulbound&quot;这个概念，将其引入区块链世界。随后在 2022 年 5 月，他与经济学家 E. Glen Weyl 和律师 Puja Ohlhaver 共同发表了一篇极具影响力的论文——《去中心化社会：寻找 Web3 的灵魂》（Decentralized Society: Finding Web3&rsquo;s Soul）</p>
+<p>从技术角度来说，SBT 并不是一种全新的发明，而是在我们已经熟悉的 ERC-721（NFT 标准） 的基础上做了一个关键修改——禁用转让功能。</p>
+<h2 id="代表项目"><a href="#%e4%bb%a3%e8%a1%a8%e9%a1%b9%e7%9b%ae" class="header-anchor"></a>代表项目
+</h2><ul>
+<li>
+<p>ENS（Ethereum Name Service）——区块链的&quot;域名系统&rdquo;，将十六进制字符串映射成一个人类可读的名字，比如 vitalik.eth。</p>
+</li>
+<li>
+<p>Worldcoin / World ID——用虹膜扫描证明&quot;你是人类&quot;</p>
+</li>
+</ul>
+<p><strong>Worldcoin</strong> 是一个极具争议但也极其雄心勃勃的项目，由 OpenAI 的联合创始人 <strong>Sam Altman</strong> 发起。它的核心目标只有一个：<strong>在 AI 时代，证明你是一个真实的人类，而不是一个 AI 机器人。</strong></p>
+<p>它的方法也足够硬核——用一个银色的球形设备 <strong>Orb（球体）</strong> 扫描你的<strong>虹膜</strong>（眼球上那个独一无二的纹理图案），生成一个加密的身份哈希值，然后颁发一个叫做 <strong>World ID</strong> 的去中心化身份凭证。这个 World ID 可以证明&quot;有一个独一无二的人类拥有这个地址&quot;，但不会暴露你的姓名、国籍或任何其他个人信息。</p>
+<ul>
+<li>Galxe（原 Project Galaxy）——链上凭证的&quot;打卡平台&quot;</li>
+</ul>
+<p><strong>Galxe</strong> 是目前 Web3 世界里最大的链上凭证和身份平台之一。如果你在 Web3 圈子里&quot;刷过任务&quot;&ldquo;做过交互&quot;&ldquo;领过 OAT&rdquo;，你几乎一定用过 Galxe。</p>
+<p>它的核心模式是：各种 Web3 项目方在 Galxe 上发布&quot;任务&rdquo;（比如&quot;在 Uniswap 上完成一次交易&quot;&ldquo;在 Twitter 上关注并转推&quot;&ldquo;参加某个 Discord AMA&rdquo;），用户完成任务后，就能领取一个链上凭证——这些凭证通常以 OAT（On-chain Achievement Token）的形式存在，本质上就是一种 SBT。</p>
 
 </section>
 
