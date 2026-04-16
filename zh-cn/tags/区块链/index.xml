@@ -7,7 +7,115 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sun, 12 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 15 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>EPF学习笔记-EL的RLP编码规则</title>
+        <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-el%E7%9A%84rlp%E7%BC%96%E7%A0%81%E8%A7%84%E5%88%99/</link>
+        <pubDate>Wed, 15 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-el%E7%9A%84rlp%E7%BC%96%E7%A0%81%E8%A7%84%E5%88%99/</guid>
+        <description>&lt;h2 id=&#34;什么是-rlp&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-rlp&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 RLP
+&lt;/h2&gt;&lt;p&gt;递归长度前缀（RLP）序列化，是以太坊执行层&lt;strong&gt;用于数据编码和解析的核心协议&lt;/strong&gt;，&lt;strong&gt;将字节数组和嵌套列表转换为统一的字节流&lt;/strong&gt;，以确保用不同编程语言编写的节点客户端能相互通信，达成一致。&lt;/p&gt;
+&lt;p&gt;与常见的 JSON 或 XML 格式不同，RLP 不会去定义数据到底是数字、布尔值还是字符串。&lt;strong&gt;它的唯一目的是存储嵌套的字节数组结构。&lt;/strong&gt;，至于这些字节代表什么意思（是账户余额还是合约代码），则交由以太坊的其他协议层去解释。这种&lt;strong&gt;极简&lt;/strong&gt;让它在处理嵌套数据时非常高效&lt;/p&gt;
+&lt;h2 id=&#34;rlp-编码如何工作&#34;&gt;&lt;a href=&#34;#rlp-%e7%bc%96%e7%a0%81%e5%a6%82%e4%bd%95%e5%b7%a5%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RLP 编码如何工作？
+&lt;/h2&gt;&lt;p&gt;RLP 的名字里有“长度前缀”，这解释了它的工作原理。一串 RLP 编码的数据，**第一个字节（前缀）**像是说明书，告诉计算机接下来的数据是什么类型、有多长：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;单字节：如果数据很小，直接编码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;字符串：如果是短字符串，前缀会告诉电脑“后面有几个字节是文本”；如果是长字符串，则会有更复杂的前缀来记录长度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;列表：它甚至可以把多个字符串打包成一个“列表”，甚至列表里还可以嵌套列表（这就是“递归”的含义）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;RLP 协议将一个字节（0x00 到 0xff）的取值范围进行了切分，以便解码器仅通过看第一个字节就能判断出数据的类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;0x00 - 0x7f：用于直接表示单个字节本身。这意味着如果数据本身就是一个很小的数字（小于 128），它不需要任何前缀，直接存储即可。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;0x80：这个特定的数值被保留用来表示空字符串、null 或 false。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;0x81 - 0xb7：这就是为什么例子中要加上 0x80 的原因。这个范围专门用于长度在 1 到 55 字节之间的字符串。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;rlp-编码例子&#34;&gt;&lt;a href=&#34;#rlp-%e7%bc%96%e7%a0%81%e4%be%8b%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RLP 编码例子
+&lt;/h3&gt;&lt;p&gt;以编码字符串 &amp;ldquo;dog&amp;rdquo; 为例：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;转换为十六进制： 字符串 &amp;ldquo;dog&amp;rdquo; 对应的 ASCII/十六进制值为 0x64, 0x6f, 0x67。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;确定长度： &amp;ldquo;dog&amp;rdquo; 的长度是 3 个字节。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;应用规则： 根据 RLP 的“短字符串”规则（长度在 1-55 字节之间），编码结果为：0x80 + 字符串长度，再接上原始数据。（对于长度为 1-55 字节的字符串，前缀应该是 0x80 + 字符串长度，当以太坊节点看到 0x83 时，它知道这个数大于 0x80 且小于 0xb7，于是它会减去 0x80 得到 3，从而知道接下来的 3 个字节是一个字符串！）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;计算前缀：0x80 + 3 = 0x83。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;最终编码： 0x83, 0x64, 0x6f, 0x67。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果是一个列表 [&amp;ldquo;cat&amp;rdquo;, &amp;ldquo;dog&amp;rdquo;]：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;ldquo;cat&amp;rdquo; 编码为 0x83, 0x63, 0x61, 0x74。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;ldquo;dog&amp;rdquo; 编码为 0x83, 0x64, 0x6f, 0x67。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两个编码项的总长度为 8 字节&lt;/p&gt;
+&lt;h2 id=&#34;什么是ssz它和rlp有什么区别&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%afssz%e5%ae%83%e5%92%8crlp%e6%9c%89%e4%bb%80%e4%b9%88%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是SSZ？它和RLP有什么区别？
+&lt;/h2&gt;&lt;p&gt;SSZ (Simple Serialize) 是以太坊的一种“简单序列化”协议。&lt;/p&gt;
+&lt;p&gt;使用层面： 以太坊的执行层的 RLP 不同，&lt;strong&gt;SSZ 是用于以太坊共识层的更现代的标准&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;功能特性： SSZ 支持默克尔化（Merkleization），&lt;strong&gt;默克尔化允许对复杂的数据结构进行哈希计算，并生成默克尔证明（Merkle Proofs）。&lt;strong&gt;这对于共识层非常关键，因为它让节点能够&lt;/strong&gt;高效地验证数据&lt;/strong&gt;的某一部分，而不需要下载或处理整个数据集。&lt;/p&gt;
+&lt;p&gt;相比之下，RLP 的设计初衷极其简约，其唯一目的是存储嵌套的字节数组，并不原生支持这种高效的片段验证机制。&lt;/p&gt;
+&lt;h2 id=&#34;rlp如何处理非常长的数据或嵌套列表&#34;&gt;&lt;a href=&#34;#rlp%e5%a6%82%e4%bd%95%e5%a4%84%e7%90%86%e9%9d%9e%e5%b8%b8%e9%95%bf%e7%9a%84%e6%95%b0%e6%8d%ae%e6%88%96%e5%b5%8c%e5%a5%97%e5%88%97%e8%a1%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RLP如何处理非常长的数据或嵌套列表？
+&lt;/h2&gt;&lt;p&gt;当数据（字符串或列表）的长度超过 55 字节时，RLP 采用&lt;strong&gt;长度的长度&lt;/strong&gt;这种两级前缀机制：&lt;/p&gt;
+&lt;p&gt;长字符串： 首先将数据的实际长度转换为大端序（big-endian）格式。前缀计算公式为 0xb7 + 长度字节数组的长度。&lt;/p&gt;
+&lt;p&gt;例子： 如果一个字符串长 56 字节（0x38），由于 56 占 1 个字节，前缀就是 0xb7 + 1 = 0xb8。最终编码以 0xb8, 0x38&amp;hellip; 开头。&lt;/p&gt;
+&lt;p&gt;长列表： 逻辑类似，前缀计算公式为 0xf7 + 长度字节数组的长度。&lt;/p&gt;
+&lt;p&gt;对于嵌套结构采用递归方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;编码时，先将列表内部的每一个元素独立进行 RLP 编码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将这些编码后的字节流拼接在一起，计算总长度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;根据这个总长度，为整个序列加上列表前缀（0xc0 系列或 0xf7 系列）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;解码时，计算机会先通过第一个字节确定列表的总范围，然后递归地解码其中的每一个元素，直到还原出完整的嵌套结构。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>ERC-8141</title>
+        <link>/zh-cn/post/2026/04/erc-8141/</link>
+        <pubDate>Wed, 15 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/erc-8141/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/-xKB4Z5ohy3mTrdVfUTP-w&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;参考 ETHPanda&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>li.fi-protocol</title>
+        <link>/zh-cn/post/2026/04/li.fi-protocol/</link>
+        <pubDate>Wed, 15 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/li.fi-protocol/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>EPF学习笔记-交易解析</title>
         <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%A4%E6%98%93%E8%A7%A3%E6%9E%90/</link>
         <pubDate>Sun, 12 Apr 2026 12:00:00 +0000</pubDate>
