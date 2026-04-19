@@ -7,7 +7,427 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Wed, 15 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 18 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Ethereum-JSON-RPC</title>
+        <link>/zh-cn/post/2026/04/ethereum-json-rpc/</link>
+        <pubDate>Sat, 18 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/ethereum-json-rpc/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/EL/JSON-RPC&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;JSON-RPC&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;json-rpc-概念&#34;&gt;&lt;a href=&#34;#json-rpc-%e6%a6%82%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JSON-RPC 概念
+&lt;/h2&gt;&lt;p&gt;JSON-RPC 协议作为一种基于 JSON 编码的远程过程调用标准，主要用于实现客户端与区块链节点之间的信息交互，是用户、开发者和钱包（如 MetaMask）与以太坊网络交互的标准方式。&lt;/p&gt;
+&lt;p&gt;为了区分功能，JSON-RPC 划分为多个命名空间，例如处理基础数据的 eth 模块、提供对原始数据的直接访问的 debug模块、用于系统调优的 admin 模块，以及支撑共识层与执行层通信的 Engine API，开发者可以用 ethers.js、web3.js 等库来封装这些 JSON-RPC 调用，实现更友好的交互。&lt;/p&gt;
+&lt;p&gt;**JSON-RPC 具有传输层无关性，本身只规定了数据的格式和交互逻辑（即如何打包请求和响应），而并不强制要求通过哪种具体的网络协议来搬运这些数据。**这意味着它可以根据不同的使用场景通过多种协议运行，比如通过HTTP、WebSocket、IPC。&lt;/p&gt;
+&lt;p&gt;为了确保跨客户端的兼容性，JSON-RPC 遵循严格的&lt;strong&gt;编码规则&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据结构：&lt;strong&gt;每个请求必须包含唯一标识符 id、协议版本 jsonrpc、调用的 method 以及 params（参数）。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;十六进制编码&lt;/strong&gt;：**所有的数量（如区块号、金额）和非格式化数据（如哈希、地址）都必须使用带 &amp;ldquo;0x&amp;rdquo; 前缀的十六进制格式。**例如数字 65 表示为 0x41，地址和字节数组也需遵循此规则。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;json-rpc-如何作为以太坊各层间的通信桥梁&#34;&gt;&lt;a href=&#34;#json-rpc-%e5%a6%82%e4%bd%95%e4%bd%9c%e4%b8%ba%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%90%84%e5%b1%82%e9%97%b4%e7%9a%84%e9%80%9a%e4%bf%a1%e6%a1%a5%e6%a2%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JSON-RPC 如何作为以太坊各层间的通信桥梁
+&lt;/h2&gt;&lt;p&gt;节点被拆分为执行层和共识层。这两层之间通过 Engine API 进行通信，而该 API 正是构建在 JSON-RPC 接口之上的。&lt;/p&gt;
+&lt;p&gt;与面向用户的普通接口不同，Engine API 运行在独立的、&lt;strong&gt;经过身份验证&lt;/strong&gt;的端口上，访问接口需要 **JSON Web Token (JWT)**进行身份验证，确保只有授权的共识客户端可以向执行客户端发送指令！&lt;/p&gt;
+&lt;p&gt;注意JWT 提供的是身份验证，不提供流量加密功能！&lt;/p&gt;
+&lt;p&gt;共识客户端和执行客户端通过 JSON-RPC 交换关于共识状态、分叉选择（Fork Choice）以及区块验证的关键信息。&lt;/p&gt;
+&lt;h2 id=&#34;json-rpc-不同-api-命名空间的作用&#34;&gt;&lt;a href=&#34;#json-rpc-%e4%b8%8d%e5%90%8c-api-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4%e7%9a%84%e4%bd%9c%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;JSON-RPC 不同 API 命名空间的作用
+&lt;/h2&gt;&lt;p&gt;命名空间可以理解成工具箱里的不同隔层，每个隔层放置了特定用途的工具。&lt;/p&gt;
+&lt;h3 id=&#34;engine核心驱动&#34;&gt;&lt;a href=&#34;#engine%e6%a0%b8%e5%bf%83%e9%a9%b1%e5%8a%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;engine：核心驱动
+&lt;/h3&gt;&lt;p&gt;这就是常提到的 Engine API，专门用于共识层和执行层之间的内部通信，需要 JWT 身份验证，普通用户通常无法直接接触。&lt;/p&gt;
+&lt;h3 id=&#34;eth-命名空间工具箱&#34;&gt;&lt;a href=&#34;#eth-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4%e5%b7%a5%e5%85%b7%e7%ae%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;eth 命名空间：工具箱
+&lt;/h3&gt;&lt;p&gt;以太坊中最常用、最重要的命名空间，几乎所有的加密货币钱包、DApp都在用。&lt;/p&gt;
+&lt;p&gt;核心作用：它提供了与以太坊网络进行基础交互的功能，主要用于读取区块链数据和发送交易。&lt;/p&gt;
+&lt;p&gt;常见用途：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;查询余额：使用 eth_getBalance 查看某个地址有多少 ETH。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;查看区块：使用 eth_blockNumber 获取最新的区块高度，或使用 eth_getBlockByNumber 查看特定区块的详情。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;估算手续费：使用 eth_gasPrice 或 eth_estimateGas 来计算发送交易需要多少油费。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;合约交互：使用 eth_call 在不消耗 Gas 的情况下模拟执行合约代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;debug-命名空间x光机&#34;&gt;&lt;a href=&#34;#debug-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4x%e5%85%89%e6%9c%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;debug 命名空间：X光机
+&lt;/h3&gt;&lt;p&gt;debug 命名空间主要用于检查以太坊的内部状态，就像 X 光机，能让你看到区块链底层更原始、更细节的数据。&lt;/p&gt;
+&lt;p&gt;核心作用：&lt;strong&gt;提供对原始数据的直接访问&lt;/strong&gt;。这对于&lt;strong&gt;区块链浏览器&lt;/strong&gt;的开发者或进行底层协议研究的研究员非常有用。&lt;/p&gt;
+&lt;p&gt;许多 debug 方法需要节点进行大量的计算，普通节点可能扛不住，性能开销大，大多数公共 RPC 服务商（如 Infura）会限制甚至关闭这个命名空间。&lt;/p&gt;
+&lt;h3 id=&#34;admin节点配置工具&#34;&gt;&lt;a href=&#34;#admin%e8%8a%82%e7%82%b9%e9%85%8d%e7%bd%ae%e5%b7%a5%e5%85%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;admin：节点配置工具
+&lt;/h3&gt;&lt;p&gt;用于管理节点本身（如添加节点对等体、修改配置）。因为涉及节点控制权，它被标记为高度敏感。&lt;/p&gt;
+&lt;h3 id=&#34;net网络状态工具&#34;&gt;&lt;a href=&#34;#net%e7%bd%91%e7%bb%9c%e7%8a%b6%e6%80%81%e5%b7%a5%e5%85%b7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;net：网络状态工具
+&lt;/h3&gt;&lt;p&gt;用于查看节点的网络连接情况，比如当前连接了多少个“小伙伴”（Peers）。&lt;/p&gt;
+&lt;h3 id=&#34;txpool交易池监控&#34;&gt;&lt;a href=&#34;#txpool%e4%ba%a4%e6%98%93%e6%b1%a0%e7%9b%91%e6%8e%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;txpool：交易池监控
+&lt;/h3&gt;&lt;p&gt;让你能看到那些还没被打包进区块、正在排队等待的交易。&lt;/p&gt;
+&lt;h3 id=&#34;trace&#34;&gt;&lt;a href=&#34;#trace&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;trace
+&lt;/h3&gt;&lt;p&gt;提供多项用于检查以太坊状态的方法，通常包含类似 Parity 客户端风格的追踪功能。&lt;/p&gt;
+&lt;h3 id=&#34;rpc&#34;&gt;&lt;a href=&#34;#rpc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;rpc
+&lt;/h3&gt;&lt;p&gt;提供关于 RPC 服务器本身及其所包含模块的信息。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>EVM 对象格式 (EOF) 与预编译合约</title>
+        <link>/zh-cn/post/2026/04/evm-%E5%AF%B9%E8%B1%A1%E6%A0%BC%E5%BC%8F-eof-%E4%B8%8E%E9%A2%84%E7%BC%96%E8%AF%91%E5%90%88%E7%BA%A6/</link>
+        <pubDate>Sat, 18 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/evm-%E5%AF%B9%E8%B1%A1%E6%A0%BC%E5%BC%8F-eof-%E4%B8%8E%E9%A2%84%E7%BC%96%E8%AF%91%E5%90%88%E7%BA%A6/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/EL/eof&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;EOF&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/EL/precompiled-contracts&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;预编译合约&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;EOF 为原本无结构的字节码引入了分段式容器框架，旨在通过强化验证机制和提升执行效率来优化底层代码的安全性与扩展性。&lt;/p&gt;
+&lt;p&gt;预编译合约作为内置于协议中的特殊账户，专门处理复杂的密码学计算，从而规避了操作码空间有限及计算开销过大的问题。&lt;/p&gt;
+&lt;h2 id=&#34;eof-容器如何改善以太坊合约的安全性&#34;&gt;&lt;a href=&#34;#eof-%e5%ae%b9%e5%99%a8%e5%a6%82%e4%bd%95%e6%94%b9%e5%96%84%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%90%88%e7%ba%a6%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EOF 容器如何改善以太坊合约的安全性
+&lt;/h2&gt;&lt;p&gt;EOF（EVM Object Format，EVM 对象格式） 是一种为 EVM 字节码设计的可扩展且具有版本控制的容器格式。目前的 EVM 字节码是一系列无结构的指令序列，而 EOF 通过引入“容器”概念，为字节码带来了结构化，使其更易于 EVM 解析和分析。&lt;/p&gt;
+&lt;p&gt;EOF 主要通过以下几个方面改善以太坊合约的安全性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;部署时验证： EOF 在合约部署时进行&lt;strong&gt;一次性验证&lt;/strong&gt;，而&lt;strong&gt;旧版 EVM 仅有有限的运行时验证&lt;/strong&gt;。这种全面的&lt;strong&gt;预执行验证&lt;/strong&gt;允许在代码实际执行前进行更彻底的静态分析。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;强制执行严格结构： EOF 引入了清晰定义的区块（Sections），&lt;strong&gt;将代码与数据分离。在旧版 EVM 中，数据和代码是混合在一起的&lt;/strong&gt;，而 EOF 的这种分离减少了潜在的攻击向量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;改进的跳转机制： &lt;strong&gt;旧版 EVM 使用动态跳转（JUMP/JUMPI）&lt;/strong&gt;，这使得控制流分析变得困难且容易出错。&lt;strong&gt;EOF 禁用了动态跳转并采用静态跳转&lt;/strong&gt;，使合约执行路径更加&lt;strong&gt;可预测和安全&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;引入类型系统： EOF 为 EVM 带来了&lt;strong&gt;函数签名和类型（Typing）&lt;/strong&gt;，而&lt;strong&gt;旧版 EVM 没有任何类型系统&lt;/strong&gt;。这有助于在编译和验证阶段发现潜在的错误。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;限制危险操作： 相关的提案（如 EIP-7620）&lt;strong&gt;在 EOF 容器中移除了使用 CREATE 或 CREATE2 指令创建合约的可能性&lt;/strong&gt;，转而使用 EOFCREATE 和 RETURNCODE 等新指令，以提供一种更安全、结构化的合约创建方式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;预编译合约与普通操作码优劣&#34;&gt;&lt;a href=&#34;#%e9%a2%84%e7%bc%96%e8%af%91%e5%90%88%e7%ba%a6%e4%b8%8e%e6%99%ae%e9%80%9a%e6%93%8d%e4%bd%9c%e7%a0%81%e4%bc%98%e5%8a%a3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;预编译合约与普通操作码优劣
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;预编译合约的优势&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;极高的执行效率： 预编译合约在 EVM 之外由执行客户端原生实现（Native implementation）。这使得它们能够高效处理复杂的密码学计算，而无需承担 EVM 的额外开销（overhead）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;节省有限的操作码空间： EVM 的 1 字节操作码空间非常有限（最多 256 个，范围 0x00 - 0xFF）。将常用但复杂的功能实现为预编译合约，可以为更基础的操作节省操作码空间。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;优化的 Gas 消耗： 预编译合约的 Gas 成本与输入数据直接挂钩，且通常经过严格基准测试。此外，根据 EIP-2929，预编译合约会被包含在交易初始的“已访问地址”中，从而节省 Gas 成本。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;劣势&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;库实现的安全性风险：预编译合约&lt;strong&gt;依赖于客户端底层的优化库&lt;/strong&gt;。如果这些库中存在漏洞，可能会导致整个协议层中断。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;高昂的维护与测试成本：预编译合约是硬编码在协议中的，会增加客户端的代码臃肿度，并带来极高的测试表面积和维护负担。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;eofcreate-与传统的-create-指令区别&#34;&gt;&lt;a href=&#34;#eofcreate-%e4%b8%8e%e4%bc%a0%e7%bb%9f%e7%9a%84-create-%e6%8c%87%e4%bb%a4%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EOFCREATE 与传统的 CREATE 指令区别
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;容器化与结构化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;传统的 CREATE： 用于处理&lt;strong&gt;无结构的传统 EVM 字节码&lt;/strong&gt;，其中代码和数据通常混合在一起。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;EOFCREATE： &lt;strong&gt;专为 EOF（EVM 对象格式）容器设计&lt;/strong&gt;。EOF 引入了清晰定义的区块（Sections），实现了代码与数据的完全分离。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;验证时机与程度&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;传统的 CREATE： 验证相对有限，且主要在**运行时（Runtime）**进行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;EOFCREATE： 遵循 EOF 的原则，在**部署时进行一次性（once-off）**的全面预执行验证。这种机制允许在代码实际执行前进行更彻底的静态分析，从而增强了安全性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>EPF学习笔记-DevP2P</title>
+        <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-devp2p/</link>
+        <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-devp2p/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/EL/devp2p&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;devp2p&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;DevP2P 协议栈是支撑&lt;strong&gt;以太坊执行层网络通信&lt;/strong&gt;的核心技术架构。该技术体系主要分为&lt;strong&gt;节点发现&lt;/strong&gt;与&lt;strong&gt;数据传输&lt;/strong&gt;两个核心部分：前者利用基于 UDP 的 Discv4/Discv5 协议，通过 Kademlia 算法在去中心化网络中定位其他节点；后者则依赖基于 TCP 的 RLPx 协议建立安全的加密连接。&lt;/p&gt;
+&lt;p&gt;为了确保通信的私密性与完整性，系统采用了 ECDH 密钥交换和 AES 加密技术，并支持完美前向安全性。&lt;/p&gt;
+&lt;h2 id=&#34;以太坊执行层是如何发现并连接到其他节点&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e6%89%a7%e8%a1%8c%e5%b1%82%e6%98%af%e5%a6%82%e4%bd%95%e5%8f%91%e7%8e%b0%e5%b9%b6%e8%bf%9e%e6%8e%a5%e5%88%b0%e5%85%b6%e4%bb%96%e8%8a%82%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊执行层是如何发现并连接到其他节点
+&lt;/h2&gt;&lt;p&gt;DevP2P 通过两个并行的堆栈来完成节点的发现与连接：**发现堆栈（Discovery Stack）负责寻找网络中的同行节点，而传输堆栈（Transport Stack）**则负责在节点之间安全地发送和接收消息。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;节点发现主要通过 Discv 协议（目前多采用 Discv5）在 UDP 协议上运行，其核心机制如下：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;启动与引导 (Bootnodes)： 新节点加入网络时，首先会连接到规范中硬编码的引导节点（Bootnodes）。这些是全网已知的稳定节点，用于&lt;strong&gt;引导新节点&lt;/strong&gt;进入发现流程。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Kademlia 算法与路由表： 以太坊使用类似 Kademlia 的分布式哈希表（DHT） 算法。节点维护一个由 k-桶（k-buckets） 组成的路由表，根据节点 ID 之间的 XOR 距离进行排序存储。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PING-PONG 握手：新节点向引导节点发送 PING 消息，收到 PONG 响应后，双方建立“绑定”关系，这证明了端点的有效性并防止放大攻击。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;查找邻居 (FindNode)： 绑定后，新节点发送 FIND-NEIGHBOURS（或 FindNode）请求，获取目标 ID 附近的节点列表。收到响应后，节点会对这些新邻居重复 PING-PONG 过程，不断扩大已知的节点范围。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;以太坊节点记录 (ENR)： 节点通过 ENR（Ethereum Node Record） 交换连接详细信息，如 IP 地址、端口号、公钥及元数据。ENR 具有签名验证功能，确保了信息的真实性与完整性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;建立加密连接 (Transport Stack)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;一旦发现了节点，执行层会切换到基于 TCP 的 RLPx 协议&lt;/strong&gt; 来建立可靠且安全的通信通道：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;身份验证与握手： &lt;strong&gt;RLPx&lt;/strong&gt; 使用 ECIES（椭圆曲线集成加密方案） 进行初始握手。发起者生成临时密钥对，并通过 ECDH（椭圆曲线迪菲-赫尔曼） 与目标节点交换，从而计算出共享密钥。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;完美前向保密 (Forward Secrecy)： 每次会话都会生成&lt;strong&gt;临时的会话密钥&lt;/strong&gt;，即使长期私钥泄露，过去的通信记录也无法被破解。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Hello 消息与协议协商： 身份验证完成后，双方交换 Hello 消息，包含各自的节点 ID、客户端 ID 以及支持的功能（Capabilities）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;多路复用与子协议： &lt;strong&gt;RLPx&lt;/strong&gt; 支持在同一个连接上运行多个应用层子协议。例如，eth 协议用于广播交易和传播区块，而 snap 协议用于状态同步。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;discv4-与-discv5-网络协议主要区别&#34;&gt;&lt;a href=&#34;#discv4-%e4%b8%8e-discv5-%e7%bd%91%e7%bb%9c%e5%8d%8f%e8%ae%ae%e4%b8%bb%e8%a6%81%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Discv4 与 Discv5 网络协议主要区别
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;安全性与加密机制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;通信加密： Discv4 的消息以明文形式发送，而 Discv5 引入了&lt;strong&gt;加密有线协议&lt;/strong&gt;，使用 AES-GCM 算法确保通信的机密性和真实性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;会话建立： Discv4 没有正式的握手过程，仅依靠 Ping-Pong 消息进行端点验证。Discv5 实现了基于 ECDH（椭圆曲线迪菲-赫尔曼）的加密会话建立，并引入了 WHOAREYOU 挑战响应机制，以防止身份欺骗。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;身份验证： Discv5 强调仅存储经过签名的节点记录（ENR），这确保了对等节点信息的真实性和完整性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;节点记录与元数据 (ENR)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;记录格式： 虽然两者都使用以太坊节点记录（ENR），但 Discv4 使用的是基础版本，而 Discv5 支持带有元数据且可扩展的 ENR。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灵活性： Discv4 的标识方案相对静态，而 Discv5 支持多种身份识别方案，具有更强的扩展性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;服务发现与功能&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;主题广告：Discv5 引入了基于主题的服务发现。节点可以发布自己提供的服务主题，其他节点通过在特定的“主题半径”内进行 Kademlia 查找来高效定位这些服务。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;自适应路由： Discv5 支持自适应路由和自愈能力，能够根据网络状况优化查询路径。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;协议实现细节&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;时钟依赖： Discv4 的运行需要节点之间时钟同步，而 Discv5 消除了这一依赖。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可扩展性： Discv4 适用于中等规模的网络，而 Discv5 针对大规模网络进行了优化，并支持并行查询以增强抵御攻击的韧性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;消息类型： Discv5 增加了专门用于安全和自定义协议的消息，如 WhoAreYou (0x07)、Handshake (0x08) 以及允许自定义应用协议的 TalkReq/TalkResp (0x09/0x0A)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;节点时钟不同步会对-discv4-产生什么影响&#34;&gt;&lt;a href=&#34;#%e8%8a%82%e7%82%b9%e6%97%b6%e9%92%9f%e4%b8%8d%e5%90%8c%e6%ad%a5%e4%bc%9a%e5%af%b9-discv4-%e4%ba%a7%e7%94%9f%e4%bb%80%e4%b9%88%e5%bd%b1%e5%93%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;节点时钟不同步会对 Discv4 产生什么影响
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;协议无法正常运行： Discv4 协议明确要求节点间的时钟必须同步。如果时钟出现偏差，该发现协议将无法按预期工作，这会直接影响节点在以太坊网络中寻找和识别其他同行节点的能力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;连接障碍： 由于 Discv4 是一种依赖结构化规则进行对等节点发现的系统，时钟不同步可能会导致节点发现流程中断，使得节点难以建立起稳定的网络拓扑。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>MEV最大可提取价值</title>
+        <link>/zh-cn/post/2026/04/mev%E6%9C%80%E5%A4%A7%E5%8F%AF%E6%8F%90%E5%8F%96%E4%BB%B7%E5%80%BC/</link>
+        <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/mev%E6%9C%80%E5%A4%A7%E5%8F%AF%E6%8F%90%E5%8F%96%E4%BB%B7%E5%80%BC/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>RPC接口查询链上数据</title>
+        <link>/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/</link>
+        <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/</guid>
+        <description>&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image.png&#34;
+	width=&#34;1482&#34;
+	height=&#34;1074&#34;
+	srcset=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image_hu_c41d05c06242d79a.png 480w, /zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image_hu_fe66a60fbfaa05c.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;331px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1.png&#34;
+	width=&#34;1395&#34;
+	height=&#34;323&#34;
+	srcset=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1_hu_d6e290bc0446527f.png 480w, /zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1_hu_ea1765e2c4a77f5b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;431&#34;
+		data-flex-basis=&#34;1036px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;合约代理模式&lt;/p&gt;
+&lt;p&gt;The Graph&lt;/p&gt;
+&lt;p&gt;ERC8004 x402 A2A&lt;/p&gt;
+&lt;p&gt;浏览器插件（自动，快捷键一键）&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>web3技术岗面试题</title>
+        <link>/zh-cn/post/2026/04/web3%E6%8A%80%E6%9C%AF%E5%B2%97%E9%9D%A2%E8%AF%95%E9%A2%98/</link>
+        <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/web3%E6%8A%80%E6%9C%AF%E5%B2%97%E9%9D%A2%E8%AF%95%E9%A2%98/</guid>
+        <description>&lt;h2 id=&#34;行为面试&#34;&gt;&lt;a href=&#34;#%e8%a1%8c%e4%b8%ba%e9%9d%a2%e8%af%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;行为面试
+&lt;/h2&gt;&lt;h3 id=&#34;你为什么想进入-web3-行业&#34;&gt;&lt;a href=&#34;#%e4%bd%a0%e4%b8%ba%e4%bb%80%e4%b9%88%e6%83%b3%e8%bf%9b%e5%85%a5-web3-%e8%a1%8c%e4%b8%9a&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;你为什么想进入 Web3 行业
+&lt;/h3&gt;&lt;h3 id=&#34;描述一个你在远程协作中遇到的挑战你是怎么解决的&#34;&gt;&lt;a href=&#34;#%e6%8f%8f%e8%bf%b0%e4%b8%80%e4%b8%aa%e4%bd%a0%e5%9c%a8%e8%bf%9c%e7%a8%8b%e5%8d%8f%e4%bd%9c%e4%b8%ad%e9%81%87%e5%88%b0%e7%9a%84%e6%8c%91%e6%88%98%e4%bd%a0%e6%98%af%e6%80%8e%e4%b9%88%e8%a7%a3%e5%86%b3%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;描述一个你在远程协作中遇到的挑战，你是怎么解决的
+&lt;/h3&gt;&lt;h3 id=&#34;描述一次你自主发现并解决一个问题的经历&#34;&gt;&lt;a href=&#34;#%e6%8f%8f%e8%bf%b0%e4%b8%80%e6%ac%a1%e4%bd%a0%e8%87%aa%e4%b8%bb%e5%8f%91%e7%8e%b0%e5%b9%b6%e8%a7%a3%e5%86%b3%e4%b8%80%e4%b8%aa%e9%97%ae%e9%a2%98%e7%9a%84%e7%bb%8f%e5%8e%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;描述一次你自主发现并解决一个问题的经历
+&lt;/h3&gt;&lt;h3 id=&#34;你对我们的项目协议了解多少你觉得我们目前最大的挑战是什么&#34;&gt;&lt;a href=&#34;#%e4%bd%a0%e5%af%b9%e6%88%91%e4%bb%ac%e7%9a%84%e9%a1%b9%e7%9b%ae%e5%8d%8f%e8%ae%ae%e4%ba%86%e8%a7%a3%e5%a4%9a%e5%b0%91%e4%bd%a0%e8%a7%89%e5%be%97%e6%88%91%e4%bb%ac%e7%9b%ae%e5%89%8d%e6%9c%80%e5%a4%a7%e7%9a%84%e6%8c%91%e6%88%98%e6%98%af%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;你对我们的项目/协议了解多少？你觉得我们目前最大的挑战是什么
+&lt;/h3&gt;&lt;h2 id=&#34;社区运营&#34;&gt;&lt;a href=&#34;#%e7%a4%be%e5%8c%ba%e8%bf%90%e8%90%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;社区运营
+&lt;/h2&gt;&lt;h3 id=&#34;如果让你从零搭建一个-discord-社区你会怎么设计频道结构&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e6%9e%9c%e8%ae%a9%e4%bd%a0%e4%bb%8e%e9%9b%b6%e6%90%ad%e5%bb%ba%e4%b8%80%e4%b8%aa-discord-%e7%a4%be%e5%8c%ba%e4%bd%a0%e4%bc%9a%e6%80%8e%e4%b9%88%e8%ae%be%e8%ae%a1%e9%a2%91%e9%81%93%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如果让你从零搭建一个 Discord 社区，你会怎么设计频道结构？
+&lt;/h3&gt;&lt;p&gt;思路：分层设计——① Welcome &amp;amp; Rules（新人引导 + 规则）② General（日常讨论）③ Announcements（官方公告，只读）④ Support（技术/产品支持）⑤ Governance（提案讨论）⑥ Language channels（多语言）⑦ Contributors / Builders（贡献者专属）。加分：说明 Bot 配置（验证、自动回复、Role 分配）和 Token Gate 策略&lt;/p&gt;
+&lt;h3 id=&#34;你管理的社区突然出现大量-fud恐慌言论比如有人说项目方跑路了你怎么处理&#34;&gt;&lt;a href=&#34;#%e4%bd%a0%e7%ae%a1%e7%90%86%e7%9a%84%e7%a4%be%e5%8c%ba%e7%aa%81%e7%84%b6%e5%87%ba%e7%8e%b0%e5%a4%a7%e9%87%8f-fud%e6%81%90%e6%85%8c%e8%a8%80%e8%ae%ba%e6%af%94%e5%a6%82%e6%9c%89%e4%ba%ba%e8%af%b4%e9%a1%b9%e7%9b%ae%e6%96%b9%e8%b7%91%e8%b7%af%e4%ba%86%e4%bd%a0%e6%80%8e%e4%b9%88%e5%a4%84%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;你管理的社区突然出现大量 FUD（恐慌言论），比如有人说&amp;quot;项目方跑路了&amp;quot;，你怎么处理？
+&lt;/h3&gt;&lt;p&gt;思路：① 不要删帖或禁言——这会加剧恐慌 ② 快速联系核心团队确认事实 ③ 在 Announcement 频道发布官方声明——承认问题（如果存在）+ 说明正在采取的行动 + 给出明确的时间线 ④ 在 General 频道积极回应用户疑问，用事实和数据回应而非情绪 ⑤ 事后复盘，优化危机响应 SOP。&lt;/p&gt;
+&lt;h3 id=&#34;你会用什么指标来衡量社区的健康度&#34;&gt;&lt;a href=&#34;#%e4%bd%a0%e4%bc%9a%e7%94%a8%e4%bb%80%e4%b9%88%e6%8c%87%e6%a0%87%e6%9d%a5%e8%a1%a1%e9%87%8f%e7%a4%be%e5%8c%ba%e7%9a%84%e5%81%a5%e5%ba%b7%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;你会用什么指标来衡量社区的健康度
+&lt;/h3&gt;&lt;p&gt;思路：不要只说 &amp;ldquo;人数&amp;rdquo;——人数是虚荣指标。核心指标：① DAU / MAU（日活/月活比）② 消息量和互动率（每天有多少人在发言，而不只是潜水）③ 新成员 7 日留存率 ④ Support ticket 响应时间和解决率 ⑤ 活动参与率（AMA 参加人数 / 总人数）⑥ 社区情绪指标（正面/负面讨论比例）&lt;/p&gt;
+&lt;h3 id=&#34;如何设计一个社区大使ambassador计划&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e8%ae%be%e8%ae%a1%e4%b8%80%e4%b8%aa%e7%a4%be%e5%8c%ba%e5%a4%a7%e4%bd%bfambassador%e8%ae%a1%e5%88%92&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何设计一个社区大使（Ambassador）计划？
+&lt;/h3&gt;&lt;p&gt;思路：① 明确目标——大使帮你做什么？（内容创作、本地社区运营、翻译、活动组织）② 准入标准——不是谁都能当大使（设置申请流程、考察活跃度和输出质量）③ 激励设计——Token 奖励、NFT 徽章、项目内部资源（早期信息、与团队直接沟通的机会）④ 考核机制——月度/季度 KPI ⑤ 退出机制——不活跃的大使会被替换。&lt;/p&gt;
+&lt;h2 id=&#34;技术岗通用&#34;&gt;&lt;a href=&#34;#%e6%8a%80%e6%9c%af%e5%b2%97%e9%80%9a%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;技术岗通用
+&lt;/h2&gt;&lt;p&gt;出现在所有技术岗位的面试中，合约开发、前端、后端、安全审计，考察对区块链技术的基础理解。&lt;/p&gt;
+&lt;h3 id=&#34;请解释一笔以太坊交易从用户发起到最终确认的完整生命周期&#34;&gt;&lt;a href=&#34;#%e8%af%b7%e8%a7%a3%e9%87%8a%e4%b8%80%e7%ac%94%e4%bb%a5%e5%a4%aa%e5%9d%8a%e4%ba%a4%e6%98%93%e4%bb%8e%e7%94%a8%e6%88%b7%e5%8f%91%e8%b5%b7%e5%88%b0%e6%9c%80%e7%bb%88%e7%a1%ae%e8%ae%a4%e7%9a%84%e5%ae%8c%e6%95%b4%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;请解释一笔以太坊交易从用户发起到最终确认的完整生命周期
+&lt;/h3&gt;&lt;p&gt;思路：用户签名 → 广播到 Mempool → 验证者/矿工选择并打包 → 区块提议 → 共识确认 → 状态更新。加分项：提到 EIP-1559 的 Base Fee + Priority Fee 机制、区块确认数与最终性的关系。&lt;/p&gt;
+&lt;h3 id=&#34;pow-和-pos-的核心区别是什么以太坊为什么要从-pow-转向-pos&#34;&gt;&lt;a href=&#34;#pow-%e5%92%8c-pos-%e7%9a%84%e6%a0%b8%e5%bf%83%e5%8c%ba%e5%88%ab%e6%98%af%e4%bb%80%e4%b9%88%e4%bb%a5%e5%a4%aa%e5%9d%8a%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e4%bb%8e-pow-%e8%bd%ac%e5%90%91-pos&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PoW 和 PoS 的核心区别是什么？以太坊为什么要从 PoW 转向 PoS
+&lt;/h3&gt;&lt;p&gt;思路：安全模型不同（算力 vs 质押资本）、能耗差异、中心化风险差异。以太坊转 PoS（The Merge）的动机：降低能耗 99.95%、为分片/Rollup 路线图做准备、降低参与门槛。&lt;/p&gt;
+&lt;h3 id=&#34;什么是区块链的不可能三角你认为目前最好的解决方案是什么&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af%e5%8c%ba%e5%9d%97%e9%93%be%e7%9a%84%e4%b8%8d%e5%8f%af%e8%83%bd%e4%b8%89%e8%a7%92%e4%bd%a0%e8%ae%a4%e4%b8%ba%e7%9b%ae%e5%89%8d%e6%9c%80%e5%a5%bd%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88%e6%98%af%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是区块链的不可能三角？你认为目前最好的解决方案是什么
+&lt;/h3&gt;&lt;p&gt;思路：去中心化、安全性、可扩展性三者不可兼得。当前主流解决思路：模块化区块链（执行层 + DA 层 + 共识层分离）和 Rollup 路线图。&lt;/p&gt;
+&lt;h3 id=&#34;optimistic-rollup-和-zk-rollup-各自的优缺点是什么&#34;&gt;&lt;a href=&#34;#optimistic-rollup-%e5%92%8c-zk-rollup-%e5%90%84%e8%87%aa%e7%9a%84%e4%bc%98%e7%bc%ba%e7%82%b9%e6%98%af%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Optimistic Rollup 和 ZK Rollup 各自的优缺点是什么
+&lt;/h3&gt;&lt;p&gt;思路：OP Rollup 用欺诈证明（7 天挑战期、兼容性好、证明成本低），ZK Rollup 用有效性证明（即时最终性、安全性更强、但电路开发复杂）。提到 EVM 兼容性差异（OP 更成熟，ZK 正在追赶）。&lt;/p&gt;
+&lt;h3 id=&#34;请解释-evm-的账户模型eoa-和合约账户有什么区别&#34;&gt;&lt;a href=&#34;#%e8%af%b7%e8%a7%a3%e9%87%8a-evm-%e7%9a%84%e8%b4%a6%e6%88%b7%e6%a8%a1%e5%9e%8beoa-%e5%92%8c%e5%90%88%e7%ba%a6%e8%b4%a6%e6%88%b7%e6%9c%89%e4%bb%80%e4%b9%88%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;请解释 EVM 的账户模型。EOA 和合约账户有什么区别
+&lt;/h3&gt;&lt;p&gt;思路：EOA 有私钥、能发起交易但没有代码；合约账户有代码、有存储但没有私钥。提到账户抽象（ERC-4337）如何模糊两者边界。&lt;/p&gt;
+&lt;h3 id=&#34;跨链桥有哪些常见的安全风险举一个真实的跨链桥攻击案例&#34;&gt;&lt;a href=&#34;#%e8%b7%a8%e9%93%be%e6%a1%a5%e6%9c%89%e5%93%aa%e4%ba%9b%e5%b8%b8%e8%a7%81%e7%9a%84%e5%ae%89%e5%85%a8%e9%a3%8e%e9%99%a9%e4%b8%be%e4%b8%80%e4%b8%aa%e7%9c%9f%e5%ae%9e%e7%9a%84%e8%b7%a8%e9%93%be%e6%a1%a5%e6%94%bb%e5%87%bb%e6%a1%88%e4%be%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;跨链桥有哪些常见的安全风险？举一个真实的跨链桥攻击案例
+&lt;/h3&gt;&lt;p&gt;思路：验证者/多签密钥泄露、消息伪造、重放攻击。经典案例：Ronin Bridge（6.25 亿美元，验证者密钥被盗）、Wormhole（3.2 亿美元，签名验证绕过）。&lt;/p&gt;
+&lt;h3 id=&#34;什么是-mev它对普通用户有什么影响&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-mev%e5%ae%83%e5%af%b9%e6%99%ae%e9%80%9a%e7%94%a8%e6%88%b7%e6%9c%89%e4%bb%80%e4%b9%88%e5%bd%b1%e5%93%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 MEV？它对普通用户有什么影响
+&lt;/h3&gt;&lt;p&gt;思路：Maximal Extractable Value，验证者/搜索者通过交易排序获取的额外价值。对用户的影响：三明治攻击导致更差的成交价、Gas 战争推高手续费。缓解方案：Flashbots、OFA、加密 Mempool。&lt;/p&gt;
+&lt;h2 id=&#34;后端devops&#34;&gt;&lt;a href=&#34;#%e5%90%8e%e7%ab%afdevops&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;后端/DevOps
+&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&#34;后端&#34;&gt;&lt;a href=&#34;#%e5%90%8e%e7%ab%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;后端
+&lt;/h3&gt;&lt;h3 id=&#34;如何设计一个可靠的链上事件监听服务需要处理哪些边缘情况&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e8%ae%be%e8%ae%a1%e4%b8%80%e4%b8%aa%e5%8f%af%e9%9d%a0%e7%9a%84%e9%93%be%e4%b8%8a%e4%ba%8b%e4%bb%b6%e7%9b%91%e5%90%ac%e6%9c%8d%e5%8a%a1%e9%9c%80%e8%a6%81%e5%a4%84%e7%90%86%e5%93%aa%e4%ba%9b%e8%be%b9%e7%bc%98%e6%83%85%e5%86%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何设计一个可靠的链上事件监听服务？需要处理哪些边缘情况
+&lt;/h3&gt;&lt;p&gt;思路：使用 eth_getLogs 或 WebSocket 订阅事件。边缘情况：① 链重组（Reorg）——已确认的事件可能被撤销 ② 节点断连——需要记录已处理的 block number 并支持断点续传 ③ 大量事件的批处理——使用分页查询 ④ 不同链的确认数要求不同。&lt;/p&gt;
+&lt;h3 id=&#34;请解释-thegraph-的-subgraph-是什么以及何时应该用-subgraph-vs-自建索引&#34;&gt;&lt;a href=&#34;#%e8%af%b7%e8%a7%a3%e9%87%8a-thegraph-%e7%9a%84-subgraph-%e6%98%af%e4%bb%80%e4%b9%88%e4%bb%a5%e5%8f%8a%e4%bd%95%e6%97%b6%e5%ba%94%e8%af%a5%e7%94%a8-subgraph-vs-%e8%87%aa%e5%bb%ba%e7%b4%a2%e5%bc%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;请解释 TheGraph 的 Subgraph 是什么，以及何时应该用 Subgraph vs 自建索引
+&lt;/h3&gt;&lt;p&gt;思路：Subgraph 是声明式的链上数据索引方案（定义 schema + event handler → 自动索引 → GraphQL 查询）。优点：快速上手、托管服务。缺点：复杂查询受限、性能不可控。当需要自定义聚合逻辑、跨链数据或高性能时，用自建索引（Ponder / 自建 ETL）。参考 24.2。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;devops&#34;&gt;&lt;a href=&#34;#devops&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DevOps
+&lt;/h3&gt;&lt;h3 id=&#34;以太坊的-full-node-和-archive-node-有什么区别什么业务场景需要-archive-node&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e7%9a%84-full-node-%e5%92%8c-archive-node-%e6%9c%89%e4%bb%80%e4%b9%88%e5%8c%ba%e5%88%ab%e4%bb%80%e4%b9%88%e4%b8%9a%e5%8a%a1%e5%9c%ba%e6%99%af%e9%9c%80%e8%a6%81-archive-node&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊的 Full Node 和 Archive Node 有什么区别？什么业务场景需要 Archive Node
+&lt;/h3&gt;&lt;p&gt;思路：Full Node 只保留当前状态 + 最近的区块数据，Archive Node 保留所有历史状态。Archive 所需磁盘空间远大于 Full（TB 级）。需要 Archive 的场景：历史数据查询、链上分析、调试历史交易、Dune/TheGraph 等数据服务。&lt;/p&gt;
+&lt;h3 id=&#34;链升级硬分叉时节点运维需要做什么&#34;&gt;&lt;a href=&#34;#%e9%93%be%e5%8d%87%e7%ba%a7%e7%a1%ac%e5%88%86%e5%8f%89%e6%97%b6%e8%8a%82%e7%82%b9%e8%bf%90%e7%bb%b4%e9%9c%80%e8%a6%81%e5%81%9a%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;链升级（硬分叉）时，节点运维需要做什么
+&lt;/h3&gt;&lt;p&gt;思路：① 提前关注升级公告和时间线 ② 在测试网上验证新版本兼容性 ③ 在硬分叉前升级客户端版本 ④ 监控升级后的节点状态（同步进度、Peer 连接、出块情况）⑤ 准备回滚方案。&lt;/p&gt;
+&lt;h2 id=&#34;智能合约&#34;&gt;&lt;a href=&#34;#%e6%99%ba%e8%83%bd%e5%90%88%e7%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;智能合约
+&lt;/h2&gt;&lt;p&gt;面试通常包含Solidity 编码 + 安全知识 + DeFi 原理三个维度。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;solidity&#34;&gt;&lt;a href=&#34;#solidity&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Solidity
+&lt;/h3&gt;&lt;h3 id=&#34;solidity-中-storagememorycalldata-的区别是什么什么时候用哪个&#34;&gt;&lt;a href=&#34;#solidity-%e4%b8%ad-storagememorycalldata-%e7%9a%84%e5%8c%ba%e5%88%ab%e6%98%af%e4%bb%80%e4%b9%88%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e7%94%a8%e5%93%aa%e4%b8%aa&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Solidity 中 &lt;code&gt;storage&lt;/code&gt;、&lt;code&gt;memory&lt;/code&gt;、&lt;code&gt;calldata&lt;/code&gt; 的区别是什么？什么时候用哪个
+&lt;/h3&gt;&lt;p&gt;思路：storage 持久化到链上（最贵）、memory 临时存在于函数执行期间、calldata 只读且只用于 external 函数参数（最便宜）。Gas 优化时优先用 calldata 和 memory&lt;/p&gt;
+&lt;h3 id=&#34;什么是重入攻击reentrancy如何防御&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af%e9%87%8d%e5%85%a5%e6%94%bb%e5%87%bbreentrancy%e5%a6%82%e4%bd%95%e9%98%b2%e5%be%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是重入攻击（Reentrancy）？如何防御
+&lt;/h3&gt;&lt;p&gt;思路：攻击者在外部调用中递归回调目标合约，在状态更新前反复提取资金。经典案例：The DAO Hack。防御：Checks-Effects-Interactions 模式、ReentrancyGuard（OpenZeppelin）、使用 transfer/send 限制 Gas。&lt;/p&gt;
+&lt;h3 id=&#34;解释-delegatecall-的工作原理它有什么安全风险&#34;&gt;&lt;a href=&#34;#%e8%a7%a3%e9%87%8a-delegatecall-%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86%e5%ae%83%e6%9c%89%e4%bb%80%e4%b9%88%e5%ae%89%e5%85%a8%e9%a3%8e%e9%99%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;解释 delegatecall 的工作原理。它有什么安全风险
+&lt;/h3&gt;&lt;p&gt;思路：delegatecall 在调用者的上下文（storage、msg.sender、msg.value）中执行目标合约的代码。用于代理模式（Proxy Pattern）。风险：存储布局冲突、恶意实现合约。&lt;/p&gt;
+&lt;h3 id=&#34;erc-20-的-approve--transferfrom-模式有什么问题erc-2612permit是如何改进的&#34;&gt;&lt;a href=&#34;#erc-20-%e7%9a%84-approve--transferfrom-%e6%a8%a1%e5%bc%8f%e6%9c%89%e4%bb%80%e4%b9%88%e9%97%ae%e9%a2%98erc-2612permit%e6%98%af%e5%a6%82%e4%bd%95%e6%94%b9%e8%bf%9b%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-20 的 approve + transferFrom 模式有什么问题？ERC-2612（Permit）是如何改进的
+&lt;/h3&gt;&lt;p&gt;思路：approve 需要一笔额外交易（额外 Gas）、无限授权（Infinite Approval）的安全风险。Permit 使用链下签名（EIP-712）来授权，一笔交易完成授权+转账。&lt;/p&gt;
+&lt;h3 id=&#34;请解释代理模式proxy-pattern的工作原理transparent-proxy-和-uups-有什么区别&#34;&gt;&lt;a href=&#34;#%e8%af%b7%e8%a7%a3%e9%87%8a%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8fproxy-pattern%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86transparent-proxy-%e5%92%8c-uups-%e6%9c%89%e4%bb%80%e4%b9%88%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;请解释代理模式（Proxy Pattern）的工作原理。Transparent Proxy 和 UUPS 有什么区别
+&lt;/h3&gt;&lt;p&gt;思路：Proxy 将调用 delegatecall 到 Implementation 合约，实现可升级性。Transparent Proxy 由 ProxyAdmin 管理升级，admin 调用走 Proxy 逻辑，用户调用走 Implementation；UUPS 的升级逻辑放在 Implementation 中，更省 Gas。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;defi&#34;&gt;&lt;a href=&#34;#defi&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DeFi
+&lt;/h3&gt;&lt;h3 id=&#34;请解释-uniswap-v2-的-amm-核心公式-xyk当用户用-token-a-换-token-b-时价格是如何计算的&#34;&gt;&lt;a href=&#34;#%e8%af%b7%e8%a7%a3%e9%87%8a-uniswap-v2-%e7%9a%84-amm-%e6%a0%b8%e5%bf%83%e5%85%ac%e5%bc%8f-xyk%e5%bd%93%e7%94%a8%e6%88%b7%e7%94%a8-token-a-%e6%8d%a2-token-b-%e6%97%b6%e4%bb%b7%e6%a0%bc%e6%98%af%e5%a6%82%e4%bd%95%e8%ae%a1%e7%ae%97%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;请解释 Uniswap V2 的 AMM 核心公式 x×y=k。当用户用 Token A 换 Token B 时，价格是如何计算的？
+&lt;/h3&gt;&lt;p&gt;思路：恒定乘积公式。swap 后新的 reserve 满足 (x+Δx)(y-Δy)=k。实际输出 Δy = yΔx/(x+Δx)。加分：讨论滑点、手续费（0.3%）对 k 的影响&lt;/p&gt;
+&lt;h3 id=&#34;什么是闪电贷flash-loan它的原子性是如何保证的&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af%e9%97%aa%e7%94%b5%e8%b4%b7flash-loan%e5%ae%83%e7%9a%84%e5%8e%9f%e5%ad%90%e6%80%a7%e6%98%af%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是闪电贷（Flash Loan）？它的原子性是如何保证的？
+&lt;/h3&gt;&lt;p&gt;思路：在一笔交易内借款+使用+还款，如果未还款则整笔交易 revert。原子性由 EVM 的交易回滚机制保证。常见用途：套利、清算、自我清算。常见攻击向量：价格操纵。&lt;/p&gt;
+&lt;h3 id=&#34;如何在-solidity-中安全地处理除法和精度问题&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%9c%a8-solidity-%e4%b8%ad%e5%ae%89%e5%85%a8%e5%9c%b0%e5%a4%84%e7%90%86%e9%99%a4%e6%b3%95%e5%92%8c%e7%b2%be%e5%ba%a6%e9%97%ae%e9%a2%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何在 Solidity 中安全地处理除法和精度问题？
+&lt;/h3&gt;&lt;p&gt;思路：Solidity 没有浮点数，必须用整数模拟。常见做法：乘以精度因子（如 1e18）再除。注意先乘后除避免精度丢失。使用 OpenZeppelin 的 Math 库。提到 rounding 方向对借贷协议安全性的影响。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;gas优化&#34;&gt;&lt;a href=&#34;#gas%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Gas优化
+&lt;/h3&gt;&lt;h3 id=&#34;列举-35-种常见的-gas-优化技巧&#34;&gt;&lt;a href=&#34;#%e5%88%97%e4%b8%be-35-%e7%a7%8d%e5%b8%b8%e8%a7%81%e7%9a%84-gas-%e4%bc%98%e5%8c%96%e6%8a%80%e5%b7%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;列举 3–5 种常见的 Gas 优化技巧。
+&lt;/h3&gt;&lt;p&gt;思路：① 使用 calldata 替代 memory ② 变量打包（Struct Packing，将多个小变量放入同一个 32 字节 slot）③ 使用 unchecked 块跳过溢出检查（在安全场景下）④ 避免重复读取 storage（缓存到 memory）⑤ 使用 events 替代 storage 存储历史数据 ⑥ 使用 immutable/constant。&lt;/p&gt;
+&lt;h2 id=&#34;live-coding&#34;&gt;&lt;a href=&#34;#live-coding&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Live Coding
+&lt;/h2&gt;&lt;p&gt;先说思路再写代码、先写接口再写实现、随手写注释、主动提及安全考虑&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;写一个简化版的 ERC-20 合约——考察基础 Solidity 能力&lt;/li&gt;
+&lt;li&gt;实现一个简单的多签钱包——考察 access control 和状态管理&lt;/li&gt;
+&lt;li&gt;写一个荷兰拍卖合约——考察时间逻辑和价格计算&lt;/li&gt;
+&lt;li&gt;给你一段有漏洞的合约，修复它——考察安全意识&lt;/li&gt;
+&lt;li&gt;用 Foundry 为这个合约写测试——考察测试能力&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;系统设计&#34;&gt;&lt;a href=&#34;#%e7%b3%bb%e7%bb%9f%e8%ae%be%e8%ae%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;系统设计
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;设计一个 NFT 市场的后端架构——索引、搜索、缓存、链上/链下数据分离&lt;/li&gt;
+&lt;li&gt;设计一个链上数据监控告警系统——事件监听、异常检测、通知&lt;/li&gt;
+&lt;li&gt;设计一个支持多链的钱包服务——密钥管理、链抽象、安全性&lt;/li&gt;
+&lt;li&gt;设计一个高可用的 RPC 节点集群——负载均衡、故障转移、监控&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/web3%E6%8A%80%E6%9C%AF%E5%B2%97%E9%9D%A2%E8%AF%95%E9%A2%98/image.png&#34;
+	width=&#34;1163&#34;
+	height=&#34;438&#34;
+	srcset=&#34;/zh-cn/post/2026/04/web3%E6%8A%80%E6%9C%AF%E5%B2%97%E9%9D%A2%E8%AF%95%E9%A2%98/image_hu_cab952595375c867.png 480w, /zh-cn/post/2026/04/web3%E6%8A%80%E6%9C%AF%E5%B2%97%E9%9D%A2%E8%AF%95%E9%A2%98/image_hu_d37a8cb7e49dbc75.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;265&#34;
+		data-flex-basis=&#34;637px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;前端开发&#34;&gt;&lt;a href=&#34;#%e5%89%8d%e7%ab%af%e5%bc%80%e5%8f%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;前端开发
+&lt;/h2&gt;&lt;p&gt;分为传统前端能力 + Web3 交互层知识两部分。&lt;/p&gt;
+&lt;h3 id=&#34;用户在-dapp-中点击swap按钮后从前端到链上确认完整的数据流是什么&#34;&gt;&lt;a href=&#34;#%e7%94%a8%e6%88%b7%e5%9c%a8-dapp-%e4%b8%ad%e7%82%b9%e5%87%bbswap%e6%8c%89%e9%92%ae%e5%90%8e%e4%bb%8e%e5%89%8d%e7%ab%af%e5%88%b0%e9%93%be%e4%b8%8a%e7%a1%ae%e8%ae%a4%e5%ae%8c%e6%95%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e6%b5%81%e6%98%af%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;用户在 DApp 中点击Swap按钮后，从前端到链上确认，完整的数据流是什么
+&lt;/h3&gt;&lt;p&gt;思路：用户点击 → 前端构建交易参数 → 调用钱包 SDK（wagmi/ethers）发起签名请求 → 钱包弹出确认 → 用户签名 → 交易广播到 RPC 节点 → 进入 Mempool → 被打包进区块 → 前端监听交易 hash → 等待区块确认 → 更新 UI 状态。关键：处理 pending / confirmed / failed 三种状态。&lt;/p&gt;
+&lt;h3 id=&#34;你如何实现-dapp-的多链支持用户切换链时需要处理什么&#34;&gt;&lt;a href=&#34;#%e4%bd%a0%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0-dapp-%e7%9a%84%e5%a4%9a%e9%93%be%e6%94%af%e6%8c%81%e7%94%a8%e6%88%b7%e5%88%87%e6%8d%a2%e9%93%be%e6%97%b6%e9%9c%80%e8%a6%81%e5%a4%84%e7%90%86%e4%bb%80%e4%b9%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;你如何实现 DApp 的多链支持？用户切换链时需要处理什么
+&lt;/h3&gt;&lt;p&gt;思路：使用 wagmi 的 chain 配置支持多链。切换链时需要：① 调用 wallet_switchEthereumChain ② 更新 RPC Provider ③ 刷新当前链的余额/合约数据 ④ 处理用户拒绝切链的情况 ⑤ 如果目标链未添加，调用 wallet_addEthereumChain。&lt;/p&gt;
+&lt;h3 id=&#34;dapp-前端如何优化首屏加载性能&#34;&gt;&lt;a href=&#34;#dapp-%e5%89%8d%e7%ab%af%e5%a6%82%e4%bd%95%e4%bc%98%e5%8c%96%e9%a6%96%e5%b1%8f%e5%8a%a0%e8%bd%bd%e6%80%a7%e8%83%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;DApp 前端如何优化首屏加载性能
+&lt;/h3&gt;&lt;p&gt;思路：① Code splitting（动态加载钱包 SDK）② 使用 SSR/SSG（Next.js）预渲染非链上内容 ③ 懒加载链上数据（TanStack Query + suspense）④ 避免在首屏加载时就连接钱包 ⑤ 使用 Skeleton UI 占位&lt;/p&gt;
+&lt;h3 id=&#34;什么是-token-approval为什么它是一个安全风险前端应该如何处理&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-token-approval%e4%b8%ba%e4%bb%80%e4%b9%88%e5%ae%83%e6%98%af%e4%b8%80%e4%b8%aa%e5%ae%89%e5%85%a8%e9%a3%8e%e9%99%a9%e5%89%8d%e7%ab%af%e5%ba%94%e8%af%a5%e5%a6%82%e4%bd%95%e5%a4%84%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 Token Approval？为什么它是一个安全风险？前端应该如何处理
+&lt;/h3&gt;&lt;p&gt;思路：用户在使用 DeFi 前需要 approve 合约操作自己的 Token。无限 approve（type(uint256).max）是常见做法但有安全风险。前端最佳实践：默认推荐有限授权（exact amount）、显示当前授权额度、提供 revoke 入口。提到 Permit2 作为更安全的替代方案。&lt;/p&gt;
+&lt;h3 id=&#34;如何在前端实时显示链上数据如-token-价格池子深度&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%9c%a8%e5%89%8d%e7%ab%af%e5%ae%9e%e6%97%b6%e6%98%be%e7%a4%ba%e9%93%be%e4%b8%8a%e6%95%b0%e6%8d%ae%e5%a6%82-token-%e4%bb%b7%e6%a0%bc%e6%b1%a0%e5%ad%90%e6%b7%b1%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何在前端实时显示链上数据（如 Token 价格、池子深度）
+&lt;/h3&gt;&lt;p&gt;思路：① 轮询 RPC（最简单但效率低）② 使用 WebSocket 订阅事件（eth_subscribe）③ 使用 TheGraph Subgraph 查询索引数据 ④ 使用 TanStack Query 管理缓存和过期策略 ⑤ 考虑使用 Alchemy / QuickNode 的增强 API 获取聚合数据&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>EPF学习笔记-EL的RLP编码规则</title>
         <link>/zh-cn/post/2026/04/epf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-el%E7%9A%84rlp%E7%BC%96%E7%A0%81%E8%A7%84%E5%88%99/</link>
         <pubDate>Wed, 15 Apr 2026 12:00:00 +0000</pubDate>
@@ -402,22 +822,35 @@
 &lt;h3 id=&#34;reth&#34;&gt;&lt;a href=&#34;#reth&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Reth
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Reth&lt;/strong&gt; 是一个注重性能的执行层客户端实现，其架构围绕高效的同步和存储设计。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;流水线架构（Pipeline）&lt;/strong&gt;：Reth 的核心驱动力是其同步流水线，该流水线被划分为 &lt;strong&gt;12 个可配置阶段（Stages）&lt;/strong&gt;，按顺序（由上至下）执行：
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;流水线架构（Pipeline）&lt;/strong&gt;：Reth 的核心驱动力是其同步流水线，该流水线被划分为 &lt;strong&gt;12 个可配置阶段（Stages）&lt;/strong&gt;，按顺序（由上至下）执行：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;HeaderStage&lt;/code&gt; 与 &lt;code&gt;BodyStage&lt;/code&gt;&lt;/strong&gt;：负责验证区块头并通过 P2P 下载区块数据。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;SenderRecoveryStage&lt;/code&gt;&lt;/strong&gt;：执行耗时较高的操作，从交易签名中恢复发送者地址。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;ExecutionStage&lt;/code&gt;&lt;/strong&gt;：通过 &lt;strong&gt;REVM&lt;/strong&gt; 执行交易，生成收据（receipts）和变更集（change sets）。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;MerkleStage&lt;/code&gt;&lt;/strong&gt;：在执行后计算并验证状态根是否准确。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;历史索引阶段&lt;/strong&gt;：如 &lt;code&gt;IndexStorageHistoryStage&lt;/code&gt; 和 &lt;code&gt;IndexAccountHistoryStage&lt;/code&gt;，允许查询任意区块号的历史数据。&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;HeaderStage&lt;/code&gt; 与 &lt;code&gt;BodyStage&lt;/code&gt;&lt;/strong&gt;：负责验证区块头并通过 P2P 下载区块数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;SenderRecoveryStage&lt;/code&gt;&lt;/strong&gt;：执行耗时较高的操作，从交易签名中恢复发送者地址。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;ExecutionStage&lt;/code&gt;&lt;/strong&gt;：通过 &lt;strong&gt;REVM&lt;/strong&gt; 执行交易，生成收据（receipts）和变更集（change sets）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;MerkleStage&lt;/code&gt;&lt;/strong&gt;：在执行后计算并验证状态根是否准确。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;历史索引阶段&lt;/strong&gt;：如 &lt;code&gt;IndexStorageHistoryStage&lt;/code&gt; 和 &lt;code&gt;IndexAccountHistoryStage&lt;/code&gt;，允许查询任意区块号的历史数据。&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;存储与数据库&lt;/strong&gt;：
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;存储与数据库&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Reth 主要使用 &lt;strong&gt;MDBX&lt;/strong&gt; 数据库，并通过 &lt;code&gt;Provider&lt;/code&gt; 抽象层进行访问，以便未来能够以最小改动更换底层数据库。&lt;/li&gt;
 &lt;li&gt;使用 &lt;strong&gt;Codecs（编解码器）&lt;/strong&gt; 优化存储空间，例如通过 &lt;code&gt;Compact&lt;/code&gt; 特性压缩无符号整数的领先零。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;特色组件&lt;/strong&gt;：
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;特色组件&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;BlockchainTree&lt;/code&gt;&lt;/strong&gt;：当同步接近链尖（Tip）时，在内存中进行状态根验证和执行.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;Pruner&lt;/code&gt;（修剪器）&lt;/strong&gt;：允许运行全节点（Full Node）模式，在区块最终确定（Finalized）后删除旧的变更集和历史索引以节省空间。&lt;/li&gt;

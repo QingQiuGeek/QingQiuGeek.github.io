@@ -879,22 +879,35 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <h3 id="reth"><a href="#reth" class="header-anchor"></a>Reth
 </h3><p><strong>Reth</strong> 是一个注重性能的执行层客户端实现，其架构围绕高效的同步和存储设计。</p>
 <ul>
-<li><strong>流水线架构（Pipeline）</strong>：Reth 的核心驱动力是其同步流水线，该流水线被划分为 <strong>12 个可配置阶段（Stages）</strong>，按顺序（由上至下）执行：
+<li>
+<p><strong>流水线架构（Pipeline）</strong>：Reth 的核心驱动力是其同步流水线，该流水线被划分为 <strong>12 个可配置阶段（Stages）</strong>，按顺序（由上至下）执行：</p>
 <ul>
-<li><strong><code>HeaderStage</code> 与 <code>BodyStage</code></strong>：负责验证区块头并通过 P2P 下载区块数据。</li>
-<li><strong><code>SenderRecoveryStage</code></strong>：执行耗时较高的操作，从交易签名中恢复发送者地址。</li>
-<li><strong><code>ExecutionStage</code></strong>：通过 <strong>REVM</strong> 执行交易，生成收据（receipts）和变更集（change sets）。</li>
-<li><strong><code>MerkleStage</code></strong>：在执行后计算并验证状态根是否准确。</li>
-<li><strong>历史索引阶段</strong>：如 <code>IndexStorageHistoryStage</code> 和 <code>IndexAccountHistoryStage</code>，允许查询任意区块号的历史数据。</li>
+<li>
+<p><strong><code>HeaderStage</code> 与 <code>BodyStage</code></strong>：负责验证区块头并通过 P2P 下载区块数据。</p>
+</li>
+<li>
+<p><strong><code>SenderRecoveryStage</code></strong>：执行耗时较高的操作，从交易签名中恢复发送者地址。</p>
+</li>
+<li>
+<p><strong><code>ExecutionStage</code></strong>：通过 <strong>REVM</strong> 执行交易，生成收据（receipts）和变更集（change sets）。</p>
+</li>
+<li>
+<p><strong><code>MerkleStage</code></strong>：在执行后计算并验证状态根是否准确。</p>
+</li>
+<li>
+<p><strong>历史索引阶段</strong>：如 <code>IndexStorageHistoryStage</code> 和 <code>IndexAccountHistoryStage</code>，允许查询任意区块号的历史数据。</p>
+</li>
 </ul>
 </li>
-<li><strong>存储与数据库</strong>：
+<li>
+<p><strong>存储与数据库</strong>：</p>
 <ul>
 <li>Reth 主要使用 <strong>MDBX</strong> 数据库，并通过 <code>Provider</code> 抽象层进行访问，以便未来能够以最小改动更换底层数据库。</li>
 <li>使用 <strong>Codecs（编解码器）</strong> 优化存储空间，例如通过 <code>Compact</code> 特性压缩无符号整数的领先零。</li>
 </ul>
 </li>
-<li><strong>特色组件</strong>：
+<li>
+<p><strong>特色组件</strong>：</p>
 <ul>
 <li><strong><code>BlockchainTree</code></strong>：当同步接近链尖（Tip）时，在内存中进行状态根验证和执行.</li>
 <li><strong><code>Pruner</code>（修剪器）</strong>：允许运行全节点（Full Node）模式，在区块最终确定（Finalized）后删除旧的变更集和历史索引以节省空间。</li>
