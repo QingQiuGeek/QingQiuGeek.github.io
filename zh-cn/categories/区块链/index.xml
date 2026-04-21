@@ -7,7 +7,141 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Sat, 18 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 20 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>以太坊区块构建</title>
+        <link>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8C%BA%E5%9D%97%E6%9E%84%E5%BB%BA/</link>
+        <pubDate>Mon, 20 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8C%BA%E5%9D%97%E6%9E%84%E5%BB%BA/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/EL/block-production&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt; 以太坊区块构建 &lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;以太坊区块构建流程&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%8c%ba%e5%9d%97%e6%9e%84%e5%bb%ba%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊区块构建流程
+&lt;/h2&gt;&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;进入内存池 (Mempool Entry)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;广播与验证： 节点通过点对点（ P2P）网络使用传播协议（ Gossip Protocol）接收交易。在存入内存池之前，执行层（ EL）会根据特定标准（如 Nonce 正确性、余额充足性、签名有效性等）对交易进行验证。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;待处理状态： 验证通过后的交易被存储在 &lt;strong&gt;内存池（Mempool/Transaction Pool）&lt;/strong&gt; 中，等待被包含进未来的区块。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;启动与触发 (Initiation)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;区块构建的起点通常源于网络中的验证者被选定为某个时隙（ Slot）的提案者。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;指令下达： 当验证者准备提案时，共识层（ CL）会通过 Engine API 的 forkchoiceUpdated 端口向执行层（ EL）发送指令，启动“负载构建程序”（ Payload building routine）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;初始状态： 为了确保不由于处理延迟而错过提案时隙， EL 会先创建一个空区块，随后再启动后台进程尝试填充交易。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;准备构建环境 (Environment Setup)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在正式填充交易前，构建器需要获取当前的上下文信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;区块元数据： 包括时间戳、区块高度、父区块哈希、基础费用（ Base Fee）以及需要处理的提款（ Withdrawals）信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;状态数据库（ State DB）： 这是执行所有交易的基础，代表了区块链当前的最底层状态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;交易获取与排序 (Transaction Management)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;内存池（ Mempool）： 节点通过点对点网络接收交易，并将其存储在内存池中。这些交易已经过初步验证（如 Nonce 检查、余额检查、签名验证等）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;排序原则： 为了最大化利润，执行层通常会根据 &lt;strong&gt;费用（Fee）&lt;/strong&gt; 对待处理交易进行排序，确保价值最高的交易优先被包含在区块中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;循环执行与验证 (Iterative Execution)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;构建的 &lt;strong&gt;核心阶段&lt;/strong&gt;，构建器会不断 &lt;strong&gt;重复以下步骤&lt;/strong&gt;，直到区块被填满：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;交易执行： 构建器从池中获取下一笔最有价值的交易，并在 以太坊虚拟机（ EVM） 中针对当前状态运行它。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gas 跟踪： 每一个区块都有 Gas 限制（例如主网约为 3000 万）。构建器会实时跟踪已使用的 Gas 总量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;错误处理： 如果某笔交易执行失败（例如由于链上逻辑、 Gas 不足或内存池过时），构建器不会报错停止，而是直接跳过该交易，继续尝试填充下一笔，以确保区块的剩余空间得到利用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;状态更新： 执行成功的交易会更新状态数据库，并累加 Gas 消耗。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;区块密封与完成 (Finalization)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;当交易池为空或 Gas 达到限额时，区块构建进入收尾工作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;计算根哈希： 构建器需要根据交易列表、收据（ Receipts）和提款信息计算出相应的 Merkle 根。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;组装区块头： 将这些根哈希填入区块头（ Header），生成一个完整的执行负载（ Execution Payload）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;6&#34;&gt;
+&lt;li&gt;负载交付 (Delivery)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;请求负载： 共识层通过 Engine API 的 getPayload 方法向执行层索取填充好的负载。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;广播： 执行层返回负载后，共识层将其放入信标区块（ Beacon Block）中，并向整个以太坊网络传播。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;为什么-el-会先创建一个空区块而不是等交易填满&#34;&gt;&lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88-el-%e4%bc%9a%e5%85%88%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e7%a9%ba%e5%8c%ba%e5%9d%97%e8%80%8c%e4%b8%8d%e6%98%af%e7%ad%89%e4%ba%a4%e6%98%93%e5%a1%ab%e6%bb%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;为什么 EL 会先创建一个空区块而不是等交易填满？
+&lt;/h2&gt;&lt;p&gt;防止时隙缺失提供保底&lt;/p&gt;
+&lt;p&gt;以太坊网络对区块提议有严格的时间限制。如果执行层在接收到构建指令后，立即开始复杂的交易排序、执行和状态更新流程，可能会因处理延迟导致无法在规定的时隙内交付区块。所以会先创建空区块，这样节点也至少有一个有效的“负载”可以随时提供给共识层进行提议，从而避免因超时而失去该时隙的提议机会。&lt;/p&gt;
+&lt;h2 id=&#34;信标区块与区块提议者&#34;&gt;&lt;a href=&#34;#%e4%bf%a1%e6%a0%87%e5%8c%ba%e5%9d%97%e4%b8%8e%e5%8c%ba%e5%9d%97%e6%8f%90%e8%ae%ae%e8%80%85&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;信标区块与区块提议者
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;信标区块是以太坊共识层（即信标链）上的基本数据单元。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;信标区块负责协调“谁来出块”以及“哪个链是有效链”。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;提议者是从所有活跃的信标链验证者中通过一个名为 RANDAO 的伪随机算法选出的。这个选择过程是加权随机的，验证者的质押余额是权重之一。&lt;/p&gt;
+&lt;p&gt;提议者的主要工作是负责构建并广播一个新区块。在当前的以太坊网络中，这通常意味着：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;从外部构建者（通过 MEV-Boost 等机制）那里获取一个已经打包好的、收益最高的执行层区块。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将这个执行层区块的“哈希根”（一种数据指纹）打包进一个信标区块中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将这个签好名的信标区块（也称为“盲块”）广播给网络中的其他验证者。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以太坊的时间被划分为固定的节奏：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;时隙 (Slot)：每 12 秒 为一个时隙。在每个时隙中，有且仅有一位验证者被选为区块提议者。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;纪元 (Epoch)：每 32 个时隙（约 6.4 分钟）构成一个纪元。在每个纪元开始时，系统会预先计算出该纪元内所有 32 个时隙的提议者。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;mev-boost-与外部构建者机制&#34;&gt;&lt;a href=&#34;#mev-boost-%e4%b8%8e%e5%a4%96%e9%83%a8%e6%9e%84%e5%bb%ba%e8%80%85%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MEV-Boost 与外部构建者机制
+&lt;/h2&gt;&lt;p&gt;MEV-Boost 是一个由 Flashbots 开发的开源软件，它实现了“提议者 - 构建者分离”（ Proposer-Builder Separation, PBS）的市场化机制。它的出现是为了解决 MEV（最大可提取价值）带来的中心化风险，并让所有验证者都能公平地获得 MEV 收益。&lt;/p&gt;
+&lt;p&gt;目的：让专业的“构建者”去竞争打包最有价值的区块，而“提议者”（验证者）则只需简单地选择出价最高的区块进行提议，从而最大化自己的收益，而无需自己具备复杂的 MEV 挖掘能力。&lt;/p&gt;
+&lt;p&gt;在没有 MEV-Boost 的情况下，一个验证者节点被选为区块提议者时，需要验证者自己节点上的共识层客户端和执行层客户端协作完成。 &lt;strong&gt;EL 客户端会从本地的交易池中挑选交易&lt;/strong&gt;，执行它们，构建区块内容。&lt;/p&gt;
+&lt;p&gt;上述标准流程虽然可行，但它忽略了 &lt;strong&gt;最大可提取价值 (MEV)&lt;/strong&gt; 的存在。&lt;strong&gt;MEV 是指通过重新排序、插入或审查区块中的交易，可以提取的额外利润（例如，通过套利或三明治攻击）。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;本地的 EL 客户端只是简单地从交易池中按 Gas 费高低抓取交易，它不具备复杂的算法来识别和排序能产生最大 MEV 的交易。这意味着验证者可能会错失大量潜在收益。这就是 MEV-Boost 发挥作用的地方。&lt;/p&gt;
+&lt;p&gt;共识层 (CL) 客户端发现自己被选为提议者，不再向本地的 EL 客户端请求区块，而是通过 MEV-Boost 向多个外部构建者（通过中继器）发起拍卖：“谁能给我一个收益最高的区块？”，验证者选择出价最高的区块，签署其区块头（此时验证者并不知道区块内的具体交易，这被称为“盲拍”），然后从外部构建者那里获取完整的区块内容，打包好的区块广播给全网。&lt;/p&gt;
+&lt;p&gt;验证者它不再负责构建本地区块，但它仍然是节点的重要组成部分，用于同步链的状态、验证接收到的区块是否有效。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Ethereum-JSON-RPC</title>
         <link>/zh-cn/post/2026/04/ethereum-json-rpc/</link>
         <pubDate>Sat, 18 Apr 2026 12:00:00 +0000</pubDate>
