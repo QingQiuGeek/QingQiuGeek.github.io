@@ -7,7 +7,719 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 20 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 29 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Hive 测试工具和 Keccak256</title>
+        <link>/zh-cn/post/2026/04/hive-%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%92%8C-keccak256/</link>
+        <pubDate>Wed, 29 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/hive-%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E5%92%8C-keccak256/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/testing/hive&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt; Hive 测试工具 &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Hive 是端对端测试框架，能够通过 &lt;strong&gt;模拟多种场景来确保不同客户端在统一网络下的互操作性。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;以太坊协议的整体架构&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e5%8d%8f%e8%ae%ae%e7%9a%84%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊协议的整体架构
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;执行层 (Execution Layer, EL)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;执行层是以太坊的“大脑”，负责 &lt;strong&gt;处理所有的交易、智能合约逻辑和状态管理&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;以太坊虚拟机 (EVM) 是执行层的心脏，负责运行智能合约代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;交易解剖 (Transaction Anatomy)：定义了交易的结构和属性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据结构与序列化：执行层使用 RLP (Recursive Length Prefix) 进行数据序列化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;网络协议 (DevP2P)：负责执行层节点之间的通信。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;客户端实例：如 Besu 和 Reth，它们是执行层协议的具体软件实现。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;共识层 (Consensus Layer, CL)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;共识层负责确保所有节点对网络状态达成一致，即负责权益证明（ Proof of Stake）机制。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;信标链 (Beacon Chain)：共识层的核心，处理验证者管理和共识逻辑。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;序列化与默克尔化 (SSZ &amp;amp; Merkleization)：共识层使用 SSZ (Simple Serialize) 格式，这与执行层的 RLP 不同，更便于进行默克尔证明。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;弱主观性 (Weak Subjectivity)：这是权益证明机制中的一个重要安全概念。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;层级间的协作： Engine API&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;执行层和共识层并不是孤立的，它们通过 Engine API 进行通信。共识层告诉执行层何时生产区块或验证区块，而执行层将处理结果反馈给共识层。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;底层密码学支撑&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;整个架构建立在多种密码学技术之上，包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;哈希函数如 Keccak256 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数字签名：执行层使用 ECDSA，而共识层为了支持签名聚合使用了 BLS 签名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;承诺机制：如 KZG 承诺，这在以太坊的扩容方案（如 EIP-4844 ）中至关重要。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;架构的测试与验证 (Hive)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;由于以太坊有多个不同的客户端（如执行层的 Besu 和共识层的各种客户端），确保它们能够完美兼容至关重要。&lt;/p&gt;
+&lt;p&gt;Hive 是一个端到端的测试套件，它通过模拟各种场景在一个网络中启动多个客户端。&lt;/p&gt;
+&lt;p&gt;它的作用是测试所有客户端在相同参数下是否会出现分歧，特别是在处理网络升级和硬分叉时， Hive 扮演着关键的测试角色。&lt;/p&gt;
+&lt;h2 id=&#34;keccak256&#34;&gt;&lt;a href=&#34;#keccak256&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Keccak256
+&lt;/h2&gt;&lt;p&gt;#Keccak256 是以太坊区块链中核心的加密哈希函数，它在确保以太坊网络的数据完整性、安全性和高效检索方面发挥着至关重要的作用。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;设计原理：海绵结构 (Sponge Construction)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Keccak256 以其独特的海绵结构脱颖而出，这种结构允许它“吸收”任意长度的输入数据，并随后“挤出”所需长度的哈希值。其运行过程分为两个阶段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;吸收阶段：输入数据被分成若干块，并与海绵的状态（称为比特率 r）进行异或 (XOR) 运算。在每次异或操作后，都会应用一个置换函数对整个状态进行处理，以确保输入与状态的彻底混合。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;挤出阶段：一旦数据吸收完成，就会从状态的比特率部分生成输出哈希。这一阶段可以根据需求产生任意长度的输出。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;evm-实现&#34;&gt;&lt;a href=&#34;#evm-%e5%ae%9e%e7%8e%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EVM 实现
+&lt;/h3&gt;&lt;p&gt;在 EVM 的堆栈式架构中，虽然没有直接命名为 KECCAK256 的操作码 (Opcode)，但存在一个 SHA3 指令。这个 SHA3 指令实际上就是用来对堆栈中的输入数据进行加密输出一个 Keccak256 哈希值（这个值与官方标准的 SHA3-256 并不完全相同）。&lt;/p&gt;
+&lt;h3 id=&#34;协议中的具体应用场景&#34;&gt;&lt;a href=&#34;#%e5%8d%8f%e8%ae%ae%e4%b8%ad%e7%9a%84%e5%85%b7%e4%bd%93%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;协议中的具体应用场景
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;区块头字段：区块头中的多个关键字段，如 &lt;strong&gt;parentHash（父块哈希）&lt;/strong&gt; 和 stateRoot（状态根），都使用 256 位的 Keccak 哈希。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;默克尔帕特里夏树：以太坊使用这种树结构来编码其状态。树中的每个节点都是通过其内容的 Keccak256 哈希来标识的，这构成了区块头中 stateRoot 的基础。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;账户存储编码：它用于编码账户的存储内容，将整数键的 Keccak256 哈希映射到经 RLP 编码的整数值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>以太坊轻客户端</title>
+        <link>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%BD%BB%E5%AE%A2%E6%88%B7%E7%AB%AF/</link>
+        <pubDate>Wed, 29 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%BD%BB%E5%AE%A2%E6%88%B7%E7%AB%AF/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/research/light-clients&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt; 轻客户端 &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;传统全节点对硬件要求极高，而轻客户端通过验证执行层数据或利用信标链证明，让用户无需运行高负载设备即可安全交互。实现路径包括作为安全中间件的 RPC 代理轻客户端，以及无状态客户端和门户网络等前沿研究方案。&lt;/p&gt;
+&lt;h3 id=&#34;轻客户端如何实现在不运行全节点的情况下保证去中心化&#34;&gt;&lt;a href=&#34;#%e8%bd%bb%e5%ae%a2%e6%88%b7%e7%ab%af%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e5%9c%a8%e4%b8%8d%e8%bf%90%e8%a1%8c%e5%85%a8%e8%8a%82%e7%82%b9%e7%9a%84%e6%83%85%e5%86%b5%e4%b8%8b%e4%bf%9d%e8%af%81%e5%8e%bb%e4%b8%ad%e5%bf%83%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;轻客户端如何实现在不运行全节点的情况下保证去中心化
+&lt;/h3&gt;&lt;p&gt;轻客户端主要通过在大幅降低硬件需求的同时，&lt;strong&gt;利用加密证明和去中心化的网络协议来验证数据的真实性&lt;/strong&gt;，从而在不运行全节点的情况下实现去中心化。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;从信任转向验证&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;传统的钱包通常依赖第三方 API，这是一种中心化的方式。轻客户端的目标是 &lt;strong&gt;实现无须信任的访问 (Trustless access)。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RPC 代理轻客户端如 Helios 、 Kevlar。它们 &lt;strong&gt;充当应用与 RPC 供应商之间的中间件&lt;/strong&gt;，通过从独立的信标节点 (Beacon Node) 获取信标根 (Beacon root) 来 &lt;strong&gt;验证&lt;/strong&gt; RPC 提供者返回的数据是否有效。这改善了信任模型，因为即使供应商试图造假，轻客户端也能通过加密证明识别出来。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;利用去中心化网络协议&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为了摆脱对中心化 RPC 供应商的依赖，不同的轻客户端设计采用了多种去中心化方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;无状态客户端&lt;/strong&gt;： 通过在 P2P 网络中传播的见证数据来验证数据，而无需存储完整的以太坊状态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Portal 网络&lt;/strong&gt;： 这是一个覆盖网络，它通过概率性方法保证数据的完整性，使用户能够以去中心化的方式获取数据而无需运行全节点。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;LES 协议 (Light Ethereum Subspace)&lt;/strong&gt;： 这是 Geth 早期探索的模式。轻节点通过 P2P 协议订阅 LES 服务，仅从提供该服务的全节点下载最新的必要数据，而不是下载整个区块链。不过，由于目前网络中愿意提供 LES 服务的全节点较少，这种模式的可靠性受到限制。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;降低参与门槛&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;运行全节点需要数百 GB 的存储空间和高性能计算，这限制了能参与去中心化网络的人数。轻客户端通过以下方式保证了广泛的参与度（去中心化的核心）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;消除资源开销： 允许用户在资源受限的设备上运行，降低了个人参与验证的门槛。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;端到端安全性： 即使通过 P2P 协议，轻客户端也能直接下载并自行验证区块或状态，确保其获取的信息与网络共识一致。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;新手如何利用-helios-或-kevlar-提升钱包连接的安全性&#34;&gt;&lt;a href=&#34;#%e6%96%b0%e6%89%8b%e5%a6%82%e4%bd%95%e5%88%a9%e7%94%a8-helios-%e6%88%96-kevlar-%e6%8f%90%e5%8d%87%e9%92%b1%e5%8c%85%e8%bf%9e%e6%8e%a5%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;新手如何利用 Helios 或 Kevlar 提升钱包连接的安全性？
+&lt;/h3&gt;&lt;p&gt;在传统的设置中，钱包直接连接到第三方 RPC 供应商（如 Infura 或 Alchemy），用户必须盲目信任这些供应商提供的数据。&lt;/p&gt;
+&lt;p&gt;Helios 和 Kevlar 的核心优势在于它们不仅仅依赖单一的数据源。它们会从一个独立的 &lt;strong&gt;信标节点（Beacon Node）&lt;/strong&gt; 获取证明数据（如信标根 Beacon root）来校验 RPC 供应商返回的结果。这意味着，除非 RPC 供应商和公共信标节点同时以完全相同的方式撒谎（这种概率极低），否则任何虚假数据都会被拦截&lt;/p&gt;
+&lt;p&gt;可以在 &lt;strong&gt;本地运行 Helios 或 Kevlar，并将其配置为钱包与 RPC 供应商之间的代理&lt;/strong&gt;。启动后，该轻客户端通常会在本地创建一个网络地址（例如 http://localhost:8545 ），钱包不再直接与潜在不可信的中心化服务器通信，而是通过这些轻客户端进行“过滤”和验证。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>账户抽象</title>
+        <link>/zh-cn/post/2026/04/%E8%B4%A6%E6%88%B7%E6%8A%BD%E8%B1%A1/</link>
+        <pubDate>Mon, 27 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E8%B4%A6%E6%88%B7%E6%8A%BD%E8%B1%A1/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/research/account-abstraction/eip-7702&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;eip-7702&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;EIP-7702 提案引入了全新的 第 4 型交易模式，&lt;strong&gt;允许传统钱包地址在交易期间临时具备 智能合约 的特性（账户抽象）&lt;/strong&gt;。通过这种机制，普通用户能够享受到 &lt;strong&gt;交易捆绑、免燃料费交易 以及更灵活的资产恢复方案&lt;/strong&gt;，显著提升了交互体验。其核心目标是实现验证逻辑与账户模型的解耦，在保障 安全性能 的同时降低区块链的使用门槛。&lt;/p&gt;
+&lt;h2 id=&#34;如何实现多签和社交恢复功能&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e5%a4%9a%e7%ad%be%e5%92%8c%e7%a4%be%e4%ba%a4%e6%81%a2%e5%a4%8d%e5%8a%9f%e8%83%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何实现多签和社交恢复功能
+&lt;/h2&gt;&lt;p&gt;EIP-7702 实现多签（ Multi-signature）和社交恢复（ Social Recovery）功能的核心机制在于 &lt;strong&gt;允许外部账户（ EOA）在交易执行期间“模仿”智能合约的行为。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;具体实现方式如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;代码委托：通过 EIP-7702 引入的 Type 4 交易， EOA 地址的所有者可以签署一份授权，将其地址临时或针对性地设置为指向一个已存在的智能合约代码。这意味着该 EOA 地址在逻辑上变成了一个可编程的智能钱包。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;自定义验证逻辑：由于账户可以运行智能合约代码，开发者可以为该账户 &lt;strong&gt;编写自定义的交易验证逻辑，而不再局限于传统的单私钥签名验证&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;多签功能：通过将 EOA &lt;strong&gt;指向一个具备多签逻辑的合约&lt;/strong&gt;，该账户可以要求在执行操作前必须提供多个指定地址的授权签名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;社交恢复：用户可以为其账户设置特定的“恢复逻辑”。在丢失私钥的情况下，&lt;strong&gt;通过预先指定的受信任联系人（监护人）的签名，利用合约中的替代恢复方案来重置账户访问权限或转移资产&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;逻辑解耦：这种方式将交易验证的逻辑与底层的账户模型解耦。用户无需将其资产从 EOA 永久迁移到合约钱包，即可通过这种 &lt;strong&gt;选择性加入&lt;/strong&gt; 的方式，获得智能合约带来的安全性增强，包括更灵活的资产访问控制。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;什么是-type-4-交易它如何改变转账流程&#34;&gt;&lt;a href=&#34;#%e4%bb%80%e4%b9%88%e6%98%af-type-4-%e4%ba%a4%e6%98%93%e5%ae%83%e5%a6%82%e4%bd%95%e6%94%b9%e5%8f%98%e8%bd%ac%e8%b4%a6%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;什么是 Type 4 交易，它如何改变转账流程
+&lt;/h2&gt;&lt;p&gt;Type 4 交易是 EIP-7702 提案中引入的一种新型交易类型，旨在为以太坊的 EOA 提供可编程性。&lt;/p&gt;
+&lt;p&gt;Type 4 交易允许地址所有者签署一份授权，使他们的 EOA 地址在交易执行期间能够模拟一个选定的现有智能合约代码。这意味着用户的地址可以表现得像一个智能合约，而无需永久迁移到合约账户。&lt;/p&gt;
+&lt;p&gt;以下是关于 Type 4 交易及其对转账流程改变的详细说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;实现交易捆绑：在传统的流程中， EOA 通常需要为每个动作单独发起一笔交易。例如，在 DEX 进行交易时，通常需要先发送一笔“授权（ Approve）”交易，然后再发送一笔“兑换（ Swap）”交易；而 Type 4 交易允许 &lt;strong&gt;将多个操作合并在一次交易中执行&lt;/strong&gt;，极大地简化了复杂的转账或交互流程。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;支持无 Gas 交易：它改变了必须由发送者支付手续费的限制，允许实现由第三方代付 Gas 的体验，从而降低了新用户的使用门槛。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;引入自定义验证逻辑：不再局限于传统的签名验证，开发者可以利用 Type 4 交易创建自定义的交易验证逻辑，也就是 EOA 授权后指向的那个智能合约地址。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;灵活的资产访问与恢复：用户可以为其账户设置自定义的资产访问权限，以便在丢失私钥时通过社交恢复等手段找回资产。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;授权代码后-eoa-账户的安全性会有风险吗&#34;&gt;&lt;a href=&#34;#%e6%8e%88%e6%9d%83%e4%bb%a3%e7%a0%81%e5%90%8e-eoa-%e8%b4%a6%e6%88%b7%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7%e4%bc%9a%e6%9c%89%e9%a3%8e%e9%99%a9%e5%90%97&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;授权代码后， EOA 账户的安全性会有风险吗？
+&lt;/h2&gt;&lt;p&gt;在 EIP-7702 机制下，用户通过签署授权，&lt;strong&gt;账户的交易验证逻辑将与底层的账户模型解耦&lt;/strong&gt;，其地址临时或针对性地设置为指向一个已存在的智能合约代码，这意味着该账户的控制权不再仅仅由单一的私钥签名（ ECDSA）决定，&lt;strong&gt;账户的安全性将高度依赖于该合约代码。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;eip-7702-和-erc-4337-区别&#34;&gt;&lt;a href=&#34;#eip-7702-%e5%92%8c-erc-4337-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP-7702 和 ERC-4337 区别
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;EIP-7702 ：赋予 EOA 编程能力。它的核心目标是让现有的 EOA（由私钥控制的传统账户） 能够具备可编程钱包的功能，如交易捆绑和社交恢复，而无需用户将资产永久迁移到新的合约账户。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ERC-4337 ：原生智能合约账户。它主要服务于智能合约钱包（ SCW）。用户必须创建一个新的合约账户来替代传统的 EOA 账户。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两者都旨在实现账户抽象的功能，包括多重签名、社交恢复、 Gas 代付（无 Gas 交易）交易捆绑。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Ethereum-PeerDAS</title>
+        <link>/zh-cn/post/2026/04/ethereum-peerdas/</link>
+        <pubDate>Sat, 25 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/ethereum-peerdas/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/research/peerdas&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Ethereum-PeerDAS&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Ethereum 协议中的 PeerDAS（点对点数据可用性抽样）技术，作为以太坊“ The Surge”扩容阶段的核心，该协议旨在通过 EIP-7594 优化 Layer 2 回滚数据的存储与验证效率。其核心机制涉及将数据块拆分为列单元进行分布式存储，并利用 KZG 承诺与 Reed-Solomon 纠删码确保信息的完整性和可恢复性。
+节点通过概率抽样即可验证数据可用性，而无需下载完整原始数据。&lt;/p&gt;
+&lt;h2 id=&#34;peerdas-如何提升以太坊的可扩展性&#34;&gt;&lt;a href=&#34;#peerdas-%e5%a6%82%e4%bd%95%e6%8f%90%e5%8d%87%e4%bb%a5%e5%a4%aa%e5%9d%8a%e7%9a%84%e5%8f%af%e6%89%a9%e5%b1%95%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PeerDAS 如何提升以太坊的可扩展性
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;引入数据可用性采样 (DAS)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;PeerDAS 的核心在于允许节点在无需下载完整数据的情况下，验证数据的可用性。节点只需从对等方请求随机的“列”样本，通过概率方法推断整个数据集是否可用，避免了让单个节点承受过大的带宽和存储压力，使得网络能够处理比之前多得多的数据量。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;数据分区与托管分配&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;PeerDAS 改变了数据的存储方式，将其从单一的块转变为分布式的结构：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据列化： 将数据 Blob 划分为更小的单元，称为 &lt;strong&gt;列&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;确定性托管： 网络根据节点 ID 等公开可验证的输入，将节点分配到特定的托管组，负责存储特定的列。这意味着没有任何一个节点需要存储所有列，从而实现了存储负载在全网的水平扩展。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;利用密码学与冗余技术确保安全&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在提升性能的同时， PeerDAS 通过以下技术确保了数据的完整性和稳健性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;KZG 承诺：使用 KZG（ Kate-Zaverucha-Goldberg）承诺进行高效的密码学验证，确保采样的列与原始数据集匹配，而无需下载全文。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;纠删码：数据使用 Reed-Solomon 纠删码进行编码并添加冗余列。即使部分数据丢失，只要节点收集到超过 50% 的列，就能重建原始数据集。这种高度的冗余性增强了系统在面对网络故障时的容错能力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;1d-peerdas-与-2d-peerdas-区别&#34;&gt;&lt;a href=&#34;#1d-peerdas-%e4%b8%8e-2d-peerdas-%e5%8c%ba%e5%88%ab&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1D PeerDAS 与 2D PeerDAS 区别
+&lt;/h2&gt;&lt;p&gt;1D PeerDAS 和 2D PeerDAS 代表了以太坊实现完全 Danksharding 路线图中两个不同的技术阶段。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;1D PeerDAS ( 第一阶段 )&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;扩展方式： 通过水平扩展 (horizontally extending) Blob 来实现。&lt;/p&gt;
+&lt;p&gt;网络机制： 引入了列子网 (column subnets)。&lt;/p&gt;
+&lt;p&gt;采样方式： 启用了对等采样 (peer sampling)，以提高网络效率&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;2D PeerDAS ( 第二阶段 )&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;最终目标： 这一阶段将完成 Danksharding。&lt;/p&gt;
+&lt;p&gt;扩展方式： 在水平扩展的基础上增加了垂直 Blob 扩展 (vertical blob extensions)。&lt;/p&gt;
+&lt;p&gt;采样方式： 引入了更轻量级的、基于单元 (cell-based) 的对等采样。&lt;/p&gt;
+&lt;p&gt;核心优势： 支持稳健的分布式重构，并旨在最大化以太坊的可扩展性&lt;/p&gt;
+&lt;h2 id=&#34;数据重建在-peerdas-中是如何运作的&#34;&gt;&lt;a href=&#34;#%e6%95%b0%e6%8d%ae%e9%87%8d%e5%bb%ba%e5%9c%a8-peerdas-%e4%b8%ad%e6%98%af%e5%a6%82%e4%bd%95%e8%bf%90%e4%bd%9c%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;数据重建在 PeerDAS 中是如何运作的
+&lt;/h2&gt;&lt;p&gt;在 PeerDAS 中，&lt;strong&gt;数据重建是确保以太坊在部分网络节点失效或数据丢失时，仍能保持数据可用性与完整性的关键机制。&lt;/strong&gt; 其运作过程主要依赖于 &lt;strong&gt;纠删码技术和 P2P 网络的分发机制&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;核心技术：纠删码 (Erasure Coding)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数据重建的基础在于数据在分发前的编码方式。 PeerDAS 使用 Reed-Solomon 纠删码将原始数据 Blob 编码为多个列，并添加冗余的校验列。这种编码方式允许在丢失部分数据的情况下，&lt;strong&gt;利用剩余的数据片段还原出原始数据集&lt;/strong&gt;。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;重建的触发条件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数据重建通常遵循以下流程：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;采样与收集： 节点会持续采样其负责托管的列，或者在发现采样失败时通过请求 / 响应协议向对等方获取缺失的列。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;50% 阈值： 根据 Reed-Solomon 编码的特性，当一个节点累积获得了一个数据 Blob 超过 50% 的总列数时，它就可以利用数学算法完全重建出原始的完整数据集。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;重建后的再分发&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数据重建不仅仅是为了节点自身获取数据，更具有维护网络健壮性的作用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;填补空缺： 一旦节点完成数据重建，它会将恢复出的列 &lt;strong&gt;重新分发&lt;/strong&gt; 回网络中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;增强弹性： 这种机制能够修复因某些子网临时失效或对等方离线导致的数据“空洞”，显著增强了全网对各种故障的容错能力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在 1D PeerDAS 阶段，主要侧重于通过列采样提高效率，到了 2D PeerDAS，系统将引入垂直 Blob 扩展和基于单元（ cell-based）的采样。&lt;/p&gt;
+&lt;h2 id=&#34;50-的数据重建阈值是如何确定的&#34;&gt;&lt;a href=&#34;#50-%e7%9a%84%e6%95%b0%e6%8d%ae%e9%87%8d%e5%bb%ba%e9%98%88%e5%80%bc%e6%98%af%e5%a6%82%e4%bd%95%e7%a1%ae%e5%ae%9a%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;50% 的数据重建阈值是如何确定的
+&lt;/h2&gt;&lt;p&gt;50% 的数据重建阈值是由 PeerDAS 所采用的数学技术—— Reed-Solomon 纠删码的特性决定的。&lt;/p&gt;
+&lt;p&gt;具体确定的逻辑如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;冗余编码机制： 在 PeerDAS 中，原始数据 Blob 不仅被划分为多个数据列，还会通过 Reed-Solomon 算法添加大量的校验列 (parity columns)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数学恢复特性： &lt;strong&gt;根据纠删码的数学原理，只要节点能够收集到编码后总列数中超过 50% 的部分&lt;/strong&gt;，就拥有足够的信息通过 Reed-Solomon 解码计算并还原出剩余缺失的所有列。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;超级节点如何增强网络冗余&#34;&gt;&lt;a href=&#34;#%e8%b6%85%e7%ba%a7%e8%8a%82%e7%82%b9%e5%a6%82%e4%bd%95%e5%a2%9e%e5%bc%ba%e7%bd%91%e7%bb%9c%e5%86%97%e4%bd%99&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;超级节点如何增强网络冗余
+&lt;/h2&gt;&lt;p&gt;超级节点指的是那些选择存储所有数据列的特定节点。有如下特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;提供完整备份：普通节点通常只根据其节点 ID 被确定性地分配托管特定的列组，而超级节点通过存储全部列，成为了网络中完整数据的可靠来源。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;提升容错能力：超级节点的存在增加了系统中数据的副本数量，从而显著增强了网络在面对节点离线、子网故障或数据丢失时的抵抗力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;确保可恢复性：超级节点持有的完整数据集确保了数据始终是可验证且可恢复的，这对于维护去中心化网络的安全性至关重要。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;辅助数据分发：虽然来源中主要强调了它们的存储和冗余功能，但持有完整列的节点在 P2P 网络的传播过程中也能更有效地响应其他节点的请求，填补数据空洞。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;peerdas-如何应对恶意节点分发错误数据列的攻击&#34;&gt;&lt;a href=&#34;#peerdas-%e5%a6%82%e4%bd%95%e5%ba%94%e5%af%b9%e6%81%b6%e6%84%8f%e8%8a%82%e7%82%b9%e5%88%86%e5%8f%91%e9%94%99%e8%af%af%e6%95%b0%e6%8d%ae%e5%88%97%e7%9a%84%e6%94%bb%e5%87%bb&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;PeerDAS 如何应对恶意节点分发错误数据列的攻击
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;利用 KZG 承诺进行实时验证&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;当节点从对等方接收到采样的数据列时，它会利用 KZG 证明来验证这些列是否与原始数据集匹配。允许节点在不下载完整数据的情况下，立刻识别并拒绝任何被篡改或损坏的数据片段，从而防止数据损坏和欺诈行为。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Reed-Solomon 纠删码的容错性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;数据在分发前使用 Reed-Solomon 纠删码进行处理，这为数据集增加了冗余。即使某些恶意节点分发错误数据（被验证拒绝）或拒绝提供数据，只要网络中的节点能够获取到超过 50% 的总列数，就可以通过数学计算完全重建原始数据集。这种高度的冗余性使得系统对恶意节点的攻击具有极强的抵御能力。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;超级节点提供的额外备份&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;网络中存在存储所有列的超级节点，提供完整的数据备份。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;修改后的分叉选择规则&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;验证者会遵循特定的分叉选择规则，只有在通过采样确认数据可用且经验证无误后，才会对新提案的区块投票。这确保了恶意节点无法通过扣留或伪造数据来诱导网络接受无效的区块，从而维护了区块链的完整性与安全性。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>U 卡对比</title>
+        <link>/zh-cn/post/2026/04/u-%E5%8D%A1%E5%AF%B9%E6%AF%94/</link>
+        <pubDate>Wed, 22 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/u-%E5%8D%A1%E5%AF%B9%E6%AF%94/</guid>
+        <description>&lt;h2 id=&#34;bitget&#34;&gt;&lt;a href=&#34;#bitget&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Bitget
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://qiutian.io/post/Bitget&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://qiutian.io/post/Bitget&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bitget.com/zh-CN/academy/bitget-card-tutorial&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.bitget.com/zh-CN/academy/bitget-card-tutorial&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;虚拟 U 卡，免费办理，每个用户每月有 400 USDT 的零手续费额度，所有消费的充值 + 消费手续费全额返现，当返还金额累计达到 1 USDC 时即可提取。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;支持场景：微信、支付宝、淘宝、京东、拼多多、美团、海外订阅如蓝 V、 ChatGPT、航旅、 Apple Pay、 Google Pay、 Samsung Pay、 PayPal 等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;支持币种： USD / EUR / CHF / RMB ，可自由 USDC 充值出金、换汇、消费、转账汇款。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;自 2025 年 8 月 22 日起，除已添加的卡片外，将无法将新卡添加到 Apple Pay。已添加至 Apple Pay 的卡片可继续正常使用，但如卡片被移除后，将无法再次添加。&lt;/p&gt;
+&lt;p&gt;注册后需要向 Arbitrum 链转 10 U 激活账户！&lt;/p&gt;
+&lt;h2 id=&#34;safepal&#34;&gt;&lt;a href=&#34;#safepal&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Safepal
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.safepal.com/zh-cn/blog/666-zero-fee?lang=zh&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.safepal.com/zh-cn/blog/666-zero-fee?lang=zh&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;虚拟 U 卡，免费办理，每个用户每月有 666 USDT 的零手续费额度，所有消费的充值 + 消费手续费全额返现，当返还金额累计达到 1 USDC 时即可提取。&lt;/p&gt;
+&lt;p&gt;请注意，此补贴仅限于同时满足以下两个条件的消费：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;消费是中国大陆地区的人民币消费&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;抵扣的是账户内的美金或人民币余额&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;支持币种： USD / EUR / CHF / RMB ，可自由 USDC 充值出金、换汇、消费、转账汇款。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;支持场景：微信、支付宝、淘宝、京东、拼多多、美团、海外订阅如蓝 V、 ChatGPT、航旅、 Apple Pay、 Google Pay、 Samsung Pay、 PayPal 等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注册后需要向 Arbitrum 链转 10 U 激活账户！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;需要注意的是，bitget 和 safepal 都是用的 fiat24 银行，每个身份只能注册一个 Fiat24 账户，重复注册不会通过身份审核，就是 fiat24 账户注销，也不能再用同一身份注册新的 Fiat24账号。意味着 1 个人只能在上面二选其一。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;我办理的就是 safepal，这是我的邀请码 👉&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/u-%E5%8D%A1%E5%AF%B9%E6%AF%94/image.png&#34;
+	width=&#34;880&#34;
+	height=&#34;1200&#34;
+	srcset=&#34;/zh-cn/post/2026/04/u-%E5%8D%A1%E5%AF%B9%E6%AF%94/image_hu_9db0d24c39ef479.png 480w, /zh-cn/post/2026/04/u-%E5%8D%A1%E5%AF%B9%E6%AF%94/image_hu_3436550aa075d1a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;73&#34;
+		data-flex-basis=&#34;176px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>黑客松报名表字段设计</title>
+        <link>/zh-cn/post/2026/04/%E9%BB%91%E5%AE%A2%E6%9D%BE%E6%8A%A5%E5%90%8D%E8%A1%A8%E5%AD%97%E6%AE%B5%E8%AE%BE%E8%AE%A1/</link>
+        <pubDate>Wed, 22 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E9%BB%91%E5%AE%A2%E6%9D%BE%E6%8A%A5%E5%90%8D%E8%A1%A8%E5%AD%97%E6%AE%B5%E8%AE%BE%E8%AE%A1/</guid>
+        <description>&lt;ol&gt;
+&lt;li&gt;基础身份字段&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;昵称或姓名（必填）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;邮箱（必填，用于通知）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Telegram / Discord（至少一项）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;所在地区或时区（用于安排活动时间）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;参与身份字段&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;你将以什么身份参与？（单选）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;个人参赛、已有团队、寻找队友、导师、志愿者、观众&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;技能方向字段&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;你的主要技能（多选）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;前端、后端、智能合约、产品经理、设计、运营、研究 / 分析、 BD / 市场&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;技能熟练度（可选）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;初级 / 中级 / 高级&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;项目方向字段
+感兴趣赛道（多选）
+AI × Web3
+DeFi
+GameFi
+Infra / 工具
+其他（填写）
+是否已有项目想法（单选）
+有明确 idea
+有方向但未成型
+暂无
+简要描述你的项目想法（可选， 100-200 字）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;团队信息字段&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;是否已有团队（是 / 否）
+团队名称（如有）
+当前团队人数
+是否开放招募（是 / 否）
+当前缺少角色（多选）
+开发 / 产品 / 设计 / 运营&lt;/p&gt;
+&lt;ol start=&#34;6&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;资源需求字段&lt;/p&gt;
+&lt;p&gt;是否需要组队匹配（是 / 否）
+是否需要 Mentor 支持（是 / 否）
+希望获得的支持（多选）
+技术指导
+产品建议
+Demo / Pitch 辅导
+投资对接
+Workspace / 场地&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>黑客松生命周期流程</title>
+        <link>/zh-cn/post/2026/04/%E9%BB%91%E5%AE%A2%E6%9D%BE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B/</link>
+        <pubDate>Wed, 22 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E9%BB%91%E5%AE%A2%E6%9D%BE%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B5%81%E7%A8%8B/</guid>
+        <description>&lt;ol&gt;
+&lt;li&gt;主题和赛道&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;确定黑客松方向（如 AI / DeFi / GameFi / 开发者工具）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;划分赛道（例如： AI Agent、链游、基础设施）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;明确赞助方或生态支持方向&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;活动页和规则&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;搭建活动页面（官网 / Notion）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;写清：时间线、奖项、赛道说明&lt;/p&gt;
+&lt;p&gt;明确提交要求（代码、 Demo、 Pitch Deck）&lt;/p&gt;
+&lt;p&gt;写清评审标准（技术、创新、落地性）&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;预热、报名组队&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;开放报名表（收集背景、技能）&lt;/p&gt;
+&lt;p&gt;建立组队渠道（表单 / 社群频道）&lt;/p&gt;
+&lt;p&gt;整理团队信息（成员、项目方向）&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;启动会（ Kickoff）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;介绍规则、时间节点、评审方式&lt;/p&gt;
+&lt;p&gt;介绍赞助方和资源支持&lt;/p&gt;
+&lt;p&gt;讲清提交要求和注意事项&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;Workshop&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;技术支持（ SDK、 API、链上工具）&lt;/p&gt;
+&lt;p&gt;产品与 Demo 指导&lt;/p&gt;
+&lt;p&gt;Pitch 和展示培训&lt;/p&gt;
+&lt;ol start=&#34;6&#34;&gt;
+&lt;li&gt;开发期跟进&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;定期提醒关键时间节点&lt;/p&gt;
+&lt;p&gt;收集团队问题并对接 mentor&lt;/p&gt;
+&lt;p&gt;跟进项目进度，避免中途流失&lt;/p&gt;
+&lt;ol start=&#34;7&#34;&gt;
+&lt;li&gt;项目提交&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;收集以下内容：&lt;/p&gt;
+&lt;p&gt;项目名称 + 简介&lt;/p&gt;
+&lt;p&gt;GitHub 仓库&lt;/p&gt;
+&lt;p&gt;Demo 视频或链接&lt;/p&gt;
+&lt;p&gt;Pitch Deck&lt;/p&gt;
+&lt;p&gt;团队信息&lt;/p&gt;
+&lt;ol start=&#34;8&#34;&gt;
+&lt;li&gt;Demo Day 和评审&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;安排展示顺序（每队时间固定）&lt;/p&gt;
+&lt;p&gt;控制 Demo 时间（如 5 分钟展示 + 3 分钟问答）&lt;/p&gt;
+&lt;p&gt;评委评分（统一标准）&lt;/p&gt;
+&lt;p&gt;汇总结果并确认排名&lt;/p&gt;
+&lt;ol start=&#34;9&#34;&gt;
+&lt;li&gt;结果沉淀&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;公布获奖名单&lt;/p&gt;
+&lt;p&gt;发布项目合集（ Demo + 项目介绍）&lt;/p&gt;
+&lt;p&gt;感谢赞助方和评委&lt;/p&gt;
+&lt;p&gt;对接孵化、投资或后续合作机会&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>以太坊协议路线图</title>
+        <link>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8D%8F%E8%AE%AE%E8%B7%AF%E7%BA%BF%E5%9B%BE/</link>
+        <pubDate>Wed, 22 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8D%8F%E8%AE%AE%E8%B7%AF%E7%BA%BF%E5%9B%BE/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://epf.wiki/#/wiki/research/roadmap&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt; 以太坊协议路线图 &lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;以太坊路线图六大核心阶段&#34;&gt;&lt;a href=&#34;#%e4%bb%a5%e5%a4%aa%e5%9d%8a%e8%b7%af%e7%ba%bf%e5%9b%be%e5%85%ad%e5%a4%a7%e6%a0%b8%e5%bf%83%e9%98%b6%e6%ae%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;以太坊路线图六大核心阶段
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;The Merge（合并）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心目标：从“工作量证明”（ PoW）转变为 &lt;strong&gt;“权益证明”（PoS）&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这是以太坊历史上最重要的升级。它通过取消挖矿极大降低了能源消耗。&lt;/p&gt;
+&lt;p&gt;“合并”已于 2022 年 9 月成功完成。未来的任务是改进共识机制，例如实现单插槽最终性（ SSF），让交易能在大约 12 秒内彻底确认，从而提升用户体验。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;The Surge（激增）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心目标：通过 Rollups 和分片技术提升以太坊的处理能力（可扩展性）。&lt;/p&gt;
+&lt;p&gt;这一阶段旨在让以太坊变得更快、更便宜。&lt;/p&gt;
+&lt;p&gt;关键技术：目前已通过 EIP-4844 （ Proto-Danksharding） 引入了“数据对象”（ Blobs），大幅降低了 Layer 2 网络（如 Arbitrum, Optimism）的交易成本。未来的目标是实现完全的 Danksharding，为网络提供海量的数据空间。&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;The Scourge（祸害 / 抗审查）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心目标：确保网络的去中心化和抗审查性，应对 MEV（最大可提取价值）带来的风险。&lt;/p&gt;
+&lt;p&gt;说白了就是 &lt;strong&gt;防止少数大型节点或机构控制网络交易的顺序或排除某些交易。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;解决方案：研究包括 MEV 销毁（ MEV-Burn），将这些额外收益分配给所有 ETH 持有者，以及包含列表（ Inclusion Lists），强制节点包含某些交易以防止审查。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;The Verge（边界）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心目标：让验证区块变得更加容易，降低运行节点的硬件门槛。&lt;/p&gt;
+&lt;p&gt;未来你可能不需要昂贵的硬盘就能运行以太坊节点，甚至在轻量级设备上也能验证网络安全。&lt;/p&gt;
+&lt;p&gt;关键技术：引入 Verkle 树（ Verkle Trees），这种技术可以用极小的数据量证明交易的有效性，从而实现“无状态”验证。&lt;/p&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;The Purge（清除）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心目标：简化协议，清理历史垃圾数据，减轻节点的存储负担。&lt;/p&gt;
+&lt;p&gt;正如电脑需要定期清理垃圾文件，以太坊也需要删除不再需要的旧数据以保持运行效率。&lt;/p&gt;
+&lt;p&gt;关键提案： EIP-4444 （历史过期），允许客户端停止在链上存储超过一年的旧区块数据，从而大幅降低存储需求。&lt;/p&gt;
+&lt;ol start=&#34;6&#34;&gt;
+&lt;li&gt;The Splurge（挥霍 / 修补）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;核心目标：所有其他能提升用户体验、安全性和长期抗风险能力的“锦上添花”功能。&lt;/p&gt;
+&lt;p&gt;这是路线图的“最后拼图”，涵盖了各种零散但重要的优化。&lt;/p&gt;
+&lt;p&gt;亮点功能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;账户抽象：让钱包像银行卡一样好用，支持社交恢复、批量交易等功能。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;抗量子签名：研究能够抵御未来量子计算机攻击的加密算法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;形式化验证工具：通过形式化验证，开发者可以获得更高的保证，极大提升客户端的安全性，防范漏洞和黑客攻击。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这些阶段并非按顺序一个接一个发生，而是并行推进的。以太坊被视为一座“无尽花园”，通过这些持续的修剪与升级，使其最终达到一种稳定且高效的状态。&lt;/p&gt;
+&lt;h2 id=&#34;如何通过-the-surge-提高可扩展性&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e9%80%9a%e8%bf%87-the-surge-%e6%8f%90%e9%ab%98%e5%8f%af%e6%89%a9%e5%b1%95%e6%80%a7&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何通过 The Surge 提高可扩展性
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;【已实现】通过 Proto-Danksharding (EIP-4844) 引入了一种 “ Blob” 临时存储空间。极大地降低了 Layer 2 （如 Rollups）的交易成本。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;技术原理： Rollup 的数据 &lt;strong&gt;不再永久存储在以太坊的主链&lt;/strong&gt; 上，而是存放在这些临时的“ Blob”中，并在不再需要时被删除。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;【研究中】 Danksharding( 完整分片 ) 是 Rollup 扩展的最终实现目标，是对 Proto-Danksharding 的全面升级。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;技术原理：为 Rollup 提供海量空间，用于转储其压缩后的交易数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;支持技术 (ePBS)：通过在协议层引入“提议者 - 构建者分离”（ ePBS），可以更好地支持 Danksharding 的升级，从而帮助以太坊实现大规模扩展。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;【研究中】数据可用性采样 (DAS)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为了在 &lt;strong&gt;不增加单个节点负担&lt;/strong&gt; 的情况下处理大量数据， The Surge 引入了 &lt;strong&gt;数据可用性采样（ DAS） 技术&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;技术原理：网络中的节点无需下载全部数据，只需通过采样检查即可确认数据是否可用。它能确保区块生产者公开了所有必要的数据，同时允许轻客户端在极低开销下获得安全保障。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;【研究中】优化 Rollup 技术与 ZK-EVMs&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;通过技术手段移除 Rollup 的“辅助轮”，即 &lt;strong&gt;减少对中心化运营者的依赖&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ZK-EVMs：通过支持零知识证明计算的 EVM 兼容虚拟机，允许 Layer 2 节点在链下处理大量交易，并生成一个极小的零知识证明发送到 Layer 1 ， Layer 1 节点只需验证这个证明，不需要像传统方式那样重新执行每一笔交易。在不牺牲链的安全性与去中心化性的前提下，实现扩展性与隐私性的巨大飞跃。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;账户抽象如何让钱包像银行卡一样好用&#34;&gt;&lt;a href=&#34;#%e8%b4%a6%e6%88%b7%e6%8a%bd%e8%b1%a1%e5%a6%82%e4%bd%95%e8%ae%a9%e9%92%b1%e5%8c%85%e5%83%8f%e9%93%b6%e8%a1%8c%e5%8d%a1%e4%b8%80%e6%a0%b7%e5%a5%bd%e7%94%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;账户抽象如何让钱包像银行卡一样好用
+&lt;/h2&gt;&lt;p&gt;账户抽象（ Account Abstraction，主要通过 EIP-4337 提案实现）是以太坊路线图中“ The Splurge”阶段的重要组成部分，通过引入 UserOperation（用户操作）、 bundlers（捆绑器） 和 paymasters（代付者） 等技术架构，账户抽象屏蔽了区块链底层复杂的签名逻辑，使普通用户能像使用移动支付或银行服务一样便捷地管理数字资产
+，能将原本由私钥直接控制的普通账户转变为智能合约钱包，在以下几个方面让钱包的使用体验向“银行卡”看齐：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;社交恢复&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;账户抽象允许用户设置“监护人”（如朋友、家人或其他设备），在丢失访问权限时，可以通过这些受信任的渠道重新获得账户控制。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;灵活的手续费支付&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;传统以太坊交易必须使用 ETH 支付 Gas。账户抽象引入了 &lt;strong&gt;代付者（Paymasters）&lt;/strong&gt; 机制，允许应用方为用户代付手续费，或者让用户直接使用账户里的其他代币（如稳定币）来支付费用！&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;批量交易与一键操作&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在去中心化应用中，传统的多次“授权 + 执行”操作非常繁琐。账户抽象支持将多个操作打包成一个步骤完成，实现“一键下单”的流畅体验，类似于银行卡支付时的单次确认，而不需要针对每个底层步骤反复签名。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;可编程的权限控制：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;用户可以像设置银行卡限额一样，为钱包设置单笔交易限额或每日转账上限。此外，还可以针对不同类型的交易设置不同的安全级别，提升了整体安全性。&lt;/p&gt;
+&lt;h2 id=&#34;代付者机制-paymasters是如何工作的&#34;&gt;&lt;a href=&#34;#%e4%bb%a3%e4%bb%98%e8%80%85%e6%9c%ba%e5%88%b6-paymasters%e6%98%af%e5%a6%82%e4%bd%95%e5%b7%a5%e4%bd%9c%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;代付者机制（ Paymasters）是如何工作的
+&lt;/h2&gt;&lt;p&gt;代付者与 UserOperation（用户操作）内存池和 bundlers（捆绑器） 共同协作，核心功能是支持 &lt;strong&gt;赞助交易&lt;/strong&gt;。在交易过程中，代付者可以介入并 &lt;strong&gt;代表用户支付交易所需的燃气费（ Gas）&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;对于应用方而言，可以为用户承担交易成本降低进入门槛，或者用户可以用非 ETH 代币向代付者支付，再由代付者代为向网络支付 ETH。&lt;/p&gt;
+&lt;h2 id=&#34;单插槽最终性如何提升交易速度&#34;&gt;&lt;a href=&#34;#%e5%8d%95%e6%8f%92%e6%a7%bd%e6%9c%80%e7%bb%88%e6%80%a7%e5%a6%82%e4%bd%95%e6%8f%90%e5%8d%87%e4%ba%a4%e6%98%93%e9%80%9f%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;单插槽最终性如何提升交易速度
+&lt;/h2&gt;&lt;p&gt;单插槽最终性（ Single Slot Finality，简称 SSF）是以太坊在“合并”（ The Merge）之后的一个重要研究方向，旨在对共识机制进行重大升级。&lt;/p&gt;
+&lt;p&gt;SSF 简单来说是指区块在被提议的同一个插槽（ Slot）内就能立即完成“最终确认”。&lt;/p&gt;
+&lt;p&gt;在以太坊目前的机制下，从一笔交易发生到被认为“不可逆转”（即最终性），通常需要经过多个阶段，耗时大约 12.8 分钟。而实现 SSF 后，这个过程将缩短至一个插槽的时间，即约 12 秒。&lt;/p&gt;
+&lt;p&gt;SSF 并不是直接增加每秒处理的交易数量（ TPS），而是 &lt;strong&gt;通过缩短最终确认时间&lt;/strong&gt; 来极大地提升“感知速度”和安全性：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;确认时间缩短一个数量级：交易的最终确认时间将从原来的 12 分钟提升到 12 秒左右。对于普通用户和开发者来说，这意味着交易能更快地达到“绝对安全”的状态，显著改善了用户体验（ UX）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;加速 Layer 2 桥接：在完全 Rollup 扩展的愿景下，结合实时 SNARK 证明， SSF 可以让 Layer 2 网络之间的资产跨链和桥接变得更加迅速。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;消除重组攻击（ Re-orgs）：由于区块在产生的瞬间即达成最终性，攻击者将更难进行多区块的 MEV 重组攻击，从而降低了共识机制的复杂性并增强了网络安全性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;kzg-承诺&#34;&gt;&lt;a href=&#34;#kzg-%e6%89%bf%e8%af%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;KZG 承诺
+&lt;/h2&gt;&lt;p&gt;KZG 承诺是 The Surge（激增）阶段实现 Proto-Danksharding (EIP-4844) 的核心技术。&lt;/p&gt;
+&lt;p&gt;用途：它被用来验证 Layer 2 提交给以太坊的“数据对象”（ Blobs）是否完整且正确。&lt;/p&gt;
+&lt;p&gt;地位：它是确保以太坊能够在大规模扩展交易能力的同时，仍能让节点高效验证数据的关键工具。&lt;/p&gt;
+&lt;h2 id=&#34;mev-销毁-mev-burn&#34;&gt;&lt;a href=&#34;#mev-%e9%94%80%e6%af%81-mev-burn&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;MEV 销毁（ MEV-Burn）
+&lt;/h2&gt;&lt;p&gt;MEV 销毁（ MEV-Burn） 是作为 The Scourge（祸害 / 抗审查）阶段提议（ enshrined PBS 的扩展）而提出的，旨在平滑并重新分配 MEV 收益。&lt;/p&gt;
+&lt;p&gt;实现普惠的通缩效益：在目前的机制下， MEV 的收益（即从区块空间中提取的额外价值）&lt;strong&gt;主要流向了运行验证者&lt;/strong&gt; 的人。而实现 MEV 销毁后，被提取的 ETH 将会被直接销毁。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;惠及所有持有者&lt;/strong&gt;，而非仅限验证者：通过销毁这些 ETH， MEV 的价值将 &lt;strong&gt;通过减少总供应量的方式&lt;/strong&gt;，让全体 ETH 持有者共同受益，而不再只是让少数验证者获利。&lt;/p&gt;
+&lt;p&gt;平滑收益波动：该机制还可以平滑并重新分配 MEV 的峰值收益（ MEV spikes），有助于降低网络中因 MEV 带来的不公平竞争和风险。&lt;/p&gt;
+&lt;p&gt;总而言之， MEV 销毁将原本属于验证者的“超额小费”转变为一种对全网持有者的间接回购，从而增强了以太坊代币持有者的整体利益。&lt;/p&gt;
+&lt;h2 id=&#34;无状态验证对运行节点有什么帮助&#34;&gt;&lt;a href=&#34;#%e6%97%a0%e7%8a%b6%e6%80%81%e9%aa%8c%e8%af%81%e5%af%b9%e8%bf%90%e8%a1%8c%e8%8a%82%e7%82%b9%e6%9c%89%e4%bb%80%e4%b9%88%e5%b8%ae%e5%8a%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;无状态验证对运行节点有什么帮助
+&lt;/h2&gt;&lt;p&gt;无状态验证是 The Verge 阶段的核心目标之一。目的是让节点在验证新区块时，不需要在本地保存完整的以太坊“状态”数据。&lt;/p&gt;
+&lt;p&gt;在目前的以太坊机制下，节点必须 &lt;strong&gt;存储整个网络的实时状态&lt;/strong&gt; 才能验证交易是否有效。而无状态验证通过引入 Verkle 树等技术，将庞大的默克尔证明（ Merkle proofs）替换为更小巧的向量承诺，实现 O(1) 级的证明大小。&lt;/p&gt;
+&lt;p&gt;验证节点只需接收区块及其附带的一个微小的“证明”（ Witness），即可确认交易的合法性，而无需去查询本地庞大的数据库，显著降低运行节点的门槛，使节点变得更加“轻量化”。&lt;/p&gt;
+&lt;h2 id=&#34;状态过期如何解决以太坊的数据膨胀问题&#34;&gt;&lt;a href=&#34;#%e7%8a%b6%e6%80%81%e8%bf%87%e6%9c%9f%e5%a6%82%e4%bd%95%e8%a7%a3%e5%86%b3%e4%bb%a5%e5%a4%aa%e5%9d%8a%e7%9a%84%e6%95%b0%e6%8d%ae%e8%86%a8%e8%83%80%e9%97%ae%e9%a2%98&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;状态过期如何解决以太坊的数据膨胀问题
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;状态过期（State Expiry）&lt;/strong&gt; 是以太坊路线图中 “ The Purge（清除）” 阶段的核心提案之一（ EIP-7736 ），旨在 &lt;strong&gt;移除在定义的时间周期内未被访问的非活跃 Verkle 树叶子节点&lt;/strong&gt;，如果未来需要重新使用这些被移除的数据，可以 &lt;strong&gt;通过证明（Proofs）将其复活&lt;/strong&gt;。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>以太坊区块构建</title>
         <link>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8C%BA%E5%9D%97%E6%9E%84%E5%BB%BA/</link>
         <pubDate>Mon, 20 Apr 2026 12:00:00 +0000</pubDate>
@@ -401,23 +1113,15 @@
 </description>
         </item>
         <item>
-        <title>MEV最大可提取价值</title>
-        <link>/zh-cn/post/2026/04/mev%E6%9C%80%E5%A4%A7%E5%8F%AF%E6%8F%90%E5%8F%96%E4%BB%B7%E5%80%BC/</link>
+        <title>RPC 接口查询链上数据</title>
+        <link>/zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/</link>
         <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/post/2026/04/mev%E6%9C%80%E5%A4%A7%E5%8F%AF%E6%8F%90%E5%8F%96%E4%BB%B7%E5%80%BC/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>RPC接口查询链上数据</title>
-        <link>/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/</link>
-        <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
-        
-        <guid>/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/</guid>
-        <description>&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image.png&#34;
+        <guid>/zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/</guid>
+        <description>&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image.png&#34;
 	width=&#34;1482&#34;
 	height=&#34;1074&#34;
-	srcset=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image_hu_c41d05c06242d79a.png 480w, /zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image_hu_fe66a60fbfaa05c.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image_hu_c41d05c06242d79a.png 480w, /zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image_hu_fe66a60fbfaa05c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -426,10 +1130,10 @@
 		data-flex-basis=&#34;331px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1.png&#34;
 	width=&#34;1395&#34;
 	height=&#34;323&#34;
-	srcset=&#34;/zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1_hu_d6e290bc0446527f.png 480w, /zh-cn/post/2026/04/rpc%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1_hu_ea1765e2c4a77f5b.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1_hu_d6e290bc0446527f.png 480w, /zh-cn/post/2026/04/rpc-%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E9%93%BE%E4%B8%8A%E6%95%B0%E6%8D%AE/image-1_hu_ea1765e2c4a77f5b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -442,6 +1146,8 @@
 &lt;p&gt;The Graph&lt;/p&gt;
 &lt;p&gt;ERC8004 x402 A2A&lt;/p&gt;
 &lt;p&gt;浏览器插件（自动，快捷键一键）&lt;/p&gt;
+&lt;p&gt;一键发射代币&lt;/p&gt;
+&lt;p&gt;水龙头&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -559,6 +1265,111 @@
 &lt;/h3&gt;&lt;p&gt;思路：用户在使用 DeFi 前需要 approve 合约操作自己的 Token。无限 approve（type(uint256).max）是常见做法但有安全风险。前端最佳实践：默认推荐有限授权（exact amount）、显示当前授权额度、提供 revoke 入口。提到 Permit2 作为更安全的替代方案。&lt;/p&gt;
 &lt;h3 id=&#34;如何在前端实时显示链上数据如-token-价格池子深度&#34;&gt;&lt;a href=&#34;#%e5%a6%82%e4%bd%95%e5%9c%a8%e5%89%8d%e7%ab%af%e5%ae%9e%e6%97%b6%e6%98%be%e7%a4%ba%e9%93%be%e4%b8%8a%e6%95%b0%e6%8d%ae%e5%a6%82-token-%e4%bb%b7%e6%a0%bc%e6%b1%a0%e5%ad%90%e6%b7%b1%e5%ba%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;如何在前端实时显示链上数据（如 Token 价格、池子深度）
 &lt;/h3&gt;&lt;p&gt;思路：① 轮询 RPC（最简单但效率低）② 使用 WebSocket 订阅事件（eth_subscribe）③ 使用 TheGraph Subgraph 查询索引数据 ④ 使用 TanStack Query 管理缓存和过期策略 ⑤ 考虑使用 Alchemy / QuickNode 的增强 API 获取聚合数据&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>以太坊协议可扩展性及其技术架构</title>
+        <link>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8D%8F%E8%AE%AE%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E5%8F%8A%E5%85%B6%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84/</link>
+        <pubDate>Thu, 16 Apr 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/04/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%8D%8F%E8%AE%AE%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E5%8F%8A%E5%85%B6%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84/</guid>
+        <description>&lt;h2 id=&#34;区块链不可能三角&#34;&gt;&lt;a href=&#34;#%e5%8c%ba%e5%9d%97%e9%93%be%e4%b8%8d%e5%8f%af%e8%83%bd%e4%b8%89%e8%a7%92&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;区块链“不可能三角”
+&lt;/h2&gt;&lt;p&gt;区块链“不可能三角”是指区块链网络在设计时，必须在安全性、去中心化和可扩展性这三个目标之间进行权衡，很难同时实现三者的最大化，为了应对这一挑战，以太坊通过以下核心策略进行演进：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;模块化架构&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;以太坊正从单体区块链向模块化架构转变，将系统分解为不同的功能组件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;共识：节点对区块排序和有效性达成一致。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行：处理交易并更新状态。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据可用性：确保交易数据可被查询和验证。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;结算：保证交易的最终性和不可篡改性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过这种“分而治之”的方法，以太坊可以独立优化每个环节，从而在不牺牲去中心化的前提下提升整体性能。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;以 Rollup 为中心的路线图&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这是以太坊解决可扩展性问题的主导方案，目前主要分为 Optimistic Rollup（基于欺诈证明）和 ZK Rollup（基于数学的零知识证明）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;执行下放：以太坊 L1 充当安全的结算层和数据可用性层，而将繁重的“执行”任务交给 Layer 2 (Rollups) 处理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;交易压缩： Rollups 将大量交易打包成一个包提交到 L1 ，极大地提高了每秒交易数 (TPS)，同时通过 L1 存储的交易数据和状态承诺继承了以太坊的安全性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Layer 1 协议级优化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在维持 L1 去中心化的同时，以太坊也在进行底层升级以支持扩展：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;维持低门槛节点运行：为了确保去中心化，以太坊通过 Gas 限制 限制了每个区块的计算和存储需求，使普通用户也能负担得起运行节点的硬件成本。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;EIP-4844 (Proto-Danksharding)：引入了专门用于 Rollup 数据的 &lt;strong&gt;Blob 空间&lt;/strong&gt;，这是一种比传统 calldata 更高效、更廉价的数据存储机制，显著降低了 L2 的成本。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;共识机制演进：转向 POS 并持续优化协议效率，以在提高 TPS 的同时保持网络的健壮性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;optimistic-rollup-和-zk-rollup&#34;&gt;&lt;a href=&#34;#optimistic-rollup-%e5%92%8c-zk-rollup&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Optimistic Rollup 和 ZK Rollup
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Optimistic Rollups：采用 &lt;strong&gt;乐观验证模式。它默认提交到 Layer 1 的所有交易都是有效的&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其安全性依赖于经济激励机制：如果有人认为交易有误，可以在“挑战期”内提交 &lt;strong&gt;欺诈证明（fraud proof）&lt;/strong&gt; 进行纠举，这意味着交易在 Layer 1 上达到最终确认需要等待挑战期结束。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ZK Rollups：通过数学确定性来确保安全。它为每一批次交易生成零知识证明（如 zk-SNARKs 或 zk-STARKs），并将其提交至 Layer 1 进行验证。一旦通过验证，该批次中的所有交易在数学上即被确认为有效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;零知识证明的-zk-snarks-和-zk-starks&#34;&gt;&lt;a href=&#34;#%e9%9b%b6%e7%9f%a5%e8%af%86%e8%af%81%e6%98%8e%e7%9a%84-zk-snarks-%e5%92%8c-zk-starks&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;零知识证明的 zk-SNARKs 和 zk-STARKs
+&lt;/h2&gt;&lt;p&gt;zk-SNARKs 和 zk-STARKs 是零知识证明（ Zero-Knowledge Proofs）在 ZK Rollups 扩容方案中应用最广泛的两类技术。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;技术定义&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;zk-SNARKs：全称为“零知识简洁非交互式知识参数”（ Succinct Non-Interactive Argument of Knowledge）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;zk-STARKs：全称为“零知识可扩展透明知识参数”（ Scalable Transparent Argument of Knowledge）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;核心区别&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;信任设置：这是两者最显著的区别之一。信任设置是一个一次性的初始化过程，用于生成证明者（ Prover）和验证者（ Verifier）之间共享的公共参数，用户必须信任执行该设置的各方正确地生成了这些参数，并彻底销毁了生成过程中的 &lt;strong&gt;随机性数据&lt;/strong&gt;（通常被称为 &lt;strong&gt;有毒废料&lt;/strong&gt;）。如果这些“有毒废料”没有被销毁，持有该数据的人就可以伪造虚假的证明，从而在系统中创造出凭空产生的资产或篡改状态，而验证者无法察觉。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;zk-STARKs 不需要信任设置。&lt;/strong&gt; 在密码学中这意味着它们不依赖于初始的秘密参数生成过程，从而 &lt;strong&gt;提高了系统的透明度和更快的证明速度&lt;/strong&gt;，&lt;strong&gt;但这是 zk-STARKs 通过牺牲一定的证明大小换来的。单个 STARK 证明的体积可能达到几十到几百 KB，而 SNARK 仅为几百字节。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;zk-STARKs 的抗量子性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;zk-STARKs 通常被认为具有抗量子攻击（ Post-Quantum Secure）的特性。这是因为它们的技术基础与 zk-SNARKs 不同：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;zk-SNARKs：通常依赖于椭圆曲线密码学（ Elliptic Curve Cryptography），而在理论上，足够强大的量子计算机可以破解此类加密。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;zk-STARKs：依赖的是 &lt;strong&gt;抗碰撞哈希函数&lt;/strong&gt;。目前认为，哈希算法在面对量子计算机攻击时具有 &lt;strong&gt;很强的鲁棒性&lt;/strong&gt;，因此 zk-STARKs 被视为一种更具前瞻性、能够抵御未来量子计算威胁的隐私和扩容技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;eip-4844-引入的-blob-空间是如何降低-l2-成本的&#34;&gt;&lt;a href=&#34;#eip-4844-%e5%bc%95%e5%85%a5%e7%9a%84-blob-%e7%a9%ba%e9%97%b4%e6%98%af%e5%a6%82%e4%bd%95%e9%99%8d%e4%bd%8e-l2-%e6%88%90%e6%9c%ac%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP-4844 引入的 Blob 空间是如何降低 L2 成本的
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;独立的专用数据空间：在此之前， Rollups 必须将其交易数据存放在以太坊交易的 calldata 区域。 calldata 是与普通 L1 交易共享的有限空间。 EIP-4844 引入了 Blobs，专门用于 Rollup 提交数据的独立、更高效的空间。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;独立的 Gas 定价模型： Blob 空间拥有自己独立的 Gas 定价机制，与传统的 L1 执行层 Gas 分离开来。这意味着 L2 的数据提交成本不再直接受到 L1 上高频操作（如 NFT 铸造或代币交换）引发的 Gas 费波动的冲击。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         <item>
@@ -9894,23 +10705,23 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 </description>
         </item>
         <item>
-        <title>以太坊的EIP和ERC是什么，几大ERC解读</title>
-        <link>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/</link>
+        <title>以太坊的 EIP 和 ERC 是什么，几大 ERC 解读</title>
+        <link>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/</link>
         <pubDate>Sat, 17 Jan 2026 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/</guid>
+        <guid>/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/</guid>
         <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://hua1223.blog.csdn.net/article/details/157547399?sharetype=blogdetail&amp;amp;sharerId=157547399&amp;amp;sharerefer=WAP&amp;amp;sharesource=&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;csdn erc&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://x.com/sugur_surendar/status/2016001672695447926/photo/4&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;参考 1&lt;/a&gt;
+    &gt; 参考 1&lt;/a&gt;
 &lt;a class=&#34;link&#34; href=&#34;https://x.com/ZanyK559799/status/2016132241517404543&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;参考 2&lt;/a&gt;
+    &gt; 参考 2&lt;/a&gt;
 &lt;a class=&#34;link&#34; href=&#34;https://eips.ethereum.org&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;EIP 官方仓库&lt;/a&gt;
+    &gt;EIP 官方仓库 &lt;/a&gt;
 &lt;a class=&#34;link&#34; href=&#34;https://ethereum-magicians.org/c/ercs/57&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;ERC 官方仓库&lt;/a&gt;&lt;/p&gt;
+    &gt;ERC 官方仓库 &lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;eip&#34;&gt;&lt;a href=&#34;#eip&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP
-&lt;/h2&gt;&lt;p&gt;Ethereum Improvement Proposal（以太坊改进提案），EIP 是向以太坊社区提出新功能、流程或标准的正式文档。任何重大变更（如协议升级、新操作码、费用机制）都必须先提交 EIP，EIP 分为三大类：&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Ethereum Improvement Proposal（以太坊改进提案）， EIP 是向以太坊社区提出新功能、流程或标准的正式文档。任何重大变更（如协议升级、新操作码、费用机制）都必须先提交 EIP， EIP 分为三大类：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Standard Track（标准轨道）：涉及核心协议修改、网络层、接口层。&lt;/p&gt;
@@ -9922,10 +10733,10 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;p&gt;Informational（信息提案）：非强制性的设计指南。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image.png&#34;
 	width=&#34;1590&#34;
 	height=&#34;703&#34;
-	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image_hu_73701cbe2a3e0ee7.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image_hu_a08be7b841218719.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image_hu_73701cbe2a3e0ee7.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image_hu_a08be7b841218719.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -9934,12 +10745,28 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 		data-flex-basis=&#34;542px&#34;
 	
 &gt;&lt;/p&gt;
+&lt;h3 id=&#34;eip-1193&#34;&gt;&lt;a href=&#34;#eip-1193&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP-1193
+&lt;/h3&gt;&lt;p&gt;以太坊生态里“钱包与网页之间通信接口”的标准。主要解决的问题是：&lt;/p&gt;
+&lt;p&gt;不同钱包以前接口不一致， dApp 适配成本高，通过统一规范， dApp 用同一套方式请求账户、签名、发交易、切链等。&lt;/p&gt;
+&lt;p&gt;钱包在页面注入 provider（常见是 window.ethereum）， dApp 通过 provider.request 或类似调用发送 RPC 方法，统一事件机制（如账户变化、链变化）通知前端更新。&lt;/p&gt;
+&lt;p&gt;常见 RPC 方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;eth_requestAccounts：请求连接钱包账户&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;eth_chainId：查询当前链 ID&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;wallet_switchEthereumChain：切换网络&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;erc&#34;&gt;&lt;a href=&#34;#erc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC
-&lt;/h2&gt;&lt;p&gt;Ethereum Request for Comments（以太坊征求意见稿），属于“标准轨道”下的一个子分类（Interface 层），是针对智能合约和 DApp 开发者制定的&lt;strong&gt;应用层标准&lt;/strong&gt;，确保不同项目之间的互操作性，是 EIP 的的一个子类，每个 ERC 都是 EIP，但不是每个 EIP 都是 ERC。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-5.png&#34;
+&lt;/h2&gt;&lt;p&gt;Ethereum Request for Comments（以太坊征求意见稿），属于“标准轨道”下的一个子分类（ Interface 层），是针对智能合约和 DApp 开发者制定的 &lt;strong&gt;应用层标准&lt;/strong&gt;，确保不同项目之间的互操作性，是 EIP 的的一个子类，每个 ERC 都是 EIP，但不是每个 EIP 都是 ERC。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-5.png&#34;
 	width=&#34;1200&#34;
 	height=&#34;480&#34;
-	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-5_hu_3fc86dcdecb3a05a.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-5_hu_3f39cfea32129f84.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-5_hu_3fc86dcdecb3a05a.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-5_hu_3f39cfea32129f84.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -9949,12 +10776,12 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;erc-20-万链之基&#34;&gt;&lt;a href=&#34;#erc-20-%e4%b8%87%e9%93%be%e4%b9%8b%e5%9f%ba&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-20 万链之基
-&lt;/h3&gt;&lt;p&gt;ERC-20 是所有代币的“通用语言”，它定义了一套&lt;strong&gt;所有代币都必须遵循的规则&lt;/strong&gt;，就像所有手机都必须有充电口一样。这使得任何支持 ERC-20 的交易所、钱包或 DApp 都能识别和处理任何 ERC-20 代币，&lt;strong&gt;极大地促进了生态的互联互通。&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;ERC-20 是所有代币的“通用语言”，它定义了一套 &lt;strong&gt;所有代币都必须遵循的规则&lt;/strong&gt;，就像所有手机都必须有充电口一样。这使得任何支持 ERC-20 的交易所、钱包或 DApp 都能识别和处理任何 ERC-20 代币，&lt;strong&gt;极大地促进了生态的互联互通。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;核心接口：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-2.png&#34;
 	width=&#34;1394&#34;
 	height=&#34;695&#34;
-	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-2_hu_1e8f4b1c6fba5fa5.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-2_hu_2cc44c6619d48511.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-2_hu_1e8f4b1c6fba5fa5.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-2_hu_2cc44c6619d48511.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -9964,12 +10791,12 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;erc-721-数字资产的确权标准&#34;&gt;&lt;a href=&#34;#erc-721-%e6%95%b0%e5%ad%97%e8%b5%84%e4%ba%a7%e7%9a%84%e7%a1%ae%e6%9d%83%e6%a0%87%e5%87%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-721 数字资产的确权标准
-&lt;/h3&gt;&lt;p&gt;如果说 ERC-20 是“钱”，那么 ERC-721 就是“房产证”或“收藏品证书”。它为每一个代币（NFT）赋予一个独一无二的 ID，确保其不可复制、不可分割、不可替代。这使得它成为数字艺术、游戏道具、虚拟土地等独特资产的理想载体。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;如果说 ERC-20 是“钱”，那么 ERC-721 就是“房产证”或“收藏品证书”。它为每一个代币（ NFT）赋予一个独一无二的 ID，确保其不可复制、不可分割、不可替代。这使得它成为数字艺术、游戏道具、虚拟土地等独特资产的理想载体。&lt;/p&gt;
 &lt;p&gt;核心接口：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-3.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-3.png&#34;
 	width=&#34;1436&#34;
 	height=&#34;643&#34;
-	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-3_hu_68327b6f73435d32.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-3_hu_d7c1ef9d6a86813f.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-3_hu_68327b6f73435d32.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-3_hu_d7c1ef9d6a86813f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -9979,11 +10806,11 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;erc-1155-半同质化资产的终极方案&#34;&gt;&lt;a href=&#34;#erc-1155-%e5%8d%8a%e5%90%8c%e8%b4%a8%e5%8c%96%e8%b5%84%e4%ba%a7%e7%9a%84%e7%bb%88%e6%9e%81%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-1155 半同质化资产的终极方案
-&lt;/h3&gt;&lt;p&gt;ERC-1155 是 ERC-20 和 ERC-721 的“超级融合体”。它允许&lt;strong&gt;在一个智能合约中同时管理多种类型的资产&lt;/strong&gt;，既可以是同质化的代币（如游戏金币），也可以是非同质化的 NFT（如稀有装备）。这极大地简化了开发流程，降低了 Gas 费用，是游戏和复杂应用的首选标准。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-4.png&#34;
+&lt;/h3&gt;&lt;p&gt;ERC-1155 是 ERC-20 和 ERC-721 的“超级融合体”。它允许 &lt;strong&gt;在一个智能合约中同时管理多种类型的资产&lt;/strong&gt;，既可以是同质化的代币（如游戏金币），也可以是非同质化的 NFT（如稀有装备）。这极大地简化了开发流程，降低了 Gas 费用，是游戏和复杂应用的首选标准。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-4.png&#34;
 	width=&#34;1434&#34;
 	height=&#34;818&#34;
-	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-4_hu_8c28a5d4c3fa3f66.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-4_hu_581e66d2749e5b20.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-4_hu_8c28a5d4c3fa3f66.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-4_hu_581e66d2749e5b20.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -9993,16 +10820,16 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 	
 &gt;&lt;/p&gt;
 &lt;h3 id=&#34;erc-2612-签名授权机制&#34;&gt;&lt;a href=&#34;#erc-2612-%e7%ad%be%e5%90%8d%e6%8e%88%e6%9d%83%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-2612 签名授权机制
-&lt;/h3&gt;&lt;p&gt;在 DeFi 世界里，用户每次转账或授权代币，都需要支付 Gas 费并进行一次链上交易。ERC-2612 引入“签名授权”机制，通过在合约中添加一个 permit 函数，允许用户在链下生成一个签名，然后在链上提交这个签名和相关参数，合约会验证签名的有效性，从而完成授权操作，即可在链上多次使用，极大地节省了 Gas 费用和操作步骤，提升了用户体验。但签名授权也意味着用户需要对签名内容有充分信任，一旦签名被恶意利用，可能导致资产损失。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;在 DeFi 世界里，用户每次转账或授权代币，都需要支付 Gas 费并进行一次链上交易。 ERC-2612 引入“签名授权”机制，通过在合约中添加一个 permit 函数，允许用户在链下生成一个签名，然后在链上提交这个签名和相关参数，合约会验证签名的有效性，从而完成授权操作，即可在链上多次使用，极大地节省了 Gas 费用和操作步骤，提升了用户体验。但签名授权也意味着用户需要对签名内容有充分信任，一旦签名被恶意利用，可能导致资产损失。&lt;/p&gt;
 &lt;h3 id=&#34;erc-777-自动触发的-hook&#34;&gt;&lt;a href=&#34;#erc-777-%e8%87%aa%e5%8a%a8%e8%a7%a6%e5%8f%91%e7%9a%84-hook&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-777 自动触发的 Hook
-&lt;/h3&gt;&lt;p&gt;ERC-777 是 ERC-20 的升级版，它引入了“Hook”（钩子）机制。这意味着在代币转账或接收时，合约可以&lt;strong&gt;自动触发一些预设的代码逻辑&lt;/strong&gt;，比如自动将部分代币转入保险库，或者在接收代币时自动执行某些操作。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;如果一个合约在接收代币时触发了另一个合约的函数，而这个函数又试图再次调用原合约&lt;/strong&gt;，就可能造成“重入攻击”，导致资产被盗，这个“钩子函数” 却成了黑客重入攻击的温床，它的落幕告诉我们：在 Web3，安全和可控永远优先于优雅。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;ERC-777 是 ERC-20 的升级版，它引入了“ Hook”（钩子）机制。这意味着在代币转账或接收时，合约可以 &lt;strong&gt;自动触发一些预设的代码逻辑&lt;/strong&gt;，比如自动将部分代币转入保险库，或者在接收代币时自动执行某些操作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;如果一个合约在接收代币时触发了另一个合约的函数，而这个函数又试图再次调用原合约&lt;/strong&gt;，就可能造成“重入攻击”，导致资产被盗，这个“钩子函数” 却成了黑客重入攻击的温床，它的落幕告诉我们：在 Web3 ，安全和可控永远优先于优雅。&lt;/p&gt;
 &lt;h3 id=&#34;erc-4626-收益金库的统一规范&#34;&gt;&lt;a href=&#34;#erc-4626-%e6%94%b6%e7%9b%8a%e9%87%91%e5%ba%93%e7%9a%84%e7%bb%9f%e4%b8%80%e8%a7%84%e8%8c%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-4626 收益金库的统一规范
-&lt;/h3&gt;&lt;p&gt;比如你有多个银行账户，但每个银行的存取款流程、ATM 机、手机 App 都完全不同。每次操作都要重新学习，非常麻烦。ERC-4626 就是为了解决这个问题而生的，它为所有 DeFi 收益金库提供了一个统一的接口标准。无论是哪个协议的金库，用户都可以用同样的方式存入、取出、查看收益，极大地简化了操作流程，提高了互操作性。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;比如你有多个银行账户，但每个银行的存取款流程、 ATM 机、手机 App 都完全不同。每次操作都要重新学习，非常麻烦。 ERC-4626 就是为了解决这个问题而生的，它为所有 DeFi 收益金库提供了一个统一的接口标准。无论是哪个协议的金库，用户都可以用同样的方式存入、取出、查看收益，极大地简化了操作流程，提高了互操作性。&lt;/p&gt;
 &lt;p&gt;核心接口：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;deposit：用户向金库存入“底层资产”如 USDC、ETH，金库会按当前汇率，返回给用户等值的“份额代币”。就像把现金存进银行，银行给一张存单。&lt;/p&gt;
+&lt;p&gt;deposit：用户向金库存入“底层资产”如 USDC、 ETH，金库会按当前汇率，返回给用户等值的“份额代币”。就像把现金存进银行，银行给一张存单。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;withdraw：用户用“份额代币”去金库按当前汇率兑换回“底层资
@@ -10016,21 +10843,21 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;redeem 和 withdraw 看起来有些像，但是前者是兑掉多少存单，后者是兑换多少资产！&lt;/p&gt;
-&lt;p&gt;由于金库合约可能被闪电贷攻击，因此需要**结合时间加权平均价格（TWAP）**等机制来防范价格操纵。&lt;/p&gt;
+&lt;p&gt;由于金库合约可能被闪电贷攻击，因此需要 &lt;strong&gt;结合时间加权平均价格（TWAP）&lt;/strong&gt; 等机制来防范价格操纵。&lt;/p&gt;
 &lt;p&gt;闪电贷攻击流程：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;第一步：借入巨资 – 攻击者通过闪电贷瞬间借入大量的资产作为操纵市场的“弹药”。&lt;/li&gt;
 &lt;li&gt;第二步：扭曲汇率 – 在极短时间内用这笔巨资在 DEX 进行大额交易，人为拉高或压低目标资产的价格。&lt;/li&gt;
-&lt;li&gt;第三步：套利收割 – 利用被操纵的虚假高价，向金库存入资产以获取更多份额，或在低价时赎回，完成套利并在**同一笔交易（以太坊出块时间是 12 秒）**中归还闪电贷。如果没有按时归还闪电贷，则整个交易原子性回滚，债务从未发生，但消耗的 gas 费不退还。&lt;/li&gt;
+&lt;li&gt;第三步：套利收割 – 利用被操纵的虚假高价，向金库存入资产以获取更多份额，或在低价时赎回，完成套利并在 &lt;strong&gt;同一笔交易（以太坊出块时间是 12 秒）&lt;/strong&gt; 中归还闪电贷。如果没有按时归还闪电贷，则整个交易原子性回滚，债务从未发生，但消耗的 gas 费不退还。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;整个过程依赖的就是&lt;strong&gt;金库合约对瞬时价格的“信任”&lt;/strong&gt;，时间加权平均价格的核心思想是&lt;strong&gt;不相信任何一个瞬间的价格，而是通过计算资产在一段较长时间窗口内的平均价格，来平滑掉由闪电贷等操作引起的瞬时剧烈波动。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;时间加权平均：系统会记录每个区块的时间戳和对应的价格，将每个价格乘以其持续的时间长度，再将所有加权值相加后除以总时长，得到最终价格。公式：TWAP = Σ(价格_i × 时间间隔_i) / 总时间间隔&lt;/p&gt;
+&lt;p&gt;整个过程依赖的就是 &lt;strong&gt;金库合约对瞬时价格的“信任”&lt;/strong&gt;，时间加权平均价格的核心思想是 &lt;strong&gt;不相信任何一个瞬间的价格，而是通过计算资产在一段较长时间窗口内的平均价格，来平滑掉由闪电贷等操作引起的瞬时剧烈波动。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;时间加权平均：系统会记录每个区块的时间戳和对应的价格，将每个价格乘以其持续的时间长度，再将所有加权值相加后除以总时长，得到最终价格。公式： TWAP = Σ ( 价格 _i × 时间间隔 _i) / 总时间间隔&lt;/p&gt;
 &lt;p&gt;这意味着攻击者若想成功操纵 TWAP 价格，必须在一段较长的时间内维持异常价格，这需要很大的资金成本，使得攻击在经济上几乎不可行。&lt;/p&gt;
 &lt;h3 id=&#34;erc-4337-账户私钥的抽象&#34;&gt;&lt;a href=&#34;#erc-4337-%e8%b4%a6%e6%88%b7%e7%a7%81%e9%92%a5%e7%9a%84%e6%8a%bd%e8%b1%a1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-4337 账户、私钥的抽象
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-7.png&#34;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-7.png&#34;
 	width=&#34;1579&#34;
 	height=&#34;732&#34;
-	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-7_hu_ed7663da9020c94d.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84eip%E5%92%8Cerc%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7erc%E8%A7%A3%E8%AF%BB/image-7_hu_4bc80b233f46ced7.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-7_hu_ed7663da9020c94d.png 480w, /zh-cn/post/2026/01/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84-eip-%E5%92%8C-erc-%E6%98%AF%E4%BB%80%E4%B9%88%E5%87%A0%E5%A4%A7-erc-%E8%A7%A3%E8%AF%BB/image-7_hu_4bc80b233f46ced7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -10042,7 +10869,7 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;p&gt;在 ERC-4337 之前，以太坊只有两种账户：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;EOA (外部拥有账户)：由私钥控制（如 MetaMask）。&lt;/p&gt;
+&lt;p&gt;EOA ( 外部拥有账户 )：由私钥控制（如 MetaMask）。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;❌ 必须用 ETH 支付 Gas：哪怕你想转账 USDC，钱包里也必须要有 ETH。&lt;/li&gt;
 &lt;li&gt;❌ 助记词地狱：丢失助记词 = 资产永久丢失，无法找回。&lt;/li&gt;
@@ -10064,21 +10891,21 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;p&gt;社交恢复：用户丢失了“登录凭证”，可以通过预先设置的“好友”或“机构”来帮助恢复账户，就像忘记密码时可以通过邮箱或手机找回一样。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Gas 代付：用户可以授权一个“Gas 代付者”（比如一个 DApp 或一个朋友）来为自己的交易支付 Gas 费。&lt;/p&gt;
+&lt;p&gt;Gas 代付：用户可以授权一个“ Gas 代付者”（比如一个 DApp 或一个朋友）来为自己的交易支付 Gas 费。&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;多签：一个账户的交易需要多个“签名者”同意才能执行，非常适合公司、DAO 或家庭共同管理资产的场景，极大地提升了安全性。&lt;/p&gt;
+&lt;p&gt;多签：一个账户的交易需要多个“签名者”同意才能执行，非常适合公司、 DAO 或家庭共同管理资产的场景，极大地提升了安全性。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;erc-2981-版税机制给创作者的持续收益&#34;&gt;&lt;a href=&#34;#erc-2981-%e7%89%88%e7%a8%8e%e6%9c%ba%e5%88%b6%e7%bb%99%e5%88%9b%e4%bd%9c%e8%80%85%e7%9a%84%e6%8c%81%e7%bb%ad%e6%94%b6%e7%9b%8a&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-2981 版税机制给创作者的持续收益
-&lt;/h3&gt;&lt;p&gt;ERC-2981 为 NFT 引入了&lt;strong&gt;版税机制&lt;/strong&gt;。核心函数是 royaltyInfo 函数，让 NFT 合约能够返回创作者的地址和版税比例，这使得 NFT 市场平台可以自动计算并支付版税，无需创作者手动干预。当一个 NFT 在二级市场被转售时，创作者可以自动获得一定比例的收益。这为创作者提供了一个可持续的收入来源，激励他们创作更多优质内容。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;ERC-2981 为 NFT 引入了 &lt;strong&gt;版税机制&lt;/strong&gt;。核心函数是 royaltyInfo 函数，让 NFT 合约能够返回创作者的地址和版税比例，这使得 NFT 市场平台可以自动计算并支付版税，无需创作者手动干预。当一个 NFT 在二级市场被转售时，创作者可以自动获得一定比例的收益。这为创作者提供了一个可持续的收入来源，激励他们创作更多优质内容。&lt;/p&gt;
 &lt;h3 id=&#34;erc-6551-nft-独立的合约地址&#34;&gt;&lt;a href=&#34;#erc-6551-nft-%e7%8b%ac%e7%ab%8b%e7%9a%84%e5%90%88%e7%ba%a6%e5%9c%b0%e5%9d%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-6551 NFT 独立的合约地址
 &lt;/h3&gt;&lt;p&gt;ERC-6551 让每个 NFT 都拥有一个独立的合约地址，这个地址可以像普通钱包一样持有资产、执行交易。这使得 NFT 不再只是一个“图片”，而是一个可以拥有“装备”、“积分”、“凭证”的“角色”，极大地拓展了 NFT 的应用场景。&lt;/p&gt;
-&lt;p&gt;ERC-6551 的核心是“Token Bound Accounts”，它通过一个&lt;strong&gt;注册表来管理 NFT 与合约地址的绑定关系&lt;/strong&gt;。每个 NFT 都可以绑定一个独立的合约地址，这个地址可以持有 ERC-20、ERC-721、ERC-1155 等资产，也可以执行任意的智能合约逻辑，使得 NFT 真正“活”了起来。&lt;/p&gt;
-&lt;h3 id=&#34;erc-3643-rwa-的合规之门原-t-rex&#34;&gt;&lt;a href=&#34;#erc-3643-rwa-%e7%9a%84%e5%90%88%e8%a7%84%e4%b9%8b%e9%97%a8%e5%8e%9f-t-rex&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-3643 RWA 的合规之门(原 T-REX)
-&lt;/h3&gt;&lt;p&gt;ERC-3643（原 T-REX）是为现实世界资产（RWA）设计的&lt;strong&gt;合规化证券代币标准&lt;/strong&gt;。核心功能是“KYC 验证、转账白名单/黑名单、监管冻结”，确保代币的发行和交易符合监管要求，使得机构投资者可以放心地将资金投入 RWA 项目，推动了 Web3 与传统金融的融合。&lt;/p&gt;
+&lt;p&gt;ERC-6551 的核心是“ Token Bound Accounts”，它通过一个 &lt;strong&gt;注册表来管理 NFT 与合约地址的绑定关系&lt;/strong&gt;。每个 NFT 都可以绑定一个独立的合约地址，这个地址可以持有 ERC-20 、 ERC-721 、 ERC-1155 等资产，也可以执行任意的智能合约逻辑，使得 NFT 真正“活”了起来。&lt;/p&gt;
+&lt;h3 id=&#34;erc-3643-rwa-的合规之门--原-t-rex&#34;&gt;&lt;a href=&#34;#erc-3643-rwa-%e7%9a%84%e5%90%88%e8%a7%84%e4%b9%8b%e9%97%a8--%e5%8e%9f-t-rex&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-3643 RWA 的合规之门 ( 原 T-REX)
+&lt;/h3&gt;&lt;p&gt;ERC-3643 （原 T-REX）是为现实世界资产（ RWA）设计的 &lt;strong&gt;合规化证券代币标准&lt;/strong&gt;。核心功能是“ KYC 验证、转账白名单 / 黑名单、监管冻结”，确保代币的发行和交易符合监管要求，使得机构投资者可以放心地将资金投入 RWA 项目，推动了 Web3 与传统金融的融合。&lt;/p&gt;
 &lt;h3 id=&#34;erc-4907-可租赁-nft-的基石&#34;&gt;&lt;a href=&#34;#erc-4907-%e5%8f%af%e7%a7%9f%e8%b5%81-nft-%e7%9a%84%e5%9f%ba%e7%9f%b3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ERC-4907 可租赁 NFT 的基石
-&lt;/h3&gt;&lt;p&gt;ERC-4907 是对 ERC-721 的扩展，它引入了“使用者（User）”角色，允许 NFT 的所有权与使用权分离。这一机制使得 NFT 可以被租赁或借用，而无需转移所有权，从而极大地提升了资产的流动性和实用性。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;ERC-4907 是对 ERC-721 的扩展，它引入了“使用者（ User）”角色，允许 NFT 的所有权与使用权分离。这一机制使得 NFT 可以被租赁或借用，而无需转移所有权，从而极大地提升了资产的流动性和实用性。&lt;/p&gt;
 &lt;p&gt;ERC-4907 通过两个关键属性实现租赁功能：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -10094,30 +10921,30 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;/h2&gt;&lt;h3 id=&#34;eip-712&#34;&gt;&lt;a href=&#34;#eip-712&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;EIP-712
 &lt;/h3&gt;&lt;p&gt;解决 &lt;strong&gt;用户不知道自己在签什么&lt;/strong&gt;，它让用户在钱包（如 MetaMask）中签名时，看到的不再是乱码般的十六进制字符串，而是清晰、可读的结构化数据。&lt;/p&gt;
 &lt;p&gt;没有 EIP-712 之前，当 DApp 请求你签名一段数据（比如授权转账、投票、登录）时，用户看到的内容是一串毫无意义的十六进制哈希值。用户完全不知道自己在签什么。恶意网站可以伪装成“登录”，实际让你签的是“授权转移所有资产”。这就是著名的 钓鱼攻击。&lt;/p&gt;
-&lt;p&gt;有了 EIP-712 之后，DApp 将数据按照 EIP-712 标准格式化后请求签名，用户能看到的可读的内容。&lt;/p&gt;
+&lt;p&gt;有了 EIP-712 之后， DApp 将数据按照 EIP-712 标准格式化后请求签名，用户能看到的可读的内容。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;应用:&lt;/p&gt;
+&lt;p&gt;应用 :&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;ERC-20 免 Gas 授权&lt;/li&gt;
-&lt;li&gt;NFT挂单交易&lt;/li&gt;
+&lt;li&gt;NFT 挂单交易&lt;/li&gt;
 &lt;li&gt;身份验证&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h4 id=&#34;原理&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e7%90%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原理
 &lt;/h4&gt;&lt;ol&gt;
-&lt;li&gt;Domain Separator (域分离器)&lt;/li&gt;
+&lt;li&gt;Domain Separator ( 域分离器 )&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;用于隔离不同的应用、版本和链，防止重放攻击（Replay Attack）。&lt;/p&gt;
+&lt;p&gt;用于隔离不同的应用、版本和链，防止重放攻击（ Replay Attack）。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;包含字段：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;name: 应用名称 (e.g., &amp;ldquo;MyDApp&amp;rdquo;)&lt;/li&gt;
 &lt;li&gt;version: 版本号 (e.g., &amp;ldquo;1&amp;rdquo;)&lt;/li&gt;
 &lt;li&gt;chainId: 链 ID (e.g., 1 for Mainnet, 11155111 for Sepolia)&lt;/li&gt;
-&lt;li&gt;verifyingContract: 验证合约地址 (可选)&lt;/li&gt;
+&lt;li&gt;verifyingContract: 验证合约地址 ( 可选 )&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 &lt;p&gt;作用：确保 A 应用的签名，不能在 B 应用中使用。&lt;/p&gt;
 &lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;Types (类型定义)&lt;/li&gt;
+&lt;li&gt;Types ( 类型定义 )&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;定义数据的结构（类似 Solidity 的 struct）。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -10145,7 +10972,7 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;Message (具体数据)&lt;/li&gt;
+&lt;li&gt;Message ( 具体数据 )&lt;/li&gt;
 &lt;/ol&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -10173,7 +11000,7 @@ Approve 会在链上暴露公钥或权限授予意图，与目标相悖，因此
 &lt;li&gt;对 Types 进行编码哈希 → 得到 typeHash。&lt;/li&gt;
 &lt;li&gt;对 Message 中的数据进行编码哈希 → 得到 messageHash。&lt;/li&gt;
 &lt;li&gt;对 Domain Separator 进行编码哈希 → 得到 domainSeparator。&lt;/li&gt;
-&lt;li&gt;最终摘要：用户对 digest 进行签名（ECDSA）&lt;/li&gt;
+&lt;li&gt;最终摘要：用户对 digest 进行签名（ ECDSA）&lt;/li&gt;
 &lt;/ul&gt;&lt;/blockquote&gt;
 </description>
         </item>
