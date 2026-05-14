@@ -39,7 +39,8 @@
         <guid>/zh-cn/page/about/</guid>
         <description>&lt;p&gt;&lt;strong&gt;该博客使用 hugo 搭建，自动化部署在 github action，如果图片、文章加载缓慢，可以开 VPN。&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&#34;-自我介绍&#34;&gt;&lt;a href=&#34;#-%e8%87%aa%e6%88%91%e4%bb%8b%e7%bb%8d&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;🤓 自我介绍
-&lt;/h2&gt;&lt;p&gt;22 届本科生，就读于&lt;strong&gt;河南科技大学&lt;/strong&gt; 软件学院 软件工程专业，前端学习过 react、nextjs、typescript、js，后端学过 C、C++、Python、Go、Java（主），Web3 学习过 Solidity，略懂微信小程序开发、大数据，精通各类技术栈的单词拼写 👀，有从 0 到 1 的全栈开发及部署经验（http://aigeek.icu），目前正在学习并了解 AI、Web3 相关知识，All in Web3 × AI！&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;22 届本科生，就读于 &lt;strong&gt;河南科技大学&lt;/strong&gt; 软件学院 软件工程专业，前端学习过 react、 nextjs、 ts、 js，后端学过 C、 C++、 Python、 Go、 Java（主）， Web3 学习过 Solidity、 Wagmi、 Viem、 Etherjs，略懂微信小程序开发、大数据，精通各类技术栈的单词拼写 👀 ，有从 0 到 1 的全栈开发及部署经验（ &lt;a class=&#34;link&#34; href=&#34;http://aigeek.icu&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://aigeek.icu&lt;/a&gt;），目前正在学习并了解 AI、 Web3 相关知识， All in Web3 × AI！&lt;/p&gt;
 &lt;h2 id=&#34;-感兴趣的&#34;&gt;&lt;a href=&#34;#-%e6%84%9f%e5%85%b4%e8%b6%a3%e7%9a%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;✨ 感兴趣的
 &lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/AIGC-FFFFFF?style=for-the-badge&#34;
 	
@@ -65,62 +66,20 @@
 	
 	
 &gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e5%9f%ba%e9%87%91%e7%90%86%e8%b4%a2-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e5%85%a8%e6%a0%88-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e8%b7%a8%e5%a2%83%e7%94%b5%e5%95%86-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e5%88%9b%e4%b8%9a-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e8%87%aa%e5%aa%92%e4%bd%93-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e7%a9%bf%e6%90%ad-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
-&lt;img src=&#34;https://img.shields.io/badge/%e5%81%9a%e9%a5%ad-FFFFFF?style=for-the-badge&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 基金理财 -FFFFFF?style=for-the-badge)
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 全栈 -FFFFFF?style=for-the-badge)
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 跨境电商 -FFFFFF?style=for-the-badge)
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 创业 -FFFFFF?style=for-the-badge)
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 自媒体 -FFFFFF?style=for-the-badge)
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 穿搭 -FFFFFF?style=for-the-badge)
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/&lt;/a&gt; 做饭 -FFFFFF?style=for-the-badge)&lt;/p&gt;
 &lt;h2 id=&#34;-技术栈&#34;&gt;&lt;a href=&#34;#-%e6%8a%80%e6%9c%af%e6%a0%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;✨ 技术栈
 &lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/Java-000000?style=plastic&amp;amp;logo=java&amp;amp;logoColor=FE5F50&#34;
 	
@@ -154,14 +113,8 @@
 	
 	
 &gt;
-&lt;img src=&#34;https://img.shields.io/badge/Linux%e4%ba%91%e6%9c%8d%e5%8a%a1%e5%99%a8-000000?style=plastic&amp;amp;logo=Linux%e4%ba%91%e6%9c%8d%e5%8a%a1%e5%99%a8&amp;amp;logoColor=08AEEA&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;
+![](&lt;a class=&#34;link&#34; href=&#34;https://img.shields.io/badge/Linux&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://img.shields.io/badge/Linux&lt;/a&gt; 云服务器 -000000?style=plastic&amp;amp;logo=Linux 云服务器 &amp;amp;logoColor=08AEEA)
 &lt;img src=&#34;https://img.shields.io/badge/docker-000000?style=plastic&amp;amp;logo=docker&amp;amp;logoColor=08AEEA&#34;
 	
 	
