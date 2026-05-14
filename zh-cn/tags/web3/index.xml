@@ -6658,24 +6658,24 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 </description>
         </item>
         <item>
-        <title>UniSwap从V1到V4演进</title>
-        <link>/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/</link>
+        <title>UniSwap 从 V1 到 V4 演进</title>
+        <link>/zh-cn/post/2026/01/uniswap/</link>
         <pubDate>Tue, 20 Jan 2026 12:00:00 +0000</pubDate>
         
-        <guid>/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/</guid>
+        <guid>/zh-cn/post/2026/01/uniswap/</guid>
         <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s/z0p5mITq0f0VWHAuWOtjsQ&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;一文读懂uniswap&lt;/a&gt;&lt;/p&gt;
+    &gt; 一文读懂 uniswap&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;自动做市商&#34;&gt;&lt;a href=&#34;#%e8%87%aa%e5%8a%a8%e5%81%9a%e5%b8%82%e5%95%86&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;自动做市商
-&lt;/h2&gt;&lt;p&gt;自动做市商 Automated Market Maker，简称&lt;strong&gt;AMM&lt;/strong&gt;，它是一种&lt;strong&gt;部署在区块链上的智能合约协议&lt;/strong&gt;，通过数学算法（定价曲线），允许用户在无需传统订单簿和特定交易对手的情况下，直接与流动性池进行代币兑换，为代币提供流动性。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;自动做市商 Automated Market Maker，简称 &lt;strong&gt;AMM&lt;/strong&gt;，它是一种 &lt;strong&gt;部署在区块链上的智能合约协议&lt;/strong&gt;，通过数学算法（定价曲线），允许用户在无需传统订单簿和特定交易对手的情况下，直接与流动性池进行代币兑换，为代币提供流动性。&lt;/p&gt;
 &lt;p&gt;可以把 AMM 想象成一个永不停歇的“自动报价机”：它根据预设的数学公式（如 x * y = k）实时计算两种资产间的兑换价格。&lt;strong&gt;用户存入资产构成“资金池”&lt;/strong&gt;，交易者直接与这个池子交互，用 A 资产换取 B 资产，整个过程由代码自动执行，无需等待买家或卖家匹配。&lt;/p&gt;
-&lt;p&gt;用户存入资产就是 Liquidity ProVider，即&lt;strong&gt;流动性提供者&lt;/strong&gt;，简称 LP，他们不靠报价差赚钱，而是&lt;strong&gt;通过向交易池存入资金来赚取手续费&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;用户存入资产就是 Liquidity ProVider，即 &lt;strong&gt;流动性提供者&lt;/strong&gt;，简称 LP，他们不靠报价差赚钱，而是 &lt;strong&gt;通过向交易池存入资金来赚取手续费&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;AMM 是一个统称&lt;/strong&gt;，它包含多种数学模型，比如 uniswap V2 的恒定乘积 x*y=k，稳定币的恒定总和 x+y=k。&lt;/p&gt;
 &lt;h2 id=&#34;滑点&#34;&gt;&lt;a href=&#34;#%e6%bb%91%e7%82%b9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;滑点
 &lt;/h2&gt;&lt;p&gt;滑点是指在 交易执行时，预期价格 和 实际成交价格 之间的差异。滑点通常发生在市场波动性较大或者流动性较低时，特别是在进行大额交易时。滑点的大小取决于交易对的流动性、市场波动以及交易量。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/01/uniswap/image-1.png&#34;
 	width=&#34;1334&#34;
 	height=&#34;595&#34;
-	srcset=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image-1_hu_1c8f4665a772303.png 480w, /zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image-1_hu_2e171d701eb0c15b.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/uniswap/image-1_hu_1c8f4665a772303.png 480w, /zh-cn/post/2026/01/uniswap/image-1_hu_2e171d701eb0c15b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -6685,21 +6685,21 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;无常损失&#34;&gt;&lt;a href=&#34;#%e6%97%a0%e5%b8%b8%e6%8d%9f%e5%a4%b1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;无常损失
-&lt;/h2&gt;&lt;p&gt;无常损失（Impermanent Loss, IL）是 DeFi 中 LP 面临的核心风险。它并非实际亏损，而是指将资产存入流动性池后，相较于直接持有这些资产，可能获得的价值的损失。&lt;/p&gt;
-&lt;p&gt;假设此时 ETH 价格为 $1000 /ETH，一个 LP 向 Uniswap V2 的 ETH/USDC 池存入价值 1000 美元的 ETH 和 1000 美元的 USDC，那么就是存入了 1 ETH 和 1000 U，恒定乘积 k = 1 * 1000 = 1000，假设他存入的资金占据池子 50%的份额。&lt;/p&gt;
-&lt;p&gt;当 ETH 翻倍至 $2000，套利者发现池内 ETH 价格低于市场价，于是用市场价 $2000 的 USDC 不断从池中买入便宜的 ETH。设新的 ETH 数量为 x，USDC 数量为 y，则新价格: $2000 = y / x =&amp;gt; y = 2000x，联立 x*y=1000，得出池子新状态 0.7071 ETH / 1414.21 USDC。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;无常损失（ Impermanent Loss, IL）是 DeFi 中 LP 面临的核心风险。它并非实际亏损，而是指将资产存入流动性池后，相较于直接持有这些资产，可能获得的价值的损失。&lt;/p&gt;
+&lt;p&gt;假设此时 ETH 价格为 $1000 /ETH，一个 LP 向 Uniswap V2 的 ETH/USDC 池存入价值 1000 美元的 ETH 和 1000 美元的 USDC，那么就是存入了 1 ETH 和 1000 U，恒定乘积 k = 1 * 1000 = 1000 ，假设他存入的资金占据池子 50% 的份额。&lt;/p&gt;
+&lt;p&gt;当 ETH 翻倍至 $2000 ，套利者发现池内 ETH 价格低于市场价，于是用市场价 $2000 的 USDC 不断从池中买入便宜的 ETH。设新的 ETH 数量为 x， USDC 数量为 y，则新价格 : $2000 = y / x =&amp;gt; y = 2000x，联立 x*y=1000 ，得出池子新状态 0.7071 ETH / 1414.21 USDC。&lt;/p&gt;
 &lt;p&gt;此时 LP 的资产是：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;新 ETH 数量: 0.7071 * 50% ≈ 0.3536 ETH&lt;/li&gt;
-&lt;li&gt;新 USDC 数量: 1414.21 * 50% ≈ 707.11 USDC&lt;/li&gt;
-&lt;li&gt;当前价值: (0.3536 * 2000)+707.11=707.20 + 707.11=$1414.31&lt;/li&gt;
+&lt;li&gt;新 ETH 数量 : 0.7071 * 50% ≈ 0.3536 ETH&lt;/li&gt;
+&lt;li&gt;新 USDC 数量 : 1414.21 * 50% ≈ 707.11 USDC&lt;/li&gt;
+&lt;li&gt;当前价值 : (0.3536 * 2000)+707.11=707.20 + 707.11=$1414.31&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;如果 LP 没有存入 Uniswap 提供流动性，而是直接持有 1 ETH 和 1000 USDC，则当前会有$3000，无常损失 = 直接持有价值 - LP 价值 = 3000−1414.31 = $1585.69，损失率 = (1585.69/3000) * 100% ≈ 52.86%&lt;/p&gt;
-&lt;p&gt;简单来说就是套利者从交易池子中买低价的 ETH，再以正常价格卖出获利，导致 LP 资产损失.
-&lt;img src=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image.png&#34;
+&lt;p&gt;如果 LP 没有存入 Uniswap 提供流动性，而是直接持有 1 ETH 和 1000 USDC，则当前会有 $3000 ，无常损失 = 直接持有价值 - LP 价值 = 3000−1414.31 = $1585.69 ，损失率 = (1585.69/3000) * 100% ≈ 52.86%&lt;/p&gt;
+&lt;p&gt;简单来说就是套利者从交易池子中买低价的 ETH，再以正常价格卖出获利，导致 LP 资产损失 .
+&lt;img src=&#34;/zh-cn/post/2026/01/uniswap/image.png&#34;
 	width=&#34;1470&#34;
 	height=&#34;351&#34;
-	srcset=&#34;/zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image_hu_1463ef86f8f305b.png 480w, /zh-cn/post/2026/01/uniswap%E4%BB%8Ev1%E5%88%B0v4%E6%BC%94%E8%BF%9B/image_hu_3fbfe3248faa6672.png 1024w&#34;
+	srcset=&#34;/zh-cn/post/2026/01/uniswap/image_hu_1463ef86f8f305b.png 480w, /zh-cn/post/2026/01/uniswap/image_hu_3fbfe3248faa6672.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -6712,24 +6712,24 @@ x402 的出现让两者得以融合。&lt;/p&gt;
 &lt;/h2&gt;&lt;p&gt;如果把交易池比作一个水池，深度就是池子里水的多少：
 深水池： 往里扔一块巨石（大单交易），水位（价格）几乎没有波动。&lt;/p&gt;
 &lt;p&gt;浅水盆： 往里扔一块小石子（小单交易），水就会溅得到处都是，水位（价格）剧烈震荡。&lt;/p&gt;
-&lt;p&gt;深度的大小直接决定了滑点的大小。&lt;strong&gt;滑点是指“预期的执行价格”与“实际成交价格”之间的差额&lt;/strong&gt;。深度好： 买入 100 万美元的资产，价格只上涨了 $0.1%$。深度差： 买入 100 万美元的资产，价格瞬间被拉高了 $10%$。这时意味着买到的成本比市场价贵了很多, uniswap 支持设置可接受的滑点范围,范围越小,个人损失就越少,但是相对的交易越难达成.&lt;/p&gt;
+&lt;p&gt;深度的大小直接决定了滑点的大小。&lt;strong&gt;滑点是指“预期的执行价格”与“实际成交价格”之间的差额&lt;/strong&gt;。深度好： 买入 100 万美元的资产，价格只上涨了 $0.1%$。深度差： 买入 100 万美元的资产，价格瞬间被拉高了 $10%$。这时意味着买到的成本比市场价贵了很多 , uniswap 支持设置可接受的滑点范围 , 范围越小 , 个人损失就越少 , 但是相对的交易越难达成 .&lt;/p&gt;
 &lt;h2 id=&#34;从-uniswap-v1-到-v4&#34;&gt;&lt;a href=&#34;#%e4%bb%8e-uniswap-v1-%e5%88%b0-v4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;从 UniSwap V1 到 V4
-&lt;/h2&gt;&lt;p&gt;币安 / OKX 是中心化交易所 CEX，而 Uniswap 是去中心化交易 DEX，Uniswap 基于智能合约自动运行，无需注册，资产自托管，就像一个自动售货机，交易者可以自由进行代币兑换。&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;币安 / OKX 是中心化交易所 CEX，而 Uniswap 是去中心化交易 DEX， Uniswap 基于智能合约自动运行，无需注册，资产自托管，就像一个自动售货机，交易者可以自由进行代币兑换。&lt;/p&gt;
 &lt;h3 id=&#34;uniswap-v1&#34;&gt;&lt;a href=&#34;#uniswap-v1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V1
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;奠定了恒积做市商 x*y=k 的基础&lt;/strong&gt;，缺点是所有代币只能跟 ETH 配对，买 A 代币得先换成 ETH。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;** 奠定了恒积做市商 x*y=k 的基础**，缺点是所有代币只能跟 ETH 配对，买 A 代币得先换成 ETH。&lt;/p&gt;
 &lt;h3 id=&#34;uniswap-v2&#34;&gt;&lt;a href=&#34;#uniswap-v2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V2
-&lt;/h3&gt;&lt;p&gt;V2 增加了&lt;strong&gt;ERC-20 自由配对&lt;/strong&gt;，ERC-20 是以太坊上创建和发行代币的技术标准，规定了代币转账、查询余额等基本功能。它就像代币的“通用接口”，&lt;strong&gt;任何两个符合 ERC-20 标准的代币都可以直接创建一个交易对池子，无需许可，让代币直接对换，不再强制经过 ETH&lt;/strong&gt;。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;V2 增加了 &lt;strong&gt;ERC-20 自由配对&lt;/strong&gt;， ERC-20 是以太坊上创建和发行代币的技术标准，规定了代币转账、查询余额等基本功能。它就像代币的“通用接口”，&lt;strong&gt;任何两个符合 ERC-20 标准的代币都可以直接创建一个交易对池子，无需许可，让代币直接对换，不再强制经过 ETH&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;此时 UniSwap V2 的 LP 的资产均匀分布在整个价格区间 （从 0 到无穷大），还无法像 V3 那样选择特定的价格区间，可以说是大水漫灌，&lt;strong&gt;价格控制被动，价格完全由市场交易和公式决定&lt;/strong&gt;！&lt;/p&gt;
-&lt;p&gt;V2 还引加入了&lt;strong&gt;闪电贷 (Flash Loan)&lt;/strong&gt;。闪电贷是一种无需抵押、但必须在同一笔区块链交易内归还的贷款。核心是利用区块链交易的“原子性”（要么全部成功，要么全部回滚）。如果借款人在交易结束前未能连本带利归还，整个交易无效，贷款从未发生。&lt;/p&gt;
+&lt;p&gt;V2 还引加入了 &lt;strong&gt;闪电贷 (Flash Loan)&lt;/strong&gt;。闪电贷是一种无需抵押、但必须在同一笔区块链交易内归还的贷款。核心是利用区块链交易的“原子性”（要么全部成功，要么全部回滚）。如果借款人在交易结束前未能连本带利归还，整个交易无效，贷款从未发生。&lt;/p&gt;
 &lt;h3 id=&#34;uniswap-v3&#34;&gt;&lt;a href=&#34;#uniswap-v3&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V3
-&lt;/h3&gt;&lt;p&gt;在 V2 中，LP 提供的流动性会均匀分布在整个价格曲线（0 到无穷大）上，但大部分流动性可能永远用不到，而 V3 &lt;strong&gt;允许 LP 自定义价格区间&lt;/strong&gt;，实现精准滴灌，这样可以让资金集中在交易活跃区，在自定义的价格区间内提供集中流动性。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;在 V2 中， LP 提供的流动性会均匀分布在整个价格曲线（ 0 到无穷大）上，但大部分流动性可能永远用不到，而 V3 &lt;strong&gt;允许 LP 自定义价格区间&lt;/strong&gt;，实现精准滴灌，这样可以让资金集中在交易活跃区，在自定义的价格区间内提供集中流动性。&lt;/p&gt;
 &lt;p&gt;比如如果我认为 ETH 价格会在 1800-2200 美元之间波动，那么我就可以只在这个区间投入资金，资金不会被均匀分布在整个价格曲线，定位更精准，流动性更高。&lt;/p&gt;
 &lt;h3 id=&#34;uniswap-v4&#34;&gt;&lt;a href=&#34;#uniswap-v4&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;UniSwap V4
-&lt;/h3&gt;&lt;p&gt;保留了 V3 的集中流动性核心，从“自动化做市商”向“可编程流动性平台 ”的范式转变.
-V4 新增了 &lt;strong&gt;Hooks&lt;/strong&gt;，允许开发者在流动性池生命周期的关键节点（如初始化、添加/移除流动性、交易前后）&lt;strong&gt;注入自定义的智能合约逻辑&lt;/strong&gt;，将 Uniswap 从一个固定的交易协议，转变为一个可组合的开发者平台。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;保留了 V3 的集中流动性核心，从“自动化做市商”向“可编程流动性平台 ”的范式转变 .
+V4 新增了 &lt;strong&gt;Hooks&lt;/strong&gt;，允许开发者在流动性池生命周期的关键节点（如初始化、添加 / 移除流动性、交易前后）&lt;strong&gt;注入自定义的智能合约逻辑&lt;/strong&gt;，将 Uniswap 从一个固定的交易协议，转变为一个可组合的开发者平台。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;在 V3 及更早版本中，&lt;strong&gt;每个流动性池都是一个独立的智能合约&lt;/strong&gt;，创建和交互成本高昂。V4 采用了&lt;strong&gt;单例设计，将所有池子集中在一个合约中管理&lt;/strong&gt;。
-配合闪电记账（Flash Accounting）机制，交易过程中代币的转移被简化为合约内部的余额记录，&lt;strong&gt;仅在交易最终结算时进行一次外部转账&lt;/strong&gt;。这使得创建新池的成本降低，跨池交易的 Gas 费用也大幅减少。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;在 V3 及更早版本中，&lt;strong&gt;每个流动性池都是一个独立的智能合约&lt;/strong&gt;，创建和交互成本高昂。 V4 采用了 &lt;strong&gt;单例设计，将所有池子集中在一个合约中管理&lt;/strong&gt;。
+配合闪电记账（ Flash Accounting）机制，交易过程中代币的转移被简化为合约内部的余额记录，&lt;strong&gt;仅在交易最终结算时进行一次外部转账&lt;/strong&gt;。这使得创建新池的成本降低，跨池交易的 Gas 费用也大幅减少。&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
