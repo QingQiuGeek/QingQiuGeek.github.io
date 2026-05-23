@@ -7,7 +7,105 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 06 Apr 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 19 May 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/categories/web3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>TheGraph学习笔记</title>
+        <link>/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Tue, 19 May 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://thegraph.com/docs/en/subgraphs/quick-start/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;官网&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm install -g @graphprotocol/graph-cli@latest
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;graph init
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm install
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;graph codegen
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;graph build
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;graph auth &amp;lt;DEPLOY_KEY&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;graph deploy &amp;lt;SUBGRAPH_SLUG&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image.png&#34;
+	width=&#34;1544&#34;
+	height=&#34;696&#34;
+	srcset=&#34;/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image_hu_5c41e479c4e0d4ab.png 480w, /zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image_hu_7e3d4526a9fd2e68.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;221&#34;
+		data-flex-basis=&#34;532px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;踩坑&#34;&gt;&lt;a href=&#34;#%e8%b8%a9%e5%9d%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;踩坑
+&lt;/h2&gt;&lt;p&gt;name中是下划线_，但是在slug中则是-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-1.png&#34;
+	width=&#34;2880&#34;
+	height=&#34;1376&#34;
+	srcset=&#34;/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-1_hu_a0045177ccc1ecd5.png 480w, /zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-1_hu_d9c5850e35031d8b.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;本地graph init创建的name要和studio的一致，否则最后部署会出现&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;× Failed to deploy to Graph node https://api.studio.thegraph.com/deploy/: Subgraph not found
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;部署后&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-4.png&#34;
+	width=&#34;2740&#34;
+	height=&#34;574&#34;
+	srcset=&#34;/zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-4_hu_e49cd1f8b088e86a.png 480w, /zh-cn/post/2026/05/thegraph%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-4_hu_579c232e93172160.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;477&#34;
+		data-flex-basis=&#34;1145px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;deploy 后：自己已经可以查，也可以接应用做开发/演示&lt;/p&gt;
+&lt;p&gt;publish 后：别人也能把它当正式网络服务来用&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>去中心化借贷</title>
         <link>/zh-cn/post/2026/04/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E5%80%9F%E8%B4%B7/</link>
         <pubDate>Mon, 06 Apr 2026 12:00:00 +0000</pubDate>
