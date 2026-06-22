@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>支付 on 青秋博客</title>
+        <link>/zh-cn/tags/%E6%94%AF%E4%BB%98/</link>
+        <description>Recent content in 支付 on 青秋博客</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>青秋博客</copyright>
+        <lastBuildDate>Sat, 20 Jun 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/%E6%94%AF%E4%BB%98/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>支付术语</title>
+        <link>/zh-cn/post/2026/06/%E6%94%AF%E4%BB%98%E6%9C%AF%E8%AF%AD/</link>
+        <pubDate>Sat, 20 Jun 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/06/%E6%94%AF%E4%BB%98%E6%9C%AF%E8%AF%AD/</guid>
+        <description>&lt;p&gt;在企业级支付系统、电商架构或金融科技（FinTech）中，这些名词构成了资金流转和账务处理的核心骨干。&lt;/p&gt;
+&lt;h2 id=&#34;支付-payment&#34;&gt;&lt;a href=&#34;#%e6%94%af%e4%bb%98-payment&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;支付 (Payment)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：消费者“付钱”买东西的动作，是资金流转的&lt;strong&gt;起点&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：用户通过特定的支付工具如微信、支付宝、银行卡，向商家发起扣款请求。此时，用户的钱从账户里被扣除，但&lt;strong&gt;并没有立刻真正进入商家的银行账户&lt;/strong&gt;，它只是在系统里生成了一笔交易订单，并由支付机构担保。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：你在喜茶收银台用微信扫码，输入密码，手机提示“支付成功 20 元”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2-清算-clearing&#34;&gt;&lt;a href=&#34;#2-%e6%b8%85%e7%ae%97-clearing&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. 清算 (Clearing)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：把今天所有的交易打包，算清楚&lt;strong&gt;谁该给谁多少钱&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：支付完成到资金真正到账的“中间过程”。由清算机构（如中国的&lt;strong&gt;银联、网联&lt;/strong&gt;）对各个金融机构之间的交易进行数据收集、核对、确认，并计算出各方轧差（Netting）后的应收应付金额。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：凌晨 12 点，网联把今天全国所有在喜茶用微信支付的交易汇总。算出来：腾讯（微信）今天一共要给喜茶的银行账户打 1,000 万元。这就是清算数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-结算-settlement&#34;&gt;&lt;a href=&#34;#3-%e7%bb%93%e7%ae%97-settlement&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3. 结算 (Settlement)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：把清算算好的账，真正完成&lt;strong&gt;资金划拨&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：根据清算的结果，在特定的结算银行完成实际的资金转移。结算通常是定时、批量的（如 $T+1$ 结算，即第二天到账）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：第二天凌晨，网联通过人民银行的大额支付系统，把 1,000 万元真正从腾讯的备付金账户划到了喜茶的银行账户里。喜茶的老板看到银行余额变多了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;4-对账-reconciliation&#34;&gt;&lt;a href=&#34;#4-%e5%af%b9%e8%b4%a6-reconciliation&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;4. 对账 (Reconciliation)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：对账单，看两边的账能不能对得上。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：企业、支付渠道和银行之间，互相核对交易流水的过程。通常比对三个核心要素：&lt;strong&gt;金额、状态、笔数&lt;/strong&gt;。目的是发现&lt;strong&gt;错账（短款/长款）&lt;/strong&gt;，确保系统资金的绝对安全。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：喜茶的财务系统下载了昨天的订单列表，又下载了微信支付官方提供的“渠道对账单”，通过程序一行行比对。如果喜茶系统里有笔 20 元订单，微信对账单里也有，说明对账成功（Match）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5-渠道-channel--gateway&#34;&gt;&lt;a href=&#34;#5-%e6%b8%a0%e9%81%93-channel--gateway&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;5. 渠道 (Channel / Gateway)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：钱走哪条路过来的。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：连接商户与金融机构（银行/第三方支付）的资金通道。在企业开发中，一个系统往往会接入多个支付渠道。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：喜茶的收银台不仅支持“微信支付渠道”，还支持“支付宝渠道”、“银联云闪付渠道”和“Apple Pay 渠道”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;6-账户-account&#34;&gt;&lt;a href=&#34;#6-%e8%b4%a6%e6%88%b7-account&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;6. 账户 (Account)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;大白话&lt;/strong&gt;：钱存放在哪里的实体或虚拟记账单元。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：用来记录资金所有权和变动历史的载体。企业支付系统中通常分为：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;银行账户&lt;/strong&gt;（底层的实体卡账号）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;第三方支付账户&lt;/strong&gt;（如微信商户号）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;虚拟账户/虚拟记账本&lt;/strong&gt;（企业内部系统自己生成的，用来记录用户余额、积分的数字）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：你付的 20 元，从你的“个人微信零钱账户”里扣除，流向了喜茶的“微信商户账户”，最后结算到喜茶的“招商银行对公账户”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;7-费率-fee-rate&#34;&gt;&lt;a href=&#34;#7-%e8%b4%b9%e7%8e%87-fee-rate&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;7. 费率 (Fee Rate)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：手续费比例。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：支付渠道为商户提供收单服务时，收取的服务费比例。通常按交易金额的百分比收取（如 0.6%）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：微信支付给喜茶的费率是 &lt;strong&gt;0.38%&lt;/strong&gt;。你付了 20 元，微信作为渠道要抽走 $20 \times 0.38% = 0.076$ 元（约 8 分钱）作为手续费，最后结算给喜茶的其实是 19.924 元。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;8-退款-refund&#34;&gt;&lt;a href=&#34;#8-%e9%80%80%e6%ac%be-refund&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;8. 退款 (Refund)
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;大白话&lt;/strong&gt;：把钱原路还给用户。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;专业解释&lt;/strong&gt;：支付的&lt;strong&gt;逆向流程&lt;/strong&gt;。由商户发起，经过支付渠道校验后，将资金从商户账户中扣除，并退回到用户的原支付账户中。退款通常会涉及手续费是否退回、部分退款等业务逻辑。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;故事场景&lt;/strong&gt;：店员做错了奶茶，在系统里点了“退款”。20 元钱按原路（微信零钱）重新退回到了你的手机里。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;9-跨境收单cross-border-acquiring&#34;&gt;&lt;a href=&#34;#9-%e8%b7%a8%e5%a2%83%e6%94%b6%e5%8d%95cross-border-acquiring&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;9. 跨境收单（Cross-border Acquiring）
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;定义：指在跨境交易中，钱怎么从消费者账户到商家收单账户。&lt;/li&gt;
+&lt;li&gt;主体：面向的是消费者（2C）。消费者到商家&lt;/li&gt;
+&lt;li&gt;谁提供这个服务：收单行（Acquiring Bank）或第三方收单机构。比如 Stripe、Adyen、PayPal，以及中国出海的连连支付、PingPong、空中云汇（Airwallex）提供的“独立站收单”服务。&lt;/li&gt;
+&lt;li&gt;关注点：支付成功率、本地化支付方式、拒付率&lt;/li&gt;
+&lt;li&gt;举例：美国消费者在你的独立站上用 Visa卡 支付了 100 美元。Stripe（收单行） 扣除手续费，把这笔钱收进了你在 Stripe 的商户账户中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;10-跨境收款cross-border-collection&#34;&gt;&lt;a href=&#34;#10-%e8%b7%a8%e5%a2%83%e6%94%b6%e6%ac%becross-border-collection&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;10. 跨境收款（Cross-border Collection）
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;定义：钱怎么从海外汇回国，进入商家国内个人的银行账户。&lt;/li&gt;
+&lt;li&gt;主体：面向的是电商平台/商家（2B）。平台/境外账户到国内银行&lt;/li&gt;
+&lt;li&gt;为什么需要它：中国内地的商家直接在境外银行开户极其困难。像亚马逊、PayPal 这样的平台，不能直接把美金打入中国内地的普通银行卡，且中国有每人每年的额度结汇限制。&lt;/li&gt;
+&lt;li&gt;关注点：时效、汇率、手续费率&lt;/li&gt;
+&lt;li&gt;举例：你要把 Stripe 里的 100 美元提现回国内。因为你没有美国银行卡，你用了 万里汇（收款公司） 给你分配的美国虚拟银行账户。Stripe 把美金转入该虚拟账户，万里汇收到后，帮你结汇成人民币，直接打进了你的中国招商银行卡里。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
