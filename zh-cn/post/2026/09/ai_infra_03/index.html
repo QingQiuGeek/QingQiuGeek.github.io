@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、基础架构三大Transformer（彻底分清）\nEncoder-only（双向注意力） 作用：理解、提取特征、全局双向信息 代表：BERT、ViT（图像编码器） 特点：不能自回归生成，只做编码理解 理解图片但不能生成图片，核心是全程无掩码双向注意力。 为什么双向注意力可以理解图片，因为图片是完整静态空间信息，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、基础架构三大Transformer\nEncoder-only（双向注意力） 作用：理解、提取特征、全局双向信息 代表：BERT、ViT（图像编码器） 特点：不能自回归生成，只做编码理解 理解图片但不能生成图片，核心是全程无掩码双向注意力。 为什么双向注意力可以理解图片，因为图片是完整静态空间信息，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；\n">
 <title>AI_Infra_03</title>
 
 <link rel='canonical' href='/zh-cn/post/2026/09/ai_infra_03/'>
 
 <link rel="stylesheet" href="/scss/style.min.0af8e7a36354f8f50b06a82de1425b9b2d8ee44d812d5ba6d0615d71fe31085d.css">
 <meta property='og:title' content="AI_Infra_03">
-<meta property='og:description' content="一、基础架构三大Transformer（彻底分清）\nEncoder-only（双向注意力） 作用：理解、提取特征、全局双向信息 代表：BERT、ViT（图像编码器） 特点：不能自回归生成，只做编码理解 理解图片但不能生成图片，核心是全程无掩码双向注意力。 为什么双向注意力可以理解图片，因为图片是完整静态空间信息，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；\n">
+<meta property='og:description' content="一、基础架构三大Transformer\nEncoder-only（双向注意力） 作用：理解、提取特征、全局双向信息 代表：BERT、ViT（图像编码器） 特点：不能自回归生成，只做编码理解 理解图片但不能生成图片，核心是全程无掩码双向注意力。 为什么双向注意力可以理解图片，因为图片是完整静态空间信息，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；\n">
 <meta property='og:url' content='/zh-cn/post/2026/09/ai_infra_03/'>
 <meta property='og:site_name' content='青秋博客'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='AI' /><meta property='article:tag' content='Transformer' /><meta property='article:published_time' content='2026-09-13T12:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-13T12:00:00&#43;00:00'/>
 <meta name="twitter:title" content="AI_Infra_03">
-<meta name="twitter:description" content="一、基础架构三大Transformer（彻底分清）\nEncoder-only（双向注意力） 作用：理解、提取特征、全局双向信息 代表：BERT、ViT（图像编码器） 特点：不能自回归生成，只做编码理解 理解图片但不能生成图片，核心是全程无掩码双向注意力。 为什么双向注意力可以理解图片，因为图片是完整静态空间信息，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；\n">
+<meta name="twitter:description" content="一、基础架构三大Transformer\nEncoder-only（双向注意力） 作用：理解、提取特征、全局双向信息 代表：BERT、ViT（图像编码器） 特点：不能自回归生成，只做编码理解 理解图片但不能生成图片，核心是全程无掩码双向注意力。 为什么双向注意力可以理解图片，因为图片是完整静态空间信息，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；\n">
     <link rel="shortcut icon" href="/img/favicon.png" />
 
     </head>
@@ -792,7 +792,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
     <section class="article-content">
     
     
-    <p>一、基础架构三大Transformer（彻底分清）</p>
+    <p>一、基础架构三大Transformer</p>
 <ol>
 <li>Encoder-only（双向注意力）</li>
 </ol>

@@ -13,7 +13,7 @@
         <pubDate>Sun, 13 Sep 2026 12:00:00 +0000</pubDate>
         
         <guid>/zh-cn/post/2026/09/ai_infra_03/</guid>
-        <description>&lt;p&gt;一、基础架构三大Transformer（彻底分清）&lt;/p&gt;
+        <description>&lt;p&gt;一、基础架构三大Transformer&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Encoder-only（双向注意力）&lt;/li&gt;
 &lt;/ol&gt;
