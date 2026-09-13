@@ -722,7 +722,11 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
   <ol>
     <li><a href="#bm25">BM25</a></li>
     <li><a href="#向量检索">向量检索</a></li>
-    <li><a href="#混合检索">混合检索</a></li>
+    <li><a href="#混合检索">混合检索</a>
+      <ol>
+        <li><a href="#那么-bm25-embedding分别检索出来的结果最后怎么处理的">那么 BM25、 Embedding分别检索出来的结果，最后怎么处理的</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -783,7 +787,7 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 
 
             <time class="article-time--reading">
-                阅读时长: 1 分钟
+                阅读时长: 2 分钟
             </time>
         </div>
         
@@ -848,6 +852,51 @@ dGFtcAAyMDI2LTAxLTE4VDExOjE0OjIxKzAwOjAwF9w6xQAAAABJRU5ErkJggg==" />
 <p>它的绝招： 它能听懂潜台词。你搜“提神提气的苦咖啡”，文章里可能一个相同的字都没有，但向量检索能通过“意思接近”，帮你把写有“冰美式”的文章捞出来。</p>
 <h2 id="混合检索"><a href="#%e6%b7%b7%e5%90%88%e6%a3%80%e7%b4%a2" class="header-anchor"></a>混合检索
 </h2><p>BM25 和 向量检索 是两条不同的“捞数据”路径，而混合检索是把两者的优势结合。</p>
+<p><img src="/zh-cn/post/2026/05/bm25%E5%92%8C%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2/image.png"
+	width="1325"
+	height="724"
+	srcset="/zh-cn/post/2026/05/bm25%E5%92%8C%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2/image_hu_ca384c9322cd38a.png 480w, /zh-cn/post/2026/05/bm25%E5%92%8C%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2/image_hu_6477b5ada0059f7c.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="183"
+		data-flex-basis="439px"
+	
+></p>
+<h3 id="那么-bm25-embedding分别检索出来的结果最后怎么处理的"><a href="#%e9%82%a3%e4%b9%88-bm25-embedding%e5%88%86%e5%88%ab%e6%a3%80%e7%b4%a2%e5%87%ba%e6%9d%a5%e7%9a%84%e7%bb%93%e6%9e%9c%e6%9c%80%e5%90%8e%e6%80%8e%e4%b9%88%e5%a4%84%e7%90%86%e7%9a%84" class="header-anchor"></a>那么 BM25、 Embedding分别检索出来的结果，最后怎么处理的
+</h3><p>BM25 和 Embedding 分别检索出结果后，由于它们使用的是完全不同的打分体系（BM25 通常是大于 0 的具体分值，受词频和文档长度影响；而 Embedding 通常是 0 - 1 之间的余弦相似度），绝对不能把它们的分数直接相加。这就像把“摄氏度”和“华氏度”直接加在一起一样，没有数学意义。</p>
+<ol>
+<li>RRF（Reciprocal Rank Fusion，倒数排名融合）</li>
+</ol>
+<p>系统会计算所有被召回文档的 RRF 得分，然后从高到低重新排序，把最终的总冠军推给用户或大模型。</p>
+<ol start="2">
+<li>Score Normalization（分数归一化加权）</li>
+</ol>
+<p>缩放分数（归一化）：把 BM25 的分数（可能在 0 - 30 之间）和 Embedding 的分数（通常在 0.5 - 0.9 之间），通过数学公式（如 Min-Max 映射）全部等比例缩放到 0 - 1 的区间内。</p>
+<p>加权相加：FinalScore = a*BM25Normalized + (1 - a)*EmbeddingNormalized</p>
+<p>如果设置 \alpha = 0.3，就代表 30% 听 BM25 的，70% 听 Embedding 的。</p>
+<ol start="3">
+<li>Cross-Encoder / Reranker（深度学习重排）</li>
+</ol>
+<p>粗筛 + 精排</p>
+<p><img src="/zh-cn/post/2026/05/bm25%E5%92%8C%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2/image-1.png"
+	width="1019"
+	height="481"
+	srcset="/zh-cn/post/2026/05/bm25%E5%92%8C%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2/image-1_hu_8213f9dfe026cf32.png 480w, /zh-cn/post/2026/05/bm25%E5%92%8C%E6%B7%B7%E5%90%88%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2/image-1_hu_94974d5105c2be32.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="211"
+		data-flex-basis="508px"
+	
+></p>
+<p>Reranker（Cross-Encoder） 是把 [用户输入 + 文档内容] 作为一个整体同时喂给大模型（Attention 机制全开），让大模型逐字逐句去审视它们到底配不配。它虽然速度慢，但处理少量的（比如 100 条）合并后的数据，准确率会发生质的飞跃。</p>
 
 </section>
 

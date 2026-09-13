@@ -7,7 +7,526 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>青秋博客</copyright>
-        <lastBuildDate>Mon, 30 Mar 2026 14:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/ai/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 13 Sep 2026 12:00:00 +0000</lastBuildDate><atom:link href="/zh-cn/tags/ai/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>AI_Infra_03</title>
+        <link>/zh-cn/post/2026/09/ai_infra_03/</link>
+        <pubDate>Sun, 13 Sep 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/09/ai_infra_03/</guid>
+        <description>&lt;p&gt;一、基础架构三大Transformer（彻底分清）&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Encoder-only（双向注意力）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;作用：理解、提取特征、全局双向信息&lt;/li&gt;
+&lt;li&gt;代表：BERT、ViT（图像编码器）&lt;/li&gt;
+&lt;li&gt;特点：不能自回归生成，只做编码理解&lt;/li&gt;
+&lt;li&gt;理解图片但不能生成图片，核心是全程无掩码双向注意力。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;为什么双向注意力可以理解图片，因为&lt;strong&gt;图片是完整静态空间信息&lt;/strong&gt;，需要每一个图像Patch能实时看见整张图所有其他Patch，双向互通建模全局空间关系（物体位置、关联、轮廓、语义）；&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Decoder-only（单向掩码注意力）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;作用：自回归生成文本（核心大模型主干）&lt;/li&gt;
+&lt;li&gt;代表：GPT、Claude、Llama、Qwen文本模型&lt;/li&gt;
+&lt;li&gt;Decoder-only 不是只能输入文本，它只是「生成方式是单向自回归」，输入可以是文本 + 图像伪token。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Encoder-Decoder&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;编码理解 + 解码生成&lt;/li&gt;
+&lt;li&gt;代表：T5、Whisper（语音）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;二、图像Patch、ViT与文本Transformer关系&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;图像Patch是什么？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;把一张图片切成无数个固定大小的小方块（patch），每个小方块拉直成向量 → 图像Token。&lt;/p&gt;
+&lt;p&gt;等价关系：文本拆单词 = 图像切Patch&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;ViT 和 文本Transformer 一样吗？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;底层数学结构完全一样（多头注意力+MLP）。&lt;/p&gt;
+&lt;p&gt;唯一区别：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ViT：Encoder双向，用于图像理解&lt;/li&gt;
+&lt;li&gt;LLM文本：Decoder单向，用于文本生成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;三、多模态两大架构&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;拼接式多模态（工业主流：LLaVA、Qwen-VL、GPT4V）
+结构：独立视觉分支 + 独立文本分支 + 共享Decoder主干&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;视觉分支：ViT Encoder 提取图像特征&lt;/li&gt;
+&lt;li&gt;适配器/Projector（关键）：把图像向量 映射对齐到文本Embedding空间，变成「图像伪Token」&lt;/li&gt;
+&lt;li&gt;文本分支：文本Embedding生成文本Token&lt;/li&gt;
+&lt;li&gt;主干：图文Token拼接，送入同一个 Decoder-only LLM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;重点答疑：是否路由选择？
+❌ 不是路由！不是二选一！
+✅ 有图就走视觉分支，无图只走文本分支，最后合并序列进同一个主干。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;原生统一多模态（Gemini、GPT4o）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;无任何独立分支、无ViT、无单独文本Encoder&lt;/li&gt;
+&lt;li&gt;图片Patch、文本Token、音频Token → 统一格式Token → 送入同一套共享Transformer&lt;/li&gt;
+&lt;li&gt;靠动态注意力掩码切换双向理解 / 单向生成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;四、图像生成、扩散模型与主干模型关系&lt;/p&gt;
+&lt;p&gt;多模态LLM（无论拼接/统一）能干啥？
+✅ 看图、理解图、OCR、图文推理、输出文字
+❌ 不能直接生成图片&lt;/p&gt;
+&lt;p&gt;要生成图片，有两个方案：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;扩散模型（DALL·E/SD/Flux）定位&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;100%独立外挂模型，和LLM主干完全分离、无权重共享
+完整链路：
+用户指令 → 多模态主干（思考、优化绘图Prompt） → 扩散模型（独立） → 输出图片&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;自回归图像Token生成（Parti/MagViT）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;图片编码成离散图像Token，Transformer直接预测图像Token。
+缺点：画质差、分辨率低、工业不用。&lt;/p&gt;
+&lt;p&gt;五、文本/图像/视频/语音 模态核心区别&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;文本：一维语义Token序列，纯Decoder建模&lt;/li&gt;
+&lt;li&gt;图像：2D空间，切Patch空间Token，建模空间关系&lt;/li&gt;
+&lt;li&gt;语音：1D时序波形 → 转频谱 → 时间方向Audio Token&lt;/li&gt;
+&lt;li&gt;视频：多帧图像 + 新增时间维度注意力，同时建模空间+运动&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;六、框架/概念极简汇总&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NLP：AI分支，处理人类自然语言&lt;/li&gt;
+&lt;li&gt;RL：强化学习，试错最大化奖励；LLM用于RLHF/DPO对齐&lt;/li&gt;
+&lt;li&gt;SOTA：当前任务最优结果，只看指标，不看工程落地&lt;/li&gt;
+&lt;li&gt;Mamba/RWKV：Transformer替代线性架构，长序列更快，推理省显存&lt;/li&gt;
+&lt;li&gt;Megatron：英伟达超大模型预训练并行框架（底座训练）&lt;/li&gt;
+&lt;li&gt;DeepSpeed：微软ZeRO显存优化，微调标配&lt;/li&gt;
+&lt;li&gt;Swift：阿里一站式微调/对齐/部署上层框架，封装DeepSpeed/Megatron&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>AI_Infra_02</title>
+        <link>/zh-cn/post/2026/09/ai_infra_02/</link>
+        <pubDate>Sat, 12 Sep 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/09/ai_infra_02/</guid>
+        <description>&lt;h2 id=&#34;原始-transformerencoder-decoder-架构&#34;&gt;&lt;a href=&#34;#%e5%8e%9f%e5%a7%8b-transformerencoder-decoder-%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;原始 Transformer：Encoder-Decoder 架构
+&lt;/h2&gt;&lt;p&gt;2017 年 “Attention Is All You Need” 论文提出的原始 Transformer 由两大部分组成。&lt;/p&gt;
+&lt;p&gt;Encoder：读取输入序列，生成上下文表示。每层包含一个 Self-Attention 和一个 FFN（前馈神经网络），所有 token 可以互相关注（双向注意力）&lt;/p&gt;
+&lt;p&gt;Decoder：基于 Encoder 的输出，自回归地生成目标序列。每层包含一个带因果掩码的 Self-Attention（只能看到已生成的 token）、一个 Cross-Attention（关注 Encoder 输出）和一个 FFN&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://caomaolufei.github.io/AIInfraGuide/images/Transformer.png&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在 Self-Attention 中，序列里的每个 token 都同时扮演这QKV：它既是提问者（生成 Q），也是被查询的索引（生成 K），还是信息的提供者（生成 V）。通过 Q 和 K 的匹配来计算”注意力权重”，再用这些权重对 V 做加权求和，就完成了信息的聚合。复杂度是O(n^2)&lt;/p&gt;
+&lt;p&gt;的显存瓶颈直接催生了 FlashAttention，复杂度变为O(n)。这正是”Memory-aware”优化的核心思想。&lt;/p&gt;
+&lt;h2 id=&#34;三种注意力&#34;&gt;&lt;a href=&#34;#%e4%b8%89%e7%a7%8d%e6%b3%a8%e6%84%8f%e5%8a%9b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;三种注意力
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Encoder Self-Attention：Encoder 层里，QKV 都来自 encoder 输入，token 和 token 互相看。&lt;/li&gt;
+&lt;li&gt;Decoder Masked Self-Attention（掩码自注意力）：Decoder 第一层，QKV 都来自 decoder 当前已经生成的序列，&lt;strong&gt;加 mask，预测第 i 个 token 的时候，看不到未来还没生成的 token&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;Cross-Attention（交叉注意力）：Decoder 第二层，Decoder 生成每个词的时候，去 “看一眼 Encoder 里的源句子信息”。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;Q：来自 Decoder 上一层输出（当前生成的 token）&lt;/li&gt;
+&lt;li&gt;K、V：来自 Encoder 的最终输出（上下文 / 源序列）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;KV Cache 就是为了加速自回归：前面已经算过的 token 的 K、V 缓存起来，不用每次从头重新计算，不然生成会非常慢。&lt;/p&gt;
+&lt;p&gt;标准 Transformer Decoder 一层顺序：&lt;/p&gt;
+&lt;p&gt;输入 → Masked Self-Attention → Add+Norm → Cross-Attention → Add+Norm → FFN → Add+Norm → 输出&lt;/p&gt;
+&lt;h2 id=&#34;当前大模型的主流decoder-only-架构&#34;&gt;&lt;a href=&#34;#%e5%bd%93%e5%89%8d%e5%a4%a7%e6%a8%a1%e5%9e%8b%e7%9a%84%e4%b8%bb%e6%b5%81decoder-only-%e6%9e%b6%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;当前大模型的主流：Decoder-only 架构
+&lt;/h2&gt;&lt;p&gt;当前几乎所有主流大语言模型——GPT、LLaMA、Mistral、Qwen、DeepSeek——都采用 Decoder-only 架构，砍掉了 Encoder 和 Cross-Attention，只保留带因果掩码的 Masked Self-Attention。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/09/ai_infra_02/image.png&#34;
+	width=&#34;832&#34;
+	height=&#34;414&#34;
+	srcset=&#34;/zh-cn/post/2026/09/ai_infra_02/image_hu_30e43b45a5e48d50.png 480w, /zh-cn/post/2026/09/ai_infra_02/image_hu_55027847ad2698f6.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;200&#34;
+		data-flex-basis=&#34;482px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;整个模型的核心就是中间那 N 层 Decoder Block 的反复堆叠。每个 Block 的结构完全相同，包含两个子模块：&lt;/p&gt;
+&lt;p&gt;Masked Self-Attention：让每个 token 从前面的 token 中聚合信息
+FFN：对每个 token 的信息做独立的非线性变换&lt;/p&gt;
+&lt;h2 id=&#34;pre-norm-vs-post-norm&#34;&gt;&lt;a href=&#34;#pre-norm-vs-post-norm&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Pre-Norm vs Post-Norm
+&lt;/h2&gt;&lt;p&gt;Norm = LayerNorm；Add = 残差连接 residual add
+两者的&lt;strong&gt;本质区别：LayerNorm 放在残差分支的里面还是外面&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Post-Norm 顺序：子层计算 → Add 残差 → LayerNorm&lt;/p&gt;
+&lt;p&gt;残差输出经过 Norm 才传给下一层，深层网络容易梯度爆炸，对学习率、初始化很敏感；残差通路没有归一化，随着层数堆叠，数值会累积放大&lt;/p&gt;
+&lt;p&gt;Pre-Norm 顺序：LayerNorm → SubLayer (MHA/FFN) → Add 残差&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Norm 在&lt;strong&gt;子层输入前面&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;残差直连支路不经过任何 Norm&lt;/strong&gt;，直接加到子层输出&lt;/li&gt;
+&lt;li&gt;梯度更稳定，可以堆很深（大模型都用这个）&lt;/li&gt;
+&lt;li&gt;训练更稳，调参门槛更低&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;/zh-cn/post/2026/09/ai_infra_02/image-1.png&#34;
+	width=&#34;1812&#34;
+	height=&#34;711&#34;
+	srcset=&#34;/zh-cn/post/2026/09/ai_infra_02/image-1_hu_9bccc805f1e31261.png 480w, /zh-cn/post/2026/09/ai_infra_02/image-1_hu_d1eaf7ca3cbeeefb.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;254&#34;
+		data-flex-basis=&#34;611px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;计算过程从输入到输出的完整流程&#34;&gt;&lt;a href=&#34;#%e8%ae%a1%e7%ae%97%e8%bf%87%e7%a8%8b%e4%bb%8e%e8%be%93%e5%85%a5%e5%88%b0%e8%be%93%e5%87%ba%e7%9a%84%e5%ae%8c%e6%95%b4%e6%b5%81%e7%a8%8b&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;计算过程：从输入到输出的完整流程
+&lt;/h2&gt;&lt;p&gt;第一步：线性投影生成 Q、K、V
+第二步：计算注意力分数
+第三步：缩放（Scale）
+第四步：Softmax 归一化
+第五步：加权求和
+第六步：输出投影&lt;/p&gt;
+&lt;h2 id=&#34;ffn&#34;&gt;&lt;a href=&#34;#ffn&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;FFN
+&lt;/h2&gt;&lt;p&gt;Attention 负责”信息交互”——让 token 之间互相传递信息。但仅靠信息交互还不够，模型还需要对每个 token 的信息做”深度加工”。这就是前馈网络（Feed-Forward Network，FFN）的工作。&lt;/p&gt;
+&lt;p&gt;打个比方：Attention 像一场圆桌会议，大家互相交换意见；FFN 则是会后每个人回到自己工位上，独立消化吸收这些信息并形成自己的判断。FFN 对每个 token 独立地做非线性变换，不涉及 token 之间的交互。&lt;/p&gt;
+&lt;h2 id=&#34;位置编码&#34;&gt;&lt;a href=&#34;#%e4%bd%8d%e7%bd%ae%e7%bc%96%e7%a0%81&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;位置编码
+&lt;/h2&gt;&lt;p&gt;语言显然是有顺序的！“猫追狗”和”狗追猫”意思完全不同。所以我们必须想办法把位置信息注入到 Transformer 中。&lt;/p&gt;
+&lt;h3 id=&#34;sinusoidal-位置编码原始论文方案&#34;&gt;&lt;a href=&#34;#sinusoidal-%e4%bd%8d%e7%bd%ae%e7%bc%96%e7%a0%81%e5%8e%9f%e5%a7%8b%e8%ae%ba%e6%96%87%e6%96%b9%e6%a1%88&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Sinusoidal 位置编码：原始论文方案
+&lt;/h3&gt;&lt;p&gt;“Attention Is All You Need” 论文提出了一种优雅的方案：用不同频率的正弦/余弦函数为每个位置生成一个独特的编码向量，直接加到 token 的 embedding 上。&lt;/p&gt;
+&lt;p&gt;这就像用”年-月-日-时-分-秒”来编码时间——“年”变化最慢但能区分大时间跨度，“秒”变化最快但只能区分小时间跨度。所有维度组合起来，每个位置就有了唯一的”时间戳”。&lt;/p&gt;
+&lt;p&gt;局限：位置信息是”加”在 embedding 上的，在深层网络中可能被逐渐稀释，难以有效外推到训练时未见过的长度&lt;/p&gt;
+&lt;h3 id=&#34;rope旋转位置编码当前大模型的主流选择&#34;&gt;&lt;a href=&#34;#rope%e6%97%8b%e8%bd%ac%e4%bd%8d%e7%bd%ae%e7%bc%96%e7%a0%81%e5%bd%93%e5%89%8d%e5%a4%a7%e6%a8%a1%e5%9e%8b%e7%9a%84%e4%b8%bb%e6%b5%81%e9%80%89%e6%8b%a9&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;RoPE（旋转位置编码）：当前大模型的主流选择
+&lt;/h3&gt;&lt;p&gt;目前几乎所有主流大模型（LLaMA、Mistral、Qwen、DeepSeek 等）采用的位置编码方案。核心思想：不在 embedding 层注入位置信息，而是在计算 Attention 时，通过旋转 Q 和 K 向量来编码位置。&lt;/p&gt;
+&lt;h2 id=&#34;layernorm-与残差连接&#34;&gt;&lt;a href=&#34;#layernorm-%e4%b8%8e%e6%ae%8b%e5%b7%ae%e8%bf%9e%e6%8e%a5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;LayerNorm 与残差连接
+&lt;/h2&gt;&lt;p&gt;output=x+SubLayer(x)，其中 SubLayer 可以是 Attention 层或 FFN 层。
+在原始信息基础上，只学习增量&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>AI_Infra_01</title>
+        <link>/zh-cn/post/2026/09/ai_infra_01/</link>
+        <pubDate>Tue, 08 Sep 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/09/ai_infra_01/</guid>
+        <description>&lt;h2 id=&#34;ai-infra-工程师的日常工作&#34;&gt;&lt;a href=&#34;#ai-infra-%e5%b7%a5%e7%a8%8b%e5%b8%88%e7%9a%84%e6%97%a5%e5%b8%b8%e5%b7%a5%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AI Infra 工程师的日常工作
+&lt;/h2&gt;&lt;h3 id=&#34;cuda-算子开发与优化&#34;&gt;&lt;a href=&#34;#cuda-%e7%ae%97%e5%ad%90%e5%bc%80%e5%8f%91%e4%b8%8e%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CUDA 算子开发与优化
+&lt;/h3&gt;&lt;p&gt;这类工作最”底层”，直接和 GPU 硬件打交道。典型任务包括：为 Attention 计算编写高效的 CUDA kernel（如实现或改进 FlashAttention）、优化矩阵乘法（GEMM）以充分利用 Tensor Core、将多个小算子融合为一个大 kernel 减少显存读写。&lt;/p&gt;
+&lt;p&gt;和 Softmax 的计算与显存访问模式，如果你不知道 Self-Attention 的计算流程，就无法理解 FlashAttention 在做什么。&lt;/p&gt;
+&lt;h3 id=&#34;分布式训练&#34;&gt;&lt;a href=&#34;#%e5%88%86%e5%b8%83%e5%bc%8f%e8%ae%ad%e7%bb%83&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分布式训练
+&lt;/h3&gt;&lt;h3 id=&#34;推理部署与优化&#34;&gt;&lt;a href=&#34;#%e6%8e%a8%e7%90%86%e9%83%a8%e7%bd%b2%e4%b8%8e%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;推理部署与优化
+&lt;/h3&gt;&lt;h2 id=&#34;cuda与算子优化&#34;&gt;&lt;a href=&#34;#cuda%e4%b8%8e%e7%ae%97%e5%ad%90%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CUDA与算子优化
+&lt;/h2&gt;&lt;h3 id=&#34;基础概念&#34;&gt;&lt;a href=&#34;#%e5%9f%ba%e7%a1%80%e6%a6%82%e5%bf%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;基础概念
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Transformer：神经网络模型结构，一种思想概念，纯模型数学结构、算法逻辑。核心是Self-Attention&lt;/li&gt;
+&lt;li&gt;PyTorch：Python深度学习工具框架，写代码、搭建、训练、调度模型，能实现 Transformer&lt;/li&gt;
+&lt;li&gt;CUDA：NVIDIA专属本地GPU计算软件平台，打通软件与NVIDIA GPU，让GPU执行大规模数学/矩阵计算。仅支持NVIDIA显卡，不支持CPU、AMD显卡、Intel显卡、Apple M芯片、TPU，无N卡电脑，CUDA完全无法生效，只能CPU运行模型&lt;/li&gt;
+&lt;li&gt;GPU：图形处理器，海量轻量CUDA核心，高吞吐，适合简单、重复、大规模并行计算（矩阵乘法、Transformer运算）&lt;/li&gt;
+&lt;li&gt;CPU：中央处理器，少量高性能核心（几核-几十核），并行算力极低，跑大模型训练极慢，适合复杂逻辑、分支判断、串行任务&lt;/li&gt;
+&lt;li&gt;TPU：- Google自研AI专用芯片，对标GPU&lt;/li&gt;
+&lt;li&gt;HBM：高带宽内存&lt;/li&gt;
+&lt;li&gt;NVLink：NVIDIA 自研的高速互联总线，用来把多张 NVIDIA GPU 直接连在一起，让多卡之间高速交换显存数据。既是硬件，也是配套通信协议。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;MHA、MQA、GQA、MLA 都只是【注意力模块（Attention）的变种】，本身不包含 FFN；完整 Transformer 层一定是：Attention + FFN 两个组件一起搭配使用。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Attention 变种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MHA：Multi-Head Attention 多头注意力。每个 Query 头，都有独立一套 K、V。优点：表达能力最强，不同头独立捕捉不同语义关系。缺点：KV Cache 体积最大；长上下文推理时，读取 KV 极度消耗显存带宽，容易触发访存瓶颈&lt;/li&gt;
+&lt;li&gt;MQA：Multi-Query Attention 多查询注意力。所有 Query 头共用同一套 K、V；Q 头仍然保持独立。优点：KV Cache 极小，显存带宽开销大幅下降，解码速度快。缺点：精度下降明显；全部头共用一套 KV，表达能力损失大&lt;/li&gt;
+&lt;li&gt;GQA：Grouped-Query Attention 分组查询注意力。把全部 Query 头分成若干组；同一组内所有 Q 头共享一套 K、V；不同分组 KV 相互独立，是目前绝大多数开源大模型的标配。优点：MHA 与 MQA 的折中方案。精度几乎接近 MHA，KV Cache 显著减少；平衡推理速度与模型能力。缺点：依然是「按头分组共享」，上下文极长时 KV 体积还是很大&lt;/li&gt;
+&lt;li&gt;MLA：Multi-Head Latent Attention 多头潜在注意力，DeepSeek模型。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;将 K、V 映射到更低维度的潜空间（latent vector），缓存压缩后的低维 KV&lt;/li&gt;
+&lt;li&gt;计算注意力前，再把低维 KV 上投影恢复维度&lt;/li&gt;
+&lt;li&gt;RoPE 位置信息单独计算，不和压缩后的 KV 绑定，解决压缩破坏位置编码的痛点。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;优点：KV Cache 压缩比例远高于 GQA；长上下文下显存 / 带宽收益巨大；精度损失很小。
+缺点：架构复杂、训练成本更高，推理引擎实现难度更大&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MoE：Mixture of Experts，混合专家，就是把单层 FFN 替换成多个独立小 FFN（专家 Expert），每次只激活少数几个专家参与计算。能在不显著增加单 token 计算量前提下，大幅提升模型总参数量与能力。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;损失函数 Loss ：对模型每一个参数（weight/bias）的偏导数。表示：这个参数往哪个方向调整，能让 Loss 变小、模型预测更准。越低代表模型在训练数据上拟合越好；但 Loss 不是越低就一定代表模型效果越强。如果 Loss 过低，大概率发生过拟合&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;memory-wall-显存带宽&#34;&gt;&lt;a href=&#34;#memory-wall-%e6%98%be%e5%ad%98%e5%b8%a6%e5%ae%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Memory Wall 显存带宽
+&lt;/h3&gt;&lt;p&gt;GPU 显存和 GPU 计算核心之间，每秒能传输的数据总量。单位 GB/s。
+类比：
+GPU 计算核心 = 工厂车间工人
+显存 = 原料仓库
+显存带宽 = 仓库到车间的传送带粗细
+带宽越大，传送带越粗，每秒运送原料越多。&lt;/p&gt;
+&lt;h3 id=&#34;存储层次结构&#34;&gt;&lt;a href=&#34;#%e5%ad%98%e5%82%a8%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;存储层次结构
+&lt;/h3&gt;&lt;p&gt;寄存器 &amp;gt; 共享内存 &amp;gt; L1/L2 Cache &amp;gt; HBM &amp;gt; 主机内存。写 kernel 的核心就是在这个层次结构中最大化数据复用，减少对慢速存储的访问&lt;/p&gt;
+&lt;h3 id=&#34;cuda-编程基础&#34;&gt;&lt;a href=&#34;#cuda-%e7%bc%96%e7%a8%8b%e5%9f%ba%e7%a1%80&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;CUDA 编程基础
+&lt;/h3&gt;&lt;p&gt;编程模型：Grid / Block / Thread 层级，线程索引计算
+内存模型：全局内存、共享内存、寄存器、常量内存的特性与用法
+Warp：&lt;strong&gt;32 个线程组成的最小调度单位&lt;/strong&gt;，GPU 每次下达指令都是以 Warp 为单位
+核心直觉：“内存访问模式决定运行速度”&lt;/p&gt;
+&lt;h3 id=&#34;常见算子实现与优化&#34;&gt;&lt;a href=&#34;#%e5%b8%b8%e8%a7%81%e7%ae%97%e5%ad%90%e5%ae%9e%e7%8e%b0%e4%b8%8e%e4%bc%98%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;常见算子实现与优化
+&lt;/h3&gt;&lt;p&gt;Reduce：并行归约的多种实现与优化（Warp Shuffle、多级归约）
+GEMM：矩阵乘法的分块、向量化、Shared Memory Tiling、利用 Tensor Core
+Softmax：Online normalizer calculation，高效 Softmax kernel
+算子融合：将多个小算子合并为一个 kernel，减少全局内存读写&lt;/p&gt;
+&lt;h3 id=&#34;attention-算子&#34;&gt;&lt;a href=&#34;#attention-%e7%ae%97%e5%ad%90&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Attention 算子
+&lt;/h3&gt;&lt;p&gt;FlashAttention V1/V2：Memory-aware 的精确 Attention 实现，通过 tiling 减少 HBM 访问——好比把一张大桌子上的拼图分成小块，每次只搬一小块到手边拼好再搬下一块，而不是把所有碎片一股脑倒出来占满桌面
+FlashAttention-3：在 Hopper 架构上进一步拉高利用率
+Flash-Decoding / FlashDecoding++：面向 Decode 阶段的 Attention 加速
+FlashInfer：可定制 Attention 引擎，面向 Serving 的可组合格式与异构 KV 存储
+PagedAttention CUDA Kernel：vLLM 中 PagedAttention 的底层实现&lt;/p&gt;
+&lt;h3 id=&#34;ai-编译器&#34;&gt;&lt;a href=&#34;#ai-%e7%bc%96%e8%af%91%e5%99%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;AI 编译器
+&lt;/h3&gt;&lt;p&gt;Triton：OpenAI 开源的 GPU 编程语言，大幅降低高效算子编写门槛
+TVM / XLA：计算图优化与代码生成
+torch.compile：PyTorch 2.x 的编译模式，理解 Graph Break 与性能收益&lt;/p&gt;
+&lt;h2 id=&#34;分布式训练-1&#34;&gt;&lt;a href=&#34;#%e5%88%86%e5%b8%83%e5%bc%8f%e8%ae%ad%e7%bb%83-1&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;分布式训练
+&lt;/h2&gt;&lt;p&gt;分布式训练要解决的核心问题是任务怎么拆、怎么传、怎么汇总。&lt;/p&gt;
+&lt;p&gt;数据并行是把同一本书复印多份、每人抄不同章节的内容然后汇总；张量并行是把每一页拆成几列、每人只抄自己那几列；流水线并行则是第一个人抄完第一章就传给第二个人继续，自己接着抄下一批。&lt;/p&gt;
+&lt;h3 id=&#34;优化器&#34;&gt;&lt;a href=&#34;#%e4%bc%98%e5%8c%96%e5%99%a8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;优化器
+&lt;/h3&gt;&lt;p&gt;优化器是训练的”舵手”——模型算出梯度之后，怎么更新参数全靠它。&lt;/p&gt;
+&lt;p&gt;数据并行&lt;/p&gt;
+&lt;p&gt;DP（DataParallel）：最基础的数据并行，单进程多卡
+DDP（DistributedDataParallel）：多进程数据并行，理解 AllReduce 梯度同步
+FSDP（Fully Sharded Data Parallel）：PyTorch 原生的 ZeRO-3 实现&lt;/p&gt;
+&lt;p&gt;模型并行（3D 并行）&lt;/p&gt;
+&lt;p&gt;张量并行（TP）：将矩阵乘法沿特定维度切分到多卡，通信密集，通常限于单机
+流水线并行（PP）：将模型不同层切分到不同机器，像流水线一样传递数据
+序列并行（SP）：沿序列维度切分，与 TP 配合减少激活显存&lt;/p&gt;
+&lt;h3 id=&#34;zero-zero-redundancy-optimizer&#34;&gt;&lt;a href=&#34;#zero-zero-redundancy-optimizer&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;ZeRO （Zero Redundancy Optimizer）
+&lt;/h3&gt;&lt;p&gt;分布式训练的显存优化算法，核心思路：把【模型权重、梯度、优化器状态】这三块训练显存大头，拆分分散到多张 GPU 上，而不是每张 GPU 都完整保存全部副本。&lt;/p&gt;
+&lt;p&gt;ZeRO-1：优化器状态切分
+ZeRO-2：优化器状态 + 梯度切分
+ZeRO-3：优化器状态 + 梯度 + 参数切分（用通信换显存）&lt;/p&gt;
+&lt;h2 id=&#34;推理与部署&#34;&gt;&lt;a href=&#34;#%e6%8e%a8%e7%90%86%e4%b8%8e%e9%83%a8%e7%bd%b2&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;推理与部署
+&lt;/h2&gt;&lt;p&gt;LLM 推理的两阶段：Prefill（处理输入）与 Decode（逐 token 生成）&lt;/p&gt;
+&lt;p&gt;KV Cache把已经算过的中间结果记下来，后续生成每个新 token 时就不用从头算起。&lt;/p&gt;
+&lt;p&gt;关键性能指标：TTFT（首 token 延迟）、TPOT（每 token 延迟）、吞吐量（token/s）、P50/P95 尾延迟&lt;/p&gt;
+&lt;p&gt;端到端部署：拿到一个 7B 模型，分别用 vLLM 和 SGLang 部署成 OpenAI 兼容 API，用相同的压测脚本（固定并发、输入输出长度）跑出 TTFT、TPOT、throughput 三个指标的对比表&lt;/p&gt;
+&lt;h3 id=&#34;推理框架&#34;&gt;&lt;a href=&#34;#%e6%8e%a8%e7%90%86%e6%a1%86%e6%9e%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;推理框架
+&lt;/h3&gt;&lt;p&gt;vLLM、SGLang、TensorRT-LLM&lt;/p&gt;
+&lt;h3 id=&#34;量化&#34;&gt;&lt;a href=&#34;#%e9%87%8f%e5%8c%96&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;量化
+&lt;/h3&gt;&lt;p&gt;把模型参数（权重、激活值）从高精度浮点数，转换成更低比特宽度的数据类型，用更少 bit 表示数值，目的降低显存占用、减少访存数据量、加速推理；代价是引入少量精度损失。&lt;/p&gt;
+&lt;p&gt;常见精度规格（面试必记）
+FP32（32bit 浮点数）：原始训练默认，占用最大，推理几乎不用
+FP16 / BF16（16bit）：主流训练精度；很多模型原生推理精度
+INT8（8bit 整数）：常用量化精度
+INT4（4bit 整数）：当前开源 LLM 最常用，压缩幅度大
+INT2（2bit）：压缩极强，精度损失通常很大，使用较少&lt;/p&gt;
+&lt;h3 id=&#34;prefilldecode-解耦&#34;&gt;&lt;a href=&#34;#prefilldecode-%e8%a7%a3%e8%80%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;Prefill/Decode 解耦
+&lt;/h3&gt;&lt;p&gt;Prefill 与 Decode 混合 batching 造成资源耦合与互扰，导致尾延迟爆炸。这就像餐厅里让同一个厨师既负责快速出小炒（Decode 低延迟）又负责慢炖大菜（Prefill 重计算），互相拖累；解耦就是把快餐区和慢炖区分开，各配专属厨师。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>claude-hooks</title>
+        <link>/zh-cn/post/2026/07/claude-hooks/</link>
+        <pubDate>Fri, 03 Jul 2026 12:00:00 +0000</pubDate>
+        
+        <guid>/zh-cn/post/2026/07/claude-hooks/</guid>
+        <description>&lt;p&gt;在软件工程与智能体（Agent）架构开发中，&lt;strong&gt;Hook（钩子）&lt;/strong&gt; 是一种极其核心的进阶设计模式。它通过在核心流程中埋下“插座”，实现了&lt;strong&gt;高内聚、低耦合&lt;/strong&gt;的代码结构。&lt;/p&gt;
+&lt;h2 id=&#34;一-为什么需要-hooks痛点与核心价值&#34;&gt;&lt;a href=&#34;#%e4%b8%80-%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81-hooks%e7%97%9b%e7%82%b9%e4%b8%8e%e6%a0%b8%e5%bf%83%e4%bb%b7%e5%80%bc&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;一、 为什么需要 Hooks？（痛点与核心价值）
+&lt;/h2&gt;&lt;h3 id=&#34;1-传统硬编码的痛点-s03-阶段&#34;&gt;&lt;a href=&#34;#1-%e4%bc%a0%e7%bb%9f%e7%a1%ac%e7%bc%96%e7%a0%81%e7%9a%84%e7%97%9b%e7%82%b9-s03-%e9%98%b6%e6%ae%b5&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1. 传统硬编码的痛点 (s03 阶段)
+&lt;/h3&gt;&lt;p&gt;在没有引入 Hook 之前，诸如“权限检查”、“日志记录”、“耗时统计”等横切关注点（Cross-cutting Concerns）的代码，必须硬编码（Hardcode）在系统的核心业务循环（如 &lt;code&gt;agent_loop&lt;/code&gt;）内部。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;后果：&lt;/strong&gt; 导致核心循环代码迅速臃肿，变成难以维护的“屎山代码”；且每次增加新功能，都必须修改核心底层逻辑，极易引入新 Bug。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-hooks-的解耦哲学&#34;&gt;&lt;a href=&#34;#2-hooks-%e7%9a%84%e8%a7%a3%e8%80%a6%e5%93%b2%e5%ad%a6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. Hooks 的解耦哲学
+&lt;/h3&gt;&lt;p&gt;Hooks 允许核心流程保持绝对的纯粹和单一职责（Stay boring on purpose）。它只在特定的生命周期关键节点留出&lt;strong&gt;事件插座（Event Slots）&lt;/strong&gt;。核心代码只管在走到这一步时“高喊”一声触发事件，而具体执行什么业务逻辑，完全由外部注册的函数决定。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;二-hook-系统的底层技术实现&#34;&gt;&lt;a href=&#34;#%e4%ba%8c-hook-%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%ba%95%e5%b1%82%e6%8a%80%e6%9c%af%e5%ae%9e%e7%8e%b0&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;二、 Hook 系统的底层技术实现
+&lt;/h2&gt;&lt;p&gt;在底层，一个标准的 Hook 系统由 &lt;strong&gt;1 个核心字典（注册表）&lt;/strong&gt; 和 &lt;strong&gt;2 个核心函数（注册与触发）&lt;/strong&gt; 支撑，代码极其朴素优雅：&lt;/p&gt;
+&lt;h3 id=&#34;1-初始化钩子注册表hooks-字典&#34;&gt;&lt;a href=&#34;#1-%e5%88%9d%e5%a7%8b%e5%8c%96%e9%92%a9%e5%ad%90%e6%b3%a8%e5%86%8c%e8%a1%a8hooks-%e5%ad%97%e5%85%b8&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1. 初始化钩子注册表（&lt;code&gt;HOOKS&lt;/code&gt; 字典）
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 蓄水池：用来存放不同节点挂载的回调函数列表&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;HOOKS&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;UserPromptSubmit&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[],&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# 用户输入后，大模型思考前&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;PreToolUse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[],&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;# 大模型决定调用工具，但工具尚未真正执行前&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;PostToolUse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[],&lt;/span&gt;       &lt;span class=&#34;c1&#34;&gt;# 工具执行完毕，拿到结果后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;Stop&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;               &lt;span class=&#34;c1&#34;&gt;# 核心循环准备退出前&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;2-注册钩子register_hook&#34;&gt;&lt;a href=&#34;#2-%e6%b3%a8%e5%86%8c%e9%92%a9%e5%ad%90register_hook&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. 注册钩子（&lt;code&gt;register_hook&lt;/code&gt;）
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;register_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    管道工：把外部定义的业务函数追加到对应事件的列表中排队。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    此时函数并不运行，只是登记。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;event&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HOOKS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;HOOKS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;3-触发钩子trigger_hooks与高级拦截机制&#34;&gt;&lt;a href=&#34;#3-%e8%a7%a6%e5%8f%91%e9%92%a9%e5%ad%90trigger_hooks%e4%b8%8e%e9%ab%98%e7%ba%a7%e6%8b%a6%e6%88%aa%e6%9c%ba%e5%88%b6&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3. 触发钩子（&lt;code&gt;trigger_hooks&lt;/code&gt;）与高级拦截机制
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;trigger_hooks&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    引爆器：在核心循环中被动触发，按顺序遍历并执行该事件下挂载的所有钩子。
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;callback&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HOOKS&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;callback&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# 💡 核心设计：拦截机制 (Interceptor)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# 如果某一个高优先级的钩子（如安全检查）返回了非空内容，立刻中断后续执行，实现安全拦截&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;is&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;None&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;三-hook-的实际使用流程三步连贯动作&#34;&gt;&lt;a href=&#34;#%e4%b8%89-hook-%e7%9a%84%e5%ae%9e%e9%99%85%e4%bd%bf%e7%94%a8%e6%b5%81%e7%a8%8b%e4%b8%89%e6%ad%a5%e8%bf%9e%e8%b4%af%e5%8a%a8%e4%bd%9c&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;三、 Hook 的实际使用流程（三步连贯动作）
+&lt;/h2&gt;&lt;p&gt;使用 Hook 系统在开发中遵循标准的 &lt;strong&gt;写钩子 $\rightarrow$ 登钩子 $\rightarrow$ 踩钩子&lt;/strong&gt; 闭环：&lt;/p&gt;
+&lt;h3 id=&#34;1-第一步写钩子编写独立的业务扩展功能&#34;&gt;&lt;a href=&#34;#1-%e7%ac%ac%e4%b8%80%e6%ad%a5%e5%86%99%e9%92%a9%e5%ad%90%e7%bc%96%e5%86%99%e7%8b%ac%e7%ab%8b%e7%9a%84%e4%b8%9a%e5%8a%a1%e6%89%a9%e5%b1%95%e5%8a%9f%e8%83%bd&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;1. 第一步：写钩子（编写独立的业务扩展功能）
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 开发一个日志钩子&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;log_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;block&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;【HOOK 日志】AI 准备调用工具: &lt;/span&gt;&lt;span class=&#34;si&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;block&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;None&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# 返回 None 表示不拦截，放行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 开发一个安全拦截钩子&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;permission_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;block&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;block&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;bash&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;rm -rf&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;block&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;command&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Permission denied: 严禁执行危险的删库跑路命令！&amp;#34;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# 触发拦截&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;None&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;2-第二步登钩子将功能挂载到对应的插座上&#34;&gt;&lt;a href=&#34;#2-%e7%ac%ac%e4%ba%8c%e6%ad%a5%e7%99%bb%e9%92%a9%e5%ad%90%e5%b0%86%e5%8a%9f%e8%83%bd%e6%8c%82%e8%bd%bd%e5%88%b0%e5%af%b9%e5%ba%94%e7%9a%84%e6%8f%92%e5%ba%a7%e4%b8%8a&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;2. 第二步：登钩子（将功能挂载到对应的插座上）
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 在程序初始化时进行功能拼装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;register_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;PreToolUse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;permission_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;# 优先进行安全检查&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;register_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;PreToolUse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;log_hook&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;# 其次记录日志&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;3-第三步踩钩子核心循环中的被动触发&#34;&gt;&lt;a href=&#34;#3-%e7%ac%ac%e4%b8%89%e6%ad%a5%e8%b8%a9%e9%92%a9%e5%ad%90%e6%a0%b8%e5%bf%83%e5%be%aa%e7%8e%af%e4%b8%ad%e7%9a%84%e8%a2%ab%e5%8a%a8%e8%a7%a6%e5%8f%91&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;3. 第三步：踩钩子（核心循环中的被动触发）
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;agent_loop&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;messages&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# ... AI 思考产出 tool_use 指令 ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# 💥 核心代码在此“踩”下触发器，解耦业务逻辑&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;blocked&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;trigger_hooks&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;PreToolUse&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;block&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;blocked&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;c1&#34;&gt;# 如果被前面的安全钩子拦截了（返回了拦截报错字符串），则直接跳过工具执行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;n&#34;&gt;results&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;({&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;type&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;tool_result&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;blocked&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)})&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;k&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;# ... 如果没被拦截，正常运行底层的工具（如读写文件） ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id=&#34;四-本次-agent-架构s04基于-hook-实现的功能清单&#34;&gt;&lt;a href=&#34;#%e5%9b%9b-%e6%9c%ac%e6%ac%a1-agent-%e6%9e%b6%e6%9e%84s04%e5%9f%ba%e4%ba%8e-hook-%e5%ae%9e%e7%8e%b0%e7%9a%84%e5%8a%9f%e8%83%bd%e6%b8%85%e5%8d%95&#34; class=&#34;header-anchor&#34;&gt;&lt;/a&gt;四、 本次 Agent 架构（s04）基于 Hook 实现的功能清单
+&lt;/h2&gt;&lt;p&gt;通过 Hook 模式，&lt;code&gt;s04&lt;/code&gt; 版本在不污染 &lt;code&gt;agent_loop&lt;/code&gt; 主干的前提下，完美插入了以下 5 个跨切面功能：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;钩子名称&lt;/th&gt;
+          &lt;th&gt;挂载节点&lt;/th&gt;
+          &lt;th&gt;核心功能说明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;context_inject_hook&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;UserPromptSubmit&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;在用户提交问题进入 AI 思考前，做环境感知或前置日志记录。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;permission_hook&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;PreToolUse&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;核心防线&lt;/strong&gt;：拦截高危敏感命令（&lt;code&gt;sudo&lt;/code&gt;, &lt;code&gt;rm -rf&lt;/code&gt;），处理文件越界写入并弹出用户确认提示。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;log_hook&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;PreToolUse&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;统一接管工具调用的前置控制台日志打印。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;large_output_hook&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;PostToolUse&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;后置监控&lt;/strong&gt;：检查工具执行输出是否超过 10 万字，过大时进行告警，防止撑爆上下文。&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;summary_hook&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;Stop&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;在整个会话周期结束时，自动盘点并打印本次任务一共消耗了多少次工具调用。&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
         <title>Harness第三次工程化</title>
         <link>/zh-cn/post/2026/03/harness%E7%AC%AC%E4%B8%89%E6%AC%A1%E5%B7%A5%E7%A8%8B%E5%8C%96/</link>
         <pubDate>Mon, 30 Mar 2026 14:00:00 +0000</pubDate>
